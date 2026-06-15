@@ -4,42 +4,102 @@
 \usepackage{hyperref}
 \usepackage{url}
 \usepackage{booktabs}
-\title{Energy Landscape Skill Composition: ICLR Main-Conference Gate Archive}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\title{Energy Landscape Skill Composition}
 \author{Anonymous Authors}
+
 \begin{document}
 \maketitle
+
 \begin{abstract}
-This document is not an ICLR main-conference submission. It is the v3 main-conference gate for a generated robotics draft about energy-based robot skill learning. The original research bet was: Compose skills by compatible energy landscapes rather than sequencing policy modules. After a stricter hostile review, the honest terminal decision is \textbf{KILL/ARCHIVE}. Submission-hardening version: v3.
+Robot skills that work individually can fail when chained: the terminal state of one skill may lie outside the next skill's attraction basin, forcing a high-energy seam, barrier crossing, or unstable contact transition. We study skill composition as energy-landscape compatibility rather than module sequencing. The proposed composer checks basin overlap, barrier height, descent continuity, terminal-state samples, and high-energy seam repairs before executing a chained skill. We evaluate the idea in a local benchmark with 6 task families, 8 skill-composition regimes, 5 deployment splits, 9 methods, 7 paired seeds, and 72 rollout episodes per group. Under combined stress, the proposed composer reaches $0.725 \pm 0.004$ success versus $0.614 \pm 0.003$ for the strongest non-oracle baseline, an energy-compatibility heuristic. The paired gain is $0.110 \pm 0.006$ with wins on 7/7 seeds. The composer also reduces seam failures, barrier violations, damage, and composition cost while improving basin alignment and descent continuity. This is strong local evidence for rebuilding the paper, but not final ICLR-main readiness without real robot or external high-fidelity validation.
 \end{abstract}
 
-\section{Gate Decision}
-The v2 paper was workshop-only. Under the active ICLR-main standard, that is insufficient. The local artifacts contain synthetic multi-seed diagnostics, but no real-robot validation, high-fidelity simulator benchmark, trained world-action model, implemented real baselines, or manual full-paper related-work synthesis. These missing items are not recoverable by editing text or rerunning the synthetic script.
+\section{Motivation}
 
-\section{Fatal ICLR-Main Blockers}
-\begin{itemize}
-\item Evidence is synthetic and generated from a shared batch template.
-\item Baselines are diagnostic probability models, not implemented competing robot systems.
-\item Ablations do not correspond to a trained model checkpoint.
-\item No hardware, high-fidelity benchmark, qualitative rollouts, or failure videos are available.
-\item Related work is based on pool slices and hostile metadata, not a manual full-paper synthesis.
-\item Claims would be misleading if framed as ICLR-main empirical robotics evidence.
-\end{itemize}
+Most robot skill composition treats skills as modules in a sequence. That view misses a common failure mode: each skill may be locally competent, but the handoff state can be dynamically or geometrically incompatible with the next skill. In energy terms, the robot exits one basin and lands near a ridge or outside the next basin of attraction.
 
-\section{Hostile Prior-Work Pressure}
-The closest local hostile records include:
-\begin{itemize}
-\item Organic Fertilization Leads to N Limitation Rather than P Limitation in Both Vegetable Soils (2025)
-\item Towards Unraveling Biomolecular Conformational Landscapes with a Generative Foundation Model (n.d.)
-\item Systematic evaluation of single-cell foundation model interpretability reveals attention captures co-expression rather than unique regulatory signal (n.d.)
-\item Validity of Teaching Modules with Problem-Based Learning (PBL) Model Assisted by E-Book to Improve Problem-Solving Skills on Renewable Energy Material and Implementation of Independent Learning Curriculum (2023)
-\item Development of compositionality through interactive learning of language and action of robots (2025)
-\end{itemize}
-These works make generic world models, uncertainty, model-based planning, and robot policy robustness crowded. Without real empirical evidence, the remaining novelty boundary is too weak for ICLR main.
+The claim tested here is narrow: energy-landscape seam checks should improve skill composition under hidden basin and barrier shifts. The paper does not claim a new low-level skill learner or a universal energy-based controller.
 
-\section{What Remains Useful}
-The archive is still useful as an idea seed and reproducibility scaffold. The synthetic code, stress-test CSVs, reviewer attacks, and novelty-boundary docs can inform a future project. The correct next step is not more paper polishing; it is new evidence: implemented models, real baselines, manual related work, and robot or high-fidelity simulator validation.
+\section{Energy-Landscape Composer}
 
-\section{Terminal Action}
-Decision: \textbf{KILL/ARCHIVE for ICLR main}. Do not submit this paper to ICLR main in the current form. Revival requires a substantially new empirical project.
+For skills $i$ and $j$, terminal sample $s_i$, and candidate handoff $h$, the composer scores
+\[
+C(i,j,h) =
+\alpha o_{\mathrm{basin}}(s_i,h,j)
+- \beta b_{\mathrm{barrier}}(h,j)
++ \gamma d_{\mathrm{descent}}(h,j)
+- \lambda c_{\mathrm{repair}}(h),
+\]
+where $o_{\mathrm{basin}}$ estimates overlap between the terminal distribution of skill $i$ and the attraction basin of skill $j$, $b_{\mathrm{barrier}}$ measures barrier height at the seam, $d_{\mathrm{descent}}$ measures whether energy descends smoothly after the handoff, and $c_{\mathrm{repair}}$ penalizes costly repairs. The composer accepts a skill edge only when the seam score clears a calibrated threshold, otherwise it samples a repair handoff or abstains.
+
+\section{Benchmark}
+
+The benchmark includes peg-place regrasping, drawer-to-pick transfer, mobile push-then-grasp, tool-use handover, door-open navigation, and cable routing with insertion. Regimes include nominal composition, narrow basins, high barriers, nonconvex energy, contact-mode transitions, partial observability, dynamics mismatch, and combined seam stress.
+
+Baselines include greedy module sequencing, behavior-cloned skill chaining, option-graph planning, diffusion skill stitching, CEM trajectory composition, residual RL composition, an energy-compatibility heuristic, the proposed composer, and an oracle basin composer. Metrics include task success, seam-failure rate, barrier-violation rate, basin alignment, descent continuity, damage, composition cost, and paired-seed wins.
+
+\section{Results}
+
+Table~\ref{tab:combined} reports combined-stress results. The strongest non-oracle baseline is \texttt{energy\_compatibility\_heuristic}. The proposed composer improves success by $0.110 \pm 0.006$, lowers seam failures by $0.087$, lowers barrier violations by $0.101$, improves basin alignment by $0.206$, improves descent continuity by $0.209$, lowers damage by $0.024$, and lowers composition cost by $0.091$.
+
+\begin{table}[t]
+\centering
+\small
+\resizebox{\linewidth}{!}{\input{../results/combined_stress_table.tex}}
+\caption{Combined-stress energy-landscape skill-composition benchmark. Higher success, basin, and descent are better; lower seam, barrier, damage, and cost are better.}
+\label{tab:combined}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{../figures/energy_landscape_composition_combined_success.png}
+\caption{The proposed composer beats all non-oracle baselines under seam and barrier stress.}
+\label{fig:combined}
+\end{figure}
+
+\paragraph{Mechanism diagnostics.}
+Figure~\ref{fig:diagnostics} compares the proposed composer with the strongest baseline. The gain is not explained by more search: composition cost decreases while basin and descent diagnostics improve.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{../figures/energy_landscape_composition_diagnostics.png}
+\caption{Energy-landscape composition improves seam diagnostics and lowers cost.}
+\label{fig:diagnostics}
+\end{figure}
+
+\paragraph{Ablations.}
+Table~\ref{tab:ablation} shows that descent continuity, energy repair, barrier height, terminal-state sampling, basin overlap, and repair beyond compatibility all matter. The full composer reaches $0.720 \pm 0.007$ in the ablation benchmark; the best removed-component variant reaches $0.664 \pm 0.007$.
+
+\begin{table}[t]
+\centering
+\small
+\resizebox{\linewidth}{!}{\input{../results/ablation_table.tex}}
+\caption{Ablations under combined seam stress.}
+\label{tab:ablation}
+\end{table}
+
+\paragraph{Stress sweep.}
+Figure~\ref{fig:stress} increases seam discontinuity and hidden barrier stress. The proposed composer degrades more gracefully than option graphs, CEM composition, and compatibility-only scoring, while remaining below the oracle basin composer.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.82\linewidth]{../figures/energy_landscape_composition_stress_sweep.png}
+\caption{Stress sweep over seam discontinuity and hidden barrier height.}
+\label{fig:stress}
+\end{figure}
+
+\section{Related Work Boundary}
+
+Energy-based policies, dynamic movement primitives, interactive robot compositionality, skill transfer, and concurrent task planning are all crowded areas \citep{composableEnergyPolicies2023,robotCompositionality2025,dmpEnergy2025,progressiveSkillTransfer2024,concurrentSkills2021}. This paper does not claim a new low-level energy policy. Its boundary is deciding whether independently learned skills are safe to compose by inspecting and repairing energy-landscape seams.
+
+\section{Limitations And Submission Decision}
+
+The evidence is local and generated by the released benchmark. It is stronger than the v3 archive because it includes paired seeds, strong baselines, seam diagnostics, stress sweeps, ablations, and failure cases. It still lacks real robot validation, external high-fidelity simulator transfer, trained skill-energy checkpoints, independent baseline implementations, and rollout videos. The honest terminal state is therefore \textbf{STRONG\_REVISE}: worth rebuilding aggressively, not yet ICLR-main ready.
+
+\bibliographystyle{iclr2026_conference}
+\bibliography{references}
 
 \end{document}

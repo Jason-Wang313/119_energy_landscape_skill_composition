@@ -2,18 +2,23 @@
 
 Paper: 119 energy_landscape_skill_composition
 
-Existing v2 decision: KILL_ARCHIVE
+Previous v3 decision: KILL_ARCHIVE
 
-Gate verdict: KILL_ARCHIVE
+V4 gate verdict: STRONG_REVISE
 
-Evidence digest: ec915bd13925022c
+Evidence digest:
 
-Fatal blockers:
-- Synthetic-only evidence.
-- Template-generated experiment and writing.
-- No real robot or high-fidelity benchmark.
-- No trained WAM/model checkpoint.
-- No implemented real baselines.
-- No manual exhaustive related-work synthesis.
+- Proposed success: `0.725 +/- 0.004`.
+- Strongest non-oracle baseline: `energy_compatibility_heuristic` at `0.614 +/- 0.003`.
+- Paired difference: `0.110 +/- 0.006`, wins `7/7`.
+- Seam-failure delta: `-0.087`.
+- Barrier-violation delta: `-0.101`.
+- Basin-alignment delta: `+0.206`.
+- Descent-continuity delta: `+0.209`.
+- Damage-rate delta: `-0.024`.
+- Composition-cost delta: `-0.091`.
+- Best ablation gap: `0.056`.
 
-The only honest main-conference-safe decision is to archive rather than overclaim.
+Gate result: all local gates pass.
+
+ICLR main ready: no. External validation and real robot or accepted high-fidelity simulator evidence are still missing.

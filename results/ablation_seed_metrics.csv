@@ -1,0 +1,50 @@
+ablation,seed,interpretation,mean_success_rate,ci95_success_rate,groups
+compatibility_only_heuristic,0,uses compatibility without repair,0.600984,0.019683,48
+compatibility_only_heuristic,1,uses compatibility without repair,0.592882,0.019286,48
+compatibility_only_heuristic,2,uses compatibility without repair,0.588252,0.022600,48
+compatibility_only_heuristic,3,uses compatibility without repair,0.616319,0.020974,48
+compatibility_only_heuristic,4,uses compatibility without repair,0.598669,0.018056,48
+compatibility_only_heuristic,5,uses compatibility without repair,0.594329,0.016551,48
+compatibility_only_heuristic,6,uses compatibility without repair,0.598380,0.019835,48
+full_energy_landscape_composer,0,all components,0.723380,0.015755,48
+full_energy_landscape_composer,1,all components,0.724537,0.016578,48
+full_energy_landscape_composer,2,all components,0.734954,0.017994,48
+full_energy_landscape_composer,3,all components,0.720197,0.016332,48
+full_energy_landscape_composer,4,all components,0.704282,0.013586,48
+full_energy_landscape_composer,5,all components,0.717882,0.014772,48
+full_energy_landscape_composer,6,all components,0.715567,0.016210,48
+minus_barrier_height,0,removes barrier-height term,0.636285,0.016445,48
+minus_barrier_height,1,removes barrier-height term,0.646412,0.019853,48
+minus_barrier_height,2,removes barrier-height term,0.643229,0.015969,48
+minus_barrier_height,3,removes barrier-height term,0.656829,0.017627,48
+minus_barrier_height,4,removes barrier-height term,0.650463,0.019991,48
+minus_barrier_height,5,removes barrier-height term,0.647859,0.019325,48
+minus_barrier_height,6,removes barrier-height term,0.653356,0.017421,48
+minus_basin_overlap,0,removes basin-overlap score,0.629340,0.018750,48
+minus_basin_overlap,1,removes basin-overlap score,0.635127,0.018371,48
+minus_basin_overlap,2,removes basin-overlap score,0.624421,0.015184,48
+minus_basin_overlap,3,removes basin-overlap score,0.627894,0.018834,48
+minus_basin_overlap,4,removes basin-overlap score,0.620949,0.018286,48
+minus_basin_overlap,5,removes basin-overlap score,0.622106,0.018411,48
+minus_basin_overlap,6,removes basin-overlap score,0.634259,0.019543,48
+minus_descent_continuity,0,removes descent-continuity term,0.671007,0.018361,48
+minus_descent_continuity,1,removes descent-continuity term,0.676215,0.016475,48
+minus_descent_continuity,2,removes descent-continuity term,0.653935,0.020277,48
+minus_descent_continuity,3,removes descent-continuity term,0.660880,0.015880,48
+minus_descent_continuity,4,removes descent-continuity term,0.674479,0.018249,48
+minus_descent_continuity,5,removes descent-continuity term,0.654225,0.015596,48
+minus_descent_continuity,6,removes descent-continuity term,0.657986,0.016917,48
+minus_energy_repair,0,does not repair high-energy seams,0.657118,0.015210,48
+minus_energy_repair,1,does not repair high-energy seams,0.652778,0.018286,48
+minus_energy_repair,2,does not repair high-energy seams,0.642940,0.020360,48
+minus_energy_repair,3,does not repair high-energy seams,0.660880,0.017037,48
+minus_energy_repair,4,does not repair high-energy seams,0.657407,0.021265,48
+minus_energy_repair,5,does not repair high-energy seams,0.650174,0.017321,48
+minus_energy_repair,6,does not repair high-energy seams,0.642072,0.019440,48
+minus_terminal_sampler,0,removes terminal-state sampler,0.645255,0.015716,48
+minus_terminal_sampler,1,removes terminal-state sampler,0.634259,0.019710,48
+minus_terminal_sampler,2,removes terminal-state sampler,0.634549,0.021751,48
+minus_terminal_sampler,3,removes terminal-state sampler,0.633102,0.016508,48
+minus_terminal_sampler,4,removes terminal-state sampler,0.642940,0.018973,48
+minus_terminal_sampler,5,removes terminal-state sampler,0.634549,0.019757,48
+minus_terminal_sampler,6,removes terminal-state sampler,0.639757,0.018095,48
