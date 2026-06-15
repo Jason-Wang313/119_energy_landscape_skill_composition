@@ -10,7 +10,10 @@ Why strong-revise:
 - 7/7 paired seed wins.
 - Seam-failure, barrier-violation, basin-alignment, descent-continuity, damage, and cost gates all pass.
 - Best ablation trails the full method by `0.056`.
-- Stress sweep and failure cases are included.
+- Raw evidence coverage includes `15,120` task/regime/split/method/seed rows.
+- Stress sweep includes `210` method/stress/seed rows.
+- Failure cases expand to `8` documented boundaries.
+- Numeric integrity passes with no NaN or infinite values.
 
 Why not ready:
 

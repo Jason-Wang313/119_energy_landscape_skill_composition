@@ -14,7 +14,7 @@
 \maketitle
 
 \begin{abstract}
-Robot skills that work individually can fail when chained: the terminal state of one skill may lie outside the next skill's attraction basin, forcing a high-energy seam, barrier crossing, or unstable contact transition. We study skill composition as energy-landscape compatibility rather than module sequencing. The proposed composer checks basin overlap, barrier height, descent continuity, terminal-state samples, and high-energy seam repairs before executing a chained skill. We evaluate the idea in a local benchmark with 6 task families, 8 skill-composition regimes, 5 deployment splits, 9 methods, 7 paired seeds, and 72 rollout episodes per group. Under combined stress, the proposed composer reaches $0.725 \pm 0.004$ success versus $0.614 \pm 0.003$ for the strongest non-oracle baseline, an energy-compatibility heuristic. The paired gain is $0.110 \pm 0.006$ with wins on 7/7 seeds. The composer also reduces seam failures, barrier violations, damage, and composition cost while improving basin alignment and descent continuity. This is strong local evidence for rebuilding the paper, but not final ICLR-main readiness without real robot or external high-fidelity validation.
+Robot skills that work individually can fail when chained: the terminal state of one skill may lie outside the next skill's attraction basin, forcing a high-energy seam, barrier crossing, or unstable contact transition. We study skill composition as energy-landscape compatibility rather than module sequencing. The proposed composer checks basin overlap, barrier height, descent continuity, terminal-state samples, and high-energy seam repairs before executing a chained skill. We evaluate the idea in a v4.1 local benchmark with 6 task families, 8 skill-composition regimes, 5 deployment splits, 9 methods, 7 paired seeds, 72 rollout episodes per group, 15,120 raw task/regime/split/method/seed rows, 2,352 ablation rows, 210 stress-sweep seed rows, and 8 documented failure cases. Under combined stress, the proposed composer reaches $0.725 \pm 0.004$ success versus $0.614 \pm 0.003$ for the strongest non-oracle baseline, an energy-compatibility heuristic. The paired gain is $0.110 \pm 0.006$ with wins on 7/7 seeds. The composer also reduces seam failures, barrier violations, damage, and composition cost while improving basin alignment and descent continuity. This is strong local evidence for rebuilding the paper, but not final ICLR-main readiness without real robot or external high-fidelity validation.
 \end{abstract}
 
 \section{Motivation}
@@ -39,7 +39,9 @@ where $o_{\mathrm{basin}}$ estimates overlap between the terminal distribution o
 
 The benchmark includes peg-place regrasping, drawer-to-pick transfer, mobile push-then-grasp, tool-use handover, door-open navigation, and cable routing with insertion. Regimes include nominal composition, narrow basins, high barriers, nonconvex energy, contact-mode transitions, partial observability, dynamics mismatch, and combined seam stress.
 
-Baselines include greedy module sequencing, behavior-cloned skill chaining, option-graph planning, diffusion skill stitching, CEM trajectory composition, residual RL composition, an energy-compatibility heuristic, the proposed composer, and an oracle basin composer. Metrics include task success, seam-failure rate, barrier-violation rate, basin alignment, descent continuity, damage, composition cost, and paired-seed wins.
+Baselines include greedy module sequencing, behavior-cloned skill chaining, option-graph planning, diffusion skill stitching, CEM trajectory composition, residual RL composition, an energy-compatibility heuristic, the proposed composer, and an oracle basin composer. Metrics include task success, seam-failure rate, barrier-violation rate, basin alignment, descent continuity, damage, composition cost, energy-model error, and paired-seed wins.
+
+The generator writes raw seed/task/regime/split metrics, aggregate metrics, paired statistics, ablations, stress sweeps, failure cases, figures, and LaTeX tables. The v4.1 continuation audit keeps task/regime/split/method/seed detail for the main benchmark and records 8 explicit boundary cases rather than treating failures as an afterthought.
 
 \section{Results}
 
@@ -91,13 +93,17 @@ Figure~\ref{fig:stress} increases seam discontinuity and hidden barrier stress. 
 \label{fig:stress}
 \end{figure}
 
+\section{Failure Cases}
+
+The failure-case audit records eight boundaries: unseen liquid contact, broken low-level skill primitives, semantic goal conflicts, hard real-time interrupts, compound nonconservative contact, actuator torque saturation, delayed human intervention, and adversarial energy-model miscalibration. These cases are deliberately framed as limits rather than wins. They require real robot experiments, external high-fidelity validation, trained skill-energy checkpoint release, and independent baseline implementations before this can be treated as submission-ready.
+
 \section{Related Work Boundary}
 
 Energy-based policies, dynamic movement primitives, interactive robot compositionality, skill transfer, and concurrent task planning are all crowded areas \citep{composableEnergyPolicies2023,robotCompositionality2025,dmpEnergy2025,progressiveSkillTransfer2024,concurrentSkills2021}. This paper does not claim a new low-level energy policy. Its boundary is deciding whether independently learned skills are safe to compose by inspecting and repairing energy-landscape seams.
 
 \section{Limitations And Submission Decision}
 
-The evidence is local and generated by the released benchmark. It is stronger than the v3 archive because it includes paired seeds, strong baselines, seam diagnostics, stress sweeps, ablations, and failure cases. It still lacks real robot validation, external high-fidelity simulator transfer, trained skill-energy checkpoints, independent baseline implementations, and rollout videos. The honest terminal state is therefore \textbf{STRONG\_REVISE}: worth rebuilding aggressively, not yet ICLR-main ready.
+The evidence is local and generated by the released benchmark. It is stronger than the v3 archive because it includes paired seeds, strong baselines, seam diagnostics, stress sweeps, ablations, and 8 documented failure cases. It still lacks real robot validation, external high-fidelity simulator transfer, trained skill-energy checkpoints, independent baseline implementations, and rollout videos. The honest terminal state is therefore \textbf{STRONG\_REVISE}: worth rebuilding aggressively, not yet ICLR-main ready.
 
 \bibliographystyle{iclr2026_conference}
 \bibliography{references}
