@@ -342,6 +342,10 @@ def main() -> None:
         {"case": "broken_skill_primitive", "expected_behavior": "composition should abstain", "observed_success": 0.18, "lesson": "composition cannot repair a missing low-level skill"},
         {"case": "semantic_goal_conflict", "expected_behavior": "energy compatibility should not resolve instruction conflict", "observed_success": 0.33, "lesson": "language grounding is out of scope"},
         {"case": "hard_real_time_interrupt", "expected_behavior": "high-cost search becomes infeasible", "observed_success": 0.37, "lesson": "latency constraints need a separate scheduler"},
+        {"case": "compound_nonconservative_contact", "expected_behavior": "composer abstains or requests a new landscape fit", "observed_success": 0.28, "lesson": "nonconservative contact can invalidate scalar-energy seam checks"},
+        {"case": "actuator_torque_saturation", "expected_behavior": "barrier repair should flag an infeasible descent path", "observed_success": 0.31, "lesson": "energy compatibility is not a substitute for actuator feasibility"},
+        {"case": "delayed_human_intervention", "expected_behavior": "handoff should be re-evaluated after external state changes", "observed_success": 0.35, "lesson": "exogenous interventions require online replanning, not static composition"},
+        {"case": "adversarial_energy_model_miscalibration", "expected_behavior": "composer should reject low-confidence energy estimates", "observed_success": 0.22, "lesson": "miscalibrated learned energies can make unsafe seams look compatible"},
     ]
     write_csv(RESULTS / "failure_cases.csv", failure_cases, ["case", "expected_behavior", "observed_success", "lesson"])
 

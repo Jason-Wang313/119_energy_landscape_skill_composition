@@ -3,3 +3,7 @@ unseen_liquid_contact,composer rejects all known basins,0.250000,energy landscap
 broken_skill_primitive,composition should abstain,0.180000,composition cannot repair a missing low-level skill
 semantic_goal_conflict,energy compatibility should not resolve instruction conflict,0.330000,language grounding is out of scope
 hard_real_time_interrupt,high-cost search becomes infeasible,0.370000,latency constraints need a separate scheduler
+compound_nonconservative_contact,composer abstains or requests a new landscape fit,0.280000,nonconservative contact can invalidate scalar-energy seam checks
+actuator_torque_saturation,barrier repair should flag an infeasible descent path,0.310000,energy compatibility is not a substitute for actuator feasibility
+delayed_human_intervention,handoff should be re-evaluated after external state changes,0.350000,"exogenous interventions require online replanning, not static composition"
+adversarial_energy_model_miscalibration,composer should reject low-confidence energy estimates,0.220000,miscalibrated learned energies can make unsafe seams look compatible
