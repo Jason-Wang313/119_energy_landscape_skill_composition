@@ -1,19 +1,27 @@
 # Reproducibility Checklist
 
-## What Reproduces
-- [x] `python src/run_experiment.py`
-- [x] `results/metrics.csv`
-- [x] `results/raw_seed_metrics.csv`
-- [x] `results/ablation_metrics.csv`
-- [x] `results/stress_sweep.csv`
-- [x] `results/negative_cases.csv`
-- [x] `paper/main.tex`
-- [x] Canonical PDF: `C:/Users/wangz/Downloads/119.pdf`
+- Code entry point: `src/run_experiment.py`
+- Requirements: `numpy`, `matplotlib`
+- Deterministic base seed: `11940615`
+- Main outputs:
+  - `results/seed_task_regime_metrics.csv`
+  - `results/seed_split_metrics.csv`
+  - `results/metrics.csv`
+  - `results/pairwise_stats.csv`
+  - `results/ablation_metrics.csv`
+  - `results/stress_sweep.csv`
+  - `results/failure_cases.csv`
+  - `results/summary.txt`
+- Main figures:
+  - `figures/energy_landscape_composition_combined_success.png`
+  - `figures/energy_landscape_composition_diagnostics.png`
+  - `figures/energy_landscape_composition_stress_sweep.png`
+  - `figures/energy_landscape_composition_ablation.png`
+  - `figures/energy_landscape_composition_regime_gains.png`
 
-## What Does Not Reproduce
-- [ ] Real robot results.
-- [ ] High-fidelity benchmark runs.
-- [ ] Trained WAM checkpoints.
-- [ ] Competing learned baselines.
+Reproduction command:
 
-This is reproducible as an archive memo and synthetic stress test, not as an ICLR-main robotics system paper.
+```powershell
+pip install -r requirements.txt
+python src\run_experiment.py
+```

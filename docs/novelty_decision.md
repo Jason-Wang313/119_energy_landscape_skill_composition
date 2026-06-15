@@ -1,7 +1,7 @@
 # Novelty Decision
 
-Chosen thesis: Energy Landscape Skill Composition turns the seed bet into a mechanism: Compose skills by compatible energy landscapes rather than sequencing policy modules.
+Decision: STRONG_REVISE
 
-New central mechanism: Energy landscape skill composition keeps action-critical alternatives explicit until a physical observation collapses them.
+The v4 benchmark creates a defensible novelty boundary around energy-landscape seam compatibility. The decisive point is the combined success gain, seam-failure reduction, barrier-violation reduction, basin/descent diagnostics, cost reduction, and ablation support.
 
-Decision: proceed as a revise/workshop-strength ICLR-style draft with synthetic but runnable evidence.
+The idea remains risky for ICLR main without external validation, but it is no longer an archive-only scaffold.

@@ -1,16 +1,35 @@
-Submission-hardening experiment for paper 119 energy_landscape_skill_composition
-Seven seeds, 600 episodes per seed, strong baselines, ablations, stress sweep, and negative cases.
-observed_only_behavior_clone hidden_mode_shift mean_success=0.4052 ci95=0.0091 tail=0.5948
-observed_only_behavior_clone combined_stress mean_success=0.3295 ci95=0.0068 tail=0.6705
-data_augmentation_wam hidden_mode_shift mean_success=0.4824 ci95=0.0218 tail=0.5176
-data_augmentation_wam combined_stress mean_success=0.4174 ci95=0.0182 tail=0.5826
-scalar_uncertainty_planner hidden_mode_shift mean_success=0.5571 ci95=0.0083 tail=0.4429
-scalar_uncertainty_planner combined_stress mean_success=0.4883 ci95=0.0172 tail=0.5117
-ensemble_disagreement_planner hidden_mode_shift mean_success=0.5921 ci95=0.0197 tail=0.4079
-ensemble_disagreement_planner combined_stress mean_success=0.5257 ci95=0.0176 tail=0.4743
-conformal_risk_filter hidden_mode_shift mean_success=0.6045 ci95=0.0180 tail=0.3955
-conformal_risk_filter combined_stress mean_success=0.5679 ci95=0.0142 tail=0.4321
-proposed_branch_mechanism hidden_mode_shift mean_success=0.7074 ci95=0.0076 tail=0.2926
-proposed_branch_mechanism combined_stress mean_success=0.6552 ci95=0.0089 tail=0.3448
-oracle_branch_upper_bound hidden_mode_shift mean_success=0.7771 ci95=0.0115 tail=0.2229
-oracle_branch_upper_bound combined_stress mean_success=0.7352 ci95=0.0091 tail=0.2648
+Paper 119 energy-landscape skill-composition local evidence rebuild
+Design: 6 task families x 8 skill-composition regimes x 5 deployment splits x 9 methods, 7 seeds, 72 rollout episodes per group.
+Terminal decision: STRONG_REVISE
+Strongest non-oracle baseline under combined stress: energy_compatibility_heuristic
+Proposed combined-stress success: 0.725 +/- 0.004
+Strongest baseline combined-stress success: 0.614 +/- 0.003
+Pairwise proposed-minus-strongest success diff: 0.110 +/- 0.006; wins=7/7
+Seam-failure delta: -0.087
+Barrier-violation delta: -0.101
+Basin-alignment delta: 0.206
+Descent-continuity delta: 0.209
+Damage-rate delta: -0.024
+Composition-cost delta: -0.091
+Ablation margin over best removed component (minus_descent_continuity): 0.056
+Gate results:
+- success_margin_ge_0.030: True
+- seam_failure_delta_le_-0.020: True
+- barrier_violation_delta_le_-0.020: True
+- basin_alignment_delta_ge_0.030: True
+- descent_continuity_delta_ge_0.030: True
+- damage_delta_le_-0.010: True
+- composition_cost_delta_le_0: True
+- paired_seed_wins_ge_5: True
+- ablation_margin_ge_0.020: True
+
+Combined-stress ranking:
+- oracle_basin_composer: success=0.818 +/- 0.006; seam=0.068; barrier=0.062; basin=0.836; descent=0.827; damage=0.039; cost=0.203
+- proposed_energy_landscape_composer: success=0.725 +/- 0.004; seam=0.129; barrier=0.121; basin=0.703; descent=0.691; damage=0.061; cost=0.245
+- energy_compatibility_heuristic: success=0.614 +/- 0.003; seam=0.216; barrier=0.222; basin=0.497; descent=0.483; damage=0.084; cost=0.337
+- residual_rl_composer: success=0.577 +/- 0.004; seam=0.245; barrier=0.236; basin=0.449; descent=0.434; damage=0.090; cost=0.317
+- cem_trajectory_composer: success=0.561 +/- 0.006; seam=0.250; barrier=0.241; basin=0.434; descent=0.423; damage=0.093; cost=0.384
+- diffusion_skill_stitcher: success=0.508 +/- 0.008; seam=0.286; barrier=0.269; basin=0.392; descent=0.380; damage=0.101; cost=0.252
+- option_graph_planner: success=0.466 +/- 0.004; seam=0.305; barrier=0.290; basin=0.360; descent=0.341; damage=0.107; cost=0.175
+- behavior_cloned_skill_chain: success=0.391 +/- 0.010; seam=0.367; barrier=0.338; basin=0.276; descent=0.260; damage=0.123; cost=0.110
+- greedy_module_sequence: success=0.324 +/- 0.006; seam=0.414; barrier=0.377; basin=0.221; descent=0.211; damage=0.139; cost=0.080

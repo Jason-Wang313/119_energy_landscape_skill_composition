@@ -1,0 +1,5 @@
+case,expected_behavior,observed_success,lesson
+unseen_liquid_contact,composer rejects all known basins,0.250000,energy landscapes do not cover fluid interaction skills
+broken_skill_primitive,composition should abstain,0.180000,composition cannot repair a missing low-level skill
+semantic_goal_conflict,energy compatibility should not resolve instruction conflict,0.330000,language grounding is out of scope
+hard_real_time_interrupt,high-cost search becomes infeasible,0.370000,latency constraints need a separate scheduler

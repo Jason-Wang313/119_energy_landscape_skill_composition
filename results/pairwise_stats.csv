@@ -1,0 +1,9 @@
+baseline,mean_success_diff,ci95_success_diff,paired_seed_wins,decisive
+greedy_module_sequence,0.400628,0.008068,7,yes
+behavior_cloned_skill_chain,0.333209,0.012354,7,yes
+option_graph_planner,0.258391,0.007197,7,yes
+diffusion_skill_stitcher,0.217055,0.008648,7,yes
+cem_trajectory_composer,0.163236,0.005755,7,yes
+residual_rl_composer,0.147487,0.006023,7,yes
+energy_compatibility_heuristic,0.110243,0.005943,7,yes
+oracle_basin_composer,-0.093709,0.006805,0,no

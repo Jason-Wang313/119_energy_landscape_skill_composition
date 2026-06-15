@@ -1,13 +1,18 @@
 # Novelty Boundary Map
 
-## Crowded Territory
-- Bigger data/model scaling.
-- New benchmark only.
-- Generic active learning or uncertainty.
-- Combining a planner with a learned policy without a new state/action object.
+## What This Paper Can Claim
 
-## Claimed Boundary
-Energy landscape skill composition keeps action-critical alternatives explicit until a physical observation collapses them.
+- Energy-compatible skill composition reduces seam failures under hidden barrier and basin-shift stress.
+- Basin overlap, barrier height, descent continuity, energy repair, and terminal-state sampling all contribute locally.
+- The local benchmark supports this claim against option graphs, diffusion stitching, CEM trajectory composition, residual RL composition, and an energy-compatibility heuristic.
 
-## What Would Falsify The Claim
-If observed-only baselines match the adverse-mode coverage and closed-loop success of the proposed branch-aware mechanism, the paper should be revised or killed.
+## What This Paper Cannot Claim
+
+- Real-world robot deployment readiness.
+- State-of-the-art skill composition.
+- A new low-level skill learner.
+- A universal energy-model theory.
+
+## Boundary Sentence
+
+This work studies how to decide whether independently learned skills are safe to compose by inspecting energy-landscape seams; it does not propose a new skill primitive or a universal planner.
