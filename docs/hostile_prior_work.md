@@ -8,6 +8,6 @@ The hostile set contains energy-based policies, skill composition, dynamic movem
 - Bidirectional Progressive Neural Networks With Episodic Return Progress for Emergent Task Sequencing and Robotic Skill Transfer (2024)
 - Autonomous Runtime Composition of Sensor-Based Skills Using Concurrent Task Planning (2021)
 
-Novelty boundary: the paper is not "energy-based robot learning" broadly and not "skill sequencing with another score." The defensible contribution is checking and repairing energy-landscape compatibility at skill seams.
+Novelty boundary: the paper is not "energy-based robot learning" broadly and not "skill sequencing with another score." The defensible contribution is checking, certifying, repairing, and sometimes abstaining from energy-landscape skill seams under basin/barrier/contact/dynamics risk.
 
-Remaining hostile-review weakness: the evidence is local. A reviewer can still demand external benchmark transfer or real robot validation before accepting a main-conference claim.
+Remaining hostile-review weakness: the evidence is local. A reviewer can still demand external benchmark transfer, real robot validation, released checkpoints/logs, and independent baseline implementations before accepting a main-conference claim.

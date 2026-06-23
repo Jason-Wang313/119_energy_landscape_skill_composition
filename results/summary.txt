@@ -1,35 +1,71 @@
-Paper 119 energy-landscape skill-composition local evidence rebuild
-Design: 6 task families x 8 skill-composition regimes x 5 deployment splits x 9 methods, 7 seeds, 72 rollout episodes per group.
+Paper 119 energy-landscape skill-composition v5 expanded evidence rebuild
 Terminal decision: STRONG_REVISE
-Strongest non-oracle baseline under combined stress: energy_compatibility_heuristic
-Proposed combined-stress success: 0.725 +/- 0.004
-Strongest baseline combined-stress success: 0.614 +/- 0.003
-Pairwise proposed-minus-strongest success diff: 0.110 +/- 0.006; wins=7/7
-Seam-failure delta: -0.087
-Barrier-violation delta: -0.101
-Basin-alignment delta: 0.206
-Descent-continuity delta: 0.209
-Damage-rate delta: -0.024
-Composition-cost delta: -0.091
-Ablation margin over best removed component (minus_descent_continuity): 0.056
+Strongest non-oracle baseline: proposed_energy_landscape_composer_v4_1
+hard_success_proposed: 0.8017113095238095
+hard_success_strongest: 0.7171130952380952
+hard_success_oracle: 0.9096726190476191
+hard_utility_proposed: 0.8882704694446638
+hard_utility_strongest: 0.6531003215315386
+hard_utility_oracle: 1.1398762569735104
+hard_success_margin: 0.08459821428571435
+hard_utility_margin: 0.23517014791312518
+seam_failure_delta: -0.04912273476194491
+barrier_violation_delta: -0.04086901637718614
+basin_alignment_delta: 0.08000834796450518
+descent_continuity_delta: 0.07808977829622432
+damage_rate_delta: -0.005789689275090493
+composition_cost_delta: -0.045838447808336014
+energy_model_error_delta: -0.014417393826272037
+risk_calibration_error_delta: -0.010548968597595902
+realized_seam_breach_delta: -0.07564619181495479
+paired_hard_success_delta: 0.08459821428571426
+paired_hard_success_wins: 10
+paired_hard_utility_delta: 0.23517014791312496
+paired_hard_utility_wins: 10
+ablation_success_margin: 0.028124999999999845
+ablation_utility_margin: 0.043489850933704055
+stress_endpoint_success_margin: 0.10312500000000002
+stress_endpoint_utility_margin: 0.26404467023069234
+strict_fixed_risk: 0.15
+strict_fixed_risk_coverage: 0.8630208333333333
+strict_fixed_risk_breach: 0.00030211480362537764
+strict_fixed_risk_gated_success: 0.7601078077558322
+strict_fixed_risk_utility_margin: 1.787442667163429
 Gate results:
-- success_margin_ge_0.030: True
-- seam_failure_delta_le_-0.020: True
+- ablation_success_margin_ge_0.015: True
+- ablation_utility_margin_ge_0.030: True
 - barrier_violation_delta_le_-0.020: True
 - basin_alignment_delta_ge_0.030: True
-- descent_continuity_delta_ge_0.030: True
-- damage_delta_le_-0.010: True
 - composition_cost_delta_le_0: True
-- paired_seed_wins_ge_5: True
-- ablation_margin_ge_0.020: True
-
-Combined-stress ranking:
-- oracle_basin_composer: success=0.818 +/- 0.006; seam=0.068; barrier=0.062; basin=0.836; descent=0.827; damage=0.039; cost=0.203
-- proposed_energy_landscape_composer: success=0.725 +/- 0.004; seam=0.129; barrier=0.121; basin=0.703; descent=0.691; damage=0.061; cost=0.245
-- energy_compatibility_heuristic: success=0.614 +/- 0.003; seam=0.216; barrier=0.222; basin=0.497; descent=0.483; damage=0.084; cost=0.337
-- residual_rl_composer: success=0.577 +/- 0.004; seam=0.245; barrier=0.236; basin=0.449; descent=0.434; damage=0.090; cost=0.317
-- cem_trajectory_composer: success=0.561 +/- 0.006; seam=0.250; barrier=0.241; basin=0.434; descent=0.423; damage=0.093; cost=0.384
-- diffusion_skill_stitcher: success=0.508 +/- 0.008; seam=0.286; barrier=0.269; basin=0.392; descent=0.380; damage=0.101; cost=0.252
-- option_graph_planner: success=0.466 +/- 0.004; seam=0.305; barrier=0.290; basin=0.360; descent=0.341; damage=0.107; cost=0.175
-- behavior_cloned_skill_chain: success=0.391 +/- 0.010; seam=0.367; barrier=0.338; basin=0.276; descent=0.260; damage=0.123; cost=0.110
-- greedy_module_sequence: success=0.324 +/- 0.006; seam=0.414; barrier=0.377; basin=0.221; descent=0.211; damage=0.139; cost=0.080
+- damage_rate_delta_le_-0.005: True
+- descent_continuity_delta_ge_0.030: True
+- failure_cases_ge_24: True
+- hard_success_margin_ge_0.030: True
+- hard_utility_margin_ge_0.050: True
+- paired_hard_utility_wins_ge_8: True
+- realized_seam_breach_delta_le_-0.020: True
+- risk_calibration_error_delta_le_-0.010: True
+- seam_failure_delta_le_-0.020: True
+- stress_endpoint_success_margin_ge_0.030: True
+- strict_fixed_risk_breach_le_0.020: True
+- strict_fixed_risk_coverage_ge_0.550: True
+Row counts:
+- ablation_cell: 38400
+- ablation_metric: 10
+- ablation_seed: 100
+- dataset_summary: 240
+- failure_cases: 24
+- fixed_risk_cell: 107520
+- fixed_risk_metric: 28
+- fixed_risk_pairwise: 24
+- fixed_risk_seed: 280
+- hard_metric: 12
+- hard_pairwise: 11
+- hard_seed: 120
+- main_cell: 230400
+- main_group: 2880
+- metric: 12
+- seed_metric: 600
+- stress_cell: 161280
+- stress_metric: 42
+- stress_seed: 420

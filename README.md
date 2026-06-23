@@ -1,36 +1,39 @@
 # 119 Energy Landscape Skill Composition
 
-Submission-hardening version: v4.1
+Submission-hardening version: v5_expanded
 
 Terminal decision: STRONG_REVISE for an ICLR-main-target robotics submission package.
 
-This rebuild replaces the archive scaffold with a paper-specific local benchmark for composing robot skills by compatible energy landscapes. The v4.1 continuation audit reruns the benchmark under low-RAM caps and expands the documented failure boundary while preserving the honest strong-revise direction: the proposed composer checks basin overlap, barrier height, descent continuity, terminal-state sampling, and high-energy seam repair before chaining skills. It is not yet ICLR-main ready because it lacks real robot or external high-fidelity validation.
+This rebuild expands the paper into a 25-page, CPU-only, RAM-light submission package for composing robot skills by energy-landscape seam compatibility. The v5 method, `barrier_certified_energy_composer_v5`, adds barrier certification, basin-overlap posterior checks, terminal-state sampling, high-energy seam repair, contact/dynamics guards, calibration, and a fixed-risk acceptance screen. The package is stronger and more reviewer-ready than the earlier local scaffold, but it is still not ICLR-main ready because the evidence remains local and synthetic rather than real robot or independently accepted high-fidelity validation.
 
 ## Evidence Snapshot
 
-- Design: 6 task families x 8 skill-composition regimes x 5 deployment splits x 9 methods, 7 paired seeds, 72 rollout episodes per group.
-- Strongest non-oracle baseline: `energy_compatibility_heuristic`.
-- Combined-stress success: proposed `0.725 +/- 0.004` vs baseline `0.614 +/- 0.003`.
-- Paired difference: `0.110 +/- 0.006`, wins `7/7` seeds.
-- Seam-failure delta: `-0.087`; barrier-violation delta: `-0.101`.
-- Basin-alignment delta: `+0.206`; descent-continuity delta: `+0.209`.
-- Damage-rate delta: `-0.024`; composition-cost delta: `-0.091`.
-- Best ablation gap: `0.056`.
-- Raw evidence coverage: `15,120` task/regime/split/method/seed rows, `2,352` ablation rows, and `210` stress-sweep seed rows.
-- Failure cases: `8` documented energy-landscape composition boundary cases.
-- Latest rerun log: `C:/Users/wangz/robotics_massive_pool_paper_factory/logs/119_energy_landscape_skill_composition_continuation_rerun_20260615.log`.
+- Design: 6 task families x 8 seam regimes x 5 deployment splits x 12 methods x 10 paired seeds, with 230,400 main episode cells.
+- Strongest non-oracle baseline: `proposed_energy_landscape_composer_v4_1`.
+- Hard aggregate success: proposed `0.801711` vs strongest baseline `0.717113`; margin `0.084598`, with `10/10` paired-seed wins.
+- Hard aggregate utility: proposed `0.888270` vs strongest baseline `0.653100`; margin `0.235170`, with `10/10` paired-seed wins.
+- Mechanism deltas vs strongest baseline: seam failure `-0.049123`, barrier violation `-0.040869`, basin alignment `+0.080008`, descent continuity `+0.078090`.
+- Risk/cost deltas: damage `-0.005790`, composition cost `-0.045838`, energy-model error `-0.014417`, risk calibration error `-0.010549`, realized seam breach `-0.075646`.
+- Best ablation gaps: success `0.028125`, utility `0.043490`.
+- Stress endpoint margins: success `0.103125`, utility `0.264045`.
+- Fixed-risk audit at risk budget `0.15`: coverage `0.863021`, breach `0.000302`, gated success `0.760108`, utility margin `1.787443`.
+- Evidence coverage: 230,400 main cells, 38,400 ablation cells, 161,280 stress cells, 107,520 fixed-risk cells, and 24 documented failure cases.
 
 ## Reproduce
 
 ```powershell
 pip install -r requirements.txt
 python src\run_experiment.py
+python scripts\generate_manuscript.py
+python scripts\validate_submission_artifacts.py
 ```
 
 Canonical local PDF: `C:/Users/wangz/Downloads/119.pdf`
 
-PDF SHA256: `58D63AAF9FB0DBD27F315485CC070E5FD5B0D2AC664112027CFE31D49F3FDF37`
+PDF SHA256: `8C6CB80C3AF49B3A17497EE174F70D55F0D4801F2E961A5B6268857EA4C70E9C`
 
-PDF size: `327307` bytes.
+PDF size: `657050` bytes.
+
+PDF pages: `25`.
 
 Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the visible Desktop.

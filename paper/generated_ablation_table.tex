@@ -1,0 +1,16 @@
+\begin{tabular}{llll}
+\toprule
+ablation & success & utility & interpretation \\
+\midrule
+full\_barrier\_certified\_energy\_composer & 0.790 $\pm$ 0.016 & 0.874 $\pm$ 0.016 & all v5 components \\
+minus\_terminal\_sampler & 0.762 $\pm$ 0.010 & 0.830 $\pm$ 0.010 & removes terminal-state sampler \\
+minus\_contact\_mode\_guard & 0.761 $\pm$ 0.009 & 0.815 $\pm$ 0.009 & removes contact-mode transition guard \\
+minus\_high\_energy\_repair & 0.737 $\pm$ 0.016 & 0.799 $\pm$ 0.016 & does not repair high-energy seams \\
+minus\_descent\_continuity & 0.731 $\pm$ 0.011 & 0.794 $\pm$ 0.011 & removes descent-continuity term \\
+minus\_barrier\_height & 0.740 $\pm$ 0.012 & 0.791 $\pm$ 0.012 & removes barrier-height term \\
+minus\_basin\_overlap & 0.733 $\pm$ 0.012 & 0.791 $\pm$ 0.012 & removes basin-overlap posterior \\
+minus\_fixed\_risk\_gate & 0.772 $\pm$ 0.015 & 0.784 $\pm$ 0.015 & removes fixed-risk acceptance screen \\
+minus\_calibration & 0.738 $\pm$ 0.010 & 0.772 $\pm$ 0.010 & removes risk calibration \\
+compatibility\_only\_heuristic & 0.688 $\pm$ 0.007 & 0.680 $\pm$ 0.007 & uses compatibility without repair/certification \\
+\bottomrule
+\end{tabular}

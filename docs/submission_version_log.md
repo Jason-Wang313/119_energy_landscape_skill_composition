@@ -1,23 +1,18 @@
 # Submission Version Log
 
-## v3
+## Superseded Local Builds
 
-- Archive decision: KILL_ARCHIVE.
-- Reason: synthetic/template evidence and no implemented strong empirical package.
+- Earlier archive and local-continuation builds were superseded by the v5 expansion.
+- Their useful role is now historical only: they established the paper topic, rough mechanism, and prior proposed baseline.
+- Their old page counts, hashes, row counts, and baseline statistics should not be used for the current paper state.
 
-## v4
+## v5_expanded
 
-- Rebuilt as a paper-specific energy-landscape skill-composition benchmark.
-- Added 6 task families, 8 skill-composition regimes, 5 deployment splits, 9 methods, 7 paired seeds, and 72 rollout episodes per group.
-- Added mechanism metrics, paired comparisons, ablations, stress sweep, failure cases, figures, and manuscript-ready tables.
-- Terminal decision changed to STRONG_REVISE.
-- ICLR main readiness remains no pending external validation.
-
-## v4.1
-
-- Reran the experiment under low-RAM thread caps.
-- Rechecked `15,120` raw task/regime/split/method/seed rows, `2,352` ablation rows, and `210` stress-sweep seed rows.
-- Expanded `failure_cases.csv` to 8 documented energy-landscape composition boundaries.
-- Rechecked row counts, numeric integrity, manuscript consistency, and artifact placement.
+- Rebuilt the method as `barrier_certified_energy_composer_v5`.
+- Added basin-overlap posterior checks, barrier/descent seam tests, terminal-state sampling, high-energy seam repair, contact/dynamics guards, calibration, fixed-risk acceptance, and repair memory.
+- Expanded to 12 methods, 10 paired seeds, 230,400 main cells, 38,400 ablation cells, 161,280 stress cells, 107,520 fixed-risk cells, and 24 failure cases.
+- Selected the strongest non-oracle baseline from the hard aggregate; it is `proposed_energy_landscape_composer_v4_1`.
+- Reported hard success, hard utility, mechanism diagnostics, ablations, stress endpoints, fixed-risk coverage/breach/gated success, and scope blockers.
+- Generated a 25-page ICLR-style PDF with bright boxed clickable citations.
 - Terminal decision remains STRONG_REVISE.
-- ICLR main readiness remains no pending real robot or independent high-fidelity validation.
+- ICLR main readiness remains no pending real robot or accepted high-fidelity validation, released checkpoints/logs, hardware videos, independent baselines, and full manual related work.

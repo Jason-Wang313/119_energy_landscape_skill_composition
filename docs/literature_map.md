@@ -10,7 +10,9 @@
 
 ## Local Novelty Boundary
 
-The paper should claim energy-landscape compatibility and repair for skill seams. It should not claim a new low-level controller, a universal energy-based policy framework, or real-robot skill-composition leadership.
+The paper should claim barrier-certified energy-landscape compatibility and repair for skill seams. It should not claim a new low-level controller, a universal energy-based policy framework, or real-robot skill-composition leadership.
+
+The closest defensible contribution is: use basin-overlap, barrier-height, descent-continuity, contact/dynamics guards, calibration, repair, and fixed-risk abstention to decide whether separately learned robot skills can be chained without crossing unsafe high-energy seams.
 
 ## Evidence Needed For Final Main-Conference Readiness
 
@@ -18,3 +20,4 @@ The paper should claim energy-landscape compatibility and repair for skill seams
 - Real robot chained-skill failures with replayable logs.
 - Manual related-work synthesis against accepted skill-composition baselines.
 - Stronger ablations tying learned energy basins to actual controller artifacts.
+- Released skill-energy checkpoints and independent baseline implementations.

@@ -1,0 +1,12 @@
+baseline,mean_success_diff,ci95_success_diff,paired_success_wins,mean_utility_diff,ci95_utility_diff,paired_utility_wins,decisive
+greedy_module_sequence,0.511161,0.008304,10,1.342773,0.008394,10,yes
+behavior_cloned_skill_chain,0.449851,0.011746,10,1.180131,0.011722,10,yes
+option_graph_planner,0.358408,0.010528,10,0.958693,0.010679,10,yes
+diffusion_skill_stitcher,0.311086,0.010916,10,0.870723,0.010906,10,yes
+cem_trajectory_composer,0.248065,0.007803,10,0.769610,0.007893,10,yes
+residual_rl_composer,0.226935,0.010257,10,0.712459,0.010281,10,yes
+energy_compatibility_heuristic,0.181473,0.014058,10,0.585150,0.014061,10,yes
+tamp_feasibility_screen,0.163244,0.006544,10,0.527026,0.006517,10,yes
+stable_dmp_handoff,0.164732,0.009754,10,0.497672,0.009805,10,yes
+proposed_energy_landscape_composer_v4_1,0.084598,0.006327,10,0.235170,0.006227,10,yes
+oracle_basin_composer,-0.107961,0.008173,0,-0.251606,0.008207,0,no
