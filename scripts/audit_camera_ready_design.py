@@ -189,7 +189,7 @@ def main() -> int:
         and "boundedclaim" in full_text
     )
     text_anchors = {
-        "title_and_abstract": "predictiveskillseammodels" in page_texts[1]
+        "title_and_abstract": "predictiveskillseamactionmodels" in page_texts[1]
         and "robotskillcomposition" in page_texts[1]
         and "abstract" in page_texts[1],
         "decision_quality_page": any("comparativedecisionqualityaudit" in page_texts[page] for page in (5, 6)),

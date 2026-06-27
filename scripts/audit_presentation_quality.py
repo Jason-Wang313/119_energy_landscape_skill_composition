@@ -127,7 +127,7 @@ def main() -> int:
         add_check(checks, f"section_present_{section}", f"\\section{{{section}}}" in tex, section)
 
     add_check(checks, "anonymous_submission", "\\author{Anonymous Authors}" in tex and "Anonymous authors" in text, "anonymous author line")
-    add_check(checks, "title_visible", "predictiveskillseammodelsforrobotskillcomposition" in compact_text, "PDF title text")
+    add_check(checks, "title_visible", "predictiveskillseamactionmodelsforrobotskillcomposition" in compact_text, "PDF title text")
     add_check(checks, "abstract_visible", "abstract" in compact_text and "boundedclaim" in compact_text, "abstract text")
     add_check(checks, "scope_boundary_visible", "externalrobotorhighfidelityvalidationremainsnecessary" in compact_text, "abstract boundary")
     add_check(checks, "remaining_evidence_visible", "remainingexternalevidence" in compact_text, "appendix scope section")

@@ -12,7 +12,7 @@
       "passed": true
     },
     {
-      "detail": "bytes=467865",
+      "detail": "bytes=467695",
       "name": "pdf_size_reasonable",
       "passed": true
     },
@@ -22,7 +22,7 @@
       "passed": true
     },
     {
-      "detail": "text_chars=78416",
+      "detail": "text_chars=78441",
       "name": "pdf_text_extractable",
       "passed": true
     },
@@ -251,6 +251,6 @@
   "pages": 29,
   "passed": true,
   "pdf": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\paper\\main.pdf",
-  "pdf_bytes": 467865,
+  "pdf_bytes": 467695,
   "version": "presentation_quality_audit_v1"
 }

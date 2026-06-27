@@ -369,7 +369,7 @@ def make_manuscript(summary):
     a(r"\hypersetup{hidelinks}")
     a(r"\setlist[itemize]{leftmargin=1.2em,itemsep=0.15em,topsep=0.2em}")
     a(r"\raggedbottom")
-    a(r"\title{Predictive Skill-Seam Models for\\Robot Skill Composition}")
+    a(r"\title{Predictive Skill-Seam Action Models for\\Robot Skill Composition}")
     a(r"\author{Anonymous Authors}")
     a(r"\begin{document}")
     a(r"\maketitle")
@@ -397,7 +397,7 @@ def make_manuscript(summary):
         "The core failure mode is simple: skill one ends successfully, but its terminal distribution lies near a ridge or outside the basin of skill two. A module graph may mark the edge legal, while execution requires a high-energy repair, crosses a barrier, or enters a contact mode where the next controller no longer descends. The paper asks whether an explicit seam model can make composition more reliable by predicting whether a proposed transition will fail before the handoff, diagnosing the likely reason, deciding when to accept, repair, probe, abstain, or choose a different transition, and using the outcome to improve later composition choices. Contact-rich examples matter here because they expose action consequences that a motion-only edge label misses; they are a testbed for the seam model, not the identity of the paper."
     )
     a(
-        "The broader question is how a robot represents the physical consequences of a skill transition, notices when that representation is incomplete, and adapts future planning from the outcome. We use the world/action-model view at a deliberately local scale: the model is not a whole robot simulator, and the prediction-action-update loop is limited to the handoff. That restraint is intentional; the paper studies the small interface where a planner asks, before committing to the next skill, what this transition is likely to do, what response is warranted, and what should be remembered afterward."
+        "The broader question is how a robot represents the physical consequences of a skill transition, notices when that representation is incomplete, and adapts future planning from the outcome. We use the world/action-model view at a deliberately local scale: the model is not a whole robot simulator, and the prediction-action-update loop is limited to the handoff. That restraint is intentional; the paper studies the small interface where a planner asks, before committing to the next skill, what this transition is likely to do, why it might fail, what response is warranted, and what should be remembered afterward."
     )
     a(
         "Concretely, the contribution is a seam-level predictive interface: estimate terminal/basin/barrier/descent/risk quantities, diagnose the likely failure mode, choose accept, repair, probe, abstain, or transition, and write the outcome back to planner-edge memory so future planning queries do not treat every graph edge as equally safe. The energy composer is the paper's implementation of that interface, not the identity of the contribution."

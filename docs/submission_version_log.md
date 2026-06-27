@@ -14,7 +14,7 @@
 - Selected the strongest non-oracle baseline from the hard aggregate; it is `proposed_energy_landscape_composer_v4_1`.
 - Reported hard success, hard utility, mechanism diagnostics, ablations, stress endpoints, fixed-risk coverage/breach/gated success, and scope blockers.
 - Generated a 29-page ICLR-style PDF with hidden link borders and conference-style citations.
-- Retitled the main paper to `Predictive Skill-Seam Models for Robot Skill Composition` so the world/action agenda is explicit in the abstract and mechanism, but not over-forced in the title.
+- Retitled the main paper to `Predictive Skill-Seam Action Models for Robot Skill Composition` so the world/action agenda is explicit in the abstract and mechanism, but not over-forced in the title.
 - Updated the manuscript generator to emit a natural skill-seam world/action-interface framing instead of an internal audit abstract.
 - Reframed the core claim around predicting handoff failure, diagnosing the failure reason, choosing repair/probe/abstain/transition decisions, updating planner edge beliefs, and feeding those outcomes back into future planning.
 - Added a vector-first figure pass with a skill-seam overview diagram and PDF/PNG companion outputs for all main figures.

@@ -108,7 +108,7 @@ Jason
 
 Title:
 
-> Barrier-Certified Seam Models for Compositional Robot Skills
+> Predictive Skill-Seam Action Models for Robot Composition
 
 Problem:
 

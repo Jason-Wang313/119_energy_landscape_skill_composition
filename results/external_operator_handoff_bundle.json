@@ -725,11 +725,11 @@
       "sha256": "BAAF6BC6B7BFA0DAD346498D8C7FACEE413FD2A0844E5F833A519BBAD4BEEBF5"
     },
     {
-      "bytes": 3709,
+      "bytes": 3943,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/collection_runbook.md",
-      "sha256": "E205BF2FAEB35B78C88D0641A461A89A9CC9D4587B98386823D6EBEA34BC9351"
+      "sha256": "D9BE952620E7EE35DEAE630A4A81DCA56B42C44D2095B7A996D8B7B3A98B98F1"
     },
     {
       "bytes": 9996,
