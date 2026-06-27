@@ -71,6 +71,11 @@
       "evidence": ["scripts/audit_external_execution_readiness.py", "external_validation/platform_qualification_checklist.md", "results/external_execution_readiness_audit.json", "results/external_execution_readiness_audit.md"]
     },
     {
+      "name": "external_acquisition_packet_claim",
+      "claim": "The repository provides a non-evidence acquisition packet that maps each remaining external-evidence blocker to concrete operator inputs, artifacts, and strict validation commands.",
+      "evidence": ["scripts/build_external_acquisition_packet.py", "results/external_acquisition_packet.json", "results/external_acquisition_packet.md", "results/submission_readiness_gap_audit.json"]
+    },
+    {
       "name": "external_config_template_claim",
       "claim": "The repository provides a non-evidence task config schema and template validator, while strict config evidence remains missing until real manifest-declared configs replace templates.",
       "evidence": ["external_validation/config_schema_v1.json", "external_validation/config_templates/peg_place_regrasp.json", "scripts/validate_external_configs.py", "results/external_config_template_audit.json", "results/external_config_template_audit.md"]

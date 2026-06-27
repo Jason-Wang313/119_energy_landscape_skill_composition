@@ -226,6 +226,21 @@
       "passed": true
     },
     {
+      "detail": "passed",
+      "name": "external_acquisition_packet_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True, strict_evidence_ready=False, acquisition_packet_ready=True",
+      "name": "external_acquisition_packet_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "missing_requirements=4, operator_actions=11",
+      "name": "external_acquisition_packet_maps_all_blockers",
+      "passed": true
+    },
+    {
       "detail": "external_submission_ready=False, rollout_passed=False, config_passed=False, adapter_passed=False",
       "name": "strict_evidence_gates_remain_not_ready",
       "passed": true

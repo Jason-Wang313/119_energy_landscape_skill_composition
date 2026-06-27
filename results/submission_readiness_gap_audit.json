@@ -214,6 +214,17 @@
     {
       "blocker": "",
       "evidence": [
+        "scripts/build_external_acquisition_packet.py",
+        "results/external_acquisition_packet.json",
+        "results/external_acquisition_packet.md"
+      ],
+      "requirement": "Machine-audited external evidence acquisition packet for remaining blockers",
+      "status": "satisfied",
+      "submission_blocking": true
+    },
+    {
+      "blocker": "",
+      "evidence": [
         "results/independent_validation_route_audit.json",
         "external_validation/independent_validation_route.md",
         "external_validation/independent_validation_route_matrix.csv"
@@ -257,7 +268,7 @@
       "submission_blocking": false
     }
   ],
-  "satisfied_requirements": 16,
+  "satisfied_requirements": 17,
   "scope_gate_pass": false,
   "version": "submission_readiness_gap_audit_v1"
 }

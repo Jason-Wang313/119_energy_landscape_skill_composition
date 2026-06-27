@@ -85,6 +85,8 @@ def main() -> int:
     pairing_integrity = read_json(pairing_integrity_path) if pairing_integrity_path.exists() else {}
     release_package_path = RESULTS / "external_release_package_audit.json"
     release_package = read_json(release_package_path) if release_package_path.exists() else {}
+    acquisition_packet_path = RESULTS / "external_acquisition_packet.json"
+    acquisition_packet = read_json(acquisition_packet_path) if acquisition_packet_path.exists() else {}
     presentation_path = RESULTS / "presentation_quality_audit.json"
     presentation = read_json(presentation_path) if presentation_path.exists() else {}
     figure_readability_path = RESULTS / "figure_readability_audit.json"
@@ -435,6 +437,38 @@ def main() -> int:
             "external_validation/method_alias_map.json",
         ],
         blocker="" if collection_readiness_ok else "external collection preflight audit is missing/failing or incorrectly claims actual collection readiness",
+        submission_blocking=True,
+    )
+
+    acquisition_checks = {check.get("name"): check.get("passed") for check in acquisition_packet.get("checks", [])}
+    acquisition_packet_ok = (
+        acquisition_packet.get("passed") is True
+        and acquisition_packet.get("version") == "external_acquisition_packet_v1"
+        and acquisition_packet.get("not_external_evidence") is True
+        and acquisition_packet.get("strict_evidence_ready") is False
+        and len(acquisition_packet.get("missing_requirements", []) or []) == 4
+        and len(acquisition_packet.get("operator_actions", []) or []) >= 10
+        and acquisition_checks.get("all_missing_requirements_mapped") is True
+        and acquisition_checks.get("post_collection_strict_commands_cover_all_gates") is True
+        and acquisition_checks.get("no_real_manifest_written") is True
+        and exists_all(
+            [
+                ROOT / "scripts" / "build_external_acquisition_packet.py",
+                RESULTS / "external_acquisition_packet.json",
+                RESULTS / "external_acquisition_packet.md",
+            ]
+        )
+    )
+    add_requirement(
+        requirements,
+        requirement="Machine-audited external evidence acquisition packet for remaining blockers",
+        status="satisfied" if acquisition_packet_ok else "missing",
+        evidence=[
+            "scripts/build_external_acquisition_packet.py",
+            "results/external_acquisition_packet.json",
+            "results/external_acquisition_packet.md",
+        ],
+        blocker="" if acquisition_packet_ok else "external acquisition packet is missing/failing or incorrectly claims evidence readiness",
         submission_blocking=True,
     )
 

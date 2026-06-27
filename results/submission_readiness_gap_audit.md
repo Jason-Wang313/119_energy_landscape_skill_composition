@@ -2,7 +2,7 @@
 
 Passed: `true`.
 Objective complete: `false`.
-Satisfied requirements: `16/20`.
+Satisfied requirements: `17/21`.
 Blocking missing requirements: `4`.
 Human-polish requirements: `0`.
 
@@ -46,6 +46,8 @@ This audit is meant to prevent false completion claims. It passes only while the
   Evidence: results/external_runner_harness_audit.json, results/external_runner_harness_audit.md, external_validation/runner/README.md, external_validation/runner/backend_contract.py, external_validation/runner/real_collection_runner.py, external_validation/runner/backend_templates/maniskill_backend.py
 - `satisfied` Actual external collection preflight gate before spending robot or simulator time
   Evidence: scripts/audit_external_collection_readiness.py, results/external_collection_readiness_audit.json, results/external_collection_readiness_audit.md, external_validation/blinded_operator_sheet.csv, external_validation/method_alias_map.json
+- `satisfied` Machine-audited external evidence acquisition packet for remaining blockers
+  Evidence: scripts/build_external_acquisition_packet.py, results/external_acquisition_packet.json, results/external_acquisition_packet.md
 - `satisfied` Concrete non-Haonan validation route with public simulator and robot options
   Evidence: results/independent_validation_route_audit.json, external_validation/independent_validation_route.md, external_validation/independent_validation_route_matrix.csv
 - `satisfied` Separate Haonan/Yilun outreach package derived from the strengthened paper

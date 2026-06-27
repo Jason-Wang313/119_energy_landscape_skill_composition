@@ -120,6 +120,7 @@ def main():
         "scripts\\build_external_manifest.py --allow-missing",
         "scripts\\audit_external_release_package.py",
         "scripts\\audit_external_evidence_preflight.py",
+        "scripts\\build_external_acquisition_packet.py",
         "scripts\\self_test_external_adapter_scaffold_guard.py",
         "scripts\\self_test_external_rollout_validator.py",
         "scripts\\self_test_external_evidence_pipeline.py",
@@ -153,6 +154,8 @@ def main():
         "python -m compileall",
         "python scripts/audit_external_runner_harness.py",
         "python scripts/audit_external_collection_readiness.py",
+        "python scripts/audit_external_evidence_preflight.py",
+        "python scripts/build_external_acquisition_packet.py",
         "python scripts/audit_external_release_package.py",
         "python scripts/audit_external_execution_readiness.py",
         "python scripts/audit_external_pairing_integrity.py",
@@ -994,6 +997,9 @@ def main():
         "external_pairing_integrity_not_evidence",
         "external_release_package_audit_ready",
         "external_release_package_not_evidence",
+        "external_acquisition_packet_ready",
+        "external_acquisition_packet_not_evidence",
+        "external_acquisition_packet_maps_all_blockers",
         "config_templates_ready",
         "baseline_contract_reports_missing_implementations",
         "adapter_contract_harness_ready",
@@ -1019,12 +1025,42 @@ def main():
         RESULTS / "external_pairing_integrity_audit.md",
         RESULTS / "external_release_package_audit.md",
         RESULTS / "external_collection_readiness_audit.md",
+        RESULTS / "external_acquisition_packet.md",
         RESULTS / "external_execution_readiness_audit.md",
         RESULTS / "external_fidelity_acceptance_audit.md",
         RESULTS / "external_blind_eval_audit.md",
     ):
         if not path.exists():
             fail(f"missing external execution readiness artifact: {path}")
+
+    acquisition_path = RESULTS / "external_acquisition_packet.json"
+    if not acquisition_path.exists():
+        fail("missing results/external_acquisition_packet.json; run scripts/build_external_acquisition_packet.py")
+    acquisition = json.loads(acquisition_path.read_text(encoding="utf-8"))
+    if acquisition.get("version") != "external_acquisition_packet_v1":
+        fail("external acquisition packet version mismatch")
+    if acquisition.get("passed") is not True:
+        fail("external acquisition packet did not pass")
+    if acquisition.get("not_external_evidence") is not True:
+        fail("external acquisition packet must declare that it is not evidence")
+    if acquisition.get("strict_evidence_ready") is not False:
+        fail("external acquisition packet must not claim strict evidence readiness")
+    if len(acquisition.get("missing_requirements", []) or []) != 4:
+        fail("external acquisition packet should map the four remaining blocking external requirements")
+    if len(acquisition.get("operator_actions", []) or []) < 10:
+        fail("external acquisition packet has too few operator actions")
+    acquisition_checks = {entry.get("name"): entry.get("passed") for entry in acquisition.get("checks", [])}
+    for required_check in (
+        "all_missing_requirements_mapped",
+        "collection_preflight_fail_closed",
+        "preflight_operator_actions_present",
+        "route_independent_of_haonan",
+        "post_collection_strict_commands_cover_all_gates",
+        "no_real_manifest_written",
+        "operator_actions_cover_collection_blockers",
+    ):
+        if acquisition_checks.get(required_check) is not True:
+            fail(f"external acquisition packet missing passing check: {required_check}")
 
     expected_files = {
         "dataset_summary": RESULTS / "dataset_summary.csv",

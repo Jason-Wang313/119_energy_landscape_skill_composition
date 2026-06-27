@@ -28,7 +28,7 @@ Continuation audit additions:
 - Camera-ready design audit: `results/camera_ready_design_audit.md` renders all 29 PDF pages and checks page density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
 - Numeric integrity: validator passed with no missing required outputs, invalid numeric values, or artifact-placement violations.
 - Claim boundary audit: `results/claim_boundary_audit.md` passes and blocks premature deployment, hardware, or ICLR-main readiness claims.
-- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` maps the active objective to 20 concrete requirements; it currently reports 16 satisfied, 4 blocking external gaps, and 0 human-polish items, so the objective is not complete.
+- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` maps the active objective to 21 concrete requirements; it currently reports 17 satisfied, 4 blocking external gaps, and 0 human-polish items, so the objective is not complete.
 - Full local build script: `scripts/build_submission_artifacts.ps1`.
 - GitHub validation workflow: `.github/workflows/paper119-validation.yml` runs the core runner/readiness/submission/outreach validators on pushed branches and pull requests, with the repository PDF used as the CI canonical artifact.
 - Canonical PDF: `C:/Users/wangz/Downloads/119.pdf`.

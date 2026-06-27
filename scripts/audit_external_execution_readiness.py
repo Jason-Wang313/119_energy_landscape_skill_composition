@@ -362,6 +362,32 @@ def main() -> int:
         f"operator_next_actions={len(preflight.get('operator_next_actions', []) or [])}",
     )
 
+    acquisition_ok, acquisition, acquisition_detail = passed_json(
+        RESULTS / "external_acquisition_packet.json",
+        version="external_acquisition_packet_v1",
+    )
+    add_check(checks, "external_acquisition_packet_ready", acquisition_ok, acquisition_detail)
+    add_check(
+        checks,
+        "external_acquisition_packet_not_evidence",
+        acquisition.get("not_external_evidence") is True
+        and acquisition.get("strict_evidence_ready") is False
+        and acquisition.get("acquisition_packet_ready") is True,
+        (
+            f"not_external_evidence={acquisition.get('not_external_evidence')!r}, "
+            f"strict_evidence_ready={acquisition.get('strict_evidence_ready')!r}, "
+            f"acquisition_packet_ready={acquisition.get('acquisition_packet_ready')!r}"
+        ),
+    )
+    acquisition_missing = acquisition.get("missing_requirements", []) or []
+    acquisition_actions = acquisition.get("operator_actions", []) or []
+    add_check(
+        checks,
+        "external_acquisition_packet_maps_all_blockers",
+        len(acquisition_missing) == 4 and len(acquisition_actions) >= 10,
+        f"missing_requirements={len(acquisition_missing)}, operator_actions={len(acquisition_actions)}",
+    )
+
     external_audit = read_json(RESULTS / "external_evidence_audit.json") if (RESULTS / "external_evidence_audit.json").exists() else {}
     rollout_metrics = read_json(RESULTS / "external_rollout_metrics.json") if (RESULTS / "external_rollout_metrics.json").exists() else {}
     config_evidence = read_json(RESULTS / "external_config_evidence_audit.json") if (RESULTS / "external_config_evidence_audit.json").exists() else {}

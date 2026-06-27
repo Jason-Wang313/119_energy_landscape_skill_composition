@@ -43,6 +43,12 @@ jobs:
       - name: Audit external collection readiness
         run: python scripts/audit_external_collection_readiness.py
 
+      - name: Audit external evidence preflight
+        run: python scripts/audit_external_evidence_preflight.py
+
+      - name: Build external acquisition packet
+        run: python scripts/build_external_acquisition_packet.py
+
       - name: Audit external release package
         run: python scripts/audit_external_release_package.py
 

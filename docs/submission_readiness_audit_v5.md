@@ -46,7 +46,7 @@ ICLR-main ready: no
 - Desktop numbered PDF: absent.
 - Validator: passed.
 - Claim boundary audit: `results/claim_boundary_audit.md` passed and confirms the current package keeps the claim bounded.
-- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 16/20 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
+- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 17/21 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
 - Local falsification audit: `results/local_falsification_audit.md` passed and is included in the generated manuscript.
 - Holdout robustness audit: `results/holdout_robustness_audit.md` passed and is included in the generated manuscript.
 - Diagnostic mechanism audit: `results/diagnostic_mechanism_audit.md` passed and is included in the generated manuscript.
