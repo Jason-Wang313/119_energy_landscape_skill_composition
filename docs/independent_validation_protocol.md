@@ -151,9 +151,10 @@ Generate it with:
 ```powershell
 python scripts\build_external_collection_plan.py
 python scripts\build_external_analysis_plan.py
+python scripts\build_external_platform_onboarding.py
 ```
 
-The collection plan currently expands the high-fidelity route into 4 task families x 30 paired resets x 12 methods = 1,440 required JSONL records. The analysis plan pre-registers the external primary hypotheses, rollout-schema thresholds, paired-comparison key, exclusion/unblinding policy, strict gates, and required reporting before rollout collection. These files are not evidence; they are a deterministic collection schedule and locked analysis contract for producing the real evidence package.
+The collection plan currently expands the high-fidelity route into 4 task families x 30 paired resets x 12 methods = 1,440 required JSONL records. The analysis plan pre-registers the external primary hypotheses, rollout-schema thresholds, paired-comparison key, exclusion/unblinding policy, strict gates, and required reporting before rollout collection. The external platform onboarding packet records official source anchors, required simulator provenance, task onboarding files, backend requirements, and strict gate order for the primary ManiSkill/SAPIEN route. These files are not evidence; they are a deterministic collection schedule and locked analysis/onboarding contract for producing the real evidence package.
 
 Independent route matrix:
 

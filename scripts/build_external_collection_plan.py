@@ -19,6 +19,7 @@ REQUIRED_COMMANDS = [
     r"python scripts\build_external_collection_plan.py",
     r"python scripts\build_external_analysis_plan.py",
     r"python scripts\build_independent_validation_route.py",
+    r"python scripts\build_external_platform_onboarding.py",
     r"python scripts\audit_external_fidelity_acceptance.py",
     r"python scripts\build_external_blind_eval_plan.py",
     r"python scripts\audit_external_collection_readiness.py",

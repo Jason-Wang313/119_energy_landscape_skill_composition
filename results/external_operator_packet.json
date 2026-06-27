@@ -65,6 +65,24 @@
   "operator_actions": [
     {
       "artifacts": [
+        "external_validation/platform_onboarding_packet.md",
+        "external_validation/platform_onboarding_packet.json",
+        "results/external_platform_onboarding_audit.json"
+      ],
+      "closes": [
+        "platform onboarding for independent high-fidelity or robot evidence capture"
+      ],
+      "commands": [
+        "python scripts\\build_external_platform_onboarding.py",
+        "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
+        "python scripts\\audit_external_fidelity_acceptance.py --strict"
+      ],
+      "id": "platform_onboarding",
+      "operator_input": "GPU workstation or accepted robot/simulator platform plus recorded version/provenance fields",
+      "title": "Onboard the public simulator platform"
+    },
+    {
+      "artifacts": [
         "external_validation/runner/backends/<real_backend>.py"
       ],
       "closes": [

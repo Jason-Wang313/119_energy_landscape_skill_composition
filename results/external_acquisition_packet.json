@@ -2,7 +2,7 @@
   "acquisition_packet_ready": true,
   "checks": [
     {
-      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json",
+      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_onboarding_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json",
       "name": "source_audits_exist",
       "passed": true
     },
@@ -52,6 +52,11 @@
       "passed": true
     },
     {
+      "detail": "platform_onboarding_ready=True, strict_evidence_ready=False",
+      "name": "platform_onboarding_ready",
+      "passed": true
+    },
+    {
       "detail": "missing_command_fragments=[]",
       "name": "post_collection_strict_commands_cover_all_gates",
       "passed": true
@@ -62,7 +67,7 @@
       "passed": true
     },
     {
-      "detail": "Select a non-template backend module Create real manifest-declared task configs Fill platform fidelity acceptance with real provenance Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
+      "detail": "Onboard the public simulator platform Select a non-template backend module Create real manifest-declared task configs Fill platform fidelity acceptance with real provenance Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
       "name": "operator_actions_cover_collection_blockers",
       "passed": true
     },
@@ -82,6 +87,7 @@
     {
       "blocker": "strict external evidence audit is NOT_READY; real manifest/log/video/checkpoint evidence and accepted robot/simulator fidelity provenance are missing",
       "mapped_actions": [
+        "platform_onboarding",
         "backend_module",
         "platform_fidelity",
         "run_collection",
@@ -116,6 +122,24 @@
   ],
   "not_external_evidence": true,
   "operator_actions": [
+    {
+      "artifacts": [
+        "external_validation/platform_onboarding_packet.md",
+        "external_validation/platform_onboarding_packet.json",
+        "results/external_platform_onboarding_audit.json"
+      ],
+      "closes": [
+        "platform onboarding for independent high-fidelity or robot evidence capture"
+      ],
+      "commands": [
+        "python scripts\\build_external_platform_onboarding.py",
+        "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
+        "python scripts\\audit_external_fidelity_acceptance.py --strict"
+      ],
+      "id": "platform_onboarding",
+      "operator_input": "GPU workstation or accepted robot/simulator platform plus recorded version/provenance fields",
+      "title": "Onboard the public simulator platform"
+    },
     {
       "artifacts": [
         "external_validation/runner/backends/<real_backend>.py"
@@ -309,6 +333,7 @@
     "results/external_collection_readiness_audit.json",
     "results/external_evidence_preflight.json",
     "results/independent_validation_route_audit.json",
+    "results/external_platform_onboarding_audit.json",
     "results/external_config_materialization_plan.json",
     "results/external_backend_contract_audit.json"
   ],

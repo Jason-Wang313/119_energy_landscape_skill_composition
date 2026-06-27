@@ -10,7 +10,7 @@ This packet maps the remaining main-conference blockers to concrete operator inp
 
 | Requirement | Operator actions |
 |---|---|
-| `Independent real-robot or accepted high-fidelity external validation evidence` | `backend_module`, `platform_fidelity`, `run_collection`, `manifest_and_release` |
+| `Independent real-robot or accepted high-fidelity external validation evidence` | `platform_onboarding`, `backend_module`, `platform_fidelity`, `run_collection`, `manifest_and_release` |
 | `External rollout metrics recomputed from raw JSONL logs` | `run_collection`, `strict_rollout_recompute` |
 | `Manifest-declared real task configs replace non-evidence templates` | `real_task_configs`, `manifest_and_release` |
 | `Manifest-declared independent non-oracle baseline evidence and fairness contract` | `real_method_implementations`, `strict_adapter_evidence` |
@@ -26,6 +26,7 @@ This packet maps the remaining main-conference blockers to concrete operator inp
 
 | ID | Action | Operator input | Key artifacts | Commands |
 |---|---|---|---|---|
+| `platform_onboarding` | Onboard the public simulator platform | `GPU workstation or accepted robot/simulator platform plus recorded version/provenance fields` | `external_validation/platform_onboarding_packet.md`<br>`external_validation/platform_onboarding_packet.json`<br>`results/external_platform_onboarding_audit.json` | `python scripts\build_external_platform_onboarding.py`<br>`python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --alias-map external_validation\method_alias_map.json`<br>`python scripts\audit_external_fidelity_acceptance.py --strict` |
 | `backend_module` | Select a non-template backend module | `--backend-module <module_or_path>` | `external_validation/runner/backends/<real_backend>.py` | `python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --alias-map external_validation\method_alias_map.json`<br>`python scripts\audit_external_collection_readiness.py --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map` |
 | `real_task_configs` | Create real manifest-declared task configs | `external_validation/configs/<task_family>.json for each task family` | `external_validation/configs/peg_place_regrasp.json`<br>`external_validation/configs/drawer_to_pick_transfer.json`<br>`external_validation/configs/door_open_navigation.json`<br>`external_validation/configs/cable_route_insert.json` | `python scripts\materialize_external_configs.py --platform-type <real_robot|high_fidelity_sim> --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write`<br>`python scripts\validate_external_configs.py --strict` |
 | `platform_fidelity` | Fill platform fidelity acceptance with real provenance | `accepted simulator or robot evidence, contact/dynamics/camera/state provenance, and task coverage` | `external_validation/fidelity_acceptance.json` | `python scripts\audit_external_fidelity_acceptance.py --strict` |
@@ -57,7 +58,7 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 
 ## Checks
 
-- `pass` `source_audits_exist`: results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json
+- `pass` `source_audits_exist`: results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_onboarding_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json
 - `pass` `gap_audit_has_four_external_blockers`: missing=['Independent real-robot or accepted high-fidelity external validation evidence', 'External rollout metrics recomputed from raw JSONL logs', 'Manifest-declared real task configs replace non-evidence templates', 'Manifest-declared independent non-oracle baseline evidence and fairness contract']
 - `pass` `all_missing_requirements_mapped`: unmapped=[]
 - `pass` `all_action_ids_exist`: missing_action_ids=[]
@@ -67,7 +68,8 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 - `pass` `backend_contract_gate_ready`: harness_ready=True, actual_backend_ready=False
 - `pass` `preflight_operator_actions_present`: operator_next_actions=5, evidence_ready=False
 - `pass` `route_independent_of_haonan`: primary_route='maniskill_sapien_primary'
+- `pass` `platform_onboarding_ready`: platform_onboarding_ready=True, strict_evidence_ready=False
 - `pass` `post_collection_strict_commands_cover_all_gates`: missing_command_fragments=[]
 - `pass` `no_real_manifest_written`: external_validation/manifest.json absent before real evidence
-- `pass` `operator_actions_cover_collection_blockers`: Select a non-template backend module Create real manifest-declared task configs Fill platform fidelity acceptance with real provenance Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate
+- `pass` `operator_actions_cover_collection_blockers`: Onboard the public simulator platform Select a non-template backend module Create real manifest-declared task configs Fill platform fidelity acceptance with real provenance Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate
 - `pass` `backend_action_runs_contract_before_readiness`: python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --alias-map external_validation\method_alias_map.json; python scripts\audit_external_collection_readiness.py --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map

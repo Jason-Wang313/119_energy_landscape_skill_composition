@@ -1,0 +1,187 @@
+{
+  "analysis_plan_dependency": {
+    "analysis_plan_ready": true,
+    "note": "The analysis plan locks thresholds and exclusions before rollout collection; this onboarding packet only prepares the platform path.",
+    "strict_evidence_ready": false
+  },
+  "backend_requirements": [
+    "implement external_validation.runner.backend_contract.ExternalCollectionBackend",
+    "return non-placeholder platform_provenance with the required provenance fields",
+    "load manifest-declared task configs from external_validation/configs",
+    "preserve paired reset identity for every method panel",
+    "export videos under external_validation/videos and log paths under external_validation/logs",
+    "report policy_or_config_hash for every method execution",
+    "raise rather than silently substituting scaffold/template implementations"
+  ],
+  "not_external_evidence": true,
+  "official_sources": {
+    "primary": [
+      {
+        "name": "ManiSkill installation docs",
+        "operator_note": "Official docs state the package is installed with pip and a system-compatible torch build.",
+        "url": "https://maniskill.readthedocs.io/en/latest/user_guide/getting_started/installation.html"
+      },
+      {
+        "name": "SAPIEN documentation",
+        "operator_note": "Record the exact SAPIEN version, renderer, contact solver settings, and GPU/Vulkan path used by the backend.",
+        "url": "https://sapien.ucsd.edu/docs/latest/index.html"
+      }
+    ],
+    "secondary": [
+      {
+        "name": "robosuite installation docs",
+        "route_id": "mujoco_robosuite_cross_engine",
+        "url": "https://robosuite.ai/docs/installation.html"
+      },
+      {
+        "name": "Isaac Sim installation docs",
+        "route_id": "isaac_sim_lab_secondary",
+        "url": "https://docs.isaacsim.omniverse.nvidia.com/6.0.0/installation/index.html"
+      },
+      {
+        "name": "Isaac Lab local installation docs",
+        "route_id": "isaac_sim_lab_secondary",
+        "url": "https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/index.html"
+      }
+    ]
+  },
+  "pilot_sequence": [
+    "Run the dry-run packet check without writing logs or videos.",
+    "Run strict backend qualification against the non-template backend module.",
+    "Materialize real task configs only with --confirm-real-platform --write after platform values are known.",
+    "Fill external_validation/fidelity_acceptance.json with platform, simulator, contact, observation, and task-fidelity provenance.",
+    "Run strict collection readiness with a specific immutable run id and explicit alias unsealing.",
+    "Collect the full 1,440-record blinded paired-reset panel only after strict readiness passes.",
+    "Build the manifest and run strict rollout, pairing, release-package, and evidence audits from raw logs."
+  ],
+  "planned_records": 1440,
+  "planned_tasks": [
+    "peg_place_regrasp",
+    "drawer_to_pick_transfer",
+    "door_open_navigation",
+    "cable_route_insert"
+  ],
+  "platform_onboarding_ready": true,
+  "primary_install_probe": {
+    "install_command_from_official_docs": "python -m pip install --upgrade mani_skill; python -m pip install torch torchvision torchaudio",
+    "local_status": "not_run_by_this_repo; operator must run on the selected GPU workstation and record exact versions in fidelity_acceptance.json",
+    "version_capture_command": "python -c \"import platform, torch, mani_skill, sapien; print(platform.platform()); print(torch.__version__); print(getattr(mani_skill, '__version__', 'unknown')); print(getattr(sapien, '__version__', 'unknown'))\""
+  },
+  "primary_platform_family": "ManiSkill/SAPIEN",
+  "primary_route": "maniskill_sapien_primary",
+  "primary_route_independent_of_haonan": true,
+  "purpose": "Operator-facing onboarding contract for executing the non-Haonan public-simulator validation route without loosening the external evidence gates.",
+  "readiness_blockers_addressed": [
+    "manifest_backed_external_evidence",
+    "raw_jsonl_metric_recompute",
+    "real_task_configs",
+    "independent_non_oracle_baselines"
+  ],
+  "required_platform_provenance_fields": [
+    "platform_name",
+    "platform_version",
+    "maniskill_version",
+    "sapien_version",
+    "python_version",
+    "operating_system",
+    "gpu_model",
+    "gpu_driver",
+    "vulkan_or_renderer_device",
+    "physics_timestep",
+    "contact_solver",
+    "friction_model",
+    "compliance_or_contact_regularization",
+    "camera_intrinsics_and_resolution",
+    "state_observation_keys",
+    "contact_signal_keys",
+    "asset_sources",
+    "task_config_sha256",
+    "backend_module_sha256",
+    "skill_library_hash",
+    "code_commit"
+  ],
+  "source_check_date": "2026-06-27",
+  "source_reports": [
+    "results/external_collection_plan.json",
+    "results/independent_validation_route_audit.json",
+    "results/external_analysis_plan_audit.json"
+  ],
+  "strict_commands": [
+    "python scripts\\build_external_platform_onboarding.py",
+    "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
+    "python scripts\\materialize_external_configs.py --platform-type high_fidelity_sim --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\audit_external_fidelity_acceptance.py --strict",
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+    "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "strict_evidence_ready": false,
+  "task_onboarding": [
+    {
+      "must_document": [
+        "reset sampler and paired initial-state hash rule",
+        "terminal sample set construction",
+        "camera/state/contact observation channels exposed to every method",
+        "video export path and hash coverage",
+        "task-specific fidelity risks and accepted approximations"
+      ],
+      "required_operator_files": [
+        "external_validation/configs/peg_place_regrasp.json",
+        "external_validation/logs/peg_place_regrasp.jsonl",
+        "external_validation/videos/peg_place_regrasp/"
+      ],
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "must_document": [
+        "reset sampler and paired initial-state hash rule",
+        "terminal sample set construction",
+        "camera/state/contact observation channels exposed to every method",
+        "video export path and hash coverage",
+        "task-specific fidelity risks and accepted approximations"
+      ],
+      "required_operator_files": [
+        "external_validation/configs/drawer_to_pick_transfer.json",
+        "external_validation/logs/drawer_to_pick_transfer.jsonl",
+        "external_validation/videos/drawer_to_pick_transfer/"
+      ],
+      "task_family": "drawer_to_pick_transfer"
+    },
+    {
+      "must_document": [
+        "reset sampler and paired initial-state hash rule",
+        "terminal sample set construction",
+        "camera/state/contact observation channels exposed to every method",
+        "video export path and hash coverage",
+        "task-specific fidelity risks and accepted approximations"
+      ],
+      "required_operator_files": [
+        "external_validation/configs/door_open_navigation.json",
+        "external_validation/logs/door_open_navigation.jsonl",
+        "external_validation/videos/door_open_navigation/"
+      ],
+      "task_family": "door_open_navigation"
+    },
+    {
+      "must_document": [
+        "reset sampler and paired initial-state hash rule",
+        "terminal sample set construction",
+        "camera/state/contact observation channels exposed to every method",
+        "video export path and hash coverage",
+        "task-specific fidelity risks and accepted approximations"
+      ],
+      "required_operator_files": [
+        "external_validation/configs/cable_route_insert.json",
+        "external_validation/logs/cable_route_insert.jsonl",
+        "external_validation/videos/cable_route_insert/"
+      ],
+      "task_family": "cable_route_insert"
+    }
+  ],
+  "version": "external_platform_onboarding_v1"
+}

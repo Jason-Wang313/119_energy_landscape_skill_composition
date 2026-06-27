@@ -76,6 +76,9 @@ jobs:
       - name: Build external analysis plan
         run: python scripts/build_external_analysis_plan.py
 
+      - name: Build external platform onboarding
+        run: python scripts/build_external_platform_onboarding.py
+
       - name: Build external acquisition packet
         run: python scripts/build_external_acquisition_packet.py
 

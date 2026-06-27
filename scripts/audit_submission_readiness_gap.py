@@ -80,6 +80,8 @@ def main() -> int:
     execution_readiness = read_json(execution_readiness_path) if execution_readiness_path.exists() else {}
     analysis_plan_path = RESULTS / "external_analysis_plan_audit.json"
     analysis_plan = read_json(analysis_plan_path) if analysis_plan_path.exists() else {}
+    platform_onboarding_path = RESULTS / "external_platform_onboarding_audit.json"
+    platform_onboarding = read_json(platform_onboarding_path) if platform_onboarding_path.exists() else {}
     fidelity_acceptance_path = RESULTS / "external_fidelity_acceptance_audit.json"
     fidelity_acceptance = read_json(fidelity_acceptance_path) if fidelity_acceptance_path.exists() else {}
     route_audit_path = RESULTS / "independent_validation_route_audit.json"
@@ -287,10 +289,16 @@ def main() -> int:
         and analysis_plan.get("not_external_evidence") is True
         and analysis_plan.get("analysis_plan_ready") is True
         and analysis_plan.get("strict_evidence_ready") is False
+        and platform_onboarding.get("passed") is True
+        and platform_onboarding.get("not_external_evidence") is True
+        and platform_onboarding.get("platform_onboarding_ready") is True
+        and platform_onboarding.get("strict_evidence_ready") is False
         and exists_all(
             [
                 EXTERNAL / "statistical_analysis_plan.json",
                 EXTERNAL / "statistical_analysis_plan.md",
+                EXTERNAL / "platform_onboarding_packet.json",
+                EXTERNAL / "platform_onboarding_packet.md",
                 EXTERNAL / "platform_qualification_checklist.md",
                 EXTERNAL / "fidelity_acceptance_template.json",
                 EXTERNAL / "independent_validation_route.md",
@@ -332,8 +340,11 @@ def main() -> int:
         evidence=[
             "results/external_execution_readiness_audit.json",
             "results/external_analysis_plan_audit.json",
+            "results/external_platform_onboarding_audit.json",
             "external_validation/statistical_analysis_plan.json",
             "external_validation/statistical_analysis_plan.md",
+            "external_validation/platform_onboarding_packet.json",
+            "external_validation/platform_onboarding_packet.md",
             "results/external_fidelity_acceptance_audit.json",
             "results/independent_validation_route_audit.json",
             "results/external_blind_eval_audit.json",

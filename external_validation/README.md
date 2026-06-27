@@ -76,6 +76,14 @@ python scripts\build_independent_validation_route.py
 
 This writes `external_validation/independent_validation_route.md`, `external_validation/independent_validation_route_matrix.csv`, and `results/independent_validation_route_audit.{json,md}`. It names a primary public-simulator route, secondary cross-engine routes, and a third-party robot-lab route for collecting the missing manifest-backed logs, videos, configs, platform provenance, and independent baseline implementations. It is route planning only, not evidence.
 
+Build the external platform onboarding packet for the primary public-simulator route:
+
+```powershell
+python scripts\build_external_platform_onboarding.py
+```
+
+This writes `external_validation/platform_onboarding_packet.{json,md}` and `results/external_platform_onboarding_audit.{json,md}`. It records the official source anchors, install/version-probe command, required simulator provenance, task onboarding files, backend requirements, and strict gate order for the ManiSkill/SAPIEN route. It is not evidence; the operator must still supply real platform versions, accepted fidelity provenance, real configs, backend implementations, logs, videos, manifests, and hashes.
+
 Then audit the platform-fidelity acceptance contract:
 
 ```powershell
@@ -182,6 +190,7 @@ Use the manifest builder before strict validation. It does not fabricate evidenc
 python scripts\build_external_collection_plan.py
 python scripts\build_external_analysis_plan.py
 python scripts\build_independent_validation_route.py
+python scripts\build_external_platform_onboarding.py
 python scripts\audit_external_fidelity_acceptance.py
 python scripts\build_external_blind_eval_plan.py
 python scripts\build_external_runbook.py
@@ -255,6 +264,7 @@ Required validation commands:
 ```powershell
 python scripts\build_external_collection_plan.py
 python scripts\build_external_analysis_plan.py
+python scripts\build_external_platform_onboarding.py
 python scripts\build_external_manifest.py --allow-missing
 python scripts\build_independent_validation_route.py
 python scripts\build_external_baseline_contract.py

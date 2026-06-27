@@ -1,0 +1,116 @@
+{
+  "checks": [
+    {
+      "detail": "not_external_evidence=True, strict_evidence_ready=False",
+      "name": "packet_is_non_evidence_and_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "primary_route='maniskill_sapien_primary'",
+      "name": "primary_route_matches_independent_plan",
+      "passed": true
+    },
+    {
+      "detail": "tasks=['cable_route_insert', 'door_open_navigation', 'drawer_to_pick_transfer', 'peg_place_regrasp']",
+      "name": "task_onboarding_covers_collection_plan",
+      "passed": true
+    },
+    {
+      "detail": "planned_records=1440",
+      "name": "record_budget_preserved",
+      "passed": true
+    },
+    {
+      "detail": "addressed=['manifest_backed_external_evidence', 'raw_jsonl_metric_recompute', 'real_task_configs', 'independent_non_oracle_baselines']",
+      "name": "all_remaining_blockers_addressed",
+      "passed": true
+    },
+    {
+      "detail": "source_urls=['https://maniskill.readthedocs.io/en/latest/user_guide/getting_started/installation.html', 'https://sapien.ucsd.edu/docs/latest/index.html', 'https://robosuite.ai/docs/installation.html', 'https://docs.isaacsim.omniverse.nvidia.com/6.0.0/installation/index.html', 'https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/index.html']",
+      "name": "official_sources_are_primary_and_currently_checked",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "platform_provenance_fields_cover_fidelity_hashes_and_observations",
+      "passed": true
+    },
+    {
+      "detail": "build_external_platform_onboarding.py",
+      "name": "strict_command_includes_build_external_platform_onboarding",
+      "passed": true
+    },
+    {
+      "detail": "audit_external_backend_contract.py --strict",
+      "name": "strict_command_includes_audit_external_backend_contract",
+      "passed": true
+    },
+    {
+      "detail": "materialize_external_configs.py",
+      "name": "strict_command_includes_materialize_external_configs",
+      "passed": true
+    },
+    {
+      "detail": "validate_external_configs.py --strict",
+      "name": "strict_command_includes_validate_external_configs",
+      "passed": true
+    },
+    {
+      "detail": "audit_external_fidelity_acceptance.py --strict",
+      "name": "strict_command_includes_audit_external_fidelity_acceptance",
+      "passed": true
+    },
+    {
+      "detail": "audit_external_collection_readiness.py --strict",
+      "name": "strict_command_includes_audit_external_collection_readiness",
+      "passed": true
+    },
+    {
+      "detail": "real_collection_runner.py",
+      "name": "strict_command_includes_real_collection_runner",
+      "passed": true
+    },
+    {
+      "detail": "build_external_manifest.py --write --check-video-paths",
+      "name": "strict_command_includes_build_external_manifest",
+      "passed": true
+    },
+    {
+      "detail": "validate_external_rollouts.py",
+      "name": "strict_command_includes_validate_external_rollouts",
+      "passed": true
+    },
+    {
+      "detail": "audit_external_pairing_integrity.py --strict",
+      "name": "strict_command_includes_audit_external_pairing_integrity",
+      "passed": true
+    },
+    {
+      "detail": "audit_external_release_package.py --strict",
+      "name": "strict_command_includes_audit_external_release_package",
+      "passed": true
+    },
+    {
+      "detail": "audit_external_evidence.py --strict",
+      "name": "strict_command_includes_audit_external_evidence",
+      "passed": true
+    },
+    {
+      "detail": "pilot_sequence=['Run the dry-run packet check without writing logs or videos.', 'Run strict backend qualification against the non-template backend module.', 'Materialize real task configs only with --confirm-real-platform --write after platform values are known.', 'Fill external_validation/fidelity_acceptance.json with platform, simulator, contact, observation, and task-fidelity provenance.', 'Run strict collection readiness with a specific immutable run id and explicit alias unsealing.', 'Collect the full 1,440-record blinded paired-reset panel only after strict readiness passes.', 'Build the manifest and run strict rollout, pairing, release-package, and evidence audits from raw logs.']",
+      "name": "pilot_sequence_preserves_gate_order",
+      "passed": true
+    },
+    {
+      "detail": "packet_json=True, packet_md=True",
+      "name": "packet_files_written",
+      "passed": true
+    }
+  ],
+  "failed_checks": [],
+  "not_external_evidence": true,
+  "passed": true,
+  "platform_onboarding_ready": true,
+  "source_packet": "external_validation/platform_onboarding_packet.json",
+  "strict_evidence_ready": false,
+  "version": "external_platform_onboarding_audit_v1"
+}

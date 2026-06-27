@@ -29,11 +29,11 @@ Continuation audit additions:
 - Numeric integrity: validator passed with no missing required outputs, invalid numeric values, or artifact-placement violations.
 - Claim boundary audit: `results/claim_boundary_audit.md` passes and blocks premature deployment, hardware, or ICLR-main readiness claims.
 - Submission readiness gap audit: `results/submission_readiness_gap_audit.md` maps the active objective to 21 concrete requirements; it currently reports 17 satisfied, 4 blocking external gaps, and 0 human-polish items, so the objective is not complete.
-- Visible contribution audit: `results/visible_contribution_audit.md` checks that README, final audit, readiness docs, version log, child status, and outreach package all describe the current materializer/analysis-plan/operator-packet/outreach state while preserving the 17 satisfied, 4 blocking external gaps boundary.
+- Visible contribution audit: `results/visible_contribution_audit.md` checks that README, final audit, readiness docs, version log, child status, and outreach package all describe the current materializer/analysis-plan/platform-onboarding/operator-packet/outreach state while preserving the 17 satisfied, 4 blocking external gaps boundary.
 - Full local build script: `scripts/build_submission_artifacts.ps1`.
 - GitHub validation workflow: `.github/workflows/paper119-validation.yml` runs the core runner/readiness/submission/outreach validators on pushed branches and pull requests, with the repository PDF used as the CI canonical artifact.
 - Canonical PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `F9812C7BA823CF564B5AA165A3457E410811AC36335ABB4A9888E2743707BEA2`.
+- PDF SHA256: `DCB09448558E746B08E865A97A72D01CA53446CECD9D28E3E158A5B37EE0E29F`.
 - PDF size: `465342` bytes.
 - PDF pages: `29`.
 - Desktop PDF copy: absent.
@@ -41,6 +41,7 @@ Continuation audit additions:
 - Independent validation protocol: `docs/independent_validation_protocol.md`.
 - External collection plan: `results/external_collection_plan.md` expands the current high-fidelity route into 1,440 required JSONL records and is explicitly marked as non-evidence.
 - External analysis plan: `external_validation/statistical_analysis_plan.md` and `results/external_analysis_plan_audit.md` lock the external primary hypotheses, schema thresholds, paired-comparison key, exclusion/unblinding policy, and required reporting before independent rollout collection; this is non-evidence and does not change the strict evidence gate.
+- External platform onboarding packet: `external_validation/platform_onboarding_packet.md` and `results/external_platform_onboarding_audit.md` bind the primary ManiSkill/SAPIEN route to official source anchors, required simulator provenance, task onboarding files, backend requirements, and strict gate order; this is non-evidence and does not change the strict evidence gate.
 - Independent validation route: `external_validation/independent_validation_route.md`, `external_validation/independent_validation_route_matrix.csv`, and `results/independent_validation_route_audit.md` identify a primary ManiSkill/SAPIEN route, MuJoCo/robosuite and Isaac Sim/Isaac Lab secondary routes, and a third-party robot-lab route for collecting the same evidence without relying on Haonan; this remains non-evidence.
 - External fidelity acceptance audit: `external_validation/fidelity_acceptance_template.json` and `results/external_fidelity_acceptance_audit.md` define the robot/simulator provenance, contact/dynamics, paired-reset replay, operator independence, and hash requirements for counting a high-fidelity route as credible; it currently reports `acceptance_ready=false` and remains non-evidence.
 - External fidelity acceptance self-test: `results/external_fidelity_acceptance_self_test.md` verifies the strict fidelity gate on a temporary complete high-fidelity fixture, proves the template path remains fail-closed, and leaves the real fidelity audit report unchanged; this is tooling coverage only.

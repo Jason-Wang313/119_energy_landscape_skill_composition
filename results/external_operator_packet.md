@@ -57,6 +57,7 @@ Post-collection strict gates:
 
 ## Operator Actions
 
+- `platform_onboarding`: Onboard the public simulator platform
 - `backend_module`: Select a non-template backend module
 - `real_task_configs`: Create real manifest-declared task configs
 - `platform_fidelity`: Fill platform fidelity acceptance with real provenance

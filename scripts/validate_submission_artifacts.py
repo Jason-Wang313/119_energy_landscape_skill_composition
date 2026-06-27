@@ -107,6 +107,7 @@ def main():
         "scripts\\build_external_collection_plan.py",
         "scripts\\build_external_analysis_plan.py",
         "scripts\\build_independent_validation_route.py",
+        "scripts\\build_external_platform_onboarding.py",
         "scripts\\audit_external_fidelity_acceptance.py",
         "scripts\\self_test_external_fidelity_acceptance.py",
         "scripts\\build_external_blind_eval_plan.py",
@@ -179,6 +180,7 @@ def main():
         "python scripts/self_test_external_adapter_evidence.py",
         "python scripts/materialize_external_configs.py",
         "python scripts/build_external_analysis_plan.py",
+        "python scripts/build_external_platform_onboarding.py",
         "python scripts/build_external_acquisition_packet.py",
         "python scripts/build_external_operator_packet.py",
         "python scripts/build_external_operator_handoff_bundle.py",
@@ -239,6 +241,8 @@ def main():
         fail("external collection plan must include the blind evaluation plan command")
     if "python scripts\\build_independent_validation_route.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the independent validation route command")
+    if "python scripts\\build_external_platform_onboarding.py" not in collection_plan.get("validation_commands", []):
+        fail("external collection plan must include the external platform onboarding command")
     if "python scripts\\audit_external_collection_readiness.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the collection readiness audit command")
     if "python scripts\\audit_external_collection_readiness.py --strict" not in collection_plan.get("validation_commands", []):
@@ -349,6 +353,86 @@ def main():
     ):
         if not path.exists():
             fail(f"missing independent validation route artifact: {path}")
+
+    onboarding_packet_path = EXTERNAL / "platform_onboarding_packet.json"
+    onboarding_packet_md_path = EXTERNAL / "platform_onboarding_packet.md"
+    onboarding_audit_path = RESULTS / "external_platform_onboarding_audit.json"
+    onboarding_audit_md_path = RESULTS / "external_platform_onboarding_audit.md"
+    for path in (onboarding_packet_path, onboarding_packet_md_path, onboarding_audit_path, onboarding_audit_md_path):
+        if not path.exists():
+            fail(f"missing external platform onboarding artifact: {path}")
+    onboarding_packet = json.loads(onboarding_packet_path.read_text(encoding="utf-8"))
+    onboarding_audit = json.loads(onboarding_audit_path.read_text(encoding="utf-8"))
+    if onboarding_packet.get("version") != "external_platform_onboarding_v1":
+        fail("external platform onboarding packet version mismatch")
+    if onboarding_packet.get("not_external_evidence") is not True:
+        fail("external platform onboarding packet must declare that it is not evidence")
+    if onboarding_packet.get("primary_route") != "maniskill_sapien_primary":
+        fail("external platform onboarding must keep ManiSkill/SAPIEN as the primary route")
+    if int(onboarding_packet.get("planned_records", 0) or 0) != int(collection_plan.get("total_required_records", 0) or 0):
+        fail("external platform onboarding must preserve the collection-plan record budget")
+    if set(onboarding_packet.get("planned_tasks", []) or []) != {task.get("task_family") for task in collection_plan.get("tasks", [])}:
+        fail("external platform onboarding task set must match the collection plan")
+    source_urls = "\n".join(
+        str(source.get("url", ""))
+        for sources in (onboarding_packet.get("official_sources", {}) or {}).values()
+        for source in sources
+        if isinstance(source, dict)
+    )
+    for domain in ("maniskill.readthedocs.io", "sapien.ucsd.edu", "robosuite.ai", "isaac-sim.github.io"):
+        if domain not in source_urls:
+            fail(f"external platform onboarding missing official source domain: {domain}")
+    provenance_fields = set(onboarding_packet.get("required_platform_provenance_fields", []) or [])
+    for field in (
+        "contact_solver",
+        "friction_model",
+        "camera_intrinsics_and_resolution",
+        "state_observation_keys",
+        "contact_signal_keys",
+        "task_config_sha256",
+        "backend_module_sha256",
+        "skill_library_hash",
+        "code_commit",
+    ):
+        if field not in provenance_fields:
+            fail(f"external platform onboarding missing provenance field: {field}")
+    strict_onboarding_commands = "\n".join(onboarding_packet.get("strict_commands", []) or [])
+    for fragment in (
+        "audit_external_backend_contract.py --strict",
+        "materialize_external_configs.py",
+        "validate_external_configs.py --strict",
+        "audit_external_fidelity_acceptance.py --strict",
+        "audit_external_collection_readiness.py --strict",
+        "real_collection_runner.py",
+        "build_external_manifest.py --write --check-video-paths",
+        "validate_external_rollouts.py",
+        "audit_external_pairing_integrity.py --strict",
+        "audit_external_release_package.py --strict",
+        "audit_external_evidence.py --strict",
+    ):
+        if fragment not in strict_onboarding_commands:
+            fail(f"external platform onboarding missing strict command: {fragment}")
+    if onboarding_audit.get("version") != "external_platform_onboarding_audit_v1":
+        fail("external platform onboarding audit version mismatch")
+    if onboarding_audit.get("passed") is not True:
+        fail("external platform onboarding audit did not pass")
+    if onboarding_audit.get("not_external_evidence") is not True:
+        fail("external platform onboarding audit must declare that it is not evidence")
+    if onboarding_audit.get("platform_onboarding_ready") is not True or onboarding_audit.get("strict_evidence_ready") is not False:
+        fail("external platform onboarding audit must be ready while strict evidence remains false")
+    onboarding_checks = {entry.get("name"): entry.get("passed") for entry in onboarding_audit.get("checks", [])}
+    for required_check in (
+        "packet_is_non_evidence_and_fail_closed",
+        "primary_route_matches_independent_plan",
+        "task_onboarding_covers_collection_plan",
+        "record_budget_preserved",
+        "all_remaining_blockers_addressed",
+        "official_sources_are_primary_and_currently_checked",
+        "platform_provenance_fields_cover_fidelity_hashes_and_observations",
+        "pilot_sequence_preserves_gate_order",
+    ):
+        if onboarding_checks.get(required_check) is not True:
+            fail(f"external platform onboarding audit missing passing check: {required_check}")
 
     fidelity_acceptance_path = RESULTS / "external_fidelity_acceptance_audit.json"
     if not fidelity_acceptance_path.exists():
@@ -1370,6 +1454,10 @@ def main():
         "independent_route_not_evidence",
         "independent_route_primary_covers_tasks",
         "independent_route_closes_blockers",
+        "external_platform_onboarding_ready",
+        "external_platform_onboarding_not_evidence",
+        "external_platform_onboarding_sources_and_provenance",
+        "external_platform_onboarding_gate_order",
         "blind_eval_plan_ready",
         "blind_eval_not_evidence",
         "blind_eval_row_budget",
@@ -1438,8 +1526,11 @@ def main():
         RESULTS / "external_operator_packet.md",
         RESULTS / "external_operator_handoff_bundle.md",
         RESULTS / "external_analysis_plan_audit.md",
+        RESULTS / "external_platform_onboarding_audit.md",
         EXTERNAL / "statistical_analysis_plan.json",
         EXTERNAL / "statistical_analysis_plan.md",
+        EXTERNAL / "platform_onboarding_packet.json",
+        EXTERNAL / "platform_onboarding_packet.md",
         RESULTS / "external_config_materialization_plan.md",
         RESULTS / "external_execution_readiness_audit.md",
         RESULTS / "external_fidelity_acceptance_audit.md",
@@ -1473,6 +1564,7 @@ def main():
         "backend_contract_gate_ready",
         "preflight_operator_actions_present",
         "route_independent_of_haonan",
+        "platform_onboarding_ready",
         "post_collection_strict_commands_cover_all_gates",
         "no_real_manifest_written",
         "operator_actions_cover_collection_blockers",
@@ -1560,6 +1652,7 @@ def main():
         "no_real_manifest_written",
         "handoff_has_task_config_and_baseline_assets",
         "analysis_plan_included",
+        "platform_onboarding_included",
         "operator_actions_cover_evidence_collection",
         "post_collection_commands_cover_strict_gates",
         "file_hashes_are_recorded",
@@ -1786,6 +1879,7 @@ def main():
         "readiness_gap_state_visible",
         "operator_packet_no_go_visible",
         "analysis_plan_visible",
+        "platform_onboarding_visible",
         "materializer_guard_visible",
         "ledger_tracks_new_visible_claims",
         "README_current_visible_contribution_terms",

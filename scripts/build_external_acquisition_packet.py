@@ -15,6 +15,7 @@ OUT_MD = RESULTS / "external_acquisition_packet.md"
 
 MISSING_REQUIREMENT_ACTIONS = {
     "Independent real-robot or accepted high-fidelity external validation evidence": [
+        "platform_onboarding",
         "backend_module",
         "platform_fidelity",
         "run_collection",
@@ -38,6 +39,21 @@ EXPECTED_MISSING_REQUIREMENTS = list(MISSING_REQUIREMENT_ACTIONS)
 
 
 ACTION_CATALOG = {
+    "platform_onboarding": {
+        "title": "Onboard the public simulator platform",
+        "operator_input": "GPU workstation or accepted robot/simulator platform plus recorded version/provenance fields",
+        "artifacts": [
+            "external_validation/platform_onboarding_packet.md",
+            "external_validation/platform_onboarding_packet.json",
+            "results/external_platform_onboarding_audit.json",
+        ],
+        "commands": [
+            "python scripts\\build_external_platform_onboarding.py",
+            "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
+            "python scripts\\audit_external_fidelity_acceptance.py --strict",
+        ],
+        "closes": ["platform onboarding for independent high-fidelity or robot evidence capture"],
+    },
     "backend_module": {
         "title": "Select a non-template backend module",
         "operator_input": "--backend-module <module_or_path>",
@@ -217,6 +233,7 @@ def main() -> int:
     collection_path = RESULTS / "external_collection_readiness_audit.json"
     preflight_path = RESULTS / "external_evidence_preflight.json"
     route_path = RESULTS / "independent_validation_route_audit.json"
+    onboarding_path = RESULTS / "external_platform_onboarding_audit.json"
     config_materialization_path = RESULTS / "external_config_materialization_plan.json"
     backend_contract_path = RESULTS / "external_backend_contract_audit.json"
 
@@ -224,6 +241,7 @@ def main() -> int:
     collection = require_json(collection_path)
     preflight = require_json(preflight_path)
     route = require_json(route_path)
+    onboarding = require_json(onboarding_path)
     config_materialization = require_json(config_materialization_path)
     backend_contract = require_json(backend_contract_path)
 
@@ -239,8 +257,8 @@ def main() -> int:
     add_check(
         checks,
         "source_audits_exist",
-        all(path.exists() for path in [collection_path, preflight_path, route_path, config_materialization_path, backend_contract_path]),
-        ", ".join(rel(path) for path in [collection_path, preflight_path, route_path, config_materialization_path, backend_contract_path]),
+        all(path.exists() for path in [collection_path, preflight_path, route_path, onboarding_path, config_materialization_path, backend_contract_path]),
+        ", ".join(rel(path) for path in [collection_path, preflight_path, route_path, onboarding_path, config_materialization_path, backend_contract_path]),
     )
     add_check(
         checks,
@@ -331,6 +349,22 @@ def main() -> int:
         and route_checks.get("primary_route_covers_collection_tasks") is True,
         f"primary_route={route.get('primary_route')!r}",
     )
+    onboarding_checks = {check.get("name"): check.get("passed") for check in onboarding.get("checks", []) or []}
+    add_check(
+        checks,
+        "platform_onboarding_ready",
+        onboarding.get("passed") is True
+        and onboarding.get("not_external_evidence") is True
+        and onboarding.get("platform_onboarding_ready") is True
+        and onboarding.get("strict_evidence_ready") is False
+        and onboarding_checks.get("primary_route_matches_independent_plan") is True
+        and onboarding_checks.get("official_sources_are_primary_and_currently_checked") is True
+        and onboarding_checks.get("platform_provenance_fields_cover_fidelity_hashes_and_observations") is True,
+        (
+            f"platform_onboarding_ready={onboarding.get('platform_onboarding_ready')!r}, "
+            f"strict_evidence_ready={onboarding.get('strict_evidence_ready')!r}"
+        ),
+    )
 
     post_collection_commands = collection.get("post_collection_strict_commands", []) or []
     required_command_fragments = [
@@ -343,6 +377,7 @@ def main() -> int:
         "audit_external_pairing_integrity.py --strict",
         "audit_external_evidence.py --strict",
         "audit_external_backend_contract.py --strict",
+        "build_external_platform_onboarding.py",
     ]
     command_text = "\n".join(post_collection_commands + [cmd for action in actions for cmd in action["commands"]])
     missing_command_fragments = [fragment for fragment in required_command_fragments if fragment not in command_text]
@@ -381,7 +416,7 @@ def main() -> int:
         "not_external_evidence": True,
         "acquisition_packet_ready": passed,
         "strict_evidence_ready": False,
-        "source_reports": [rel(path) for path in [gap_path, collection_path, preflight_path, route_path, config_materialization_path, backend_contract_path] if path.exists()],
+        "source_reports": [rel(path) for path in [gap_path, collection_path, preflight_path, route_path, onboarding_path, config_materialization_path, backend_contract_path] if path.exists()],
         "missing_requirements": [
             {
                 "requirement": row.get("requirement"),

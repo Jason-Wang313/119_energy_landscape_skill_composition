@@ -70,6 +70,7 @@ def build_payload() -> dict[str, Any]:
         post_collection_commands = list(acquisition.get("post_collection_strict_commands", []) or [])
 
     required_action_ids = {
+        "platform_onboarding",
         "backend_module",
         "real_task_configs",
         "platform_fidelity",

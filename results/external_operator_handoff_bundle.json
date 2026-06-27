@@ -3,9 +3,9 @@
   "category_counts": {
     "baseline_spec": 12,
     "config_template": 4,
-    "generated_non_evidence_report": 42,
-    "operator_command_source": 15,
-    "operator_facing_input": 28,
+    "generated_non_evidence_report": 44,
+    "operator_command_source": 16,
+    "operator_facing_input": 30,
     "prepared_config_input": 4,
     "reference_adapter": 60,
     "runner_backend_template": 5,
@@ -23,7 +23,7 @@
       "passed": true
     },
     {
-      "detail": "analysis=False, preflight=False, release=False, pairing=False",
+      "detail": "analysis=False, onboarding=False, preflight=False, release=False, pairing=False",
       "name": "strict_evidence_gates_remain_fail_closed",
       "passed": true
     },
@@ -43,13 +43,18 @@
       "passed": true
     },
     {
-      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 42, 'operator_command_source': 15, 'operator_facing_input': 28, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 44, 'operator_command_source': 16, 'operator_facing_input': 30, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "handoff_has_task_config_and_baseline_assets",
       "passed": true
     },
     {
       "detail": "analysis_plan_ready=True, strict_evidence_ready=False",
       "name": "analysis_plan_included",
+      "passed": true
+    },
+    {
+      "detail": "platform_onboarding_ready=True, strict_evidence_ready=False",
+      "name": "platform_onboarding_included",
       "passed": true
     },
     {
@@ -63,7 +68,7 @@
       "passed": true
     },
     {
-      "detail": "hashed_files=174",
+      "detail": "hashed_files=179",
       "name": "file_hashes_are_recorded",
       "passed": true
     }
@@ -78,14 +83,14 @@
     "placeholder_not_external_evidence"
   ],
   "handoff_bundle_ready": true,
-  "included_file_count": 174,
+  "included_file_count": 179,
   "included_files": [
     {
-      "bytes": 11258,
+      "bytes": 11514,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "D419B13E3E7E2443FAF8B8F77BF9CE4F20851F3EC025412A2269781595002244"
+      "sha256": "AB849FAB01D81B261EE600A683975D06A297587A7E790DE29644689AB0B45ABE"
     },
     {
       "bytes": 10511,
@@ -95,32 +100,32 @@
       "sha256": "F3288EA1AEFF38BA77FF9AAB0591A3AF4CE01B59B6227E94E38FAF0C61C60F20"
     },
     {
-      "bytes": 17074,
+      "bytes": 17349,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/independent_validation_protocol.md",
-      "sha256": "A2E9A483A0AA23C1CA1B8BC3DE799DB5F5B98C56116FA6D53DFE8A31DF1F03D2"
+      "sha256": "9D4D3615E46A8B0B47F16FEA6F537FE7061EF9B0BC2A9D5C22433B648F2B7708"
     },
     {
-      "bytes": 11812,
+      "bytes": 12120,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/reproducibility_checklist.md",
-      "sha256": "441A42D143FF8E1A272FAF80AF37788F3C74DFEF4FF3D53A5F51E2620C67C563"
+      "sha256": "78EBC5BB81511BCA09BC07A63843A413426D057B07704961A69A17F87A4E94EB"
     },
     {
-      "bytes": 2991,
+      "bytes": 3255,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "293F8F38F2ACFB0C824E44FE9F52E577E2C24FCD4AE501BBE6F2495C9507C3C0"
+      "sha256": "EE9132E43ECEEB5EACF1D45FAB20787DF0225416CBF849B7D30F6D19BBC1C30B"
     },
     {
-      "bytes": 21134,
+      "bytes": 21913,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/README.md",
-      "sha256": "0AC5AAF90378F29B65B5A4DE4BC4A988D0186547E127FD3172268C149EF92539"
+      "sha256": "5C4DC59C02B95EBD0E716D02B0E313719A7CF3E2354D2B087CDDFD3928CE532E"
     },
     {
       "bytes": 2583,
@@ -669,11 +674,11 @@
       "sha256": "BAAF6BC6B7BFA0DAD346498D8C7FACEE413FD2A0844E5F833A519BBAD4BEEBF5"
     },
     {
-      "bytes": 3458,
+      "bytes": 3516,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/collection_runbook.md",
-      "sha256": "0C695C87C851F71A714BFBF1B9840114F680BBA66518A16FCAB4F82DACEAAFA6"
+      "sha256": "0285B7A3EF5786964DC95F5516C9A30BAFBF602549A347DD1349F80EE24BC6AF"
     },
     {
       "bytes": 1823,
@@ -788,6 +793,20 @@
       "sha256": "3286764C655EA1F5209A93A2D4C5596941EF22F621BA11282867F62C5D22785D"
     },
     {
+      "bytes": 9129,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "external_validation/platform_onboarding_packet.json",
+      "sha256": "B86546D506529D20AAB4D844B74093D1783259676A80781E6873D68A81619041"
+    },
+    {
+      "bytes": 7014,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "external_validation/platform_onboarding_packet.md",
+      "sha256": "13684E95CC64693041910012FD6FB96A2EFCDD59F536B40F33B98A1659CF0B4B"
+    },
+    {
       "bytes": 3275,
       "category": "operator_facing_input",
       "exists": true,
@@ -900,18 +919,18 @@
       "sha256": "357F6A44637AD1D55E6E98775B60640FE0E7C0A32FE0C1707FC5863C00D3CDB9"
     },
     {
-      "bytes": 14594,
+      "bytes": 15870,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.json",
-      "sha256": "50EC7B6BF5BFDBAEEB05979958597D5CC082344778004AD44F3003F67529449B"
+      "sha256": "FDEA730207151C1353486626DB9252B83328FFDD2D2F876259E871341EB3D4CD"
     },
     {
-      "bytes": 9712,
+      "bytes": 10571,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.md",
-      "sha256": "EA0C9AB372F37C9836CCE40CA14299DE67447EA6A3C5B00F9836800563216F33"
+      "sha256": "CD498499AFF50B20929970E416A6D5D821861A0719DC12D9AC2E88096C9A26CD"
     },
     {
       "bytes": 3130,
@@ -998,18 +1017,18 @@
       "sha256": "9EC804D278A6BEBB749B193C799210EEC6894349742C2D4363E877BF8D4A5B96"
     },
     {
-      "bytes": 145303,
+      "bytes": 145365,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_collection_plan.json",
-      "sha256": "42CB28C1FB4E7803FD6C36EC2E0DEA9B82BD54D29CE65811D582B7168D4E1E18"
+      "sha256": "8D28DBF40D58217582A71482B389FB5A4B40BD7EB8630648110FF5A309A2FEA7"
     },
     {
-      "bytes": 3803,
+      "bytes": 3861,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_collection_plan.md",
-      "sha256": "6521C72389F9DCAB75690D2869FB9443E084DABE58B95F8E006B1F00AF48A581"
+      "sha256": "58D235899FDB527386F64D243920AF9D30BD923C344ACD86226FC3A6C2102E9C"
     },
     {
       "bytes": 4152,
@@ -1068,18 +1087,18 @@
       "sha256": "B68911C22003E7E03E48D7486AB58F53AD10457F0C25ABCD47A134E37A247892"
     },
     {
-      "bytes": 14446,
+      "bytes": 17443,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.json",
-      "sha256": "E9204D125BC82B7A8292C585FB6D5538CBB8FAA186C66384ED1D52825F6C7293"
+      "sha256": "CF739853B340B5F66D66DED5694DCC28625036AA0E439C8431A73DF96063EBFB"
     },
     {
-      "bytes": 9997,
+      "bytes": 12746,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.md",
-      "sha256": "DC3BB7C37886193CB095E7BE2545AC9E7460C19EC5AA15F5BB8B74E4AB562EFD"
+      "sha256": "BA32D5E6E8D6697E59B5A87F75553EB13FA896CC9EFA169660984E088274BD84"
     },
     {
       "bytes": 7157,
@@ -1096,18 +1115,18 @@
       "sha256": "768F42B68BEE3F0FC7C0F5DE78EC3CD4FFFED70AB05FF4756838A4323A924422"
     },
     {
-      "bytes": 12688,
+      "bytes": 13628,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.json",
-      "sha256": "3E595CF6BEBD1EBF2E8AF70FFE9E0F62CCCAA15C5213E82E1B6711121780C0A9"
+      "sha256": "3EE10AAA157C5F3F636A08C6102B3696BF71BD7E9B60501A08DAD20AB5E7F0C7"
     },
     {
-      "bytes": 5119,
+      "bytes": 5183,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.md",
-      "sha256": "FBD5AB4037622D4167486D404A144A877ED37099B545278495836D86A4274D30"
+      "sha256": "2FC41C6F01A40A6B064CE207EF02FE2B16AB6C445D927BFBEAA7F17ADCE9F967"
     },
     {
       "bytes": 525,
@@ -1122,6 +1141,20 @@
       "exists": true,
       "path": "results/external_pairing_integrity_audit.md",
       "sha256": "4AD20017AC4F06A5B63E1D5CA3001F8EE9E7159739C99633C567109F1B37D7AD"
+    },
+    {
+      "bytes": 4807,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_platform_onboarding_audit.json",
+      "sha256": "2DE9FE5A3492C3A47BA00A4E562CDDE9D694602F5B212B40F76F54A4FBAF174A"
+    },
+    {
+      "bytes": 3512,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_platform_onboarding_audit.md",
+      "sha256": "DCEA83DEB28B60647F4497B2B6F108566EB9674CA661771FDC38649E3026A3A4"
     },
     {
       "bytes": 7221,
@@ -1236,11 +1269,11 @@
       "sha256": "C7AAE093CBACD927A3803C328DDCD5316F5A624842FDCF8C9E30F878AD5D6804"
     },
     {
-      "bytes": 21064,
+      "bytes": 23149,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_acquisition_packet.py",
-      "sha256": "A67528C971DBAE3128CE83D9C04445982CB7993F450E8037B5E84A198ECB991B"
+      "sha256": "EECA09113E5375E354A1B88C02234D016CD7719642CB9FA3BAEFFF1D3433B79E"
     },
     {
       "bytes": 16556,
@@ -1257,18 +1290,25 @@
       "sha256": "4F5A002BCFF1FA189D98623E1D1FB7DAEB65604C200B7FE68CB757C96552BB16"
     },
     {
-      "bytes": 19122,
+      "bytes": 20881,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "590FE4D06CFFD491E631686C0F3FB45652105411C63C0F821A4F2BA33F65442C"
+      "sha256": "D9BFED8CEB20484C46083762D31F746A8D2D8D589930623E72DE0328B4BCFC01"
     },
     {
-      "bytes": 11937,
+      "bytes": 11968,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_packet.py",
-      "sha256": "7D81E435046751FA02AC7708B10C6A5CA9BF9F4B57C6FA986365DF1D21D33CD2"
+      "sha256": "2880933254D7F55E91B325A3F307444783726D926895D00992062C60F31FA0BF"
+    },
+    {
+      "bytes": 19708,
+      "category": "operator_command_source",
+      "exists": true,
+      "path": "scripts/build_external_platform_onboarding.py",
+      "sha256": "D72F04E2C99DD55944CE3D857D22A4591A34748375AFDCE3FCBAE359AF03BEA8"
     },
     {
       "bytes": 10778,
@@ -1302,6 +1342,24 @@
   "missing_files": [],
   "not_external_evidence": true,
   "operator_next_actions": [
+    {
+      "artifacts": [
+        "external_validation/platform_onboarding_packet.md",
+        "external_validation/platform_onboarding_packet.json",
+        "results/external_platform_onboarding_audit.json"
+      ],
+      "closes": [
+        "platform onboarding for independent high-fidelity or robot evidence capture"
+      ],
+      "commands": [
+        "python scripts\\build_external_platform_onboarding.py",
+        "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
+        "python scripts\\audit_external_fidelity_acceptance.py --strict"
+      ],
+      "id": "platform_onboarding",
+      "operator_input": "GPU workstation or accepted robot/simulator platform plus recorded version/provenance fields",
+      "title": "Onboard the public simulator platform"
+    },
     {
       "artifacts": [
         "external_validation/runner/backends/<real_backend>.py"
@@ -1495,6 +1553,7 @@
     "results/external_operator_packet.json",
     "results/external_acquisition_packet.json",
     "results/external_analysis_plan_audit.json",
+    "results/external_platform_onboarding_audit.json",
     "results/external_evidence_preflight.json",
     "results/external_release_package_audit.json",
     "results/external_pairing_integrity_audit.json"

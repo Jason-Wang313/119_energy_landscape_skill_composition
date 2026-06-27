@@ -62,6 +62,7 @@ This runbook turns the independent validation protocol into operator-facing coll
 - `python scripts\build_external_collection_plan.py`
 - `python scripts\build_external_analysis_plan.py`
 - `python scripts\build_independent_validation_route.py`
+- `python scripts\build_external_platform_onboarding.py`
 - `python scripts\audit_external_fidelity_acceptance.py`
 - `python scripts\build_external_blind_eval_plan.py`
 - `python scripts\audit_external_collection_readiness.py`

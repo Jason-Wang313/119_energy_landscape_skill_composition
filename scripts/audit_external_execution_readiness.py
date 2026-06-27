@@ -124,6 +124,43 @@ def main() -> int:
         f"readiness_blockers={route.get('readiness_blockers', [])!r}",
     )
 
+    onboarding_ok, onboarding, onboarding_detail = passed_json(
+        RESULTS / "external_platform_onboarding_audit.json",
+        version="external_platform_onboarding_audit_v1",
+    )
+    add_check(checks, "external_platform_onboarding_ready", onboarding_ok, onboarding_detail)
+    add_check(
+        checks,
+        "external_platform_onboarding_not_evidence",
+        onboarding.get("not_external_evidence") is True
+        and onboarding.get("platform_onboarding_ready") is True
+        and onboarding.get("strict_evidence_ready") is False,
+        (
+            f"not_external_evidence={onboarding.get('not_external_evidence')!r}, "
+            f"platform_onboarding_ready={onboarding.get('platform_onboarding_ready')!r}, "
+            f"strict_evidence_ready={onboarding.get('strict_evidence_ready')!r}"
+        ),
+    )
+    onboarding_checks = {check.get("name"): check.get("passed") for check in onboarding.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_platform_onboarding_sources_and_provenance",
+        onboarding_checks.get("primary_route_matches_independent_plan") is True
+        and onboarding_checks.get("official_sources_are_primary_and_currently_checked") is True
+        and onboarding_checks.get("platform_provenance_fields_cover_fidelity_hashes_and_observations") is True,
+        f"onboarding_checks={onboarding_checks}",
+    )
+    add_check(
+        checks,
+        "external_platform_onboarding_gate_order",
+        onboarding_checks.get("strict_command_includes_audit_external_backend_contract") is True
+        and onboarding_checks.get("strict_command_includes_audit_external_collection_readiness") is True
+        and onboarding_checks.get("strict_command_includes_real_collection_runner") is True
+        and onboarding_checks.get("strict_command_includes_audit_external_evidence") is True
+        and onboarding_checks.get("pilot_sequence_preserves_gate_order") is True,
+        f"onboarding_checks={onboarding_checks}",
+    )
+
     fidelity_ok, fidelity, fidelity_detail = passed_json(
         RESULTS / "external_fidelity_acceptance_audit.json",
         version="external_fidelity_acceptance_audit_v1",
@@ -584,6 +621,8 @@ def main() -> int:
         EXTERNAL / "log_schema_v1.json",
         EXTERNAL / "statistical_analysis_plan.json",
         EXTERNAL / "statistical_analysis_plan.md",
+        EXTERNAL / "platform_onboarding_packet.json",
+        EXTERNAL / "platform_onboarding_packet.md",
         EXTERNAL / "platform_qualification_checklist.md",
         EXTERNAL / "independent_validation_route.md",
         EXTERNAL / "independent_validation_route_matrix.csv",
@@ -598,6 +637,7 @@ def main() -> int:
         RESULTS / "external_operator_packet.md",
         RESULTS / "external_operator_handoff_bundle.md",
         RESULTS / "external_analysis_plan_audit.md",
+        RESULTS / "external_platform_onboarding_audit.md",
         DOCS / "independent_validation_protocol.md",
     ]
     missing_packet_paths = [rel(path) for path in required_packet_paths if not path.exists()]
@@ -653,6 +693,10 @@ def main() -> int:
         "independent_route_not_evidence",
         "independent_route_primary_covers_tasks",
         "independent_route_closes_blockers",
+        "external_platform_onboarding_ready",
+        "external_platform_onboarding_not_evidence",
+        "external_platform_onboarding_sources_and_provenance",
+        "external_platform_onboarding_gate_order",
         "blind_eval_plan_ready",
         "blind_eval_not_evidence",
         "blind_eval_row_budget",

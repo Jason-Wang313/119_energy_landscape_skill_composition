@@ -44,6 +44,7 @@ def main() -> int:
     operator = read_json(RESULTS / "external_operator_packet.json")
     handoff = read_json(RESULTS / "external_operator_handoff_bundle.json")
     analysis = read_json(RESULTS / "external_analysis_plan_audit.json")
+    onboarding = read_json(RESULTS / "external_platform_onboarding_audit.json")
     materialization = read_json(RESULTS / "external_config_materialization_plan.json")
     ledger = read_json(DOCS / "claim_evidence_ledger.json")
 
@@ -112,6 +113,18 @@ def main() -> int:
     )
     add_check(
         checks,
+        "platform_onboarding_visible",
+        onboarding.get("passed") is True
+        and onboarding.get("not_external_evidence") is True
+        and onboarding.get("platform_onboarding_ready") is True
+        and onboarding.get("strict_evidence_ready") is False,
+        (
+            f"platform_onboarding_ready={onboarding.get('platform_onboarding_ready')!r}, "
+            f"strict_evidence_ready={onboarding.get('strict_evidence_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
         "materializer_guard_visible",
         materialization.get("passed") is True
         and materialization.get("write_enabled") is False
@@ -130,9 +143,10 @@ def main() -> int:
             "external_operator_packet_claim",
             "external_operator_handoff_bundle_claim",
             "external_analysis_plan_claim",
+            "external_platform_onboarding_claim",
             "external_config_materialization_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_config_materialization_claim'} - claim_names)}",
+        f"missing={sorted({'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_config_materialization_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -140,6 +154,7 @@ def main() -> int:
             "adaptive physical world/action model for skill seams",
             "External config materialization plan",
             "External analysis plan",
+            "External platform onboarding packet",
             "External operator packet",
             "External operator handoff bundle",
             "17/21",
@@ -147,6 +162,7 @@ def main() -> int:
         "final_audit": [
             "External config materialization plan",
             "External analysis plan",
+            "External platform onboarding packet",
             "External operator packet",
             "External operator handoff bundle",
             "Haonan/Yilun outreach package",
@@ -155,6 +171,7 @@ def main() -> int:
         "readiness_decision": [
             "guarded config materialization plan",
             "external analysis plan",
+            "external platform onboarding packet",
             "generated external operator packet",
             "external operator handoff bundle",
             "outreach package now frames Haonan's role as fit/falsification advice",
@@ -163,6 +180,7 @@ def main() -> int:
         "readiness_audit": [
             "External config materialization plan",
             "External analysis plan",
+            "External platform onboarding packet",
             "External operator packet",
             "External operator handoff bundle",
             "outreach PDFs now reflect the operator-packet/no-go stance",
@@ -171,6 +189,7 @@ def main() -> int:
         "version_log": [
             "scripts/materialize_external_configs.py",
             "scripts/build_external_analysis_plan.py",
+            "scripts/build_external_platform_onboarding.py",
             "scripts/build_external_operator_packet.py",
             "scripts/build_external_operator_handoff_bundle.py",
             "operator-packet/no-go stance",
@@ -178,6 +197,7 @@ def main() -> int:
         "child_status": [
             "external config materialization plan",
             "external analysis plan",
+            "external platform onboarding packet",
             "external operator packet",
             "external operator handoff bundle",
             "operator-packet-aligned Haonan/Yilun outreach package",
@@ -209,7 +229,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, guarded external config materialization, the locked external analysis plan, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, guarded external config materialization, the locked external analysis plan, the external platform onboarding packet, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

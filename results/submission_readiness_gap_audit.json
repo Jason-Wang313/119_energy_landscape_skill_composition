@@ -146,8 +146,11 @@
       "evidence": [
         "results/external_execution_readiness_audit.json",
         "results/external_analysis_plan_audit.json",
+        "results/external_platform_onboarding_audit.json",
         "external_validation/statistical_analysis_plan.json",
         "external_validation/statistical_analysis_plan.md",
+        "external_validation/platform_onboarding_packet.json",
+        "external_validation/platform_onboarding_packet.md",
         "results/external_fidelity_acceptance_audit.json",
         "results/independent_validation_route_audit.json",
         "results/external_blind_eval_audit.json",
