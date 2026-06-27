@@ -51,6 +51,7 @@ Send:
 - A 4-page clean technical preview.
 - One figure or 30-second GIF showing `skill i -> seam critic -> accept/repair/reject -> skill j`.
 - Link to repo/logs only if the repo is clean enough to survive inspection.
+- Keep the independent validation protocol and `results/external_operator_packet.md` ready as follow-up artifacts, not as first-email clutter.
 
 The full PDF can be offered after he shows interest.
 
@@ -79,7 +80,7 @@ I have been developing a local world/action model for skill-seam certification: 
 
 I thought of your CoStream work because it makes behavior composition the right object of study. My project is complementary: it is not another behavior module, but a seam critic for deciding when composed behaviors should be accepted, repaired, probed, or abstained from.
 
-I have a submission-shaped draft and a concrete independent validation protocol. I would really value your advice on whether this seam-certification layer would be useful to test in a CoStream-style behavior-composition setting. If it seems worth exploring, I would be happy to do the implementation, analysis, writing, and ablations around the seam critic.
+I have a submission-shaped draft, a short memo, and an independent validation protocol/operator packet. I would really value your advice on whether this seam-certification layer would be useful to test in a CoStream-style behavior-composition setting. If it seems worth exploring, I would be happy to do the implementation, analysis, writing, and ablations around the seam critic.
 
 Would you be open to a short chat?
 
@@ -98,7 +99,7 @@ The resulting composer chooses among accept, repair, probe, abstain, or fallback
 
 CoStream seems like a particularly natural point of contact because it composes semantic, predictive, and reactive behaviors through a shared action interface. My question is whether a seam critic of this kind could be useful as a reliability layer for behavior composition.
 
-I have a short technical memo and a validation protocol ready. I would love your advice on whether the idea is worth testing, and I would take on the implementation/analysis/writing burden if there is a clean collaboration path.
+I have a short technical memo, a validation protocol, and an operator packet that currently marks the external run as no-go until real backend/config/fidelity gates are cleared. I would love your advice on whether the idea is worth testing, and I would take on the implementation/analysis/writing burden if there is a clean collaboration path.
 
 Best,  
 Jason
@@ -140,6 +141,7 @@ Validation ask:
 - Test as a seam critic in a real or high-fidelity behavior-composition stack.
 - Same skill library and paired resets across baselines.
 - Report success, utility, seam failure, breach, coverage, calibration, and videos.
+- Use the independent operator packet as Jason-owned validation scaffolding; do not frame Haonan as responsible for supplying the missing proof.
 
 Why it fits CoStream:
 
@@ -164,6 +166,7 @@ Send:
 
 - 4-page preview.
 - 1-page validation protocol.
+- `results/external_operator_packet.md`, if he asks how the external run would actually be gated.
 - Figure/GIF.
 - Link to selected logs and code.
 

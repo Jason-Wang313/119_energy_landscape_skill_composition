@@ -120,7 +120,7 @@ Before the paper should be called independently submission-ready, it needs one o
 \item a mixed route with 2 real robot tasks plus 2 high-fidelity simulation tasks.
 \end{itemize}
 
-Each run should use the same primitive skill library across baselines and log terminal samples, basin estimates, barrier scores, descent diagnostics, predicted risk, accepted/rejected seams, final outcomes, and videos.
+Each run should use the same primitive skill library across baselines and log terminal samples, basin estimates, barrier scores, descent diagnostics, predicted risk, accepted/rejected seams, final outcomes, and videos. The repository has a generated operator packet that currently says \texttt{DO\_NOT\_COLLECT\_YET} until backend, real configs, fidelity acceptance, alias unsealing, and run identity pass strict gates.
 
 \textbf{Why Haonan is the right first scientific contact.}
 Haonan Chen's public research statement centers on multi-modal action composition: composing skills, action abstractions, and physics-inspired world models across sensory modalities and time scales. CoStream is especially relevant because it composes semantic, predictive, and reactive behaviors through a shared action interface.
@@ -129,7 +129,7 @@ Haonan Chen's public research statement centers on multi-modal action compositio
 Yilun Du's public research direction emphasizes generative models, decision making, robot learning, embodied agents, world models, planning, iterative reasoning, and composable energy landscapes. Paper 119 is naturally framed as a small predictive world/action model at the skill seam, not as low-level manipulation plumbing.
 
 \textbf{Collaboration ask.}
-The clean ask is not for a collaborator to validate the paper. The clean ask is:
+The clean ask is not for a collaborator to validate the paper or supply the missing proof. The clean ask is:
 
 \boxnote{Would a skill-seam world/action model be useful as a reliability layer in a CoStream-style behavior-composition stack, and what would be the cleanest falsification test?}
 
@@ -138,6 +138,7 @@ The clean ask is not for a collaborator to validate the paper. The clean ask is:
 \item This four-page preview.
 \item The one-page memo.
 \item The independent validation protocol.
+\item The operator packet if he asks how the external run would be gated.
 \item A short email centered on CoStream, with at most one secondary pointer to SIMPACT or OAT.
 \end{itemize}
 
