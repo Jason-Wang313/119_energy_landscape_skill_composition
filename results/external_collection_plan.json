@@ -3922,6 +3922,7 @@
     "python scripts\\build_external_baseline_contract.py",
     "python scripts\\build_external_adapter_scaffolds.py",
     "python scripts\\validate_external_adapters.py",
+    "python scripts\\build_external_method_implementation_packet.py",
     "python scripts\\validate_external_configs.py --strict",
     "python scripts\\validate_external_adapters.py --strict",
     "python scripts\\build_external_manifest.py --write --check-video-paths",

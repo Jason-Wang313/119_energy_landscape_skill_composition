@@ -92,8 +92,8 @@
     }
   ],
   "density_summary": {
-    "maximum": 0.17558005020189893,
-    "mean": 0.09666846048764334,
+    "maximum": 0.17297609953072138,
+    "mean": 0.09715053419486916,
     "minimum": 0.017884972170686457,
     "sparse_pages": [
       15,
@@ -113,9 +113,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.1466572083378806,
+      "foreground_fraction": 0.14717887154861944,
       "height": 770,
-      "luminance_std": 0.16838322886872462,
+      "luminance_std": 0.16829942680065535,
       "page": 1,
       "width": 595
     },
@@ -127,9 +127,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.17558005020189893,
+      "foreground_fraction": 0.17297609953072138,
       "height": 770,
-      "luminance_std": 0.1784352926853459,
+      "luminance_std": 0.1780626508085829,
       "page": 2,
       "width": 595
     },
@@ -141,9 +141,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.15625013641820365,
+      "foreground_fraction": 0.15629160755211174,
       "height": 770,
-      "luminance_std": 0.14385130871859195,
+      "luminance_std": 0.14420451756434294,
       "page": 3,
       "width": 595
     },
@@ -155,9 +155,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.11480956018771145,
+      "foreground_fraction": 0.11154425406526247,
       "height": 770,
-      "luminance_std": 0.17200940061382966,
+      "luminance_std": 0.1703232667308638,
       "page": 4,
       "width": 595
     },
@@ -166,12 +166,12 @@
         "bottom": 31,
         "left": 71,
         "minimum": 27,
-        "right": 105,
+        "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.11109898504856489,
+      "foreground_fraction": 0.12397468078140347,
       "height": 770,
-      "luminance_std": 0.14478044746046906,
+      "luminance_std": 0.1521940093973979,
       "page": 5,
       "width": 595
     },
@@ -183,9 +183,9 @@
         "right": 105,
         "top": 27
       },
-      "foreground_fraction": 0.09010367783477027,
+      "foreground_fraction": 0.07968569245880171,
       "height": 770,
-      "luminance_std": 0.1378461988669241,
+      "luminance_std": 0.12387434279961626,
       "page": 6,
       "width": 595
     },
@@ -194,12 +194,12 @@
         "bottom": 31,
         "left": 71,
         "minimum": 27,
-        "right": 104,
+        "right": 105,
         "top": 27
       },
-      "foreground_fraction": 0.12128123976863472,
+      "foreground_fraction": 0.10695623704027066,
       "height": 770,
-      "luminance_std": 0.16462578362701819,
+      "luminance_std": 0.16237269119377176,
       "page": 7,
       "width": 595
     },
@@ -211,9 +211,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.13403907017352396,
+      "foreground_fraction": 0.13344101276874387,
       "height": 770,
-      "luminance_std": 0.12197593054709005,
+      "luminance_std": 0.12134407450913345,
       "page": 8,
       "width": 595
     },
@@ -222,12 +222,12 @@
         "bottom": 31,
         "left": 71,
         "minimum": 27,
-        "right": 104,
+        "right": 105,
         "top": 27
       },
-      "foreground_fraction": 0.07429444505074757,
+      "foreground_fraction": 0.07559096365819055,
       "height": 770,
-      "luminance_std": 0.10147899220355545,
+      "luminance_std": 0.10247938527150947,
       "page": 9,
       "width": 595
     },
@@ -239,9 +239,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.1615933646185747,
+      "foreground_fraction": 0.149660591509331,
       "height": 770,
-      "luminance_std": 0.1837854025791753,
+      "luminance_std": 0.17866938814036012,
       "page": 10,
       "width": 595
     },
@@ -253,9 +253,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.061730874167848955,
+      "foreground_fraction": 0.1041187384044527,
       "height": 770,
-      "luminance_std": 0.10965561157446296,
+      "luminance_std": 0.1413842043896387,
       "page": 11,
       "width": 595
     },

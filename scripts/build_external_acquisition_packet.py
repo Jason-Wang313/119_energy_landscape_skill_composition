@@ -30,6 +30,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "manifest_and_release",
     ],
     "Manifest-declared independent non-oracle baseline evidence and fairness contract": [
+        "method_implementation_packet",
         "real_method_implementations",
         "strict_adapter_evidence",
     ],
@@ -110,6 +111,20 @@ ACTION_CATALOG = {
         ],
         "commands": [
             "python scripts\\build_external_baseline_contract.py",
+            "python scripts\\validate_external_adapters.py --strict",
+        ],
+        "closes": ["Manifest-declared independent non-oracle baseline evidence and fairness contract"],
+    },
+    "method_implementation_packet": {
+        "title": "Use the method implementation packet as the non-oracle work-order checklist",
+        "operator_input": "complete every non-oracle method work order with real implementation/config/checkpoint paths and hashes",
+        "artifacts": [
+            "external_validation/method_implementation_packet.md",
+            "external_validation/method_implementation_work_orders.csv",
+            "results/external_method_implementation_audit.json",
+        ],
+        "commands": [
+            "python scripts\\build_external_method_implementation_packet.py",
             "python scripts\\validate_external_adapters.py --strict",
         ],
         "closes": ["Manifest-declared independent non-oracle baseline evidence and fairness contract"],
@@ -236,6 +251,7 @@ def main() -> int:
     onboarding_path = RESULTS / "external_platform_onboarding_audit.json"
     config_materialization_path = RESULTS / "external_config_materialization_plan.json"
     backend_contract_path = RESULTS / "external_backend_contract_audit.json"
+    method_packet_path = RESULTS / "external_method_implementation_audit.json"
 
     gap = require_json(gap_path)
     collection = require_json(collection_path)
@@ -244,6 +260,7 @@ def main() -> int:
     onboarding = require_json(onboarding_path)
     config_materialization = require_json(config_materialization_path)
     backend_contract = require_json(backend_contract_path)
+    method_packet = require_json(method_packet_path)
 
     missing_requirements = missing_requirements_from_gap(gap)
     missing_names = [row.get("requirement", "") for row in missing_requirements]
@@ -257,8 +274,8 @@ def main() -> int:
     add_check(
         checks,
         "source_audits_exist",
-        all(path.exists() for path in [collection_path, preflight_path, route_path, onboarding_path, config_materialization_path, backend_contract_path]),
-        ", ".join(rel(path) for path in [collection_path, preflight_path, route_path, onboarding_path, config_materialization_path, backend_contract_path]),
+        all(path.exists() for path in [collection_path, preflight_path, route_path, onboarding_path, config_materialization_path, backend_contract_path, method_packet_path]),
+        ", ".join(rel(path) for path in [collection_path, preflight_path, route_path, onboarding_path, config_materialization_path, backend_contract_path, method_packet_path]),
     )
     add_check(
         checks,
@@ -334,6 +351,23 @@ def main() -> int:
             f"actual_backend_ready={backend_contract.get('actual_backend_ready')!r}"
         ),
     )
+    method_packet_checks = {check.get("name"): check.get("passed") for check in method_packet.get("checks", []) or []}
+    add_check(
+        checks,
+        "method_implementation_packet_ready",
+        method_packet.get("passed") is True
+        and method_packet.get("not_external_evidence") is True
+        and method_packet.get("method_implementation_packet_ready") is True
+        and method_packet.get("strict_adapter_evidence_ready") is False
+        and method_packet_checks.get("work_orders_cover_all_missing_non_oracle_methods") is True
+        and method_packet_checks.get("adapter_evidence_still_missing") is True
+        and (EXTERNAL / "method_implementation_packet.md").exists()
+        and (EXTERNAL / "method_implementation_work_orders.csv").exists(),
+        (
+            f"method_implementation_packet_ready={method_packet.get('method_implementation_packet_ready')!r}, "
+            f"strict_adapter_evidence_ready={method_packet.get('strict_adapter_evidence_ready')!r}"
+        ),
+    )
     preflight_actions = preflight.get("operator_next_actions", []) or []
     add_check(
         checks,
@@ -378,6 +412,7 @@ def main() -> int:
         "audit_external_evidence.py --strict",
         "audit_external_backend_contract.py --strict",
         "build_external_platform_onboarding.py",
+        "build_external_method_implementation_packet.py",
     ]
     command_text = "\n".join(post_collection_commands + [cmd for action in actions for cmd in action["commands"]])
     missing_command_fragments = [fragment for fragment in required_command_fragments if fragment not in command_text]
@@ -416,7 +451,7 @@ def main() -> int:
         "not_external_evidence": True,
         "acquisition_packet_ready": passed,
         "strict_evidence_ready": False,
-        "source_reports": [rel(path) for path in [gap_path, collection_path, preflight_path, route_path, onboarding_path, config_materialization_path, backend_contract_path] if path.exists()],
+        "source_reports": [rel(path) for path in [gap_path, collection_path, preflight_path, route_path, onboarding_path, config_materialization_path, backend_contract_path, method_packet_path] if path.exists()],
         "missing_requirements": [
             {
                 "requirement": row.get("requirement"),

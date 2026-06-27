@@ -20,6 +20,7 @@ Why strong-revise:
 - The guarded config materialization plan is ready to write real task configs only after a platform and compute budget are supplied with `--confirm-real-platform --write`.
 - The external analysis plan locks the external primary hypotheses, rollout-schema thresholds, paired-comparison key, exclusion/unblinding policy, and required reporting before collection while remaining non-evidence.
 - The external platform onboarding packet turns the primary ManiSkill/SAPIEN public-simulator route into a concrete non-evidence operator contract with official source anchors, provenance fields, task onboarding files, backend requirements, and strict gate order.
+- The external method implementation packet turns the missing non-oracle baseline layer into concrete per-method work orders while strict adapter evidence remains missing.
 - The generated external operator packet is a no-go handoff for independent validation: after materializing the high-fidelity route configs, it lists four remaining pre-collection blockers, the exact collection command, and post-collection strict gates without claiming evidence.
 - The external operator handoff bundle hash-lists the operator-facing validation files and excludes rollout logs, videos, checkpoints, local dry-run artifacts, placeholder media, and real evidence manifests.
 - The outreach package now frames Haonan's role as fit/falsification advice around CoStream-style behavior composition, not as responsibility for supplying the missing proof.

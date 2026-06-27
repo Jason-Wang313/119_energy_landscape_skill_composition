@@ -1,6 +1,6 @@
 # Claims
 
-- Agenda framing claim: the paper studies a local world/action model at robot skill seams: before chaining two skills, predict handoff failure, diagnose likely basin/barrier/descent/contact uncertainty, choose accept/repair/probe/abstain/transition, and update planner-edge beliefs for future planning.
+- Agenda framing claim: the paper studies a local world/action model at robot skill seams: before chaining two skills, predict handoff failure, diagnose likely basin/barrier/descent/contact uncertainty, choose accept/repair/probe/abstain/transition, and update planner-edge beliefs for future planning. Energy landscapes are the implementation vocabulary; the scientific object is the skill-seam action model.
 - Mechanism claim: skill composition fails when individually competent skills create high-energy seams; basin overlap, barrier height, descent continuity, contact/dynamics guards, calibration, and fixed-risk acceptance should be checked before chaining.
 - Evidence claim: the v5 benchmark tests 6 task families, 8 seam regimes, 5 deployment splits, 12 methods, 10 paired seeds, 230,400 main episode cells, 38,400 ablation cells, 161,280 stress cells, and 107,520 fixed-risk cells.
 - Result claim: on hard aggregate settings, `barrier_certified_energy_composer_v5` reaches `0.801711` success versus `0.717113` for `proposed_energy_landscape_composer_v4_1`, with `0.084598` paired success margin and `10/10` paired-seed wins.

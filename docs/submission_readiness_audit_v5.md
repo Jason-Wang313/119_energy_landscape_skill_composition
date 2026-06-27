@@ -39,14 +39,14 @@ ICLR-main ready: no
 ## Artifact Checks
 
 - PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `DCB09448558E746B08E865A97A72D01CA53446CECD9D28E3E158A5B37EE0E29F`.
-- PDF size: `465342` bytes.
+- PDF SHA256: `8E5935AD2DC26D2C9C2B1E046A88533FD0032803B1A9CC519F7AC4FFE867C792`.
+- PDF size: `466648` bytes.
 - PDF pages: `29`.
 - Numbered PDF placement: Downloads only.
 - Desktop numbered PDF: absent.
 - Validator: passed.
 - Claim boundary audit: `results/claim_boundary_audit.md` passed and confirms the current package keeps the claim bounded.
-- Visible contribution audit: `results/visible_contribution_audit.md` passed and checks that public-facing docs mention the current materializer, External analysis plan, External platform onboarding packet, external operator packet, outreach stance, and 17/21 objective requirements satisfied boundary.
+- Visible contribution audit: `results/visible_contribution_audit.md` passed and checks that public-facing docs mention the current materializer, External analysis plan, External platform onboarding packet, External method implementation packet, external operator packet, outreach stance, and 17/21 objective requirements satisfied boundary.
 - Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 17/21 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
 - Local falsification audit: `results/local_falsification_audit.md` passed and is included in the generated manuscript.
 - Holdout robustness audit: `results/holdout_robustness_audit.md` passed and is included in the generated manuscript.
@@ -65,6 +65,7 @@ ICLR-main ready: no
 - External collection plan: `results/external_collection_plan.md` exists, passes, and expands the current high-fidelity route into 1,440 required JSONL records while explicitly remaining non-evidence.
 - External analysis plan: `external_validation/statistical_analysis_plan.md` and `results/external_analysis_plan_audit.md` exist, pass, and pre-register external hypotheses, rollout-schema thresholds, paired-reset comparisons, exclusion/unblinding policy, strict gates, and reporting while explicitly remaining non-evidence.
 - External platform onboarding packet: `external_validation/platform_onboarding_packet.md` and `results/external_platform_onboarding_audit.md` exist, pass, and specify official source anchors, required simulator provenance, task onboarding files, backend requirements, and strict gate order for the primary ManiSkill/SAPIEN route while explicitly remaining non-evidence.
+- External method implementation packet: `external_validation/method_implementation_packet.md`, `external_validation/method_implementation_work_orders.csv`, and `results/external_method_implementation_audit.md` exist, pass, cover all missing non-oracle method work orders, exclude the oracle from implementation work, and remain non-evidence while strict adapter evidence is missing.
 - Independent validation route: `external_validation/independent_validation_route.md`, `external_validation/independent_validation_route_matrix.csv`, and `results/independent_validation_route_audit.md` exist, pass, and define a non-Haonan route through public simulators and an independent robot-lab option while explicitly remaining non-evidence.
 - External fidelity acceptance audit: `external_validation/fidelity_acceptance_template.json` and `results/external_fidelity_acceptance_audit.md` exist, pass as a contract audit, and currently report `acceptance_ready=false` until a real robot or simulator provenance file is filled and declared by the manifest.
 - External fidelity acceptance self-test: `results/external_fidelity_acceptance_self_test.md` passes on a temporary complete high-fidelity fixture, verifies the strict gate can turn `acceptance_ready=true` when all provenance is supplied, leaves the real fidelity audit report unchanged, and remains non-evidence.

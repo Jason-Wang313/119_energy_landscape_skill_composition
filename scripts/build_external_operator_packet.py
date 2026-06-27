@@ -76,6 +76,7 @@ def build_payload() -> dict[str, Any]:
         "platform_fidelity",
         "alias_unseal",
         "specific_run_id",
+        "method_implementation_packet",
         "real_method_implementations",
         "run_collection",
         "manifest_and_release",

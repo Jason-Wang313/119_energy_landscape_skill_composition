@@ -20,7 +20,7 @@
       "passed": true
     },
     {
-      "detail": "files=179, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=185, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -32,6 +32,11 @@
     {
       "detail": "platform_onboarding_ready=True, strict_evidence_ready=False",
       "name": "platform_onboarding_visible",
+      "passed": true
+    },
+    {
+      "detail": "method_implementation_packet_ready=True, strict_adapter_evidence_ready=False",
+      "name": "method_implementation_packet_visible",
       "passed": true
     },
     {

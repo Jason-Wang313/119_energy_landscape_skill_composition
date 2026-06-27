@@ -64,6 +64,7 @@ Post-collection strict gates:
 - `alias_unseal`: Unseal method aliases only after configs, implementations, and run plan are frozen
 - `specific_run_id`: Use a specific immutable external run id
 - `real_method_implementations`: Replace scaffold-only methods with real non-oracle implementations or wrappers
+- `method_implementation_packet`: Use the method implementation packet as the non-oracle work-order checklist
 - `run_collection`: Collect paired-reset external rollouts
 - `manifest_and_release`: Build the real manifest and hash-lock release artifacts
 - `strict_rollout_recompute`: Recompute external metrics from raw JSONL logs

@@ -1,0 +1,638 @@
+{
+  "adapter_evidence_state": {
+    "adapter_count": 0,
+    "strict_adapter_audit_passed": false
+  },
+  "forbidden_evidence_shortcuts": [
+    "using scaffold adapters as manifest-declared implementations",
+    "using reference adapters as rollout evidence without real source/config/checkpoint hashes",
+    "dropping hard methods after viewing method identity or outcomes",
+    "changing compute budgets after seeing paired-reset performance",
+    "hand-entering manifest metrics without raw JSONL logs"
+  ],
+  "method_implementation_packet_ready": true,
+  "missing_implementations": [
+    "greedy_module_sequence",
+    "behavior_cloned_skill_chain",
+    "option_graph_planner",
+    "tamp_feasibility_screen",
+    "stable_dmp_handoff",
+    "diffusion_skill_stitcher",
+    "cem_trajectory_composer",
+    "residual_rl_composer",
+    "energy_compatibility_heuristic",
+    "proposed_energy_landscape_composer_v4_1",
+    "barrier_certified_energy_composer_v5"
+  ],
+  "non_oracle_method_count": 11,
+  "not_external_evidence": true,
+  "oracle_method": "oracle_basin_composer",
+  "oracle_role": "post_hoc_upper_bound_only_not_an_implementation_work_order",
+  "purpose": "Convert the missing independent non-oracle baseline layer into per-method implementation work orders before external rollouts.",
+  "source_reports": [
+    "results/external_baseline_contract_audit.json",
+    "results/external_adapter_contract_evidence_audit.json",
+    "external_validation/log_schema_v1.json"
+  ],
+  "spec_count": 12,
+  "strict_acceptance_commands": [
+    "python scripts\\build_external_method_implementation_packet.py",
+    "python scripts\\validate_external_adapters.py --strict",
+    "python scripts\\build_external_baseline_contract.py",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "strict_adapter_evidence_ready": false,
+  "version": "external_method_implementation_packet_v1",
+  "work_orders": [
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_method_implementation_packet.py",
+        "python scripts\\validate_external_adapters.py --strict",
+        "python scripts\\build_external_baseline_contract.py",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "allowed_inputs": [
+        "terminal samples",
+        "basin posterior",
+        "barrier score",
+        "descent continuity",
+        "calibrated risk"
+      ],
+      "evidence_status": "missing_manifest_declared_implementation",
+      "forbidden_advantages": [
+        "post hoc oracle basin truth",
+        "unpaired reset retries"
+      ],
+      "manifest_implementation_key": "methods[barrier_certified_energy_composer_v5].implementation",
+      "method": "barrier_certified_energy_composer_v5",
+      "operator_notes": [
+        "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
+        "record implementation source hash or repository commit before rollouts start",
+        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
+        "strict adapter validation must pass before any rollout logs from this method count as evidence"
+      ],
+      "required_artifact_fields": [
+        "implementation_path_or_repository",
+        "implementation_sha256_or_commit",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash",
+        "adapter_path",
+        "manifest_method_entry",
+        "policy_or_config_hash_in_logs"
+      ],
+      "required_entrypoint": "compose_with_barrier_certified_seam_model",
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "success",
+        "utility"
+      ],
+      "role": "primary method",
+      "spec_file": "external_validation/baseline_specs/barrier_certified_energy_composer_v5.json",
+      "suggested_real_implementation_path": "external_validation/implementations/barrier_certified_energy_composer_v5/implementation.py",
+      "target_adapter_dir": "external_validation/baselines/barrier_certified_energy_composer_v5"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_method_implementation_packet.py",
+        "python scripts\\validate_external_adapters.py --strict",
+        "python scripts\\build_external_baseline_contract.py",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "allowed_inputs": [
+        "demonstration policy or checkpoint",
+        "current observation",
+        "shared skill library"
+      ],
+      "evidence_status": "missing_manifest_declared_implementation",
+      "forbidden_advantages": [
+        "v5 diagnostic labels",
+        "post hoc oracle repair",
+        "unpaired demonstration resets"
+      ],
+      "manifest_implementation_key": "methods[behavior_cloned_skill_chain].implementation",
+      "method": "behavior_cloned_skill_chain",
+      "operator_notes": [
+        "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
+        "record implementation source hash or repository commit before rollouts start",
+        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
+        "strict adapter validation must pass before any rollout logs from this method count as evidence"
+      ],
+      "required_artifact_fields": [
+        "implementation_path_or_repository",
+        "implementation_sha256_or_commit",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash",
+        "adapter_path",
+        "manifest_method_entry",
+        "policy_or_config_hash_in_logs"
+      ],
+      "required_entrypoint": "predict_demonstrated_handoff",
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "success",
+        "utility"
+      ],
+      "role": "demonstration sequence baseline",
+      "spec_file": "external_validation/baseline_specs/behavior_cloned_skill_chain.json",
+      "suggested_real_implementation_path": "external_validation/implementations/behavior_cloned_skill_chain/implementation.py",
+      "target_adapter_dir": "external_validation/baselines/behavior_cloned_skill_chain"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_method_implementation_packet.py",
+        "python scripts\\validate_external_adapters.py --strict",
+        "python scripts\\build_external_baseline_contract.py",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "allowed_inputs": [
+        "same rollout/simulation budget",
+        "current observation",
+        "shared skill library"
+      ],
+      "evidence_status": "missing_manifest_declared_implementation",
+      "forbidden_advantages": [
+        "larger compute budget",
+        "extra reset attempts",
+        "oracle basin state"
+      ],
+      "manifest_implementation_key": "methods[cem_trajectory_composer].implementation",
+      "method": "cem_trajectory_composer",
+      "operator_notes": [
+        "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
+        "record implementation source hash or repository commit before rollouts start",
+        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
+        "strict adapter validation must pass before any rollout logs from this method count as evidence"
+      ],
+      "required_artifact_fields": [
+        "implementation_path_or_repository",
+        "implementation_sha256_or_commit",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash",
+        "adapter_path",
+        "manifest_method_entry",
+        "policy_or_config_hash_in_logs"
+      ],
+      "required_entrypoint": "optimize_handoff_with_cem",
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "success",
+        "utility"
+      ],
+      "role": "trajectory-search baseline",
+      "spec_file": "external_validation/baseline_specs/cem_trajectory_composer.json",
+      "suggested_real_implementation_path": "external_validation/implementations/cem_trajectory_composer/implementation.py",
+      "target_adapter_dir": "external_validation/baselines/cem_trajectory_composer"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_method_implementation_packet.py",
+        "python scripts\\validate_external_adapters.py --strict",
+        "python scripts\\build_external_baseline_contract.py",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "allowed_inputs": [
+        "diffusion/generative model checkpoint",
+        "current observation",
+        "shared skill library"
+      ],
+      "evidence_status": "missing_manifest_declared_implementation",
+      "forbidden_advantages": [
+        "v5 accept/reject labels unless explicitly trained on the same data as all baselines"
+      ],
+      "manifest_implementation_key": "methods[diffusion_skill_stitcher].implementation",
+      "method": "diffusion_skill_stitcher",
+      "operator_notes": [
+        "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
+        "record implementation source hash or repository commit before rollouts start",
+        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
+        "strict adapter validation must pass before any rollout logs from this method count as evidence"
+      ],
+      "required_artifact_fields": [
+        "implementation_path_or_repository",
+        "implementation_sha256_or_commit",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash",
+        "adapter_path",
+        "manifest_method_entry",
+        "policy_or_config_hash_in_logs"
+      ],
+      "required_entrypoint": "sample_handoff_state",
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "success",
+        "utility"
+      ],
+      "role": "generative handoff sampler baseline",
+      "spec_file": "external_validation/baseline_specs/diffusion_skill_stitcher.json",
+      "suggested_real_implementation_path": "external_validation/implementations/diffusion_skill_stitcher/implementation.py",
+      "target_adapter_dir": "external_validation/baselines/diffusion_skill_stitcher"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_method_implementation_packet.py",
+        "python scripts\\validate_external_adapters.py --strict",
+        "python scripts\\build_external_baseline_contract.py",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "allowed_inputs": [
+        "same energy estimates available to all non-oracle methods",
+        "current observation"
+      ],
+      "evidence_status": "missing_manifest_declared_implementation",
+      "forbidden_advantages": [
+        "fixed-risk calibration gate",
+        "repair memory from proposed v5"
+      ],
+      "manifest_implementation_key": "methods[energy_compatibility_heuristic].implementation",
+      "method": "energy_compatibility_heuristic",
+      "operator_notes": [
+        "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
+        "record implementation source hash or repository commit before rollouts start",
+        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
+        "strict adapter validation must pass before any rollout logs from this method count as evidence"
+      ],
+      "required_artifact_fields": [
+        "implementation_path_or_repository",
+        "implementation_sha256_or_commit",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash",
+        "adapter_path",
+        "manifest_method_entry",
+        "policy_or_config_hash_in_logs"
+      ],
+      "required_entrypoint": "score_energy_compatibility",
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "success",
+        "utility"
+      ],
+      "role": "non-certified energy heuristic baseline",
+      "spec_file": "external_validation/baseline_specs/energy_compatibility_heuristic.json",
+      "suggested_real_implementation_path": "external_validation/implementations/energy_compatibility_heuristic/implementation.py",
+      "target_adapter_dir": "external_validation/baselines/energy_compatibility_heuristic"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_method_implementation_packet.py",
+        "python scripts\\validate_external_adapters.py --strict",
+        "python scripts\\build_external_baseline_contract.py",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "allowed_inputs": [
+        "skill library",
+        "current observation",
+        "task graph",
+        "shared reset metadata"
+      ],
+      "evidence_status": "missing_manifest_declared_implementation",
+      "forbidden_advantages": [
+        "energy seam labels",
+        "post hoc basin truth",
+        "extra reset attempts"
+      ],
+      "manifest_implementation_key": "methods[greedy_module_sequence].implementation",
+      "method": "greedy_module_sequence",
+      "operator_notes": [
+        "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
+        "record implementation source hash or repository commit before rollouts start",
+        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
+        "strict adapter validation must pass before any rollout logs from this method count as evidence"
+      ],
+      "required_artifact_fields": [
+        "implementation_path_or_repository",
+        "implementation_sha256_or_commit",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash",
+        "adapter_path",
+        "manifest_method_entry",
+        "policy_or_config_hash_in_logs"
+      ],
+      "required_entrypoint": "select_next_skill_and_handoff",
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "success",
+        "utility"
+      ],
+      "role": "open-loop skill graph baseline",
+      "spec_file": "external_validation/baseline_specs/greedy_module_sequence.json",
+      "suggested_real_implementation_path": "external_validation/implementations/greedy_module_sequence/implementation.py",
+      "target_adapter_dir": "external_validation/baselines/greedy_module_sequence"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_method_implementation_packet.py",
+        "python scripts\\validate_external_adapters.py --strict",
+        "python scripts\\build_external_baseline_contract.py",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "allowed_inputs": [
+        "option graph",
+        "current observation",
+        "shared skill library",
+        "same compute budget"
+      ],
+      "evidence_status": "missing_manifest_declared_implementation",
+      "forbidden_advantages": [
+        "hidden basin classifier",
+        "privileged barrier score"
+      ],
+      "manifest_implementation_key": "methods[option_graph_planner].implementation",
+      "method": "option_graph_planner",
+      "operator_notes": [
+        "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
+        "record implementation source hash or repository commit before rollouts start",
+        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
+        "strict adapter validation must pass before any rollout logs from this method count as evidence"
+      ],
+      "required_artifact_fields": [
+        "implementation_path_or_repository",
+        "implementation_sha256_or_commit",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash",
+        "adapter_path",
+        "manifest_method_entry",
+        "policy_or_config_hash_in_logs"
+      ],
+      "required_entrypoint": "plan_over_option_graph",
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "success",
+        "utility"
+      ],
+      "role": "temporal-abstraction planning baseline",
+      "spec_file": "external_validation/baseline_specs/option_graph_planner.json",
+      "suggested_real_implementation_path": "external_validation/implementations/option_graph_planner/implementation.py",
+      "target_adapter_dir": "external_validation/baselines/option_graph_planner"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_method_implementation_packet.py",
+        "python scripts\\validate_external_adapters.py --strict",
+        "python scripts\\build_external_baseline_contract.py",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "allowed_inputs": [
+        "same energy estimates",
+        "current observation",
+        "shared skill library"
+      ],
+      "evidence_status": "missing_manifest_declared_implementation",
+      "forbidden_advantages": [
+        "v5-only repair memory",
+        "v5 fixed-risk calibration updates"
+      ],
+      "manifest_implementation_key": "methods[proposed_energy_landscape_composer_v4_1].implementation",
+      "method": "proposed_energy_landscape_composer_v4_1",
+      "operator_notes": [
+        "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
+        "record implementation source hash or repository commit before rollouts start",
+        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
+        "strict adapter validation must pass before any rollout logs from this method count as evidence"
+      ],
+      "required_artifact_fields": [
+        "implementation_path_or_repository",
+        "implementation_sha256_or_commit",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash",
+        "adapter_path",
+        "manifest_method_entry",
+        "policy_or_config_hash_in_logs"
+      ],
+      "required_entrypoint": "compose_with_v4_1_rules",
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "success",
+        "utility"
+      ],
+      "role": "previous proposed method baseline",
+      "spec_file": "external_validation/baseline_specs/proposed_energy_landscape_composer_v4_1.json",
+      "suggested_real_implementation_path": "external_validation/implementations/proposed_energy_landscape_composer_v4_1/implementation.py",
+      "target_adapter_dir": "external_validation/baselines/proposed_energy_landscape_composer_v4_1"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_method_implementation_packet.py",
+        "python scripts\\validate_external_adapters.py --strict",
+        "python scripts\\build_external_baseline_contract.py",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "allowed_inputs": [
+        "residual policy checkpoint",
+        "current observation",
+        "shared skill library"
+      ],
+      "evidence_status": "missing_manifest_declared_implementation",
+      "forbidden_advantages": [
+        "training on evaluation resets",
+        "post hoc barrier labels"
+      ],
+      "manifest_implementation_key": "methods[residual_rl_composer].implementation",
+      "method": "residual_rl_composer",
+      "operator_notes": [
+        "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
+        "record implementation source hash or repository commit before rollouts start",
+        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
+        "strict adapter validation must pass before any rollout logs from this method count as evidence"
+      ],
+      "required_artifact_fields": [
+        "implementation_path_or_repository",
+        "implementation_sha256_or_commit",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash",
+        "adapter_path",
+        "manifest_method_entry",
+        "policy_or_config_hash_in_logs"
+      ],
+      "required_entrypoint": "apply_residual_repair_policy",
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "success",
+        "utility"
+      ],
+      "role": "learned residual repair baseline",
+      "spec_file": "external_validation/baseline_specs/residual_rl_composer.json",
+      "suggested_real_implementation_path": "external_validation/implementations/residual_rl_composer/implementation.py",
+      "target_adapter_dir": "external_validation/baselines/residual_rl_composer"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_method_implementation_packet.py",
+        "python scripts\\validate_external_adapters.py --strict",
+        "python scripts\\build_external_baseline_contract.py",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "allowed_inputs": [
+        "DMP or stable dynamics parameters",
+        "current observation",
+        "shared skill library"
+      ],
+      "evidence_status": "missing_manifest_declared_implementation",
+      "forbidden_advantages": [
+        "oracle basin membership",
+        "future failure labels"
+      ],
+      "manifest_implementation_key": "methods[stable_dmp_handoff].implementation",
+      "method": "stable_dmp_handoff",
+      "operator_notes": [
+        "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
+        "record implementation source hash or repository commit before rollouts start",
+        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
+        "strict adapter validation must pass before any rollout logs from this method count as evidence"
+      ],
+      "required_artifact_fields": [
+        "implementation_path_or_repository",
+        "implementation_sha256_or_commit",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash",
+        "adapter_path",
+        "manifest_method_entry",
+        "policy_or_config_hash_in_logs"
+      ],
+      "required_entrypoint": "generate_stable_handoff",
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "success",
+        "utility"
+      ],
+      "role": "stable dynamics handoff baseline",
+      "spec_file": "external_validation/baseline_specs/stable_dmp_handoff.json",
+      "suggested_real_implementation_path": "external_validation/implementations/stable_dmp_handoff/implementation.py",
+      "target_adapter_dir": "external_validation/baselines/stable_dmp_handoff"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_method_implementation_packet.py",
+        "python scripts\\validate_external_adapters.py --strict",
+        "python scripts\\build_external_baseline_contract.py",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "allowed_inputs": [
+        "task symbols",
+        "geometric scene state",
+        "shared skill library"
+      ],
+      "evidence_status": "missing_manifest_declared_implementation",
+      "forbidden_advantages": [
+        "energy descent continuity",
+        "post hoc contact outcome"
+      ],
+      "manifest_implementation_key": "methods[tamp_feasibility_screen].implementation",
+      "method": "tamp_feasibility_screen",
+      "operator_notes": [
+        "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
+        "record implementation source hash or repository commit before rollouts start",
+        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
+        "strict adapter validation must pass before any rollout logs from this method count as evidence"
+      ],
+      "required_artifact_fields": [
+        "implementation_path_or_repository",
+        "implementation_sha256_or_commit",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash",
+        "adapter_path",
+        "manifest_method_entry",
+        "policy_or_config_hash_in_logs"
+      ],
+      "required_entrypoint": "screen_symbolic_geometric_transition",
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "success",
+        "utility"
+      ],
+      "role": "task-and-motion feasibility baseline",
+      "spec_file": "external_validation/baseline_specs/tamp_feasibility_screen.json",
+      "suggested_real_implementation_path": "external_validation/implementations/tamp_feasibility_screen/implementation.py",
+      "target_adapter_dir": "external_validation/baselines/tamp_feasibility_screen"
+    }
+  ]
+}

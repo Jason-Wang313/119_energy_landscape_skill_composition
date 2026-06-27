@@ -70,6 +70,9 @@ jobs:
       - name: Self-test external adapter evidence
         run: python scripts/self_test_external_adapter_evidence.py
 
+      - name: Build external method implementation packet
+        run: python scripts/build_external_method_implementation_packet.py
+
       - name: Plan external config materialization
         run: python scripts/materialize_external_configs.py
 

@@ -161,6 +161,42 @@ def main() -> int:
         f"onboarding_checks={onboarding_checks}",
     )
 
+    method_ok, method_packet, method_detail = passed_json(
+        RESULTS / "external_method_implementation_audit.json",
+        version="external_method_implementation_audit_v1",
+    )
+    add_check(checks, "external_method_implementation_packet_ready", method_ok, method_detail)
+    method_checks = {check.get("name"): check.get("passed") for check in method_packet.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_method_implementation_not_evidence",
+        method_packet.get("not_external_evidence") is True
+        and method_packet.get("method_implementation_packet_ready") is True
+        and method_packet.get("strict_adapter_evidence_ready") is False,
+        (
+            f"not_external_evidence={method_packet.get('not_external_evidence')!r}, "
+            f"method_implementation_packet_ready={method_packet.get('method_implementation_packet_ready')!r}, "
+            f"strict_adapter_evidence_ready={method_packet.get('strict_adapter_evidence_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "external_method_implementation_covers_missing_methods",
+        method_checks.get("work_orders_cover_all_missing_non_oracle_methods") is True
+        and method_checks.get("oracle_excluded_from_work_orders") is True
+        and method_checks.get("adapter_evidence_still_missing") is True,
+        f"method_checks={method_checks}",
+    )
+    add_check(
+        checks,
+        "external_method_implementation_gate_order",
+        method_checks.get("strict_commands_cover_adapter_rollout_pairing_and_evidence") is True
+        and (EXTERNAL / "method_implementation_packet.md").exists()
+        and (EXTERNAL / "method_implementation_work_orders.csv").exists()
+        and (ROOT / "scripts" / "build_external_method_implementation_packet.py").exists(),
+        "method packet, work orders, builder, and strict command order are present",
+    )
+
     fidelity_ok, fidelity, fidelity_detail = passed_json(
         RESULTS / "external_fidelity_acceptance_audit.json",
         version="external_fidelity_acceptance_audit_v1",
@@ -623,6 +659,9 @@ def main() -> int:
         EXTERNAL / "statistical_analysis_plan.md",
         EXTERNAL / "platform_onboarding_packet.json",
         EXTERNAL / "platform_onboarding_packet.md",
+        EXTERNAL / "method_implementation_packet.json",
+        EXTERNAL / "method_implementation_packet.md",
+        EXTERNAL / "method_implementation_work_orders.csv",
         EXTERNAL / "platform_qualification_checklist.md",
         EXTERNAL / "independent_validation_route.md",
         EXTERNAL / "independent_validation_route_matrix.csv",
@@ -638,6 +677,7 @@ def main() -> int:
         RESULTS / "external_operator_handoff_bundle.md",
         RESULTS / "external_analysis_plan_audit.md",
         RESULTS / "external_platform_onboarding_audit.md",
+        RESULTS / "external_method_implementation_audit.md",
         DOCS / "independent_validation_protocol.md",
     ]
     missing_packet_paths = [rel(path) for path in required_packet_paths if not path.exists()]
@@ -697,6 +737,10 @@ def main() -> int:
         "external_platform_onboarding_not_evidence",
         "external_platform_onboarding_sources_and_provenance",
         "external_platform_onboarding_gate_order",
+        "external_method_implementation_packet_ready",
+        "external_method_implementation_not_evidence",
+        "external_method_implementation_covers_missing_methods",
+        "external_method_implementation_gate_order",
         "blind_eval_plan_ready",
         "blind_eval_not_evidence",
         "blind_eval_row_budget",
@@ -774,6 +818,7 @@ def main() -> int:
             "manifest-declared task configs with hashes",
             "manifest-declared videos",
             "manifest-declared independent non-oracle adapter implementations",
+            "completed method implementation packet work orders with source/config/checkpoint hashes",
             "non-template backend module for external_validation/runner/real_collection_runner.py",
             "accepted robot/simulator fidelity acceptance file",
             "preflight-cleared external evidence package",

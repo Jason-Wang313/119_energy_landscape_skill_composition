@@ -89,6 +89,9 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "statistical_analysis_plan.md",
         EXTERNAL / "platform_onboarding_packet.json",
         EXTERNAL / "platform_onboarding_packet.md",
+        EXTERNAL / "method_implementation_packet.json",
+        EXTERNAL / "method_implementation_packet.md",
+        EXTERNAL / "method_implementation_work_orders.csv",
         EXTERNAL / "config_schema_v1.json",
         EXTERNAL / "configs" / "README.md",
         EXTERNAL / "independent_validation_route.md",
@@ -110,6 +113,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_acquisition_packet.py",
         SCRIPTS / "build_external_analysis_plan.py",
         SCRIPTS / "build_external_platform_onboarding.py",
+        SCRIPTS / "build_external_method_implementation_packet.py",
         SCRIPTS / "materialize_external_configs.py",
         SCRIPTS / "audit_external_backend_contract.py",
         SCRIPTS / "audit_external_collection_readiness.py",
@@ -135,6 +139,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_analysis_plan_audit.md",
         RESULTS / "external_platform_onboarding_audit.json",
         RESULTS / "external_platform_onboarding_audit.md",
+        RESULTS / "external_method_implementation_audit.json",
+        RESULTS / "external_method_implementation_audit.md",
         RESULTS / "independent_validation_route_audit.json",
         RESULTS / "independent_validation_route_audit.md",
         RESULTS / "external_blind_eval_audit.json",
@@ -221,6 +227,7 @@ def build_payload() -> dict[str, Any]:
     pairing = require_payload(RESULTS / "external_pairing_integrity_audit.json", "external_pairing_integrity_audit_v1")
     analysis = require_payload(RESULTS / "external_analysis_plan_audit.json", "external_analysis_plan_audit_v1")
     onboarding = require_payload(RESULTS / "external_platform_onboarding_audit.json", "external_platform_onboarding_audit_v1")
+    method_implementation = require_payload(RESULTS / "external_method_implementation_audit.json", "external_method_implementation_audit_v1")
 
     files = build_file_manifest()
     records = file_records(files)
@@ -336,6 +343,26 @@ def build_payload() -> dict[str, Any]:
             f"strict_evidence_ready={onboarding.get('strict_evidence_ready')!r}"
         ),
     )
+    method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", []) or []}
+    add_check(
+        checks,
+        "method_implementation_packet_included",
+        method_implementation.get("passed") is True
+        and method_implementation.get("not_external_evidence") is True
+        and method_implementation.get("method_implementation_packet_ready") is True
+        and method_implementation.get("strict_adapter_evidence_ready") is False
+        and method_checks.get("work_orders_cover_all_missing_non_oracle_methods") is True
+        and method_checks.get("oracle_excluded_from_work_orders") is True
+        and "external_validation/method_implementation_packet.json" in paths
+        and "external_validation/method_implementation_packet.md" in paths
+        and "external_validation/method_implementation_work_orders.csv" in paths
+        and "results/external_method_implementation_audit.json" in paths
+        and "scripts/build_external_method_implementation_packet.py" in paths,
+        (
+            f"method_implementation_packet_ready={method_implementation.get('method_implementation_packet_ready')!r}, "
+            f"strict_adapter_evidence_ready={method_implementation.get('strict_adapter_evidence_ready')!r}"
+        ),
+    )
     add_check(
         checks,
         "operator_actions_cover_evidence_collection",
@@ -344,13 +371,14 @@ def build_payload() -> dict[str, Any]:
             "backend_module",
             "real_task_configs",
             "platform_fidelity",
+            "method_implementation_packet",
             "real_method_implementations",
             "run_collection",
             "manifest_and_release",
             "strict_rollout_recompute",
             "final_strict_gate",
         }.issubset(action_ids),
-        f"missing={sorted({'platform_onboarding', 'backend_module', 'real_task_configs', 'platform_fidelity', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
+        f"missing={sorted({'platform_onboarding', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
     )
     add_check(
         checks,
@@ -394,6 +422,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_acquisition_packet.json",
             "results/external_analysis_plan_audit.json",
             "results/external_platform_onboarding_audit.json",
+            "results/external_method_implementation_audit.json",
             "results/external_evidence_preflight.json",
             "results/external_release_package_audit.json",
             "results/external_pairing_integrity_audit.json",

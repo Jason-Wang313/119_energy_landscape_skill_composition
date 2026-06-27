@@ -2,7 +2,7 @@
   "acquisition_packet_ready": true,
   "checks": [
     {
-      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_onboarding_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json",
+      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_onboarding_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_method_implementation_audit.json",
       "name": "source_audits_exist",
       "passed": true
     },
@@ -42,6 +42,11 @@
       "passed": true
     },
     {
+      "detail": "method_implementation_packet_ready=True, strict_adapter_evidence_ready=False",
+      "name": "method_implementation_packet_ready",
+      "passed": true
+    },
+    {
       "detail": "operator_next_actions=5, evidence_ready=False",
       "name": "preflight_operator_actions_present",
       "passed": true
@@ -67,7 +72,7 @@
       "passed": true
     },
     {
-      "detail": "Onboard the public simulator platform Select a non-template backend module Create real manifest-declared task configs Fill platform fidelity acceptance with real provenance Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
+      "detail": "Onboard the public simulator platform Select a non-template backend module Create real manifest-declared task configs Fill platform fidelity acceptance with real provenance Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
       "name": "operator_actions_cover_collection_blockers",
       "passed": true
     },
@@ -114,6 +119,7 @@
     {
       "blocker": "baseline contract still reports manifest-declared independent non-oracle evidence as missing; strict adapter contract evidence audit has no passing manifest-declared real implementations",
       "mapped_actions": [
+        "method_implementation_packet",
         "real_method_implementations",
         "strict_adapter_evidence"
       ],
@@ -234,6 +240,23 @@
     },
     {
       "artifacts": [
+        "external_validation/method_implementation_packet.md",
+        "external_validation/method_implementation_work_orders.csv",
+        "results/external_method_implementation_audit.json"
+      ],
+      "closes": [
+        "Manifest-declared independent non-oracle baseline evidence and fairness contract"
+      ],
+      "commands": [
+        "python scripts\\build_external_method_implementation_packet.py",
+        "python scripts\\validate_external_adapters.py --strict"
+      ],
+      "id": "method_implementation_packet",
+      "operator_input": "complete every non-oracle method work order with real implementation/config/checkpoint paths and hashes",
+      "title": "Use the method implementation packet as the non-oracle work-order checklist"
+    },
+    {
+      "artifacts": [
         "external_validation/logs/peg_place_regrasp.jsonl",
         "external_validation/logs/drawer_to_pick_transfer.jsonl",
         "external_validation/logs/door_open_navigation.jsonl",
@@ -335,7 +358,8 @@
     "results/independent_validation_route_audit.json",
     "results/external_platform_onboarding_audit.json",
     "results/external_config_materialization_plan.json",
-    "results/external_backend_contract_audit.json"
+    "results/external_backend_contract_audit.json",
+    "results/external_method_implementation_audit.json"
   ],
   "strict_collection_command": "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
   "strict_evidence_ready": false,

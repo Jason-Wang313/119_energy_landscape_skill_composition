@@ -263,6 +263,22 @@ python scripts\build_external_baseline_contract.py
 
 This contract is not evidence. It specifies the adapter API, fairness invariants, oracle boundary, required source/config/checkpoint hashes, and method-by-method release requirements for the non-oracle baselines. The strict external audit must still see real implementations and raw rollout logs before the paper can be called independently submission-ready.
 
+External method implementation packet:
+
+- `external_validation/method_implementation_packet.json`
+- `external_validation/method_implementation_packet.md`
+- `external_validation/method_implementation_work_orders.csv`
+- `results/external_method_implementation_audit.json`
+- `results/external_method_implementation_audit.md`
+
+Generate it with:
+
+```powershell
+python scripts\build_external_method_implementation_packet.py
+```
+
+This packet is not evidence. It turns the missing non-oracle baseline implementation layer into concrete work orders with required source hashes, config hashes, checkpoint hashes, adapter checks, and log fields. Strict adapter validation must still fail until real manifest-declared implementations replace the scaffolds and produce rollout evidence.
+
 Adapter scaffolds:
 
 - `external_validation/baseline_adapter_scaffold.md`

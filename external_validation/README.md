@@ -136,6 +136,14 @@ python scripts\build_external_baseline_contract.py
 
 This writes `external_validation/baseline_implementation_contract.md`, `external_validation/baseline_implementation_matrix.csv`, method specs under `external_validation/baseline_specs/`, and `results/external_baseline_contract_audit.{json,md}`. The contract is not evidence; it states the adapter API, fairness invariants, and method-by-method implementation requirements that must be satisfied before strict external validation can pass.
 
+Build the external method implementation packet:
+
+```powershell
+python scripts\build_external_method_implementation_packet.py
+```
+
+This writes `external_validation/method_implementation_packet.{json,md}`, `external_validation/method_implementation_work_orders.csv`, and `results/external_method_implementation_audit.{json,md}`. It turns every missing non-oracle baseline implementation into a concrete work order with required source/config/checkpoint hashes and log fields. It is not evidence and still reports strict adapter evidence as missing until real manifest-declared implementations replace the scaffolds.
+
 Generate executable adapter scaffolds from the method specs:
 
 ```powershell
@@ -203,6 +211,7 @@ python scripts\build_external_adapter_scaffolds.py
 python scripts\build_external_reference_adapters.py
 python scripts\build_external_local_dry_run.py
 python scripts\validate_external_adapters.py
+python scripts\build_external_method_implementation_packet.py
 python scripts\self_test_external_adapter_evidence.py
 python scripts\build_external_manifest.py --allow-missing
 python scripts\audit_external_evidence_preflight.py
@@ -282,6 +291,7 @@ python scripts\audit_external_evidence_preflight.py
 python scripts\audit_external_pairing_integrity.py
 python scripts\self_test_external_pairing_integrity.py
 python scripts\validate_external_adapters.py
+python scripts\build_external_method_implementation_packet.py
 python scripts\validate_external_configs.py --strict
 python scripts\validate_external_adapters.py --strict
 python scripts\self_test_external_backend_contract.py

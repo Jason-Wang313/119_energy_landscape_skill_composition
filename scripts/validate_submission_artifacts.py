@@ -123,6 +123,7 @@ def main():
         "scripts\\build_external_reference_adapters.py",
         "scripts\\build_external_local_dry_run.py",
         "scripts\\validate_external_adapters.py",
+        "scripts\\build_external_method_implementation_packet.py",
         "scripts\\self_test_external_adapter_evidence.py",
         "scripts\\build_external_manifest.py --allow-missing",
         "scripts\\audit_external_release_package.py",
@@ -181,6 +182,7 @@ def main():
         "python scripts/materialize_external_configs.py",
         "python scripts/build_external_analysis_plan.py",
         "python scripts/build_external_platform_onboarding.py",
+        "python scripts/build_external_method_implementation_packet.py",
         "python scripts/build_external_acquisition_packet.py",
         "python scripts/build_external_operator_packet.py",
         "python scripts/build_external_operator_handoff_bundle.py",
@@ -225,6 +227,8 @@ def main():
         fail("external collection plan must include the adapter scaffold command")
     if "python scripts\\validate_external_adapters.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the adapter contract validation command")
+    if "python scripts\\build_external_method_implementation_packet.py" not in collection_plan.get("validation_commands", []):
+        fail("external collection plan must include the method implementation packet command")
     if "python scripts\\validate_external_adapters.py --strict" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the strict adapter implementation validation command")
     if "python scripts\\audit_external_release_package.py --strict" not in collection_plan.get("validation_commands", []):
@@ -991,6 +995,69 @@ def main():
     if not (RESULTS / "external_adapter_evidence_self_test.md").exists():
         fail("missing results/external_adapter_evidence_self_test.md")
 
+    method_packet_paths = [
+        EXTERNAL / "method_implementation_packet.json",
+        EXTERNAL / "method_implementation_packet.md",
+        EXTERNAL / "method_implementation_work_orders.csv",
+        RESULTS / "external_method_implementation_audit.json",
+        RESULTS / "external_method_implementation_audit.md",
+        ROOT / "scripts" / "build_external_method_implementation_packet.py",
+    ]
+    for path in method_packet_paths:
+        if not path.exists():
+            fail(f"missing external method implementation packet artifact: {path}")
+    method_packet = json.loads((EXTERNAL / "method_implementation_packet.json").read_text(encoding="utf-8"))
+    if method_packet.get("version") != "external_method_implementation_packet_v1":
+        fail("external method implementation packet version mismatch")
+    if method_packet.get("not_external_evidence") is not True:
+        fail("external method implementation packet must declare that it is not evidence")
+    if method_packet.get("method_implementation_packet_ready") is not True:
+        fail("external method implementation packet should be ready as a work-order packet")
+    if method_packet.get("strict_adapter_evidence_ready") is not False:
+        fail("external method implementation packet must not claim strict adapter evidence")
+    if int(method_packet.get("non_oracle_method_count", 0) or 0) < 11:
+        fail("external method implementation packet has too few non-oracle work orders")
+    if method_packet.get("oracle_method") != "oracle_basin_composer":
+        fail("external method implementation packet should declare the oracle as a post hoc upper bound")
+    work_order_methods = {order.get("method") for order in method_packet.get("work_orders", []) or []}
+    if "oracle_basin_composer" in work_order_methods:
+        fail("external method implementation packet must not create an oracle work order")
+    method_command_text = "\n".join(method_packet.get("strict_acceptance_commands", []) or [])
+    for fragment in (
+        "build_external_method_implementation_packet.py",
+        "validate_external_adapters.py --strict",
+        "validate_external_rollouts.py",
+        "audit_external_pairing_integrity.py --strict",
+        "audit_external_evidence.py --strict",
+    ):
+        if fragment not in method_command_text:
+            fail(f"external method implementation packet missing strict command fragment: {fragment}")
+    method_audit = json.loads((RESULTS / "external_method_implementation_audit.json").read_text(encoding="utf-8"))
+    if method_audit.get("version") != "external_method_implementation_audit_v1":
+        fail("external method implementation audit version mismatch")
+    if method_audit.get("passed") is not True:
+        fail("external method implementation audit did not pass")
+    if method_audit.get("not_external_evidence") is not True:
+        fail("external method implementation audit must declare that it is not evidence")
+    if method_audit.get("method_implementation_packet_ready") is not True:
+        fail("external method implementation audit should report packet ready")
+    if method_audit.get("strict_adapter_evidence_ready") is not False:
+        fail("external method implementation audit must keep strict adapter evidence false")
+    method_audit_checks = {check.get("name"): check.get("passed") for check in method_audit.get("checks", [])}
+    for required_check in (
+        "packet_is_non_evidence_and_fail_closed",
+        "work_orders_cover_all_missing_non_oracle_methods",
+        "oracle_excluded_from_work_orders",
+        "required_artifact_fields_declared",
+        "required_log_fields_declared",
+        "strict_commands_cover_adapter_rollout_pairing_and_evidence",
+        "adapter_evidence_still_missing",
+        "no_real_implementation_files_created",
+        "packet_files_written",
+    ):
+        if method_audit_checks.get(required_check) is not True:
+            fail(f"external method implementation audit missing passing check: {required_check}")
+
     manifest_builder_report_path = RESULTS / "external_manifest_builder_report.json"
     if not manifest_builder_report_path.exists():
         fail("missing results/external_manifest_builder_report.json; run scripts/build_external_manifest.py --allow-missing")
@@ -1458,6 +1525,10 @@ def main():
         "external_platform_onboarding_not_evidence",
         "external_platform_onboarding_sources_and_provenance",
         "external_platform_onboarding_gate_order",
+        "external_method_implementation_packet_ready",
+        "external_method_implementation_not_evidence",
+        "external_method_implementation_covers_missing_methods",
+        "external_method_implementation_gate_order",
         "blind_eval_plan_ready",
         "blind_eval_not_evidence",
         "blind_eval_row_budget",
@@ -1531,6 +1602,10 @@ def main():
         EXTERNAL / "statistical_analysis_plan.md",
         EXTERNAL / "platform_onboarding_packet.json",
         EXTERNAL / "platform_onboarding_packet.md",
+        EXTERNAL / "method_implementation_packet.json",
+        EXTERNAL / "method_implementation_packet.md",
+        EXTERNAL / "method_implementation_work_orders.csv",
+        RESULTS / "external_method_implementation_audit.md",
         RESULTS / "external_config_materialization_plan.md",
         RESULTS / "external_execution_readiness_audit.md",
         RESULTS / "external_fidelity_acceptance_audit.md",
@@ -1562,6 +1637,7 @@ def main():
         "config_intake_directory_tracked",
         "config_materializer_ready",
         "backend_contract_gate_ready",
+        "method_implementation_packet_ready",
         "preflight_operator_actions_present",
         "route_independent_of_haonan",
         "platform_onboarding_ready",
@@ -1594,6 +1670,11 @@ def main():
     operator_actions = operator_packet.get("operator_actions", []) or []
     if len(operator_actions) < 10:
         fail("external operator packet has too few operator actions")
+    method_actions = [action for action in operator_actions if action.get("id") == "method_implementation_packet"]
+    if not method_actions:
+        fail("external operator packet missing method_implementation_packet action")
+    if "build_external_method_implementation_packet.py" not in "\n".join(method_actions[0].get("commands", []) or []):
+        fail("external operator packet method action must rebuild the method implementation packet")
     if "audit_external_collection_readiness.py --strict" not in operator_packet.get("pre_collection_gate_command", ""):
         fail("external operator packet missing strict pre-collection gate command")
     if "audit_external_backend_contract.py --strict" not in operator_packet.get("backend_contract_gate_command", ""):
@@ -1653,6 +1734,7 @@ def main():
         "handoff_has_task_config_and_baseline_assets",
         "analysis_plan_included",
         "platform_onboarding_included",
+        "method_implementation_packet_included",
         "operator_actions_cover_evidence_collection",
         "post_collection_commands_cover_strict_gates",
         "file_hashes_are_recorded",
@@ -1880,6 +1962,7 @@ def main():
         "operator_packet_no_go_visible",
         "analysis_plan_visible",
         "platform_onboarding_visible",
+        "method_implementation_packet_visible",
         "materializer_guard_visible",
         "ledger_tracks_new_visible_claims",
         "README_current_visible_contribution_terms",

@@ -27,6 +27,7 @@ REQUIRED_COMMANDS = [
     r"python scripts\build_external_baseline_contract.py",
     r"python scripts\build_external_adapter_scaffolds.py",
     r"python scripts\validate_external_adapters.py",
+    r"python scripts\build_external_method_implementation_packet.py",
     r"python scripts\validate_external_configs.py --strict",
     r"python scripts\validate_external_adapters.py --strict",
     r"python scripts\build_external_manifest.py --write --check-video-paths",

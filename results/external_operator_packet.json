@@ -175,6 +175,23 @@
     },
     {
       "artifacts": [
+        "external_validation/method_implementation_packet.md",
+        "external_validation/method_implementation_work_orders.csv",
+        "results/external_method_implementation_audit.json"
+      ],
+      "closes": [
+        "Manifest-declared independent non-oracle baseline evidence and fairness contract"
+      ],
+      "commands": [
+        "python scripts\\build_external_method_implementation_packet.py",
+        "python scripts\\validate_external_adapters.py --strict"
+      ],
+      "id": "method_implementation_packet",
+      "operator_input": "complete every non-oracle method work order with real implementation/config/checkpoint paths and hashes",
+      "title": "Use the method implementation packet as the non-oracle work-order checklist"
+    },
+    {
+      "artifacts": [
         "external_validation/logs/peg_place_regrasp.jsonl",
         "external_validation/logs/drawer_to_pick_transfer.jsonl",
         "external_validation/logs/door_open_navigation.jsonl",

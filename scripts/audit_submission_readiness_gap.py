@@ -102,6 +102,8 @@ def main() -> int:
     acquisition_packet = read_json(acquisition_packet_path) if acquisition_packet_path.exists() else {}
     handoff_bundle_path = RESULTS / "external_operator_handoff_bundle.json"
     handoff_bundle = read_json(handoff_bundle_path) if handoff_bundle_path.exists() else {}
+    method_implementation_path = RESULTS / "external_method_implementation_audit.json"
+    method_implementation = read_json(method_implementation_path) if method_implementation_path.exists() else {}
     presentation_path = RESULTS / "presentation_quality_audit.json"
     presentation = read_json(presentation_path) if presentation_path.exists() else {}
     figure_readability_path = RESULTS / "figure_readability_audit.json"
@@ -505,6 +507,7 @@ def main() -> int:
 
     acquisition_checks = {check.get("name"): check.get("passed") for check in acquisition_packet.get("checks", [])}
     handoff_checks = {check.get("name"): check.get("passed") for check in handoff_bundle.get("checks", [])}
+    method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", [])}
     acquisition_packet_ok = (
         acquisition_packet.get("passed") is True
         and acquisition_packet.get("version") == "external_acquisition_packet_v1"
@@ -513,21 +516,32 @@ def main() -> int:
         and len(acquisition_packet.get("missing_requirements", []) or []) == 4
         and len(acquisition_packet.get("operator_actions", []) or []) >= 10
         and acquisition_checks.get("all_missing_requirements_mapped") is True
+        and acquisition_checks.get("method_implementation_packet_ready") is True
         and acquisition_checks.get("post_collection_strict_commands_cover_all_gates") is True
         and acquisition_checks.get("no_real_manifest_written") is True
+        and method_implementation.get("passed") is True
+        and method_implementation.get("not_external_evidence") is True
+        and method_implementation.get("strict_adapter_evidence_ready") is False
+        and method_checks.get("work_orders_cover_all_missing_non_oracle_methods") is True
         and handoff_bundle.get("passed") is True
         and handoff_bundle.get("version") == "external_operator_handoff_bundle_v1"
         and handoff_bundle.get("not_external_evidence") is True
         and handoff_bundle.get("strict_evidence_ready") is False
         and handoff_bundle.get("start_state") == "DO_NOT_COLLECT_YET"
         and handoff_checks.get("bundle_excludes_rollout_evidence_artifacts") is True
+        and handoff_checks.get("method_implementation_packet_included") is True
         and handoff_checks.get("file_hashes_are_recorded") is True
         and exists_all(
             [
                 ROOT / "scripts" / "build_external_acquisition_packet.py",
                 ROOT / "scripts" / "build_external_operator_handoff_bundle.py",
+                ROOT / "scripts" / "build_external_method_implementation_packet.py",
+                EXTERNAL / "method_implementation_packet.md",
+                EXTERNAL / "method_implementation_work_orders.csv",
                 RESULTS / "external_acquisition_packet.json",
                 RESULTS / "external_acquisition_packet.md",
+                RESULTS / "external_method_implementation_audit.json",
+                RESULTS / "external_method_implementation_audit.md",
                 RESULTS / "external_operator_handoff_bundle.json",
                 RESULTS / "external_operator_handoff_bundle.md",
             ]
@@ -540,8 +554,13 @@ def main() -> int:
         evidence=[
             "scripts/build_external_acquisition_packet.py",
             "scripts/build_external_operator_handoff_bundle.py",
+            "scripts/build_external_method_implementation_packet.py",
+            "external_validation/method_implementation_packet.md",
+            "external_validation/method_implementation_work_orders.csv",
             "results/external_acquisition_packet.json",
             "results/external_acquisition_packet.md",
+            "results/external_method_implementation_audit.json",
+            "results/external_method_implementation_audit.md",
             "results/external_operator_handoff_bundle.json",
             "results/external_operator_handoff_bundle.md",
         ],

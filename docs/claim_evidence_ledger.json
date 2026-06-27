@@ -76,6 +76,11 @@
       "evidence": ["scripts/build_external_platform_onboarding.py", "external_validation/platform_onboarding_packet.json", "external_validation/platform_onboarding_packet.md", "results/external_platform_onboarding_audit.json", "results/external_platform_onboarding_audit.md", "results/independent_validation_route_audit.json", "external_validation/fidelity_acceptance_template.json"]
     },
     {
+      "name": "external_method_implementation_packet_claim",
+      "claim": "The repository provides a non-evidence method implementation packet that turns the missing independent non-oracle baseline layer into per-method work orders while strict adapter evidence remains missing.",
+      "evidence": ["scripts/build_external_method_implementation_packet.py", "external_validation/method_implementation_packet.json", "external_validation/method_implementation_packet.md", "external_validation/method_implementation_work_orders.csv", "results/external_method_implementation_audit.json", "results/external_method_implementation_audit.md", "results/external_baseline_contract_audit.json", "results/external_adapter_contract_evidence_audit.json"]
+    },
+    {
       "name": "external_runbook_claim",
       "claim": "The repository provides a non-evidence operator packet for collecting the external validation layer, including task cards, config templates, and a 1,440-row record sheet.",
       "evidence": ["scripts/build_external_runbook.py", "external_validation/collection_runbook.md", "external_validation/operator_record_sheet.csv", "external_validation/task_cards/peg_place_regrasp.md", "external_validation/config_templates/peg_place_regrasp.json", "results/external_runbook_audit.json", "results/external_runbook_audit.md"]
@@ -231,9 +236,11 @@
     "external_validation/platform_qualification_checklist.md",
     "external_validation/statistical_analysis_plan.md",
     "external_validation/platform_onboarding_packet.md",
+    "external_validation/method_implementation_packet.md",
     "external_validation/README.md",
     "results/external_analysis_plan_audit.md",
     "results/external_platform_onboarding_audit.md",
+    "results/external_method_implementation_audit.md",
     "results/external_operator_packet.md",
     "results/external_operator_handoff_bundle.md",
     "results/submission_readiness_gap_audit.md"
