@@ -6,7 +6,7 @@ Primary route: `maniskill_sapien_primary`.
 Primary platform family: `ManiSkill/SAPIEN`.
 Planned records: `1440`.
 
-This packet turns the non-Haonan public-simulator route into an operator onboarding contract. It does not claim that ManiSkill, SAPIEN, robosuite, Isaac Sim, or Isaac Lab has been run locally; the operator must record actual installed versions, platform provenance, configs, videos, logs, hashes, and backend implementations before any result can count as evidence.
+This packet turns the non-Haonan public-simulator route into an operator onboarding contract. Package and registry probes are non-evidence; this packet does not claim that any simulator task rollout has been run locally. The operator must record actual installed versions, platform provenance, configs, videos, logs, hashes, and backend implementations before any result can count as evidence.
 
 ## Official Sources Checked
 
@@ -22,6 +22,11 @@ This packet turns the non-Haonan public-simulator route into an operator onboard
 - Version capture command: `python -c "import platform, torch, mani_skill, sapien; print(platform.platform()); print(torch.__version__); print(getattr(mani_skill, '__version__', 'unknown')); print(getattr(sapien, '__version__', 'unknown'))"`
 - Machine probe command: `python scripts\probe_external_platform.py`
 - Strict machine probe command: `python scripts\probe_external_platform.py --strict`
+- Task binding probe command: `python scripts\probe_maniskill_task_bindings.py`
+- Strict task binding probe command: `python scripts\probe_maniskill_task_bindings.py --strict`
+- Latest task binding probe report: `results/maniskill_task_binding_probe.json`
+- Latest task binding install ready: `true`
+- Latest task binding missing env IDs: `[]`
 - Latest probe report: `results/external_platform_probe.json`
 - Latest probe install ready: `true`
 - Latest probe missing packages: `[]`
@@ -55,6 +60,13 @@ This packet turns the non-Haonan public-simulator route into an operator onboard
 
 ### `peg_place_regrasp`
 
+Backend task binding:
+- Primary env ID: `PegInsertionSide-v1`
+- Support env IDs: `[]`
+- Binding strength: `direct_contact_candidate`
+- Primary env available in latest probe: `True`
+- Operator fidelity acceptance required: `true`
+
 Required operator files:
 - `external_validation/configs/peg_place_regrasp.json`
 - `external_validation/logs/peg_place_regrasp.jsonl`
@@ -68,6 +80,13 @@ Must document:
 - task-specific fidelity risks and accepted approximations
 
 ### `drawer_to_pick_transfer`
+
+Backend task binding:
+- Primary env ID: `OpenCabinetDrawer-v1`
+- Support env IDs: `['PickCube-v1', 'PickSingleYCB-v1']`
+- Binding strength: `composite_contact_candidate`
+- Primary env available in latest probe: `True`
+- Operator fidelity acceptance required: `true`
 
 Required operator files:
 - `external_validation/configs/drawer_to_pick_transfer.json`
@@ -83,6 +102,13 @@ Must document:
 
 ### `door_open_navigation`
 
+Backend task binding:
+- Primary env ID: `OpenCabinetDoor-v1`
+- Support env IDs: `[]`
+- Binding strength: `partial_contact_candidate`
+- Primary env available in latest probe: `True`
+- Operator fidelity acceptance required: `true`
+
 Required operator files:
 - `external_validation/configs/door_open_navigation.json`
 - `external_validation/logs/door_open_navigation.jsonl`
@@ -96,6 +122,13 @@ Must document:
 - task-specific fidelity risks and accepted approximations
 
 ### `cable_route_insert`
+
+Backend task binding:
+- Primary env ID: `PullCubeTool-v1`
+- Support env IDs: `['InsertFlower-v1']`
+- Binding strength: `surrogate_contact_candidate`
+- Primary env available in latest probe: `True`
+- Operator fidelity acceptance required: `true`
 
 Required operator files:
 - `external_validation/configs/cable_route_insert.json`
@@ -133,6 +166,7 @@ Must document:
 
 - `python scripts\build_external_platform_onboarding.py`
 - `python scripts\probe_external_platform.py --strict`
+- `python scripts\probe_maniskill_task_bindings.py --strict`
 - `python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --alias-map external_validation\method_alias_map.json`
 - `python scripts\materialize_external_configs.py --platform-type high_fidelity_sim --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write`
 - `python scripts\validate_external_configs.py --strict`

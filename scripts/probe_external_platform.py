@@ -76,6 +76,7 @@ PACKAGE_SPECS = [
 HASH_PATHS = [
     EXTERNAL / "fidelity_acceptance_template.json",
     EXTERNAL / "config_schema_v1.json",
+    EXTERNAL / "maniskill_task_bindings.json",
     EXTERNAL / "runner" / "backend_contract.py",
     EXTERNAL / "runner" / "real_collection_runner.py",
     EXTERNAL / "runner" / "backend_templates" / "maniskill_backend.py",

@@ -41,7 +41,7 @@ This probe records operator-machine environment facts for the independent public
 - `pass` `primary_route_declared`: maniskill_sapien_primary
 - `pass` `primary_packages_checked`: checked=['gymnasium', 'isaaclab', 'isaacsim', 'mani_skill', 'mujoco', 'robosuite', 'sapien', 'torch']
 - `pass` `primary_install_readiness_reported`: primary_missing=[]
-- `pass` `repo_commit_reported`: commit='d2ab7a326bc61f243e332e1cbcc5b1c885578775'
+- `pass` `repo_commit_reported`: commit='2949e4cba5ae67c4894e4179313ac2e1d421c4be'
 - `pass` `required_hashes_recorded`: missing=[]
 - `pass` `gpu_renderer_commands_attempted`: commands=['nvidia_smi', 'vulkaninfo_summary']
 - `pass` `strict_evidence_remains_false`: probe cannot satisfy external fidelity or rollout evidence

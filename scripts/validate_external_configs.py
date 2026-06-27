@@ -50,6 +50,28 @@ def contains_forbidden_placeholder(value: Any, forbidden: set[str]) -> bool:
     return False
 
 
+def backend_task_binding_errors(config: dict[str, Any]) -> list[str]:
+    binding = config.get("backend_task_binding")
+    if binding is None:
+        return []
+    errors: list[str] = []
+    if not isinstance(binding, dict):
+        return ["backend_task_binding must be an object when present"]
+    for field in ("binding_source", "registry_probe_report", "primary_route", "primary_env_id", "binding_strength"):
+        if not isinstance(binding.get(field), str) or not binding.get(field):
+            errors.append(f"backend_task_binding.{field} must be nonempty string")
+    support = binding.get("support_env_ids", [])
+    if not isinstance(support, list):
+        errors.append("backend_task_binding.support_env_ids must be a list")
+    if binding.get("requires_operator_fidelity_acceptance") is not True:
+        errors.append("backend_task_binding.requires_operator_fidelity_acceptance must be true")
+    if binding.get("accepted_task_binding_ready") is not False:
+        errors.append("backend_task_binding.accepted_task_binding_ready must remain false before fidelity acceptance")
+    if binding.get("strict_external_evidence_ready") is not False:
+        errors.append("backend_task_binding.strict_external_evidence_ready must remain false")
+    return errors
+
+
 def validate_config(path: Path, schema: dict[str, Any], *, strict: bool, manifest_task: dict[str, Any] | None = None) -> tuple[bool, list[str]]:
     errors: list[str] = []
     config = read_json(path)
@@ -127,6 +149,7 @@ def validate_config(path: Path, schema: dict[str, Any], *, strict: bool, manifes
     missing_log = sorted(set(schema.get("required_log_fields", [])) - must_log)
     if missing_log:
         errors.append(f"must_log missing {missing_log}")
+    errors.extend(backend_task_binding_errors(config))
 
     if strict:
         if config.get("not_external_evidence") is True or config.get("template_only") is True:

@@ -16,6 +16,7 @@ OUT_MD = RESULTS / "external_acquisition_packet.md"
 MISSING_REQUIREMENT_ACTIONS = {
     "Independent real-robot or accepted high-fidelity external validation evidence": [
         "platform_probe",
+        "task_binding_probe",
         "platform_onboarding",
         "fidelity_provenance_packet",
         "backend_integration_packet",
@@ -60,6 +61,20 @@ ACTION_CATALOG = {
         ],
         "closes": ["platform package, GPU, renderer, code, config, and backend hash provenance before fidelity acceptance"],
     },
+    "task_binding_probe": {
+        "title": "Probe ManiSkill task-family bindings",
+        "operator_input": "bind each Paper 119 task family to concrete ManiSkill/SAPIEN environment candidates and inspect the local registry when available",
+        "artifacts": [
+            "external_validation/maniskill_task_bindings.json",
+            "results/maniskill_task_binding_probe.json",
+            "results/maniskill_task_binding_probe.md",
+        ],
+        "commands": [
+            "python scripts\\probe_maniskill_task_bindings.py",
+            "python scripts\\probe_maniskill_task_bindings.py --strict",
+        ],
+        "closes": ["task-family to public-simulator environment binding before operator fidelity acceptance"],
+    },
     "platform_onboarding": {
         "title": "Onboard the public simulator platform",
         "operator_input": "GPU workstation or accepted robot/simulator platform plus recorded version/provenance fields",
@@ -67,10 +82,12 @@ ACTION_CATALOG = {
             "external_validation/platform_onboarding_packet.md",
             "external_validation/platform_onboarding_packet.json",
             "results/external_platform_probe.json",
+            "results/maniskill_task_binding_probe.json",
             "results/external_platform_onboarding_audit.json",
         ],
         "commands": [
             "python scripts\\probe_external_platform.py",
+            "python scripts\\probe_maniskill_task_bindings.py",
             "python scripts\\build_external_platform_onboarding.py",
             "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
             "python scripts\\audit_external_fidelity_acceptance.py --strict",
@@ -349,6 +366,7 @@ def main() -> int:
     preflight_path = RESULTS / "external_evidence_preflight.json"
     route_path = RESULTS / "independent_validation_route_audit.json"
     platform_probe_path = RESULTS / "external_platform_probe.json"
+    task_binding_probe_path = RESULTS / "maniskill_task_binding_probe.json"
     onboarding_path = RESULTS / "external_platform_onboarding_audit.json"
     fidelity_provenance_path = RESULTS / "external_fidelity_provenance_audit.json"
     config_materialization_path = RESULTS / "external_config_materialization_plan.json"
@@ -364,6 +382,7 @@ def main() -> int:
     preflight = require_json(preflight_path)
     route = require_json(route_path)
     platform_probe = require_json(platform_probe_path)
+    task_binding_probe = require_json(task_binding_probe_path)
     onboarding = require_json(onboarding_path)
     fidelity_provenance = require_json(fidelity_provenance_path)
     config_materialization = require_json(config_materialization_path)
@@ -393,6 +412,7 @@ def main() -> int:
                 preflight_path,
                 route_path,
                 platform_probe_path,
+                task_binding_probe_path,
                 onboarding_path,
                 fidelity_provenance_path,
                 config_materialization_path,
@@ -411,6 +431,7 @@ def main() -> int:
                 preflight_path,
                 route_path,
                 platform_probe_path,
+                task_binding_probe_path,
                 onboarding_path,
                 fidelity_provenance_path,
                 config_materialization_path,
@@ -614,6 +635,20 @@ def main() -> int:
             f"missing={platform_probe.get('primary_route_missing_packages')!r}"
         ),
     )
+    add_check(
+        checks,
+        "task_binding_probe_ready",
+        task_binding_probe.get("version") == "maniskill_task_binding_probe_v1"
+        and task_binding_probe.get("passed") is True
+        and task_binding_probe.get("not_external_evidence") is True
+        and task_binding_probe.get("task_binding_probe_ready") is True
+        and task_binding_probe.get("accepted_task_binding_ready") is False
+        and task_binding_probe.get("strict_external_evidence_ready") is False,
+        (
+            f"strict_task_binding_install_ready={task_binding_probe.get('strict_task_binding_install_ready')!r}, "
+            f"missing={task_binding_probe.get('primary_missing_env_ids')!r}"
+        ),
+    )
     onboarding_checks = {check.get("name"): check.get("passed") for check in onboarding.get("checks", []) or []}
     add_check(
         checks,
@@ -667,6 +702,7 @@ def main() -> int:
         "build_external_fidelity_provenance_packet.py",
         "build_external_platform_onboarding.py",
         "probe_external_platform.py",
+        "probe_maniskill_task_bindings.py",
         "build_external_method_implementation_packet.py",
         "build_external_pilot_smoke_packet.py",
         "audit_external_pilot_smoke.py",

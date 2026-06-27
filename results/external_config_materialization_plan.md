@@ -29,5 +29,6 @@ python scripts\materialize_external_configs.py --platform-type <real_robot|high_
 - `pass` `template_dir_exists`: external_validation/config_templates
 - `pass` `template_count_ge_4`: templates=4
 - `pass` `output_dir_exists`: external_validation/configs
+- `pass` `task_binding_file_ready`: path=external_validation/maniskill_task_bindings.json, bindings=4
 - `pass` `write_requires_explicit_flag`: write=False, confirm_real_platform=False
 - `pass` `materialized_payloads_validate`: failed=[]

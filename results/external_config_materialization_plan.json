@@ -26,6 +26,11 @@
       "passed": true
     },
     {
+      "detail": "path=external_validation/maniskill_task_bindings.json, bindings=4",
+      "name": "task_binding_file_ready",
+      "passed": true
+    },
+    {
       "detail": "write=False, confirm_real_platform=False",
       "name": "write_requires_explicit_flag",
       "passed": true
@@ -79,6 +84,7 @@
   "schema": "external_validation/config_schema_v1.json",
   "simulator_query_budget": 100,
   "strict_config_evidence_ready": false,
+  "task_binding_file": "external_validation/maniskill_task_bindings.json",
   "task_count": 4,
   "template_dir": "external_validation/config_templates",
   "version": "external_config_materialization_plan_v1",

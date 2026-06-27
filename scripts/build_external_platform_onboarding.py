@@ -83,6 +83,7 @@ PRIMARY_PROVENANCE_FIELDS = [
 STRICT_COMMANDS = [
     r"python scripts\build_external_platform_onboarding.py",
     r"python scripts\probe_external_platform.py --strict",
+    r"python scripts\probe_maniskill_task_bindings.py --strict",
     r"python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --alias-map external_validation\method_alias_map.json",
     r"python scripts\materialize_external_configs.py --platform-type high_fidelity_sim --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
     r"python scripts\validate_external_configs.py --strict",
@@ -129,17 +130,37 @@ def planned_tasks(collection_plan: dict[str, Any]) -> list[str]:
     ]
 
 
+def task_binding_by_task(task_binding_probe: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    records = task_binding_probe.get("task_records", [])
+    if not isinstance(records, list):
+        return {}
+    return {
+        str(record.get("task_family")): record
+        for record in records
+        if isinstance(record, dict) and record.get("task_family")
+    }
+
+
 def build_packet(
     collection_plan: dict[str, Any],
     route_audit: dict[str, Any],
     analysis_audit: dict[str, Any],
     platform_probe: dict[str, Any],
+    task_binding_probe: dict[str, Any],
 ) -> dict[str, Any]:
     primary_route = route_by_id(route_audit, "maniskill_sapien_primary")
     tasks = planned_tasks(collection_plan)
+    bindings_by_task = task_binding_by_task(task_binding_probe)
     task_onboarding = [
         {
             "task_family": task,
+            "backend_task_binding": {
+                "primary_env_id": bindings_by_task.get(task, {}).get("primary_env_id", ""),
+                "support_env_ids": bindings_by_task.get(task, {}).get("support_env_ids", []),
+                "binding_strength": bindings_by_task.get(task, {}).get("binding_strength", ""),
+                "primary_env_available": bindings_by_task.get(task, {}).get("primary_env_available"),
+                "requires_operator_fidelity_acceptance": bindings_by_task.get(task, {}).get("requires_operator_fidelity_acceptance", True),
+            },
             "required_operator_files": [
                 f"external_validation/configs/{task}.json",
                 f"external_validation/logs/{task}.jsonl",
@@ -167,6 +188,8 @@ def build_packet(
             rel(RESULTS / "independent_validation_route_audit.json"),
             rel(RESULTS / "external_analysis_plan_audit.json"),
             rel(RESULTS / "external_platform_probe.json"),
+            rel(EXTERNAL / "maniskill_task_bindings.json"),
+            rel(RESULTS / "maniskill_task_binding_probe.json"),
         ],
         "primary_route": primary_route.get("route_id", "maniskill_sapien_primary"),
         "primary_platform_family": primary_route.get("platform_family", "ManiSkill/SAPIEN"),
@@ -183,6 +206,11 @@ def build_packet(
             "version_capture_command": "python -c \"import platform, torch, mani_skill, sapien; print(platform.platform()); print(torch.__version__); print(getattr(mani_skill, '__version__', 'unknown')); print(getattr(sapien, '__version__', 'unknown'))\"",
             "machine_probe_command": r"python scripts\probe_external_platform.py",
             "strict_machine_probe_command": r"python scripts\probe_external_platform.py --strict",
+            "task_binding_probe_command": r"python scripts\probe_maniskill_task_bindings.py",
+            "strict_task_binding_probe_command": r"python scripts\probe_maniskill_task_bindings.py --strict",
+            "latest_task_binding_probe_report": "results/maniskill_task_binding_probe.json",
+            "latest_task_binding_install_ready": task_binding_probe.get("strict_task_binding_install_ready") is True,
+            "latest_task_binding_missing_env_ids": list(task_binding_probe.get("primary_missing_env_ids", []) or []),
             "latest_probe_report": "results/external_platform_probe.json",
             "latest_probe_install_ready": platform_probe.get("primary_route_install_ready") is True,
             "latest_probe_missing_packages": list(platform_probe.get("primary_route_missing_packages", []) or []),
@@ -222,6 +250,7 @@ def audit_packet(
     collection_plan: dict[str, Any],
     route_audit: dict[str, Any],
     platform_probe: dict[str, Any],
+    task_binding_probe: dict[str, Any],
 ) -> dict[str, Any]:
     checks: list[dict[str, Any]] = []
     route_checks = {check.get("name"): check.get("passed") for check in route_audit.get("checks", []) or []}
@@ -320,12 +349,38 @@ def audit_packet(
         checks,
         "primary_install_probe_has_machine_probe_command",
         "probe_external_platform.py" in str(install_probe.get("machine_probe_command", ""))
-        and "probe_external_platform.py --strict" in str(install_probe.get("strict_machine_probe_command", "")),
+        and "probe_external_platform.py --strict" in str(install_probe.get("strict_machine_probe_command", ""))
+        and "probe_maniskill_task_bindings.py" in str(install_probe.get("task_binding_probe_command", ""))
+        and "probe_maniskill_task_bindings.py --strict" in str(install_probe.get("strict_task_binding_probe_command", "")),
         f"install_probe={install_probe}",
+    )
+    task_binding_checks = {check.get("name"): check.get("passed") for check in task_binding_probe.get("checks", []) or []}
+    task_bindings = [
+        task.get("backend_task_binding", {})
+        for task in packet.get("task_onboarding", []) or []
+        if isinstance(task, dict)
+    ]
+    add_check(
+        checks,
+        "task_binding_probe_report_ready",
+        task_binding_probe.get("version") == "maniskill_task_binding_probe_v1"
+        and task_binding_probe.get("passed") is True
+        and task_binding_probe.get("not_external_evidence") is True
+        and task_binding_probe.get("task_binding_probe_ready") is True
+        and task_binding_probe.get("accepted_task_binding_ready") is False
+        and task_binding_probe.get("strict_external_evidence_ready") is False
+        and task_binding_checks.get("task_bindings_cover_configs") is True
+        and task_binding_checks.get("configs_embed_backend_task_bindings") is True
+        and all(binding.get("primary_env_id") for binding in task_bindings if isinstance(binding, dict)),
+        (
+            f"strict_task_binding_install_ready={task_binding_probe.get('strict_task_binding_install_ready')!r}, "
+            f"missing={task_binding_probe.get('primary_missing_env_ids')!r}"
+        ),
     )
     for fragment in (
         "build_external_platform_onboarding.py",
         "probe_external_platform.py --strict",
+        "probe_maniskill_task_bindings.py --strict",
         "audit_external_backend_contract.py --strict",
         "materialize_external_configs.py",
         "validate_external_configs.py --strict",
@@ -382,7 +437,7 @@ def write_packet_md(packet: dict[str, Any]) -> None:
         f"Primary platform family: `{packet['primary_platform_family']}`.",
         f"Planned records: `{packet['planned_records']}`.",
         "",
-        "This packet turns the non-Haonan public-simulator route into an operator onboarding contract. It does not claim that ManiSkill, SAPIEN, robosuite, Isaac Sim, or Isaac Lab has been run locally; the operator must record actual installed versions, platform provenance, configs, videos, logs, hashes, and backend implementations before any result can count as evidence.",
+        "This packet turns the non-Haonan public-simulator route into an operator onboarding contract. Package and registry probes are non-evidence; this packet does not claim that any simulator task rollout has been run locally. The operator must record actual installed versions, platform provenance, configs, videos, logs, hashes, and backend implementations before any result can count as evidence.",
         "",
         "## Official Sources Checked",
         "",
@@ -399,6 +454,11 @@ def write_packet_md(packet: dict[str, Any]) -> None:
             f"- Version capture command: `{packet['primary_install_probe']['version_capture_command']}`",
             f"- Machine probe command: `{packet['primary_install_probe']['machine_probe_command']}`",
             f"- Strict machine probe command: `{packet['primary_install_probe']['strict_machine_probe_command']}`",
+            f"- Task binding probe command: `{packet['primary_install_probe']['task_binding_probe_command']}`",
+            f"- Strict task binding probe command: `{packet['primary_install_probe']['strict_task_binding_probe_command']}`",
+            f"- Latest task binding probe report: `{packet['primary_install_probe']['latest_task_binding_probe_report']}`",
+            f"- Latest task binding install ready: `{str(packet['primary_install_probe']['latest_task_binding_install_ready']).lower()}`",
+            f"- Latest task binding missing env IDs: `{packet['primary_install_probe']['latest_task_binding_missing_env_ids']}`",
             f"- Latest probe report: `{packet['primary_install_probe']['latest_probe_report']}`",
             f"- Latest probe install ready: `{str(packet['primary_install_probe']['latest_probe_install_ready']).lower()}`",
             f"- Latest probe missing packages: `{packet['primary_install_probe']['latest_probe_missing_packages']}`",
@@ -413,6 +473,14 @@ def write_packet_md(packet: dict[str, Any]) -> None:
     lines.extend(["", "## Task Onboarding", ""])
     for task in packet["task_onboarding"]:
         lines.append(f"### `{task['task_family']}`")
+        lines.append("")
+        binding = task.get("backend_task_binding", {})
+        lines.append("Backend task binding:")
+        lines.append(f"- Primary env ID: `{binding.get('primary_env_id', '')}`")
+        lines.append(f"- Support env IDs: `{binding.get('support_env_ids', [])}`")
+        lines.append(f"- Binding strength: `{binding.get('binding_strength', '')}`")
+        lines.append(f"- Primary env available in latest probe: `{binding.get('primary_env_available')}`")
+        lines.append(f"- Operator fidelity acceptance required: `{str(binding.get('requires_operator_fidelity_acceptance', True)).lower()}`")
         lines.append("")
         lines.append("Required operator files:")
         for item in task["required_operator_files"]:
@@ -461,11 +529,12 @@ def main() -> int:
     route_audit = read_json(RESULTS / "independent_validation_route_audit.json")
     analysis_audit = read_json(RESULTS / "external_analysis_plan_audit.json")
     platform_probe = read_json(RESULTS / "external_platform_probe.json")
+    task_binding_probe = read_json(RESULTS / "maniskill_task_binding_probe.json")
 
-    packet = build_packet(collection_plan, route_audit, analysis_audit, platform_probe)
+    packet = build_packet(collection_plan, route_audit, analysis_audit, platform_probe, task_binding_probe)
     PACKET_JSON.write_text(json.dumps(packet, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_packet_md(packet)
-    audit = audit_packet(packet, collection_plan, route_audit, platform_probe)
+    audit = audit_packet(packet, collection_plan, route_audit, platform_probe, task_binding_probe)
     AUDIT_JSON.write_text(json.dumps(audit, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_audit_md(audit)
 

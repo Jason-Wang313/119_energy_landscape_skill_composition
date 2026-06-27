@@ -16,6 +16,7 @@ This file is a collection schedule only. It does not count as external validatio
 - `python scripts\build_external_analysis_plan.py`
 - `python scripts\build_independent_validation_route.py`
 - `python scripts\probe_external_platform.py`
+- `python scripts\probe_maniskill_task_bindings.py`
 - `python scripts\build_external_platform_onboarding.py`
 - `python scripts\build_external_fidelity_provenance_packet.py`
 - `python scripts\build_external_backend_integration_packet.py`

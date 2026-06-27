@@ -81,9 +81,27 @@
     },
     {
       "artifacts": [
+        "external_validation/maniskill_task_bindings.json",
+        "results/maniskill_task_binding_probe.json",
+        "results/maniskill_task_binding_probe.md"
+      ],
+      "closes": [
+        "task-family to public-simulator environment binding before operator fidelity acceptance"
+      ],
+      "commands": [
+        "python scripts\\probe_maniskill_task_bindings.py",
+        "python scripts\\probe_maniskill_task_bindings.py --strict"
+      ],
+      "id": "task_binding_probe",
+      "operator_input": "bind each Paper 119 task family to concrete ManiSkill/SAPIEN environment candidates and inspect the local registry when available",
+      "title": "Probe ManiSkill task-family bindings"
+    },
+    {
+      "artifacts": [
         "external_validation/platform_onboarding_packet.md",
         "external_validation/platform_onboarding_packet.json",
         "results/external_platform_probe.json",
+        "results/maniskill_task_binding_probe.json",
         "results/external_platform_onboarding_audit.json"
       ],
       "closes": [
@@ -91,6 +109,7 @@
       ],
       "commands": [
         "python scripts\\probe_external_platform.py",
+        "python scripts\\probe_maniskill_task_bindings.py",
         "python scripts\\build_external_platform_onboarding.py",
         "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
         "python scripts\\audit_external_fidelity_acceptance.py --strict"
@@ -407,6 +426,7 @@
     "results/external_collection_readiness_audit.json",
     "results/external_acquisition_packet.json",
     "results/external_platform_probe.json",
+    "results/maniskill_task_binding_probe.json",
     "results/external_backend_contract_audit.json",
     "results/external_config_materialization_plan.json",
     "results/external_rollout_evidence_audit.json",

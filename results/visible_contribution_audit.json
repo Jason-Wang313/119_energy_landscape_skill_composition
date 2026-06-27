@@ -20,7 +20,7 @@
       "passed": true
     },
     {
-      "detail": "files=221, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=225, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -32,6 +32,11 @@
     {
       "detail": "primary_route_install_ready=True, missing=[]",
       "name": "platform_probe_visible",
+      "passed": true
+    },
+    {
+      "detail": "strict_task_binding_install_ready=True, missing=[]",
+      "name": "maniskill_task_binding_probe_visible",
       "passed": true
     },
     {

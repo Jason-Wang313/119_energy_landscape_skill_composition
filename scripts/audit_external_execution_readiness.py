@@ -142,6 +142,25 @@ def main() -> int:
         ),
     )
 
+    task_binding_ok, task_binding, task_binding_detail = passed_json(
+        RESULTS / "maniskill_task_binding_probe.json",
+        version="maniskill_task_binding_probe_v1",
+    )
+    add_check(checks, "maniskill_task_binding_probe_ready", task_binding_ok, task_binding_detail)
+    add_check(
+        checks,
+        "maniskill_task_binding_probe_not_evidence",
+        task_binding.get("not_external_evidence") is True
+        and task_binding.get("task_binding_probe_ready") is True
+        and task_binding.get("accepted_task_binding_ready") is False
+        and task_binding.get("strict_fidelity_evidence_ready") is False
+        and task_binding.get("strict_external_evidence_ready") is False,
+        (
+            f"strict_task_binding_install_ready={task_binding.get('strict_task_binding_install_ready')!r}, "
+            f"accepted_task_binding_ready={task_binding.get('accepted_task_binding_ready')!r}"
+        ),
+    )
+
     onboarding_ok, onboarding, onboarding_detail = passed_json(
         RESULTS / "external_platform_onboarding_audit.json",
         version="external_platform_onboarding_audit_v1",

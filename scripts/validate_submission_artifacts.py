@@ -108,6 +108,7 @@ def main():
         "scripts\\build_external_analysis_plan.py",
         "scripts\\build_independent_validation_route.py",
         "scripts\\probe_external_platform.py",
+        "scripts\\probe_maniskill_task_bindings.py",
         "scripts\\build_external_platform_onboarding.py",
         "scripts\\build_external_fidelity_provenance_packet.py",
         "scripts\\audit_external_fidelity_acceptance.py",
@@ -193,6 +194,7 @@ def main():
         "python scripts/build_external_rollout_evidence_packet.py",
         "python scripts/build_external_analysis_plan.py",
         "python scripts/probe_external_platform.py",
+        "python scripts/probe_maniskill_task_bindings.py",
         "python scripts/build_external_platform_onboarding.py",
         "python scripts/build_external_fidelity_provenance_packet.py",
         "python scripts/build_external_backend_integration_packet.py",
@@ -271,6 +273,8 @@ def main():
         fail("external collection plan must include the independent validation route command")
     if "python scripts\\probe_external_platform.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the external platform probe command")
+    if "python scripts\\probe_maniskill_task_bindings.py" not in collection_plan.get("validation_commands", []):
+        fail("external collection plan must include the ManiSkill task binding probe command")
     if "python scripts\\build_external_platform_onboarding.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the external platform onboarding command")
     if "python scripts\\build_external_fidelity_provenance_packet.py" not in collection_plan.get("validation_commands", []):
@@ -422,6 +426,53 @@ def main():
         if probe_checks.get(required_check) is not True:
             fail(f"external platform probe missing passing check: {required_check}")
 
+    task_binding_file_path = EXTERNAL / "maniskill_task_bindings.json"
+    task_binding_probe_path = RESULTS / "maniskill_task_binding_probe.json"
+    task_binding_probe_md_path = RESULTS / "maniskill_task_binding_probe.md"
+    for path in (task_binding_file_path, task_binding_probe_path, task_binding_probe_md_path, ROOT / "scripts" / "probe_maniskill_task_bindings.py"):
+        if not path.exists():
+            fail(f"missing ManiSkill task binding artifact: {path}")
+    task_binding_file = json.loads(task_binding_file_path.read_text(encoding="utf-8"))
+    task_binding_probe = json.loads(task_binding_probe_path.read_text(encoding="utf-8"))
+    if task_binding_file.get("version") != "maniskill_task_bindings_v1":
+        fail("ManiSkill task binding file version mismatch")
+    if task_binding_file.get("not_external_evidence") is not True:
+        fail("ManiSkill task binding file must be non-evidence")
+    if task_binding_probe.get("version") != "maniskill_task_binding_probe_v1":
+        fail("ManiSkill task binding probe version mismatch")
+    if task_binding_probe.get("passed") is not True:
+        fail("ManiSkill task binding probe did not pass")
+    if task_binding_probe.get("not_external_evidence") is not True:
+        fail("ManiSkill task binding probe must declare that it is not evidence")
+    if task_binding_probe.get("task_binding_probe_ready") is not True:
+        fail("ManiSkill task binding probe must report task_binding_probe_ready=true")
+    if task_binding_probe.get("accepted_task_binding_ready") is not False:
+        fail("ManiSkill task binding probe must leave accepted_task_binding_ready=false")
+    if task_binding_probe.get("strict_fidelity_evidence_ready") is not False or task_binding_probe.get("strict_external_evidence_ready") is not False:
+        fail("ManiSkill task binding probe must not claim strict fidelity or external evidence readiness")
+    task_records = task_binding_probe.get("task_records", []) or []
+    if {record.get("task_family") for record in task_records if isinstance(record, dict)} != {task.get("task_family") for task in collection_plan.get("tasks", [])}:
+        fail("ManiSkill task binding probe task set must match the collection plan")
+    for record in task_records:
+        if not isinstance(record, dict):
+            continue
+        if not record.get("primary_env_id"):
+            fail(f"ManiSkill task binding record missing primary env id: {record}")
+        if record.get("requires_operator_fidelity_acceptance") is not True:
+            fail(f"ManiSkill task binding must require operator fidelity acceptance: {record.get('task_family')}")
+    binding_checks = {check.get("name"): check.get("passed") for check in task_binding_probe.get("checks", [])}
+    for required_check in (
+        "probe_is_non_evidence",
+        "binding_file_ready",
+        "task_bindings_cover_configs",
+        "configs_embed_backend_task_bindings",
+        "registry_availability_reported",
+        "primary_env_availability_reported",
+        "strict_evidence_remains_false",
+    ):
+        if binding_checks.get(required_check) is not True:
+            fail(f"ManiSkill task binding probe missing passing check: {required_check}")
+
     onboarding_packet_path = EXTERNAL / "platform_onboarding_packet.json"
     onboarding_packet_md_path = EXTERNAL / "platform_onboarding_packet.md"
     onboarding_audit_path = RESULTS / "external_platform_onboarding_audit.json"
@@ -467,6 +518,7 @@ def main():
     strict_onboarding_commands = "\n".join(onboarding_packet.get("strict_commands", []) or [])
     for fragment in (
         "probe_external_platform.py --strict",
+        "probe_maniskill_task_bindings.py --strict",
         "audit_external_backend_contract.py --strict",
         "materialize_external_configs.py",
         "validate_external_configs.py --strict",
@@ -499,6 +551,7 @@ def main():
         "official_sources_are_primary_and_currently_checked",
         "platform_provenance_fields_cover_fidelity_hashes_and_observations",
         "platform_probe_report_ready",
+        "task_binding_probe_report_ready",
         "primary_install_probe_has_machine_probe_command",
         "pilot_sequence_preserves_gate_order",
     ):
@@ -1719,6 +1772,8 @@ def main():
         "independent_route_closes_blockers",
         "external_platform_probe_ready",
         "external_platform_probe_not_evidence",
+        "maniskill_task_binding_probe_ready",
+        "maniskill_task_binding_probe_not_evidence",
         "external_platform_onboarding_ready",
         "external_platform_onboarding_not_evidence",
         "external_platform_onboarding_sources_and_provenance",
@@ -1884,6 +1939,7 @@ def main():
         "preflight_operator_actions_present",
         "route_independent_of_haonan",
         "platform_probe_ready",
+        "task_binding_probe_ready",
         "platform_onboarding_ready",
         "fidelity_provenance_packet_ready",
         "post_collection_strict_commands_cover_all_gates",
@@ -1921,6 +1977,12 @@ def main():
     platform_probe_commands = "\n".join(platform_probe_actions[0].get("commands", []) or [])
     if "probe_external_platform.py" not in platform_probe_commands or "probe_external_platform.py --strict" not in platform_probe_commands:
         fail("external operator packet platform probe action must include non-strict and strict probe commands")
+    task_binding_actions = [action for action in operator_actions if action.get("id") == "task_binding_probe"]
+    if not task_binding_actions:
+        fail("external operator packet missing task_binding_probe action")
+    task_binding_commands = "\n".join(task_binding_actions[0].get("commands", []) or [])
+    if "probe_maniskill_task_bindings.py" not in task_binding_commands or "probe_maniskill_task_bindings.py --strict" not in task_binding_commands:
+        fail("external operator packet task binding action must include non-strict and strict probe commands")
     backend_integration_actions = [action for action in operator_actions if action.get("id") == "backend_integration_packet"]
     if not backend_integration_actions:
         fail("external operator packet missing backend_integration_packet action")

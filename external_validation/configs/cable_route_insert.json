@@ -1,4 +1,17 @@
 {
+  "backend_task_binding": {
+    "accepted_task_binding_ready": false,
+    "binding_source": "external_validation/maniskill_task_bindings.json",
+    "binding_strength": "surrogate_contact_candidate",
+    "primary_env_id": "PullCubeTool-v1",
+    "primary_route": "maniskill_sapien_primary",
+    "registry_probe_report": "results/maniskill_task_binding_probe.json",
+    "requires_operator_fidelity_acceptance": true,
+    "strict_external_evidence_ready": false,
+    "support_env_ids": [
+      "InsertFlower-v1"
+    ]
+  },
   "compute_budget": {
     "same_for_all_non_oracle_methods": true,
     "simulator_query_budget": 4096,

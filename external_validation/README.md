@@ -109,6 +109,14 @@ python scripts\probe_external_platform.py
 
 This writes `results/external_platform_probe.{json,md}` with Python, package, GPU/renderer, code-commit, and config/backend hash provenance for the selected public-simulator route. It is not evidence; rerun it on the actual external GPU workstation and use `--strict` only as an install-readiness gate before collection.
 
+Probe the ManiSkill task-family bindings:
+
+```powershell
+python scripts\probe_maniskill_task_bindings.py
+```
+
+This writes `results/maniskill_task_binding_probe.{json,md}` from `external_validation/maniskill_task_bindings.json`. It maps the four Paper 119 task families to concrete public-simulator environment candidates and checks the local Gymnasium registry when ManiSkill is installed. It is not evidence; the operator must still accept or replace the bindings in `external_validation/fidelity_acceptance.json` before any rollout can count.
+
 Build the external platform onboarding packet for the primary public-simulator route:
 
 ```powershell

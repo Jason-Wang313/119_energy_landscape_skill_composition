@@ -12,6 +12,7 @@ RESULTS = ROOT / "results"
 SCHEMA = EXTERNAL / "config_schema_v1.json"
 TEMPLATE_DIR = EXTERNAL / "config_templates"
 OUTPUT_DIR = EXTERNAL / "configs"
+DEFAULT_BINDINGS = EXTERNAL / "maniskill_task_bindings.json"
 OUT_JSON = RESULTS / "external_config_materialization_plan.json"
 OUT_MD = RESULTS / "external_config_materialization_plan.md"
 
@@ -50,8 +51,43 @@ def template_paths(template_dir: Path) -> list[Path]:
     return sorted(template_dir.glob("*.json"))
 
 
-def materialize_template(template: dict[str, Any], args: argparse.Namespace, schema: dict[str, Any]) -> dict[str, Any]:
+def task_bindings(path: Path) -> dict[str, dict[str, Any]]:
+    if not path.exists():
+        return {}
+    payload = read_json(path)
+    raw = payload.get("bindings", [])
+    if not isinstance(raw, list):
+        return {}
+    bindings: dict[str, dict[str, Any]] = {}
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        task = str(item.get("task_family", "")).strip()
+        primary_env_id = str(item.get("primary_env_id", "")).strip()
+        if not task or not primary_env_id:
+            continue
+        bindings[task] = {
+            "binding_source": "external_validation/maniskill_task_bindings.json",
+            "registry_probe_report": "results/maniskill_task_binding_probe.json",
+            "primary_route": payload.get("primary_route", "maniskill_sapien_primary"),
+            "primary_env_id": primary_env_id,
+            "support_env_ids": list(item.get("support_env_ids", []) or []),
+            "binding_strength": item.get("binding_strength", ""),
+            "requires_operator_fidelity_acceptance": item.get("requires_operator_fidelity_acceptance") is True,
+            "accepted_task_binding_ready": False,
+            "strict_external_evidence_ready": False,
+        }
+    return bindings
+
+
+def materialize_template(
+    template: dict[str, Any],
+    args: argparse.Namespace,
+    schema: dict[str, Any],
+    bindings: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
     payload = json.loads(json.dumps(template))
+    task = str(payload.get("task_family", ""))
     payload["version"] = schema["evidence_version"]
     payload["platform_type"] = args.platform_type
     payload["platform_name"] = args.platform_name
@@ -61,6 +97,8 @@ def materialize_template(template: dict[str, Any], args: argparse.Namespace, sch
     payload["compute_budget"]["wall_clock_seconds"] = int(args.wall_clock_seconds)
     payload["compute_budget"]["simulator_query_budget"] = int(args.simulator_query_budget)
     payload["reset_protocol"]["reset_count"] = int(args.paired_reset_count)
+    if args.platform_type == "high_fidelity_sim" and task in bindings:
+        payload["backend_task_binding"] = bindings[task]
     return payload
 
 
@@ -90,6 +128,7 @@ def validate_payload(payload: dict[str, Any], schema: dict[str, Any], *, for_wri
 
 def build_payload(args: argparse.Namespace) -> dict[str, Any]:
     schema = read_json(args.schema)
+    bindings = task_bindings(args.task_binding_file)
     paths = template_paths(args.template_dir)
     checks: list[dict[str, Any]] = []
     add_check(checks, "schema_exists", args.schema.exists(), rel(args.schema))
@@ -97,6 +136,12 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
     add_check(checks, "template_dir_exists", args.template_dir.exists(), rel(args.template_dir))
     add_check(checks, "template_count_ge_4", len(paths) >= 4, f"templates={len(paths)}")
     add_check(checks, "output_dir_exists", args.output_dir.exists(), rel(args.output_dir))
+    add_check(
+        checks,
+        "task_binding_file_ready",
+        args.task_binding_file.exists() and len(bindings) >= 4,
+        f"path={rel(args.task_binding_file)}, bindings={len(bindings)}",
+    )
     add_check(
         checks,
         "write_requires_explicit_flag",
@@ -109,7 +154,7 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
     for path in paths:
         template = read_json(path)
         task = str(template.get("task_family", path.stem))
-        payload = materialize_template(template, args, schema)
+        payload = materialize_template(template, args, schema, bindings)
         errors = validate_payload(payload, schema, for_write=args.write)
         errors_by_task[task] = errors
         materialized.append(
@@ -138,7 +183,7 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         for path in paths:
             template = read_json(path)
             task = str(template.get("task_family", path.stem))
-            payload = materialize_template(template, args, schema)
+            payload = materialize_template(template, args, schema, bindings)
             target = args.output_dir / f"{task}.json"
             if target.exists() and not args.force:
                 raise SystemExit(f"refusing to overwrite existing config without --force: {target}")
@@ -155,6 +200,7 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         "strict_config_evidence_ready": False,
         "schema": rel(args.schema),
         "template_dir": rel(args.template_dir),
+        "task_binding_file": rel(args.task_binding_file),
         "output_dir": rel(args.output_dir),
         "platform_type": args.platform_type,
         "platform_name": args.platform_name,
@@ -213,6 +259,7 @@ def main() -> int:
     parser.add_argument("--schema", type=Path, default=SCHEMA)
     parser.add_argument("--template-dir", type=Path, default=TEMPLATE_DIR)
     parser.add_argument("--output-dir", type=Path, default=OUTPUT_DIR)
+    parser.add_argument("--task-binding-file", type=Path, default=DEFAULT_BINDINGS)
     parser.add_argument("--platform-type", choices=["real_robot", "high_fidelity_sim"], default="high_fidelity_sim")
     parser.add_argument("--platform-name", default="DRY_RUN_PLATFORM_NOT_EVIDENCE")
     parser.add_argument("--wall-clock-seconds", type=int, default=30)

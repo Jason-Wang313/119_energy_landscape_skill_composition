@@ -76,6 +76,11 @@
       "evidence": ["scripts/probe_external_platform.py", "results/external_platform_probe.json", "results/external_platform_probe.md", "external_validation/platform_onboarding_packet.json", "external_validation/fidelity_provenance_packet.json"]
     },
     {
+      "name": "maniskill_task_binding_probe_claim",
+      "claim": "The repository provides a non-evidence ManiSkill task binding probe that maps Paper 119 task families to concrete public-simulator environment candidates and checks registry availability when ManiSkill is installed, while accepted task binding, strict fidelity, and external evidence remain false.",
+      "evidence": ["external_validation/maniskill_task_bindings.json", "scripts/probe_maniskill_task_bindings.py", "results/maniskill_task_binding_probe.json", "results/maniskill_task_binding_probe.md", "external_validation/platform_onboarding_packet.json"]
+    },
+    {
       "name": "external_platform_onboarding_claim",
       "claim": "The repository provides a non-evidence platform onboarding packet for the primary non-Haonan ManiSkill/SAPIEN route, including official source anchors, required simulator provenance, task onboarding files, backend requirements, and strict gate ordering before any rollout can count as evidence.",
       "evidence": ["scripts/build_external_platform_onboarding.py", "external_validation/platform_onboarding_packet.json", "external_validation/platform_onboarding_packet.md", "results/external_platform_onboarding_audit.json", "results/external_platform_onboarding_audit.md", "results/independent_validation_route_audit.json", "external_validation/fidelity_acceptance_template.json"]

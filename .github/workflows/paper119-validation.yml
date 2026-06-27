@@ -94,6 +94,9 @@ jobs:
       - name: Probe external platform environment
         run: python scripts/probe_external_platform.py
 
+      - name: Probe ManiSkill task bindings
+        run: python scripts/probe_maniskill_task_bindings.py
+
       - name: Build external platform onboarding
         run: python scripts/build_external_platform_onboarding.py
 

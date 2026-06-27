@@ -71,6 +71,7 @@ def build_payload() -> dict[str, Any]:
 
     required_action_ids = {
         "platform_probe",
+        "task_binding_probe",
         "platform_onboarding",
         "fidelity_provenance_packet",
         "backend_integration_packet",
@@ -224,6 +225,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_collection_readiness_audit.json",
             "results/external_acquisition_packet.json",
             "results/external_platform_probe.json",
+            "results/maniskill_task_binding_probe.json",
             "results/external_backend_contract_audit.json",
             "results/external_config_materialization_plan.json",
             "results/external_rollout_evidence_audit.json",

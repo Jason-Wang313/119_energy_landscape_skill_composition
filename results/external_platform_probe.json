@@ -21,7 +21,7 @@
       "passed": true
     },
     {
-      "detail": "commit='d2ab7a326bc61f243e332e1cbcc5b1c885578775'",
+      "detail": "commit='2949e4cba5ae67c4894e4179313ac2e1d421c4be'",
       "name": "repo_commit_reported",
       "passed": true
     },
@@ -143,7 +143,7 @@
   "primary_route_missing_packages": [],
   "repo": {
     "branch": "codex/paper119-submission-hardening",
-    "commit": "d2ab7a326bc61f243e332e1cbcc5b1c885578775",
+    "commit": "2949e4cba5ae67c4894e4179313ac2e1d421c4be",
     "dirty_status_lines": [
       " M .github/workflows/paper119-validation.yml",
       " M README.md",
@@ -155,40 +155,41 @@
       " M docs/submission_version_log.md",
       " M external_validation/README.md",
       " M external_validation/collection_runbook.md",
-      " M external_validation/fidelity_provenance_packet.json",
-      " M external_validation/fidelity_provenance_packet.md",
-      " M external_validation/fidelity_provenance_work_orders.csv",
+      " M external_validation/config_manifest_packet.json",
+      " M external_validation/config_manifest_packet.md",
+      " M external_validation/config_manifest_work_orders.csv",
+      " M external_validation/configs/cable_route_insert.json",
+      " M external_validation/configs/door_open_navigation.json",
+      " M external_validation/configs/drawer_to_pick_transfer.json",
+      " M external_validation/configs/peg_place_regrasp.json",
       " M external_validation/platform_onboarding_packet.json",
       " M external_validation/platform_onboarding_packet.md",
       " M results/external_acquisition_packet.json",
       " M results/external_acquisition_packet.md",
       " M results/external_collection_plan.json",
       " M results/external_collection_plan.md",
+      " M results/external_config_manifest_audit.json",
+      " M results/external_config_manifest_audit.md",
+      " M results/external_config_materialization_plan.json",
+      " M results/external_config_materialization_plan.md",
       " M results/external_execution_readiness_audit.json",
       " M results/external_execution_readiness_audit.md",
-      " M results/external_fidelity_provenance_audit.json",
-      " M results/external_fidelity_provenance_audit.md",
       " M results/external_operator_handoff_bundle.json",
       " M results/external_operator_handoff_bundle.md",
       " M results/external_operator_packet.json",
       " M results/external_operator_packet.md",
       " M results/external_platform_onboarding_audit.json",
       " M results/external_platform_onboarding_audit.md",
+      " M results/external_platform_probe.json",
+      " M results/external_platform_probe.md",
       " M results/visible_contribution_audit.json",
       " M results/visible_contribution_audit.md",
       " M scripts/audit_external_execution_readiness.py",
       " M scripts/audit_visible_contribution.py",
       " M scripts/build_external_acquisition_packet.py",
       " M scripts/build_external_collection_plan.py",
-      " M scripts/build_external_fidelity_provenance_packet.py",
       " M scripts/build_external_operator_handoff_bundle.py",
-      " M scripts/build_external_operator_packet.py",
-      " M scripts/build_external_platform_onboarding.py",
-      " M scripts/build_submission_artifacts.ps1",
-      " M scripts/validate_submission_artifacts.py",
-      "?? results/external_platform_probe.json",
-      "?? results/external_platform_probe.md",
-      "?? scripts/probe_external_platform.py"
+      " M scripts/build_external_operator_packet.py"
     ],
     "git_commands": {
       "rev_parse_branch": {
@@ -212,7 +213,7 @@
         ],
         "returncode": 0,
         "stderr": "",
-        "stdout": "d2ab7a326bc61f243e332e1cbcc5b1c885578775\n"
+        "stdout": "2949e4cba5ae67c4894e4179313ac2e1d421c4be\n"
       },
       "status_short": {
         "available": true,
@@ -223,7 +224,7 @@
         ],
         "returncode": 0,
         "stderr": "",
-        "stdout": " M .github/workflows/paper119-validation.yml\n M README.md\n M child_status.md\n M docs/claim_evidence_ledger.json\n M docs/final_audit.md\n M docs/submission_readiness_audit_v5.md\n M docs/submission_readiness_decision.md\n M docs/submission_version_log.md\n M external_validation/README.md\n M external_validation/collection_runbook.md\n M external_validation/fidelity_provenance_packet.json\n M external_validation/fidelity_provenance_packet.md\n M external_validation/fidelity_provenance_work_orders.csv\n M external_validation/platform_onboarding_packet.json\n M external_validation/platform_onboarding_packet.md\n M results/external_acquisition_packet.json\n M results/external_acquisition_packet.md\n M results/external_collection_plan.json\n M results/external_collection_plan.md\n M results/external_execution_readiness_audit.json\n M results/external_execution_readiness_audit.md\n M results/external_fidelity_provenance_audit.json\n M results/external_fidelity_provenance_audit.md\n M results/external_operator_handoff_bundle.json\n M results/external_operator_handoff_bundle.md\n M results/external_operator_packet.json\n M results/external_operator_packet.md\n M results/external_platform_onboarding_audit.json\n M results/external_platform_onboarding_audit.md\n M results/visible_contribution_audit.json\n M results/visible_contribution_audit.md\n M scripts/audit_external_execution_readiness.py\n M scripts/audit_visible_contribution.py\n M scripts/build_external_acquisition_packet.py\n M scripts/build_external_collection_plan.py\n M scripts/build_external_fidelity_provenance_packet.py\n M scripts/build_external_operator_handoff_bundle.py\n M scripts/build_external_operator_packet.py\n M scripts/build_external_platform_onboarding.py\n M scripts/build_submission_artifacts.ps1\n M scripts/validate_submission_artifacts.py\n?? results/external_platform_probe.json\n?? results/external_platform_probe.md\n?? scripts/probe_external_platform.py\n"
+        "stdout": " M .github/workflows/paper119-validation.yml\n M README.md\n M child_status.md\n M docs/claim_evidence_ledger.json\n M docs/final_audit.md\n M docs/submission_readiness_audit_v5.md\n M docs/submission_readiness_decision.md\n M docs/submission_version_log.md\n M external_validation/README.md\n M external_validation/collection_runbook.md\n M external_validation/config_manifest_packet.json\n M external_validation/config_manifest_packet.md\n M external_validation/config_manifest_work_orders.csv\n M external_validation/configs/cable_route_insert.json\n M external_validation/configs/door_open_navigation.json\n M external_validation/configs/drawer_to_pick_transfer.json\n M external_validation/configs/peg_place_regrasp.json\n M external_validation/platform_onboarding_packet.json\n M external_validation/platform_onboarding_packet.md\n M results/external_acquisition_packet.json\n M results/external_acquisition_packet.md\n M results/external_collection_plan.json\n M results/external_collection_plan.md\n M results/external_config_manifest_audit.json\n M results/external_config_manifest_audit.md\n M results/external_config_materialization_plan.json\n M results/external_config_materialization_plan.md\n M results/external_execution_readiness_audit.json\n M results/external_execution_readiness_audit.md\n M results/external_operator_handoff_bundle.json\n M results/external_operator_handoff_bundle.md\n M results/external_operator_packet.json\n M results/external_operator_packet.md\n M results/external_platform_onboarding_audit.json\n M results/external_platform_onboarding_audit.md\n M results/external_platform_probe.json\n M results/external_platform_probe.md\n M results/visible_contribution_audit.json\n M results/visible_contribution_audit.md\n M scripts/audit_external_execution_readiness.py\n M scripts/audit_visible_contribution.py\n M scripts/build_external_acquisition_packet.py\n M scripts/build_external_collection_plan.py\n M scripts/build_external_operator_handoff_bundle.py\n M scripts/build_external_operator_packet.py\n "
       }
     }
   },
@@ -237,29 +238,34 @@
       "sha256": "6936B85F4D47F87CC509E272E37F577BD3FF2EC0B505EEAEE0C3180207189573"
     },
     "external_validation/configs/cable_route_insert.json": {
-      "bytes": 1502,
+      "bytes": 2034,
       "exists": true,
-      "sha256": "15D687A12F9213E1EB410876203CE93F73E667C30E039685E151438017B3D7AD"
+      "sha256": "8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E"
     },
     "external_validation/configs/door_open_navigation.json": {
-      "bytes": 1503,
+      "bytes": 2005,
       "exists": true,
-      "sha256": "39697F0BA1ECBE013C1790455F26B68C927EEF97415A2BB49C6FD1440DEBEA9C"
+      "sha256": "13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61"
     },
     "external_validation/configs/drawer_to_pick_transfer.json": {
-      "bytes": 1486,
+      "bytes": 2046,
       "exists": true,
-      "sha256": "EABEA38D21F936A46C69E566D0324F7C42A8693CAA1D441B81C7E87B595FCA0D"
+      "sha256": "1288223014CB9D9285E4249B2FA607FFC16EBEE20B6F44E0241B63E88233E471"
     },
     "external_validation/configs/peg_place_regrasp.json": {
-      "bytes": 1487,
+      "bytes": 1989,
       "exists": true,
-      "sha256": "8D041F5E869F4D81E2352D77A01C85EE585DF2040E45987750DF84B86EA94086"
+      "sha256": "021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9"
     },
     "external_validation/fidelity_acceptance_template.json": {
       "bytes": 4582,
       "exists": true,
       "sha256": "0BED23F5E73145C7D3283605C0EFDCCF0970CBC989CAAC6DF4E45445D30496E0"
+    },
+    "external_validation/maniskill_task_bindings.json": {
+      "bytes": 2159,
+      "exists": true,
+      "sha256": "448A0430B88097618D463319DBD599334D28D533F81BA2FE783C3B80DE4EFBC5"
     },
     "external_validation/runner/backend_contract.py": {
       "bytes": 3269,
