@@ -63,7 +63,15 @@
   ],
   "platform_onboarding_ready": true,
   "primary_install_probe": {
+    "env_smoke_probe_command": "python scripts\\probe_maniskill_env_smoke.py",
     "install_command_from_official_docs": "python -m pip install --upgrade mani_skill; python -m pip install torch torchvision torchaudio",
+    "latest_env_smoke_asset_install_hint": "python -m mani_skill.utils.download_asset partnet_mobility_cabinet",
+    "latest_env_smoke_primary_reset_missing": [
+      "OpenCabinetDoor-v1",
+      "OpenCabinetDrawer-v1"
+    ],
+    "latest_env_smoke_probe_report": "results/maniskill_env_smoke_probe.json",
+    "latest_env_smoke_ready": false,
     "latest_probe_install_ready": true,
     "latest_probe_missing_packages": [],
     "latest_probe_report": "results/external_platform_probe.json",
@@ -72,6 +80,7 @@
     "latest_task_binding_probe_report": "results/maniskill_task_binding_probe.json",
     "local_status": "probe is non-evidence; operator must rerun it on the selected GPU workstation and record exact versions in fidelity_acceptance.json",
     "machine_probe_command": "python scripts\\probe_external_platform.py",
+    "strict_env_smoke_probe_command": "python scripts\\probe_maniskill_env_smoke.py --strict",
     "strict_machine_probe_command": "python scripts\\probe_external_platform.py --strict",
     "strict_task_binding_probe_command": "python scripts\\probe_maniskill_task_bindings.py --strict",
     "task_binding_probe_command": "python scripts\\probe_maniskill_task_bindings.py",
@@ -117,12 +126,14 @@
     "results/external_analysis_plan_audit.json",
     "results/external_platform_probe.json",
     "external_validation/maniskill_task_bindings.json",
-    "results/maniskill_task_binding_probe.json"
+    "results/maniskill_task_binding_probe.json",
+    "results/maniskill_env_smoke_probe.json"
   ],
   "strict_commands": [
     "python scripts\\build_external_platform_onboarding.py",
     "python scripts\\probe_external_platform.py --strict",
     "python scripts\\probe_maniskill_task_bindings.py --strict",
+    "python scripts\\probe_maniskill_env_smoke.py --strict",
     "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
     "python scripts\\materialize_external_configs.py --platform-type high_fidelity_sim --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
     "python scripts\\validate_external_configs.py --strict",

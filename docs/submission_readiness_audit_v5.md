@@ -39,14 +39,14 @@ ICLR-main ready: no
 ## Artifact Checks
 
 - PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `04951AB1CBCF70F821F56E17B3F964F4F8C6929BC959BE962B4A10F37F20FCC4`.
+- PDF SHA256: `8FA71C4D2189E1638062AB64F8F8BE04DABD5C8422FFC4246BE70A38F07E7014`.
 - PDF size: `467695` bytes.
 - PDF pages: `29`.
 - Numbered PDF placement: Downloads only.
 - Desktop numbered PDF: absent.
 - Validator: passed.
 - Claim boundary audit: `results/claim_boundary_audit.md` passed and confirms the current package keeps the claim bounded.
-- Visible contribution audit: `results/visible_contribution_audit.md` passed and checks that public-facing docs mention the current materializer, External config manifest packet, External rollout evidence packet, External analysis plan, External platform probe, ManiSkill task binding probe, External platform onboarding packet, External fidelity provenance packet, External backend integration packet, External runner backend probe self-test, External pilot smoke packet, External method implementation packet, external operator packet, outreach stance, and 17/21 objective requirements satisfied boundary.
+- Visible contribution audit: `results/visible_contribution_audit.md` passed and checks that public-facing docs mention the current materializer, External config manifest packet, External rollout evidence packet, External analysis plan, External platform probe, ManiSkill task binding probe, ManiSkill env smoke probe, External platform onboarding packet, External fidelity provenance packet, External backend integration packet, External runner backend probe self-test, External pilot smoke packet, External method implementation packet, external operator packet, outreach stance, and 17/21 objective requirements satisfied boundary.
 - Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 17/21 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
 - Local falsification audit: `results/local_falsification_audit.md` passed and is included in the generated manuscript.
 - Holdout robustness audit: `results/holdout_robustness_audit.md` passed and is included in the generated manuscript.
@@ -66,6 +66,7 @@ ICLR-main ready: no
 - External analysis plan: `external_validation/statistical_analysis_plan.md` and `results/external_analysis_plan_audit.md` exist, pass, and pre-register external hypotheses, rollout-schema thresholds, paired-reset comparisons, exclusion/unblinding policy, strict gates, and reporting while explicitly remaining non-evidence.
 - External platform probe: `scripts/probe_external_platform.py` and `results/external_platform_probe.md` exist, pass, and record Python, package, GPU/renderer, code-commit, and config/backend hash provenance for the selected public-simulator route while explicitly remaining non-evidence.
 - ManiSkill task binding probe: `external_validation/maniskill_task_bindings.json`, `scripts/probe_maniskill_task_bindings.py`, and `results/maniskill_task_binding_probe.md` exist, pass, and bind the four external task families to concrete public-simulator environment candidates while accepted task binding and strict external evidence remain false.
+- ManiSkill env smoke probe: `scripts/probe_maniskill_env_smoke.py` and `results/maniskill_env_smoke_probe.md` exist, pass, and report simulator construction/reset readiness and missing assets while accepted fidelity and strict external evidence remain false.
 - External platform onboarding packet: `external_validation/platform_onboarding_packet.md` and `results/external_platform_onboarding_audit.md` exist, pass, and specify official source anchors, required simulator provenance, task onboarding files, backend requirements, and strict gate order for the primary ManiSkill/SAPIEN route while explicitly remaining non-evidence.
 - External fidelity provenance packet: `external_validation/fidelity_provenance_packet.md`, `external_validation/fidelity_provenance_work_orders.csv`, and `results/external_fidelity_provenance_audit.md` exist, pass, and turn the platform physics/contact, paired-reset replay, operator independence, calibration basis, code/skill hashes, manifest declaration, and strict fidelity gate into work orders while strict fidelity evidence remains false.
 - External backend integration packet: `external_validation/backend_integration_packet.md`, `external_validation/backend_integration_work_orders.csv`, and `results/external_backend_integration_audit.md` exist, pass, and convert the missing non-template public-simulator backend module into work orders while strict backend readiness and strict external evidence remain false.

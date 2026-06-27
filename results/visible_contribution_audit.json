@@ -20,7 +20,7 @@
       "passed": true
     },
     {
-      "detail": "files=225, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=228, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -37,6 +37,11 @@
     {
       "detail": "strict_task_binding_install_ready=True, missing=[]",
       "name": "maniskill_task_binding_probe_visible",
+      "passed": true
+    },
+    {
+      "detail": "strict_env_smoke_ready=False, primary_reset_missing=['OpenCabinetDoor-v1', 'OpenCabinetDrawer-v1']",
+      "name": "maniskill_env_smoke_probe_visible",
       "passed": true
     },
     {

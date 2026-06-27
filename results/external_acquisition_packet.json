@@ -2,7 +2,7 @@
   "acquisition_packet_ready": true,
   "checks": [
     {
-      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_probe.json, results/maniskill_task_binding_probe.json, results/external_platform_onboarding_audit.json, results/external_fidelity_provenance_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/external_config_manifest_audit.json, results/external_rollout_evidence_audit.json, results/external_method_implementation_audit.json, results/external_pilot_smoke_packet_audit.json",
+      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_probe.json, results/maniskill_task_binding_probe.json, results/maniskill_env_smoke_probe.json, results/external_platform_onboarding_audit.json, results/external_fidelity_provenance_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/external_config_manifest_audit.json, results/external_rollout_evidence_audit.json, results/external_method_implementation_audit.json, results/external_pilot_smoke_packet_audit.json",
       "name": "source_audits_exist",
       "passed": true
     },
@@ -87,6 +87,11 @@
       "passed": true
     },
     {
+      "detail": "strict_env_smoke_ready=False, primary_reset_missing=['OpenCabinetDoor-v1', 'OpenCabinetDrawer-v1']",
+      "name": "env_smoke_probe_ready",
+      "passed": true
+    },
+    {
       "detail": "platform_onboarding_ready=True, strict_evidence_ready=False",
       "name": "platform_onboarding_ready",
       "passed": true
@@ -107,7 +112,7 @@
       "passed": true
     },
     {
-      "detail": "Probe the selected external platform machine Probe ManiSkill task-family bindings Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Fill platform fidelity acceptance with real provenance Run a quarantined first-panel backend smoke test Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
+      "detail": "Probe the selected external platform machine Probe ManiSkill task-family bindings Smoke-test bound ManiSkill environments Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Fill platform fidelity acceptance with real provenance Run a quarantined first-panel backend smoke test Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
       "name": "operator_actions_cover_collection_blockers",
       "passed": true
     },
@@ -129,6 +134,7 @@
       "mapped_actions": [
         "platform_probe",
         "task_binding_probe",
+        "env_smoke_probe",
         "platform_onboarding",
         "fidelity_provenance_packet",
         "backend_integration_packet",
@@ -206,10 +212,27 @@
     },
     {
       "artifacts": [
+        "results/maniskill_env_smoke_probe.json",
+        "results/maniskill_env_smoke_probe.md"
+      ],
+      "closes": [
+        "environment construction/reset and missing-asset readiness before backend qualification"
+      ],
+      "commands": [
+        "python scripts\\probe_maniskill_env_smoke.py",
+        "python scripts\\probe_maniskill_env_smoke.py --strict"
+      ],
+      "id": "env_smoke_probe",
+      "operator_input": "construct and reset the bound public-simulator environment candidates without writing rollout logs or videos",
+      "title": "Smoke-test bound ManiSkill environments"
+    },
+    {
+      "artifacts": [
         "external_validation/platform_onboarding_packet.md",
         "external_validation/platform_onboarding_packet.json",
         "results/external_platform_probe.json",
         "results/maniskill_task_binding_probe.json",
+        "results/maniskill_env_smoke_probe.json",
         "results/external_platform_onboarding_audit.json"
       ],
       "closes": [
@@ -218,6 +241,7 @@
       "commands": [
         "python scripts\\probe_external_platform.py",
         "python scripts\\probe_maniskill_task_bindings.py",
+        "python scripts\\probe_maniskill_env_smoke.py",
         "python scripts\\build_external_platform_onboarding.py",
         "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
         "python scripts\\audit_external_fidelity_acceptance.py --strict"

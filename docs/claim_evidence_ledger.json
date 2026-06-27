@@ -81,6 +81,11 @@
       "evidence": ["external_validation/maniskill_task_bindings.json", "scripts/probe_maniskill_task_bindings.py", "results/maniskill_task_binding_probe.json", "results/maniskill_task_binding_probe.md", "external_validation/platform_onboarding_packet.json"]
     },
     {
+      "name": "maniskill_env_smoke_probe_claim",
+      "claim": "The repository provides a non-evidence ManiSkill environment smoke probe that attempts construction and reset for bound public-simulator candidates and reports missing assets or reset blockers while accepted fidelity and strict external evidence remain false.",
+      "evidence": ["scripts/probe_maniskill_env_smoke.py", "results/maniskill_env_smoke_probe.json", "results/maniskill_env_smoke_probe.md", "external_validation/platform_onboarding_packet.json"]
+    },
+    {
       "name": "external_platform_onboarding_claim",
       "claim": "The repository provides a non-evidence platform onboarding packet for the primary non-Haonan ManiSkill/SAPIEN route, including official source anchors, required simulator provenance, task onboarding files, backend requirements, and strict gate ordering before any rollout can count as evidence.",
       "evidence": ["scripts/build_external_platform_onboarding.py", "external_validation/platform_onboarding_packet.json", "external_validation/platform_onboarding_packet.md", "results/external_platform_onboarding_audit.json", "results/external_platform_onboarding_audit.md", "results/independent_validation_route_audit.json", "external_validation/fidelity_acceptance_template.json"]

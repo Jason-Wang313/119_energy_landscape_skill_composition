@@ -59,6 +59,7 @@ Post-collection strict gates:
 
 - `platform_probe`: Probe the selected external platform machine
 - `task_binding_probe`: Probe ManiSkill task-family bindings
+- `env_smoke_probe`: Smoke-test bound ManiSkill environments
 - `platform_onboarding`: Onboard the public simulator platform
 - `backend_module`: Select a non-template backend module
 - `backend_integration_packet`: Use the backend integration packet as the public-simulator backend checklist

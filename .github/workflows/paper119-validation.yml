@@ -97,6 +97,9 @@ jobs:
       - name: Probe ManiSkill task bindings
         run: python scripts/probe_maniskill_task_bindings.py
 
+      - name: Probe ManiSkill environment smoke
+        run: python scripts/probe_maniskill_env_smoke.py
+
       - name: Build external platform onboarding
         run: python scripts/build_external_platform_onboarding.py
 

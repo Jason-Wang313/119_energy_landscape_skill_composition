@@ -21,6 +21,7 @@ REQUIRED_COMMANDS = [
     r"python scripts\build_independent_validation_route.py",
     r"python scripts\probe_external_platform.py",
     r"python scripts\probe_maniskill_task_bindings.py",
+    r"python scripts\probe_maniskill_env_smoke.py",
     r"python scripts\build_external_platform_onboarding.py",
     r"python scripts\build_external_fidelity_provenance_packet.py",
     r"python scripts\build_external_backend_integration_packet.py",

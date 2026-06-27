@@ -131,6 +131,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_platform_onboarding.py",
         SCRIPTS / "probe_external_platform.py",
         SCRIPTS / "probe_maniskill_task_bindings.py",
+        SCRIPTS / "probe_maniskill_env_smoke.py",
         SCRIPTS / "build_external_fidelity_provenance_packet.py",
         SCRIPTS / "build_external_backend_integration_packet.py",
         SCRIPTS / "build_external_config_manifest_packet.py",
@@ -165,6 +166,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_platform_probe.md",
         RESULTS / "maniskill_task_binding_probe.json",
         RESULTS / "maniskill_task_binding_probe.md",
+        RESULTS / "maniskill_env_smoke_probe.json",
+        RESULTS / "maniskill_env_smoke_probe.md",
         RESULTS / "external_platform_onboarding_audit.json",
         RESULTS / "external_platform_onboarding_audit.md",
         RESULTS / "external_fidelity_provenance_audit.json",
@@ -268,6 +271,7 @@ def build_payload() -> dict[str, Any]:
     analysis = require_payload(RESULTS / "external_analysis_plan_audit.json", "external_analysis_plan_audit_v1")
     platform_probe = require_payload(RESULTS / "external_platform_probe.json", "external_platform_probe_v1")
     task_binding_probe = require_payload(RESULTS / "maniskill_task_binding_probe.json", "maniskill_task_binding_probe_v1")
+    env_smoke_probe = require_payload(RESULTS / "maniskill_env_smoke_probe.json", "maniskill_env_smoke_probe_v1")
     onboarding = require_payload(RESULTS / "external_platform_onboarding_audit.json", "external_platform_onboarding_audit_v1")
     fidelity_provenance = require_payload(RESULTS / "external_fidelity_provenance_audit.json", "external_fidelity_provenance_audit_v1")
     backend_integration = require_payload(RESULTS / "external_backend_integration_audit.json", "external_backend_integration_audit_v1")
@@ -388,17 +392,26 @@ def build_payload() -> dict[str, Any]:
         and task_binding_probe.get("task_binding_probe_ready") is True
         and task_binding_probe.get("accepted_task_binding_ready") is False
         and task_binding_probe.get("strict_external_evidence_ready") is False
+        and env_smoke_probe.get("passed") is True
+        and env_smoke_probe.get("not_external_evidence") is True
+        and env_smoke_probe.get("env_smoke_probe_ready") is True
+        and env_smoke_probe.get("accepted_fidelity_ready") is False
+        and env_smoke_probe.get("strict_external_evidence_ready") is False
         and onboarding_checks.get("primary_route_matches_independent_plan") is True
         and onboarding_checks.get("platform_provenance_fields_cover_fidelity_hashes_and_observations") is True
         and onboarding_checks.get("platform_probe_report_ready") is True
         and onboarding_checks.get("task_binding_probe_report_ready") is True
+        and onboarding_checks.get("env_smoke_probe_report_ready") is True
         and "external_validation/maniskill_task_bindings.json" in paths
         and "results/external_platform_probe.json" in paths
         and "results/external_platform_probe.md" in paths
         and "results/maniskill_task_binding_probe.json" in paths
         and "results/maniskill_task_binding_probe.md" in paths
+        and "results/maniskill_env_smoke_probe.json" in paths
+        and "results/maniskill_env_smoke_probe.md" in paths
         and "scripts/probe_external_platform.py" in paths
         and "scripts/probe_maniskill_task_bindings.py" in paths
+        and "scripts/probe_maniskill_env_smoke.py" in paths
         and "external_validation/platform_onboarding_packet.json" in paths
         and "external_validation/platform_onboarding_packet.md" in paths
         and "results/external_platform_onboarding_audit.json" in paths

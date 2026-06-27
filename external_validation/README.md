@@ -117,6 +117,14 @@ python scripts\probe_maniskill_task_bindings.py
 
 This writes `results/maniskill_task_binding_probe.{json,md}` from `external_validation/maniskill_task_bindings.json`. It maps the four Paper 119 task families to concrete public-simulator environment candidates and checks the local Gymnasium registry when ManiSkill is installed. It is not evidence; the operator must still accept or replace the bindings in `external_validation/fidelity_acceptance.json` before any rollout can count.
 
+Smoke-test bound ManiSkill environments:
+
+```powershell
+python scripts\probe_maniskill_env_smoke.py
+```
+
+This writes `results/maniskill_env_smoke_probe.{json,md}`. It attempts construction and reset for the bound public-simulator candidates without writing official rollout logs or videos. It is not evidence; use the report to install missing assets, replace weak bindings, and fill fidelity acceptance before backend qualification.
+
 Build the external platform onboarding packet for the primary public-simulator route:
 
 ```powershell

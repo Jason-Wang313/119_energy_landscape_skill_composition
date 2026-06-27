@@ -161,6 +161,25 @@ def main() -> int:
         ),
     )
 
+    env_smoke_ok, env_smoke, env_smoke_detail = passed_json(
+        RESULTS / "maniskill_env_smoke_probe.json",
+        version="maniskill_env_smoke_probe_v1",
+    )
+    add_check(checks, "maniskill_env_smoke_probe_ready", env_smoke_ok, env_smoke_detail)
+    add_check(
+        checks,
+        "maniskill_env_smoke_probe_not_evidence",
+        env_smoke.get("not_external_evidence") is True
+        and env_smoke.get("env_smoke_probe_ready") is True
+        and env_smoke.get("accepted_fidelity_ready") is False
+        and env_smoke.get("strict_fidelity_evidence_ready") is False
+        and env_smoke.get("strict_external_evidence_ready") is False,
+        (
+            f"strict_env_smoke_ready={env_smoke.get('strict_env_smoke_ready')!r}, "
+            f"primary_reset_missing={env_smoke.get('primary_reset_missing')!r}"
+        ),
+    )
+
     onboarding_ok, onboarding, onboarding_detail = passed_json(
         RESULTS / "external_platform_onboarding_audit.json",
         version="external_platform_onboarding_audit_v1",

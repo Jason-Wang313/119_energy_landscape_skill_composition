@@ -109,6 +109,7 @@ def main():
         "scripts\\build_independent_validation_route.py",
         "scripts\\probe_external_platform.py",
         "scripts\\probe_maniskill_task_bindings.py",
+        "scripts\\probe_maniskill_env_smoke.py",
         "scripts\\build_external_platform_onboarding.py",
         "scripts\\build_external_fidelity_provenance_packet.py",
         "scripts\\audit_external_fidelity_acceptance.py",
@@ -195,6 +196,7 @@ def main():
         "python scripts/build_external_analysis_plan.py",
         "python scripts/probe_external_platform.py",
         "python scripts/probe_maniskill_task_bindings.py",
+        "python scripts/probe_maniskill_env_smoke.py",
         "python scripts/build_external_platform_onboarding.py",
         "python scripts/build_external_fidelity_provenance_packet.py",
         "python scripts/build_external_backend_integration_packet.py",
@@ -275,6 +277,8 @@ def main():
         fail("external collection plan must include the external platform probe command")
     if "python scripts\\probe_maniskill_task_bindings.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the ManiSkill task binding probe command")
+    if "python scripts\\probe_maniskill_env_smoke.py" not in collection_plan.get("validation_commands", []):
+        fail("external collection plan must include the ManiSkill env smoke probe command")
     if "python scripts\\build_external_platform_onboarding.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the external platform onboarding command")
     if "python scripts\\build_external_fidelity_provenance_packet.py" not in collection_plan.get("validation_commands", []):
@@ -473,6 +477,40 @@ def main():
         if binding_checks.get(required_check) is not True:
             fail(f"ManiSkill task binding probe missing passing check: {required_check}")
 
+    env_smoke_path = RESULTS / "maniskill_env_smoke_probe.json"
+    env_smoke_md_path = RESULTS / "maniskill_env_smoke_probe.md"
+    for path in (env_smoke_path, env_smoke_md_path, ROOT / "scripts" / "probe_maniskill_env_smoke.py"):
+        if not path.exists():
+            fail(f"missing ManiSkill env smoke artifact: {path}")
+    env_smoke = json.loads(env_smoke_path.read_text(encoding="utf-8"))
+    if env_smoke.get("version") != "maniskill_env_smoke_probe_v1":
+        fail("ManiSkill env smoke probe version mismatch")
+    if env_smoke.get("passed") is not True:
+        fail("ManiSkill env smoke probe did not pass")
+    if env_smoke.get("not_external_evidence") is not True:
+        fail("ManiSkill env smoke probe must declare that it is not evidence")
+    if env_smoke.get("env_smoke_probe_ready") is not True:
+        fail("ManiSkill env smoke probe must report env_smoke_probe_ready=true")
+    if env_smoke.get("accepted_fidelity_ready") is not False:
+        fail("ManiSkill env smoke probe must leave accepted_fidelity_ready=false")
+    if env_smoke.get("strict_fidelity_evidence_ready") is not False or env_smoke.get("strict_external_evidence_ready") is not False:
+        fail("ManiSkill env smoke probe must not claim strict fidelity or external evidence readiness")
+    if int(env_smoke.get("primary_env_count", 0) or 0) < 4:
+        fail("ManiSkill env smoke probe must cover the four primary task envs")
+    if not isinstance(env_smoke.get("primary_reset_missing"), list):
+        fail("ManiSkill env smoke probe must report primary_reset_missing as a list")
+    env_smoke_checks = {check.get("name"): check.get("passed") for check in env_smoke.get("checks", [])}
+    for required_check in (
+        "probe_is_non_evidence",
+        "binding_file_ready",
+        "smoke_attempted_all_bound_envs",
+        "primary_reset_readiness_reported",
+        "asset_failures_reported",
+        "strict_evidence_remains_false",
+    ):
+        if env_smoke_checks.get(required_check) is not True:
+            fail(f"ManiSkill env smoke probe missing passing check: {required_check}")
+
     onboarding_packet_path = EXTERNAL / "platform_onboarding_packet.json"
     onboarding_packet_md_path = EXTERNAL / "platform_onboarding_packet.md"
     onboarding_audit_path = RESULTS / "external_platform_onboarding_audit.json"
@@ -519,6 +557,7 @@ def main():
     for fragment in (
         "probe_external_platform.py --strict",
         "probe_maniskill_task_bindings.py --strict",
+        "probe_maniskill_env_smoke.py --strict",
         "audit_external_backend_contract.py --strict",
         "materialize_external_configs.py",
         "validate_external_configs.py --strict",
@@ -552,6 +591,7 @@ def main():
         "platform_provenance_fields_cover_fidelity_hashes_and_observations",
         "platform_probe_report_ready",
         "task_binding_probe_report_ready",
+        "env_smoke_probe_report_ready",
         "primary_install_probe_has_machine_probe_command",
         "pilot_sequence_preserves_gate_order",
     ):
@@ -1774,6 +1814,8 @@ def main():
         "external_platform_probe_not_evidence",
         "maniskill_task_binding_probe_ready",
         "maniskill_task_binding_probe_not_evidence",
+        "maniskill_env_smoke_probe_ready",
+        "maniskill_env_smoke_probe_not_evidence",
         "external_platform_onboarding_ready",
         "external_platform_onboarding_not_evidence",
         "external_platform_onboarding_sources_and_provenance",
@@ -1940,6 +1982,7 @@ def main():
         "route_independent_of_haonan",
         "platform_probe_ready",
         "task_binding_probe_ready",
+        "env_smoke_probe_ready",
         "platform_onboarding_ready",
         "fidelity_provenance_packet_ready",
         "post_collection_strict_commands_cover_all_gates",
@@ -1983,6 +2026,12 @@ def main():
     task_binding_commands = "\n".join(task_binding_actions[0].get("commands", []) or [])
     if "probe_maniskill_task_bindings.py" not in task_binding_commands or "probe_maniskill_task_bindings.py --strict" not in task_binding_commands:
         fail("external operator packet task binding action must include non-strict and strict probe commands")
+    env_smoke_actions = [action for action in operator_actions if action.get("id") == "env_smoke_probe"]
+    if not env_smoke_actions:
+        fail("external operator packet missing env_smoke_probe action")
+    env_smoke_commands = "\n".join(env_smoke_actions[0].get("commands", []) or [])
+    if "probe_maniskill_env_smoke.py" not in env_smoke_commands or "probe_maniskill_env_smoke.py --strict" not in env_smoke_commands:
+        fail("external operator packet env smoke action must include non-strict and strict probe commands")
     backend_integration_actions = [action for action in operator_actions if action.get("id") == "backend_integration_packet"]
     if not backend_integration_actions:
         fail("external operator packet missing backend_integration_packet action")

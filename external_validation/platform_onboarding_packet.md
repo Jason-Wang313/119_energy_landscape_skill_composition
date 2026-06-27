@@ -24,9 +24,15 @@ This packet turns the non-Haonan public-simulator route into an operator onboard
 - Strict machine probe command: `python scripts\probe_external_platform.py --strict`
 - Task binding probe command: `python scripts\probe_maniskill_task_bindings.py`
 - Strict task binding probe command: `python scripts\probe_maniskill_task_bindings.py --strict`
+- Env smoke probe command: `python scripts\probe_maniskill_env_smoke.py`
+- Strict env smoke probe command: `python scripts\probe_maniskill_env_smoke.py --strict`
 - Latest task binding probe report: `results/maniskill_task_binding_probe.json`
 - Latest task binding install ready: `true`
 - Latest task binding missing env IDs: `[]`
+- Latest env smoke probe report: `results/maniskill_env_smoke_probe.json`
+- Latest env smoke ready: `false`
+- Latest env smoke primary reset missing: `['OpenCabinetDoor-v1', 'OpenCabinetDrawer-v1']`
+- Latest env smoke asset install hint: `python -m mani_skill.utils.download_asset partnet_mobility_cabinet`
 - Latest probe report: `results/external_platform_probe.json`
 - Latest probe install ready: `true`
 - Latest probe missing packages: `[]`
@@ -167,6 +173,7 @@ Must document:
 - `python scripts\build_external_platform_onboarding.py`
 - `python scripts\probe_external_platform.py --strict`
 - `python scripts\probe_maniskill_task_bindings.py --strict`
+- `python scripts\probe_maniskill_env_smoke.py --strict`
 - `python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --alias-map external_validation\method_alias_map.json`
 - `python scripts\materialize_external_configs.py --platform-type high_fidelity_sim --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write`
 - `python scripts\validate_external_configs.py --strict`

@@ -84,6 +84,7 @@ STRICT_COMMANDS = [
     r"python scripts\build_external_platform_onboarding.py",
     r"python scripts\probe_external_platform.py --strict",
     r"python scripts\probe_maniskill_task_bindings.py --strict",
+    r"python scripts\probe_maniskill_env_smoke.py --strict",
     r"python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --alias-map external_validation\method_alias_map.json",
     r"python scripts\materialize_external_configs.py --platform-type high_fidelity_sim --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
     r"python scripts\validate_external_configs.py --strict",
@@ -147,6 +148,7 @@ def build_packet(
     analysis_audit: dict[str, Any],
     platform_probe: dict[str, Any],
     task_binding_probe: dict[str, Any],
+    env_smoke_probe: dict[str, Any],
 ) -> dict[str, Any]:
     primary_route = route_by_id(route_audit, "maniskill_sapien_primary")
     tasks = planned_tasks(collection_plan)
@@ -190,6 +192,7 @@ def build_packet(
             rel(RESULTS / "external_platform_probe.json"),
             rel(EXTERNAL / "maniskill_task_bindings.json"),
             rel(RESULTS / "maniskill_task_binding_probe.json"),
+            rel(RESULTS / "maniskill_env_smoke_probe.json"),
         ],
         "primary_route": primary_route.get("route_id", "maniskill_sapien_primary"),
         "primary_platform_family": primary_route.get("platform_family", "ManiSkill/SAPIEN"),
@@ -208,9 +211,15 @@ def build_packet(
             "strict_machine_probe_command": r"python scripts\probe_external_platform.py --strict",
             "task_binding_probe_command": r"python scripts\probe_maniskill_task_bindings.py",
             "strict_task_binding_probe_command": r"python scripts\probe_maniskill_task_bindings.py --strict",
+            "env_smoke_probe_command": r"python scripts\probe_maniskill_env_smoke.py",
+            "strict_env_smoke_probe_command": r"python scripts\probe_maniskill_env_smoke.py --strict",
             "latest_task_binding_probe_report": "results/maniskill_task_binding_probe.json",
             "latest_task_binding_install_ready": task_binding_probe.get("strict_task_binding_install_ready") is True,
             "latest_task_binding_missing_env_ids": list(task_binding_probe.get("primary_missing_env_ids", []) or []),
+            "latest_env_smoke_probe_report": "results/maniskill_env_smoke_probe.json",
+            "latest_env_smoke_ready": env_smoke_probe.get("strict_env_smoke_ready") is True,
+            "latest_env_smoke_primary_reset_missing": list(env_smoke_probe.get("primary_reset_missing", []) or []),
+            "latest_env_smoke_asset_install_hint": env_smoke_probe.get("asset_install_hint", ""),
             "latest_probe_report": "results/external_platform_probe.json",
             "latest_probe_install_ready": platform_probe.get("primary_route_install_ready") is True,
             "latest_probe_missing_packages": list(platform_probe.get("primary_route_missing_packages", []) or []),
@@ -251,6 +260,7 @@ def audit_packet(
     route_audit: dict[str, Any],
     platform_probe: dict[str, Any],
     task_binding_probe: dict[str, Any],
+    env_smoke_probe: dict[str, Any],
 ) -> dict[str, Any]:
     checks: list[dict[str, Any]] = []
     route_checks = {check.get("name"): check.get("passed") for check in route_audit.get("checks", []) or []}
@@ -351,7 +361,9 @@ def audit_packet(
         "probe_external_platform.py" in str(install_probe.get("machine_probe_command", ""))
         and "probe_external_platform.py --strict" in str(install_probe.get("strict_machine_probe_command", ""))
         and "probe_maniskill_task_bindings.py" in str(install_probe.get("task_binding_probe_command", ""))
-        and "probe_maniskill_task_bindings.py --strict" in str(install_probe.get("strict_task_binding_probe_command", "")),
+        and "probe_maniskill_task_bindings.py --strict" in str(install_probe.get("strict_task_binding_probe_command", ""))
+        and "probe_maniskill_env_smoke.py" in str(install_probe.get("env_smoke_probe_command", ""))
+        and "probe_maniskill_env_smoke.py --strict" in str(install_probe.get("strict_env_smoke_probe_command", "")),
         f"install_probe={install_probe}",
     )
     task_binding_checks = {check.get("name"): check.get("passed") for check in task_binding_probe.get("checks", []) or []}
@@ -377,10 +389,29 @@ def audit_packet(
             f"missing={task_binding_probe.get('primary_missing_env_ids')!r}"
         ),
     )
+    env_smoke_checks = {check.get("name"): check.get("passed") for check in env_smoke_probe.get("checks", []) or []}
+    add_check(
+        checks,
+        "env_smoke_probe_report_ready",
+        env_smoke_probe.get("version") == "maniskill_env_smoke_probe_v1"
+        and env_smoke_probe.get("passed") is True
+        and env_smoke_probe.get("not_external_evidence") is True
+        and env_smoke_probe.get("env_smoke_probe_ready") is True
+        and env_smoke_probe.get("accepted_fidelity_ready") is False
+        and env_smoke_probe.get("strict_fidelity_evidence_ready") is False
+        and env_smoke_probe.get("strict_external_evidence_ready") is False
+        and env_smoke_checks.get("smoke_attempted_all_bound_envs") is True
+        and env_smoke_checks.get("primary_reset_readiness_reported") is True,
+        (
+            f"strict_env_smoke_ready={env_smoke_probe.get('strict_env_smoke_ready')!r}, "
+            f"primary_reset_missing={env_smoke_probe.get('primary_reset_missing')!r}"
+        ),
+    )
     for fragment in (
         "build_external_platform_onboarding.py",
         "probe_external_platform.py --strict",
         "probe_maniskill_task_bindings.py --strict",
+        "probe_maniskill_env_smoke.py --strict",
         "audit_external_backend_contract.py --strict",
         "materialize_external_configs.py",
         "validate_external_configs.py --strict",
@@ -456,9 +487,15 @@ def write_packet_md(packet: dict[str, Any]) -> None:
             f"- Strict machine probe command: `{packet['primary_install_probe']['strict_machine_probe_command']}`",
             f"- Task binding probe command: `{packet['primary_install_probe']['task_binding_probe_command']}`",
             f"- Strict task binding probe command: `{packet['primary_install_probe']['strict_task_binding_probe_command']}`",
+            f"- Env smoke probe command: `{packet['primary_install_probe']['env_smoke_probe_command']}`",
+            f"- Strict env smoke probe command: `{packet['primary_install_probe']['strict_env_smoke_probe_command']}`",
             f"- Latest task binding probe report: `{packet['primary_install_probe']['latest_task_binding_probe_report']}`",
             f"- Latest task binding install ready: `{str(packet['primary_install_probe']['latest_task_binding_install_ready']).lower()}`",
             f"- Latest task binding missing env IDs: `{packet['primary_install_probe']['latest_task_binding_missing_env_ids']}`",
+            f"- Latest env smoke probe report: `{packet['primary_install_probe']['latest_env_smoke_probe_report']}`",
+            f"- Latest env smoke ready: `{str(packet['primary_install_probe']['latest_env_smoke_ready']).lower()}`",
+            f"- Latest env smoke primary reset missing: `{packet['primary_install_probe']['latest_env_smoke_primary_reset_missing']}`",
+            f"- Latest env smoke asset install hint: `{packet['primary_install_probe']['latest_env_smoke_asset_install_hint']}`",
             f"- Latest probe report: `{packet['primary_install_probe']['latest_probe_report']}`",
             f"- Latest probe install ready: `{str(packet['primary_install_probe']['latest_probe_install_ready']).lower()}`",
             f"- Latest probe missing packages: `{packet['primary_install_probe']['latest_probe_missing_packages']}`",
@@ -530,11 +567,12 @@ def main() -> int:
     analysis_audit = read_json(RESULTS / "external_analysis_plan_audit.json")
     platform_probe = read_json(RESULTS / "external_platform_probe.json")
     task_binding_probe = read_json(RESULTS / "maniskill_task_binding_probe.json")
+    env_smoke_probe = read_json(RESULTS / "maniskill_env_smoke_probe.json")
 
-    packet = build_packet(collection_plan, route_audit, analysis_audit, platform_probe, task_binding_probe)
+    packet = build_packet(collection_plan, route_audit, analysis_audit, platform_probe, task_binding_probe, env_smoke_probe)
     PACKET_JSON.write_text(json.dumps(packet, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_packet_md(packet)
-    audit = audit_packet(packet, collection_plan, route_audit, platform_probe, task_binding_probe)
+    audit = audit_packet(packet, collection_plan, route_audit, platform_probe, task_binding_probe, env_smoke_probe)
     AUDIT_JSON.write_text(json.dumps(audit, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_audit_md(audit)
 
