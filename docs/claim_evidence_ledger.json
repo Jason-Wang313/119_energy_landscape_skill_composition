@@ -7,7 +7,7 @@
   "permitted_claims": [
     {
       "name": "bounded_mechanism_claim",
-      "claim": "Barrier-certified seam models can improve skill composition when basin overlap, barrier height, descent continuity, repair cost, and seam-risk calibration are estimable at the handoff.",
+      "claim": "Barrier-certified seam models can improve skill composition when they act as local world/action interfaces: predicting handoff failure, diagnosing basin/barrier/descent risks, choosing accept/repair/probe/abstain/transition, and updating planner-edge beliefs from outcomes.",
       "evidence": ["paper/main.tex", "results/summary.json", "results/hard_aggregate_metrics.csv", "results/ablation_metrics.csv"]
     },
     {
@@ -58,7 +58,7 @@
     {
       "name": "visible_contribution_claim",
       "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, and outreach package synchronized with the current materializer, operator packet, outreach stance, and readiness boundary.",
-      "evidence": ["scripts/audit_visible_contribution.py", "results/visible_contribution_audit.json", "results/visible_contribution_audit.md", "README.md", "docs/final_audit.md", "docs/submission_readiness_decision.md"]
+      "evidence": ["scripts/audit_visible_contribution.py", "README.md", "docs/final_audit.md", "docs/submission_readiness_decision.md", "docs/submission_readiness_audit_v5.md", "docs/submission_version_log.md", "child_status.md", "docs/haonan_yilun_outreach_package.md"]
     },
     {
       "name": "external_collection_plan_claim",

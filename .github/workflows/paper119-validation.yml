@@ -64,13 +64,16 @@ jobs:
       - name: Audit external execution readiness
         run: python scripts/audit_external_execution_readiness.py
 
+      - name: Audit claim boundary before readiness gap
+        run: python scripts/audit_claim_boundary.py
+
       - name: Audit submission readiness gap
         run: python scripts/audit_submission_readiness_gap.py
 
       - name: Audit visible contribution docs
         run: python scripts/audit_visible_contribution.py
 
-      - name: Audit claim boundary
+      - name: Audit claim boundary after visible docs
         run: python scripts/audit_claim_boundary.py
 
       - name: Validate submission artifacts

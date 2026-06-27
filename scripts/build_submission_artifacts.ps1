@@ -151,6 +151,10 @@ try {
         }
     }
 
+    Invoke-Step "Audit claim boundary before readiness gap" {
+        Invoke-Native python scripts\audit_claim_boundary.py
+    }
+
     Invoke-Step "Audit submission readiness gap" {
         Invoke-Native python scripts\audit_submission_readiness_gap.py
     }
@@ -159,7 +163,7 @@ try {
         Invoke-Native python scripts\audit_visible_contribution.py
     }
 
-    Invoke-Step "Audit claim boundary" {
+    Invoke-Step "Audit claim boundary after visible docs" {
         Invoke-Native python scripts\audit_claim_boundary.py
     }
 

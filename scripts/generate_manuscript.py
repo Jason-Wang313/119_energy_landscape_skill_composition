@@ -393,7 +393,7 @@ def make_manuscript(summary):
         "The broader question is how a robot represents the physical consequences of a skill transition, notices when that representation is incomplete, and adapts future planning from the outcome. We use that world/action model lens at a deliberately local scale: the model is not a whole robot simulator, and the prediction-action-update loop is limited to the handoff."
     )
     a(
-        "Concretely, the contribution is a seam-level predictive interface: estimate terminal/basin/barrier/descent/risk quantities, diagnose the likely failure mode, choose accept, repair, probe, abstain, or transition, and write the outcome back to planner-edge memory. The energy composer is one implementation of that interface, not the whole story."
+        "Concretely, the contribution is a seam-level predictive interface: estimate terminal/basin/barrier/descent/risk quantities, diagnose the likely failure mode, choose accept, repair, probe, abstain, or transition, and write the outcome back to planner-edge memory. The energy composer is the paper's implementation of that interface, not the identity of the contribution."
     )
 
     a(r"\section{Problem Setup}")
