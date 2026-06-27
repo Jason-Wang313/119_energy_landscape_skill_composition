@@ -18,6 +18,7 @@
 - Figure readability validator: `scripts/audit_figure_readability.py`
 - Camera-ready design validator: `scripts/audit_camera_ready_design.py`
 - Claim boundary validator: `scripts/audit_claim_boundary.py`
+- Visible contribution validator: `scripts/audit_visible_contribution.py`
 - Submission readiness gap validator: `scripts/audit_submission_readiness_gap.py`
 - External collection planner: `scripts/build_external_collection_plan.py`
 - External collection runbook builder: `scripts/build_external_runbook.py`
@@ -87,6 +88,8 @@
   - `results/figure_readability_audit.md`
   - `results/camera_ready_design_audit.json`
   - `results/camera_ready_design_audit.md`
+  - `results/visible_contribution_audit.json`
+  - `results/visible_contribution_audit.md`
   - `results/submission_readiness_gap_audit.json`
   - `results/submission_readiness_gap_audit.md`
   - `results/external_collection_plan.json`

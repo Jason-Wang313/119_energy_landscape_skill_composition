@@ -56,6 +56,11 @@
       "evidence": ["scripts/audit_submission_readiness_gap.py", "results/submission_readiness_gap_audit.json", "results/submission_readiness_gap_audit.md", "docs/submission_readiness_audit_v5.md"]
     },
     {
+      "name": "visible_contribution_claim",
+      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, and outreach package synchronized with the current materializer, operator packet, outreach stance, and readiness boundary.",
+      "evidence": ["scripts/audit_visible_contribution.py", "results/visible_contribution_audit.json", "results/visible_contribution_audit.md", "README.md", "docs/final_audit.md", "docs/submission_readiness_decision.md"]
+    },
+    {
       "name": "external_collection_plan_claim",
       "claim": "The repository provides a non-evidence collection schedule for producing independent high-fidelity validation records before any Haonan/Yilun collaboration.",
       "evidence": ["scripts/build_external_collection_plan.py", "results/external_collection_plan.json", "results/external_collection_plan.md", "docs/independent_validation_protocol.md"]
@@ -190,6 +195,7 @@
     "docs/haonan_yilun_outreach_package.md",
     "docs/independent_validation_protocol.md",
     "docs/related_work_coverage_matrix.md",
+    "docs/submission_readiness_decision.md",
     "docs/submission_readiness_audit_v5.md",
     "docs/submission_version_log.md",
     "external_validation/platform_qualification_checklist.md",

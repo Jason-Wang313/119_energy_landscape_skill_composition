@@ -27,6 +27,9 @@
 - Added `scripts/build_external_collection_plan.py` so the independent high-fidelity validation route has a concrete non-evidence schedule before real rollouts are collected.
 - Added `scripts/build_external_runbook.py` so the collection schedule becomes a non-evidence operator packet with a runbook, 1,440-row record sheet, task cards, config templates, and audit.
 - Added `external_validation/platform_qualification_checklist.md` and `scripts/audit_external_execution_readiness.py` so the independent external-validation packet is checked as executable while still remaining explicitly non-evidence.
+- Added `scripts/materialize_external_configs.py` so real task configs can be generated only through a guarded operator command after concrete platform and compute values are supplied.
+- Added `scripts/build_external_operator_packet.py` so the independent validation path has a generated go/no-go packet with pre-collection blockers, collection commands, and post-collection strict gates.
+- Updated the outreach memo, four-page preview, and Haonan/Yilun package to reflect the operator-packet/no-go stance while keeping Haonan's role framed as scientific fit and falsification advice.
 - Added `external_validation/config_schema_v1.json` and `scripts/validate_external_configs.py` so task config templates and future strict evidence configs are machine-checked separately.
 - Added `scripts/build_external_baseline_contract.py` so the external package has a non-evidence baseline implementation contract, method matrix, per-method adapter specs, and an audit that still marks independent non-oracle implementations as missing.
 - Added `scripts/build_external_adapter_scaffolds.py` so the baseline specs produce executable scaffold templates that strict external validation still rejects as evidence until real implementations replace them.
@@ -42,6 +45,7 @@
 - Fixed strict evidence-audit metric parsing so legitimate zero-valued fixed-risk breach is accepted as a number rather than treated as missing.
 - Added `docs/claim_evidence_ledger.json` and `scripts/audit_claim_boundary.py` so the package fails validation if it overclaims beyond the bounded local evidence.
 - Added `scripts/audit_submission_readiness_gap.py` so the active objective is tracked as concrete satisfied, missing, and human-polish requirements without falsely declaring the paper complete.
+- Added `scripts/audit_visible_contribution.py` so README, final audit, readiness docs, version log, child status, and outreach package must stay synchronized with the current materializer/operator-packet/outreach state.
 - Added `scripts/audit_local_falsification.py` and manuscript integration for abstention, cost/search, risk-monotonicity, slice-coverage, and oracle-gap checks over episode-level hard-slice rows.
 - Added `scripts/audit_holdout_robustness.py` and manuscript integration for task-family, seam-regime, split, task-regime, and hash-fold withheld-slice local robustness checks.
 - Added `scripts/audit_diagnostic_mechanism.py` and manuscript integration for exported diagnostic labels, seam decisions, and planner-edge updates over local rows.

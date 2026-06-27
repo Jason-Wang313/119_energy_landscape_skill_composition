@@ -46,6 +46,7 @@ ICLR-main ready: no
 - Desktop numbered PDF: absent.
 - Validator: passed.
 - Claim boundary audit: `results/claim_boundary_audit.md` passed and confirms the current package keeps the claim bounded.
+- Visible contribution audit: `results/visible_contribution_audit.md` passed and checks that public-facing docs mention the current materializer, external operator packet, outreach stance, and 17/21 objective requirements satisfied boundary.
 - Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 17/21 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
 - Local falsification audit: `results/local_falsification_audit.md` passed and is included in the generated manuscript.
 - Holdout robustness audit: `results/holdout_robustness_audit.md` passed and is included in the generated manuscript.
@@ -67,6 +68,8 @@ ICLR-main ready: no
 - External collection runbook: `external_validation/collection_runbook.md`, `external_validation/operator_record_sheet.csv`, task cards, config templates, and `results/external_runbook_audit.md` exist, pass, and remain non-evidence collection scaffolding.
 - External collection runner harness: `external_validation/runner/README.md`, `external_validation/runner/backend_contract.py`, `external_validation/runner/real_collection_runner.py`, backend templates, and `results/external_runner_harness_audit.md` exist, pass, dry-run without writing logs, reject template backends/configs for actual collection, and remain non-evidence execution scaffolding.
 - External collection readiness audit: `results/external_collection_readiness_audit.md` exists, passes as a fail-closed pre-collection gate, verifies 1,440 blinded rows and 12 aliases, and reports `collection_ready=false` until a real backend, real task configs, fidelity acceptance, explicit alias unsealing, and a specific run id are supplied.
+- External config materialization plan: `results/external_config_materialization_plan.md` exists, passes as a guarded non-evidence plan, writes no real configs by default, and requires `--confirm-real-platform --write` with concrete platform and compute values before task configs can be materialized.
+- External operator packet: `results/external_operator_packet.md` exists, passes, reports `DO_NOT_COLLECT_YET`, lists the five current pre-collection blockers, and provides the guarded config materialization, strict preflight, actual collection, and post-collection strict-gate commands.
 - External blind evaluation packet: `external_validation/blind_evaluation_protocol.md`, `external_validation/blinded_operator_sheet.csv`, `external_validation/method_alias_map.json`, and `results/external_blind_eval_audit.md` exist, pass, and provide deterministic per-reset randomization plus sealed method aliases while remaining non-evidence collection control.
 - External execution readiness audit: `external_validation/platform_qualification_checklist.md` and `results/external_execution_readiness_audit.md` exist, pass, and verify the independent operator packet is executable while strict evidence gates remain not ready.
 - External config schema/template audit: `external_validation/config_schema_v1.json` and `results/external_config_template_audit.md` exist and pass for templates; strict config evidence validation still fails until real configs exist.
@@ -87,7 +90,7 @@ ICLR-main ready: no
 - Visual QA: final title page, overview page, main result figures, fixed-risk figures, and outreach preview figure page inspected after the reframing/figure pass.
 - Independent validation protocol: `docs/independent_validation_protocol.md`.
 - Haonan/Yilun outreach package: `docs/haonan_yilun_outreach_package.md`.
-- Outreach memo PDF: `outreach/paper119_one_page_memo.pdf` passed 1-page validation and visual QA.
+- Outreach memo PDF: `outreach/paper119_one_page_memo.pdf` passed 1-page validation and visual QA; the outreach PDFs now reflect the operator-packet/no-go stance without asking Haonan to supply the missing proof.
 - Four-page preview PDF: `outreach/paper119_four_page_preview.pdf` passed 4-page validation and visual QA.
 
 ## Scope Blockers

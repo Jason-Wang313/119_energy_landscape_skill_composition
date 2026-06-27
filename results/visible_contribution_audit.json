@@ -1,0 +1,72 @@
+{
+  "audited_files": {
+    "README": "README.md",
+    "child_status": "child_status.md",
+    "final_audit": "docs/final_audit.md",
+    "outreach": "docs/haonan_yilun_outreach_package.md",
+    "readiness_audit": "docs/submission_readiness_audit_v5.md",
+    "readiness_decision": "docs/submission_readiness_decision.md",
+    "version_log": "docs/submission_version_log.md"
+  },
+  "checks": [
+    {
+      "detail": "objective_complete=False, satisfied=17, blocking=4",
+      "name": "readiness_gap_state_visible",
+      "passed": true
+    },
+    {
+      "detail": "start_state='DO_NOT_COLLECT_YET', blocking_missing_count=5",
+      "name": "operator_packet_no_go_visible",
+      "passed": true
+    },
+    {
+      "detail": "write_enabled=False, not_external_evidence=True",
+      "name": "materializer_guard_visible",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "ledger_tracks_new_visible_claims",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "README_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "final_audit_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "readiness_decision_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "readiness_audit_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "version_log_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "child_status_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "outreach_current_visible_contribution_terms",
+      "passed": true
+    }
+  ],
+  "failed_checks": [],
+  "not_external_evidence": true,
+  "passed": true,
+  "version": "visible_contribution_audit_v1"
+}

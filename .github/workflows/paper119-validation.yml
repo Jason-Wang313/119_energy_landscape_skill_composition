@@ -67,6 +67,12 @@ jobs:
       - name: Audit submission readiness gap
         run: python scripts/audit_submission_readiness_gap.py
 
+      - name: Audit visible contribution docs
+        run: python scripts/audit_visible_contribution.py
+
+      - name: Audit claim boundary
+        run: python scripts/audit_claim_boundary.py
+
       - name: Validate submission artifacts
         run: python scripts/validate_submission_artifacts.py
 

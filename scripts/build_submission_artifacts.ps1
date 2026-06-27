@@ -145,10 +145,6 @@ try {
         Invoke-Native python scripts\audit_camera_ready_design.py
     }
 
-    Invoke-Step "Audit claim boundary" {
-        Invoke-Native python scripts\audit_claim_boundary.py
-    }
-
     if (-not $SkipOutreach) {
         Invoke-Step "Build outreach artifacts" {
             & (Join-Path $RepoRoot "scripts\build_outreach_artifacts.ps1") -Root $RepoRoot
@@ -157,6 +153,14 @@ try {
 
     Invoke-Step "Audit submission readiness gap" {
         Invoke-Native python scripts\audit_submission_readiness_gap.py
+    }
+
+    Invoke-Step "Audit visible contribution docs" {
+        Invoke-Native python scripts\audit_visible_contribution.py
+    }
+
+    Invoke-Step "Audit claim boundary" {
+        Invoke-Native python scripts\audit_claim_boundary.py
     }
 
     Invoke-Step "Validate submission artifacts" {

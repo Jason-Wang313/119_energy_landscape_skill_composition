@@ -139,6 +139,7 @@ def main():
         "scripts\\audit_figure_readability.py",
         "scripts\\audit_camera_ready_design.py",
         "scripts\\build_outreach_artifacts.ps1",
+        "scripts\\audit_visible_contribution.py",
         "scripts\\validate_submission_artifacts.py",
         "scripts\\validate_outreach_artifacts.py",
     ]
@@ -164,6 +165,8 @@ def main():
         "python scripts/audit_external_execution_readiness.py",
         "python scripts/audit_external_pairing_integrity.py",
         "python scripts/audit_submission_readiness_gap.py",
+        "python scripts/audit_visible_contribution.py",
+        "python scripts/audit_claim_boundary.py",
         "python scripts/validate_submission_artifacts.py",
         "python scripts/validate_outreach_artifacts.py",
     ]
@@ -1308,6 +1311,35 @@ def main():
         fail("manuscript over-positions itself as contact-rich manipulation")
     if "manual_related_work_not_full_paper_complete" in summary.get("missing_scope_evidence", []):
         fail("summary still contains stale manual-related-work scope blocker")
+
+    visible_contribution_path = RESULTS / "visible_contribution_audit.json"
+    if not visible_contribution_path.exists():
+        fail("missing results/visible_contribution_audit.json; run scripts/audit_visible_contribution.py")
+    visible_contribution = json.loads(visible_contribution_path.read_text(encoding="utf-8"))
+    if visible_contribution.get("version") != "visible_contribution_audit_v1":
+        fail("visible contribution audit version mismatch")
+    if visible_contribution.get("passed") is not True:
+        fail("visible contribution audit did not pass")
+    if visible_contribution.get("not_external_evidence") is not True:
+        fail("visible contribution audit must declare that it is not external evidence")
+    visible_checks = {check.get("name"): check.get("passed") for check in visible_contribution.get("checks", [])}
+    for required_check in (
+        "readiness_gap_state_visible",
+        "operator_packet_no_go_visible",
+        "materializer_guard_visible",
+        "ledger_tracks_new_visible_claims",
+        "README_current_visible_contribution_terms",
+        "final_audit_current_visible_contribution_terms",
+        "readiness_decision_current_visible_contribution_terms",
+        "readiness_audit_current_visible_contribution_terms",
+        "version_log_current_visible_contribution_terms",
+        "child_status_current_visible_contribution_terms",
+        "outreach_current_visible_contribution_terms",
+    ):
+        if visible_checks.get(required_check) is not True:
+            fail(f"visible contribution audit missing passing check: {required_check}")
+    if not (RESULTS / "visible_contribution_audit.md").exists():
+        fail("missing results/visible_contribution_audit.md")
 
     expected_figures = [
         "skill_seam_action_model_overview_v5",

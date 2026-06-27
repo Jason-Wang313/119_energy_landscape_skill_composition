@@ -29,6 +29,7 @@ Continuation audit additions:
 - Numeric integrity: validator passed with no missing required outputs, invalid numeric values, or artifact-placement violations.
 - Claim boundary audit: `results/claim_boundary_audit.md` passes and blocks premature deployment, hardware, or ICLR-main readiness claims.
 - Submission readiness gap audit: `results/submission_readiness_gap_audit.md` maps the active objective to 21 concrete requirements; it currently reports 17 satisfied, 4 blocking external gaps, and 0 human-polish items, so the objective is not complete.
+- Visible contribution audit: `results/visible_contribution_audit.md` checks that README, final audit, readiness docs, version log, child status, and outreach package all describe the current materializer/operator-packet/outreach state while preserving the 17 satisfied, 4 blocking external gaps boundary.
 - Full local build script: `scripts/build_submission_artifacts.ps1`.
 - GitHub validation workflow: `.github/workflows/paper119-validation.yml` runs the core runner/readiness/submission/outreach validators on pushed branches and pull requests, with the repository PDF used as the CI canonical artifact.
 - Canonical PDF: `C:/Users/wangz/Downloads/119.pdf`.
@@ -44,6 +45,8 @@ Continuation audit additions:
 - External collection runbook: `external_validation/collection_runbook.md`, `external_validation/operator_record_sheet.csv`, task cards, config templates, and `results/external_runbook_audit.md` turn that schedule into an operator packet while remaining non-evidence.
 - External collection runner harness: `external_validation/runner/README.md`, `external_validation/runner/backend_contract.py`, `external_validation/runner/real_collection_runner.py`, backend templates, and `results/external_runner_harness_audit.md` provide a fail-closed execution path that dry-runs without writing logs and rejects template backends/configs for actual collection while remaining non-evidence.
 - External collection readiness audit: `results/external_collection_readiness_audit.md` verifies the blinded sheet, alias map, output-log state, backend/config/fidelity prerequisites, explicit alias unsealing, and run-id specificity before any real robot or simulator collection starts; it currently reports `collection_ready=false` and remains non-evidence.
+- External config materialization plan: `results/external_config_materialization_plan.md` verifies that real task configs can be written only after a concrete platform and compute budget are supplied with `--confirm-real-platform --write`; the default report writes no configs and remains non-evidence.
+- External operator packet: `results/external_operator_packet.md` is the independent operator entry point and currently reports `DO_NOT_COLLECT_YET` with five pre-collection blockers, guarded config materialization, the actual collection command, and post-collection strict gates while remaining non-evidence.
 - External blind evaluation packet: `external_validation/blind_evaluation_protocol.md`, `external_validation/blinded_operator_sheet.csv`, `external_validation/method_alias_map.json`, and `results/external_blind_eval_audit.md` add deterministic per-reset randomization and sealed method aliases for the 1,440-record route while remaining non-evidence.
 - External execution readiness audit: `external_validation/platform_qualification_checklist.md` and `results/external_execution_readiness_audit.md` verify that the independent operator packet is ready to execute while strict evidence gates still correctly report not ready.
 - External config schema: `external_validation/config_schema_v1.json` and `results/external_config_template_audit.md` validate non-evidence task templates, while strict config evidence validation remains blocked until real manifest configs exist.
@@ -62,7 +65,7 @@ Continuation audit additions:
 - External rollout validator self-test: `scripts/self_test_external_rollout_validator.py` passes on temporary synthetic records; this verifies tooling only and is not evidence.
 - External full-pipeline evidence self-test: `scripts/self_test_external_evidence_pipeline.py` passes on a temporary synthetic manifest/config/log/video/checkpoint package and leaves the real `external_validation/manifest.json` absent; this verifies tooling only and is not evidence.
 - Related-work coverage matrix: `docs/related_work_coverage_matrix.md`.
-- Haonan/Yilun outreach package: `docs/haonan_yilun_outreach_package.md`.
+- Haonan/Yilun outreach package: `docs/haonan_yilun_outreach_package.md`, now aligned with the operator packet so the ask is fit/falsification advice rather than asking Haonan to supply the missing proof.
 - One-page outreach memo: `outreach/paper119_one_page_memo.pdf`.
 - Four-page technical preview: `outreach/paper119_four_page_preview.pdf`.
 

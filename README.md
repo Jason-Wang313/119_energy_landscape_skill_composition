@@ -8,7 +8,7 @@ This rebuild expands the paper into a 29-page, CPU-only, RAM-light submission pa
 
 ## Visible Contribution
 
-Paper 119's contribution is an adaptive physical world/action model for skill seams: it scores whether two embodied skills can compose, explains likely failure modes, selects accept/repair/probe/abstain/transition actions at the seam, and records planner-facing memory for future attempts. The repository now makes that contribution visible through the generated manuscript, bounded claim ledger, mechanism/calibration/holdout/falsification audits, reproducible local experiments, a non-Haonan external validation packet, a fail-closed real-collection runner harness, and a separate Haonan/Yilun outreach package. The machine readiness audit currently reports `17/21` requirements satisfied; the remaining blockers are external-evidence blockers, not prose or packaging blockers.
+Paper 119's contribution is an adaptive physical world/action model for skill seams: it scores whether two embodied skills can compose, explains likely failure modes, selects accept/repair/probe/abstain/transition actions at the seam, and records planner-facing memory for future attempts. The repository now makes that contribution visible through the generated manuscript, bounded claim ledger, mechanism/calibration/holdout/falsification audits, reproducible local experiments, a non-Haonan external validation packet, a guarded config materializer, a no-go external operator packet, a fail-closed real-collection runner harness, and a separate Haonan/Yilun outreach package. The machine readiness audit currently reports `17/21` requirements satisfied; the remaining blockers are external-evidence blockers, not prose or packaging blockers.
 
 ## Evidence Snapshot
 
@@ -50,6 +50,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - Independent validation gate: `docs/independent_validation_protocol.md`
 - Claim/evidence ledger: `docs/claim_evidence_ledger.json`
 - Claim boundary audit: `results/claim_boundary_audit.md`
+- Visible contribution audit: `results/visible_contribution_audit.md`
 - Submission readiness gap audit: `results/submission_readiness_gap_audit.md`
 - Local falsification audit: `results/local_falsification_audit.md`
 - Holdout robustness audit: `results/holdout_robustness_audit.md`
