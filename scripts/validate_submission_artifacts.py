@@ -121,6 +121,7 @@ def main():
         "scripts\\build_external_reference_adapters.py",
         "scripts\\build_external_local_dry_run.py",
         "scripts\\validate_external_adapters.py",
+        "scripts\\self_test_external_adapter_evidence.py",
         "scripts\\build_external_manifest.py --allow-missing",
         "scripts\\audit_external_release_package.py",
         "scripts\\audit_external_evidence_preflight.py",
@@ -171,6 +172,7 @@ def main():
         "python scripts/audit_external_collection_readiness.py",
         "python scripts/audit_external_evidence_preflight.py",
         "python scripts/self_test_external_config_evidence.py",
+        "python scripts/self_test_external_adapter_evidence.py",
         "python scripts/materialize_external_configs.py",
         "python scripts/build_external_acquisition_packet.py",
         "python scripts/build_external_operator_packet.py",
@@ -723,6 +725,37 @@ def main():
     for required_check in ("contract_self_test_passed", "scaffold_entries_present", "adapter_results_passed"):
         if contract_checks.get(required_check) is not True:
             fail(f"external adapter contract audit missing passing check: {required_check}")
+
+    adapter_evidence_self_test_path = RESULTS / "external_adapter_evidence_self_test.json"
+    if not adapter_evidence_self_test_path.exists():
+        fail("missing results/external_adapter_evidence_self_test.json; run scripts/self_test_external_adapter_evidence.py")
+    if not (ROOT / "scripts" / "self_test_external_adapter_evidence.py").exists():
+        fail("missing scripts/self_test_external_adapter_evidence.py")
+    adapter_evidence_self_test = json.loads(adapter_evidence_self_test_path.read_text(encoding="utf-8"))
+    if adapter_evidence_self_test.get("version") != "external_adapter_evidence_self_test_v1":
+        fail("external adapter evidence self-test version mismatch")
+    if adapter_evidence_self_test.get("passed") is not True:
+        fail("external adapter evidence self-test did not pass")
+    if adapter_evidence_self_test.get("not_external_evidence") is not True:
+        fail("external adapter evidence self-test must declare that it is not evidence")
+    if adapter_evidence_self_test.get("synthetic_adapter_evidence_ready") is not True:
+        fail("external adapter evidence self-test should make temporary manifest-declared adapters ready")
+    if adapter_evidence_self_test.get("scaffold_adapter_evidence_ready") is not False:
+        fail("external adapter evidence self-test should reject scaffolds as strict evidence")
+    if adapter_evidence_self_test.get("missing_manifest_ready") is not False:
+        fail("external adapter evidence self-test should reject a missing manifest")
+    adapter_evidence_self_checks = {check.get("name"): check.get("passed") for check in adapter_evidence_self_test.get("checks", [])}
+    for required_check in (
+        "synthetic_strict_adapters_pass",
+        "synthetic_manifest_entries_cover_non_oracle_methods",
+        "missing_manifest_fails_strict",
+        "scaffold_adapters_rejected_as_strict_evidence",
+        "real_adapter_evidence_report_not_overwritten",
+    ):
+        if adapter_evidence_self_checks.get(required_check) is not True:
+            fail(f"external adapter evidence self-test missing passing check: {required_check}")
+    if not (RESULTS / "external_adapter_evidence_self_test.md").exists():
+        fail("missing results/external_adapter_evidence_self_test.md")
 
     manifest_builder_report_path = RESULTS / "external_manifest_builder_report.json"
     if not manifest_builder_report_path.exists():

@@ -43,6 +43,7 @@
 - Added `scripts/build_external_local_dry_run.py` so the frozen local suite is exported into 1,440 schema-compatible external-style JSONL records for plumbing validation while remaining explicitly non-evidence.
 - Added `scripts/self_test_external_adapter_scaffold_guard.py` so scaffold-only adapter detection is itself tested.
 - Added `scripts/validate_external_adapters.py` so external baseline adapters must expose the seam-model API, proposal fields, log fields, and policy/config hash reporting; strict mode remains blocked until manifest-declared real implementations replace scaffolds.
+- Added `scripts/self_test_external_adapter_evidence.py` so strict manifest-declared adapter evidence is tested on temporary complete implementations while missing manifests and scaffold templates remain fail-closed.
 - Added `scripts/build_external_manifest.py` so real or high-fidelity rollout logs, videos, configs, checkpoints, hashes, and recomputed metrics can be assembled into `external_validation/manifest.json` without hand-editing evidence.
 - Added `external_validation/log_schema_v1.json` and `scripts/validate_external_rollouts.py` so external success/utility margins, paired win rate, fixed-risk coverage, fixed-risk breach, and positive task-family count must be recomputed from raw episode logs.
 - Tightened `scripts/audit_external_evidence.py` so a future evidence package is blocked unless manifest metrics agree with recomputed rollout metrics.

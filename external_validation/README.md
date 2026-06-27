@@ -152,6 +152,14 @@ python scripts\validate_external_adapters.py --strict
 
 Strict adapter validation currently fails until `external_validation/manifest.json` points to real non-oracle implementations that replace the scaffold templates.
 
+Test the strict adapter-evidence gate without creating evidence:
+
+```powershell
+python scripts\self_test_external_adapter_evidence.py
+```
+
+This writes `results/external_adapter_evidence_self_test.{json,md}`. It uses temporary manifest-declared adapters to prove the strict gate can pass when real-style implementations exist, and verifies missing manifests and scaffold templates remain fail-closed.
+
 Use the manifest builder before strict validation. It does not fabricate evidence; in report-only mode it only scans the declared logs, videos, configs, and checkpoints and writes a readiness report:
 
 ```powershell
@@ -169,6 +177,7 @@ python scripts\build_external_adapter_scaffolds.py
 python scripts\build_external_reference_adapters.py
 python scripts\build_external_local_dry_run.py
 python scripts\validate_external_adapters.py
+python scripts\self_test_external_adapter_evidence.py
 python scripts\build_external_manifest.py --allow-missing
 python scripts\audit_external_evidence_preflight.py
 python scripts\audit_external_pairing_integrity.py
@@ -230,6 +239,7 @@ python scripts\validate_external_configs.py --strict
 python scripts\validate_external_adapters.py --strict
 python scripts\self_test_external_backend_contract.py
 python scripts\self_test_external_config_evidence.py
+python scripts\self_test_external_adapter_evidence.py
 python scripts\self_test_external_fidelity_acceptance.py
 python scripts\self_test_external_rollout_validator.py
 python scripts\self_test_external_evidence_pipeline.py

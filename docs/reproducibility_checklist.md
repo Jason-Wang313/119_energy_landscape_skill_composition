@@ -43,6 +43,7 @@
 - External rollout validator self-test: `scripts/self_test_external_rollout_validator.py`
 - External backend contract self-test: `scripts/self_test_external_backend_contract.py`
 - External config evidence self-test: `scripts/self_test_external_config_evidence.py`
+- External adapter evidence self-test: `scripts/self_test_external_adapter_evidence.py`
 - External fidelity acceptance self-test: `scripts/self_test_external_fidelity_acceptance.py`
 - External collection preflight self-test: `scripts/self_test_external_collection_preflight.py`
 - External runner backend-path self-test: `scripts/self_test_external_runner_backend.py`
@@ -120,6 +121,8 @@
   - `results/external_adapter_contract_audit.md`
   - `results/external_adapter_contract_evidence_audit.json`
   - `results/external_adapter_contract_evidence_audit.md`
+  - `results/external_adapter_evidence_self_test.json`
+  - `results/external_adapter_evidence_self_test.md`
   - `results/external_manifest_builder_report.json`
   - `results/external_manifest_builder_report.md`
   - `results/external_release_package_audit.json`
@@ -168,6 +171,7 @@
   - `results/external_reference_adapter_audit.json`
   - `results/external_adapter_contract_audit.json`
   - `results/external_adapter_contract_evidence_audit.json`
+  - `results/external_adapter_evidence_self_test.json`
 - Main figures:
   - `figures/skill_seam_action_model_overview_v5.pdf`
   - `figures/skill_seam_action_model_overview_v5.png`

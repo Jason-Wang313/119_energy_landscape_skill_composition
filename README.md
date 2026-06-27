@@ -100,6 +100,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External adapter scaffold guard self-test: `scripts/self_test_external_adapter_scaffold_guard.py`
 - External adapter contract audit: `results/external_adapter_contract_audit.md`
 - Strict external adapter evidence audit: `results/external_adapter_contract_evidence_audit.md`
+- External adapter evidence self-test: `results/external_adapter_evidence_self_test.md`
 - External manifest builder report: `results/external_manifest_builder_report.md`
 - External release package audit: `results/external_release_package_audit.md`
 - External evidence preflight matrix: `results/external_evidence_preflight.md`

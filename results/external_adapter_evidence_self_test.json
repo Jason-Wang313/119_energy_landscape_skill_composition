@@ -1,0 +1,37 @@
+{
+  "checks": [
+    {
+      "detail": "passed=True, adapter_count=11",
+      "name": "synthetic_strict_adapters_pass",
+      "passed": true
+    },
+    {
+      "detail": "methods=11",
+      "name": "synthetic_manifest_entries_cover_non_oracle_methods",
+      "passed": true
+    },
+    {
+      "detail": "passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': False, 'manifest_implementation_entries_present': False, 'adapter_results_passed': False}",
+      "name": "missing_manifest_fails_strict",
+      "passed": true
+    },
+    {
+      "detail": "failed_adapters=11",
+      "name": "scaffold_adapters_rejected_as_strict_evidence",
+      "passed": true
+    },
+    {
+      "detail": "before=5d13af70e50616d589853e16574235669441e147b18f94ce071398d6ea1ed940, after=5d13af70e50616d589853e16574235669441e147b18f94ce071398d6ea1ed940",
+      "name": "real_adapter_evidence_report_not_overwritten",
+      "passed": true
+    }
+  ],
+  "missing_manifest_ready": false,
+  "not_external_evidence": true,
+  "passed": true,
+  "real_adapter_evidence_report_after": "5d13af70e50616d589853e16574235669441e147b18f94ce071398d6ea1ed940",
+  "real_adapter_evidence_report_before": "5d13af70e50616d589853e16574235669441e147b18f94ce071398d6ea1ed940",
+  "scaffold_adapter_evidence_ready": false,
+  "synthetic_adapter_evidence_ready": true,
+  "version": "external_adapter_evidence_self_test_v1"
+}

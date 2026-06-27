@@ -67,6 +67,9 @@ jobs:
       - name: Self-test external config evidence
         run: python scripts/self_test_external_config_evidence.py
 
+      - name: Self-test external adapter evidence
+        run: python scripts/self_test_external_adapter_evidence.py
+
       - name: Plan external config materialization
         run: python scripts/materialize_external_configs.py
 
