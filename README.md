@@ -71,6 +71,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - Independent validation route audit: `results/independent_validation_route_audit.md`
 - External fidelity acceptance template: `external_validation/fidelity_acceptance_template.json`
 - External fidelity acceptance audit: `results/external_fidelity_acceptance_audit.md`
+- External fidelity acceptance self-test: `results/external_fidelity_acceptance_self_test.md`
 - External collection runbook: `external_validation/collection_runbook.md`
 - External operator record sheet: `external_validation/operator_record_sheet.csv`
 - External blinded evaluation protocol: `external_validation/blind_evaluation_protocol.md`

@@ -107,6 +107,7 @@ def main():
         "scripts\\build_external_collection_plan.py",
         "scripts\\build_independent_validation_route.py",
         "scripts\\audit_external_fidelity_acceptance.py",
+        "scripts\\self_test_external_fidelity_acceptance.py",
         "scripts\\build_external_blind_eval_plan.py",
         "scripts\\build_external_runbook.py",
         "scripts\\audit_external_runner_harness.py",
@@ -162,6 +163,8 @@ def main():
         "python scripts/audit_external_runner_harness.py",
         "python scripts/audit_external_backend_contract.py",
         "python scripts/self_test_external_backend_contract.py",
+        "python scripts/audit_external_fidelity_acceptance.py",
+        "python scripts/self_test_external_fidelity_acceptance.py",
         "python scripts/self_test_external_runner_backend.py",
         "python scripts/self_test_external_collection_preflight.py",
         "python scripts/audit_external_collection_readiness.py",
@@ -280,6 +283,35 @@ def main():
         fail("missing external_validation/fidelity_acceptance_template.json")
     if not (RESULTS / "external_fidelity_acceptance_audit.md").exists():
         fail("missing results/external_fidelity_acceptance_audit.md")
+
+    fidelity_acceptance_self_test_path = RESULTS / "external_fidelity_acceptance_self_test.json"
+    if not fidelity_acceptance_self_test_path.exists():
+        fail("missing results/external_fidelity_acceptance_self_test.json; run scripts/self_test_external_fidelity_acceptance.py")
+    if not (ROOT / "scripts" / "self_test_external_fidelity_acceptance.py").exists():
+        fail("missing scripts/self_test_external_fidelity_acceptance.py")
+    fidelity_acceptance_self_test = json.loads(fidelity_acceptance_self_test_path.read_text(encoding="utf-8"))
+    if fidelity_acceptance_self_test.get("version") != "external_fidelity_acceptance_self_test_v1":
+        fail("external fidelity acceptance self-test version mismatch")
+    if fidelity_acceptance_self_test.get("passed") is not True:
+        fail("external fidelity acceptance self-test did not pass")
+    if fidelity_acceptance_self_test.get("not_external_evidence") is not True:
+        fail("external fidelity acceptance self-test must declare that it is not evidence")
+    if fidelity_acceptance_self_test.get("synthetic_acceptance_ready") is not True:
+        fail("external fidelity acceptance self-test should make a temporary acceptance fixture ready")
+    if fidelity_acceptance_self_test.get("template_acceptance_ready") is not False:
+        fail("external fidelity acceptance self-test should keep the template path fail-closed")
+    fidelity_acceptance_self_checks = {check.get("name"): check.get("passed") for check in fidelity_acceptance_self_test.get("checks", [])}
+    for required_check in (
+        "synthetic_strict_acceptance_ready",
+        "synthetic_route_task_count",
+        "synthetic_platform_modalities",
+        "template_acceptance_fails_strict_evidence",
+        "real_fidelity_report_not_overwritten",
+    ):
+        if fidelity_acceptance_self_checks.get(required_check) is not True:
+            fail(f"external fidelity acceptance self-test missing passing check: {required_check}")
+    if not (RESULTS / "external_fidelity_acceptance_self_test.md").exists():
+        fail("missing results/external_fidelity_acceptance_self_test.md")
 
     pairing_integrity_path = RESULTS / "external_pairing_integrity_audit.json"
     if not pairing_integrity_path.exists():

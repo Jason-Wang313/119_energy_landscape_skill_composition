@@ -42,6 +42,7 @@
 - External pairing integrity validator: `scripts/audit_external_pairing_integrity.py`
 - External rollout validator self-test: `scripts/self_test_external_rollout_validator.py`
 - External backend contract self-test: `scripts/self_test_external_backend_contract.py`
+- External fidelity acceptance self-test: `scripts/self_test_external_fidelity_acceptance.py`
 - External collection preflight self-test: `scripts/self_test_external_collection_preflight.py`
 - External runner backend-path self-test: `scripts/self_test_external_runner_backend.py`
 - External full-pipeline evidence self-test: `scripts/self_test_external_evidence_pipeline.py`

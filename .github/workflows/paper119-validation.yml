@@ -46,6 +46,12 @@ jobs:
       - name: Self-test external backend contract
         run: python scripts/self_test_external_backend_contract.py
 
+      - name: Audit external fidelity acceptance
+        run: python scripts/audit_external_fidelity_acceptance.py
+
+      - name: Self-test external fidelity acceptance
+        run: python scripts/self_test_external_fidelity_acceptance.py
+
       - name: Self-test external runner backend path
         run: python scripts/self_test_external_runner_backend.py
 

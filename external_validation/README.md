@@ -64,9 +64,12 @@ Then audit the platform-fidelity acceptance contract:
 
 ```powershell
 python scripts\audit_external_fidelity_acceptance.py
+python scripts\self_test_external_fidelity_acceptance.py
 ```
 
 This writes `results/external_fidelity_acceptance_audit.{json,md}` and checks `external_validation/fidelity_acceptance_template.json`. It defines the minimum provenance required before a real robot or high-fidelity simulator route is credible: platform version, physics/contact details, replayable paired resets, state/camera/contact signals, operator independence, real or benchmark calibration basis, code commit, skill-library hash, and acceptance gates. It is not rollout evidence and currently reports `acceptance_ready: false` until `external_validation/fidelity_acceptance.json`, `external_validation/manifest.json`, and the real artifacts exist.
+
+The fidelity acceptance self-test writes `results/external_fidelity_acceptance_self_test.{json,md}`. It uses a temporary synthetic high-fidelity fixture to prove the strict-ready path can pass, verifies the template/default path remains fail-closed, and confirms the real fidelity audit report is not overwritten. It is tooling coverage, not validation evidence.
 
 Generate the blinded randomized collection packet:
 
@@ -225,6 +228,7 @@ python scripts\validate_external_adapters.py
 python scripts\validate_external_configs.py --strict
 python scripts\validate_external_adapters.py --strict
 python scripts\self_test_external_backend_contract.py
+python scripts\self_test_external_fidelity_acceptance.py
 python scripts\self_test_external_rollout_validator.py
 python scripts\self_test_external_evidence_pipeline.py
 python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict
@@ -238,6 +242,8 @@ The self-test uses temporary synthetic records only. It verifies the validator's
 The full-pipeline self-test also uses a temporary synthetic package only. It verifies that a complete manifest/config/log/video/checkpoint/implementation package can drive the strict audit to READY, then deletes the fixture and confirms the real repository evidence state is untouched. It is tooling coverage, not validation evidence.
 
 The backend contract self-test uses temporary backend modules only. It verifies that strict backend qualification accepts a complete synthetic backend, rejects incomplete/template backends, and leaves the real backend audit report untouched. It is tooling coverage, not validation evidence.
+
+The fidelity acceptance self-test uses a temporary acceptance file and synthetic manifest data only. It verifies that strict platform/fidelity acceptance can become ready when all provenance fields are supplied, rejects the template/default path, and leaves the real fidelity audit report untouched. It is tooling coverage, not validation evidence.
 
 The rollout validator recomputes the external success margin, utility margin, paired win rate, fixed-risk coverage, fixed-risk breach, and positive task-family count from raw JSONL records. The manifest metrics are therefore not accepted as evidence unless they are backed by episode logs with the seam prediction, diagnosis, decision, outcome, utility, video, and config/checkpoint hashes required by `log_schema_v1.json`. The evidence audit also blocks if manifest metrics disagree with the recomputed rollout metrics.
 

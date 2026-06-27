@@ -1,0 +1,36 @@
+{
+  "checks": [
+    {
+      "detail": "contract_failures=[], evidence_failures=[]",
+      "name": "synthetic_strict_acceptance_ready",
+      "passed": true
+    },
+    {
+      "detail": "route_has_enough_task_families=True",
+      "name": "synthetic_route_task_count",
+      "passed": true
+    },
+    {
+      "detail": "modalities=True, contact_channels=True",
+      "name": "synthetic_platform_modalities",
+      "passed": true
+    },
+    {
+      "detail": "template_ready=False",
+      "name": "template_acceptance_fails_strict_evidence",
+      "passed": true
+    },
+    {
+      "detail": "before=bdcb4a5bb6b441b3426803a5f18eba003528818fbe3a303a324d95b9a20732f0, after=bdcb4a5bb6b441b3426803a5f18eba003528818fbe3a303a324d95b9a20732f0",
+      "name": "real_fidelity_report_not_overwritten",
+      "passed": true
+    }
+  ],
+  "not_external_evidence": true,
+  "passed": true,
+  "real_fidelity_report_after": "bdcb4a5bb6b441b3426803a5f18eba003528818fbe3a303a324d95b9a20732f0",
+  "real_fidelity_report_before": "bdcb4a5bb6b441b3426803a5f18eba003528818fbe3a303a324d95b9a20732f0",
+  "synthetic_acceptance_ready": true,
+  "template_acceptance_ready": false,
+  "version": "external_fidelity_acceptance_self_test_v1"
+}
