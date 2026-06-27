@@ -210,6 +210,14 @@ python scripts\audit_external_pairing_integrity.py
 
 This writes `results/external_pairing_integrity_audit.{json,md}`. Before real evidence exists, it reports `pairing_ready: false` and is not evidence. With a real manifest, the strict form requires every paired reset to have a complete, duplicate-free panel over all declared methods, equal per-method counts, and consistent terminal samples, platform, and fixed-risk budget within each panel.
 
+Test the paired-reset fairness gate without creating evidence:
+
+```powershell
+python scripts\self_test_external_pairing_integrity.py
+```
+
+This writes `results/external_pairing_integrity_self_test.{json,md}`. It creates temporary complete 1,440-record method panels to prove the gate can pass, then checks missing manifests, duplicate method rows, incomplete panels, and terminal-sample mismatches stay fail-closed.
+
 After real or accepted high-fidelity artifacts exist, run:
 
 ```powershell
@@ -243,6 +251,7 @@ python scripts\audit_external_release_package.py
 python scripts\self_test_external_release_package.py
 python scripts\audit_external_evidence_preflight.py
 python scripts\audit_external_pairing_integrity.py
+python scripts\self_test_external_pairing_integrity.py
 python scripts\validate_external_adapters.py
 python scripts\validate_external_configs.py --strict
 python scripts\validate_external_adapters.py --strict
@@ -251,6 +260,7 @@ python scripts\self_test_external_config_evidence.py
 python scripts\self_test_external_adapter_evidence.py
 python scripts\self_test_external_fidelity_acceptance.py
 python scripts\self_test_external_release_package.py
+python scripts\self_test_external_pairing_integrity.py
 python scripts\self_test_external_rollout_validator.py
 python scripts\self_test_external_evidence_pipeline.py
 python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict

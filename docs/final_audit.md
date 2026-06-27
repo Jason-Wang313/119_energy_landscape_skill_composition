@@ -68,6 +68,7 @@ Continuation audit additions:
 - External evidence audit: `results/external_evidence_audit.md` reports `submission_ready=false` with no external manifest/log/video/checkpoint evidence or manifest-vs-rollout metric agreement yet.
 - External rollout metric audit: `results/external_rollout_metrics.md` reports `passed=false` because no manifest/log evidence exists yet.
 - External pairing integrity audit: `results/external_pairing_integrity_audit.md` reports `pairing_ready=false` until real manifest-declared logs contain complete, duplicate-free paired reset panels over all methods.
+- External pairing integrity self-test: `results/external_pairing_integrity_self_test.md` verifies the paired-reset fairness gate on temporary complete 1,440-record panels and rejects missing manifests, duplicate method rows, incomplete panels, and terminal-sample mismatches while leaving the real pairing audit report unchanged.
 - External rollout validator self-test: `scripts/self_test_external_rollout_validator.py` passes on temporary synthetic records; this verifies tooling only and is not evidence.
 - External full-pipeline evidence self-test: `scripts/self_test_external_evidence_pipeline.py` passes on a temporary synthetic manifest/config/log/video/checkpoint package and leaves the real `external_validation/manifest.json` absent; this verifies tooling only and is not evidence.
 - Related-work coverage matrix: `docs/related_work_coverage_matrix.md`.

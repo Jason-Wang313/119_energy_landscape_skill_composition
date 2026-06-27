@@ -88,6 +88,9 @@ jobs:
       - name: Audit external pairing integrity
         run: python scripts/audit_external_pairing_integrity.py
 
+      - name: Self-test external pairing integrity
+        run: python scripts/self_test_external_pairing_integrity.py
+
       - name: Audit external execution readiness
         run: python scripts/audit_external_execution_readiness.py
 

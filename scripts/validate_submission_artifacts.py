@@ -136,6 +136,7 @@ def main():
         "scripts\\self_test_external_evidence_pipeline.py",
         "scripts\\validate_external_rollouts.py --write-results",
         "scripts\\audit_external_pairing_integrity.py",
+        "scripts\\self_test_external_pairing_integrity.py",
         "scripts\\audit_external_evidence.py",
         "scripts\\audit_external_execution_readiness.py",
         "scripts\\audit_claim_boundary.py",
@@ -181,6 +182,7 @@ def main():
         "python scripts/self_test_external_release_package.py",
         "python scripts/audit_external_execution_readiness.py",
         "python scripts/audit_external_pairing_integrity.py",
+        "python scripts/self_test_external_pairing_integrity.py",
         "python scripts/audit_submission_readiness_gap.py",
         "python scripts/audit_visible_contribution.py",
         "python scripts/audit_claim_boundary.py",
@@ -335,6 +337,37 @@ def main():
         fail("external pairing integrity audit should identify the missing real manifest")
     if not (RESULTS / "external_pairing_integrity_audit.md").exists():
         fail("missing results/external_pairing_integrity_audit.md")
+
+    pairing_integrity_self_test_path = RESULTS / "external_pairing_integrity_self_test.json"
+    if not pairing_integrity_self_test_path.exists():
+        fail("missing results/external_pairing_integrity_self_test.json; run scripts/self_test_external_pairing_integrity.py")
+    if not (ROOT / "scripts" / "self_test_external_pairing_integrity.py").exists():
+        fail("missing scripts/self_test_external_pairing_integrity.py")
+    pairing_integrity_self_test = json.loads(pairing_integrity_self_test_path.read_text(encoding="utf-8"))
+    if pairing_integrity_self_test.get("version") != "external_pairing_integrity_self_test_v1":
+        fail("external pairing integrity self-test version mismatch")
+    if pairing_integrity_self_test.get("passed") is not True:
+        fail("external pairing integrity self-test did not pass")
+    if pairing_integrity_self_test.get("not_external_evidence") is not True:
+        fail("external pairing integrity self-test must declare that it is not evidence")
+    if pairing_integrity_self_test.get("synthetic_pairing_ready") is not True:
+        fail("external pairing integrity self-test should make temporary complete method panels ready")
+    for field in ("duplicate_pairing_ready", "missing_method_pairing_ready", "terminal_mismatch_pairing_ready", "missing_manifest_ready"):
+        if pairing_integrity_self_test.get(field) is not False:
+            fail(f"external pairing integrity self-test should reject {field}")
+    pairing_integrity_self_checks = {check.get("name"): check.get("passed") for check in pairing_integrity_self_test.get("checks", [])}
+    for required_check in (
+        "synthetic_pairing_integrity_passes",
+        "missing_manifest_fails_pairing_readiness",
+        "duplicate_method_rows_fail_pairing",
+        "missing_method_panel_fails_pairing",
+        "terminal_sample_mismatch_fails_pairing",
+        "real_pairing_integrity_report_not_overwritten",
+    ):
+        if pairing_integrity_self_checks.get(required_check) is not True:
+            fail(f"external pairing integrity self-test missing passing check: {required_check}")
+    if not (RESULTS / "external_pairing_integrity_self_test.md").exists():
+        fail("missing results/external_pairing_integrity_self_test.md")
 
     release_package_path = RESULTS / "external_release_package_audit.json"
     if not release_package_path.exists():

@@ -46,6 +46,7 @@
 - External adapter evidence self-test: `scripts/self_test_external_adapter_evidence.py`
 - External fidelity acceptance self-test: `scripts/self_test_external_fidelity_acceptance.py`
 - External release package self-test: `scripts/self_test_external_release_package.py`
+- External pairing integrity self-test: `scripts/self_test_external_pairing_integrity.py`
 - External collection preflight self-test: `scripts/self_test_external_collection_preflight.py`
 - External runner backend-path self-test: `scripts/self_test_external_runner_backend.py`
 - External full-pipeline evidence self-test: `scripts/self_test_external_evidence_pipeline.py`
@@ -138,6 +139,8 @@
   - `results/external_operator_packet.md`
   - `results/external_pairing_integrity_audit.json`
   - `results/external_pairing_integrity_audit.md`
+  - `results/external_pairing_integrity_self_test.json`
+  - `results/external_pairing_integrity_self_test.md`
   - `results/external_execution_readiness_audit.json`
   - `results/external_execution_readiness_audit.md`
   - `results/summary.json`

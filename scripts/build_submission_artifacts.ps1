@@ -120,6 +120,7 @@ try {
         Invoke-Native python scripts\self_test_external_evidence_pipeline.py
         Invoke-Native python scripts\validate_external_rollouts.py --write-results
         Invoke-Native python scripts\audit_external_pairing_integrity.py
+        Invoke-Native python scripts\self_test_external_pairing_integrity.py
         Invoke-Native python scripts\audit_external_evidence.py
         Invoke-Native python scripts\audit_external_execution_readiness.py
     }

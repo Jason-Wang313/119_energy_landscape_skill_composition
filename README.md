@@ -110,6 +110,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External evidence contract: `external_validation/manifest_template.json`
 - External rollout log schema: `external_validation/log_schema_v1.json`
 - External pairing integrity audit: `results/external_pairing_integrity_audit.md`
+- External pairing integrity self-test: `results/external_pairing_integrity_self_test.md`
 - External rollout validator self-test: `scripts/self_test_external_rollout_validator.py`
 - External collection preflight self-test report: `results/external_collection_preflight_self_test.md`
 - External full-pipeline evidence self-test: `scripts/self_test_external_evidence_pipeline.py` checks a temporary synthetic package only; it is not evidence.
