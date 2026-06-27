@@ -1,0 +1,41 @@
+{
+  "adapter_count": 0,
+  "adapter_results": [],
+  "checks": [
+    {
+      "detail": "spec_methods=12",
+      "name": "baseline_specs_present",
+      "passed": true
+    },
+    {
+      "detail": "temporary good/bad adapters behaved as expected",
+      "name": "contract_self_test_passed",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\log_schema_v1.json",
+      "name": "log_schema_exists",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json missing",
+      "name": "manifest_exists",
+      "passed": false
+    },
+    {
+      "detail": "entries=0",
+      "name": "manifest_implementation_entries_present",
+      "passed": false
+    },
+    {
+      "detail": "failed=0",
+      "name": "adapter_results_passed",
+      "passed": false
+    }
+  ],
+  "failed_adapters": [],
+  "not_external_evidence": false,
+  "passed": false,
+  "strict": true,
+  "version": "external_adapter_contract_evidence_audit_v1"
+}

@@ -1,0 +1,10 @@
+{
+  "adapter": "external_validation/baselines/behavior_cloned_skill_chain/adapter.py",
+  "evidence_status": "implementation_only_not_rollout_evidence",
+  "method": "behavior_cloned_skill_chain",
+  "oracle_boundary": "non_oracle_reference_adapter",
+  "reference_implementation": true,
+  "strict_manifest_path": "external_validation/baselines/behavior_cloned_skill_chain/adapter.py",
+  "uses_shared_common_adapter": "external_validation/baselines/common_reference_adapter.py",
+  "version": "paper119_reference_adapter_metadata_v1"
+}

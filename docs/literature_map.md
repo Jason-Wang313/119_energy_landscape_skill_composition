@@ -20,4 +20,4 @@ The closest defensible contribution is: use basin-overlap, barrier-height, desce
 - Real robot chained-skill failures with replayable logs.
 - Manual related-work synthesis against accepted skill-composition baselines.
 - Stronger ablations tying learned energy basins to actual controller artifacts.
-- Released skill-energy checkpoints and independent baseline implementations.
+- Released skill-energy checkpoints and manifest-declared independent baseline evidence from real external runs.

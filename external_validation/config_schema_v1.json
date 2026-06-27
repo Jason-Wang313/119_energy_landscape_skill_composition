@@ -1,0 +1,72 @@
+{
+  "version": "external_config_schema_v1",
+  "purpose": "Machine-checkable task configuration requirements for Paper 119 external validation.",
+  "not_external_evidence": true,
+  "template_version": "paper119_external_config_template_v1",
+  "evidence_version": "paper119_external_config_v1",
+  "required_fields": [
+    "version",
+    "config_schema",
+    "task_family",
+    "platform_type",
+    "platform_name",
+    "skill_i",
+    "skill_j",
+    "seam_under_test",
+    "required_fidelity_checks",
+    "reset_protocol",
+    "observation_interface",
+    "compute_budget",
+    "paired_reset_count",
+    "fixed_risk_budget",
+    "must_log"
+  ],
+  "allowed_task_families": [
+    "peg_place_regrasp",
+    "drawer_to_pick_transfer",
+    "door_open_navigation",
+    "cable_route_insert",
+    "mobile_push_then_grasp",
+    "tool_use_handover"
+  ],
+  "allowed_platform_types": [
+    "real_robot",
+    "high_fidelity_sim"
+  ],
+  "required_log_fields": [
+    "initial_state_hash",
+    "terminal_sample_set_hash",
+    "basin_estimate",
+    "barrier_score",
+    "descent_continuity_score",
+    "predicted_seam_risk",
+    "decision",
+    "failure_diagnosis",
+    "success",
+    "realized_seam_breach",
+    "utility",
+    "video_path",
+    "policy_or_config_hash"
+  ],
+  "required_reset_protocol_fields": [
+    "paired_resets",
+    "reset_count",
+    "scene_id_template",
+    "initial_state_hash_required"
+  ],
+  "required_observation_interface_fields": [
+    "state_logging_required",
+    "camera_logging_required",
+    "contact_or_force_logging_required"
+  ],
+  "required_compute_budget_fields": [
+    "same_for_all_non_oracle_methods",
+    "wall_clock_seconds",
+    "simulator_query_budget"
+  ],
+  "strict_forbidden_values": [
+    "FILL_AFTER_PLATFORM_SELECTION",
+    "REPLACE_WITH_SOURCE_SKILL",
+    "REPLACE_WITH_TARGET_SKILL"
+  ]
+}

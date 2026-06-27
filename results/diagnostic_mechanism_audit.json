@@ -1,0 +1,143 @@
+{
+  "checks": [
+    {
+      "detail": "local diagnostic audit only",
+      "name": "not_external_evidence_declared",
+      "passed": true
+    },
+    {
+      "detail": "rows=13440",
+      "name": "proposed_hard_rows_ge_10000",
+      "passed": true
+    },
+    {
+      "detail": "invalid_labels=0, invalid_decisions=0",
+      "name": "diagnostic_columns_valid",
+      "passed": true
+    },
+    {
+      "detail": "label_mismatches=0/230400",
+      "name": "label_rule_matches_rows",
+      "passed": true
+    },
+    {
+      "detail": "decision_mismatches=0/230400",
+      "name": "decision_rule_matches_rows",
+      "passed": true
+    },
+    {
+      "detail": "update_mismatches=0/230400",
+      "name": "planner_update_matches_decision",
+      "passed": true
+    },
+    {
+      "detail": "labels={'basin_mismatch': 1440, 'contact_mode_discontinuity': 1440, 'high_barrier': 1581, 'missing_bridge_skill': 3360, 'model_uncertainty': 5619}",
+      "name": "all_failure_labels_observed",
+      "passed": true
+    },
+    {
+      "detail": "decisions={'abstain': 5099, 'accept': 5429, 'probe': 1333, 'repair': 801, 'transition': 778}",
+      "name": "all_decisions_observed",
+      "passed": true
+    },
+    {
+      "detail": "matched=4/5; means={'basin_mismatch': {'basin_alignment': 0.7682426555555556, 'barrier_violation_rate': 0.06046439861111111, 'descent_continuity': 0.7610020958333333, 'uncertainty_score': 0.12715524097222222, 'bridge_score': 0.27608437430555555}, 'missing_bridge_skill': {'basin_alignment': 0.7575236443452381, 'barrier_violation_rate': 0.08499581488095238, 'descent_continuity': 0.7374202904761905, 'uncertainty_score': 0.1611533255952381, 'bridge_score': 0.2953937678571429}, 'high_barrier': {'basin_alignment': 0.7650099493991145, 'barrier_violation_rate': 0.08711060974067046, 'descent_continuity': 0.7460013396584441, 'uncertainty_score': 0.14485275585072738, 'bridge_score': 0.29033481657179}, 'model_uncertainty': {'basin_alignment': 0.7500004612920449, 'barrier_violation_rate': 0.09109301566114968, 'descent_continuity': 0.7359926255561487, 'uncertainty_score': 0.17978658213205195, 'bridge_score': 0.29799417903541553}, 'contact_mode_discontinuity': {'basin_alignment': 0.7598181722222223, 'barrier_violation_rate': 0.08420314861111111, 'descent_continuity': 0.74243244375, 'uncertainty_score': 0.15693336944444444, 'bridge_score': 0.29234329375}}",
+      "name": "mechanism_labels_have_targeted_metric_signature",
+      "passed": true
+    },
+    {
+      "detail": "accept_breach=0.076033, non_accept_breach=0.107993",
+      "name": "accepted_seams_are_lower_breach",
+      "passed": true
+    },
+    {
+      "detail": "accept_risk=0.080526, abstain_risk=0.125391",
+      "name": "abstained_seams_are_higher_risk",
+      "passed": true
+    },
+    {
+      "detail": "repair=1.000000, probe=1.000000, transition=1.000000",
+      "name": "repair_probe_transition_reasons_are_specific",
+      "passed": true
+    }
+  ],
+  "failed_checks": [],
+  "metrics": {
+    "abstain_mean_predicted_risk": 0.12539094194940184,
+    "accept_mean_predicted_risk": 0.08052639252164302,
+    "accept_mean_realized_breach": 0.07603346969976055,
+    "decision_counts": {
+      "abstain": 5099,
+      "accept": 5429,
+      "probe": 1333,
+      "repair": 801,
+      "transition": 778
+    },
+    "decision_mismatches": 0,
+    "label_counts": {
+      "basin_mismatch": 1440,
+      "contact_mode_discontinuity": 1440,
+      "high_barrier": 1581,
+      "missing_bridge_skill": 3360,
+      "model_uncertainty": 5619
+    },
+    "label_means": {
+      "basin_mismatch": {
+        "barrier_violation_rate": 0.06046439861111111,
+        "basin_alignment": 0.7682426555555556,
+        "bridge_score": 0.27608437430555555,
+        "descent_continuity": 0.7610020958333333,
+        "uncertainty_score": 0.12715524097222222
+      },
+      "contact_mode_discontinuity": {
+        "barrier_violation_rate": 0.08420314861111111,
+        "basin_alignment": 0.7598181722222223,
+        "bridge_score": 0.29234329375,
+        "descent_continuity": 0.74243244375,
+        "uncertainty_score": 0.15693336944444444
+      },
+      "high_barrier": {
+        "barrier_violation_rate": 0.08711060974067046,
+        "basin_alignment": 0.7650099493991145,
+        "bridge_score": 0.29033481657179,
+        "descent_continuity": 0.7460013396584441,
+        "uncertainty_score": 0.14485275585072738
+      },
+      "missing_bridge_skill": {
+        "barrier_violation_rate": 0.08499581488095238,
+        "basin_alignment": 0.7575236443452381,
+        "bridge_score": 0.2953937678571429,
+        "descent_continuity": 0.7374202904761905,
+        "uncertainty_score": 0.1611533255952381
+      },
+      "model_uncertainty": {
+        "barrier_violation_rate": 0.09109301566114968,
+        "basin_alignment": 0.7500004612920449,
+        "bridge_score": 0.29799417903541553,
+        "descent_continuity": 0.7359926255561487,
+        "uncertainty_score": 0.17978658213205195
+      }
+    },
+    "label_mismatches": 0,
+    "matched_targeted_label_signatures": 4,
+    "non_accept_mean_realized_breach": 0.10799259967544626,
+    "probe_reason_rate": 1.0,
+    "proposed_hard_rows": 13440,
+    "repair_reason_rate": 1.0,
+    "targeted_label_checks": {
+      "basin_mismatch": true,
+      "contact_mode_discontinuity": true,
+      "high_barrier": true,
+      "missing_bridge_skill": false,
+      "model_uncertainty": true
+    },
+    "transition_reason_rate": 1.0,
+    "update_mismatches": 0
+  },
+  "not_external_evidence": true,
+  "passed": true,
+  "proposed": "barrier_certified_energy_composer_v5",
+  "scope": "local_synthetic_hard_slice_only",
+  "strongest_non_oracle": "proposed_energy_landscape_composer_v4_1",
+  "version": "diagnostic_mechanism_audit_v1"
+}

@@ -1,0 +1,242 @@
+{
+  "checks": [
+    {
+      "detail": "passed",
+      "name": "collection_plan_ready",
+      "passed": true
+    },
+    {
+      "detail": "total_required_records=1440",
+      "name": "collection_scale_ge_1440_records",
+      "passed": true
+    },
+    {
+      "detail": "route='high_fidelity_sim'",
+      "name": "collection_route_high_fidelity",
+      "passed": true
+    },
+    {
+      "detail": "passed",
+      "name": "independent_validation_route_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True",
+      "name": "independent_route_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "primary_route='maniskill_sapien_primary', planned_tasks=['peg_place_regrasp', 'drawer_to_pick_transfer', 'door_open_navigation', 'cable_route_insert']",
+      "name": "independent_route_primary_covers_tasks",
+      "passed": true
+    },
+    {
+      "detail": "readiness_blockers=['manifest_backed_external_evidence', 'raw_jsonl_metric_recompute', 'real_task_configs', 'independent_non_oracle_baselines']",
+      "name": "independent_route_closes_blockers",
+      "passed": true
+    },
+    {
+      "detail": "passed",
+      "name": "fidelity_acceptance_contract_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True",
+      "name": "fidelity_acceptance_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE', blocking_missing_count=14",
+      "name": "fidelity_acceptance_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "core external task-fidelity rows are declared in the acceptance template",
+      "name": "fidelity_acceptance_task_coverage",
+      "passed": true
+    },
+    {
+      "detail": "passed",
+      "name": "blind_eval_plan_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True",
+      "name": "blind_eval_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "rows=1440, aliases=12",
+      "name": "blind_eval_row_budget",
+      "passed": true
+    },
+    {
+      "detail": "blinded operator sheet is checked for method-name leakage",
+      "name": "blind_eval_no_method_leak",
+      "passed": true
+    },
+    {
+      "detail": "passed",
+      "name": "operator_runbook_ready",
+      "passed": true
+    },
+    {
+      "detail": "operator_rows=1440, total_required_records=1440",
+      "name": "operator_sheet_covers_collection_plan",
+      "passed": true
+    },
+    {
+      "detail": "passed",
+      "name": "external_runner_harness_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True",
+      "name": "external_runner_harness_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "actual_execution_ready=False",
+      "name": "external_runner_harness_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "passed",
+      "name": "config_templates_ready",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/config_schema_v1.json",
+      "name": "config_schema_exists",
+      "passed": true
+    },
+    {
+      "detail": "passed",
+      "name": "baseline_contract_ready",
+      "passed": true
+    },
+    {
+      "detail": "implementations_ready=False, missing=11",
+      "name": "baseline_contract_reports_missing_implementations",
+      "passed": true
+    },
+    {
+      "detail": "passed",
+      "name": "adapter_scaffolds_ready",
+      "passed": true
+    },
+    {
+      "detail": "passed",
+      "name": "reference_adapters_ready",
+      "passed": true
+    },
+    {
+      "detail": "implementation_only_not_rollout_evidence=True, not_external_evidence=True",
+      "name": "reference_adapters_implementation_only",
+      "passed": true
+    },
+    {
+      "detail": "non_oracle_adapter_count=11",
+      "name": "reference_adapters_cover_non_oracle_methods",
+      "passed": true
+    },
+    {
+      "detail": "passed",
+      "name": "adapter_contract_harness_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True",
+      "name": "adapter_contract_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "results/external_manifest_builder_report.json",
+      "name": "manifest_builder_report_exists",
+      "passed": true
+    },
+    {
+      "detail": "manifest_written=False, records_loaded=0",
+      "name": "manifest_builder_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "passed",
+      "name": "external_evidence_preflight_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True",
+      "name": "external_evidence_preflight_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "evidence_ready=False, readiness_state='COLLECT_EXTERNAL_EVIDENCE', blocking_missing_count=60",
+      "name": "external_evidence_preflight_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "expected=1440, observed=0",
+      "name": "external_evidence_preflight_record_budget",
+      "passed": true
+    },
+    {
+      "detail": "operator_next_actions=5",
+      "name": "external_evidence_preflight_operator_actions",
+      "passed": true
+    },
+    {
+      "detail": "external_submission_ready=False, rollout_passed=False, config_passed=False, adapter_passed=False",
+      "name": "strict_evidence_gates_remain_not_ready",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "operator_packet_paths_exist",
+      "passed": true
+    },
+    {
+      "detail": "task_cards=4",
+      "name": "task_cards_ge_4",
+      "passed": true
+    },
+    {
+      "detail": "config_templates=4",
+      "name": "config_templates_ge_4",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json absent as expected before real evidence",
+      "name": "no_real_manifest_written",
+      "passed": true
+    },
+    {
+      "detail": "independent validation protocol explicitly separates base evidence from Haonan collaboration",
+      "name": "validation_path_independent_of_haonan",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "platform_qualification_terms_present",
+      "passed": true
+    }
+  ],
+  "execution_packet_ready": true,
+  "missing_evidence_to_collect": [
+    "external_validation/manifest.json",
+    "manifest-declared JSONL rollout logs",
+    "manifest-declared task configs with hashes",
+    "manifest-declared videos",
+    "manifest-declared independent non-oracle adapter implementations",
+    "non-template backend module for external_validation/runner/real_collection_runner.py",
+    "accepted robot/simulator fidelity acceptance file",
+    "preflight-cleared external evidence package",
+    "released or hash-declared skill/checkpoint artifacts"
+  ],
+  "not_external_evidence": true,
+  "operator_rows": 1440,
+  "passed": true,
+  "strict_evidence_ready": false,
+  "total_required_records": 1440,
+  "version": "external_execution_readiness_audit_v1"
+}

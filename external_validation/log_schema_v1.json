@@ -1,0 +1,69 @@
+{
+  "version": "external_log_schema_v1",
+  "description": "Episode-level external validation records for Paper 119. Each JSONL line must be one object with these fields.",
+  "required_fields": {
+    "run_id": "string, stable identifier for the external validation run",
+    "task_family": "string, one of the task families declared in manifest.json",
+    "platform_type": "string, real_robot or high_fidelity_sim",
+    "platform_name": "string, robot/simulator name and version",
+    "scene_id": "string, paired reset or scene identifier",
+    "episode_index": "integer >= 0, unique within run/task/method/seed",
+    "seed": "integer",
+    "method": "string, one of the manifest methods",
+    "skill_i": "string, source skill at the seam",
+    "skill_j": "string, destination skill at the seam",
+    "initial_state_hash": "64-character SHA256 hash of the reset/initial state descriptor",
+    "terminal_sample_set_hash": "64-character SHA256 hash of terminal samples used by the seam model",
+    "basin_estimate": "number in [0, 1]",
+    "barrier_score": "number >= 0",
+    "descent_continuity_score": "number in [0, 1]",
+    "predicted_seam_risk": "number in [0, 1]",
+    "fixed_risk_budget": "number in [0, 1]",
+    "decision": "string, one of accept, repair, probe, abstain, transition",
+    "failure_diagnosis": "string, one of none, basin_miss, high_barrier, descent_break, contact_transition, dynamics_mismatch, partial_observability, calibration_shift, unknown",
+    "repair_action": "string, none if no repair was attempted",
+    "success": "boolean",
+    "seam_failure": "boolean",
+    "barrier_violation": "boolean",
+    "damage_or_intervention": "boolean",
+    "composition_cost": "number >= 0",
+    "realized_seam_breach": "boolean",
+    "utility": "number, externally recomputed task utility using the paper's fixed scoring rule",
+    "video_path": "string, path to rollout video relative to repository root",
+    "policy_or_config_hash": "64-character SHA256 hash for the method config/checkpoint used in the episode"
+  },
+  "allowed_values": {
+    "platform_type": ["real_robot", "high_fidelity_sim"],
+    "decision": ["accept", "repair", "probe", "abstain", "transition"],
+    "failure_diagnosis": [
+      "none",
+      "basin_miss",
+      "high_barrier",
+      "descent_break",
+      "contact_transition",
+      "dynamics_mismatch",
+      "partial_observability",
+      "calibration_shift",
+      "unknown"
+    ]
+  },
+  "paired_comparison_key": [
+    "task_family",
+    "platform_type",
+    "scene_id",
+    "seed",
+    "skill_i",
+    "skill_j",
+    "initial_state_hash"
+  ],
+  "primary_method": "barrier_certified_energy_composer_v5",
+  "strongest_external_baseline_rule": "Among non-oracle methods present in the external logs, choose the baseline with highest mean success, breaking ties by mean utility.",
+  "primary_thresholds": {
+    "external_success_margin": 0.05,
+    "external_utility_margin": 0.08,
+    "paired_win_rate": 0.7,
+    "fixed_risk_breach": 0.02,
+    "fixed_risk_coverage": 0.55,
+    "positive_task_families": 3
+  }
+}

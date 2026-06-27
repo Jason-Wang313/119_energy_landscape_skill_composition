@@ -1,0 +1,72 @@
+{
+  "alias_count": 12,
+  "blinded_operator_sheet": "external_validation/blinded_operator_sheet.csv",
+  "checks": [
+    {
+      "detail": "passed=True",
+      "name": "collection_plan_passed",
+      "passed": true
+    },
+    {
+      "detail": "aliases=12, methods=12",
+      "name": "alias_count_matches_methods",
+      "passed": true
+    },
+    {
+      "detail": "rows=1440, expected=1440",
+      "name": "row_count_matches_plan",
+      "passed": true
+    },
+    {
+      "detail": "blinded sheet, alias map, and protocol exist",
+      "name": "blind_artifacts_written",
+      "passed": true
+    },
+    {
+      "detail": "duplicates=[]",
+      "name": "aliases_unique",
+      "passed": true
+    },
+    {
+      "detail": "aliases do not contain method names",
+      "name": "aliases_hide_method_names",
+      "passed": true
+    },
+    {
+      "detail": "bad_resets=[], reset_count=120",
+      "name": "every_reset_has_all_aliases",
+      "passed": true
+    },
+    {
+      "detail": "distinct_orders=120",
+      "name": "run_order_varies_by_reset",
+      "passed": true
+    },
+    {
+      "detail": "first observed order differs from sorted aliases",
+      "name": "first_order_not_alias_sorted",
+      "passed": true
+    },
+    {
+      "detail": "leaked_methods=[]",
+      "name": "blinded_sheet_has_no_method_names",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "protocol_contains_anti_leakage_terms",
+      "passed": true
+    }
+  ],
+  "expected_records": 1440,
+  "failed_checks": [],
+  "method_alias_map": "external_validation/method_alias_map.json",
+  "method_count": 12,
+  "not_external_evidence": true,
+  "passed": true,
+  "protocol": "external_validation/blind_evaluation_protocol.md",
+  "reset_count": 120,
+  "row_count": 1440,
+  "seed_hash": "329A999B4BB725C5269FA65829CD750B5414F3FE8AB5B7701969CA2D7819DA05",
+  "version": "external_blind_eval_plan_v1"
+}

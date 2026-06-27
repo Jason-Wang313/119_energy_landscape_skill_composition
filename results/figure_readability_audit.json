@@ -1,0 +1,576 @@
+{
+  "checks": [
+    {
+      "detail": "paper/main.tex",
+      "name": "main_tex_exists",
+      "passed": true
+    },
+    {
+      "detail": "no PNG includes in main.tex",
+      "name": "main_uses_vector_figures",
+      "passed": true
+    },
+    {
+      "detail": "figures/skill_seam_action_model_overview_v5.png",
+      "name": "skill_seam_action_model_overview_v5_png_exists",
+      "passed": true
+    },
+    {
+      "detail": "figures/skill_seam_action_model_overview_v5.pdf",
+      "name": "skill_seam_action_model_overview_v5_pdf_exists",
+      "passed": true
+    },
+    {
+      "detail": "bytes=143735",
+      "name": "skill_seam_action_model_overview_v5_png_size",
+      "passed": true
+    },
+    {
+      "detail": "bytes=22161",
+      "name": "skill_seam_action_model_overview_v5_pdf_size",
+      "passed": true
+    },
+    {
+      "detail": "2026x972",
+      "name": "skill_seam_action_model_overview_v5_render_resolution",
+      "passed": true
+    },
+    {
+      "detail": "foreground_fraction=0.3570",
+      "name": "skill_seam_action_model_overview_v5_foreground_fraction",
+      "passed": true
+    },
+    {
+      "detail": "dark_fraction=0.0659",
+      "name": "skill_seam_action_model_overview_v5_dark_fraction",
+      "passed": true
+    },
+    {
+      "detail": "std=0.1318, p99=1.0000",
+      "name": "skill_seam_action_model_overview_v5_luminance_contrast",
+      "passed": true
+    },
+    {
+      "detail": "margins={'left': 71, 'top': 85, 'right': 110, 'bottom': 55, 'minimum': 55}",
+      "name": "skill_seam_action_model_overview_v5_not_edge_clipped",
+      "passed": true
+    },
+    {
+      "detail": "unique_quantized_colors=92",
+      "name": "skill_seam_action_model_overview_v5_color_detail",
+      "passed": true
+    },
+    {
+      "detail": "skill_seam_action_model_overview_v5",
+      "name": "skill_seam_action_model_overview_v5_referenced_in_manuscript",
+      "passed": true
+    },
+    {
+      "detail": "figures/energy_landscape_composition_hard_success_v5.png",
+      "name": "energy_landscape_composition_hard_success_v5_png_exists",
+      "passed": true
+    },
+    {
+      "detail": "figures/energy_landscape_composition_hard_success_v5.pdf",
+      "name": "energy_landscape_composition_hard_success_v5_pdf_exists",
+      "passed": true
+    },
+    {
+      "detail": "bytes=130382",
+      "name": "energy_landscape_composition_hard_success_v5_png_size",
+      "passed": true
+    },
+    {
+      "detail": "bytes=27319",
+      "name": "energy_landscape_composition_hard_success_v5_pdf_size",
+      "passed": true
+    },
+    {
+      "detail": "1952x1204",
+      "name": "energy_landscape_composition_hard_success_v5_render_resolution",
+      "passed": true
+    },
+    {
+      "detail": "foreground_fraction=0.2402",
+      "name": "energy_landscape_composition_hard_success_v5_foreground_fraction",
+      "passed": true
+    },
+    {
+      "detail": "dark_fraction=0.2280",
+      "name": "energy_landscape_composition_hard_success_v5_dark_fraction",
+      "passed": true
+    },
+    {
+      "detail": "std=0.1867, p99=1.0000",
+      "name": "energy_landscape_composition_hard_success_v5_luminance_contrast",
+      "passed": true
+    },
+    {
+      "detail": "margins={'left': 28, 'top': 26, 'right': 27, 'bottom': 32, 'minimum': 26}",
+      "name": "energy_landscape_composition_hard_success_v5_not_edge_clipped",
+      "passed": true
+    },
+    {
+      "detail": "unique_quantized_colors=53",
+      "name": "energy_landscape_composition_hard_success_v5_color_detail",
+      "passed": true
+    },
+    {
+      "detail": "energy_landscape_composition_hard_success_v5",
+      "name": "energy_landscape_composition_hard_success_v5_referenced_in_manuscript",
+      "passed": true
+    },
+    {
+      "detail": "figures/energy_landscape_composition_utility_risk_v5.png",
+      "name": "energy_landscape_composition_utility_risk_v5_png_exists",
+      "passed": true
+    },
+    {
+      "detail": "figures/energy_landscape_composition_utility_risk_v5.pdf",
+      "name": "energy_landscape_composition_utility_risk_v5_pdf_exists",
+      "passed": true
+    },
+    {
+      "detail": "bytes=106021",
+      "name": "energy_landscape_composition_utility_risk_v5_png_size",
+      "passed": true
+    },
+    {
+      "detail": "bytes=25701",
+      "name": "energy_landscape_composition_utility_risk_v5_pdf_size",
+      "passed": true
+    },
+    {
+      "detail": "1543x1144",
+      "name": "energy_landscape_composition_utility_risk_v5_render_resolution",
+      "passed": true
+    },
+    {
+      "detail": "foreground_fraction=0.0445",
+      "name": "energy_landscape_composition_utility_risk_v5_foreground_fraction",
+      "passed": true
+    },
+    {
+      "detail": "dark_fraction=0.0324",
+      "name": "energy_landscape_composition_utility_risk_v5_dark_fraction",
+      "passed": true
+    },
+    {
+      "detail": "std=0.1213, p99=1.0000",
+      "name": "energy_landscape_composition_utility_risk_v5_luminance_contrast",
+      "passed": true
+    },
+    {
+      "detail": "margins={'left': 25, 'top': 26, 'right': 24, 'bottom': 28, 'minimum': 24}",
+      "name": "energy_landscape_composition_utility_risk_v5_not_edge_clipped",
+      "passed": true
+    },
+    {
+      "detail": "unique_quantized_colors=80",
+      "name": "energy_landscape_composition_utility_risk_v5_color_detail",
+      "passed": true
+    },
+    {
+      "detail": "energy_landscape_composition_utility_risk_v5",
+      "name": "energy_landscape_composition_utility_risk_v5_referenced_in_manuscript",
+      "passed": true
+    },
+    {
+      "detail": "figures/energy_landscape_composition_ablation_v5.png",
+      "name": "energy_landscape_composition_ablation_v5_png_exists",
+      "passed": true
+    },
+    {
+      "detail": "figures/energy_landscape_composition_ablation_v5.pdf",
+      "name": "energy_landscape_composition_ablation_v5_pdf_exists",
+      "passed": true
+    },
+    {
+      "detail": "bytes=104956",
+      "name": "energy_landscape_composition_ablation_v5_png_size",
+      "passed": true
+    },
+    {
+      "detail": "bytes=21977",
+      "name": "energy_landscape_composition_ablation_v5_pdf_size",
+      "passed": true
+    },
+    {
+      "detail": "1875x1104",
+      "name": "energy_landscape_composition_ablation_v5_render_resolution",
+      "passed": true
+    },
+    {
+      "detail": "foreground_fraction=0.1777",
+      "name": "energy_landscape_composition_ablation_v5_foreground_fraction",
+      "passed": true
+    },
+    {
+      "detail": "dark_fraction=0.1648",
+      "name": "energy_landscape_composition_ablation_v5_dark_fraction",
+      "passed": true
+    },
+    {
+      "detail": "std=0.1768, p99=1.0000",
+      "name": "energy_landscape_composition_ablation_v5_luminance_contrast",
+      "passed": true
+    },
+    {
+      "detail": "margins={'left': 28, 'top': 26, 'right': 28, 'bottom': 26, 'minimum': 26}",
+      "name": "energy_landscape_composition_ablation_v5_not_edge_clipped",
+      "passed": true
+    },
+    {
+      "detail": "unique_quantized_colors=33",
+      "name": "energy_landscape_composition_ablation_v5_color_detail",
+      "passed": true
+    },
+    {
+      "detail": "energy_landscape_composition_ablation_v5",
+      "name": "energy_landscape_composition_ablation_v5_referenced_in_manuscript",
+      "passed": true
+    },
+    {
+      "detail": "figures/energy_landscape_composition_stress_sweep_v5.png",
+      "name": "energy_landscape_composition_stress_sweep_v5_png_exists",
+      "passed": true
+    },
+    {
+      "detail": "figures/energy_landscape_composition_stress_sweep_v5.pdf",
+      "name": "energy_landscape_composition_stress_sweep_v5_pdf_exists",
+      "passed": true
+    },
+    {
+      "detail": "bytes=128259",
+      "name": "energy_landscape_composition_stress_sweep_v5_png_size",
+      "passed": true
+    },
+    {
+      "detail": "bytes=25642",
+      "name": "energy_landscape_composition_stress_sweep_v5_pdf_size",
+      "passed": true
+    },
+    {
+      "detail": "1559x1144",
+      "name": "energy_landscape_composition_stress_sweep_v5_render_resolution",
+      "passed": true
+    },
+    {
+      "detail": "foreground_fraction=0.2706",
+      "name": "energy_landscape_composition_stress_sweep_v5_foreground_fraction",
+      "passed": true
+    },
+    {
+      "detail": "dark_fraction=0.0651",
+      "name": "energy_landscape_composition_stress_sweep_v5_dark_fraction",
+      "passed": true
+    },
+    {
+      "detail": "std=0.1379, p99=1.0000",
+      "name": "energy_landscape_composition_stress_sweep_v5_luminance_contrast",
+      "passed": true
+    },
+    {
+      "detail": "margins={'left': 34, 'top': 26, 'right': 24, 'bottom': 25, 'minimum': 24}",
+      "name": "energy_landscape_composition_stress_sweep_v5_not_edge_clipped",
+      "passed": true
+    },
+    {
+      "detail": "unique_quantized_colors=81",
+      "name": "energy_landscape_composition_stress_sweep_v5_color_detail",
+      "passed": true
+    },
+    {
+      "detail": "energy_landscape_composition_stress_sweep_v5",
+      "name": "energy_landscape_composition_stress_sweep_v5_referenced_in_manuscript",
+      "passed": true
+    },
+    {
+      "detail": "figures/energy_landscape_composition_fixed_risk_v5.png",
+      "name": "energy_landscape_composition_fixed_risk_v5_png_exists",
+      "passed": true
+    },
+    {
+      "detail": "figures/energy_landscape_composition_fixed_risk_v5.pdf",
+      "name": "energy_landscape_composition_fixed_risk_v5_pdf_exists",
+      "passed": true
+    },
+    {
+      "detail": "bytes=124966",
+      "name": "energy_landscape_composition_fixed_risk_v5_png_size",
+      "passed": true
+    },
+    {
+      "detail": "bytes=26259",
+      "name": "energy_landscape_composition_fixed_risk_v5_pdf_size",
+      "passed": true
+    },
+    {
+      "detail": "1581x1104",
+      "name": "energy_landscape_composition_fixed_risk_v5_render_resolution",
+      "passed": true
+    },
+    {
+      "detail": "foreground_fraction=0.0944",
+      "name": "energy_landscape_composition_fixed_risk_v5_foreground_fraction",
+      "passed": true
+    },
+    {
+      "detail": "dark_fraction=0.0520",
+      "name": "energy_landscape_composition_fixed_risk_v5_dark_fraction",
+      "passed": true
+    },
+    {
+      "detail": "std=0.1384, p99=1.0000",
+      "name": "energy_landscape_composition_fixed_risk_v5_luminance_contrast",
+      "passed": true
+    },
+    {
+      "detail": "margins={'left': 25, 'top': 26, 'right': 23, 'bottom': 26, 'minimum': 23}",
+      "name": "energy_landscape_composition_fixed_risk_v5_not_edge_clipped",
+      "passed": true
+    },
+    {
+      "detail": "unique_quantized_colors=94",
+      "name": "energy_landscape_composition_fixed_risk_v5_color_detail",
+      "passed": true
+    },
+    {
+      "detail": "energy_landscape_composition_fixed_risk_v5",
+      "name": "energy_landscape_composition_fixed_risk_v5_referenced_in_manuscript",
+      "passed": true
+    },
+    {
+      "detail": "figures/energy_landscape_composition_fixed_coverage_v5.png",
+      "name": "energy_landscape_composition_fixed_coverage_v5_png_exists",
+      "passed": true
+    },
+    {
+      "detail": "figures/energy_landscape_composition_fixed_coverage_v5.pdf",
+      "name": "energy_landscape_composition_fixed_coverage_v5_pdf_exists",
+      "passed": true
+    },
+    {
+      "detail": "bytes=123927",
+      "name": "energy_landscape_composition_fixed_coverage_v5_png_size",
+      "passed": true
+    },
+    {
+      "detail": "bytes=25951",
+      "name": "energy_landscape_composition_fixed_coverage_v5_pdf_size",
+      "passed": true
+    },
+    {
+      "detail": "1539x1104",
+      "name": "energy_landscape_composition_fixed_coverage_v5_render_resolution",
+      "passed": true
+    },
+    {
+      "detail": "foreground_fraction=0.0831",
+      "name": "energy_landscape_composition_fixed_coverage_v5_foreground_fraction",
+      "passed": true
+    },
+    {
+      "detail": "dark_fraction=0.0510",
+      "name": "energy_landscape_composition_fixed_coverage_v5_dark_fraction",
+      "passed": true
+    },
+    {
+      "detail": "std=0.1381, p99=1.0000",
+      "name": "energy_landscape_composition_fixed_coverage_v5_luminance_contrast",
+      "passed": true
+    },
+    {
+      "detail": "margins={'left': 34, 'top': 26, 'right': 24, 'bottom': 26, 'minimum': 24}",
+      "name": "energy_landscape_composition_fixed_coverage_v5_not_edge_clipped",
+      "passed": true
+    },
+    {
+      "detail": "unique_quantized_colors=98",
+      "name": "energy_landscape_composition_fixed_coverage_v5_color_detail",
+      "passed": true
+    },
+    {
+      "detail": "energy_landscape_composition_fixed_coverage_v5",
+      "name": "energy_landscape_composition_fixed_coverage_v5_referenced_in_manuscript",
+      "passed": true
+    },
+    {
+      "detail": "figures=7",
+      "name": "all_expected_figures_checked",
+      "passed": true
+    }
+  ],
+  "failed_checks": [],
+  "figure_count": 7,
+  "figures": [
+    {
+      "bytes": 143735,
+      "dark_fraction": 0.06593045551858757,
+      "edge_margins_px": {
+        "bottom": 55,
+        "left": 71,
+        "minimum": 55,
+        "right": 110,
+        "top": 85
+      },
+      "foreground_fraction": 0.3570080720184921,
+      "height": 972,
+      "luminance_p01": 0.16078431655963263,
+      "luminance_p99": 1.0,
+      "luminance_std": 0.1318420506172212,
+      "pdf": "figures/skill_seam_action_model_overview_v5.pdf",
+      "pdf_bytes": 22161,
+      "png": "figures/skill_seam_action_model_overview_v5.png",
+      "stem": "skill_seam_action_model_overview_v5",
+      "unique_foreground_colors_quantized": 92,
+      "width": 2026
+    },
+    {
+      "bytes": 130382,
+      "dark_fraction": 0.2279925861881161,
+      "edge_margins_px": {
+        "bottom": 32,
+        "left": 28,
+        "minimum": 26,
+        "right": 27,
+        "top": 26
+      },
+      "foreground_fraction": 0.2402042712815206,
+      "height": 1204,
+      "luminance_p01": 0.16078431655963263,
+      "luminance_p99": 1.0,
+      "luminance_std": 0.18665775431752116,
+      "pdf": "figures/energy_landscape_composition_hard_success_v5.pdf",
+      "pdf_bytes": 27319,
+      "png": "figures/energy_landscape_composition_hard_success_v5.png",
+      "stem": "energy_landscape_composition_hard_success_v5",
+      "unique_foreground_colors_quantized": 53,
+      "width": 1952
+    },
+    {
+      "bytes": 106021,
+      "dark_fraction": 0.03239817538262127,
+      "edge_margins_px": {
+        "bottom": 28,
+        "left": 25,
+        "minimum": 24,
+        "right": 24,
+        "top": 26
+      },
+      "foreground_fraction": 0.044463718394372964,
+      "height": 1144,
+      "luminance_p01": 0.16078431655963263,
+      "luminance_p99": 1.0,
+      "luminance_std": 0.1212846512882979,
+      "pdf": "figures/energy_landscape_composition_utility_risk_v5.pdf",
+      "pdf_bytes": 25701,
+      "png": "figures/energy_landscape_composition_utility_risk_v5.png",
+      "stem": "energy_landscape_composition_utility_risk_v5",
+      "unique_foreground_colors_quantized": 80,
+      "width": 1543
+    },
+    {
+      "bytes": 104956,
+      "dark_fraction": 0.16482946859903383,
+      "edge_margins_px": {
+        "bottom": 26,
+        "left": 28,
+        "minimum": 26,
+        "right": 28,
+        "top": 26
+      },
+      "foreground_fraction": 0.17767149758454107,
+      "height": 1104,
+      "luminance_p01": 0.16078431655963263,
+      "luminance_p99": 1.0,
+      "luminance_std": 0.17678901059158073,
+      "pdf": "figures/energy_landscape_composition_ablation_v5.pdf",
+      "pdf_bytes": 21977,
+      "png": "figures/energy_landscape_composition_ablation_v5.png",
+      "stem": "energy_landscape_composition_ablation_v5",
+      "unique_foreground_colors_quantized": 33,
+      "width": 1875
+    },
+    {
+      "bytes": 128259,
+      "dark_fraction": 0.06505873856739797,
+      "edge_margins_px": {
+        "bottom": 25,
+        "left": 34,
+        "minimum": 24,
+        "right": 24,
+        "top": 26
+      },
+      "foreground_fraction": 0.2706274642612038,
+      "height": 1144,
+      "luminance_p01": 0.0,
+      "luminance_p99": 1.0,
+      "luminance_std": 0.13791667503515373,
+      "pdf": "figures/energy_landscape_composition_stress_sweep_v5.pdf",
+      "pdf_bytes": 25642,
+      "png": "figures/energy_landscape_composition_stress_sweep_v5.png",
+      "stem": "energy_landscape_composition_stress_sweep_v5",
+      "unique_foreground_colors_quantized": 81,
+      "width": 1559
+    },
+    {
+      "bytes": 124966,
+      "dark_fraction": 0.05200111835290451,
+      "edge_margins_px": {
+        "bottom": 26,
+        "left": 25,
+        "minimum": 23,
+        "right": 23,
+        "top": 26
+      },
+      "foreground_fraction": 0.09443206922787815,
+      "height": 1104,
+      "luminance_p01": 0.003921568859368563,
+      "luminance_p99": 1.0,
+      "luminance_std": 0.1384239008478016,
+      "pdf": "figures/energy_landscape_composition_fixed_risk_v5.pdf",
+      "pdf_bytes": 26259,
+      "png": "figures/energy_landscape_composition_fixed_risk_v5.png",
+      "stem": "energy_landscape_composition_fixed_risk_v5",
+      "unique_foreground_colors_quantized": 94,
+      "width": 1581
+    },
+    {
+      "bytes": 123927,
+      "dark_fraction": 0.05095535403188594,
+      "edge_margins_px": {
+        "bottom": 26,
+        "left": 34,
+        "minimum": 24,
+        "right": 24,
+        "top": 26
+      },
+      "foreground_fraction": 0.08314146208247403,
+      "height": 1104,
+      "luminance_p01": 0.0,
+      "luminance_p99": 1.0,
+      "luminance_std": 0.13812167628188446,
+      "pdf": "figures/energy_landscape_composition_fixed_coverage_v5.pdf",
+      "pdf_bytes": 25951,
+      "png": "figures/energy_landscape_composition_fixed_coverage_v5.png",
+      "stem": "energy_landscape_composition_fixed_coverage_v5",
+      "unique_foreground_colors_quantized": 98,
+      "width": 1539
+    }
+  ],
+  "not_external_evidence": true,
+  "passed": true,
+  "thresholds": {
+    "max_foreground_fraction": 0.6,
+    "min_dark_fraction": 0.02,
+    "min_edge_margin_px": 18,
+    "min_foreground_fraction": 0.03,
+    "min_height": 900,
+    "min_luminance_std": 0.1,
+    "min_pdf_bytes": 15000,
+    "min_png_bytes": 50000,
+    "min_width": 1500
+  },
+  "version": "figure_readability_audit_v1"
+}

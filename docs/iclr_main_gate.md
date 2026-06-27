@@ -23,10 +23,20 @@ Local evidence digest:
 - Best ablation utility gap: `0.043490`.
 - Stress endpoint success margin: `0.103125`.
 - Fixed-risk coverage/breach/gated success: `0.863021` / `0.000302` / `0.760108`.
+- Diagnostic mechanism audit: zero label, decision, and planner-update mismatches over 230,400 local rows, with all five failure labels and all five seam decisions observed in the proposed hard slice.
+- Comparative decision-quality audit: accept coverage `0.404` vs `0.000`, accepted-seam breach above the `0.15` budget rate `0.000`, and 3,850 recovered predecessor-abstained accepts with utility `+0.243`, success `+0.091`, and realized breach `-0.077`.
+- External execution readiness audit: independent operator packet ready for a 1,440-record high-fidelity validation run, but explicitly non-evidence until real manifest-declared logs, configs, videos, checkpoints, and implementations exist.
+- External reference adapter audit: 12 executable implementation-only adapters, including 11 non-oracle baselines, pass the API contract and remove validation-harness ambiguity; they are not robot or high-fidelity rollout evidence.
+- External local dry run: 1,440 external-schema JSONL records are generated from the frozen local suite and recomputed successfully as a plumbing check; they are not external evidence.
+- Figure readability audit: all seven main figure companions pass render-resolution, contrast, margin, and manuscript-reference checks.
+- Camera-ready design audit: all 29 rendered PDF pages pass nonblank, density, contrast, margin, sparse-page, canonical-parity, and text-anchor checks.
+- Manuscript readability audit: agenda framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and stale manual-polish blocker removal pass.
 - Evidence coverage: 230,400 main cells, 38,400 ablation cells, 161,280 stress cells, 107,520 fixed-risk cells, and 24 failure cases.
 
 Local gate result: pass.
 
 Scope gate result: fail.
 
-ICLR main ready: no. Real robot rollouts, accepted high-fidelity validation, released skill-energy checkpoints, calibrated robot logs, videos, independent baselines, and a full manual related-work pass are still missing.
+External evidence audit: fail until `scripts/audit_external_evidence.py --strict` passes against `external_validation/manifest.json` and the referenced logs, videos, configs, checkpoints, metrics, and independent baselines.
+
+ICLR main ready: no. Real robot rollouts, accepted high-fidelity validation, released skill-energy checkpoints, calibrated robot logs, videos, and manifest-declared independent baseline evidence from real external runs are still missing.

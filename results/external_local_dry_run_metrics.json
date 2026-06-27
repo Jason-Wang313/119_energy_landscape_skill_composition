@@ -1,0 +1,185 @@
+{
+  "manifest": "external_validation/local_dry_run/manifest.json",
+  "not_external_evidence": true,
+  "passed": true,
+  "schema_errors": [],
+  "source": "results/cell_metrics.csv",
+  "summary": {
+    "episodes": 1440,
+    "external_success_margin": 0.125,
+    "external_task_families": 4,
+    "external_utility_margin": 0.2718227833333333,
+    "fixed_risk_breach": 0.0,
+    "fixed_risk_budget": 0.15,
+    "fixed_risk_coverage": 0.6166666666666667,
+    "method_summary": {
+      "barrier_certified_energy_composer_v5": {
+        "episodes": 120,
+        "realized_seam_breach": 0.008333333333333333,
+        "seam_failure": 0.0,
+        "success": 0.8083333333333333,
+        "utility": 0.9227515666666667
+      },
+      "behavior_cloned_skill_chain": {
+        "episodes": 120,
+        "realized_seam_breach": 1.0,
+        "seam_failure": 1.0,
+        "success": 0.4,
+        "utility": -0.20157190833333333
+      },
+      "cem_trajectory_composer": {
+        "episodes": 120,
+        "realized_seam_breach": 1.0,
+        "seam_failure": 1.0,
+        "success": 0.6166666666666667,
+        "utility": 0.22014725
+      },
+      "diffusion_skill_stitcher": {
+        "episodes": 120,
+        "realized_seam_breach": 1.0,
+        "seam_failure": 1.0,
+        "success": 0.5333333333333333,
+        "utility": 0.10035050000000001
+      },
+      "energy_compatibility_heuristic": {
+        "episodes": 120,
+        "realized_seam_breach": 1.0,
+        "seam_failure": 0.8416666666666667,
+        "success": 0.6,
+        "utility": 0.31803661666666666
+      },
+      "greedy_module_sequence": {
+        "episodes": 120,
+        "realized_seam_breach": 1.0,
+        "seam_failure": 1.0,
+        "success": 0.275,
+        "utility": -0.4273902666666667
+      },
+      "option_graph_planner": {
+        "episodes": 120,
+        "realized_seam_breach": 1.0,
+        "seam_failure": 1.0,
+        "success": 0.475,
+        "utility": 0.00015899999999999712
+      },
+      "oracle_basin_composer": {
+        "episodes": 120,
+        "realized_seam_breach": 0.0,
+        "seam_failure": 0.0,
+        "success": 0.9,
+        "utility": 1.1561973916666666
+      },
+      "proposed_energy_landscape_composer_v4_1": {
+        "episodes": 120,
+        "realized_seam_breach": 0.6166666666666667,
+        "seam_failure": 0.041666666666666664,
+        "success": 0.6833333333333333,
+        "utility": 0.6509287833333334
+      },
+      "residual_rl_composer": {
+        "episodes": 120,
+        "realized_seam_breach": 1.0,
+        "seam_failure": 0.9916666666666667,
+        "success": 0.6083333333333333,
+        "utility": 0.24446361666666666
+      },
+      "stable_dmp_handoff": {
+        "episodes": 120,
+        "realized_seam_breach": 0.9583333333333334,
+        "seam_failure": 0.6,
+        "success": 0.675,
+        "utility": 0.4629814666666667
+      },
+      "tamp_feasibility_screen": {
+        "episodes": 120,
+        "realized_seam_breach": 0.9833333333333333,
+        "seam_failure": 0.7,
+        "success": 0.5583333333333333,
+        "utility": 0.3153146333333333
+      }
+    },
+    "methods": [
+      "barrier_certified_energy_composer_v5",
+      "behavior_cloned_skill_chain",
+      "cem_trajectory_composer",
+      "diffusion_skill_stitcher",
+      "energy_compatibility_heuristic",
+      "greedy_module_sequence",
+      "option_graph_planner",
+      "oracle_basin_composer",
+      "proposed_energy_landscape_composer_v4_1",
+      "residual_rl_composer",
+      "stable_dmp_handoff",
+      "tamp_feasibility_screen"
+    ],
+    "paired_comparison_count": 120,
+    "paired_win_rate": 0.875,
+    "positive_task_families": 4,
+    "primary_method": "barrier_certified_energy_composer_v5",
+    "strongest_external_baseline": "proposed_energy_landscape_composer_v4_1",
+    "task_families": [
+      "cable_route_insert",
+      "door_open_navigation",
+      "drawer_to_pick_transfer",
+      "peg_place_regrasp"
+    ],
+    "task_summary": {
+      "cable_route_insert": {
+        "baseline_episodes": 30,
+        "primary_episodes": 30,
+        "primary_success": 0.8,
+        "strongest_baseline_success": 0.6666666666666666,
+        "success_margin": 0.13333333333333341
+      },
+      "door_open_navigation": {
+        "baseline_episodes": 30,
+        "primary_episodes": 30,
+        "primary_success": 0.8,
+        "strongest_baseline_success": 0.7333333333333333,
+        "success_margin": 0.06666666666666676
+      },
+      "drawer_to_pick_transfer": {
+        "baseline_episodes": 30,
+        "primary_episodes": 30,
+        "primary_success": 0.8333333333333334,
+        "strongest_baseline_success": 0.6333333333333333,
+        "success_margin": 0.20000000000000007
+      },
+      "peg_place_regrasp": {
+        "baseline_episodes": 30,
+        "primary_episodes": 30,
+        "primary_success": 0.8,
+        "strongest_baseline_success": 0.7,
+        "success_margin": 0.10000000000000009
+      }
+    },
+    "version": "external_rollout_metrics_v1"
+  },
+  "threshold_checks": [
+    {
+      "message": "external_success_margin: value=0.125, threshold=0.05",
+      "passed": true
+    },
+    {
+      "message": "external_utility_margin: value=0.2718227833333333, threshold=0.08",
+      "passed": true
+    },
+    {
+      "message": "paired_win_rate: value=0.875, threshold=0.7",
+      "passed": true
+    },
+    {
+      "message": "fixed_risk_coverage: value=0.6166666666666667, threshold=0.55",
+      "passed": true
+    },
+    {
+      "message": "fixed_risk_breach: value=0.0, threshold=0.02",
+      "passed": true
+    },
+    {
+      "message": "positive_task_families: value=4, threshold=3",
+      "passed": true
+    }
+  ],
+  "version": "external_local_dry_run_metrics_v1"
+}

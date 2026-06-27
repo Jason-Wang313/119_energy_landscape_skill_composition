@@ -13,6 +13,7 @@ Why strong-revise:
 - Best ablation trails the full method by `0.028125` success and `0.043490` utility.
 - Evidence coverage includes 230,400 main cells, 38,400 ablation cells, 161,280 stress cells, 107,520 fixed-risk cells, and 24 failure cases.
 - Fixed-risk audit reports coverage `0.863021`, breach `0.000302`, and gated success `0.760108` at risk budget `0.15`.
+- External reference adapters pass for all 12 methods as implementation-only harness checks, reducing future validation friction without counting as rollout evidence.
 - Numeric integrity, PDF placement, page-count, and visual QA checks pass.
 
 Why not ready:
@@ -22,5 +23,4 @@ Why not ready:
 - no released trained skill-energy or policy checkpoint;
 - no calibrated contact-force, camera, or state logs;
 - no hardware rollout videos;
-- no independent baseline implementations;
-- full manual related-work pass remains incomplete.
+- no manifest-declared independent baseline evidence from real external runs.

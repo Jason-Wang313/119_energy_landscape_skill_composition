@@ -1,0 +1,256 @@
+{
+  "canonical_pdf": "C:\\Users\\wangz\\Downloads\\119.pdf",
+  "checks": [
+    {
+      "detail": "pages=29",
+      "name": "pdf_page_count",
+      "passed": true
+    },
+    {
+      "detail": "page_size='612 x 792 pts (letter)'",
+      "name": "pdf_letter_size",
+      "passed": true
+    },
+    {
+      "detail": "bytes=464927",
+      "name": "pdf_size_reasonable",
+      "passed": true
+    },
+    {
+      "detail": "paper/main.pdf vs Downloads/119.pdf",
+      "name": "canonical_matches_paper_pdf",
+      "passed": true
+    },
+    {
+      "detail": "text_chars=76428",
+      "name": "pdf_text_extractable",
+      "passed": true
+    },
+    {
+      "detail": "Motivation",
+      "name": "section_present_Motivation",
+      "passed": true
+    },
+    {
+      "detail": "Problem Setup",
+      "name": "section_present_Problem Setup",
+      "passed": true
+    },
+    {
+      "detail": "Skill Seams As Local World/Action Models",
+      "name": "section_present_Skill Seams As Local World/Action Models",
+      "passed": true
+    },
+    {
+      "detail": "Evaluation Protocol",
+      "name": "section_present_Evaluation Protocol",
+      "passed": true
+    },
+    {
+      "detail": "Main Results",
+      "name": "section_present_Main Results",
+      "passed": true
+    },
+    {
+      "detail": "Diagnostics, Ablations, And Fixed Risk",
+      "name": "section_present_Diagnostics, Ablations, And Fixed Risk",
+      "passed": true
+    },
+    {
+      "detail": "Related Work And Boundary",
+      "name": "section_present_Related Work And Boundary",
+      "passed": true
+    },
+    {
+      "detail": "Scope And Validation",
+      "name": "section_present_Scope And Validation",
+      "passed": true
+    },
+    {
+      "detail": "anonymous author line",
+      "name": "anonymous_submission",
+      "passed": true
+    },
+    {
+      "detail": "PDF title text",
+      "name": "title_visible",
+      "passed": true
+    },
+    {
+      "detail": "abstract text",
+      "name": "abstract_visible",
+      "passed": true
+    },
+    {
+      "detail": "abstract boundary",
+      "name": "scope_boundary_visible",
+      "passed": true
+    },
+    {
+      "detail": "appendix scope section",
+      "name": "remaining_evidence_visible",
+      "passed": true
+    },
+    {
+      "detail": "leaks=[]",
+      "name": "no_internal_status_leaks_in_pdf",
+      "passed": true
+    },
+    {
+      "detail": "hidelinks",
+      "name": "hidden_links_configured",
+      "passed": true
+    },
+    {
+      "detail": "appendix wording",
+      "name": "hidden_link_wording",
+      "passed": true
+    },
+    {
+      "detail": "no PNG includes in main.tex",
+      "name": "vector_figures_only_in_manuscript",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\figures\\skill_seam_action_model_overview_v5.pdf bytes=22161",
+      "name": "figure_pdf_exists_skill_seam_action_model_overview_v5",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\figures\\skill_seam_action_model_overview_v5.png bytes=143735",
+      "name": "figure_png_companion_exists_skill_seam_action_model_overview_v5",
+      "passed": true
+    },
+    {
+      "detail": "skill_seam_action_model_overview_v5",
+      "name": "figure_pdf_referenced_skill_seam_action_model_overview_v5",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\figures\\energy_landscape_composition_hard_success_v5.pdf bytes=27319",
+      "name": "figure_pdf_exists_energy_landscape_composition_hard_success_v5",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\figures\\energy_landscape_composition_hard_success_v5.png bytes=130382",
+      "name": "figure_png_companion_exists_energy_landscape_composition_hard_success_v5",
+      "passed": true
+    },
+    {
+      "detail": "energy_landscape_composition_hard_success_v5",
+      "name": "figure_pdf_referenced_energy_landscape_composition_hard_success_v5",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\figures\\energy_landscape_composition_utility_risk_v5.pdf bytes=25701",
+      "name": "figure_pdf_exists_energy_landscape_composition_utility_risk_v5",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\figures\\energy_landscape_composition_utility_risk_v5.png bytes=106021",
+      "name": "figure_png_companion_exists_energy_landscape_composition_utility_risk_v5",
+      "passed": true
+    },
+    {
+      "detail": "energy_landscape_composition_utility_risk_v5",
+      "name": "figure_pdf_referenced_energy_landscape_composition_utility_risk_v5",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\figures\\energy_landscape_composition_ablation_v5.pdf bytes=21977",
+      "name": "figure_pdf_exists_energy_landscape_composition_ablation_v5",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\figures\\energy_landscape_composition_ablation_v5.png bytes=104956",
+      "name": "figure_png_companion_exists_energy_landscape_composition_ablation_v5",
+      "passed": true
+    },
+    {
+      "detail": "energy_landscape_composition_ablation_v5",
+      "name": "figure_pdf_referenced_energy_landscape_composition_ablation_v5",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\figures\\energy_landscape_composition_stress_sweep_v5.pdf bytes=25642",
+      "name": "figure_pdf_exists_energy_landscape_composition_stress_sweep_v5",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\figures\\energy_landscape_composition_stress_sweep_v5.png bytes=128259",
+      "name": "figure_png_companion_exists_energy_landscape_composition_stress_sweep_v5",
+      "passed": true
+    },
+    {
+      "detail": "energy_landscape_composition_stress_sweep_v5",
+      "name": "figure_pdf_referenced_energy_landscape_composition_stress_sweep_v5",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\figures\\energy_landscape_composition_fixed_risk_v5.pdf bytes=26259",
+      "name": "figure_pdf_exists_energy_landscape_composition_fixed_risk_v5",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\figures\\energy_landscape_composition_fixed_risk_v5.png bytes=124966",
+      "name": "figure_png_companion_exists_energy_landscape_composition_fixed_risk_v5",
+      "passed": true
+    },
+    {
+      "detail": "energy_landscape_composition_fixed_risk_v5",
+      "name": "figure_pdf_referenced_energy_landscape_composition_fixed_risk_v5",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\figures\\energy_landscape_composition_fixed_coverage_v5.pdf bytes=25951",
+      "name": "figure_pdf_exists_energy_landscape_composition_fixed_coverage_v5",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\figures\\energy_landscape_composition_fixed_coverage_v5.png bytes=123927",
+      "name": "figure_png_companion_exists_energy_landscape_composition_fixed_coverage_v5",
+      "passed": true
+    },
+    {
+      "detail": "energy_landscape_composition_fixed_coverage_v5",
+      "name": "figure_pdf_referenced_energy_landscape_composition_fixed_coverage_v5",
+      "passed": true
+    },
+    {
+      "detail": "hits=0",
+      "name": "log_no_undefined",
+      "passed": true
+    },
+    {
+      "detail": "hits=0",
+      "name": "log_no_warnings",
+      "passed": true
+    },
+    {
+      "detail": "hits=0",
+      "name": "log_no_overfull",
+      "passed": true
+    },
+    {
+      "detail": "hits=0",
+      "name": "log_no_fatal",
+      "passed": true
+    },
+    {
+      "detail": "underfull_count=3",
+      "name": "log_underfull_count_bounded",
+      "passed": true
+    },
+    {
+      "detail": "max_badness=3460",
+      "name": "log_underfull_badness_bounded",
+      "passed": true
+    }
+  ],
+  "failed_checks": [],
+  "pages": 29,
+  "passed": true,
+  "pdf": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\paper\\main.pdf",
+  "pdf_bytes": 464927,
+  "version": "presentation_quality_audit_v1"
+}

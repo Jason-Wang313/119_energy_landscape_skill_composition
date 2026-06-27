@@ -1,0 +1,73 @@
+{
+  "checks": [
+    {
+      "detail": "runbook and generated sheets are collection scaffolding only",
+      "name": "not_external_evidence_declared",
+      "passed": true
+    },
+    {
+      "detail": "rows=1440, required=1440",
+      "name": "operator_row_count_matches_plan",
+      "passed": true
+    },
+    {
+      "detail": "rows=1440",
+      "name": "operator_row_count_ge_1440",
+      "passed": true
+    },
+    {
+      "detail": "cards=4",
+      "name": "task_cards_match_tasks",
+      "passed": true
+    },
+    {
+      "detail": "templates=4",
+      "name": "config_templates_match_tasks",
+      "passed": true
+    },
+    {
+      "detail": "method_count=12",
+      "name": "method_count_ge_12",
+      "passed": true
+    },
+    {
+      "detail": "required_fields=29",
+      "name": "required_fields_ge_28",
+      "passed": true
+    },
+    {
+      "detail": "strict validation command found",
+      "name": "strict_commands_present",
+      "passed": true
+    },
+    {
+      "detail": "external_validation\\operator_record_sheet.csv",
+      "name": "operator_sheet_exists",
+      "passed": true
+    },
+    {
+      "detail": "external_validation\\collection_runbook.md",
+      "name": "runbook_exists",
+      "passed": true
+    }
+  ],
+  "config_templates": [
+    "external_validation/config_templates/peg_place_regrasp.json",
+    "external_validation/config_templates/drawer_to_pick_transfer.json",
+    "external_validation/config_templates/door_open_navigation.json",
+    "external_validation/config_templates/cable_route_insert.json"
+  ],
+  "failed_checks": [],
+  "not_external_evidence": true,
+  "operator_record_sheet": "external_validation/operator_record_sheet.csv",
+  "operator_rows": 1440,
+  "passed": true,
+  "runbook": "external_validation/collection_runbook.md",
+  "task_cards": [
+    "external_validation/task_cards/peg_place_regrasp.md",
+    "external_validation/task_cards/drawer_to_pick_transfer.md",
+    "external_validation/task_cards/door_open_navigation.md",
+    "external_validation/task_cards/cable_route_insert.md"
+  ],
+  "version": "external_runbook_audit_v1"
+}

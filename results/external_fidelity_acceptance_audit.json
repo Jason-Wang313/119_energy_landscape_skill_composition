@@ -1,0 +1,184 @@
+{
+  "acceptance_ready": false,
+  "blocking_missing": [
+    "manifest_exists: external_validation/manifest.json missing",
+    "manifest_declares_acceptance_path: source_kind=template",
+    "real_acceptance_file_exists: external_validation/fidelity_acceptance_template.json",
+    "real_acceptance_version: version='paper119_fidelity_acceptance_template_v1', expected='paper119_fidelity_acceptance_v1'",
+    "not_template_only: template_only=True",
+    "route_matches_manifest: acceptance_route='high_fidelity_sim', manifest_route=''",
+    "route_has_enough_task_families: route='high_fidelity_sim', counts={'real_robot': 0, 'high_fidelity_sim': 0}",
+    "platform_values_filled: placeholder_fields=['asset_sources', 'contact_solver', 'physics_engine', 'platform_name', 'platform_version', 'robot_model_source', 'substeps_per_control_step', 'timestep_seconds']",
+    "qualification_text_filled: weak_or_placeholder=['contact_dynamics_justification', 'known_limitations', 'operator_independence_statement', 'paired_reset_replay_test', 'real_or_benchmark_calibration_basis']",
+    "operator_independence_declared: operator_not_target_collaborator=True",
+    "date_locked_filled: date_locked='FILL_AFTER_PLATFORM_SELECTION'",
+    "code_commit_filled: code_commit=''",
+    "skill_library_hash_valid: skill_library_hash must be 64-character SHA256",
+    "all_acceptance_gates_passed: unpassed=['platform_provenance_complete', 'paired_reset_replay_verified', 'contact_failure_observable', 'non_oracle_methods_fair', 'raw_logs_drive_metrics']"
+  ],
+  "blocking_missing_count": 14,
+  "contract_checks": [
+    {
+      "detail": "external_validation/fidelity_acceptance_template.json",
+      "name": "template_exists",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/fidelity_acceptance_template.json",
+      "name": "source_exists",
+      "passed": true
+    },
+    {
+      "detail": "version='paper119_fidelity_acceptance_template_v1'",
+      "name": "recognized_version",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True",
+      "name": "template_declares_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "route='high_fidelity_sim'",
+      "name": "route_declared",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "platform_fields_present",
+      "passed": true
+    },
+    {
+      "detail": "missing_flags=[], missing_text=[]",
+      "name": "qualification_fields_present",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "task_fidelity_covers_core_tasks",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "acceptance_gates_present",
+      "passed": true
+    }
+  ],
+  "evidence_checks": [
+    {
+      "detail": "external_validation/manifest.json missing",
+      "name": "manifest_exists",
+      "passed": false
+    },
+    {
+      "detail": "source_kind=template",
+      "name": "manifest_declares_acceptance_path",
+      "passed": false
+    },
+    {
+      "detail": "external_validation/fidelity_acceptance_template.json",
+      "name": "real_acceptance_file_exists",
+      "passed": false
+    },
+    {
+      "detail": "version='paper119_fidelity_acceptance_template_v1', expected='paper119_fidelity_acceptance_v1'",
+      "name": "real_acceptance_version",
+      "passed": false
+    },
+    {
+      "detail": "template_only=True",
+      "name": "not_template_only",
+      "passed": false
+    },
+    {
+      "detail": "acceptance_route='high_fidelity_sim', manifest_route=''",
+      "name": "route_matches_manifest",
+      "passed": false
+    },
+    {
+      "detail": "route='high_fidelity_sim', counts={'real_robot': 0, 'high_fidelity_sim': 0}",
+      "name": "route_has_enough_task_families",
+      "passed": false
+    },
+    {
+      "detail": "placeholder_fields=['asset_sources', 'contact_solver', 'physics_engine', 'platform_name', 'platform_version', 'robot_model_source', 'substeps_per_control_step', 'timestep_seconds']",
+      "name": "platform_values_filled",
+      "passed": false
+    },
+    {
+      "detail": "platform_type='high_fidelity_sim'",
+      "name": "platform_type_valid",
+      "passed": true
+    },
+    {
+      "detail": "sensor_modalities=['state', 'camera', 'contact_or_force']",
+      "name": "modalities_cover_state_camera_contact",
+      "passed": true
+    },
+    {
+      "detail": "contact_or_force_channels=['contact_events', 'normal_force_or_proxy']",
+      "name": "contact_channels_declared",
+      "passed": true
+    },
+    {
+      "detail": "false_or_missing=[]",
+      "name": "qualification_flags_true",
+      "passed": true
+    },
+    {
+      "detail": "weak_or_placeholder=['contact_dynamics_justification', 'known_limitations', 'operator_independence_statement', 'paired_reset_replay_test', 'real_or_benchmark_calibration_basis']",
+      "name": "qualification_text_filled",
+      "passed": false
+    },
+    {
+      "detail": "weak_tasks=[]",
+      "name": "task_fidelity_details_filled",
+      "passed": true
+    },
+    {
+      "detail": "operator_not_target_collaborator=True",
+      "name": "operator_independence_declared",
+      "passed": false
+    },
+    {
+      "detail": "date_locked='FILL_AFTER_PLATFORM_SELECTION'",
+      "name": "date_locked_filled",
+      "passed": false
+    },
+    {
+      "detail": "code_commit=''",
+      "name": "code_commit_filled",
+      "passed": false
+    },
+    {
+      "detail": "skill_library_hash must be 64-character SHA256",
+      "name": "skill_library_hash_valid",
+      "passed": false
+    },
+    {
+      "detail": "artifact_hash_policy='sha256'",
+      "name": "artifact_hash_policy_sha256",
+      "passed": true
+    },
+    {
+      "detail": "unpassed=['platform_provenance_complete', 'paired_reset_replay_verified', 'contact_failure_observable', 'non_oracle_methods_fair', 'raw_logs_drive_metrics']",
+      "name": "all_acceptance_gates_passed",
+      "passed": false
+    }
+  ],
+  "expected_real_acceptance_path": "external_validation/fidelity_acceptance.json",
+  "manifest_exists": false,
+  "not_external_evidence": true,
+  "operator_next_actions": [
+    "Select an external robot or accepted high-fidelity simulator before collecting rollouts.",
+    "Copy fidelity_acceptance_template.json to external_validation/fidelity_acceptance.json and change the version to paper119_fidelity_acceptance_v1.",
+    "Fill platform physics/contact details, paired-reset replay evidence, operator independence, real/benchmark calibration basis, code commit, and skill-library hash.",
+    "Declare fidelity_acceptance_path in external_validation/manifest.json before strict external evidence validation.",
+    "Run audit_external_fidelity_acceptance.py --strict before counting any high-fidelity route as external evidence."
+  ],
+  "passed": true,
+  "readiness_state": "COLLECT_PLATFORM_PROVENANCE",
+  "source": "external_validation/fidelity_acceptance_template.json",
+  "source_kind": "template",
+  "version": "external_fidelity_acceptance_audit_v1"
+}

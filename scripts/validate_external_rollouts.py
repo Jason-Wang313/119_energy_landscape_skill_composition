@@ -1,0 +1,425 @@
+from __future__ import annotations
+
+import argparse
+import json
+import math
+import re
+from collections import defaultdict
+from dataclasses import dataclass
+from pathlib import Path
+from statistics import mean
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+EXTERNAL = ROOT / "external_validation"
+RESULTS = ROOT / "results"
+DEFAULT_MANIFEST = EXTERNAL / "manifest.json"
+DEFAULT_SCHEMA = EXTERNAL / "log_schema_v1.json"
+OUT_JSON = RESULTS / "external_rollout_metrics.json"
+OUT_MD = RESULTS / "external_rollout_metrics.md"
+
+PRIMARY_METHOD = "barrier_certified_energy_composer_v5"
+ORACLE_METHOD = "oracle_basin_composer"
+HEX64 = re.compile(r"^[A-Fa-f0-9]{64}$")
+
+
+@dataclass
+class ValidationResult:
+    passed: bool
+    message: str
+
+
+def read_json(path: Path) -> dict[str, Any]:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise SystemExit(f"invalid JSON in {path}: {exc}") from exc
+
+
+def rel_path(value: str) -> Path:
+    path = Path(value)
+    return path if path.is_absolute() else ROOT / path
+
+
+def as_float(record: dict[str, Any], field: str, errors: list[str], line_id: str) -> float | None:
+    value = record.get(field)
+    if isinstance(value, bool):
+        errors.append(f"{line_id}: {field} must be numeric, got boolean")
+        return None
+    if isinstance(value, (int, float)) and math.isfinite(float(value)):
+        return float(value)
+    errors.append(f"{line_id}: {field} must be finite numeric")
+    return None
+
+
+def as_bool(record: dict[str, Any], field: str, errors: list[str], line_id: str) -> bool | None:
+    value = record.get(field)
+    if isinstance(value, bool):
+        return value
+    errors.append(f"{line_id}: {field} must be boolean")
+    return None
+
+
+def validate_record(
+    record: dict[str, Any],
+    *,
+    line_id: str,
+    schema: dict[str, Any],
+    manifest_methods: set[str],
+    manifest_tasks: set[str],
+    check_video_paths: bool,
+) -> list[str]:
+    errors: list[str] = []
+    required = set(schema.get("required_fields", {}))
+    missing = sorted(required - set(record))
+    if missing:
+        return [f"{line_id}: missing required fields {missing}"]
+
+    for field in (
+        "run_id",
+        "task_family",
+        "platform_type",
+        "platform_name",
+        "scene_id",
+        "method",
+        "skill_i",
+        "skill_j",
+        "decision",
+        "failure_diagnosis",
+        "repair_action",
+        "video_path",
+    ):
+        if not isinstance(record.get(field), str) or not record.get(field).strip():
+            errors.append(f"{line_id}: {field} must be non-empty string")
+
+    for field in ("initial_state_hash", "terminal_sample_set_hash", "policy_or_config_hash"):
+        value = record.get(field)
+        if not isinstance(value, str) or not HEX64.fullmatch(value):
+            errors.append(f"{line_id}: {field} must be 64-character SHA256")
+
+    for field in ("seed", "episode_index"):
+        value = record.get(field)
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+            errors.append(f"{line_id}: {field} must be integer >= 0")
+
+    for field in ("basin_estimate", "descent_continuity_score", "predicted_seam_risk", "fixed_risk_budget"):
+        value = as_float(record, field, errors, line_id)
+        if value is not None and not (0.0 <= value <= 1.0):
+            errors.append(f"{line_id}: {field}={value} outside [0, 1]")
+
+    barrier_score = as_float(record, "barrier_score", errors, line_id)
+    if barrier_score is not None and barrier_score < 0:
+        errors.append(f"{line_id}: barrier_score={barrier_score} must be >= 0")
+    composition_cost = as_float(record, "composition_cost", errors, line_id)
+    if composition_cost is not None and composition_cost < 0:
+        errors.append(f"{line_id}: composition_cost={composition_cost} must be >= 0")
+    as_float(record, "utility", errors, line_id)
+
+    for field in ("success", "seam_failure", "barrier_violation", "damage_or_intervention", "realized_seam_breach"):
+        as_bool(record, field, errors, line_id)
+
+    allowed = schema.get("allowed_values", {})
+    for field, values in allowed.items():
+        if record.get(field) not in set(values):
+            errors.append(f"{line_id}: {field}={record.get(field)!r} not in {values}")
+
+    if record.get("task_family") not in manifest_tasks:
+        errors.append(f"{line_id}: task_family={record.get('task_family')!r} not declared in manifest")
+    if record.get("method") not in manifest_methods:
+        errors.append(f"{line_id}: method={record.get('method')!r} not declared in manifest")
+
+    if check_video_paths:
+        video_path = str(record.get("video_path", ""))
+        if video_path and not rel_path(video_path).exists():
+            errors.append(f"{line_id}: video_path does not exist: {video_path}")
+
+    return errors
+
+
+def load_records(
+    manifest: dict[str, Any],
+    schema: dict[str, Any],
+    *,
+    check_video_paths: bool,
+    max_errors: int,
+) -> tuple[list[dict[str, Any]], list[str]]:
+    tasks = manifest.get("tasks", [])
+    tasks = tasks if isinstance(tasks, list) else []
+    methods = manifest.get("methods", [])
+    methods = methods if isinstance(methods, list) else []
+    manifest_tasks = {str(task.get("task_family", "")) for task in tasks if isinstance(task, dict)}
+    manifest_methods = {str(method.get("name", "")) for method in methods if isinstance(method, dict)}
+
+    records: list[dict[str, Any]] = []
+    errors: list[str] = []
+    for task in tasks:
+        if not isinstance(task, dict):
+            errors.append("manifest task entry is not an object")
+            continue
+        log_value = str(task.get("log_jsonl", ""))
+        if not log_value:
+            errors.append(f"{task.get('task_family', 'unknown')}: missing log_jsonl")
+            continue
+        log_path = rel_path(log_value)
+        if not log_path.exists():
+            errors.append(f"{task.get('task_family', 'unknown')}: missing log file {log_value}")
+            continue
+        with log_path.open(encoding="utf-8") as handle:
+            for line_number, raw in enumerate(handle, start=1):
+                raw = raw.strip()
+                if not raw:
+                    continue
+                line_id = f"{log_value}:{line_number}"
+                try:
+                    record = json.loads(raw)
+                except json.JSONDecodeError as exc:
+                    errors.append(f"{line_id}: invalid JSON: {exc}")
+                    if len(errors) >= max_errors:
+                        return records, errors
+                    continue
+                if not isinstance(record, dict):
+                    errors.append(f"{line_id}: JSONL line must be an object")
+                    if len(errors) >= max_errors:
+                        return records, errors
+                    continue
+                errors.extend(
+                    validate_record(
+                        record,
+                        line_id=line_id,
+                        schema=schema,
+                        manifest_methods=manifest_methods,
+                        manifest_tasks=manifest_tasks,
+                        check_video_paths=check_video_paths,
+                    )
+                )
+                records.append(record)
+                if len(errors) >= max_errors:
+                    return records, errors
+    return records, errors
+
+
+def paired_key(record: dict[str, Any], schema: dict[str, Any]) -> tuple[Any, ...]:
+    fields = schema.get("paired_comparison_key", [])
+    return tuple(record.get(field) for field in fields)
+
+
+def summarize(records: list[dict[str, Any]], schema: dict[str, Any]) -> dict[str, Any]:
+    by_method: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    by_task_method: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    for record in records:
+        method = str(record["method"])
+        task = str(record["task_family"])
+        by_method[method].append(record)
+        by_task_method[(task, method)].append(record)
+
+    method_summary = {}
+    for method, method_records in sorted(by_method.items()):
+        method_summary[method] = {
+            "episodes": len(method_records),
+            "success": mean(1.0 if row["success"] else 0.0 for row in method_records),
+            "utility": mean(float(row["utility"]) for row in method_records),
+            "seam_failure": mean(1.0 if row["seam_failure"] else 0.0 for row in method_records),
+            "realized_seam_breach": mean(1.0 if row["realized_seam_breach"] else 0.0 for row in method_records),
+        }
+
+    candidate_baselines = {
+        method: stats
+        for method, stats in method_summary.items()
+        if method not in {PRIMARY_METHOD, ORACLE_METHOD}
+    }
+    strongest_baseline = None
+    if candidate_baselines:
+        strongest_baseline = max(
+            candidate_baselines,
+            key=lambda method: (candidate_baselines[method]["success"], candidate_baselines[method]["utility"]),
+        )
+
+    primary_stats = method_summary.get(PRIMARY_METHOD)
+    baseline_stats = method_summary.get(strongest_baseline) if strongest_baseline else None
+    success_margin = None
+    utility_margin = None
+    if primary_stats and baseline_stats:
+        success_margin = primary_stats["success"] - baseline_stats["success"]
+        utility_margin = primary_stats["utility"] - baseline_stats["utility"]
+
+    paired_groups: dict[tuple[Any, ...], dict[str, dict[str, Any]]] = defaultdict(dict)
+    for record in records:
+        paired_groups[paired_key(record, schema)][str(record["method"])] = record
+    paired_available = [
+        methods
+        for methods in paired_groups.values()
+        if PRIMARY_METHOD in methods and strongest_baseline and strongest_baseline in methods
+    ]
+    paired_win_rate = None
+    if paired_available:
+        wins = 0
+        for methods in paired_available:
+            primary = methods[PRIMARY_METHOD]
+            baseline = methods[strongest_baseline]
+            primary_tuple = (1.0 if primary["success"] else 0.0, float(primary["utility"]))
+            baseline_tuple = (1.0 if baseline["success"] else 0.0, float(baseline["utility"]))
+            if primary_tuple > baseline_tuple:
+                wins += 1
+        paired_win_rate = wins / len(paired_available)
+
+    proposed_records = by_method.get(PRIMARY_METHOD, [])
+    fixed_risk_budget = None
+    fixed_risk_breach = None
+    fixed_risk_coverage = None
+    if proposed_records:
+        fixed_risk_budget = mean(float(row["fixed_risk_budget"]) for row in proposed_records)
+        accepted = [
+            row
+            for row in proposed_records
+            if row["decision"] in {"accept", "repair", "transition"} and float(row["predicted_seam_risk"]) <= float(row["fixed_risk_budget"])
+        ]
+        fixed_risk_coverage = len(accepted) / len(proposed_records)
+        fixed_risk_breach = (
+            mean(1.0 if row["realized_seam_breach"] else 0.0 for row in accepted)
+            if accepted
+            else None
+        )
+
+    positive_tasks = 0
+    task_summary = {}
+    tasks = sorted({str(row["task_family"]) for row in records})
+    for task in tasks:
+        primary_task = by_task_method.get((task, PRIMARY_METHOD), [])
+        baseline_task = by_task_method.get((task, strongest_baseline), []) if strongest_baseline else []
+        primary_success = mean(1.0 if row["success"] else 0.0 for row in primary_task) if primary_task else None
+        baseline_success = mean(1.0 if row["success"] else 0.0 for row in baseline_task) if baseline_task else None
+        margin = primary_success - baseline_success if primary_success is not None and baseline_success is not None else None
+        if margin is not None and margin > 0:
+            positive_tasks += 1
+        task_summary[task] = {
+            "primary_episodes": len(primary_task),
+            "baseline_episodes": len(baseline_task),
+            "primary_success": primary_success,
+            "strongest_baseline_success": baseline_success,
+            "success_margin": margin,
+        }
+
+    return {
+        "version": "external_rollout_metrics_v1",
+        "episodes": len(records),
+        "task_families": tasks,
+        "methods": sorted(by_method),
+        "primary_method": PRIMARY_METHOD,
+        "strongest_external_baseline": strongest_baseline,
+        "method_summary": method_summary,
+        "task_summary": task_summary,
+        "external_success_margin": success_margin,
+        "external_utility_margin": utility_margin,
+        "paired_comparison_count": len(paired_available),
+        "paired_win_rate": paired_win_rate,
+        "fixed_risk_budget": fixed_risk_budget,
+        "fixed_risk_breach": fixed_risk_breach,
+        "fixed_risk_coverage": fixed_risk_coverage,
+        "positive_task_families": positive_tasks,
+        "external_task_families": len(tasks),
+    }
+
+
+def threshold_checks(summary: dict[str, Any], schema: dict[str, Any]) -> list[ValidationResult]:
+    thresholds = schema.get("primary_thresholds", {})
+    checks = []
+    for key in ("external_success_margin", "external_utility_margin", "paired_win_rate", "fixed_risk_coverage"):
+        value = summary.get(key)
+        threshold = thresholds.get(key)
+        checks.append(
+            ValidationResult(
+                value is not None and threshold is not None and float(value) >= float(threshold),
+                f"{key}: value={value}, threshold={threshold}",
+            )
+        )
+    breach = summary.get("fixed_risk_breach")
+    breach_threshold = thresholds.get("fixed_risk_breach")
+    checks.append(
+        ValidationResult(
+            breach is not None and breach_threshold is not None and float(breach) <= float(breach_threshold),
+            f"fixed_risk_breach: value={breach}, threshold={breach_threshold}",
+        )
+    )
+    positive = summary.get("positive_task_families")
+    positive_threshold = thresholds.get("positive_task_families")
+    checks.append(
+        ValidationResult(
+            positive is not None and positive_threshold is not None and int(positive) >= int(positive_threshold),
+            f"positive_task_families: value={positive}, threshold={positive_threshold}",
+        )
+    )
+    return checks
+
+
+def write_outputs(summary: dict[str, Any], checks: list[ValidationResult], errors: list[str]) -> None:
+    RESULTS.mkdir(exist_ok=True)
+    payload = {
+        "summary": summary,
+        "threshold_checks": [{"passed": check.passed, "message": check.message} for check in checks],
+        "schema_errors": errors,
+        "passed": not errors and all(check.passed for check in checks),
+    }
+    OUT_JSON.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    lines = [
+        "# External Rollout Metrics",
+        "",
+        f"Passed: `{str(payload['passed']).lower()}`.",
+        f"Episodes: `{summary.get('episodes', 0)}`.",
+        f"Primary method: `{summary.get('primary_method')}`.",
+        f"Strongest external baseline: `{summary.get('strongest_external_baseline')}`.",
+        "",
+        "## Threshold Checks",
+        "",
+    ]
+    for check in checks:
+        status = "pass" if check.passed else "fail"
+        lines.append(f"- `{status}` {check.message}")
+    lines.extend(["", "## Schema Errors", ""])
+    if errors:
+        for error in errors[:100]:
+            lines.append(f"- {error}")
+    else:
+        lines.append("- none")
+    OUT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Validate and recompute external rollout metrics for Paper 119.")
+    parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST, help="External validation manifest path.")
+    parser.add_argument("--schema", type=Path, default=DEFAULT_SCHEMA, help="External validation JSONL schema path.")
+    parser.add_argument("--write-results", action="store_true", help="Write results/external_rollout_metrics.{json,md}.")
+    parser.add_argument("--strict", action="store_true", help="Return non-zero unless schema and metric thresholds pass.")
+    parser.add_argument("--check-video-paths", action="store_true", help="Require every episode video_path to exist.")
+    parser.add_argument("--max-errors", type=int, default=100, help="Stop after this many schema errors.")
+    args = parser.parse_args()
+
+    if not args.manifest.exists():
+        print(f"External rollout validation: NOT_READY; missing manifest {args.manifest}")
+        if args.write_results:
+            write_outputs({"version": "external_rollout_metrics_v1", "episodes": 0}, [], [f"missing manifest {args.manifest}"])
+        return 1 if args.strict else 0
+    if not args.schema.exists():
+        raise SystemExit(f"missing schema {args.schema}")
+
+    manifest = read_json(args.manifest)
+    schema = read_json(args.schema)
+    records, errors = load_records(manifest, schema, check_video_paths=args.check_video_paths, max_errors=args.max_errors)
+    summary = summarize(records, schema) if records else {"version": "external_rollout_metrics_v1", "episodes": 0}
+    checks = threshold_checks(summary, schema) if records else []
+    passed = not errors and bool(records) and all(check.passed for check in checks)
+    if args.write_results:
+        write_outputs(summary, checks, errors)
+    status = "READY" if passed else "NOT_READY"
+    print(f"External rollout validation: {status}; episodes={summary.get('episodes', 0)}; schema_errors={len(errors)}")
+    if args.write_results:
+        print(f"Wrote {OUT_JSON}")
+        print(f"Wrote {OUT_MD}")
+    if args.strict and not passed:
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

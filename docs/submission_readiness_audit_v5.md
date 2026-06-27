@@ -1,6 +1,6 @@
 # Submission Readiness Audit v5
 
-Date: 2026-06-23
+Date: 2026-06-27
 
 Paper: 119 energy_landscape_skill_composition
 
@@ -27,17 +27,64 @@ ICLR-main ready: no
 - Best ablation success/utility gaps: `0.028125` / `0.043490`.
 - Stress endpoint success/utility margins: `0.103125` / `0.264045`.
 - Fixed-risk coverage/breach/gated success: `0.863021` / `0.000302` / `0.760108`.
+- Local falsification audit: episode-level hard-slice checks now reject abstention-gaming, cost/search-gaming, decorative-risk, cherry-picked-slice, and saturated-problem explanations while explicitly remaining non-external evidence.
+- Holdout robustness audit: withheld task-family, seam-regime, deployment-split, task-regime, and hash-fold checks remain positive locally, with worst task-regime success margin `0.021875` and utility margin `0.172559`; this is still non-external evidence.
+- Diagnostic mechanism audit: exported labels, seam decisions, and planner-edge updates have zero rule mismatches over 230,400 local rows, with all five failure labels and all five seam decisions observed in the proposed hard slice; this is still non-external evidence.
+- Comparative decision-quality audit: the proposed seam model accepts `0.404` of hard seams versus `0.000` for the predecessor, keeps accepted-seam breach above the `0.15` budget at `0.000`, and recovers 3,850 predecessor-abstained accepts with utility `+0.243`, success `+0.091`, and realized breach `-0.077`; this is still non-external evidence.
+- Predictive calibration audit: proposed hard-slice ECE10 is `0.007207` versus `0.014790` for the strongest predecessor, max bin gap is `0.012758`, risk-breach correlation is `0.970670`, and realized breach is monotone across 10 risk deciles; this is still non-external evidence.
+- Framing pass: manuscript now presents the method as a skill-seam world/action interface for prediction, diagnosis, repair/probe/abstain/transition decisions, planner edge-belief updates, and future planning.
+- Related-work pass: added CoStream, OAT, SIMPACT, PoCo, CEP, Diffusion Policy, runtime skill composition, EzSkiROS, latent robot skills, language/action compositionality, Yilun energy-based modeling, and the 2026 robot world-model survey to the generated bibliography and positioning.
+- Related-work coverage matrix: `docs/related_work_coverage_matrix.md`.
 
 ## Artifact Checks
 
 - PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `8C6CB80C3AF49B3A17497EE174F70D55F0D4801F2E961A5B6268857EA4C70E9C`.
-- PDF size: `657050` bytes.
-- PDF pages: `25`.
+- PDF SHA256: `0996818722E25CD719E418DDAB3444FA774036F637BC81C4085CD33A66D8736B`.
+- PDF size: `464927` bytes.
+- PDF pages: `29`.
 - Numbered PDF placement: Downloads only.
 - Desktop numbered PDF: absent.
 - Validator: passed.
-- Visual QA: pages 1, 4, 8, 14, 21, and 25 inspected.
+- Claim boundary audit: `results/claim_boundary_audit.md` passed and confirms the current package keeps the claim bounded.
+- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 13/17 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
+- Local falsification audit: `results/local_falsification_audit.md` passed and is included in the generated manuscript.
+- Holdout robustness audit: `results/holdout_robustness_audit.md` passed and is included in the generated manuscript.
+- Diagnostic mechanism audit: `results/diagnostic_mechanism_audit.md` passed and is included in the generated manuscript.
+- Comparative decision-quality audit: `results/decision_quality_audit.md` passed and is included in the generated manuscript.
+- Predictive calibration audit: `results/seam_prediction_calibration_audit.md` passed and is included in the generated manuscript.
+- Manuscript number audit: `results/manuscript_number_audit.md` passed and checks that reported margins, row counts, table values, local falsification numbers, diagnostic mechanism numbers, decision-quality numbers, predictive-calibration numbers, and holdout robustness numbers match generated result files.
+- Related-work audit: `results/related_work_audit.md` passed and checks citation coverage, novelty-boundary rows, and outreach/validation boundary wording across 12 required areas.
+- Reference integrity audit: `results/reference_integrity_audit.md` passed and checks required BibTeX fields, DOI/arXiv identifiers, and recent Haonan/Yilun-adjacent primary-source metadata.
+- Manuscript readability audit: `results/manuscript_readability_audit.md` passed and checks agenda framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and stale manual-polish blocker removal.
+- Presentation quality audit: `results/presentation_quality_audit.md` passed and checks PDF structure, source/log hygiene, hidden links, vector figures, canonical artifact parity, and internal-status leak prevention.
+- Figure readability audit: `results/figure_readability_audit.md` passed and checks render resolution, foreground density, contrast, edge margins, color detail, and manuscript references for all seven main figures.
+- Camera-ready design audit: `results/camera_ready_design_audit.md` passed and checks all 29 rendered PDF pages for density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
+- Full local build script: `scripts/build_submission_artifacts.ps1` regenerates the current local artifacts and validations.
+- External collection plan: `results/external_collection_plan.md` exists, passes, and expands the current high-fidelity route into 1,440 required JSONL records while explicitly remaining non-evidence.
+- Independent validation route: `external_validation/independent_validation_route.md`, `external_validation/independent_validation_route_matrix.csv`, and `results/independent_validation_route_audit.md` exist, pass, and define a non-Haonan route through public simulators and an independent robot-lab option while explicitly remaining non-evidence.
+- External fidelity acceptance audit: `external_validation/fidelity_acceptance_template.json` and `results/external_fidelity_acceptance_audit.md` exist, pass as a contract audit, and currently report `acceptance_ready=false` until a real robot or simulator provenance file is filled and declared by the manifest.
+- External collection runbook: `external_validation/collection_runbook.md`, `external_validation/operator_record_sheet.csv`, task cards, config templates, and `results/external_runbook_audit.md` exist, pass, and remain non-evidence collection scaffolding.
+- External collection runner harness: `external_validation/runner/README.md`, `external_validation/runner/backend_contract.py`, `external_validation/runner/real_collection_runner.py`, backend templates, and `results/external_runner_harness_audit.md` exist, pass, dry-run without writing logs, reject template backends/configs for actual collection, and remain non-evidence execution scaffolding.
+- External blind evaluation packet: `external_validation/blind_evaluation_protocol.md`, `external_validation/blinded_operator_sheet.csv`, `external_validation/method_alias_map.json`, and `results/external_blind_eval_audit.md` exist, pass, and provide deterministic per-reset randomization plus sealed method aliases while remaining non-evidence collection control.
+- External execution readiness audit: `external_validation/platform_qualification_checklist.md` and `results/external_execution_readiness_audit.md` exist, pass, and verify the independent operator packet is executable while strict evidence gates remain not ready.
+- External config schema/template audit: `external_validation/config_schema_v1.json` and `results/external_config_template_audit.md` exist and pass for templates; strict config evidence validation still fails until real configs exist.
+- External baseline implementation contract: `external_validation/baseline_implementation_contract.md`, `external_validation/baseline_implementation_matrix.csv`, per-method specs, and `results/external_baseline_contract_audit.md` exist, pass as a contract audit, and still report the non-oracle independent implementations as missing.
+- External baseline adapter scaffolds: `external_validation/baseline_adapter_scaffold.md`, scaffold directories under `external_validation/baselines/`, and `results/external_adapter_scaffold_audit.md` exist, pass as scaffold completeness checks, and are rejected as evidence until replaced by real independent implementations.
+- External adapter contract audit: `scripts/validate_external_adapters.py` and `results/external_adapter_contract_audit.md` pass as non-evidence checks for the required API, proposal fields, log fields, and hash reporting; strict adapter evidence validation still fails until real manifest-declared implementations replace scaffolds.
+- External reference adapter audit: `external_validation/baselines/common_reference_adapter.py`, per-method `adapter.py` files, `external_validation/reference_adapter_report.md`, and `results/external_reference_adapter_audit.md` exist, pass for all 12 methods, and are explicitly marked as implementation-only rather than rollout evidence.
+- External local dry-run audit: `scripts/build_external_local_dry_run.py`, `external_validation/local_dry_run/manifest.json`, and `results/external_local_dry_run_metrics.md` exist, pass over 1,440 schema-compatible local records, and are explicitly marked as non-evidence.
+- External adapter scaffold guard self-test: `scripts/self_test_external_adapter_scaffold_guard.py` passes and protects the strict audit against scaffold-as-evidence regression.
+- External manifest builder report: `results/external_manifest_builder_report.md` exists and confirms no manifest is written until real external logs/configs/checkpoints are supplied.
+- External evidence preflight matrix: `results/external_evidence_preflight.md` exists, passes as a fail-closed operator checklist, expects 1,440 external records, observes 0 real external records, reports `evidence_ready=false`, and is explicitly marked as non-evidence.
+- External evidence audit: `results/external_evidence_audit.md` exists and reports `submission_ready=false` because no real/high-fidelity manifest, logs, videos, checkpoints, manifest-declared independent baseline evidence, or manifest-vs-rollout metric agreement have been supplied.
+- External rollout metric audit: `results/external_rollout_metrics.md` exists and reports `passed=false` because no external manifest/log package has been supplied.
+- External rollout validator self-test: passed on temporary synthetic records, verifying metric recomputation and missing-field failure behavior only.
+- External full-pipeline evidence self-test: passed on a temporary synthetic package with manifest-declared configs, logs, video paths, checkpoints, implementations, recomputed rollout metrics, and release artifacts; it verifies tooling only and is not evidence.
+- Visual QA: final title page, overview page, main result figures, fixed-risk figures, and outreach preview figure page inspected after the reframing/figure pass.
+- Independent validation protocol: `docs/independent_validation_protocol.md`.
+- Haonan/Yilun outreach package: `docs/haonan_yilun_outreach_package.md`.
+- Outreach memo PDF: `outreach/paper119_one_page_memo.pdf` passed 1-page validation and visual QA.
+- Four-page preview PDF: `outreach/paper119_four_page_preview.pdf` passed 4-page validation and visual QA.
 
 ## Scope Blockers
 
@@ -46,7 +93,11 @@ ICLR-main ready: no
 - No released skill-energy or policy checkpoints.
 - No calibrated contact-force, camera, or state logs.
 - No hardware rollout videos.
-- No independent baseline implementations.
-- Manual related-work pass is not yet full-paper complete.
+- No independent manifest-declared baseline evidence from real external runs.
+- Strict adapter-contract evidence validation over manifest-declared real implementations and logs does not pass yet.
+- External evidence strict audit does not pass yet.
+- External rollout-log strict validation does not pass yet.
+- Related-work/reference/readability coverage is now machine-audited across the target novelty boundary; human taste review can still improve prose, but it is no longer a tracked readiness gap.
+- Camera-ready design is now machine-audited, but final human taste review can still improve polish without changing the evidence state.
 
 Conclusion: the package is a strong local submission candidate, but hostile review would still be justified in rejecting an ICLR-main claim on external-evidence grounds.

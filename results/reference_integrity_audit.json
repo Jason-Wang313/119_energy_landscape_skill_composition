@@ -1,0 +1,359 @@
+{
+  "checked_entries": 26,
+  "checks": [
+    {
+      "detail": "entries=26",
+      "name": "bib_entries_parse",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "all_cited_keys_have_entries",
+      "passed": true
+    },
+    {
+      "detail": "uncited=[]",
+      "name": "all_bib_entries_are_cited",
+      "passed": true
+    },
+    {
+      "detail": "duplicates=[]",
+      "name": "no_duplicate_keys",
+      "passed": true
+    },
+    {
+      "detail": "hits=[]",
+      "name": "no_placeholder_bib_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "required_fields_present",
+      "passed": true
+    },
+    {
+      "detail": "bad_years=[]",
+      "name": "years_in_range",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "recent_entries_have_primary_identifier",
+      "passed": true
+    },
+    {
+      "detail": "openx2023",
+      "name": "recent_source_exists_openx2023",
+      "passed": true
+    },
+    {
+      "detail": "Open X-Embodiment: Robotic learning datasets and {RT-X} models",
+      "name": "recent_source_title_openx2023",
+      "passed": true
+    },
+    {
+      "detail": "2310.08864",
+      "name": "recent_source_arxiv_openx2023",
+      "passed": true
+    },
+    {
+      "detail": "https://arxiv.org/abs/2310.08864",
+      "name": "recent_source_url_openx2023",
+      "passed": true
+    },
+    {
+      "detail": "du2019implicit",
+      "name": "recent_source_exists_du2019implicit",
+      "passed": true
+    },
+    {
+      "detail": "Implicit Generation and Generalization in Energy-Based Models",
+      "name": "recent_source_title_du2019implicit",
+      "passed": true
+    },
+    {
+      "detail": "1903.08689",
+      "name": "recent_source_arxiv_du2019implicit",
+      "passed": true
+    },
+    {
+      "detail": "https://arxiv.org/abs/1903.08689",
+      "name": "recent_source_url_du2019implicit",
+      "passed": true
+    },
+    {
+      "detail": "wang2024poco",
+      "name": "recent_source_exists_wang2024poco",
+      "passed": true
+    },
+    {
+      "detail": "{PoCo}: Policy Composition from and for Heterogeneous Robot Learning",
+      "name": "recent_source_title_wang2024poco",
+      "passed": true
+    },
+    {
+      "detail": "2402.02511",
+      "name": "recent_source_arxiv_wang2024poco",
+      "passed": true
+    },
+    {
+      "detail": "https://arxiv.org/abs/2402.02511",
+      "name": "recent_source_url_wang2024poco",
+      "passed": true
+    },
+    {
+      "detail": "liu2026simpact",
+      "name": "recent_source_exists_liu2026simpact",
+      "passed": true
+    },
+    {
+      "detail": "{SIMPACT}: Simulation-Enabled Action Planning using Vision-Language Models",
+      "name": "recent_source_title_liu2026simpact",
+      "passed": true
+    },
+    {
+      "detail": "2512.05955",
+      "name": "recent_source_arxiv_liu2026simpact",
+      "passed": true
+    },
+    {
+      "detail": "https://arxiv.org/abs/2512.05955",
+      "name": "recent_source_url_liu2026simpact",
+      "passed": true
+    },
+    {
+      "detail": " IEEE/CVF Conference on Computer Vision and Pattern Recognition",
+      "name": "recent_source_venue_liu2026simpact",
+      "passed": true
+    },
+    {
+      "detail": "Liu, Haowen and Chen, Haonan and Du, Yilun and others",
+      "name": "recent_source_author_liu2026simpact_Haonan_Chen",
+      "passed": true
+    },
+    {
+      "detail": "Liu, Haowen and Chen, Haonan and Du, Yilun and others",
+      "name": "recent_source_author_liu2026simpact_Yilun_Du",
+      "passed": true
+    },
+    {
+      "detail": "liu2026oat",
+      "name": "recent_source_exists_liu2026oat",
+      "passed": true
+    },
+    {
+      "detail": "{OAT}: Ordered Action Tokenization",
+      "name": "recent_source_title_liu2026oat",
+      "passed": true
+    },
+    {
+      "detail": "2602.04215",
+      "name": "recent_source_arxiv_liu2026oat",
+      "passed": true
+    },
+    {
+      "detail": "https://arxiv.org/abs/2602.04215",
+      "name": "recent_source_url_liu2026oat",
+      "passed": true
+    },
+    {
+      "detail": "Liu, Chaoqi and Chen, Haonan and Du, Yilun and others",
+      "name": "recent_source_author_liu2026oat_Haonan_Chen",
+      "passed": true
+    },
+    {
+      "detail": "Liu, Chaoqi and Chen, Haonan and Du, Yilun and others",
+      "name": "recent_source_author_liu2026oat_Yilun_Du",
+      "passed": true
+    },
+    {
+      "detail": "hou2026worldmodel",
+      "name": "recent_source_exists_hou2026worldmodel",
+      "passed": true
+    },
+    {
+      "detail": "World Model for Robot Learning: A Comprehensive Survey",
+      "name": "recent_source_title_hou2026worldmodel",
+      "passed": true
+    },
+    {
+      "detail": "2605.00080",
+      "name": "recent_source_arxiv_hou2026worldmodel",
+      "passed": true
+    },
+    {
+      "detail": "https://arxiv.org/abs/2605.00080",
+      "name": "recent_source_url_hou2026worldmodel",
+      "passed": true
+    },
+    {
+      "detail": "Hou, Bohan and Du, Yilun and Yang, Jianfei and others",
+      "name": "recent_source_author_hou2026worldmodel_Yilun_Du",
+      "passed": true
+    },
+    {
+      "detail": "chen2026costream",
+      "name": "recent_source_exists_chen2026costream",
+      "passed": true
+    },
+    {
+      "detail": "{CoStream}: Composing Simple Behaviors for Generalizable Complex Manipulation",
+      "name": "recent_source_title_chen2026costream",
+      "passed": true
+    },
+    {
+      "detail": "2606.26423",
+      "name": "recent_source_arxiv_chen2026costream",
+      "passed": true
+    },
+    {
+      "detail": "https://arxiv.org/abs/2606.26423",
+      "name": "recent_source_url_chen2026costream",
+      "passed": true
+    },
+    {
+      "detail": "Chen, Haonan and Du, Yilun and others",
+      "name": "recent_source_author_chen2026costream_Haonan_Chen",
+      "passed": true
+    },
+    {
+      "detail": "Chen, Haonan and Du, Yilun and others",
+      "name": "recent_source_author_chen2026costream_Yilun_Du",
+      "passed": true
+    },
+    {
+      "detail": "urain2021cep",
+      "name": "doi_source_exists_urain2021cep",
+      "passed": true
+    },
+    {
+      "detail": "10.15607/RSS.2021.XVII.052",
+      "name": "doi_matches_urain2021cep",
+      "passed": true
+    },
+    {
+      "detail": "pane2021runtime",
+      "name": "doi_source_exists_pane2021runtime",
+      "passed": true
+    },
+    {
+      "detail": "10.1109/LRA.2021.3094498",
+      "name": "doi_matches_pane2021runtime",
+      "passed": true
+    },
+    {
+      "detail": "rizwan2025ezskiros",
+      "name": "doi_source_exists_rizwan2025ezskiros",
+      "passed": true
+    },
+    {
+      "detail": "10.3389/frobt.2024.1363443",
+      "name": "doi_matches_rizwan2025ezskiros",
+      "passed": true
+    },
+    {
+      "detail": "chi2023diffusionpolicy",
+      "name": "doi_source_exists_chi2023diffusionpolicy",
+      "passed": true
+    },
+    {
+      "detail": "10.15607/RSS.2023.XIX.026",
+      "name": "doi_matches_chi2023diffusionpolicy",
+      "passed": true
+    },
+    {
+      "detail": "julian2020latent",
+      "name": "doi_source_exists_julian2020latent",
+      "passed": true
+    },
+    {
+      "detail": "10.1177/0278364920944474",
+      "name": "doi_matches_julian2020latent",
+      "passed": true
+    },
+    {
+      "detail": "vijayaraghavan2025compositionality",
+      "name": "doi_source_exists_vijayaraghavan2025compositionality",
+      "passed": true
+    },
+    {
+      "detail": "10.1126/scirobotics.adp0751",
+      "name": "doi_matches_vijayaraghavan2025compositionality",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "recent_outreach_sources_cited",
+      "passed": true
+    }
+  ],
+  "cited_keys": [
+    "brohan2023rt1",
+    "chen2026costream",
+    "chi2023diffusionpolicy",
+    "du2019implicit",
+    "florence2022implicit",
+    "garrett2021integrated",
+    "hou2026worldmodel",
+    "ijspeert2013dmp",
+    "janner2019mbpo",
+    "julian2020latent",
+    "kaelbling2011tamp",
+    "khansari2011stable",
+    "khatib1986potential",
+    "koditschek1989navigation",
+    "konidaris2009skillchaining",
+    "lecun2006energy",
+    "liu2026oat",
+    "liu2026simpact",
+    "openx2023",
+    "pane2021runtime",
+    "ratliff2009chomp",
+    "rizwan2025ezskiros",
+    "sutton1999options",
+    "urain2021cep",
+    "vijayaraghavan2025compositionality",
+    "wang2024poco"
+  ],
+  "doi_expectations": {
+    "chi2023diffusionpolicy": "10.15607/RSS.2023.XIX.026",
+    "julian2020latent": "10.1177/0278364920944474",
+    "pane2021runtime": "10.1109/LRA.2021.3094498",
+    "rizwan2025ezskiros": "10.3389/frobt.2024.1363443",
+    "urain2021cep": "10.15607/RSS.2021.XVII.052",
+    "vijayaraghavan2025compositionality": "10.1126/scirobotics.adp0751"
+  },
+  "failed_checks": [],
+  "passed": true,
+  "primary_source_expectations": {
+    "chen2026costream": {
+      "arxiv": "2606.26423",
+      "title": "CoStream"
+    },
+    "du2019implicit": {
+      "arxiv": "1903.08689",
+      "title": "Implicit Generation and Generalization"
+    },
+    "hou2026worldmodel": {
+      "arxiv": "2605.00080",
+      "title": "World Model for Robot Learning"
+    },
+    "liu2026oat": {
+      "arxiv": "2602.04215",
+      "title": "OAT"
+    },
+    "liu2026simpact": {
+      "arxiv": "2512.05955",
+      "title": "SIMPACT"
+    },
+    "openx2023": {
+      "arxiv": "2310.08864",
+      "title": "Open X-Embodiment"
+    },
+    "wang2024poco": {
+      "arxiv": "2402.02511",
+      "title": "PoCo"
+    }
+  },
+  "version": "reference_integrity_audit_v1"
+}

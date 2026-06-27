@@ -1,0 +1,189 @@
+{
+  "adapter_count": 12,
+  "adapter_results": [
+    {
+      "errors": [],
+      "method": "barrier_certified_energy_composer_v5",
+      "passed": true,
+      "path": "external_validation/baselines/barrier_certified_energy_composer_v5/adapter.py"
+    },
+    {
+      "errors": [],
+      "method": "behavior_cloned_skill_chain",
+      "passed": true,
+      "path": "external_validation/baselines/behavior_cloned_skill_chain/adapter.py"
+    },
+    {
+      "errors": [],
+      "method": "cem_trajectory_composer",
+      "passed": true,
+      "path": "external_validation/baselines/cem_trajectory_composer/adapter.py"
+    },
+    {
+      "errors": [],
+      "method": "diffusion_skill_stitcher",
+      "passed": true,
+      "path": "external_validation/baselines/diffusion_skill_stitcher/adapter.py"
+    },
+    {
+      "errors": [],
+      "method": "energy_compatibility_heuristic",
+      "passed": true,
+      "path": "external_validation/baselines/energy_compatibility_heuristic/adapter.py"
+    },
+    {
+      "errors": [],
+      "method": "greedy_module_sequence",
+      "passed": true,
+      "path": "external_validation/baselines/greedy_module_sequence/adapter.py"
+    },
+    {
+      "errors": [],
+      "method": "option_graph_planner",
+      "passed": true,
+      "path": "external_validation/baselines/option_graph_planner/adapter.py"
+    },
+    {
+      "errors": [],
+      "method": "oracle_basin_composer",
+      "passed": true,
+      "path": "external_validation/baselines/oracle_basin_composer/adapter.py"
+    },
+    {
+      "errors": [],
+      "method": "proposed_energy_landscape_composer_v4_1",
+      "passed": true,
+      "path": "external_validation/baselines/proposed_energy_landscape_composer_v4_1/adapter.py"
+    },
+    {
+      "errors": [],
+      "method": "residual_rl_composer",
+      "passed": true,
+      "path": "external_validation/baselines/residual_rl_composer/adapter.py"
+    },
+    {
+      "errors": [],
+      "method": "stable_dmp_handoff",
+      "passed": true,
+      "path": "external_validation/baselines/stable_dmp_handoff/adapter.py"
+    },
+    {
+      "errors": [],
+      "method": "tamp_feasibility_screen",
+      "passed": true,
+      "path": "external_validation/baselines/tamp_feasibility_screen/adapter.py"
+    }
+  ],
+  "checks": [
+    {
+      "detail": "external_validation/baselines/common_reference_adapter.py",
+      "name": "common_reference_adapter_exists",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "reference_adapters_exist",
+      "passed": true
+    },
+    {
+      "detail": "methods=12",
+      "name": "method_count_ge_12",
+      "passed": true
+    },
+    {
+      "detail": "non_oracle=11",
+      "name": "non_oracle_reference_adapters_ge_11",
+      "passed": true
+    },
+    {
+      "detail": "failed=[]",
+      "name": "all_reference_adapters_pass_contract",
+      "passed": true
+    },
+    {
+      "detail": "reference adapters are executable implementation shims, not robot or high-fidelity rollout evidence",
+      "name": "audit_not_rollout_evidence",
+      "passed": true
+    }
+  ],
+  "entries": [
+    {
+      "adapter": "external_validation/baselines/barrier_certified_energy_composer_v5/adapter.py",
+      "metadata": "external_validation/baselines/barrier_certified_energy_composer_v5/reference_adapter_metadata.json",
+      "method": "barrier_certified_energy_composer_v5",
+      "oracle_boundary": "non_oracle_reference_adapter"
+    },
+    {
+      "adapter": "external_validation/baselines/behavior_cloned_skill_chain/adapter.py",
+      "metadata": "external_validation/baselines/behavior_cloned_skill_chain/reference_adapter_metadata.json",
+      "method": "behavior_cloned_skill_chain",
+      "oracle_boundary": "non_oracle_reference_adapter"
+    },
+    {
+      "adapter": "external_validation/baselines/cem_trajectory_composer/adapter.py",
+      "metadata": "external_validation/baselines/cem_trajectory_composer/reference_adapter_metadata.json",
+      "method": "cem_trajectory_composer",
+      "oracle_boundary": "non_oracle_reference_adapter"
+    },
+    {
+      "adapter": "external_validation/baselines/diffusion_skill_stitcher/adapter.py",
+      "metadata": "external_validation/baselines/diffusion_skill_stitcher/reference_adapter_metadata.json",
+      "method": "diffusion_skill_stitcher",
+      "oracle_boundary": "non_oracle_reference_adapter"
+    },
+    {
+      "adapter": "external_validation/baselines/energy_compatibility_heuristic/adapter.py",
+      "metadata": "external_validation/baselines/energy_compatibility_heuristic/reference_adapter_metadata.json",
+      "method": "energy_compatibility_heuristic",
+      "oracle_boundary": "non_oracle_reference_adapter"
+    },
+    {
+      "adapter": "external_validation/baselines/greedy_module_sequence/adapter.py",
+      "metadata": "external_validation/baselines/greedy_module_sequence/reference_adapter_metadata.json",
+      "method": "greedy_module_sequence",
+      "oracle_boundary": "non_oracle_reference_adapter"
+    },
+    {
+      "adapter": "external_validation/baselines/option_graph_planner/adapter.py",
+      "metadata": "external_validation/baselines/option_graph_planner/reference_adapter_metadata.json",
+      "method": "option_graph_planner",
+      "oracle_boundary": "non_oracle_reference_adapter"
+    },
+    {
+      "adapter": "external_validation/baselines/oracle_basin_composer/adapter.py",
+      "metadata": "external_validation/baselines/oracle_basin_composer/reference_adapter_metadata.json",
+      "method": "oracle_basin_composer",
+      "oracle_boundary": "post_hoc_upper_bound_only"
+    },
+    {
+      "adapter": "external_validation/baselines/proposed_energy_landscape_composer_v4_1/adapter.py",
+      "metadata": "external_validation/baselines/proposed_energy_landscape_composer_v4_1/reference_adapter_metadata.json",
+      "method": "proposed_energy_landscape_composer_v4_1",
+      "oracle_boundary": "non_oracle_reference_adapter"
+    },
+    {
+      "adapter": "external_validation/baselines/residual_rl_composer/adapter.py",
+      "metadata": "external_validation/baselines/residual_rl_composer/reference_adapter_metadata.json",
+      "method": "residual_rl_composer",
+      "oracle_boundary": "non_oracle_reference_adapter"
+    },
+    {
+      "adapter": "external_validation/baselines/stable_dmp_handoff/adapter.py",
+      "metadata": "external_validation/baselines/stable_dmp_handoff/reference_adapter_metadata.json",
+      "method": "stable_dmp_handoff",
+      "oracle_boundary": "non_oracle_reference_adapter"
+    },
+    {
+      "adapter": "external_validation/baselines/tamp_feasibility_screen/adapter.py",
+      "metadata": "external_validation/baselines/tamp_feasibility_screen/reference_adapter_metadata.json",
+      "method": "tamp_feasibility_screen",
+      "oracle_boundary": "non_oracle_reference_adapter"
+    }
+  ],
+  "failed_adapters": [],
+  "implementation_only_not_rollout_evidence": true,
+  "non_oracle_adapter_count": 11,
+  "not_external_evidence": true,
+  "passed": true,
+  "version": "external_reference_adapter_audit_v1"
+}

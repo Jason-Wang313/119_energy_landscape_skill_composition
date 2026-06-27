@@ -1,0 +1,197 @@
+{
+  "abstract_words": 228,
+  "checks": [
+    {
+      "detail": "words=228",
+      "name": "abstract_exists",
+      "passed": true
+    },
+    {
+      "detail": "words=228",
+      "name": "abstract_length_conference_reasonable",
+      "passed": true
+    },
+    {
+      "detail": "positions=[2145, 5187, 8375, 10153, 11027, 12545, 20305, 24179]",
+      "name": "required_sections_present",
+      "passed": true
+    },
+    {
+      "detail": "positions=[2145, 5187, 8375, 10153, 11027, 12545, 20305, 24179]",
+      "name": "required_sections_in_order",
+      "passed": true
+    },
+    {
+      "detail": "compact world/action model at the skill seam",
+      "name": "core_frame_term_compact world/action model at th",
+      "passed": true
+    },
+    {
+      "detail": "action-conditioned physical interface between a skill library and a planner",
+      "name": "core_frame_term_action-conditioned physical inte",
+      "passed": true
+    },
+    {
+      "detail": "adaptive physical world/action models for embodied agents",
+      "name": "core_frame_term_adaptive physical world/action m",
+      "passed": true
+    },
+    {
+      "detail": "prediction-action-update loop",
+      "name": "core_frame_term_prediction-action-update loop",
+      "passed": true
+    },
+    {
+      "detail": "accept, repair, probe, abstain",
+      "name": "core_frame_term_accept, repair, probe, abstain",
+      "passed": true
+    },
+    {
+      "detail": "choose a different transition",
+      "name": "core_frame_term_choose a different transition",
+      "passed": true
+    },
+    {
+      "detail": "planner-edge updates for future planning",
+      "name": "core_frame_term_planner-edge updates for future ",
+      "passed": true
+    },
+    {
+      "detail": "planner's edge beliefs",
+      "name": "core_frame_term_planner's edge beliefs",
+      "passed": true
+    },
+    {
+      "detail": "not a universal world model",
+      "name": "boundary_term_not a universal world model",
+      "passed": true
+    },
+    {
+      "detail": "rather than a new low-level controller",
+      "name": "boundary_term_rather than a new low-level cont",
+      "passed": true
+    },
+    {
+      "detail": "bounded claim",
+      "name": "boundary_term_bounded claim",
+      "passed": true
+    },
+    {
+      "detail": "local study",
+      "name": "boundary_term_local study",
+      "passed": true
+    },
+    {
+      "detail": "external robot or high-fidelity validation",
+      "name": "boundary_term_external robot or high-fidelity ",
+      "passed": true
+    },
+    {
+      "detail": "deployment-level claims",
+      "name": "boundary_term_deployment-level claims",
+      "passed": true
+    },
+    {
+      "detail": "Composable Energy Policies",
+      "name": "matrix_term_Composable Energy Policies",
+      "passed": true
+    },
+    {
+      "detail": "Runtime Skill Composition",
+      "name": "matrix_term_Runtime Skill Composition",
+      "passed": true
+    },
+    {
+      "detail": "World/action models and hierarchical world models",
+      "name": "matrix_term_World/action models and hierarch",
+      "passed": true
+    },
+    {
+      "detail": "Closest outreach works",
+      "name": "matrix_term_Closest outreach works",
+      "passed": true
+    },
+    {
+      "detail": "External Validation Boundary",
+      "name": "matrix_term_External Validation Boundary",
+      "passed": true
+    },
+    {
+      "detail": "count=1",
+      "name": "identity_phrase_not_overused",
+      "passed": true
+    },
+    {
+      "detail": "count=8",
+      "name": "world_action_framing_not_overdone",
+      "passed": true
+    },
+    {
+      "detail": "contact-rich count=1",
+      "name": "contact_rich_is_not_the_identity",
+      "passed": true
+    },
+    {
+      "detail": "contact-rich examples are positioned as a testbed",
+      "name": "contact_positioning_is_testbed",
+      "passed": true
+    },
+    {
+      "detail": "hits=[]",
+      "name": "no_stale_internal_or_manual_polish_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing_scope_evidence=['no_real_robot_rollouts', 'no_accepted_high_fidelity_skill_composition_simulation', 'no_released_skill_energy_or_policy_checkpoint', 'no_calibrated_contact_force_camera_or_state_logs', 'no_hardware_rollout_videos', 'no_independent_baseline_implementations']",
+      "name": "summary_scope_blockers_are_external_only",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "all_citations_have_bib_entries",
+      "passed": true
+    },
+    {
+      "detail": "entries=26",
+      "name": "bibliography_has_enough_entries",
+      "passed": true
+    },
+    {
+      "detail": "results/related_work_audit.json",
+      "name": "related_work_audit_passed",
+      "passed": true
+    },
+    {
+      "detail": "results/reference_integrity_audit.json",
+      "name": "reference_integrity_audit_passed",
+      "passed": true
+    },
+    {
+      "detail": "results/manuscript_number_audit.json",
+      "name": "number_audit_passed",
+      "passed": true
+    },
+    {
+      "detail": "long=[]",
+      "name": "main_body_paragraphs_not_overlong",
+      "passed": true
+    },
+    {
+      "detail": "current evidence supports a bounded claim",
+      "name": "abstract_is_bounded",
+      "passed": true
+    },
+    {
+      "detail": "scope section has evidence contract",
+      "name": "scope_section_demands_external_evidence",
+      "passed": true
+    }
+  ],
+  "contact_rich_count": 1,
+  "failed_checks": [],
+  "main_body_paragraphs": 32,
+  "not_external_evidence": true,
+  "passed": true,
+  "version": "manuscript_readability_audit_v1",
+  "world_action_phrase_count": 8
+}

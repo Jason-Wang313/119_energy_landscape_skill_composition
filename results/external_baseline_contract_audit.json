@@ -1,0 +1,108 @@
+{
+  "adapter_api": {
+    "initialize": "load method config/checkpoint and declare method_name, version, and hashes",
+    "log": "emit predicted risk, diagnosis, decision, repair action, policy/config hash, and timing for the episode JSONL record",
+    "propose": "given shared observation, terminal samples, skill_i, skill_j, and compute budget, return seam decision and optional repair",
+    "reset": "clear method-local state between paired resets unless the method explicitly models online memory and logs it"
+  },
+  "checks": [
+    {
+      "detail": "contract, matrix, specs, and audit are scaffolding only",
+      "name": "not_external_evidence_declared",
+      "passed": true
+    },
+    {
+      "detail": "method_count=12",
+      "name": "method_count_ge_12",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "all_required_methods_present",
+      "passed": true
+    },
+    {
+      "detail": "rows=12, methods=12",
+      "name": "matrix_rows_match_methods",
+      "passed": true
+    },
+    {
+      "detail": "specs=12, methods=12",
+      "name": "spec_files_match_methods",
+      "passed": true
+    },
+    {
+      "detail": "invariants=6",
+      "name": "fairness_invariants_declared",
+      "passed": true
+    },
+    {
+      "detail": "all non-oracle rows require independent source",
+      "name": "non_oracle_requires_independent_source",
+      "passed": true
+    },
+    {
+      "detail": "oracle_rows=[{'not_external_evidence': 'true', 'method': 'oracle_basin_composer', 'role': 'post hoc upper bound only', 'requires_independent_source': 'false', 'expected_adapter_dir': 'post_hoc_upper_bound', 'required_entrypoint': 'evaluate_oracle_upper_bound', 'same_skill_library': 'true', 'same_observation_interface': 'true', 'same_compute_budget': 'not_applicable', 'logging_required': 'true', 'oracle_boundary': 'post_hoc_only', 'implementation_status': 'post_hoc_upper_bound_only'}]",
+      "name": "oracle_post_hoc_only",
+      "passed": true
+    },
+    {
+      "detail": "missing_implementations=['greedy_module_sequence', 'behavior_cloned_skill_chain', 'option_graph_planner', 'tamp_feasibility_screen', 'stable_dmp_handoff', 'diffusion_skill_stitcher', 'cem_trajectory_composer', 'residual_rl_composer', 'energy_compatibility_heuristic', 'proposed_energy_landscape_composer_v4_1', 'barrier_certified_energy_composer_v5']",
+      "name": "implementations_not_marked_ready",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\baseline_implementation_contract.md",
+      "name": "contract_file_exists",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\baseline_implementation_matrix.csv",
+      "name": "matrix_file_exists",
+      "passed": true
+    }
+  ],
+  "contract": "external_validation/baseline_implementation_contract.md",
+  "fairness_invariants": [
+    "same skill library for every non-oracle method",
+    "same initial state, scene_id, seed, and skill pair for paired comparisons",
+    "same observation interface and no hidden state except where the platform exposes it to all methods",
+    "same compute budget or a predeclared budget measured in wall-clock time and simulator queries",
+    "same logging schema, video requirement, and policy/config hash requirement",
+    "oracle_basin_composer is reported only as a post hoc upper bound and is excluded from strongest non-oracle selection"
+  ],
+  "implementations_ready": false,
+  "matrix": "external_validation/baseline_implementation_matrix.csv",
+  "method_count": 12,
+  "missing_implementations": [
+    "greedy_module_sequence",
+    "behavior_cloned_skill_chain",
+    "option_graph_planner",
+    "tamp_feasibility_screen",
+    "stable_dmp_handoff",
+    "diffusion_skill_stitcher",
+    "cem_trajectory_composer",
+    "residual_rl_composer",
+    "energy_compatibility_heuristic",
+    "proposed_energy_landscape_composer_v4_1",
+    "barrier_certified_energy_composer_v5"
+  ],
+  "non_oracle_method_count": 11,
+  "not_external_evidence": true,
+  "passed": true,
+  "spec_files": [
+    "external_validation/baseline_specs/greedy_module_sequence.json",
+    "external_validation/baseline_specs/behavior_cloned_skill_chain.json",
+    "external_validation/baseline_specs/option_graph_planner.json",
+    "external_validation/baseline_specs/tamp_feasibility_screen.json",
+    "external_validation/baseline_specs/stable_dmp_handoff.json",
+    "external_validation/baseline_specs/diffusion_skill_stitcher.json",
+    "external_validation/baseline_specs/cem_trajectory_composer.json",
+    "external_validation/baseline_specs/residual_rl_composer.json",
+    "external_validation/baseline_specs/energy_compatibility_heuristic.json",
+    "external_validation/baseline_specs/proposed_energy_landscape_composer_v4_1.json",
+    "external_validation/baseline_specs/barrier_certified_energy_composer_v5.json",
+    "external_validation/baseline_specs/oracle_basin_composer.json"
+  ],
+  "version": "external_baseline_contract_audit_v1"
+}

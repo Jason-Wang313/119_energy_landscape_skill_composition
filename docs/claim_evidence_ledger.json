@@ -1,0 +1,184 @@
+{
+  "version": "claim_evidence_ledger_v1",
+  "current_decision": "STRONG_REVISE",
+  "iclr_main_ready": false,
+  "scope_gate_pass": false,
+  "core_identity": "A local world/action model for robot skill seams: predict handoff failure, diagnose why, choose repair/probe/abstain/transition, and update planner edge beliefs.",
+  "permitted_claims": [
+    {
+      "name": "bounded_mechanism_claim",
+      "claim": "Barrier-certified seam models can improve skill composition when basin overlap, barrier height, descent continuity, repair cost, and seam-risk calibration are estimable at the handoff.",
+      "evidence": ["paper/main.tex", "results/summary.json", "results/hard_aggregate_metrics.csv", "results/ablation_metrics.csv"]
+    },
+    {
+      "name": "local_result_claim",
+      "claim": "In the frozen local rollout suite, v5 improves hard-slice success and utility over the strongest non-oracle predecessor.",
+      "evidence": ["results/summary.json", "results/hard_aggregate_metrics.csv", "paper/main.tex", "results/manuscript_number_audit.json"]
+    },
+    {
+      "name": "local_holdout_robustness_claim",
+      "claim": "In local withheld-slice audits, the v5 gain remains positive across task-family, seam-regime, split, task-regime, and deterministic hash-fold holdouts.",
+      "evidence": ["results/holdout_robustness_audit.json", "results/holdout_robustness_audit.md", "paper/generated_holdout_robustness_table.tex", "paper/main.tex"]
+    },
+    {
+      "name": "diagnostic_claim",
+      "claim": "The method reports seam failure, barrier violation, basin alignment, descent continuity, risk calibration, and realized seam breach diagnostics.",
+      "evidence": ["results/metrics.csv", "results/failure_cases.csv", "paper/main.tex", "results/manuscript_number_audit.json"]
+    },
+    {
+      "name": "diagnostic_mechanism_consistency_claim",
+      "claim": "The local rollout artifacts expose diagnostic labels, seam decisions, and planner-edge updates, and a machine-checkable local audit verifies that the exported labels, decisions, and updates are rule-consistent while preserving the external-validation boundary.",
+      "evidence": ["results/diagnostic_mechanism_audit.json", "results/diagnostic_mechanism_audit.md", "paper/generated_diagnostic_mechanism_table.tex", "paper/main.tex"]
+    },
+    {
+      "name": "local_decision_quality_claim",
+      "claim": "On the local hard slice, the v5 seam decision layer recovers useful accepted transitions that the strongest predecessor abstains from, while keeping accepted-seam breach above the fixed-risk budget near zero.",
+      "evidence": ["results/decision_quality_audit.json", "results/decision_quality_audit.md", "paper/generated_decision_quality_table.tex", "paper/main.tex"]
+    },
+    {
+      "name": "local_predictive_calibration_claim",
+      "claim": "On the local hard slice, predicted seam risk tracks realized seam breach with low ten-bin calibration error, monotone risk deciles, and decision-relevant utility separation while preserving the external-validation boundary.",
+      "evidence": ["results/seam_prediction_calibration_audit.json", "results/seam_prediction_calibration_audit.md", "paper/generated_seam_prediction_calibration_table.tex", "paper/main.tex"]
+    },
+    {
+      "name": "external_validation_contract_claim",
+      "claim": "The repository defines a machine-checkable external validation contract, but the contract currently does not pass because no real/high-fidelity evidence package exists.",
+      "evidence": ["external_validation/log_schema_v1.json", "scripts/build_external_collection_plan.py", "results/external_collection_plan.json", "scripts/validate_external_rollouts.py", "scripts/audit_external_evidence.py", "results/external_evidence_audit.json"]
+    },
+    {
+      "name": "external_evidence_pipeline_self_test_claim",
+      "claim": "The repository includes a tooling-only self-test showing that the strict external validation path can accept a complete temporary manifest/config/log/video/checkpoint/implementation fixture, while leaving the real repository evidence state untouched.",
+      "evidence": ["scripts/self_test_external_evidence_pipeline.py", "scripts/audit_external_evidence.py", "scripts/validate_external_rollouts.py", "scripts/validate_external_configs.py", "external_validation/README.md"]
+    },
+    {
+      "name": "submission_readiness_gap_claim",
+      "claim": "The repository includes a requirement-level gap audit that maps the active submission objective to satisfied, missing, and human-polish requirements and currently reports the objective as incomplete.",
+      "evidence": ["scripts/audit_submission_readiness_gap.py", "results/submission_readiness_gap_audit.json", "results/submission_readiness_gap_audit.md", "docs/submission_readiness_audit_v5.md"]
+    },
+    {
+      "name": "external_collection_plan_claim",
+      "claim": "The repository provides a non-evidence collection schedule for producing independent high-fidelity validation records before any Haonan/Yilun collaboration.",
+      "evidence": ["scripts/build_external_collection_plan.py", "results/external_collection_plan.json", "results/external_collection_plan.md", "docs/independent_validation_protocol.md"]
+    },
+    {
+      "name": "external_runbook_claim",
+      "claim": "The repository provides a non-evidence operator packet for collecting the external validation layer, including task cards, config templates, and a 1,440-row record sheet.",
+      "evidence": ["scripts/build_external_runbook.py", "external_validation/collection_runbook.md", "external_validation/operator_record_sheet.csv", "external_validation/task_cards/peg_place_regrasp.md", "external_validation/config_templates/peg_place_regrasp.json", "results/external_runbook_audit.json", "results/external_runbook_audit.md"]
+    },
+    {
+      "name": "external_execution_readiness_claim",
+      "claim": "The repository provides a non-evidence external execution-readiness audit and platform qualification checklist showing that the independent operator packet is ready to run while strict evidence remains missing.",
+      "evidence": ["scripts/audit_external_execution_readiness.py", "external_validation/platform_qualification_checklist.md", "results/external_execution_readiness_audit.json", "results/external_execution_readiness_audit.md"]
+    },
+    {
+      "name": "external_config_template_claim",
+      "claim": "The repository provides a non-evidence task config schema and template validator, while strict config evidence remains missing until real manifest-declared configs replace templates.",
+      "evidence": ["external_validation/config_schema_v1.json", "external_validation/config_templates/peg_place_regrasp.json", "scripts/validate_external_configs.py", "results/external_config_template_audit.json", "results/external_config_template_audit.md"]
+    },
+    {
+      "name": "external_baseline_contract_claim",
+      "claim": "The repository provides a non-evidence baseline implementation contract, method matrix, and per-method adapter specs, while explicitly recording that independent non-oracle implementations are still missing.",
+      "evidence": ["scripts/build_external_baseline_contract.py", "external_validation/baseline_implementation_contract.md", "external_validation/baseline_implementation_matrix.csv", "external_validation/baseline_specs/barrier_certified_energy_composer_v5.json", "external_validation/baseline_specs/oracle_basin_composer.json", "results/external_baseline_contract_audit.json", "results/external_baseline_contract_audit.md"]
+    },
+    {
+      "name": "external_adapter_scaffold_claim",
+      "claim": "The repository provides non-evidence executable adapter scaffolds for every external method, and strict external validation rejects scaffold-only adapters until real independent implementations replace them.",
+      "evidence": ["scripts/build_external_adapter_scaffolds.py", "scripts/self_test_external_adapter_scaffold_guard.py", "external_validation/baseline_adapter_scaffold.md", "external_validation/baselines/README.md", "external_validation/baselines/barrier_certified_energy_composer_v5/adapter_template.py", "external_validation/baselines/barrier_certified_energy_composer_v5/adapter_metadata.json", "results/external_adapter_scaffold_audit.json", "results/external_adapter_scaffold_audit.md"]
+    },
+    {
+      "name": "external_reference_adapter_claim",
+      "claim": "The repository provides executable reference adapters for every external method and audits them against the adapter contract, while explicitly treating them as implementation-only artifacts rather than rollout evidence.",
+      "evidence": ["scripts/build_external_reference_adapters.py", "external_validation/baselines/common_reference_adapter.py", "external_validation/baselines/barrier_certified_energy_composer_v5/adapter.py", "external_validation/reference_adapter_report.md", "results/external_reference_adapter_audit.json", "results/external_reference_adapter_audit.md"]
+    },
+    {
+      "name": "external_local_dry_run_claim",
+      "claim": "The repository provides a non-evidence local dry run that converts frozen local rows into the external JSONL schema and recomputes external-style metrics from those records without satisfying the external evidence gate.",
+      "evidence": ["scripts/build_external_local_dry_run.py", "external_validation/local_dry_run/manifest.json", "external_validation/local_dry_run/logs/peg_place_regrasp.jsonl", "results/external_local_dry_run_metrics.json", "results/external_local_dry_run_metrics.md"]
+    },
+    {
+      "name": "external_adapter_contract_claim",
+      "claim": "The repository provides a non-evidence adapter contract validator for the seam-model API and records that strict manifest-declared adapter evidence is still missing until real independent implementations replace scaffolds.",
+      "evidence": ["scripts/validate_external_adapters.py", "results/external_adapter_contract_audit.json", "results/external_adapter_contract_audit.md", "results/external_adapter_contract_evidence_audit.json", "results/external_adapter_contract_evidence_audit.md", "external_validation/README.md"]
+    },
+    {
+      "name": "novelty_boundary_claim",
+      "claim": "The paper positions itself as a local world/action model for skill seams rather than a low-level controller, diffusion policy, full behavior-composition stack, or general robot world model.",
+      "evidence": ["paper/main.tex", "paper/references.bib", "docs/related_work_coverage_matrix.md", "results/related_work_audit.json", "results/reference_integrity_audit.json"]
+    },
+    {
+      "name": "reference_integrity_claim",
+      "claim": "The generated bibliography has machine-checked citation coverage, required fields, recent primary identifiers, and verified Haonan/Yilun-adjacent arXiv/CVPR source metadata.",
+      "evidence": ["paper/references.bib", "results/reference_integrity_audit.json", "results/reference_integrity_audit.md", "scripts/audit_reference_integrity.py"]
+    },
+    {
+      "name": "manuscript_readability_claim",
+      "claim": "The generated manuscript has a machine-checked agenda framing, novelty boundary, contact-as-testbed positioning, and no stale manual related-work blocker; this remains a readability/framing audit rather than external robot evidence.",
+      "evidence": ["scripts/audit_manuscript_readability.py", "results/manuscript_readability_audit.json", "results/manuscript_readability_audit.md", "paper/main.tex"]
+    },
+    {
+      "name": "presentation_quality_claim",
+      "claim": "The compiled local PDF has a machine-checked presentation surface with hidden links, vector figures, clean log hygiene, canonical artifact parity, and no internal status leaks.",
+      "evidence": ["paper/main.pdf", "paper/main.tex", "paper/main.log", "results/presentation_quality_audit.json"]
+    },
+    {
+      "name": "figure_readability_claim",
+      "claim": "The main figure companions pass a machine-checkable readability audit for render resolution, foreground density, contrast, edge margins, color detail, and manuscript references.",
+      "evidence": ["scripts/audit_figure_readability.py", "results/figure_readability_audit.json", "results/figure_readability_audit.md", "figures/skill_seam_action_model_overview_v5.png"]
+    },
+    {
+      "name": "camera_ready_design_claim",
+      "claim": "The compiled PDF passes a machine-checkable camera-ready design audit over rendered pages, page density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.",
+      "evidence": ["scripts/audit_camera_ready_design.py", "results/camera_ready_design_audit.json", "results/camera_ready_design_audit.md", "paper/main.pdf"]
+    }
+  ],
+  "unsupported_claims_to_block": [
+    "ICLR-main ready",
+    "deployment-ready",
+    "hardware-safe",
+    "state-of-the-art real-robot skill composition",
+    "real-robot validation passed",
+    "high-fidelity validation passed",
+    "external evidence passed"
+  ],
+  "required_boundary_phrases": [
+    {
+      "file": "paper/main.tex",
+      "phrase": "The current evidence supports a bounded claim"
+    },
+    {
+      "file": "paper/main.tex",
+      "phrase": "external robot or high-fidelity validation remains necessary before deployment-level claims"
+    },
+    {
+      "file": "paper/main.tex",
+      "phrase": "the paper remains a local study with a bounded claim"
+    },
+    {
+      "file": "README.md",
+      "phrase": "it is still not ICLR-main ready"
+    },
+    {
+      "file": "child_status.md",
+      "phrase": "ICLR main ready: no"
+    },
+    {
+      "file": "docs/submission_readiness_audit_v5.md",
+      "phrase": "ICLR-main ready: no"
+    }
+  ],
+  "audited_text_files": [
+    "paper/main.tex",
+    "README.md",
+    "child_status.md",
+    "docs/claims.md",
+    "docs/final_audit.md",
+    "docs/haonan_yilun_outreach_package.md",
+    "docs/independent_validation_protocol.md",
+    "docs/related_work_coverage_matrix.md",
+    "docs/submission_readiness_audit_v5.md",
+    "docs/submission_version_log.md",
+    "external_validation/platform_qualification_checklist.md",
+    "external_validation/README.md",
+    "results/submission_readiness_gap_audit.md"
+  ]
+}

@@ -1,0 +1,10 @@
+\begin{tabular}{p{0.24\linewidth}p{0.58\linewidth}p{0.08\linewidth}}
+\toprule
+audit target & local predictive-validity evidence & verdict \\
+\midrule
+calibration & ECE10 0.007 vs strongest baseline 0.015; max bin gap 0.013 & pass \\
+mean agreement & mean predicted risk 0.102 vs realized breach 0.095; row MAE 0.008 & pass \\
+risk ordering & risk-breach correlation 0.971, Spearman 0.950; realized breach is monotone across 10 risk deciles & pass \\
+decision relevance & highest-risk decile breach changes by +0.080 and utility is lower by 0.251 vs lowest-risk decile; accept risk 0.081 vs abstain risk 0.125 & pass \\
+\bottomrule
+\end{tabular}

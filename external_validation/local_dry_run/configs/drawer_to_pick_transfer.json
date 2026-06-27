@@ -1,0 +1,65 @@
+{
+  "compute_budget": {
+    "same_for_all_non_oracle_methods": true,
+    "simulator_query_budget": 0,
+    "wall_clock_seconds": 0
+  },
+  "config_schema": "external_validation/config_schema_v1.json",
+  "fixed_risk_budget": 0.15,
+  "must_log": [
+    "run_id",
+    "task_family",
+    "platform_type",
+    "platform_name",
+    "scene_id",
+    "episode_index",
+    "seed",
+    "method",
+    "skill_i",
+    "skill_j",
+    "initial_state_hash",
+    "terminal_sample_set_hash",
+    "basin_estimate",
+    "barrier_score",
+    "descent_continuity_score",
+    "predicted_seam_risk",
+    "fixed_risk_budget",
+    "decision",
+    "failure_diagnosis",
+    "repair_action",
+    "success",
+    "seam_failure",
+    "barrier_violation",
+    "damage_or_intervention",
+    "composition_cost",
+    "realized_seam_breach",
+    "utility",
+    "video_path",
+    "policy_or_config_hash"
+  ],
+  "not_external_evidence": true,
+  "observation_interface": {
+    "camera_logging_required": false,
+    "contact_or_force_logging_required": false,
+    "state_logging_required": true
+  },
+  "paired_reset_count": 30,
+  "platform_name": "LocalFrozenSuite-v5-DRY-RUN-NOT-EVIDENCE",
+  "platform_type": "high_fidelity_sim",
+  "required_fidelity_checks": [
+    "not_applicable_local_dry_run",
+    "real_or_accepted_high_fidelity_collection_still_required"
+  ],
+  "reset_protocol": {
+    "initial_state_hash_required": true,
+    "paired_resets": true,
+    "reset_count": 30,
+    "scene_id_template": "drawer_to_pick_transfer_{regime}_{split}_seed{seed}_episode{episode}"
+  },
+  "seam_under_test": "Local dry-run handoff for drawer_to_pick_transfer; generated from frozen local CSV rows.",
+  "skill_i": "drawer_to_pick_transfer_source_skill",
+  "skill_j": "drawer_to_pick_transfer_target_skill",
+  "task_family": "drawer_to_pick_transfer",
+  "template_only": true,
+  "version": "paper119_external_config_template_v1"
+}

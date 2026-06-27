@@ -1,0 +1,307 @@
+{
+  "blocking_missing": [
+    "code_commit is empty",
+    "skill_library_hash is empty",
+    "external_validation/manifest.json has not been written from real evidence",
+    "release_artifacts.configs is empty",
+    "release_artifacts.logs is empty",
+    "release_artifacts.videos is empty",
+    "release_artifacts.checkpoints is empty",
+    "peg_place_regrasp: platform_name is empty",
+    "peg_place_regrasp: log_jsonl is missing: external_validation/logs/peg_place_regrasp.jsonl",
+    "peg_place_regrasp: video_dir is missing: external_validation/videos/peg_place_regrasp",
+    "peg_place_regrasp: config_path is missing: external_validation/configs/peg_place_regrasp.json",
+    "peg_place_regrasp: config_hash is empty",
+    "drawer_to_pick_transfer: platform_name is empty",
+    "drawer_to_pick_transfer: log_jsonl is missing: external_validation/logs/drawer_to_pick_transfer.jsonl",
+    "drawer_to_pick_transfer: video_dir is missing: external_validation/videos/drawer_to_pick_transfer",
+    "drawer_to_pick_transfer: config_path is missing: external_validation/configs/drawer_to_pick_transfer.json",
+    "drawer_to_pick_transfer: config_hash is empty",
+    "door_open_navigation: platform_name is empty",
+    "door_open_navigation: log_jsonl is missing: external_validation/logs/door_open_navigation.jsonl",
+    "door_open_navigation: video_dir is missing: external_validation/videos/door_open_navigation",
+    "door_open_navigation: config_path is missing: external_validation/configs/door_open_navigation.json",
+    "door_open_navigation: config_hash is empty",
+    "cable_route_insert: platform_name is empty",
+    "cable_route_insert: log_jsonl is missing: external_validation/logs/cable_route_insert.jsonl",
+    "cable_route_insert: video_dir is missing: external_validation/videos/cable_route_insert",
+    "cable_route_insert: config_path is missing: external_validation/configs/cable_route_insert.json",
+    "cable_route_insert: config_hash is empty",
+    "greedy_module_sequence: implementation missing: implementation path is empty",
+    "greedy_module_sequence: checkpoint_or_config_path is empty",
+    "greedy_module_sequence: checkpoint_or_config_hash is empty",
+    "behavior_cloned_skill_chain: implementation missing: implementation path is empty",
+    "behavior_cloned_skill_chain: checkpoint_or_config_path is empty",
+    "behavior_cloned_skill_chain: checkpoint_or_config_hash is empty",
+    "option_graph_planner: implementation missing: implementation path is empty",
+    "option_graph_planner: checkpoint_or_config_path is empty",
+    "option_graph_planner: checkpoint_or_config_hash is empty",
+    "tamp_feasibility_screen: implementation missing: implementation path is empty",
+    "tamp_feasibility_screen: checkpoint_or_config_path is empty",
+    "tamp_feasibility_screen: checkpoint_or_config_hash is empty",
+    "stable_dmp_handoff: implementation missing: implementation path is empty",
+    "stable_dmp_handoff: checkpoint_or_config_path is empty",
+    "stable_dmp_handoff: checkpoint_or_config_hash is empty",
+    "diffusion_skill_stitcher: implementation missing: implementation path is empty",
+    "diffusion_skill_stitcher: checkpoint_or_config_path is empty",
+    "diffusion_skill_stitcher: checkpoint_or_config_hash is empty",
+    "cem_trajectory_composer: implementation missing: implementation path is empty",
+    "cem_trajectory_composer: checkpoint_or_config_path is empty",
+    "cem_trajectory_composer: checkpoint_or_config_hash is empty",
+    "residual_rl_composer: implementation missing: implementation path is empty",
+    "residual_rl_composer: checkpoint_or_config_path is empty",
+    "residual_rl_composer: checkpoint_or_config_hash is empty",
+    "energy_compatibility_heuristic: implementation missing: implementation path is empty",
+    "energy_compatibility_heuristic: checkpoint_or_config_path is empty",
+    "energy_compatibility_heuristic: checkpoint_or_config_hash is empty",
+    "proposed_energy_landscape_composer_v4_1: implementation missing: implementation path is empty",
+    "proposed_energy_landscape_composer_v4_1: checkpoint_or_config_path is empty",
+    "proposed_energy_landscape_composer_v4_1: checkpoint_or_config_hash is empty",
+    "barrier_certified_energy_composer_v5: implementation missing: implementation path is empty",
+    "barrier_certified_energy_composer_v5: checkpoint_or_config_path is empty",
+    "barrier_certified_energy_composer_v5: checkpoint_or_config_hash is empty"
+  ],
+  "blocking_missing_count": 60,
+  "evidence_ready": false,
+  "expected_records": 1440,
+  "global_blockers": [
+    "code_commit is empty",
+    "skill_library_hash is empty",
+    "external_validation/manifest.json has not been written from real evidence",
+    "release_artifacts.configs is empty",
+    "release_artifacts.logs is empty",
+    "release_artifacts.videos is empty",
+    "release_artifacts.checkpoints is empty"
+  ],
+  "manifest_source": "external_validation/manifest_template.json",
+  "method_count": 12,
+  "method_reports": [
+    {
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "missing": [
+        "implementation missing: implementation path is empty",
+        "checkpoint_or_config_path is empty",
+        "checkpoint_or_config_hash is empty"
+      ],
+      "name": "greedy_module_sequence",
+      "role": "baseline"
+    },
+    {
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "missing": [
+        "implementation missing: implementation path is empty",
+        "checkpoint_or_config_path is empty",
+        "checkpoint_or_config_hash is empty"
+      ],
+      "name": "behavior_cloned_skill_chain",
+      "role": "baseline"
+    },
+    {
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "missing": [
+        "implementation missing: implementation path is empty",
+        "checkpoint_or_config_path is empty",
+        "checkpoint_or_config_hash is empty"
+      ],
+      "name": "option_graph_planner",
+      "role": "baseline"
+    },
+    {
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "missing": [
+        "implementation missing: implementation path is empty",
+        "checkpoint_or_config_path is empty",
+        "checkpoint_or_config_hash is empty"
+      ],
+      "name": "tamp_feasibility_screen",
+      "role": "baseline"
+    },
+    {
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "missing": [
+        "implementation missing: implementation path is empty",
+        "checkpoint_or_config_path is empty",
+        "checkpoint_or_config_hash is empty"
+      ],
+      "name": "stable_dmp_handoff",
+      "role": "baseline"
+    },
+    {
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "missing": [
+        "implementation missing: implementation path is empty",
+        "checkpoint_or_config_path is empty",
+        "checkpoint_or_config_hash is empty"
+      ],
+      "name": "diffusion_skill_stitcher",
+      "role": "baseline"
+    },
+    {
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "missing": [
+        "implementation missing: implementation path is empty",
+        "checkpoint_or_config_path is empty",
+        "checkpoint_or_config_hash is empty"
+      ],
+      "name": "cem_trajectory_composer",
+      "role": "baseline"
+    },
+    {
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "missing": [
+        "implementation missing: implementation path is empty",
+        "checkpoint_or_config_path is empty",
+        "checkpoint_or_config_hash is empty"
+      ],
+      "name": "residual_rl_composer",
+      "role": "baseline"
+    },
+    {
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "missing": [
+        "implementation missing: implementation path is empty",
+        "checkpoint_or_config_path is empty",
+        "checkpoint_or_config_hash is empty"
+      ],
+      "name": "energy_compatibility_heuristic",
+      "role": "baseline"
+    },
+    {
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "missing": [
+        "implementation missing: implementation path is empty",
+        "checkpoint_or_config_path is empty",
+        "checkpoint_or_config_hash is empty"
+      ],
+      "name": "proposed_energy_landscape_composer_v4_1",
+      "role": "baseline"
+    },
+    {
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "missing": [
+        "implementation missing: implementation path is empty",
+        "checkpoint_or_config_path is empty",
+        "checkpoint_or_config_hash is empty"
+      ],
+      "name": "barrier_certified_energy_composer_v5",
+      "role": "primary"
+    },
+    {
+      "checkpoint_or_config_path": "",
+      "implementation": "post_hoc_upper_bound",
+      "missing": [],
+      "name": "oracle_basin_composer",
+      "role": "oracle"
+    }
+  ],
+  "not_external_evidence": true,
+  "observed_records": 0,
+  "operator_next_actions": [
+    "Collect real-robot or accepted high-fidelity simulator rollouts; do not use local_dry_run logs as evidence.",
+    "Copy manifest_template.json to external_validation/manifest.json only after platform, configs, logs, videos, implementations, and hashes are real.",
+    "Fill platform_name, code_commit, skill_library_hash, task config hashes, method implementation paths, and checkpoint/config hashes.",
+    "Record at least the manifest-declared episodes_per_method for every declared method and task family with paired reset identifiers.",
+    "Run build_external_manifest.py --write --check-video-paths, validate_external_configs.py --strict, validate_external_adapters.py --strict, validate_external_rollouts.py --write-results --check-video-paths --strict, and audit_external_evidence.py --strict."
+  ],
+  "passed": true,
+  "readiness_state": "COLLECT_EXTERNAL_EVIDENCE",
+  "real_manifest_exists": false,
+  "release_artifact_counts": {
+    "checkpoints": 0,
+    "code": 0,
+    "configs": 0,
+    "logs": 0,
+    "videos": 0
+  },
+  "task_count": 4,
+  "task_reports": [
+    {
+      "config_exists": false,
+      "config_is_template": null,
+      "expected_records": 360,
+      "log_exists": false,
+      "missing": [
+        "platform_name is empty",
+        "log_jsonl is missing: external_validation/logs/peg_place_regrasp.jsonl",
+        "video_dir is missing: external_validation/videos/peg_place_regrasp",
+        "config_path is missing: external_validation/configs/peg_place_regrasp.json",
+        "config_hash is empty"
+      ],
+      "non_placeholder_videos": 0,
+      "observed_records": 0,
+      "platform_name": "",
+      "platform_type": "high_fidelity_sim",
+      "task_family": "peg_place_regrasp",
+      "video_dir_exists": false
+    },
+    {
+      "config_exists": false,
+      "config_is_template": null,
+      "expected_records": 360,
+      "log_exists": false,
+      "missing": [
+        "platform_name is empty",
+        "log_jsonl is missing: external_validation/logs/drawer_to_pick_transfer.jsonl",
+        "video_dir is missing: external_validation/videos/drawer_to_pick_transfer",
+        "config_path is missing: external_validation/configs/drawer_to_pick_transfer.json",
+        "config_hash is empty"
+      ],
+      "non_placeholder_videos": 0,
+      "observed_records": 0,
+      "platform_name": "",
+      "platform_type": "high_fidelity_sim",
+      "task_family": "drawer_to_pick_transfer",
+      "video_dir_exists": false
+    },
+    {
+      "config_exists": false,
+      "config_is_template": null,
+      "expected_records": 360,
+      "log_exists": false,
+      "missing": [
+        "platform_name is empty",
+        "log_jsonl is missing: external_validation/logs/door_open_navigation.jsonl",
+        "video_dir is missing: external_validation/videos/door_open_navigation",
+        "config_path is missing: external_validation/configs/door_open_navigation.json",
+        "config_hash is empty"
+      ],
+      "non_placeholder_videos": 0,
+      "observed_records": 0,
+      "platform_name": "",
+      "platform_type": "high_fidelity_sim",
+      "task_family": "door_open_navigation",
+      "video_dir_exists": false
+    },
+    {
+      "config_exists": false,
+      "config_is_template": null,
+      "expected_records": 360,
+      "log_exists": false,
+      "missing": [
+        "platform_name is empty",
+        "log_jsonl is missing: external_validation/logs/cable_route_insert.jsonl",
+        "video_dir is missing: external_validation/videos/cable_route_insert",
+        "config_path is missing: external_validation/configs/cable_route_insert.json",
+        "config_hash is empty"
+      ],
+      "non_placeholder_videos": 0,
+      "observed_records": 0,
+      "platform_name": "",
+      "platform_type": "high_fidelity_sim",
+      "task_family": "cable_route_insert",
+      "video_dir_exists": false
+    }
+  ],
+  "version": "external_evidence_preflight_v1"
+}

@@ -1,8 +1,40 @@
 # Reproducibility Checklist
 
 - Code entry point: `src/run_experiment.py`
+- Full local build entry point: `scripts/build_submission_artifacts.ps1`
 - Manuscript entry point: `scripts/generate_manuscript.py`
 - Artifact validator: `scripts/validate_submission_artifacts.py`
+- Local falsification validator: `scripts/audit_local_falsification.py`
+- Holdout robustness validator: `scripts/audit_holdout_robustness.py`
+- Diagnostic mechanism validator: `scripts/audit_diagnostic_mechanism.py`
+- Comparative decision-quality validator: `scripts/audit_decision_quality.py`
+- Seam prediction calibration validator: `scripts/audit_seam_prediction_calibration.py`
+- Manuscript number validator: `scripts/audit_manuscript_numbers.py`
+- Related-work validator: `scripts/audit_related_work.py`
+- Reference integrity validator: `scripts/audit_reference_integrity.py`
+- Manuscript readability validator: `scripts/audit_manuscript_readability.py`
+- Presentation quality validator: `scripts/audit_presentation_quality.py`
+- Figure readability validator: `scripts/audit_figure_readability.py`
+- Camera-ready design validator: `scripts/audit_camera_ready_design.py`
+- Claim boundary validator: `scripts/audit_claim_boundary.py`
+- Submission readiness gap validator: `scripts/audit_submission_readiness_gap.py`
+- External collection planner: `scripts/build_external_collection_plan.py`
+- External collection runbook builder: `scripts/build_external_runbook.py`
+- External config validator: `scripts/validate_external_configs.py`
+- External baseline contract builder: `scripts/build_external_baseline_contract.py`
+- External adapter scaffold builder: `scripts/build_external_adapter_scaffolds.py`
+- External reference adapter builder: `scripts/build_external_reference_adapters.py`
+- External local dry-run builder: `scripts/build_external_local_dry_run.py`
+- External adapter contract validator: `scripts/validate_external_adapters.py`
+- External manifest builder: `scripts/build_external_manifest.py`
+- External adapter scaffold guard self-test: `scripts/self_test_external_adapter_scaffold_guard.py`
+- External evidence validator: `scripts/audit_external_evidence.py`
+- External execution readiness validator: `scripts/audit_external_execution_readiness.py`
+- External rollout metric validator: `scripts/validate_external_rollouts.py`
+- External rollout validator self-test: `scripts/self_test_external_rollout_validator.py`
+- External full-pipeline evidence self-test: `scripts/self_test_external_evidence_pipeline.py`
+- External rollout schema: `external_validation/log_schema_v1.json`
+- Related-work coverage matrix: `docs/related_work_coverage_matrix.md`
 - Requirements: `numpy`, `matplotlib`
 - Deterministic base seed: `119_2026_5`
 - Main outputs:
@@ -24,21 +56,108 @@
   - `results/fixed_risk_seed_metrics.csv`
   - `results/fixed_risk_metrics.csv`
   - `results/fixed_risk_pairwise_stats.csv`
+  - `results/local_falsification_audit.json`
+  - `results/local_falsification_audit.md`
+  - `results/holdout_robustness_audit.json`
+  - `results/holdout_robustness_audit.md`
+  - `results/diagnostic_mechanism_audit.json`
+  - `results/diagnostic_mechanism_audit.md`
+  - `results/decision_quality_audit.json`
+  - `results/decision_quality_audit.md`
+  - `results/seam_prediction_calibration_audit.json`
+  - `results/seam_prediction_calibration_audit.md`
+  - `results/manuscript_number_audit.json`
+  - `results/manuscript_number_audit.md`
+  - `results/related_work_audit.json`
+  - `results/related_work_audit.md`
+  - `results/reference_integrity_audit.json`
+  - `results/reference_integrity_audit.md`
+  - `results/manuscript_readability_audit.json`
+  - `results/manuscript_readability_audit.md`
+  - `results/presentation_quality_audit.json`
+  - `results/presentation_quality_audit.md`
+  - `results/figure_readability_audit.json`
+  - `results/figure_readability_audit.md`
+  - `results/camera_ready_design_audit.json`
+  - `results/camera_ready_design_audit.md`
+  - `results/submission_readiness_gap_audit.json`
+  - `results/submission_readiness_gap_audit.md`
+  - `results/external_collection_plan.json`
+  - `results/external_collection_plan.md`
+  - `results/external_runbook_audit.json`
+  - `results/external_runbook_audit.md`
+  - `results/external_config_template_audit.json`
+  - `results/external_config_template_audit.md`
+  - `results/external_config_evidence_audit.json`
+  - `results/external_config_evidence_audit.md`
+  - `results/external_baseline_contract_audit.json`
+  - `results/external_baseline_contract_audit.md`
+  - `results/external_adapter_scaffold_audit.json`
+  - `results/external_adapter_scaffold_audit.md`
+  - `results/external_reference_adapter_audit.json`
+  - `results/external_reference_adapter_audit.md`
+  - `results/external_local_dry_run_metrics.json`
+  - `results/external_local_dry_run_metrics.md`
+  - `results/external_adapter_contract_audit.json`
+  - `results/external_adapter_contract_audit.md`
+  - `results/external_adapter_contract_evidence_audit.json`
+  - `results/external_adapter_contract_evidence_audit.md`
+  - `results/external_manifest_builder_report.json`
+  - `results/external_manifest_builder_report.md`
+  - `results/external_execution_readiness_audit.json`
+  - `results/external_execution_readiness_audit.md`
   - `results/summary.json`
   - `results/summary.txt`
+- External collection scaffolding:
+  - `external_validation/collection_runbook.md`
+  - `external_validation/operator_record_sheet.csv`
+  - `external_validation/task_cards/peg_place_regrasp.md`
+  - `external_validation/task_cards/drawer_to_pick_transfer.md`
+  - `external_validation/task_cards/door_open_navigation.md`
+  - `external_validation/task_cards/cable_route_insert.md`
+  - `external_validation/config_templates/peg_place_regrasp.json`
+  - `external_validation/config_templates/drawer_to_pick_transfer.json`
+  - `external_validation/config_templates/door_open_navigation.json`
+  - `external_validation/config_templates/cable_route_insert.json`
+  - `external_validation/config_schema_v1.json`
+  - `external_validation/platform_qualification_checklist.md`
+- External baseline implementation scaffolding:
+  - `external_validation/baseline_implementation_contract.md`
+  - `external_validation/baseline_implementation_matrix.csv`
+  - `external_validation/baseline_specs/barrier_certified_energy_composer_v5.json`
+  - `external_validation/baseline_specs/oracle_basin_composer.json`
+  - `external_validation/baseline_adapter_scaffold.md`
+  - `external_validation/baselines/README.md`
+  - `external_validation/baselines/barrier_certified_energy_composer_v5/adapter_template.py`
+  - `external_validation/baselines/barrier_certified_energy_composer_v5/adapter_metadata.json`
+  - `external_validation/baselines/common_reference_adapter.py`
+  - `external_validation/baselines/barrier_certified_energy_composer_v5/adapter.py`
+  - `external_validation/baselines/barrier_certified_energy_composer_v5/reference_adapter_metadata.json`
+  - `external_validation/reference_adapter_report.md`
+  - `external_validation/local_dry_run/manifest.json`
+  - `external_validation/local_dry_run/logs/peg_place_regrasp.jsonl`
+  - `results/external_local_dry_run_metrics.json`
+  - `results/external_reference_adapter_audit.json`
+  - `results/external_adapter_contract_audit.json`
+  - `results/external_adapter_contract_evidence_audit.json`
 - Main figures:
+  - `figures/skill_seam_action_model_overview_v5.pdf`
+  - `figures/skill_seam_action_model_overview_v5.png`
+  - `figures/energy_landscape_composition_hard_success_v5.pdf`
   - `figures/energy_landscape_composition_hard_success_v5.png`
+  - `figures/energy_landscape_composition_utility_risk_v5.pdf`
   - `figures/energy_landscape_composition_utility_risk_v5.png`
+  - `figures/energy_landscape_composition_ablation_v5.pdf`
   - `figures/energy_landscape_composition_ablation_v5.png`
+  - `figures/energy_landscape_composition_stress_sweep_v5.pdf`
   - `figures/energy_landscape_composition_stress_sweep_v5.png`
+  - `figures/energy_landscape_composition_fixed_coverage_v5.pdf`
   - `figures/energy_landscape_composition_fixed_coverage_v5.png`
+  - `figures/energy_landscape_composition_fixed_risk_v5.pdf`
   - `figures/energy_landscape_composition_fixed_risk_v5.png`
 
 Reproduction command:
 
 ```powershell
-pip install -r requirements.txt
-python src\run_experiment.py
-python scripts\generate_manuscript.py
-python scripts\validate_submission_artifacts.py
+powershell -ExecutionPolicy Bypass -File scripts\build_submission_artifacts.ps1
 ```

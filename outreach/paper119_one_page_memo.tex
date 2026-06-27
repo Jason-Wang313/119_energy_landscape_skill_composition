@@ -1,0 +1,59 @@
+\documentclass[10pt]{article}
+\usepackage[letterpaper,margin=0.58in]{geometry}
+\usepackage{times}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\pagestyle{empty}
+\hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlist[itemize]{leftmargin=1.05em,itemsep=1pt,topsep=1pt}
+\definecolor{accent}{RGB}{37,94,142}
+\definecolor{soft}{RGB}{245,248,250}
+\newcommand{\tagline}[1]{\colorbox{soft}{\parbox{\dimexpr\linewidth-2\fboxsep}{\textcolor{accent}{\textbf{#1}}}}}
+\begin{document}
+
+{\Large \textbf{Barrier-Certified Seam Models for Compositional Robot Skills}}\\[-1pt]
+{\normalsize One-page collaboration memo for Paper 119}\\[3pt]
+\tagline{Core idea: treat skill handoff as a local world/action model: predict whether composition will fail, diagnose why, choose repair/probe/abstain/transition, and update future planning.}
+
+\textbf{Problem.}
+Robot skills that work individually can fail when composed. A graph edge may look legal while the terminal state of the first skill falls outside the next skill's attraction basin, crosses a high-energy barrier, or enters a contact mode where the next controller no longer descends. The failure is not only low-level control; it is a representation and prediction problem at the action seam.
+
+\textbf{Method.}
+The proposed composer scores candidate handoff $h$ by basin overlap, barrier height, descent continuity, repair cost, and calibrated seam risk:
+\[
+S(i,j,h)=\alpha O_{\mathrm{basin}}-\beta B_{\mathrm{barrier}}+\gamma D_{\mathrm{descent}}-\lambda C_{\mathrm{repair}}-\kappa R_{\mathrm{seam}}.
+\]
+It then chooses among \textbf{accept}, \textbf{repair}, \textbf{probe}, \textbf{abstain}, or \textbf{fallback}. The contribution is a seam-level world/action model for behavior composition, not a new low-level controller or universal manipulation policy.
+
+\textbf{Current evidence.}
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Hard-slice metric & Proposed & Strongest non-oracle predecessor \\
+\midrule
+Success & 0.80171 & 0.71711 \\
+Utility & 0.88827 & 0.65310 \\
+Paired utility wins & 10/10 & -- \\
+\bottomrule
+\end{tabular}
+\end{center}
+The frozen local suite covers 12 methods, 6 task families, 8 seam regimes, 5 deployment splits, and 10 paired seeds. The proposed method reduces seam failure, barrier violation, damage, risk calibration error, and realized seam breach while improving basin alignment and descent continuity. A diagnostic audit checks exported failure labels, seam decisions, and planner-edge updates over 230,400 local rows.
+
+\textbf{Claim boundary.}
+The current claim is bounded: energy-seam certification improves skill composition when basin, barrier, descent, repair, and risk quantities are estimable. The paper should not claim deployment-ready robotics until it has real-robot or accepted high-fidelity validation with shared skill libraries, paired resets, raw logs, videos, and independent baselines.
+
+\textbf{Why this is a natural fit for behavior composition.}
+CoStream asks how simple behaviors can compose into complex manipulation. Paper 119 asks when a composed behavior handoff should be trusted, repaired, probed, or avoided. A clean collaboration question is whether a seam model improves robustness for a CoStream-style stack under perturbations, precision assembly, object transfer, and contact-mode transitions.
+
+\textbf{Proposed validation.}
+Use the same primitive skills across baselines; log terminal samples, basin estimates, barrier scores, descent diagnostics, predicted risk, accepted/rejected seams, outcomes, and videos. Compare against option graphs, TAMP screens, diffusion stitching, CEM, residual repair, energy heuristics, the previous v4.1 method, and an oracle post hoc upper bound.
+
+\vfill
+References for fit: \href{https://haonan16.github.io/}{Haonan Chen homepage}; \href{https://arxiv.org/abs/2606.26423}{CoStream}; \href{https://yilundu.github.io/}{Yilun Du homepage}; \href{https://arxiv.org/abs/2512.05955}{SIMPACT}.
+
+\end{document}

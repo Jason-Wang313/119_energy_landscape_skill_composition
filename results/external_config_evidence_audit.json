@@ -1,0 +1,37 @@
+{
+  "checks": [
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\config_schema_v1.json",
+      "name": "config_schema_exists",
+      "passed": true
+    },
+    {
+      "detail": "version='external_config_schema_v1'",
+      "name": "config_schema_version",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json missing",
+      "name": "manifest_exists",
+      "passed": false
+    },
+    {
+      "detail": "entries=0",
+      "name": "manifest_config_entries_present",
+      "passed": false
+    },
+    {
+      "detail": "failed=0",
+      "name": "configs_pass_validation",
+      "passed": false
+    }
+  ],
+  "config_count": 0,
+  "config_results": [],
+  "failed_configs": [],
+  "not_external_evidence": false,
+  "passed": false,
+  "schema": "external_validation/config_schema_v1.json",
+  "strict": true,
+  "version": "external_config_evidence_audit_v1"
+}
