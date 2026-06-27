@@ -157,6 +157,14 @@ python scripts\audit_maniskill_backend_readiness.py
 
 This writes `results/maniskill_backend_readiness_audit.{json,md}`. It contract-qualifies `external_validation/runner/maniskill_reference_backend.py` against the backend API, task configs, platform-provenance fields, all 12 reference adapters, and a synthetic MP4 writer path. It is not evidence: official collection still requires accepted fidelity provenance, installed assets, explicit alias unsealing, a specific run id, renderable per-episode videos, JSONL logs, a manifest, and strict evidence audits.
 
+Audit the explicit reference-backend collection preflight:
+
+```powershell
+python scripts\audit_maniskill_reference_collection_preflight.py
+```
+
+This writes `results/maniskill_reference_collection_preflight_audit.{json,md}`. It runs the tracked reference backend through the strict backend-contract and collection-preflight checks with explicit backend/config/run-id/alias inputs, without writing rollout logs, videos, manifests, or evidence. It currently reaches the fidelity-acceptance gate; official collection and strict external evidence remain false until accepted platform provenance, real logs, videos, manifests, and strict audits exist.
+
 Then audit the platform-fidelity acceptance contract:
 
 ```powershell

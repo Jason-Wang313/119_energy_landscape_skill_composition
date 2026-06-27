@@ -14,7 +14,7 @@
         "scripts/generate_manuscript.py",
         "scripts/validate_submission_artifacts.py"
       ],
-      "requirement": "Core agenda framing: adaptive physical world/action model for skill seams",
+      "requirement": "Core paper framing: adaptive physical world/action model for skill seams",
       "status": "satisfied",
       "submission_blocking": true
     },

@@ -30,7 +30,7 @@ Local evidence digest:
 - External local dry run: 1,440 external-schema JSONL records are generated from the frozen local suite and recomputed successfully as a plumbing check; they are not external evidence.
 - Figure readability audit: all seven main figure companions pass render-resolution, contrast, margin, and manuscript-reference checks.
 - Camera-ready design audit: all 30 rendered PDF pages pass nonblank, density, contrast, margin, sparse-page, canonical-parity, and text-anchor checks.
-- Manuscript readability audit: agenda framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and stale manual-polish blocker removal pass.
+- Manuscript readability audit: central framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and stale manual-polish blocker removal pass.
 - Evidence coverage: 230,400 main cells, 38,400 ablation cells, 161,280 stress cells, 107,520 fixed-risk cells, and 24 failure cases.
 
 Local gate result: pass.

@@ -15,19 +15,19 @@ Asset install hint: `python -m mani_skill.utils.download_asset partnet_mobility_
 
 | Env ID | Primary for | Support for | Made | Reset | Error |
 |---|---|---|---|---|---|
-| `InsertFlower-v1` | `none` | `cable_route_insert` | `False` | `False` | EOF when reading a line |
-| `OpenCabinetDoor-v1` | `door_open_navigation` | `none` | `False` | `False` | Partnet Mobility dataset not found. Download it by running python -m mani_skill.utils.download_asset partnet_mobility_ca |
-| `OpenCabinetDrawer-v1` | `drawer_to_pick_transfer` | `none` | `False` | `False` | EOF when reading a line |
-| `PegInsertionSide-v1` | `peg_place_regrasp` | `none` | `True` | `True` |  |
-| `PickCube-v1` | `none` | `drawer_to_pick_transfer` | `True` | `True` |  |
-| `PickSingleYCB-v1` | `none` | `drawer_to_pick_transfer` | `False` | `False` | EOF when reading a line |
-| `PullCubeTool-v1` | `cable_route_insert` | `none` | `True` | `True` |  |
+| `InsertFlower-v1` | `none` | `cable_route_insert` | `False` | `False` | timed out after 45s |
+| `OpenCabinetDoor-v1` | `door_open_navigation` | `none` | `False` | `False` | timed out after 45s |
+| `OpenCabinetDrawer-v1` | `drawer_to_pick_transfer` | `none` | `False` | `False` | timed out after 45s |
+| `PegInsertionSide-v1` | `peg_place_regrasp` | `none` | `False` | `False` | timed out after 45s |
+| `PickCube-v1` | `none` | `drawer_to_pick_transfer` | `False` | `False` | timed out after 45s |
+| `PickSingleYCB-v1` | `none` | `drawer_to_pick_transfer` | `False` | `False` | timed out after 45s |
+| `PullCubeTool-v1` | `cable_route_insert` | `none` | `False` | `False` | timed out after 45s |
 
 ## Checks
 
 - `pass` `probe_is_non_evidence`: not_external_evidence=True
 - `pass` `binding_file_ready`: version='maniskill_task_bindings_v1', bindings=4
 - `pass` `smoke_attempted_all_bound_envs`: attempted=7, expected=7
-- `pass` `primary_reset_readiness_reported`: primary_reset_missing=['OpenCabinetDoor-v1', 'OpenCabinetDrawer-v1']
-- `pass` `asset_failures_reported`: asset_related_failures=['InsertFlower-v1', 'OpenCabinetDoor-v1', 'OpenCabinetDrawer-v1', 'PickSingleYCB-v1']
+- `pass` `primary_reset_readiness_reported`: primary_reset_missing=['OpenCabinetDoor-v1', 'OpenCabinetDrawer-v1', 'PegInsertionSide-v1', 'PullCubeTool-v1']
+- `pass` `asset_failures_reported`: asset_related_failures=[]
 - `pass` `strict_evidence_remains_false`: environment construction/reset smoke tests are not rollout evidence

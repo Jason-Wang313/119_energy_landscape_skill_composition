@@ -41,7 +41,7 @@
 - [x] Manuscript number audit checks that reported margins, row counts, table values, local falsification numbers, diagnostic mechanism numbers, decision-quality numbers, and holdout robustness numbers match generated result files.
 - [x] Related-work audit checks citation coverage, novelty-boundary rows, and outreach/validation boundary wording across 12 required areas.
 - [x] Reference integrity audit checks BibTeX fields, DOI/arXiv identifiers, recent primary-source metadata, and Haonan/Yilun-adjacent author coverage.
-- [x] Manuscript readability audit checks agenda framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and stale manual-polish blocker removal.
+- [x] Manuscript readability audit checks central framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and stale manual-polish blocker removal.
 - [x] Presentation quality audit checks PDF structure, source/log hygiene, hidden links, vector figures, canonical artifact parity, and internal-status leak prevention.
 - [x] Figure readability audit checks raster companion resolution, foreground density, contrast, edge margins, color detail, and manuscript references for all seven main figures.
 - [x] Camera-ready design audit renders all 30 PDF pages and checks page density, contrast, margins, sparse-page count, and selected text anchors.

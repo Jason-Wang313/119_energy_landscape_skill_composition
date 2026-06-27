@@ -542,6 +542,29 @@ def main() -> int:
         f"readiness_checks={readiness_checks}",
     )
 
+    reference_preflight_ok, reference_preflight, reference_preflight_detail = passed_json(
+        RESULTS / "maniskill_reference_collection_preflight_audit.json",
+        version="maniskill_reference_collection_preflight_audit_v1",
+    )
+    add_check(checks, "maniskill_reference_collection_preflight_ready", reference_preflight_ok, reference_preflight_detail)
+    reference_preflight_checks = {check.get("name"): check.get("passed") for check in reference_preflight.get("checks", []) or []}
+    add_check(
+        checks,
+        "maniskill_reference_collection_preflight_reaches_fidelity_gate",
+        reference_preflight.get("not_external_evidence") is True
+        and reference_preflight.get("reference_backend_contract_ready") is True
+        and reference_preflight.get("collection_ready") is False
+        and reference_preflight.get("strict_external_evidence_ready") is False
+        and int(reference_preflight.get("collection_blocking_missing_count", 0) or 0) == 1
+        and any("fidelity_acceptance_ready" in str(item) for item in reference_preflight.get("collection_blocking_missing", []) or [])
+        and reference_preflight_checks.get("reference_backend_collection_preflight_reaches_fidelity_gate") is True,
+        (
+            f"contract_ready={reference_preflight.get('reference_backend_contract_ready')!r}, "
+            f"collection_ready={reference_preflight.get('collection_ready')!r}, "
+            f"blocking={reference_preflight.get('collection_blocking_missing')!r}"
+        ),
+    )
+
     pairing_ok, pairing, pairing_detail = passed_json(
         RESULTS / "external_pairing_integrity_audit.json",
         version="external_pairing_integrity_audit_v1",
@@ -1052,6 +1075,8 @@ def main() -> int:
         "external_collection_readiness_not_evidence",
         "external_collection_readiness_fail_closed",
         "external_collection_readiness_packet_shape",
+        "maniskill_reference_collection_preflight_ready",
+        "maniskill_reference_collection_preflight_reaches_fidelity_gate",
         "external_pairing_integrity_audit_ready",
         "external_pairing_integrity_not_evidence",
         "external_release_package_audit_ready",

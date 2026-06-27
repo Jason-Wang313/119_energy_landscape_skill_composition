@@ -49,6 +49,12 @@ jobs:
       - name: Audit ManiSkill reference backend readiness
         run: python scripts/audit_maniskill_backend_readiness.py
 
+      - name: Audit ManiSkill reference collection preflight
+        run: python scripts/audit_maniskill_reference_collection_preflight.py
+
+      - name: Audit external collection readiness
+        run: python scripts/audit_external_collection_readiness.py
+
       - name: Build external backend integration packet
         run: python scripts/build_external_backend_integration_packet.py
 
@@ -66,9 +72,6 @@ jobs:
 
       - name: Self-test external collection preflight
         run: python scripts/self_test_external_collection_preflight.py
-
-      - name: Audit external collection readiness
-        run: python scripts/audit_external_collection_readiness.py
 
       - name: Audit external pilot smoke
         run: python scripts/audit_external_pilot_smoke.py

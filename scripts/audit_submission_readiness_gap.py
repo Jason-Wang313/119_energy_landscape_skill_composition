@@ -138,7 +138,7 @@ def main() -> int:
     ]
     add_requirement(
         requirements,
-        requirement="Core agenda framing: adaptive physical world/action model for skill seams",
+        requirement="Core paper framing: adaptive physical world/action model for skill seams",
         status="satisfied" if tex and all(term in tex for term in core_terms) else "missing",
         evidence=["paper/main.tex", "scripts/generate_manuscript.py", "scripts/validate_submission_artifacts.py"],
         blocker="" if tex and all(term in tex for term in core_terms) else "manuscript no longer contains the required world/action skill-seam framing",

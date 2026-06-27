@@ -27,6 +27,7 @@
 - External fidelity provenance packet builder: `scripts/build_external_fidelity_provenance_packet.py`
 - External collection runbook builder: `scripts/build_external_runbook.py`
 - External backend contract validator: `scripts/audit_external_backend_contract.py`
+- ManiSkill reference collection preflight validator: `scripts/audit_maniskill_reference_collection_preflight.py`
 - External backend integration packet builder: `scripts/build_external_backend_integration_packet.py`
 - External config manifest packet builder: `scripts/build_external_config_manifest_packet.py`
 - External rollout evidence packet builder: `scripts/build_external_rollout_evidence_packet.py`
@@ -146,6 +147,8 @@
   - `results/external_runbook_audit.md`
   - `results/external_collection_readiness_audit.json`
   - `results/external_collection_readiness_audit.md`
+  - `results/maniskill_reference_collection_preflight_audit.json`
+  - `results/maniskill_reference_collection_preflight_audit.md`
   - `results/external_config_template_audit.json`
   - `results/external_config_template_audit.md`
   - `results/external_config_evidence_audit.json`

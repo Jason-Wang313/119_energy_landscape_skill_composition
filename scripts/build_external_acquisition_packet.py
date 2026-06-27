@@ -22,6 +22,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "fidelity_provenance_packet",
         "backend_integration_packet",
         "maniskill_reference_backend_audit",
+        "maniskill_reference_collection_preflight",
         "rollout_evidence_packet",
         "backend_module",
         "platform_fidelity",
@@ -147,6 +148,19 @@ ACTION_CATALOG = {
             "python scripts\\audit_maniskill_backend_readiness.py",
         ],
         "closes": ["reference backend contract plus MP4-writer qualification only; official collection still requires accepted fidelity, renderable per-episode videos, logs, manifests, and strict evidence gates"],
+    },
+    "maniskill_reference_collection_preflight": {
+        "title": "Audit explicit reference-backend collection preflight",
+        "operator_input": "use the tracked reference backend with prepared configs, an explicit run id, and unsealed aliases to verify that preflight reaches the fidelity gate",
+        "artifacts": [
+            "results/maniskill_reference_collection_preflight_audit.json",
+            "results/maniskill_reference_collection_preflight_audit.md",
+            "external_validation/runner/maniskill_reference_backend.py",
+        ],
+        "commands": [
+            "python scripts\\audit_maniskill_reference_collection_preflight.py",
+        ],
+        "closes": ["reference backend/config/run-id/alias preflight to fidelity acceptance only; official collection still requires accepted fidelity, logs, videos, manifest, and strict evidence gates"],
     },
     "real_task_configs": {
         "title": "Create real manifest-declared task configs",
@@ -404,6 +418,7 @@ def main() -> int:
     backend_contract_path = RESULTS / "external_backend_contract_audit.json"
     backend_integration_path = RESULTS / "external_backend_integration_audit.json"
     maniskill_backend_path = RESULTS / "maniskill_backend_readiness_audit.json"
+    maniskill_preflight_path = RESULTS / "maniskill_reference_collection_preflight_audit.json"
     config_manifest_path = RESULTS / "external_config_manifest_audit.json"
     rollout_evidence_path = RESULTS / "external_rollout_evidence_audit.json"
     method_packet_path = RESULTS / "external_method_implementation_audit.json"
@@ -422,6 +437,7 @@ def main() -> int:
     backend_contract = require_json(backend_contract_path)
     backend_integration = require_json(backend_integration_path)
     maniskill_backend = require_json(maniskill_backend_path)
+    maniskill_preflight = require_json(maniskill_preflight_path)
     config_manifest = require_json(config_manifest_path)
     rollout_evidence = require_json(rollout_evidence_path)
     method_packet = require_json(method_packet_path)
@@ -454,6 +470,7 @@ def main() -> int:
                 backend_contract_path,
                 backend_integration_path,
                 maniskill_backend_path,
+                maniskill_preflight_path,
                 config_manifest_path,
                 rollout_evidence_path,
                 method_packet_path,
@@ -475,6 +492,7 @@ def main() -> int:
                 backend_contract_path,
                 backend_integration_path,
                 maniskill_backend_path,
+                maniskill_preflight_path,
                 config_manifest_path,
                 rollout_evidence_path,
                 method_packet_path,
@@ -592,6 +610,24 @@ def main() -> int:
             f"backend_contract_ready={maniskill_backend.get('backend_contract_ready')!r}, "
             f"video_writer_ready={maniskill_backend.get('video_writer_ready')!r}, "
             f"official_collection_ready={maniskill_backend.get('official_collection_ready')!r}"
+        ),
+    )
+    maniskill_preflight_checks = {check.get("name"): check.get("passed") for check in maniskill_preflight.get("checks", []) or []}
+    add_check(
+        checks,
+        "maniskill_reference_collection_preflight_ready",
+        maniskill_preflight.get("passed") is True
+        and maniskill_preflight.get("not_external_evidence") is True
+        and maniskill_preflight.get("reference_backend_contract_ready") is True
+        and maniskill_preflight.get("collection_ready") is False
+        and maniskill_preflight.get("strict_external_evidence_ready") is False
+        and int(maniskill_preflight.get("collection_blocking_missing_count", 0) or 0) == 1
+        and any("fidelity_acceptance_ready" in str(item) for item in maniskill_preflight.get("collection_blocking_missing", []) or [])
+        and maniskill_preflight_checks.get("reference_backend_collection_preflight_reaches_fidelity_gate") is True,
+        (
+            f"contract_ready={maniskill_preflight.get('reference_backend_contract_ready')!r}, "
+            f"collection_ready={maniskill_preflight.get('collection_ready')!r}, "
+            f"blocking={maniskill_preflight.get('collection_blocking_missing')!r}"
         ),
     )
     method_packet_checks = {check.get("name"): check.get("passed") for check in method_packet.get("checks", []) or []}

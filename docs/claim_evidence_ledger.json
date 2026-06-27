@@ -111,6 +111,11 @@
       "evidence": ["external_validation/runner/maniskill_reference_backend.py", "scripts/audit_maniskill_backend_readiness.py", "results/maniskill_backend_readiness_audit.json", "results/maniskill_backend_readiness_audit.md", "external_validation/runner/README.md"]
     },
     {
+      "name": "maniskill_reference_collection_preflight_claim",
+      "claim": "The repository provides a non-evidence ManiSkill/SAPIEN reference collection preflight audit showing that the tracked reference backend passes strict backend-contract checks and explicit collection preflight reaches the fidelity-acceptance gate, while official collection and strict external evidence remain false.",
+      "evidence": ["scripts/audit_maniskill_reference_collection_preflight.py", "external_validation/runner/maniskill_reference_backend.py", "results/maniskill_reference_collection_preflight_audit.json", "results/maniskill_reference_collection_preflight_audit.md", "results/external_fidelity_acceptance_audit.json"]
+    },
+    {
       "name": "external_runner_backend_probe_claim",
       "claim": "The repository provides a non-evidence runner backend probe self-test that exercises the actual external collection runner with a temporary non-template backend, writes schema-valid temporary JSONL records and videos, and leaves the real external manifest untouched.",
       "evidence": ["scripts/self_test_external_runner_backend.py", "external_validation/runner/real_collection_runner.py", "external_validation/runner/backend_contract.py", "results/external_runner_backend_self_test.json", "results/external_runner_backend_self_test.md", "external_validation/log_schema_v1.json"]
@@ -222,7 +227,7 @@
     },
     {
       "name": "manuscript_readability_claim",
-      "claim": "The generated manuscript has a machine-checked agenda framing, novelty boundary, contact-as-testbed positioning, and no stale manual related-work blocker; this remains a readability/framing audit rather than external robot evidence.",
+      "claim": "The generated manuscript has a machine-checked central framing, novelty boundary, contact-as-testbed positioning, and no stale manual related-work blocker; this remains a readability/framing audit rather than external robot evidence.",
       "evidence": ["scripts/audit_manuscript_readability.py", "results/manuscript_readability_audit.json", "results/manuscript_readability_audit.md", "paper/main.tex"]
     },
     {

@@ -10,7 +10,7 @@ This audit is meant to prevent false completion claims. It passes only while the
 
 ## Requirements
 
-- `satisfied` Core agenda framing: adaptive physical world/action model for skill seams
+- `satisfied` Core paper framing: adaptive physical world/action model for skill seams
   Evidence: paper/main.tex, scripts/generate_manuscript.py, scripts/validate_submission_artifacts.py
 - `satisfied` Defensible bounded local mechanism claim with frozen local gates
   Evidence: results/summary.json, results/hard_aggregate_metrics.csv, paper/main.tex

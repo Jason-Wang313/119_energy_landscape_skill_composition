@@ -402,7 +402,7 @@ def make_manuscript(summary):
         "The broader question is how a robot represents the physical consequences of a skill transition, notices when that representation is incomplete, and adapts future planning from the outcome. We use the world/action-model view at a deliberately local scale: the model is not a whole robot simulator, and the prediction-action-update loop is limited to the handoff. That restraint is intentional. The paper studies the small interface where a planner asks, before committing to the next skill, what this transition is likely to do, why it might fail, which response is warranted, and what should be remembered afterward."
     )
     a(
-        "Concretely, the contribution is a seam-level predictive interface: estimate terminal/basin/barrier/descent/risk quantities, diagnose the likely failure mode, choose accept, repair, probe, abstain, or an alternate transition, and write the outcome back to planner-edge memory so future planning queries do not treat every graph edge as equally safe. The energy composer is the paper's implementation of that interface, not the identity of the contribution; the identity is a small world/action model for skill seams."
+        "Concretely, the contribution is a seam-level predictive interface: estimate terminal/basin/barrier/descent/risk quantities, diagnose the likely failure mode, choose accept, repair, probe, abstain, or an alternate transition, and write the outcome back to planner-edge memory so future planning queries do not treat every graph edge as equally safe. The energy composer is one implementation of that interface; the paper's claim is the smaller and testable one that skill seams need a local world/action model."
     )
 
     a(r"\section{Problem Setup}")
@@ -500,7 +500,7 @@ def make_manuscript(summary):
 
     a(r"\subsection{Planner-Edge Policy Audit}")
     a(
-        "The agenda claim also requires that seam predictions affect future planning, not only one-step classification. "
+        "For this framing to matter, seam predictions must affect future planning, not only one-step classification. "
         f"We therefore treat each task/regime/split/seed hard slice as a local planning frontier and select the candidate edge using only the exported planner-edge update, predicted seam risk, basin alignment, descent continuity, and composition cost. This produces {int(planner_metrics['frontier_count']):,} paired planning-frontier decisions and does not use realized utility to choose the edge. "
         f"The proposed seam model selects executable accept/repair/transition edges on {fmt(planner_metrics['proposed_executable_edge_coverage'], 3)} of frontiers versus {fmt(planner_metrics['baseline_executable_edge_coverage'], 3)} for the strongest predecessor. "
         f"Selected-edge utility is {fmt(planner_metrics['proposed_selected_utility'], 3)} versus {fmt(planner_metrics['baseline_selected_utility'], 3)}, success is {fmt(planner_metrics['proposed_selected_success'], 3)} versus {fmt(planner_metrics['baseline_selected_success'], 3)}, and realized breach is {fmt(planner_metrics['proposed_selected_realized_breach'], 3)} versus {fmt(planner_metrics['baseline_selected_realized_breach'], 3)}. "
@@ -681,7 +681,7 @@ def make_manuscript(summary):
         "Citation links are hidden and clickable.",
         "The numbered PDF is placed in Downloads only.",
         "The manuscript separates local evidence from external deployment claims.",
-        "The manuscript readability audit checks the agenda framing, related-work boundary, and stale-polish blocker.",
+        "The manuscript readability audit checks the central framing, related-work boundary, and stale-polish blocker.",
     ]
     for item in checks:
         a(rf"\paragraph{{Check.}} {esc(item)}")

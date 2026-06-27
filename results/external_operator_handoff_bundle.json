@@ -3,8 +3,8 @@
   "category_counts": {
     "baseline_spec": 12,
     "config_template": 4,
-    "generated_non_evidence_report": 66,
-    "operator_command_source": 27,
+    "generated_non_evidence_report": 68,
+    "operator_command_source": 28,
     "operator_facing_input": 50,
     "prepared_config_input": 4,
     "reference_adapter": 60,
@@ -43,7 +43,7 @@
       "passed": true
     },
     {
-      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 66, 'operator_command_source': 27, 'operator_facing_input': 50, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 68, 'operator_command_source': 28, 'operator_facing_input': 50, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "handoff_has_task_config_and_baseline_assets",
       "passed": true
     },
@@ -70,6 +70,11 @@
     {
       "detail": "backend_contract_ready=True, video_writer_ready=True, official_collection_ready=False",
       "name": "maniskill_reference_backend_included",
+      "passed": true
+    },
+    {
+      "detail": "contract_ready=True, collection_ready=False, blocking=[\"fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'\"]",
+      "name": "maniskill_reference_collection_preflight_included",
       "passed": true
     },
     {
@@ -103,7 +108,7 @@
       "passed": true
     },
     {
-      "detail": "hashed_files=232",
+      "detail": "hashed_files=235",
       "name": "file_hashes_are_recorded",
       "passed": true
     }
@@ -118,14 +123,14 @@
     "placeholder_not_external_evidence"
   ],
   "handoff_bundle_ready": true,
-  "included_file_count": 232,
+  "included_file_count": 235,
   "included_files": [
     {
-      "bytes": 14656,
+      "bytes": 14914,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "57A906378E91195D45B63AC5BA8C2DD7B51A254D0065141E8EFDE92444308AD2"
+      "sha256": "5B2D28A9C2266948973DB0453AF5027B3F029D8E5E7D936F2BA6792E7D87694C"
     },
     {
       "bytes": 10521,
@@ -142,25 +147,25 @@
       "sha256": "AD9BFC5B473586D61A60EF9AE60E07AB60F81783D3BD7DD22421C910B2E8DB5E"
     },
     {
-      "bytes": 14848,
+      "bytes": 15092,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/reproducibility_checklist.md",
-      "sha256": "62F46B2FBF8BD0833473F9EC74F7F8BB774B4802211C834D0484AE557D1770DD"
+      "sha256": "624713DD0B7A6569740FBE7E901A2641CDC28193FAEFB2AAE7784B5EBF650358"
     },
     {
-      "bytes": 5992,
+      "bytes": 6284,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "86E3ADB14AF89BC35528152C859B3E915089747A937448B75C0EA1B583C8B454"
+      "sha256": "4ABD2A1FB14861921BB4068925B76CD88489E36BB03ADC8E6EEF9956651B1C5C"
     },
     {
-      "bytes": 27975,
+      "bytes": 28622,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/README.md",
-      "sha256": "507CE40BBC9AA4437FC73A5DDA6A2739688B0E1932A726E53B9B3BADA3D47C92"
+      "sha256": "7B4523D8EF689DA8085378EA21DDD294AC94DD364C052FBAFF7561F47CC366E6"
     },
     {
       "bytes": 8780,
@@ -940,18 +945,18 @@
       "sha256": "5F18D7641041AD7B7F9AD394AFE8A4CB7ADE880E2A0B6ECBA4A7F568DD821F3E"
     },
     {
-      "bytes": 11953,
+      "bytes": 12009,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/platform_onboarding_packet.json",
-      "sha256": "65CC9E3ECCF7700516263924A416E2501CFEDEB58CB50CD483FC5B10ECD2589B"
+      "sha256": "1629B6F445E8C5A38F50E496E5458D2E5EF8BFCD77B336855F6D36911F57E2FD"
     },
     {
-      "bytes": 9345,
+      "bytes": 9387,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/platform_onboarding_packet.md",
-      "sha256": "4CC2ABC98BBAC33ED283510031CEE41A95DF1829F62B9646141467CA379281DF"
+      "sha256": "9F7872D734692779DDDFBC3AE19A48C276A48A99913155432F235FF7A1A22B71"
     },
     {
       "bytes": 3275,
@@ -989,11 +994,11 @@
       "sha256": "C20FE327337FA1FC2988744B8DE9419F67BEBF4F4D0B10FDA2EB2BAD4CAAC642"
     },
     {
-      "bytes": 3328,
+      "bytes": 3716,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/runner/README.md",
-      "sha256": "C241589A6E3826554C13FEF527AC861C627EC5F409FAA3A6ACDD0442F29FE13B"
+      "sha256": "67A570BCB3377263F89123A8DE66346CDF31C518279563333792D681CD31212D"
     },
     {
       "bytes": 3269,
@@ -1094,18 +1099,18 @@
       "sha256": "357F6A44637AD1D55E6E98775B60640FE0E7C0A32FE0C1707FC5863C00D3CDB9"
     },
     {
-      "bytes": 28222,
+      "bytes": 29604,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.json",
-      "sha256": "7852C0D032EC9C36E52C2ABBFB63B6C999DC25117EC8E7A77F6F33B53A6BD19E"
+      "sha256": "C93752B54ED75EAE051E8AE854013CE5D5E990119FDE3EB676DC25DC13C26508"
     },
     {
-      "bytes": 18682,
+      "bytes": 19614,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.md",
-      "sha256": "D902F0FA648BB2CAC9F8A6EC01FAC21EDA18571D2163BB2D2572BBD561E10C87"
+      "sha256": "3485579B4D90C4A27E7782B596A695C4C1693EEC297F7F36BD854D6885191994"
     },
     {
       "bytes": 3130,
@@ -1290,18 +1295,18 @@
       "sha256": "B68911C22003E7E03E48D7486AB58F53AD10457F0C25ABCD47A134E37A247892"
     },
     {
-      "bytes": 28787,
+      "bytes": 29267,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.json",
-      "sha256": "CAC53A2EEA578D7FCBA15C2D40C51F7152634565BC243E11E01642F1BC41AF36"
+      "sha256": "ACBEB0AC90578F621DE3E171F75BF1AFA31311FC373EB58761F95481ECF2150A"
     },
     {
-      "bytes": 22029,
+      "bytes": 22383,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.md",
-      "sha256": "2873A0966564BC14BDF5B774839A1E46FA5C506588368AB209CBAF00FBFA0E31"
+      "sha256": "7D5A7DDE139D302F9895B10499FC29B068A87376DC97C8C76C0ED7DD4019AFD2"
     },
     {
       "bytes": 7157,
@@ -1346,18 +1351,18 @@
       "sha256": "428B997AE9D07EF6B24950444186AAC256634822B715B632D2BC4F2451C2C2E1"
     },
     {
-      "bytes": 22568,
+      "bytes": 23461,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.json",
-      "sha256": "BBB743036B0579E328FDAA71EF7CC9D5B06F4FB4C291648CA347E9BB62B7D7EC"
+      "sha256": "2A3F73C24BB943F5F97F5A8C1DFC7AF7D4C98E3705B53786EA78F09AC897C556"
     },
     {
-      "bytes": 6073,
+      "bytes": 6174,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.md",
-      "sha256": "465E5B537CB3CF25CA4B78C36847636DACFB9F80F6267D663A8EA96FB475025E"
+      "sha256": "8EE88E39A3F5CFD9136C23F1C9393ACCB1502ED0AFA3C42CD14960BDE8695770"
     },
     {
       "bytes": 525,
@@ -1402,32 +1407,32 @@
       "sha256": "684869BB5A12AB93D254C35B90856DEAD3BC8CA512ACC68DEF4D78F2CAFE39DA"
     },
     {
-      "bytes": 7621,
+      "bytes": 7705,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_platform_onboarding_audit.json",
-      "sha256": "54EB60CB4A447C76E0FA8B4A9384692820C086B4C899E8E201DAC49816A7E924"
+      "sha256": "48DFC582F6D7379399333E3265B97DBCB0C744317EBCB20409A1D04316FFEB8F"
     },
     {
-      "bytes": 5870,
+      "bytes": 5954,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_platform_onboarding_audit.md",
-      "sha256": "5B36DB118DFE565A8FD47C02C77002AC4595CC564475F4CCE25E47FB43389AB1"
+      "sha256": "79F4FA0E629215C45E80559771C78A3C613E68DEC582977BB47F72EEBFD38BC0"
     },
     {
-      "bytes": 12073,
+      "bytes": 13756,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_platform_probe.json",
-      "sha256": "A7F7B9A3EEFD926122EA1A3C5794BE08479D2A5ABC76A12AAE68DC6BED8EAFDB"
+      "sha256": "686C62085F2413C32DD6F22D48B435FA543C3FCEB3ED0D4F5E6401F71D5C21C1"
     },
     {
       "bytes": 2287,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_platform_probe.md",
-      "sha256": "9689762EA2379A49D744851A294017FB773667FDA84E4005B5EAD86E0694366B"
+      "sha256": "BC6B0980FC60B23386DEBCB7717ECBC4989A73DBD67CD3E5817B985560510619"
     },
     {
       "bytes": 7221,
@@ -1528,18 +1533,32 @@
       "sha256": "A1EF93BA23A41BD7011C3289F80C58AF4D8BC815EC14B27B14987BE94EC31323"
     },
     {
-      "bytes": 25616,
+      "bytes": 50739,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_env_smoke_probe.json",
-      "sha256": "7C36981A3506B9442F28DBDDA54DDB4F55A1A3B7F0100CEFA87A4AE2096DC58F"
+      "sha256": "73A233992BFA1C8FA41097481B210911F30FB16A8D534012FA1DEB8C198E422E"
     },
     {
-      "bytes": 2073,
+      "bytes": 1982,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_env_smoke_probe.md",
-      "sha256": "C4812A93C7148A33527B883F1355C2E12813A274B06FE11A85ED5E2D009E1776"
+      "sha256": "A2A04EF26BF69FBFD931850D1B85EA5278EF0404D1E40828656B0531FE9483A1"
+    },
+    {
+      "bytes": 4062,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/maniskill_reference_collection_preflight_audit.json",
+      "sha256": "327EE4D89B2EA6C6F5609818DE533465BB53693FD4D3A502EDB0CEC3EB9F5F06"
+    },
+    {
+      "bytes": 1325,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/maniskill_reference_collection_preflight_audit.md",
+      "sha256": "28691987D608EA40FA50EBD7BCA64E7240E5583DCEDFC72E729829EDDF35F942"
     },
     {
       "bytes": 9710,
@@ -1563,11 +1582,11 @@
       "sha256": "6A2A65A7AA73B04C438AFF9B85115589397D8DDF3496A93632E7A178D7230E4C"
     },
     {
-      "bytes": 15351,
+      "bytes": 15559,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/audit_external_collection_readiness.py",
-      "sha256": "02F0F9E7A06FE1B8E12941F93894ED8369C385EECE79E97ADCAB4E05D59DC64B"
+      "sha256": "D57C161EF11EEC793D785A336514D1CEBB0A4E6691FFFEE5CEE70AA6C5384828"
     },
     {
       "bytes": 25791,
@@ -1612,11 +1631,18 @@
       "sha256": "596DD2BE7A1952C6BA315CB303E4AB08105E9FEF9F81901763B874C2BD180F48"
     },
     {
-      "bytes": 45287,
+      "bytes": 8466,
+      "category": "operator_command_source",
+      "exists": true,
+      "path": "scripts/audit_maniskill_reference_collection_preflight.py",
+      "sha256": "A9B57E8629AF6556AF8BB31B0CD10081E1BA1BEC5FBB1178650CD587FDFFAD7B"
+    },
+    {
+      "bytes": 47658,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_acquisition_packet.py",
-      "sha256": "3DCFC42A1EBBCAE408643DD9A658BEEBFB79B3FA03FD4B710AB0C6FC56FA6D6A"
+      "sha256": "ECDB29A968A3C83FBCEE2FDCC1556BC87AE2CD7A4F9DB7BFB5E7DF04A6FEBFDD"
     },
     {
       "bytes": 16556,
@@ -1661,18 +1687,18 @@
       "sha256": "2BBE4A63230A15DC53D69B3D5798765D61EA7F07944B6FBD533AD1F9788FE101"
     },
     {
-      "bytes": 37768,
+      "bytes": 39468,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "4E46C16442BFA12B255B803B9DC999509127E0AD264BD3DF16BE38F29868C2C2"
+      "sha256": "F96BCE86C51018A29B80AEB779E092F09A0287C18B9E3D51F13D9A163680D1CD"
     },
     {
-      "bytes": 12721,
+      "bytes": 12773,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_packet.py",
-      "sha256": "8E1621FD9A7CE16CB75AB80E2B4BC6B3E0E3257F5AFA81A59C207CF326AB2F47"
+      "sha256": "F9B6ACD8DD4DFBB45F7ECCEDBB097540928634D46C3A7A93DBD0E4CAD775A6AD"
     },
     {
       "bytes": 11266,
@@ -1868,6 +1894,22 @@
       "id": "maniskill_reference_backend_audit",
       "operator_input": "use the tracked reference backend to inspect API/config/adapter wiring before replacing or wrapping it with a real evidence backend",
       "title": "Audit the repository ManiSkill/SAPIEN reference backend candidate"
+    },
+    {
+      "artifacts": [
+        "results/maniskill_reference_collection_preflight_audit.json",
+        "results/maniskill_reference_collection_preflight_audit.md",
+        "external_validation/runner/maniskill_reference_backend.py"
+      ],
+      "closes": [
+        "reference backend/config/run-id/alias preflight to fidelity acceptance only; official collection still requires accepted fidelity, logs, videos, manifest, and strict evidence gates"
+      ],
+      "commands": [
+        "python scripts\\audit_maniskill_reference_collection_preflight.py"
+      ],
+      "id": "maniskill_reference_collection_preflight",
+      "operator_input": "use the tracked reference backend with prepared configs, an explicit run id, and unsealed aliases to verify that preflight reaches the fidelity gate",
+      "title": "Audit explicit reference-backend collection preflight"
     },
     {
       "artifacts": [

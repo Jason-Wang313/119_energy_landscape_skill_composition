@@ -120,6 +120,7 @@ def main():
         "scripts\\audit_external_runner_harness.py",
         "scripts\\audit_external_backend_contract.py",
         "scripts\\audit_maniskill_backend_readiness.py",
+        "scripts\\audit_maniskill_reference_collection_preflight.py",
         "scripts\\build_external_backend_integration_packet.py",
         "scripts\\audit_external_collection_readiness.py",
         "scripts\\audit_external_pilot_smoke.py",
@@ -183,6 +184,7 @@ def main():
         "python scripts/audit_external_runner_harness.py",
         "python scripts/audit_external_backend_contract.py",
         "python scripts/audit_maniskill_backend_readiness.py",
+        "python scripts/audit_maniskill_reference_collection_preflight.py",
         "python scripts/self_test_external_backend_contract.py",
         "python scripts/audit_external_fidelity_acceptance.py",
         "python scripts/self_test_external_fidelity_acceptance.py",
@@ -932,6 +934,42 @@ def main():
     ):
         if maniskill_backend_checks.get(required_check) is not True:
             fail(f"ManiSkill reference backend audit missing passing check: {required_check}")
+
+    reference_preflight_paths = [
+        ROOT / "scripts" / "audit_maniskill_reference_collection_preflight.py",
+        RESULTS / "maniskill_reference_collection_preflight_audit.json",
+        RESULTS / "maniskill_reference_collection_preflight_audit.md",
+    ]
+    for path in reference_preflight_paths:
+        if not path.exists():
+            fail(f"missing ManiSkill reference collection preflight artifact: {path}")
+    reference_preflight = json.loads((RESULTS / "maniskill_reference_collection_preflight_audit.json").read_text(encoding="utf-8"))
+    if reference_preflight.get("version") != "maniskill_reference_collection_preflight_audit_v1":
+        fail("ManiSkill reference collection preflight audit version mismatch")
+    if reference_preflight.get("passed") is not True:
+        fail("ManiSkill reference collection preflight audit did not pass")
+    if reference_preflight.get("not_external_evidence") is not True:
+        fail("ManiSkill reference collection preflight audit must declare that it is not evidence")
+    if reference_preflight.get("reference_backend_contract_ready") is not True:
+        fail("ManiSkill reference backend should pass explicit strict backend-contract preflight")
+    if reference_preflight.get("collection_ready") is not False:
+        fail("ManiSkill reference collection preflight must not claim collection readiness")
+    if reference_preflight.get("strict_external_evidence_ready") is not False:
+        fail("ManiSkill reference collection preflight must keep strict external evidence false")
+    if int(reference_preflight.get("collection_blocking_missing_count", 0) or 0) != 1:
+        fail("ManiSkill reference collection preflight should currently leave exactly one collection blocker")
+    blockers = "\n".join(reference_preflight.get("collection_blocking_missing", []) or [])
+    if "fidelity_acceptance_ready" not in blockers:
+        fail("ManiSkill reference collection preflight should block on fidelity acceptance")
+    reference_preflight_checks = {check.get("name"): check.get("passed") for check in reference_preflight.get("checks", [])}
+    for required_check in (
+        "reference_backend_contract_strict_passes",
+        "reference_backend_collection_preflight_reaches_fidelity_gate",
+        "official_collection_still_not_ready",
+        "default_audits_are_not_overwritten",
+    ):
+        if reference_preflight_checks.get(required_check) is not True:
+            fail(f"ManiSkill reference collection preflight audit missing passing check: {required_check}")
 
     backend_integration_paths = [
         EXTERNAL / "backend_integration_packet.json",
@@ -1936,6 +1974,8 @@ def main():
         "external_collection_readiness_not_evidence",
         "external_collection_readiness_fail_closed",
         "external_collection_readiness_packet_shape",
+        "maniskill_reference_collection_preflight_ready",
+        "maniskill_reference_collection_preflight_reaches_fidelity_gate",
         "external_pairing_integrity_audit_ready",
         "external_pairing_integrity_not_evidence",
         "external_release_package_audit_ready",
@@ -2063,6 +2103,7 @@ def main():
         "backend_contract_gate_ready",
         "backend_integration_packet_ready",
         "maniskill_reference_backend_audit_ready",
+        "maniskill_reference_collection_preflight_ready",
         "pilot_smoke_packet_ready",
         "method_implementation_packet_ready",
         "preflight_operator_actions_present",
@@ -2129,6 +2170,11 @@ def main():
         fail("external operator packet missing maniskill_reference_backend_audit action")
     if "audit_maniskill_backend_readiness.py" not in "\n".join(reference_backend_actions[0].get("commands", []) or []):
         fail("external operator packet reference backend action must run the readiness audit")
+    reference_preflight_actions = [action for action in operator_actions if action.get("id") == "maniskill_reference_collection_preflight"]
+    if not reference_preflight_actions:
+        fail("external operator packet missing maniskill_reference_collection_preflight action")
+    if "audit_maniskill_reference_collection_preflight.py" not in "\n".join(reference_preflight_actions[0].get("commands", []) or []):
+        fail("external operator packet reference preflight action must run the collection preflight audit")
     config_manifest_actions = [action for action in operator_actions if action.get("id") == "config_manifest_packet"]
     if not config_manifest_actions:
         fail("external operator packet missing config_manifest_packet action")
@@ -2217,6 +2263,7 @@ def main():
         "fidelity_provenance_packet_included",
         "backend_integration_packet_included",
         "maniskill_reference_backend_included",
+        "maniskill_reference_collection_preflight_included",
         "config_manifest_packet_included",
         "rollout_evidence_packet_included",
         "pilot_smoke_packet_included",
@@ -2683,6 +2730,7 @@ def main():
         "platform_onboarding_visible",
         "fidelity_provenance_packet_visible",
         "backend_integration_packet_visible",
+        "maniskill_reference_collection_preflight_visible",
         "runner_backend_probe_visible",
         "config_manifest_packet_visible",
         "rollout_evidence_packet_visible",

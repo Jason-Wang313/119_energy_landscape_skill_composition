@@ -186,6 +186,22 @@
     },
     {
       "artifacts": [
+        "results/maniskill_reference_collection_preflight_audit.json",
+        "results/maniskill_reference_collection_preflight_audit.md",
+        "external_validation/runner/maniskill_reference_backend.py"
+      ],
+      "closes": [
+        "reference backend/config/run-id/alias preflight to fidelity acceptance only; official collection still requires accepted fidelity, logs, videos, manifest, and strict evidence gates"
+      ],
+      "commands": [
+        "python scripts\\audit_maniskill_reference_collection_preflight.py"
+      ],
+      "id": "maniskill_reference_collection_preflight",
+      "operator_input": "use the tracked reference backend with prepared configs, an explicit run id, and unsealed aliases to verify that preflight reaches the fidelity gate",
+      "title": "Audit explicit reference-backend collection preflight"
+    },
+    {
+      "artifacts": [
         "external_validation/configs/peg_place_regrasp.json",
         "external_validation/configs/drawer_to_pick_transfer.json",
         "external_validation/configs/door_open_navigation.json",

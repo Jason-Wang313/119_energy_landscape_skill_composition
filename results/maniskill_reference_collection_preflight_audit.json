@@ -1,0 +1,127 @@
+{
+  "backend_module": "external_validation/runner/maniskill_reference_backend.py",
+  "checks": [
+    {
+      "detail": "passed=True, actual_backend_ready=True",
+      "name": "reference_backend_contract_strict_passes",
+      "passed": true
+    },
+    {
+      "detail": "blocking=[\"fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'\"]",
+      "name": "reference_backend_collection_preflight_reaches_fidelity_gate",
+      "passed": true
+    },
+    {
+      "detail": "no manifest is written and fidelity acceptance remains required",
+      "name": "official_collection_still_not_ready",
+      "passed": true
+    },
+    {
+      "detail": "out=results/maniskill_reference_collection_preflight_audit.json",
+      "name": "default_audits_are_not_overwritten",
+      "passed": true
+    }
+  ],
+  "collection_blocking_missing": [
+    "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"
+  ],
+  "collection_blocking_missing_count": 1,
+  "collection_ready": false,
+  "collection_summary": {
+    "blocking_missing": [
+      "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"
+    ],
+    "checks": [
+      {
+        "detail": "external_validation/runner/real_collection_runner.py",
+        "name": "runner_exists",
+        "passed": true
+      },
+      {
+        "detail": "external_validation/log_schema_v1.json",
+        "name": "schema_exists",
+        "passed": true
+      },
+      {
+        "detail": "external_validation/blinded_operator_sheet.csv",
+        "name": "operator_sheet_exists",
+        "passed": true
+      },
+      {
+        "detail": "required columns present",
+        "name": "operator_sheet_columns",
+        "passed": true
+      },
+      {
+        "detail": "rows=1440",
+        "name": "operator_sheet_row_budget",
+        "passed": true
+      },
+      {
+        "detail": "external_validation/method_alias_map.json",
+        "name": "alias_map_exists",
+        "passed": true
+      },
+      {
+        "detail": "aliases=12, missing=[], errors=[]",
+        "name": "alias_map_complete",
+        "passed": true
+      },
+      {
+        "detail": "backend contract and provenance passed",
+        "name": "backend_module_ready",
+        "passed": true
+      },
+      {
+        "detail": "external_validation/configs",
+        "name": "task_config_dir_exists",
+        "passed": true
+      },
+      {
+        "detail": "tasks=['cable_route_insert', 'door_open_navigation', 'drawer_to_pick_transfer', 'peg_place_regrasp']",
+        "name": "real_task_configs_ready",
+        "passed": true
+      },
+      {
+        "detail": "acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'",
+        "name": "fidelity_acceptance_ready",
+        "passed": false
+      },
+      {
+        "detail": "unsealed_alias_map=True",
+        "name": "alias_unsealing_explicit",
+        "passed": true
+      },
+      {
+        "detail": "run_id='maniskill_sapien_reference_preflight_protocol_v1'",
+        "name": "run_id_specific",
+        "passed": true
+      },
+      {
+        "detail": "existing_nonempty_logs=[], force=False",
+        "name": "output_logs_empty_or_force",
+        "passed": true
+      },
+      {
+        "detail": "external_validation/videos",
+        "name": "video_dir_parent_exists",
+        "passed": true
+      }
+    ],
+    "collection_ready": false,
+    "readiness_state": "PREPARE_BACKEND_CONFIGS_AND_FIDELITY"
+  },
+  "contract_summary": {
+    "actual_backend_ready": true,
+    "backend_contract_harness_ready": true,
+    "blocking_missing": [],
+    "passed": true
+  },
+  "failed_checks": [],
+  "not_external_evidence": true,
+  "passed": true,
+  "reference_backend_contract_ready": true,
+  "run_id": "maniskill_sapien_reference_preflight_protocol_v1",
+  "strict_external_evidence_ready": false,
+  "version": "maniskill_reference_collection_preflight_audit_v1"
+}

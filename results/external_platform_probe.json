@@ -21,7 +21,7 @@
       "passed": true
     },
     {
-      "detail": "commit='ef8529a185b5c77ec27fbec38f8b9bf8d2e031db'",
+      "detail": "commit='648c84ff587124d9110ef4e32f4ae067dc4e4d7f'",
       "name": "repo_commit_reported",
       "passed": true
     },
@@ -143,39 +143,56 @@
   "primary_route_missing_packages": [],
   "repo": {
     "branch": "codex/paper119-submission-hardening",
-    "commit": "ef8529a185b5c77ec27fbec38f8b9bf8d2e031db",
+    "commit": "648c84ff587124d9110ef4e32f4ae067dc4e4d7f",
     "dirty_status_lines": [
+      " M .github/workflows/paper119-validation.yml",
       " M README.md",
       " M child_status.md",
       " M docs/claim_evidence_ledger.json",
       " M docs/experiment_rigor_checklist.md",
       " M docs/final_audit.md",
+      " M docs/iclr_main_gate.md",
       " M docs/paper119_terminal_audit_20260623.md",
+      " M docs/reproducibility_checklist.md",
       " M docs/submission_readiness_audit_v5.md",
       " M docs/submission_readiness_decision.md",
       " M docs/submission_version_log.md",
       " M external_validation/README.md",
       " M external_validation/runner/README.md",
-      " M external_validation/runner/maniskill_reference_backend.py",
+      " M outreach/paper119_four_page_preview.pdf",
+      " M outreach/paper119_one_page_memo.pdf",
+      " M paper/main.pdf",
       " M paper/main.tex",
-      " M requirements.txt",
       " M results/external_acquisition_packet.json",
       " M results/external_acquisition_packet.md",
+      " M results/external_execution_readiness_audit.json",
+      " M results/external_execution_readiness_audit.md",
       " M results/external_operator_handoff_bundle.json",
       " M results/external_operator_handoff_bundle.md",
       " M results/external_operator_packet.json",
-      " M results/maniskill_backend_readiness_audit.json",
-      " M results/maniskill_backend_readiness_audit.md",
+      " M results/external_operator_packet.md",
+      " M results/external_platform_probe.json",
+      " M results/external_platform_probe.md",
+      " M results/maniskill_env_smoke_probe.json",
       " M results/manuscript_readability_audit.json",
       " M results/manuscript_readability_audit.md",
+      " M results/submission_readiness_gap_audit.json",
+      " M results/submission_readiness_gap_audit.md",
       " M results/visible_contribution_audit.json",
       " M results/visible_contribution_audit.md",
-      " M scripts/audit_maniskill_backend_readiness.py",
+      " M scripts/audit_external_collection_readiness.py",
+      " M scripts/audit_external_execution_readiness.py",
+      " M scripts/audit_submission_readiness_gap.py",
       " M scripts/audit_visible_contribution.py",
       " M scripts/build_external_acquisition_packet.py",
       " M scripts/build_external_operator_handoff_bundle.py",
+      " M scripts/build_external_operator_packet.py",
+      " M scripts/build_submission_artifacts.ps1",
       " M scripts/generate_manuscript.py",
-      " M scripts/validate_submission_artifacts.py"
+      " M scripts/validate_submission_artifacts.py",
+      "?? results/maniskill_reference_collection_preflight_audit.json",
+      "?? results/maniskill_reference_collection_preflight_audit.md",
+      "?? scripts/audit_maniskill_reference_collection_preflight.py"
     ],
     "git_commands": {
       "rev_parse_branch": {
@@ -199,7 +216,7 @@
         ],
         "returncode": 0,
         "stderr": "",
-        "stdout": "ef8529a185b5c77ec27fbec38f8b9bf8d2e031db\n"
+        "stdout": "648c84ff587124d9110ef4e32f4ae067dc4e4d7f\n"
       },
       "status_short": {
         "available": true,
@@ -210,7 +227,7 @@
         ],
         "returncode": 0,
         "stderr": "",
-        "stdout": " M README.md\n M child_status.md\n M docs/claim_evidence_ledger.json\n M docs/experiment_rigor_checklist.md\n M docs/final_audit.md\n M docs/paper119_terminal_audit_20260623.md\n M docs/submission_readiness_audit_v5.md\n M docs/submission_readiness_decision.md\n M docs/submission_version_log.md\n M external_validation/README.md\n M external_validation/runner/README.md\n M external_validation/runner/maniskill_reference_backend.py\n M paper/main.tex\n M requirements.txt\n M results/external_acquisition_packet.json\n M results/external_acquisition_packet.md\n M results/external_operator_handoff_bundle.json\n M results/external_operator_handoff_bundle.md\n M results/external_operator_packet.json\n M results/maniskill_backend_readiness_audit.json\n M results/maniskill_backend_readiness_audit.md\n M results/manuscript_readability_audit.json\n M results/manuscript_readability_audit.md\n M results/visible_contribution_audit.json\n M results/visible_contribution_audit.md\n M scripts/audit_maniskill_backend_readiness.py\n M scripts/audit_visible_contribution.py\n M scripts/build_external_acquisition_packet.py\n M scripts/build_external_operator_handoff_bundle.py\n M scripts/generate_manuscript.py\n M scripts/validate_submission_artifacts.py\n"
+        "stdout": " M .github/workflows/paper119-validation.yml\n M README.md\n M child_status.md\n M docs/claim_evidence_ledger.json\n M docs/experiment_rigor_checklist.md\n M docs/final_audit.md\n M docs/iclr_main_gate.md\n M docs/paper119_terminal_audit_20260623.md\n M docs/reproducibility_checklist.md\n M docs/submission_readiness_audit_v5.md\n M docs/submission_readiness_decision.md\n M docs/submission_version_log.md\n M external_validation/README.md\n M external_validation/runner/README.md\n M outreach/paper119_four_page_preview.pdf\n M outreach/paper119_one_page_memo.pdf\n M paper/main.pdf\n M paper/main.tex\n M results/external_acquisition_packet.json\n M results/external_acquisition_packet.md\n M results/external_execution_readiness_audit.json\n M results/external_execution_readiness_audit.md\n M results/external_operator_handoff_bundle.json\n M results/external_operator_handoff_bundle.md\n M results/external_operator_packet.json\n M results/external_operator_packet.md\n M results/external_platform_probe.json\n M results/external_platform_probe.md\n M results/maniskill_env_smoke_probe.json\n M results/manuscript_readability_audit.json\n M results/manuscript_readability_audit.md\n M results/submission_readiness_gap_audit.json\n M results/submission_readiness_gap_audit.md\n M results/visible_contribution_audit.json\n M results/visible_contribution_audit.md\n M scripts/audit_external_collection_readiness.py\n M scripts/audit_external_execution_readiness.py\n M scripts/audit_submission_readiness_gap.py\n M scripts/audit_visible_contribution.py\n M scripts/build_external_acquisition_packet.py\n M scripts/build_external_operator_handoff_bundle.py\n M scripts/build_external_operator_packet.py\n M scripts/build_submission_artifacts.ps1\n M scripts/generate_manuscript.py\n M scripts/validate_submission_artifacts.py\n?? results/maniskill_reference_collection_preflight_audit.json\n?? results/maniskill_reference_collection_preflight_audit.md\n?? scripts/audit_maniskill_reference_collection_preflight.py\n"
       }
     }
   },

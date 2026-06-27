@@ -14,7 +14,7 @@ Current figure-readiness note: `results/figure_readability_audit.md` now checks 
 
 Current camera-ready note: `results/camera_ready_design_audit.md` renders all 30 PDF pages and checks nonblank content, density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
 
-Current manuscript-readability note: `results/manuscript_readability_audit.md` checks agenda framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and removal of the stale manual related-work blocker.
+Current manuscript-readability note: `results/manuscript_readability_audit.md` checks central framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and removal of the stale manual related-work blocker.
 
 ## Terminal State
 

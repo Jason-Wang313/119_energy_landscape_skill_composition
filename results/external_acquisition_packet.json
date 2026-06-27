@@ -2,7 +2,7 @@
   "acquisition_packet_ready": true,
   "checks": [
     {
-      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_probe.json, results/maniskill_task_binding_probe.json, results/maniskill_env_smoke_probe.json, results/external_platform_onboarding_audit.json, results/external_fidelity_provenance_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/maniskill_backend_readiness_audit.json, results/external_config_manifest_audit.json, results/external_rollout_evidence_audit.json, results/external_method_implementation_audit.json, results/external_pilot_smoke_packet_audit.json",
+      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_probe.json, results/maniskill_task_binding_probe.json, results/maniskill_env_smoke_probe.json, results/external_platform_onboarding_audit.json, results/external_fidelity_provenance_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/maniskill_backend_readiness_audit.json, results/maniskill_reference_collection_preflight_audit.json, results/external_config_manifest_audit.json, results/external_rollout_evidence_audit.json, results/external_method_implementation_audit.json, results/external_pilot_smoke_packet_audit.json",
       "name": "source_audits_exist",
       "passed": true
     },
@@ -52,6 +52,11 @@
       "passed": true
     },
     {
+      "detail": "contract_ready=True, collection_ready=False, blocking=[\"fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'\"]",
+      "name": "maniskill_reference_collection_preflight_ready",
+      "passed": true
+    },
+    {
       "detail": "config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False",
       "name": "config_manifest_packet_ready",
       "passed": true
@@ -92,7 +97,7 @@
       "passed": true
     },
     {
-      "detail": "strict_env_smoke_ready=False, primary_reset_missing=['OpenCabinetDoor-v1', 'OpenCabinetDrawer-v1']",
+      "detail": "strict_env_smoke_ready=False, primary_reset_missing=['OpenCabinetDoor-v1', 'OpenCabinetDrawer-v1', 'PegInsertionSide-v1', 'PullCubeTool-v1']",
       "name": "env_smoke_probe_ready",
       "passed": true
     },
@@ -117,7 +122,7 @@
       "passed": true
     },
     {
-      "detail": "Probe the selected external platform machine Probe ManiSkill task-family bindings Smoke-test bound ManiSkill environments Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Audit the repository ManiSkill/SAPIEN reference backend candidate Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Fill platform fidelity acceptance with real provenance Run a quarantined first-panel backend smoke test Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
+      "detail": "Probe the selected external platform machine Probe ManiSkill task-family bindings Smoke-test bound ManiSkill environments Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Audit the repository ManiSkill/SAPIEN reference backend candidate Audit explicit reference-backend collection preflight Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Fill platform fidelity acceptance with real provenance Run a quarantined first-panel backend smoke test Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
       "name": "operator_actions_cover_collection_blockers",
       "passed": true
     },
@@ -144,6 +149,7 @@
         "fidelity_provenance_packet",
         "backend_integration_packet",
         "maniskill_reference_backend_audit",
+        "maniskill_reference_collection_preflight",
         "rollout_evidence_packet",
         "backend_module",
         "platform_fidelity",
@@ -303,6 +309,22 @@
       "id": "maniskill_reference_backend_audit",
       "operator_input": "use the tracked reference backend to inspect API/config/adapter wiring before replacing or wrapping it with a real evidence backend",
       "title": "Audit the repository ManiSkill/SAPIEN reference backend candidate"
+    },
+    {
+      "artifacts": [
+        "results/maniskill_reference_collection_preflight_audit.json",
+        "results/maniskill_reference_collection_preflight_audit.md",
+        "external_validation/runner/maniskill_reference_backend.py"
+      ],
+      "closes": [
+        "reference backend/config/run-id/alias preflight to fidelity acceptance only; official collection still requires accepted fidelity, logs, videos, manifest, and strict evidence gates"
+      ],
+      "commands": [
+        "python scripts\\audit_maniskill_reference_collection_preflight.py"
+      ],
+      "id": "maniskill_reference_collection_preflight",
+      "operator_input": "use the tracked reference backend with prepared configs, an explicit run id, and unsealed aliases to verify that preflight reaches the fidelity gate",
+      "title": "Audit explicit reference-backend collection preflight"
     },
     {
       "artifacts": [

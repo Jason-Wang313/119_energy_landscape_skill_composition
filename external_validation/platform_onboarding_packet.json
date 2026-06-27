@@ -68,7 +68,9 @@
     "latest_env_smoke_asset_install_hint": "python -m mani_skill.utils.download_asset partnet_mobility_cabinet",
     "latest_env_smoke_primary_reset_missing": [
       "OpenCabinetDoor-v1",
-      "OpenCabinetDrawer-v1"
+      "OpenCabinetDrawer-v1",
+      "PegInsertionSide-v1",
+      "PullCubeTool-v1"
     ],
     "latest_env_smoke_probe_report": "results/maniskill_env_smoke_probe.json",
     "latest_env_smoke_ready": false,

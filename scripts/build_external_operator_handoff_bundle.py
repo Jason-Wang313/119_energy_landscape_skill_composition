@@ -143,6 +143,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "materialize_external_configs.py",
         SCRIPTS / "audit_external_backend_contract.py",
         SCRIPTS / "audit_maniskill_backend_readiness.py",
+        SCRIPTS / "audit_maniskill_reference_collection_preflight.py",
         SCRIPTS / "audit_external_collection_readiness.py",
         SCRIPTS / "audit_external_fidelity_acceptance.py",
         SCRIPTS / "build_external_manifest.py",
@@ -198,6 +199,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_backend_contract_audit.md",
         RESULTS / "maniskill_backend_readiness_audit.json",
         RESULTS / "maniskill_backend_readiness_audit.md",
+        RESULTS / "maniskill_reference_collection_preflight_audit.json",
+        RESULTS / "maniskill_reference_collection_preflight_audit.md",
         RESULTS / "external_collection_readiness_audit.json",
         RESULTS / "external_collection_readiness_audit.md",
         RESULTS / "external_config_template_audit.json",
@@ -280,6 +283,7 @@ def build_payload() -> dict[str, Any]:
     fidelity_provenance = require_payload(RESULTS / "external_fidelity_provenance_audit.json", "external_fidelity_provenance_audit_v1")
     backend_integration = require_payload(RESULTS / "external_backend_integration_audit.json", "external_backend_integration_audit_v1")
     maniskill_backend = require_payload(RESULTS / "maniskill_backend_readiness_audit.json", "maniskill_reference_backend_audit_v1")
+    maniskill_preflight = require_payload(RESULTS / "maniskill_reference_collection_preflight_audit.json", "maniskill_reference_collection_preflight_audit_v1")
     config_manifest = require_payload(RESULTS / "external_config_manifest_audit.json", "external_config_manifest_audit_v1")
     rollout_evidence = require_payload(RESULTS / "external_rollout_evidence_audit.json", "external_rollout_evidence_audit_v1")
     method_implementation = require_payload(RESULTS / "external_method_implementation_audit.json", "external_method_implementation_audit_v1")
@@ -495,6 +499,25 @@ def build_payload() -> dict[str, Any]:
             f"official_collection_ready={maniskill_backend.get('official_collection_ready')!r}"
         ),
     )
+    maniskill_preflight_checks = {check.get("name"): check.get("passed") for check in maniskill_preflight.get("checks", []) or []}
+    add_check(
+        checks,
+        "maniskill_reference_collection_preflight_included",
+        maniskill_preflight.get("passed") is True
+        and maniskill_preflight.get("not_external_evidence") is True
+        and maniskill_preflight.get("reference_backend_contract_ready") is True
+        and maniskill_preflight.get("collection_ready") is False
+        and maniskill_preflight.get("strict_external_evidence_ready") is False
+        and int(maniskill_preflight.get("collection_blocking_missing_count", 0) or 0) == 1
+        and maniskill_preflight_checks.get("reference_backend_collection_preflight_reaches_fidelity_gate") is True
+        and "scripts/audit_maniskill_reference_collection_preflight.py" in paths
+        and "results/maniskill_reference_collection_preflight_audit.json" in paths,
+        (
+            f"contract_ready={maniskill_preflight.get('reference_backend_contract_ready')!r}, "
+            f"collection_ready={maniskill_preflight.get('collection_ready')!r}, "
+            f"blocking={maniskill_preflight.get('collection_blocking_missing')!r}"
+        ),
+    )
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", []) or []}
     config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", []) or []}
     add_check(
@@ -588,6 +611,7 @@ def build_payload() -> dict[str, Any]:
             "fidelity_provenance_packet",
             "backend_integration_packet",
             "maniskill_reference_backend_audit",
+            "maniskill_reference_collection_preflight",
             "config_manifest_packet",
             "rollout_evidence_packet",
             "backend_module",
@@ -601,7 +625,7 @@ def build_payload() -> dict[str, Any]:
             "strict_rollout_recompute",
             "final_strict_gate",
         }.issubset(action_ids),
-        f"missing={sorted({'platform_onboarding', 'fidelity_provenance_packet', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
+        f"missing={sorted({'platform_onboarding', 'fidelity_provenance_packet', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
     )
     add_check(
         checks,

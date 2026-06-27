@@ -20,7 +20,7 @@
       "passed": true
     },
     {
-      "detail": "files=232, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=235, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -40,7 +40,7 @@
       "passed": true
     },
     {
-      "detail": "strict_env_smoke_ready=False, primary_reset_missing=['OpenCabinetDoor-v1', 'OpenCabinetDrawer-v1']",
+      "detail": "strict_env_smoke_ready=False, primary_reset_missing=['OpenCabinetDoor-v1', 'OpenCabinetDrawer-v1', 'PegInsertionSide-v1', 'PullCubeTool-v1']",
       "name": "maniskill_env_smoke_probe_visible",
       "passed": true
     },
@@ -62,6 +62,11 @@
     {
       "detail": "backend_contract_ready=True, video_writer_ready=True, official_collection_ready=False, strict_external_evidence_ready=False",
       "name": "maniskill_reference_backend_visible",
+      "passed": true
+    },
+    {
+      "detail": "contract_ready=True, collection_ready=False, blocking=[\"fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'\"]",
+      "name": "maniskill_reference_collection_preflight_visible",
       "passed": true
     },
     {

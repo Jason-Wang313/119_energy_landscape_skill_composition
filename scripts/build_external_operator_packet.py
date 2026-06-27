@@ -77,6 +77,7 @@ def build_payload() -> dict[str, Any]:
         "fidelity_provenance_packet",
         "backend_integration_packet",
         "maniskill_reference_backend_audit",
+        "maniskill_reference_collection_preflight",
         "backend_module",
         "config_manifest_packet",
         "rollout_evidence_packet",

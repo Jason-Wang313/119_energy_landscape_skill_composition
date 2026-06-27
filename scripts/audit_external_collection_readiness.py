@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import importlib
 import importlib.util
 import json
@@ -16,6 +17,8 @@ EXTERNAL = ROOT / "external_validation"
 RESULTS = ROOT / "results"
 RUNNER_DIR = EXTERNAL / "runner"
 
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 if str(RUNNER_DIR) not in sys.path:
     sys.path.insert(0, str(RUNNER_DIR))
 
@@ -141,7 +144,9 @@ def inspect_config(path: Path) -> list[str]:
 def import_module_from_value(value: str) -> ModuleType:
     path = Path(value)
     if path.exists():
-        spec = importlib.util.spec_from_file_location(f"paper119_collection_backend_{path.stem}", path)
+        digest = hashlib.sha256(str(path.resolve()).encode("utf-8")).hexdigest()[:12]
+        module_name = f"paper119_collection_backend_{digest}_{path.stem}"
+        spec = importlib.util.spec_from_file_location(module_name, path)
         if spec is None or spec.loader is None:
             raise RuntimeError(f"could not import backend module from {path}")
         module = importlib.util.module_from_spec(spec)
