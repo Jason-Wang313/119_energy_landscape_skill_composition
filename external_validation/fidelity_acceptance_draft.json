@@ -168,12 +168,118 @@
     "python scripts\\audit_external_fidelity_acceptance.py --strict",
     "python scripts\\audit_external_collection_readiness.py --strict --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map"
   ],
+  "promotion_readiness": {
+    "acceptance_gate_count": 5,
+    "machine_prefilled_items": [
+      {
+        "name": "primary_route_package_versions",
+        "ready": true
+      },
+      {
+        "name": "primary_env_smoke_status",
+        "ready": true
+      },
+      {
+        "name": "primary_fidelity_metadata_timing",
+        "ready": true
+      },
+      {
+        "name": "primary_task_config_hashes",
+        "ready": true
+      },
+      {
+        "name": "reference_backend_hash",
+        "ready": true
+      },
+      {
+        "name": "skill_library_hash",
+        "ready": true
+      },
+      {
+        "name": "support_asset_blockers_visible",
+        "ready": true
+      }
+    ],
+    "machine_prefilled_ready": true,
+    "next_manual_step": "Independent operator verifies/overwrites every OPERATOR_VERIFY field, collects manifest-declared logs/videos, and only then promotes this draft.",
+    "not_external_evidence": true,
+    "operator_signoff_item_count": 10,
+    "operator_signoff_items": [
+      {
+        "accepted": false,
+        "name": "independent_operator_identity",
+        "required": true,
+        "source": "independent_operator_or_manifest_after_real_collection"
+      },
+      {
+        "accepted": false,
+        "name": "accepted_external_collection_machine",
+        "required": true,
+        "source": "independent_operator_or_manifest_after_real_collection"
+      },
+      {
+        "accepted": false,
+        "name": "contact_solver_and_friction_model",
+        "required": true,
+        "source": "independent_operator_or_manifest_after_real_collection"
+      },
+      {
+        "accepted": false,
+        "name": "timestep_and_substeps_per_control_step",
+        "required": true,
+        "source": "independent_operator_or_manifest_after_real_collection"
+      },
+      {
+        "accepted": false,
+        "name": "paired_reset_replay_verification",
+        "required": true,
+        "source": "independent_operator_or_manifest_after_real_collection"
+      },
+      {
+        "accepted": false,
+        "name": "real_or_benchmark_calibration_basis",
+        "required": true,
+        "source": "independent_operator_or_manifest_after_real_collection"
+      },
+      {
+        "accepted": false,
+        "name": "task_binding_accept_or_replace_decision",
+        "required": true,
+        "source": "independent_operator_or_manifest_after_real_collection"
+      },
+      {
+        "accepted": false,
+        "name": "acceptance_gate_signoff",
+        "required": true,
+        "source": "independent_operator_or_manifest_after_real_collection"
+      },
+      {
+        "accepted": false,
+        "name": "manifest_declares_fidelity_acceptance_path",
+        "required": true,
+        "source": "independent_operator_or_manifest_after_real_collection"
+      },
+      {
+        "accepted": false,
+        "name": "real_rollout_logs_videos_and_release_hashes",
+        "required": true,
+        "source": "independent_operator_or_manifest_after_real_collection"
+      }
+    ],
+    "operator_signoff_ready": false,
+    "promotion_ready": false,
+    "strict_promotion_gate_commands": [
+      "python scripts\\audit_external_fidelity_acceptance.py --strict",
+      "python scripts\\audit_external_collection_readiness.py --strict --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map"
+    ],
+    "task_metadata_ready": true
+  },
   "promotion_ready": false,
   "provenance": {
     "artifact_hash_policy": "sha256",
     "backend_module": "external_validation/runner/maniskill_reference_backend.py",
     "backend_module_hash": "E30E5A3292B6ACB7B9819914A6FDA6BD068B5B469031EEF1FF4E7AA852D140B2",
-    "code_commit": "01de91b46e7502a81b73c036244b5bf9d2a7800f",
+    "code_commit": "a90c72888085cbbdb1682951ab08a7a6562a9769",
     "date_locked": "DRAFT_NOT_LOCKED",
     "fidelity_metadata_probe_path": "results/maniskill_fidelity_metadata_probe.json",
     "fidelity_metadata_probe_ready": true,
@@ -221,28 +327,16 @@
       "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"
     ],
     "repo_dirty_status_lines": [
-      "M .github/workflows/paper119-validation.yml",
-      " M README.md",
+      "M README.md",
       " M child_status.md",
       " M docs/claim_evidence_ledger.json",
       " M docs/final_audit.md",
-      " M docs/haonan_yilun_outreach_package.md",
       " M docs/submission_readiness_audit_v5.md",
       " M docs/submission_readiness_decision.md",
       " M docs/submission_version_log.md",
       " M external_validation/README.md",
       " M external_validation/fidelity_acceptance_draft.json",
       " M external_validation/fidelity_acceptance_draft.md",
-      " M outreach/paper119_four_page_preview.pdf",
-      " M outreach/paper119_one_page_memo.pdf",
-      " M paper/main.pdf",
-      " M paper/main.tex",
-      " M results/camera_ready_design_audit.json",
-      " M results/camera_ready_design_audit.md",
-      " M results/external_acquisition_packet.json",
-      " M results/external_acquisition_packet.md",
-      " M results/external_execution_readiness_audit.json",
-      " M results/external_execution_readiness_audit.md",
       " M results/external_fidelity_acceptance_draft_audit.json",
       " M results/external_fidelity_acceptance_draft_audit.md",
       " M results/external_operator_handoff_bundle.json",
@@ -252,24 +346,11 @@
       " M results/external_platform_probe.json",
       " M results/external_platform_probe.md",
       " M results/maniskill_env_smoke_probe.json",
-      " M results/manuscript_readability_audit.json",
-      " M results/manuscript_readability_audit.md",
-      " M results/presentation_quality_audit.json",
-      " M results/presentation_quality_audit.md",
-      " M results/visible_contribution_audit.json",
-      " M results/visible_contribution_audit.md",
-      " M scripts/audit_external_execution_readiness.py",
+      " M results/maniskill_fidelity_metadata_probe.json",
       " M scripts/audit_visible_contribution.py",
-      " M scripts/build_external_acquisition_packet.py",
       " M scripts/build_external_fidelity_acceptance_draft.py",
-      " M scripts/build_external_operator_handoff_bundle.py",
       " M scripts/build_external_operator_packet.py",
-      " M scripts/build_submission_artifacts.ps1",
-      " M scripts/generate_manuscript.py",
-      " M scripts/validate_submission_artifacts.py",
-      "?? results/maniskill_fidelity_metadata_probe.json",
-      "?? results/maniskill_fidelity_metadata_probe.md",
-      "?? scripts/probe_maniskill_fidelity_metadata.py"
+      " M scripts/validate_submission_artifacts.py"
     ],
     "skill_library_hash": "62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1",
     "strict_fidelity_metadata_ready": true

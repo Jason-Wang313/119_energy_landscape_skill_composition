@@ -44,6 +44,16 @@ REMAINING_OPERATOR_INPUTS = [
     "real_rollout_logs_videos_and_release_hashes",
 ]
 
+MACHINE_PREFILLED_ITEMS = [
+    "primary_route_package_versions",
+    "primary_env_smoke_status",
+    "primary_fidelity_metadata_timing",
+    "primary_task_config_hashes",
+    "reference_backend_hash",
+    "skill_library_hash",
+    "support_asset_blockers_visible",
+]
+
 PROMOTION_COMMANDS = [
     "copy external_validation\\fidelity_acceptance_draft.json external_validation\\fidelity_acceptance.json",
     "edit external_validation\\fidelity_acceptance.json: change version to paper119_fidelity_acceptance_v1, remove draft_only, fill every remaining operator input, and set gates only after evidence exists",
@@ -221,6 +231,68 @@ def build_task_fidelity(
     return result
 
 
+def build_promotion_readiness(
+    *,
+    platform_probe: dict[str, Any],
+    env_smoke: dict[str, Any],
+    metadata_probe: dict[str, Any],
+    task_fidelity: list[dict[str, Any]],
+    config_hash_by_task: dict[str, str],
+    backend_hash: str,
+    skill_library_hash: str,
+    support_asset_ids: list[str],
+) -> dict[str, Any]:
+    task_rows = [task for task in task_fidelity if isinstance(task, dict) and task.get("task_family") in REQUIRED_TASKS]
+    machine_status = {
+        "primary_route_package_versions": platform_probe.get("primary_route_install_ready") is True,
+        "primary_env_smoke_status": env_smoke.get("env_smoke_probe_ready") is True
+        and isinstance(env_smoke.get("primary_reset_missing"), list),
+        "primary_fidelity_metadata_timing": metadata_probe.get("metadata_probe_ready") is True
+        and isinstance((metadata_probe.get("primary_timing_summary", {}) or {}).get("sim_timestep_seconds_values"), list)
+        and isinstance((metadata_probe.get("primary_timing_summary", {}) or {}).get("derived_substeps_per_control_step_values"), list),
+        "primary_task_config_hashes": all(has_sha(config_hash_by_task.get(task)) for task in REQUIRED_TASKS),
+        "reference_backend_hash": has_sha(backend_hash),
+        "skill_library_hash": has_sha(skill_library_hash),
+        "support_asset_blockers_visible": {"oakink-v2", "ycb"} <= set(support_asset_ids),
+    }
+    task_metadata_ready = all(
+        task.get("primary_env_smoke_recorded") is True
+        and task.get("primary_fidelity_metadata_recorded") is True
+        and has_sha(task.get("config_sha256"))
+        for task in task_rows
+    ) and len(task_rows) >= len(REQUIRED_TASKS)
+    machine_prefilled_ready = all(machine_status.values()) and task_metadata_ready
+    return {
+        "not_external_evidence": True,
+        "promotion_ready": False,
+        "machine_prefilled_ready": machine_prefilled_ready,
+        "task_metadata_ready": task_metadata_ready,
+        "operator_signoff_ready": False,
+        "machine_prefilled_items": [
+            {"name": name, "ready": bool(machine_status.get(name))}
+            for name in MACHINE_PREFILLED_ITEMS
+        ],
+        "operator_signoff_items": [
+            {
+                "name": name,
+                "required": True,
+                "accepted": False,
+                "source": "independent_operator_or_manifest_after_real_collection",
+            }
+            for name in REMAINING_OPERATOR_INPUTS
+        ],
+        "operator_signoff_item_count": len(REMAINING_OPERATOR_INPUTS),
+        "acceptance_gate_count": 5,
+        "next_manual_step": (
+            "Independent operator verifies/overwrites every OPERATOR_VERIFY field, "
+            "collects manifest-declared logs/videos, and only then promotes this draft."
+        ),
+        "strict_promotion_gate_commands": [
+            command for command in PROMOTION_COMMANDS if "audit_" in command or "validate_" in command
+        ],
+    }
+
+
 def build_draft() -> dict[str, Any]:
     template = read_json(EXTERNAL / "fidelity_acceptance_template.json")
     platform_probe = read_json(RESULTS / "external_platform_probe.json")
@@ -313,6 +385,18 @@ def build_draft() -> dict[str, Any]:
         new_gate["evidence"] = f"DRAFT ONLY: {gate.get('evidence', '')}"
         gates.append(new_gate)
 
+    task_fidelity = build_task_fidelity(template, bindings, env_smoke, metadata_probe, config_hash_by_task)
+    promotion_readiness = build_promotion_readiness(
+        platform_probe=platform_probe,
+        env_smoke=env_smoke,
+        metadata_probe=metadata_probe,
+        task_fidelity=task_fidelity,
+        config_hash_by_task=config_hash_by_task,
+        backend_hash=backend_hash,
+        skill_library_hash=skill_library_hash,
+        support_asset_ids=sorted(set(support_asset_ids).union(metadata_missing_asset_ids)),
+    )
+
     return {
         "version": DRAFT_VERSION,
         "not_external_evidence": True,
@@ -327,7 +411,7 @@ def build_draft() -> dict[str, Any]:
         "purpose": "Operator-editable draft for the tracked ManiSkill/SAPIEN route. This file pre-fills reproducible provenance anchors but cannot satisfy fidelity acceptance until independently completed, renamed, manifest-declared, and strict-audited.",
         "platform": platform,
         "qualification": qualification,
-        "task_fidelity": build_task_fidelity(template, bindings, env_smoke, metadata_probe, config_hash_by_task),
+        "task_fidelity": task_fidelity,
         "provenance": {
             "operator_name_or_lab": "DRAFT_OPERATOR_TO_FILL",
             "operator_not_target_collaborator": False,
@@ -356,6 +440,7 @@ def build_draft() -> dict[str, Any]:
             "skill_library_hash": skill_library_hash,
             "tracked_probe_hashes": tracked_hashes,
         },
+        "promotion_readiness": promotion_readiness,
         "remaining_operator_inputs": REMAINING_OPERATOR_INPUTS,
         "acceptance_gates": gates,
         "promotion_commands": PROMOTION_COMMANDS,
@@ -381,6 +466,8 @@ def audit_draft(draft: dict[str, Any]) -> dict[str, Any]:
     remaining = set(draft.get("remaining_operator_inputs", []) or [])
     gates = draft.get("acceptance_gates", []) if isinstance(draft.get("acceptance_gates"), list) else []
     command_text = "\n".join(draft.get("promotion_commands", []) or [])
+    promotion_readiness = draft.get("promotion_readiness", {})
+    promotion_readiness = promotion_readiness if isinstance(promotion_readiness, dict) else {}
 
     add_check(
         checks,
@@ -479,6 +566,28 @@ def audit_draft(draft: dict[str, Any]) -> dict[str, Any]:
         set(REMAINING_OPERATOR_INPUTS) <= remaining,
         f"missing={sorted(set(REMAINING_OPERATOR_INPUTS) - remaining)}",
     )
+    machine_items = promotion_readiness.get("machine_prefilled_items", [])
+    machine_items = machine_items if isinstance(machine_items, list) else []
+    operator_items = promotion_readiness.get("operator_signoff_items", [])
+    operator_items = operator_items if isinstance(operator_items, list) else []
+    add_check(
+        checks,
+        "promotion_readiness_separates_machine_prefill_from_operator_signoff",
+        promotion_readiness.get("not_external_evidence") is True
+        and promotion_readiness.get("machine_prefilled_ready") is True
+        and promotion_readiness.get("task_metadata_ready") is True
+        and promotion_readiness.get("operator_signoff_ready") is False
+        and promotion_readiness.get("promotion_ready") is False
+        and {item.get("name") for item in machine_items if isinstance(item, dict)} >= set(MACHINE_PREFILLED_ITEMS)
+        and {item.get("name") for item in operator_items if isinstance(item, dict)} >= set(REMAINING_OPERATOR_INPUTS)
+        and all(item.get("ready") is True for item in machine_items if isinstance(item, dict))
+        and all(item.get("accepted") is False for item in operator_items if isinstance(item, dict)),
+        (
+            f"machine_prefilled_ready={promotion_readiness.get('machine_prefilled_ready')!r}, "
+            f"operator_signoff_ready={promotion_readiness.get('operator_signoff_ready')!r}, "
+            f"operator_items={len(operator_items)}"
+        ),
+    )
     add_check(
         checks,
         "acceptance_gates_remain_unaccepted",
@@ -494,6 +603,14 @@ def audit_draft(draft: dict[str, Any]) -> dict[str, Any]:
         and "audit_external_fidelity_acceptance.py --strict" in command_text
         and "audit_external_collection_readiness.py --strict" in command_text,
         command_text,
+    )
+    strict_gate_text = "\n".join(promotion_readiness.get("strict_promotion_gate_commands", []) or [])
+    add_check(
+        checks,
+        "promotion_readiness_lists_strict_promotion_gates",
+        "audit_external_fidelity_acceptance.py --strict" in strict_gate_text
+        and "audit_external_collection_readiness.py --strict" in strict_gate_text,
+        strict_gate_text,
     )
     add_check(
         checks,
@@ -522,6 +639,9 @@ def audit_draft(draft: dict[str, Any]) -> dict[str, Any]:
         "strict_fidelity_evidence_ready": False,
         "strict_external_evidence_ready": False,
         "remaining_operator_input_count": len(REMAINING_OPERATOR_INPUTS),
+        "machine_prefilled_ready": promotion_readiness.get("machine_prefilled_ready") is True,
+        "operator_signoff_ready": promotion_readiness.get("operator_signoff_ready") is True,
+        "operator_signoff_item_count": int(promotion_readiness.get("operator_signoff_item_count", 0) or 0),
         "draft_path": rel(DRAFT_JSON),
         "draft_md_path": rel(DRAFT_MD),
         "real_acceptance_path": REAL_ACCEPTANCE_PATH,
@@ -534,6 +654,8 @@ def audit_draft(draft: dict[str, Any]) -> dict[str, Any]:
 def write_draft_md(draft: dict[str, Any]) -> None:
     platform = draft["platform"]
     provenance = draft["provenance"]
+    promotion_readiness = draft.get("promotion_readiness", {})
+    promotion_readiness = promotion_readiness if isinstance(promotion_readiness, dict) else {}
     lines = [
         "# External Fidelity Acceptance Draft",
         "",
@@ -541,6 +663,8 @@ def write_draft_md(draft: dict[str, Any]) -> None:
         "Not evidence: `true`.",
         "Acceptance ready: `false`.",
         "Strict fidelity evidence ready: `false`.",
+        f"Machine-prefilled ready: `{str(promotion_readiness.get('machine_prefilled_ready') is True).lower()}`.",
+        f"Operator signoff ready: `{str(promotion_readiness.get('operator_signoff_ready') is True).lower()}`.",
         "",
         "This is an operator-editable draft for the tracked ManiSkill/SAPIEN route. It pre-fills reproducible anchors from the current platform probe, backend readiness audit, task bindings, config hashes, and environment smoke probe. It is deliberately not accepted evidence.",
         "",
@@ -560,9 +684,37 @@ def write_draft_md(draft: dict[str, Any]) -> None:
         f"- Strict fidelity metadata ready: `{str(provenance['strict_fidelity_metadata_ready']).lower()}`",
         f"- Probe-observed timing summary: `{provenance['probe_observed_timing_summary']}`",
         "",
-        "## Remaining Operator Inputs",
+        "## Promotion Readiness",
+        "",
+        f"- Promotion ready: `{str(promotion_readiness.get('promotion_ready') is True).lower()}`",
+        f"- Machine-prefilled ready: `{str(promotion_readiness.get('machine_prefilled_ready') is True).lower()}`",
+        f"- Task metadata ready: `{str(promotion_readiness.get('task_metadata_ready') is True).lower()}`",
+        f"- Operator signoff ready: `{str(promotion_readiness.get('operator_signoff_ready') is True).lower()}`",
+        f"- Operator signoff items: `{promotion_readiness.get('operator_signoff_item_count', 0)}`",
+        "",
+        "Machine-prefilled items:",
         "",
     ]
+    for item in promotion_readiness.get("machine_prefilled_items", []) or []:
+        if isinstance(item, dict):
+            lines.append(f"- `{item.get('name')}`: `{str(item.get('ready') is True).lower()}`")
+    lines.extend(
+        [
+            "",
+            "Operator signoff items:",
+            "",
+        ]
+    )
+    for item in promotion_readiness.get("operator_signoff_items", []) or []:
+        if isinstance(item, dict):
+            lines.append(f"- `{item.get('name')}`: accepted=`{str(item.get('accepted') is True).lower()}`")
+    lines.extend(
+        [
+            "",
+        "## Remaining Operator Inputs",
+        "",
+        ]
+    )
     for item in draft["remaining_operator_inputs"]:
         lines.append(f"- `{item}`")
     lines.extend(["", "## Task Bindings", ""])
@@ -595,6 +747,9 @@ def write_audit_md(audit: dict[str, Any]) -> None:
         f"Draft ready: `{str(audit['draft_ready']).lower()}`.",
         f"Acceptance ready: `{str(audit['acceptance_ready']).lower()}`.",
         f"Remaining operator inputs: `{audit['remaining_operator_input_count']}`.",
+        f"Machine-prefilled ready: `{str(audit['machine_prefilled_ready']).lower()}`.",
+        f"Operator signoff ready: `{str(audit['operator_signoff_ready']).lower()}`.",
+        f"Operator signoff items: `{audit['operator_signoff_item_count']}`.",
         "",
         "This audit checks that the draft is useful as an operator intake artifact while remaining impossible to count as accepted fidelity evidence.",
         "",

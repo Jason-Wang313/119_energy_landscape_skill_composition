@@ -4,6 +4,8 @@ Draft ready: `true`.
 Not evidence: `true`.
 Acceptance ready: `false`.
 Strict fidelity evidence ready: `false`.
+Machine-prefilled ready: `true`.
+Operator signoff ready: `false`.
 
 This is an operator-editable draft for the tracked ManiSkill/SAPIEN route. It pre-fills reproducible anchors from the current platform probe, backend readiness audit, task bindings, config hashes, and environment smoke probe. It is deliberately not accepted evidence.
 
@@ -14,7 +16,7 @@ This is an operator-editable draft for the tracked ManiSkill/SAPIEN route. It pr
 - Physics engine: `SAPIEN 3.0.3 via ManiSkill`
 - Backend hash: `E30E5A3292B6ACB7B9819914A6FDA6BD068B5B469031EEF1FF4E7AA852D140B2`
 - Candidate skill-library hash: `62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1`
-- Code commit captured in draft: `01de91b46e7502a81b73c036244b5bf9d2a7800f`
+- Code commit captured in draft: `a90c72888085cbbdb1682951ab08a7a6562a9769`
 - Primary route install ready: `true`
 - Primary env smoke recorded: `true`
 - Primary env smoke ready: `true`
@@ -22,6 +24,37 @@ This is an operator-editable draft for the tracked ManiSkill/SAPIEN route. It pr
 - Fidelity metadata probe ready: `true`
 - Strict fidelity metadata ready: `true`
 - Probe-observed timing summary: `{'agent_uids': ['fetch', 'panda', 'panda_wristcam'], 'control_freq_hz_values': [20.0], 'control_timestep_seconds_values': [0.05], 'controller_types': ['CombinedController'], 'derived_substeps_per_control_step_values': [5.0], 'primary_metadata_env_count': 4, 'scene_backend_types': ['PhysxCpuSystem'], 'scene_timestep_seconds_values': [0.01], 'sim_freq_hz_values': [100.0], 'sim_timestep_seconds_values': [0.01]}`
+
+## Promotion Readiness
+
+- Promotion ready: `false`
+- Machine-prefilled ready: `true`
+- Task metadata ready: `true`
+- Operator signoff ready: `false`
+- Operator signoff items: `10`
+
+Machine-prefilled items:
+
+- `primary_route_package_versions`: `true`
+- `primary_env_smoke_status`: `true`
+- `primary_fidelity_metadata_timing`: `true`
+- `primary_task_config_hashes`: `true`
+- `reference_backend_hash`: `true`
+- `skill_library_hash`: `true`
+- `support_asset_blockers_visible`: `true`
+
+Operator signoff items:
+
+- `independent_operator_identity`: accepted=`false`
+- `accepted_external_collection_machine`: accepted=`false`
+- `contact_solver_and_friction_model`: accepted=`false`
+- `timestep_and_substeps_per_control_step`: accepted=`false`
+- `paired_reset_replay_verification`: accepted=`false`
+- `real_or_benchmark_calibration_basis`: accepted=`false`
+- `task_binding_accept_or_replace_decision`: accepted=`false`
+- `acceptance_gate_signoff`: accepted=`false`
+- `manifest_declares_fidelity_acceptance_path`: accepted=`false`
+- `real_rollout_logs_videos_and_release_hashes`: accepted=`false`
 
 ## Remaining Operator Inputs
 

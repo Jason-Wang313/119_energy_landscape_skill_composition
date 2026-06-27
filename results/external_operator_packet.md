@@ -50,6 +50,9 @@ The draft is not evidence and does not satisfy fidelity acceptance. It pre-fills
 - Draft ready: `true`
 - Acceptance ready: `false`
 - Remaining operator inputs: `10`
+- Machine-prefilled ready: `true`
+- Operator signoff ready: `false`
+- Operator signoff items: `10`
 
 Draft rebuild command:
 

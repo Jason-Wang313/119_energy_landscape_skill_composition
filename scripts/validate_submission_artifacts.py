@@ -2242,6 +2242,10 @@ def main():
         fail("external operator packet fidelity draft must point to the draft JSON")
     if int(operator_draft.get("remaining_operator_input_count", 0) or 0) < 8:
         fail("external operator packet fidelity draft must expose remaining operator input count")
+    if operator_draft.get("machine_prefilled_ready") is not True or operator_draft.get("operator_signoff_ready") is not False:
+        fail("external operator packet fidelity draft must separate machine-prefilled readiness from operator signoff")
+    if int(operator_draft.get("operator_signoff_item_count", 0) or 0) < 8:
+        fail("external operator packet fidelity draft must expose operator signoff item count")
     if "build_external_fidelity_acceptance_draft.py" not in str(operator_draft.get("build_command", "")):
         fail("external operator packet fidelity draft must include rebuild command")
     operator_actions = operator_packet.get("operator_actions", []) or []
@@ -2626,8 +2630,10 @@ def main():
         "fidelity_metadata_probe_prefills_timing_and_task_records",
         "candidate_hashes_prefilled",
         "remaining_operator_inputs_cover_fidelity_gate",
+        "promotion_readiness_separates_machine_prefill_from_operator_signoff",
         "acceptance_gates_remain_unaccepted",
         "promotion_commands_require_real_file_manifest_and_strict_audits",
+        "promotion_readiness_lists_strict_promotion_gates",
         "no_real_acceptance_or_manifest_written",
         "draft_files_written",
     ):

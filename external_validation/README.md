@@ -155,7 +155,7 @@ Build the external fidelity acceptance draft:
 python scripts\build_external_fidelity_acceptance_draft.py
 ```
 
-This writes `external_validation/fidelity_acceptance_draft.{json,md}` and `results/external_fidelity_acceptance_draft_audit.{json,md}`. The draft pre-fills the tracked ManiSkill/SAPIEN route with platform/package/backend/config hashes, task bindings, and primary environment smoke status, but it remains draft-only non-evidence: `external_validation/fidelity_acceptance.json` and `external_validation/manifest.json` must still be independently filled, promoted, and strict-audited before any collection can count.
+This writes `external_validation/fidelity_acceptance_draft.{json,md}` and `results/external_fidelity_acceptance_draft_audit.{json,md}`. The draft pre-fills the tracked ManiSkill/SAPIEN route with platform/package/backend/config hashes, task bindings, primary environment smoke status, and fidelity metadata, then reports a fidelity acceptance promotion checklist that separates machine-prefilled readiness from independent operator signoff readiness. It remains draft-only non-evidence: `external_validation/fidelity_acceptance.json` and `external_validation/manifest.json` must still be independently filled, promoted, and strict-audited before any collection can count.
 
 Build the external backend integration packet:
 
