@@ -2,6 +2,7 @@
 
 - Code entry point: `src/run_experiment.py`
 - Full local build entry point: `scripts/build_submission_artifacts.ps1`
+- GitHub validation workflow: `.github/workflows/paper119-validation.yml`
 - Manuscript entry point: `scripts/generate_manuscript.py`
 - Artifact validator: `scripts/validate_submission_artifacts.py`
 - Local falsification validator: `scripts/audit_local_falsification.py`

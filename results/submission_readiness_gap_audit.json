@@ -128,9 +128,10 @@
         "scripts/validate_submission_artifacts.py",
         "scripts/self_test_external_rollout_validator.py",
         "scripts/self_test_external_evidence_pipeline.py",
+        ".github/workflows/paper119-validation.yml",
         "docs/reproducibility_checklist.md"
       ],
-      "requirement": "Single-command local reproducibility plus validator self-tests",
+      "requirement": "Single-command local reproducibility, GitHub CI, and validator self-tests",
       "status": "satisfied",
       "submission_blocking": true
     },

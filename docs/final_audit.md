@@ -30,6 +30,7 @@ Continuation audit additions:
 - Claim boundary audit: `results/claim_boundary_audit.md` passes and blocks premature deployment, hardware, or ICLR-main readiness claims.
 - Submission readiness gap audit: `results/submission_readiness_gap_audit.md` maps the active objective to 17 concrete requirements; it currently reports 13 satisfied, 4 blocking external gaps, and 0 human-polish items, so the objective is not complete.
 - Full local build script: `scripts/build_submission_artifacts.ps1`.
+- GitHub validation workflow: `.github/workflows/paper119-validation.yml` runs the core runner/readiness/submission/outreach validators on pushed branches and pull requests, with the repository PDF used as the CI canonical artifact.
 - Canonical PDF: `C:/Users/wangz/Downloads/119.pdf`.
 - PDF SHA256: `0996818722E25CD719E418DDAB3444FA774036F637BC81C4085CD33A66D8736B`.
 - PDF size: `464927` bytes.

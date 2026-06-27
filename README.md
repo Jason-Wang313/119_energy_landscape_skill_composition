@@ -64,6 +64,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - Figure readability audit: `results/figure_readability_audit.md`
 - Camera-ready design audit: `results/camera_ready_design_audit.md`
 - Full local build script: `scripts/build_submission_artifacts.ps1`
+- GitHub validation workflow: `.github/workflows/paper119-validation.yml`
 - External collection plan: `results/external_collection_plan.md`
 - Independent validation route: `external_validation/independent_validation_route.md`
 - Independent validation route audit: `results/independent_validation_route_audit.md`

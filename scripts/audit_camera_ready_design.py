@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import subprocess
 import tempfile
@@ -15,9 +16,16 @@ ROOT = Path(__file__).resolve().parents[1]
 PAPER = ROOT / "paper"
 RESULTS = ROOT / "results"
 PAPER_PDF = PAPER / "main.pdf"
-CANONICAL_PDF = Path("C:/Users/wangz/Downloads/119.pdf")
 OUT_JSON = RESULTS / "camera_ready_design_audit.json"
 OUT_MD = RESULTS / "camera_ready_design_audit.md"
+
+
+def configured_path(env_name: str, default: str) -> Path:
+    path = Path(os.environ.get(env_name, default))
+    return path if path.is_absolute() else ROOT / path
+
+
+CANONICAL_PDF = configured_path("PAPER119_CANONICAL_PDF", "C:/Users/wangz/Downloads/119.pdf")
 
 EXPECTED_PAGES = 29
 RENDER_DPI = 70

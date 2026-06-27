@@ -34,8 +34,8 @@ This audit is meant to prevent false completion claims. It passes only while the
   Evidence: results/presentation_quality_audit.json, results/figure_readability_audit.json, paper/main.pdf, C:/Users/wangz/Downloads/119.pdf
 - `satisfied` Canonical artifact placement and overclaim prevention
   Evidence: results/claim_boundary_audit.json, paper/main.pdf, C:/Users/wangz/Downloads/119.pdf
-- `satisfied` Single-command local reproducibility plus validator self-tests
-  Evidence: scripts/build_submission_artifacts.ps1, scripts/validate_submission_artifacts.py, scripts/self_test_external_rollout_validator.py, scripts/self_test_external_evidence_pipeline.py, docs/reproducibility_checklist.md
+- `satisfied` Single-command local reproducibility, GitHub CI, and validator self-tests
+  Evidence: scripts/build_submission_artifacts.ps1, scripts/validate_submission_artifacts.py, scripts/self_test_external_rollout_validator.py, scripts/self_test_external_evidence_pipeline.py, .github/workflows/paper119-validation.yml, docs/reproducibility_checklist.md
 - `satisfied` Independent external-validation execution packet not dependent on Haonan
   Evidence: results/external_execution_readiness_audit.json, results/external_fidelity_acceptance_audit.json, results/independent_validation_route_audit.json, results/external_blind_eval_audit.json, results/external_runner_harness_audit.json, external_validation/platform_qualification_checklist.md, external_validation/fidelity_acceptance_template.json, external_validation/independent_validation_route.md, external_validation/independent_validation_route_matrix.csv, external_validation/blind_evaluation_protocol.md, external_validation/blinded_operator_sheet.csv, external_validation/collection_runbook.md, external_validation/operator_record_sheet.csv, external_validation/runner/real_collection_runner.py
 - `satisfied` Fail-closed external collection runner for independent evidence capture

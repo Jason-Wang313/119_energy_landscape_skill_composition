@@ -10,6 +10,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $RepoRoot = Resolve-Path -LiteralPath (Join-Path $PSScriptRoot "..")
+$env:PAPER119_CANONICAL_PDF = $CanonicalPdf
 
 function Invoke-Step {
     param(

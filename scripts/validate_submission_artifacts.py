@@ -2,6 +2,7 @@ import csv
 import hashlib
 import json
 import math
+import os
 import subprocess
 from pathlib import Path
 
@@ -12,10 +13,17 @@ PAPER = ROOT / "paper"
 FIGURES = ROOT / "figures"
 EXTERNAL = ROOT / "external_validation"
 PAPER_PDF = PAPER / "main.pdf"
-DOWNLOADS_PDF = Path("C:/Users/wangz/Downloads/119.pdf")
-DESKTOP_PDF = Path("C:/Users/wangz/Desktop/119.pdf")
 ROOT_PDF = ROOT.parent / "119.pdf"
 CHILD_PDF = ROOT / "119.pdf"
+
+
+def configured_path(env_name, default):
+    path = Path(os.environ.get(env_name, default))
+    return path if path.is_absolute() else ROOT / path
+
+
+DOWNLOADS_PDF = configured_path("PAPER119_CANONICAL_PDF", "C:/Users/wangz/Downloads/119.pdf")
+DESKTOP_PDF = configured_path("PAPER119_DESKTOP_PDF", "C:/Users/wangz/Desktop/119.pdf")
 
 
 def fail(message):
@@ -131,6 +139,24 @@ def main():
     missing_build_steps = [step for step in required_build_steps if step not in build_text]
     if missing_build_steps:
         fail(f"build script missing required steps: {missing_build_steps}")
+
+    ci_workflow = ROOT / ".github" / "workflows" / "paper119-validation.yml"
+    if not ci_workflow.exists():
+        fail("missing GitHub validation workflow: .github/workflows/paper119-validation.yml")
+    ci_text = ci_workflow.read_text(encoding="utf-8")
+    required_ci_terms = [
+        "PAPER119_CANONICAL_PDF",
+        "poppler-utils",
+        "python -m compileall",
+        "python scripts/audit_external_runner_harness.py",
+        "python scripts/audit_external_execution_readiness.py",
+        "python scripts/audit_submission_readiness_gap.py",
+        "python scripts/validate_submission_artifacts.py",
+        "python scripts/validate_outreach_artifacts.py",
+    ]
+    missing_ci_terms = [term for term in required_ci_terms if term not in ci_text]
+    if missing_ci_terms:
+        fail(f"GitHub validation workflow missing required terms: {missing_ci_terms}")
 
     collection_plan_path = RESULTS / "external_collection_plan.json"
     if not collection_plan_path.exists():
@@ -1121,7 +1147,7 @@ def main():
     paper_digest = sha256(PAPER_PDF)
     digest = sha256(DOWNLOADS_PDF)
     if paper_digest != digest:
-        fail(f"canonical PDF is stale: paper/main.pdf SHA256={paper_digest}, Downloads/119.pdf SHA256={digest}")
+        fail(f"canonical PDF is stale: paper/main.pdf SHA256={paper_digest}, canonical SHA256={digest}")
     print(f"Paper 119 validation passed. SHA256={digest} pages={pages}")
 
 
