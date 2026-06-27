@@ -217,13 +217,16 @@ def main() -> int:
         and maniskill_backend.get("not_external_evidence") is True
         and maniskill_backend.get("backend_contract_ready") is True
         and maniskill_backend.get("reference_backend_available") is True
+        and maniskill_backend.get("video_writer_ready") is True
         and maniskill_backend.get("reference_backend_collection_enabled") is False
         and maniskill_backend.get("official_collection_ready") is False
         and maniskill_backend.get("strict_external_evidence_ready") is False
         and maniskill_backend_checks.get("official_collection_fail_closed_without_enable_flag") is True
-        and maniskill_backend_checks.get("video_export_remains_operator_backend_requirement") is True,
+        and maniskill_backend_checks.get("video_export_fail_closed_before_reset") is True
+        and maniskill_backend_checks.get("synthetic_mp4_writer_passes") is True,
         (
             f"backend_contract_ready={maniskill_backend.get('backend_contract_ready')!r}, "
+            f"video_writer_ready={maniskill_backend.get('video_writer_ready')!r}, "
             f"official_collection_ready={maniskill_backend.get('official_collection_ready')!r}, "
             f"strict_external_evidence_ready={maniskill_backend.get('strict_external_evidence_ready')!r}"
         ),
@@ -372,6 +375,7 @@ def main() -> int:
             "External fidelity provenance packet",
             "External backend integration packet",
             "ManiSkill reference backend readiness audit",
+            "MP4 writer path",
             "External runner backend probe self-test",
             "External pilot smoke packet",
             "External config manifest packet",
@@ -392,6 +396,7 @@ def main() -> int:
             "External fidelity provenance packet",
             "External backend integration packet",
             "ManiSkill reference backend readiness audit",
+            "MP4 writer path",
             "External runner backend probe self-test",
             "External pilot smoke packet",
             "External config manifest packet",
@@ -413,6 +418,7 @@ def main() -> int:
             "external fidelity provenance packet",
             "external backend integration packet",
             "ManiSkill reference backend readiness audit",
+            "MP4 writer path",
             "external runner backend probe self-test",
             "external pilot smoke packet",
             "external config manifest packet",
@@ -434,6 +440,7 @@ def main() -> int:
             "External fidelity provenance packet",
             "External backend integration packet",
             "ManiSkill reference backend readiness audit",
+            "MP4 writer path",
             "External runner backend probe self-test",
             "External pilot smoke packet",
             "External config manifest packet",
@@ -455,6 +462,7 @@ def main() -> int:
             "scripts/build_external_fidelity_provenance_packet.py",
             "scripts/build_external_backend_integration_packet.py",
             "scripts/audit_maniskill_backend_readiness.py",
+            "synthetic MP4 writer check",
             "scripts/self_test_external_runner_backend.py",
             "scripts/build_external_pilot_smoke_packet.py",
             "scripts/audit_external_pilot_smoke.py",
@@ -476,6 +484,7 @@ def main() -> int:
             "external fidelity provenance packet",
             "external backend integration packet",
             "ManiSkill reference backend readiness audit",
+            "MP4 writer path",
             "external runner backend probe self-test",
             "external pilot smoke packet",
             "external config manifest packet",
@@ -512,7 +521,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external backend integration packet, the ManiSkill reference backend readiness audit, the external runner backend probe self-test, the external pilot smoke packet, the external method implementation packet, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, the external runner backend probe self-test, the external pilot smoke packet, the external method implementation packet, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

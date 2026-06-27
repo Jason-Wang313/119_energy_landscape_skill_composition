@@ -12,7 +12,7 @@
 - [x] Fixed-risk deployment audit reports coverage, breach, gated success, gated utility, and pairwise comparisons.
 - [x] 24 failure cases documented.
 - [x] Terminal gates computed in `results/summary.json` and `results/summary.txt`.
-- [x] 29-page PDF, vector/PDF main figures with PNG companions, BibTeX warning count zero, log warning scan clean, visual QA complete.
+- [x] 30-page PDF, vector/PDF main figures with PNG companions, BibTeX warning count zero, log warning scan clean, visual QA complete.
 - [x] Machine-checkable external evidence audit exists and currently fails until real/high-fidelity artifacts are supplied.
 - [x] External manifest builder exists and currently writes a non-evidence readiness report until real logs, videos, configs, and checkpoints are supplied.
 - [x] External collection plan exists and currently expands the high-fidelity route into 1,440 required JSONL records while remaining non-evidence.

@@ -911,6 +911,8 @@ def main():
         fail("ManiSkill reference backend should be available as a non-evidence candidate")
     if maniskill_backend.get("reference_backend_collection_enabled") is not False:
         fail("ManiSkill reference backend collection must be disabled by default")
+    if maniskill_backend.get("video_writer_ready") is not True:
+        fail("ManiSkill reference backend should pass the synthetic MP4 writer check")
     if maniskill_backend.get("official_collection_ready") is not False:
         fail("ManiSkill reference backend audit must not mark official collection ready")
     if maniskill_backend.get("strict_external_evidence_ready") is not False:
@@ -924,7 +926,8 @@ def main():
         "platform_provenance_marks_non_evidence",
         "delegates_to_reference_adapters",
         "official_collection_fail_closed_without_enable_flag",
-        "video_export_remains_operator_backend_requirement",
+        "video_export_fail_closed_before_reset",
+        "synthetic_mp4_writer_passes",
         "strict_evidence_remains_false",
     ):
         if maniskill_backend_checks.get(required_check) is not True:

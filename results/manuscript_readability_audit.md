@@ -3,7 +3,7 @@
 Passed: `true`.
 Not evidence: `true`.
 Abstract words: `256`.
-World/action phrase count: `7`.
+World/action phrase count: `9`.
 Contact-rich phrase count: `1`.
 
 This audit checks that the generated manuscript is naturally framed around a bounded skill-seam world/action model, keeps contact-rich manipulation as a testbed rather than the identity, and has machine-audited related-work/reference coverage. It is not external robot evidence.
@@ -12,8 +12,8 @@ This audit checks that the generated manuscript is naturally framed around a bou
 
 - `pass` `abstract_exists`: words=256
 - `pass` `abstract_length_conference_reasonable`: words=256
-- `pass` `required_sections_present`: positions=[2352, 6282, 9725, 11612, 12486, 14020, 23104, 27752]
-- `pass` `required_sections_in_order`: positions=[2352, 6282, 9725, 11612, 12486, 14020, 23104, 27752]
+- `pass` `required_sections_present`: positions=[2352, 6351, 9794, 11821, 12695, 14229, 23313, 27961]
+- `pass` `required_sections_in_order`: positions=[2352, 6351, 9794, 11821, 12695, 14229, 23313, 27961]
 - `pass` `core_frame_term_local world/action-modeling prob`: local world/action-modeling problem
 - `pass` `core_frame_term_compact predictive interface bet`: compact predictive interface between a skill library and a planner
 - `pass` `core_frame_term_action-conditioned physical inte`: action-conditioned physical interface between a skill library and a planner
@@ -35,7 +35,7 @@ This audit checks that the generated manuscript is naturally framed around a bou
 - `pass` `matrix_term_Closest outreach works`: Closest outreach works
 - `pass` `matrix_term_External Validation Boundary`: External Validation Boundary
 - `pass` `identity_phrase_not_forced`: count=0
-- `pass` `world_action_framing_not_overdone`: count=7
+- `pass` `world_action_framing_not_overdone`: count=9
 - `pass` `contact_rich_is_not_the_identity`: contact-rich count=1
 - `pass` `contact_positioning_is_testbed`: contact-rich examples are positioned as a testbed
 - `pass` `no_stale_internal_or_manual_polish_terms`: hits=[]

@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 import os
 import sys
+import tempfile
+import importlib
 from pathlib import Path
 from typing import Any
 
@@ -56,6 +58,7 @@ def build_payload() -> dict[str, Any]:
         EXTERNAL / "method_alias_map.json",
     )
     checks: list[dict[str, Any]] = list(contract_checks)
+    backend_module = importlib.import_module(BACKEND_MODULE)
     backend = create_backend(BACKEND_MODULE)
     provenance = backend.platform_provenance()
     methods = alias_methods()
@@ -114,19 +117,44 @@ def build_payload() -> dict[str, Any]:
         video_fail_closed = False
         video_detail = "record_video unexpectedly ran"
     except RuntimeError as exc:
-        video_fail_closed = "not implemented" in str(exc) or "real MP4" in str(exc)
+        video_fail_closed = "requires a reset ManiSkill environment" in str(exc)
         video_detail = str(exc)
     add_check(
         checks,
-        "video_export_remains_operator_backend_requirement",
+        "video_export_fail_closed_before_reset",
         video_fail_closed,
         video_detail,
+    )
+    writer = getattr(backend_module, "write_mp4", None)
+    video_writer_ok = False
+    video_writer_detail = "write_mp4 missing"
+    if callable(writer):
+        import numpy as np
+
+        with tempfile.TemporaryDirectory(prefix="paper119_maniskill_video_") as tmp_name:
+            target = Path(tmp_name) / "probe.mp4"
+            frames = [
+                np.zeros((32, 32, 3), dtype=np.uint8),
+                np.full((32, 32, 3), 255, dtype=np.uint8),
+            ]
+            try:
+                writer(target, frames, fps=4)
+                header = target.read_bytes()[:64]
+                video_writer_ok = target.exists() and target.stat().st_size >= 512 and b"ftyp" in header
+                video_writer_detail = f"bytes={target.stat().st_size}, mp4_header={b'ftyp' in header}"
+            except Exception as exc:  # noqa: BLE001 - report the concrete writer failure.
+                video_writer_detail = f"{type(exc).__name__}: {exc}"
+    add_check(
+        checks,
+        "synthetic_mp4_writer_passes",
+        video_writer_ok,
+        video_writer_detail,
     )
     add_check(
         checks,
         "strict_evidence_remains_false",
-        True,
-        "backend contract readiness is not rollout evidence, fidelity acceptance, videos, logs, or manifest evidence",
+        provenance.get("not_external_evidence") is True,
+        "backend contract and MP4-writer readiness are not rollout evidence, fidelity acceptance, logs, or manifest evidence",
     )
 
     passed = all(check["passed"] for check in checks)
@@ -139,6 +167,7 @@ def build_payload() -> dict[str, Any]:
         "backend_contract_ready": contract_ready,
         "reference_backend_available": passed,
         "reference_backend_collection_enabled": False,
+        "video_writer_ready": video_writer_ok,
         "official_collection_ready": False,
         "strict_external_evidence_ready": False,
         "method_adapter_count": len(methods),
@@ -159,10 +188,11 @@ def write_outputs(payload: dict[str, Any]) -> None:
         f"Backend module: `{payload['backend_module']}`.",
         f"Backend contract ready: `{str(payload['backend_contract_ready']).lower()}`.",
         f"Reference backend collection enabled: `{str(payload['reference_backend_collection_enabled']).lower()}`.",
+        f"Video writer ready: `{str(payload['video_writer_ready']).lower()}`.",
         f"Official collection ready: `{str(payload['official_collection_ready']).lower()}`.",
         f"Strict external evidence ready: `{str(payload['strict_external_evidence_ready']).lower()}`.",
         "",
-        "This audit qualifies the repository's ManiSkill/SAPIEN reference backend against the backend API and method-adapter wiring. It does not provide rollout evidence: official collection still requires accepted fidelity provenance, installed assets, explicit alias unsealing, real MP4 export, JSONL logs, manifests, and strict evidence audits.",
+        "This audit qualifies the repository's ManiSkill/SAPIEN reference backend against the backend API, method-adapter wiring, and MP4 writer path. It does not provide rollout evidence: official collection still requires accepted fidelity provenance, installed assets, explicit alias unsealing, renderable per-episode videos, JSONL logs, manifests, and strict evidence audits.",
         "",
         "## Checks",
         "",

@@ -175,7 +175,7 @@
         "results/maniskill_backend_readiness_audit.md"
       ],
       "closes": [
-        "reference backend contract qualification only; official collection still requires a real enabled backend, real MP4 export, logs, manifests, and strict evidence gates"
+        "reference backend contract plus MP4-writer qualification only; official collection still requires accepted fidelity, renderable per-episode videos, logs, manifests, and strict evidence gates"
       ],
       "commands": [
         "python scripts\\audit_maniskill_backend_readiness.py"

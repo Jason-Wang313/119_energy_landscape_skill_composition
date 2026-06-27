@@ -77,7 +77,7 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 - `pass` `config_materializer_ready`: passed=True, write_enabled=False, task_count=4
 - `pass` `backend_contract_gate_ready`: harness_ready=True, actual_backend_ready=False
 - `pass` `backend_integration_packet_ready`: backend_integration_packet_ready=True, strict_backend_ready=False
-- `pass` `maniskill_reference_backend_audit_ready`: backend_contract_ready=True, official_collection_ready=False
+- `pass` `maniskill_reference_backend_audit_ready`: backend_contract_ready=True, video_writer_ready=True, official_collection_ready=False
 - `pass` `config_manifest_packet_ready`: config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False
 - `pass` `rollout_evidence_packet_ready`: rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False
 - `pass` `pilot_smoke_packet_ready`: pilot_smoke_packet_ready=True, strict_evidence_ready=False

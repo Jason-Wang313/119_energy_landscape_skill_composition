@@ -480,15 +480,18 @@ def build_payload() -> dict[str, Any]:
         and maniskill_backend.get("not_external_evidence") is True
         and maniskill_backend.get("backend_contract_ready") is True
         and maniskill_backend.get("reference_backend_available") is True
+        and maniskill_backend.get("video_writer_ready") is True
         and maniskill_backend.get("official_collection_ready") is False
         and maniskill_backend.get("strict_external_evidence_ready") is False
         and maniskill_backend_checks.get("official_collection_fail_closed_without_enable_flag") is True
-        and maniskill_backend_checks.get("video_export_remains_operator_backend_requirement") is True
+        and maniskill_backend_checks.get("video_export_fail_closed_before_reset") is True
+        and maniskill_backend_checks.get("synthetic_mp4_writer_passes") is True
         and "external_validation/runner/maniskill_reference_backend.py" in paths
         and "scripts/audit_maniskill_backend_readiness.py" in paths
         and "results/maniskill_backend_readiness_audit.json" in paths,
         (
             f"backend_contract_ready={maniskill_backend.get('backend_contract_ready')!r}, "
+            f"video_writer_ready={maniskill_backend.get('video_writer_ready')!r}, "
             f"official_collection_ready={maniskill_backend.get('official_collection_ready')!r}"
         ),
     )

@@ -2,7 +2,7 @@
 
 Updated artifact note: the current reframed PDF was rebuilt on 2026-06-28 as a 30-page paper with SHA256 `329EC8975904AE6593CF3CEC6DDBA62EF1F470859EE24DB6C973B91FC4088C2B`.
 
-The v5 expansion was completed as a CPU-only, RAM-light rebuild. The current artifact is a 29-page PDF in Downloads only, with hidden link borders, targeted skill-seam world/action-interface framing, diagnostic and decision-quality audits, and vector-first tables/figures generated from v5 CSV outputs.
+The v5 expansion was completed as a CPU-only, RAM-light rebuild. The current artifact is a 30-page PDF in Downloads only, with hidden link borders, targeted skill-seam world/action-interface framing, diagnostic and decision-quality audits, and vector-first tables/figures generated from v5 CSV outputs.
 
 Current external-readiness note: `results/external_execution_readiness_audit.md` now verifies that the independent 1,440-record high-fidelity operator packet, platform qualification checklist, config templates, adapter harness, and fail-closed manifest tooling are ready to execute while still explicitly remaining non-evidence until real manifest-declared artifacts exist.
 

@@ -107,7 +107,7 @@
     },
     {
       "name": "maniskill_reference_backend_claim",
-      "claim": "The repository provides a non-evidence ManiSkill/SAPIEN reference backend candidate that passes backend API, task-config, and reference-adapter contract checks while official collection remains fail-closed and strict external evidence remains false.",
+      "claim": "The repository provides a non-evidence ManiSkill/SAPIEN reference backend candidate that passes backend API, task-config, reference-adapter, and MP4-writer checks while official collection remains fail-closed and strict external evidence remains false.",
       "evidence": ["external_validation/runner/maniskill_reference_backend.py", "scripts/audit_maniskill_backend_readiness.py", "results/maniskill_backend_readiness_audit.json", "results/maniskill_backend_readiness_audit.md", "external_validation/runner/README.md"]
     },
     {

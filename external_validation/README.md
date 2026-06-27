@@ -155,7 +155,7 @@ Audit the repository ManiSkill/SAPIEN reference backend candidate:
 python scripts\audit_maniskill_backend_readiness.py
 ```
 
-This writes `results/maniskill_backend_readiness_audit.{json,md}`. It contract-qualifies `external_validation/runner/maniskill_reference_backend.py` against the backend API, task configs, platform-provenance fields, and all 12 reference adapters. It is not evidence: official collection still requires accepted fidelity provenance, installed assets, explicit alias unsealing, a specific run id, real MP4 export, JSONL logs, a manifest, and strict evidence audits.
+This writes `results/maniskill_backend_readiness_audit.{json,md}`. It contract-qualifies `external_validation/runner/maniskill_reference_backend.py` against the backend API, task configs, platform-provenance fields, all 12 reference adapters, and a synthetic MP4 writer path. It is not evidence: official collection still requires accepted fidelity provenance, installed assets, explicit alias unsealing, a specific run id, renderable per-episode videos, JSONL logs, a manifest, and strict evidence audits.
 
 Then audit the platform-fidelity acceptance contract:
 

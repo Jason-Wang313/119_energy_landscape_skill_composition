@@ -10,7 +10,7 @@ import platform
 import sys
 from pathlib import Path
 from types import ModuleType
-from typing import Any
+from typing import Any, Iterable
 
 from external_validation.runner.backend_contract import ExternalCollectionBackend, sha256_file, sha256_json
 
@@ -60,6 +60,73 @@ def numeric_values(value: Any, *, limit: int = 128) -> list[float]:
     return values
 
 
+def _find_frame_candidate(value: Any) -> Any | None:
+    if value is None:
+        return None
+    if isinstance(value, dict):
+        preferred_keys = ("rgb", "image", "color", "Color", "rgba", "sensor_data")
+        for key in preferred_keys:
+            if key in value:
+                candidate = _find_frame_candidate(value[key])
+                if candidate is not None:
+                    return candidate
+        for child in value.values():
+            candidate = _find_frame_candidate(child)
+            if candidate is not None:
+                return candidate
+        return None
+    if isinstance(value, (list, tuple)) and value and not isinstance(value[0], (int, float, bool)):
+        for child in value:
+            candidate = _find_frame_candidate(child)
+            if candidate is not None:
+                return candidate
+    if hasattr(value, "shape") or hasattr(value, "tolist"):
+        return value
+    return None
+
+
+def _as_uint8_rgb_frame(value: Any) -> Any:
+    import numpy as np
+
+    candidate = _find_frame_candidate(value)
+    if candidate is None:
+        raise RuntimeError("render did not return an RGB-like frame")
+    if hasattr(candidate, "detach") and callable(candidate.detach):
+        candidate = candidate.detach().cpu().numpy()
+    frame = np.asarray(candidate)
+    if frame.ndim == 4:
+        frame = frame[0]
+    if frame.ndim == 2:
+        frame = np.repeat(frame[:, :, None], 3, axis=2)
+    if frame.ndim != 3 or frame.shape[2] < 3:
+        raise RuntimeError(f"render frame has unsupported shape {frame.shape}")
+    frame = frame[:, :, :3]
+    if frame.dtype != np.uint8:
+        frame = frame.astype(np.float32)
+        if frame.size and frame.max() <= 1.0:
+            frame = frame * 255.0
+        frame = np.clip(frame, 0, 255).astype(np.uint8)
+    return frame
+
+
+def write_mp4(target_path: Path, frames: Iterable[Any], *, fps: int = 4) -> str:
+    import imageio.v2 as imageio
+
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+    rgb_frames = [_as_uint8_rgb_frame(frame) for frame in frames]
+    if not rgb_frames:
+        raise RuntimeError("cannot write MP4 without at least one RGB frame")
+    if len(rgb_frames) == 1:
+        rgb_frames.append(rgb_frames[0].copy())
+    imageio.mimsave(target_path, rgb_frames, fps=fps, macro_block_size=1)
+    if not target_path.exists() or target_path.stat().st_size < 512:
+        raise RuntimeError(f"video writer did not produce a usable MP4 at {target_path}")
+    header = target_path.read_bytes()[:64]
+    if b"ftyp" not in header:
+        raise RuntimeError(f"video writer output does not look like MP4: {target_path}")
+    return target_path.as_posix()
+
+
 def import_adapter(method_name: str) -> ModuleType:
     adapter_path = BASELINES / method_name / "adapter.py"
     if not adapter_path.exists():
@@ -95,6 +162,7 @@ class Backend(ExternalCollectionBackend):
         self._last_row: dict[str, Any] = {}
         self._last_config: dict[str, Any] = {}
         self._last_proposal: dict[str, Any] = {}
+        self._video_frames: list[Any] = []
 
     def platform_provenance(self) -> dict[str, Any]:
         return {
@@ -139,9 +207,21 @@ class Backend(ExternalCollectionBackend):
         import gymnasium as gym
         import mani_skill  # noqa: F401
 
-        self._env = gym.make(env_id, obs_mode="state")
+        try:
+            self._env = gym.make(env_id, obs_mode="state", render_mode="rgb_array")
+        except TypeError:
+            self._env = gym.make(env_id, obs_mode="state")
         self._env_id = env_id
         return self._env
+
+    def _try_capture_video_frame(self) -> None:
+        if self._env is None:
+            return
+        try:
+            frame = self._env.render()
+            self._video_frames.append(_as_uint8_rgb_frame(frame))
+        except Exception:
+            return
 
     def reset_scene(self, reset_spec: dict[str, Any]) -> dict[str, Any]:
         row = reset_spec.get("row", {})
@@ -158,6 +238,8 @@ class Backend(ExternalCollectionBackend):
         self._last_info = dict(info)
         self._last_row = dict(row)
         self._last_config = dict(config)
+        self._video_frames = []
+        self._try_capture_video_frame()
         return {
             "initial_state_hash": stable_digest({"env_id": env_id, "seed": seed, "obs": numeric_values(obs, limit=64)}),
             "env_id": env_id,
@@ -264,6 +346,7 @@ class Backend(ExternalCollectionBackend):
             }
         action = self._env.action_space.sample()
         _obs, reward, terminated, truncated, info = self._env.step(action)
+        self._try_capture_video_frame()
         success_value = info.get("success", bool(terminated)) if isinstance(info, dict) else bool(terminated)
         success = bool(success_value.item()) if hasattr(success_value, "item") else bool(success_value)
         reward_value = float(reward.item()) if hasattr(reward, "item") else float(reward)
@@ -281,10 +364,18 @@ class Backend(ExternalCollectionBackend):
         }
 
     def record_video(self, target_path: Path) -> str:
-        raise RuntimeError(
-            "video export is intentionally not implemented in the reference backend; "
-            "an accepted evidence backend must wrap ManiSkill recording and write real MP4 files."
-        )
+        if self._env is None:
+            raise RuntimeError("record_video requires a reset ManiSkill environment")
+        frames = list(self._video_frames)
+        self._try_capture_video_frame()
+        if len(self._video_frames) > len(frames):
+            frames.append(self._video_frames[-1])
+        if not frames:
+            raise RuntimeError(
+                "record_video requires renderable ManiSkill RGB frames; verify render_mode='rgb_array', "
+                "camera setup, and renderer availability during fidelity acceptance"
+            )
+        return write_mp4(target_path, frames)
 
     def policy_or_config_hash(self, method_name: str) -> str:
         adapter_path = BASELINES / method_name / "adapter.py"
