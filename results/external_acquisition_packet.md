@@ -18,7 +18,6 @@ This packet maps the remaining main-conference blockers to concrete operator inp
 ## Collection Preflight Blockers
 
 - `backend_module_ready`: --backend-module is required before actual collection
-- `task_config_dir_exists`: external_validation/configs
 - `real_task_configs_ready`: missing config: external_validation/configs/cable_route_insert.json; missing config: external_validation/configs/door_open_navigation.json; missing config: external_validation/configs/drawer_to_pick_transfer.json; missing config: external_validation/configs/peg_place_regrasp.json
 - `fidelity_acceptance_ready`: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'
 - `alias_unsealing_explicit`: unsealed_alias_map=False
@@ -63,7 +62,8 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 - `pass` `gap_audit_has_four_external_blockers`: missing=['Independent real-robot or accepted high-fidelity external validation evidence', 'External rollout metrics recomputed from raw JSONL logs', 'Manifest-declared real task configs replace non-evidence templates', 'Manifest-declared independent non-oracle baseline evidence and fairness contract']
 - `pass` `all_missing_requirements_mapped`: unmapped=[]
 - `pass` `all_action_ids_exist`: missing_action_ids=[]
-- `pass` `collection_preflight_fail_closed`: collection_ready=False, blockers=['alias_unsealing_explicit', 'backend_module_ready', 'fidelity_acceptance_ready', 'real_task_configs_ready', 'run_id_specific', 'task_config_dir_exists']
+- `pass` `collection_preflight_fail_closed`: collection_ready=False, blockers=['alias_unsealing_explicit', 'backend_module_ready', 'fidelity_acceptance_ready', 'real_task_configs_ready', 'run_id_specific']
+- `pass` `config_intake_directory_tracked`: task_config_dir_exists=True
 - `pass` `preflight_operator_actions_present`: operator_next_actions=5, evidence_ready=False
 - `pass` `route_independent_of_haonan`: primary_route='maniskill_sapien_primary'
 - `pass` `post_collection_strict_commands_cover_all_gates`: missing_command_fragments=[]

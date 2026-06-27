@@ -48,8 +48,8 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_runner_harness_fail_closed`: actual_execution_ready=False
 - `pass` `external_collection_readiness_audit_ready`: passed
 - `pass` `external_collection_readiness_not_evidence`: not_external_evidence=True
-- `pass` `external_collection_readiness_fail_closed`: collection_ready=False, readiness_state='PREPARE_BACKEND_CONFIGS_AND_FIDELITY', blocking_missing_count=6
-- `pass` `external_collection_readiness_packet_shape`: readiness_checks={'runner_exists': True, 'schema_exists': True, 'operator_sheet_exists': True, 'operator_sheet_columns': True, 'operator_sheet_row_budget': True, 'alias_map_exists': True, 'alias_map_complete': True, 'backend_module_ready': False, 'task_config_dir_exists': False, 'real_task_configs_ready': False, 'fidelity_acceptance_ready': False, 'alias_unsealing_explicit': False, 'run_id_specific': False, 'output_logs_empty_or_force': True, 'video_dir_parent_exists': True}
+- `pass` `external_collection_readiness_fail_closed`: collection_ready=False, readiness_state='PREPARE_BACKEND_CONFIGS_AND_FIDELITY', blocking_missing_count=5
+- `pass` `external_collection_readiness_packet_shape`: readiness_checks={'runner_exists': True, 'schema_exists': True, 'operator_sheet_exists': True, 'operator_sheet_columns': True, 'operator_sheet_row_budget': True, 'alias_map_exists': True, 'alias_map_complete': True, 'backend_module_ready': False, 'task_config_dir_exists': True, 'real_task_configs_ready': False, 'fidelity_acceptance_ready': False, 'alias_unsealing_explicit': False, 'run_id_specific': False, 'output_logs_empty_or_force': True, 'video_dir_parent_exists': True}
 - `pass` `external_pairing_integrity_audit_ready`: passed
 - `pass` `external_pairing_integrity_not_evidence`: not_external_evidence=True, pairing_ready=False
 - `pass` `external_release_package_audit_ready`: passed

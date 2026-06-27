@@ -6,7 +6,7 @@ Collection ready: `false`.
 Readiness state: `PREPARE_BACKEND_CONFIGS_AND_FIDELITY`.
 Rows: `1440`.
 Task families: `4`.
-Blocking missing items: `6`.
+Blocking missing items: `5`.
 
 This audit is a pre-collection gate for real robot or accepted high-fidelity simulator runs. It is not rollout evidence; it prevents starting collection until backend, configs, fidelity provenance, alias unsealing, output logs, and run identity are ready.
 
@@ -19,7 +19,6 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 ## Blocking Missing
 
 - backend_module_ready: --backend-module is required before actual collection
-- task_config_dir_exists: external_validation/configs
 - real_task_configs_ready: missing config: external_validation/configs/cable_route_insert.json; missing config: external_validation/configs/door_open_navigation.json; missing config: external_validation/configs/drawer_to_pick_transfer.json; missing config: external_validation/configs/peg_place_regrasp.json
 - fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'
 - alias_unsealing_explicit: unsealed_alias_map=False
@@ -35,7 +34,7 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 - `pass` `alias_map_exists`: external_validation/method_alias_map.json
 - `pass` `alias_map_complete`: aliases=12, missing=[], errors=[]
 - `fail` `backend_module_ready`: --backend-module is required before actual collection
-- `fail` `task_config_dir_exists`: external_validation/configs
+- `pass` `task_config_dir_exists`: external_validation/configs
 - `fail` `real_task_configs_ready`: missing config: external_validation/configs/cable_route_insert.json; missing config: external_validation/configs/door_open_navigation.json; missing config: external_validation/configs/drawer_to_pick_transfer.json; missing config: external_validation/configs/peg_place_regrasp.json
 - `fail` `fidelity_acceptance_ready`: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'
 - `fail` `alias_unsealing_explicit`: unsealed_alias_map=False

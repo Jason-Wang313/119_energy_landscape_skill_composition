@@ -24,7 +24,7 @@ Validate real manifest-declared configs with:
 python scripts\validate_external_configs.py --strict
 ```
 
-Strict config validation currently fails until `external_validation/manifest.json` points to real `external_validation/configs/*.json` files that are not marked as templates.
+Strict config validation currently fails until `external_validation/manifest.json` points to real `external_validation/configs/*.json` files that are not marked as templates. The tracked `external_validation/configs/README.md` file makes the real-config intake directory explicit, but it is not evidence and does not replace the required task JSON files.
 
 ## Manifest Builder Workflow
 

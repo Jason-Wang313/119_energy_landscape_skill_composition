@@ -77,8 +77,8 @@
     },
     {
       "name": "external_config_template_claim",
-      "claim": "The repository provides a non-evidence task config schema and template validator, while strict config evidence remains missing until real manifest-declared configs replace templates.",
-      "evidence": ["external_validation/config_schema_v1.json", "external_validation/config_templates/peg_place_regrasp.json", "scripts/validate_external_configs.py", "results/external_config_template_audit.json", "results/external_config_template_audit.md"]
+      "claim": "The repository provides a non-evidence task config schema, template validator, and tracked real-config intake directory, while strict config evidence remains missing until real manifest-declared configs replace templates.",
+      "evidence": ["external_validation/config_schema_v1.json", "external_validation/config_templates/peg_place_regrasp.json", "external_validation/configs/README.md", "scripts/validate_external_configs.py", "results/external_config_template_audit.json", "results/external_config_template_audit.md"]
     },
     {
       "name": "external_baseline_contract_claim",

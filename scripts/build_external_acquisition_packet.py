@@ -255,9 +255,9 @@ def main() -> int:
 
     collection_blockers = collection.get("blocking_missing", []) or []
     collection_blocker_names = {blocker_name(item) for item in collection_blockers}
+    collection_checks = {check.get("name"): check.get("passed") for check in collection.get("checks", []) or []}
     required_collection_blockers = {
         "backend_module_ready",
-        "task_config_dir_exists",
         "real_task_configs_ready",
         "fidelity_acceptance_ready",
         "alias_unsealing_explicit",
@@ -270,6 +270,12 @@ def main() -> int:
         and collection.get("not_external_evidence") is True
         and required_collection_blockers.issubset(collection_blocker_names),
         f"collection_ready={collection.get('collection_ready')!r}, blockers={sorted(collection_blocker_names)}",
+    )
+    add_check(
+        checks,
+        "config_intake_directory_tracked",
+        collection_checks.get("task_config_dir_exists") is True,
+        f"task_config_dir_exists={collection_checks.get('task_config_dir_exists')!r}",
     )
     preflight_actions = preflight.get("operator_next_actions", []) or []
     add_check(

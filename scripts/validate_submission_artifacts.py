@@ -1053,6 +1053,7 @@ def main():
     for required_check in (
         "all_missing_requirements_mapped",
         "collection_preflight_fail_closed",
+        "config_intake_directory_tracked",
         "preflight_operator_actions_present",
         "route_independent_of_haonan",
         "post_collection_strict_commands_cover_all_gates",
