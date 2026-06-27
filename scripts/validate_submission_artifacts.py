@@ -108,6 +108,7 @@ def main():
         "scripts\\build_external_analysis_plan.py",
         "scripts\\build_independent_validation_route.py",
         "scripts\\build_external_platform_onboarding.py",
+        "scripts\\build_external_fidelity_provenance_packet.py",
         "scripts\\audit_external_fidelity_acceptance.py",
         "scripts\\self_test_external_fidelity_acceptance.py",
         "scripts\\build_external_blind_eval_plan.py",
@@ -187,6 +188,7 @@ def main():
         "python scripts/build_external_rollout_evidence_packet.py",
         "python scripts/build_external_analysis_plan.py",
         "python scripts/build_external_platform_onboarding.py",
+        "python scripts/build_external_fidelity_provenance_packet.py",
         "python scripts/build_external_backend_integration_packet.py",
         "python scripts/build_external_method_implementation_packet.py",
         "python scripts/build_external_acquisition_packet.py",
@@ -259,6 +261,8 @@ def main():
         fail("external collection plan must include the independent validation route command")
     if "python scripts\\build_external_platform_onboarding.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the external platform onboarding command")
+    if "python scripts\\build_external_fidelity_provenance_packet.py" not in collection_plan.get("validation_commands", []):
+        fail("external collection plan must include the fidelity provenance packet command")
     if "python scripts\\audit_external_collection_readiness.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the collection readiness audit command")
     if "python scripts\\audit_external_collection_readiness.py --strict" not in collection_plan.get("validation_commands", []):
@@ -1600,6 +1604,10 @@ def main():
         "fidelity_acceptance_not_evidence",
         "fidelity_acceptance_fail_closed",
         "fidelity_acceptance_task_coverage",
+        "external_fidelity_provenance_packet_ready",
+        "external_fidelity_provenance_not_evidence",
+        "external_fidelity_provenance_covers_acceptance_blocker",
+        "external_fidelity_provenance_gate_order",
         "independent_validation_route_ready",
         "independent_route_not_evidence",
         "independent_route_primary_covers_tasks",
@@ -1697,10 +1705,14 @@ def main():
         RESULTS / "external_operator_handoff_bundle.md",
         RESULTS / "external_analysis_plan_audit.md",
         RESULTS / "external_platform_onboarding_audit.md",
+        RESULTS / "external_fidelity_provenance_audit.md",
         EXTERNAL / "statistical_analysis_plan.json",
         EXTERNAL / "statistical_analysis_plan.md",
         EXTERNAL / "platform_onboarding_packet.json",
         EXTERNAL / "platform_onboarding_packet.md",
+        EXTERNAL / "fidelity_provenance_packet.json",
+        EXTERNAL / "fidelity_provenance_packet.md",
+        EXTERNAL / "fidelity_provenance_work_orders.csv",
         EXTERNAL / "backend_integration_packet.json",
         EXTERNAL / "backend_integration_packet.md",
         EXTERNAL / "backend_integration_work_orders.csv",
@@ -1755,6 +1767,7 @@ def main():
         "preflight_operator_actions_present",
         "route_independent_of_haonan",
         "platform_onboarding_ready",
+        "fidelity_provenance_packet_ready",
         "post_collection_strict_commands_cover_all_gates",
         "no_real_manifest_written",
         "operator_actions_cover_collection_blockers",
@@ -1799,6 +1812,11 @@ def main():
         fail("external operator packet missing rollout_evidence_packet action")
     if "build_external_rollout_evidence_packet.py" not in "\n".join(rollout_evidence_actions[0].get("commands", []) or []):
         fail("external operator packet rollout evidence action must rebuild the rollout evidence packet")
+    fidelity_provenance_actions = [action for action in operator_actions if action.get("id") == "fidelity_provenance_packet"]
+    if not fidelity_provenance_actions:
+        fail("external operator packet missing fidelity_provenance_packet action")
+    if "build_external_fidelity_provenance_packet.py" not in "\n".join(fidelity_provenance_actions[0].get("commands", []) or []):
+        fail("external operator packet fidelity provenance action must rebuild the fidelity provenance packet")
     method_actions = [action for action in operator_actions if action.get("id") == "method_implementation_packet"]
     if not method_actions:
         fail("external operator packet missing method_implementation_packet action")
@@ -1863,6 +1881,7 @@ def main():
         "handoff_has_task_config_and_baseline_assets",
         "analysis_plan_included",
         "platform_onboarding_included",
+        "fidelity_provenance_packet_included",
         "backend_integration_packet_included",
         "config_manifest_packet_included",
         "rollout_evidence_packet_included",
@@ -1965,6 +1984,81 @@ def main():
     ):
         if config_manifest_checks.get(required_check) is not True:
             fail(f"external config manifest audit missing passing check: {required_check}")
+
+    fidelity_packet_path = EXTERNAL / "fidelity_provenance_packet.json"
+    fidelity_packet_md_path = EXTERNAL / "fidelity_provenance_packet.md"
+    fidelity_orders_path = EXTERNAL / "fidelity_provenance_work_orders.csv"
+    fidelity_audit_path = RESULTS / "external_fidelity_provenance_audit.json"
+    fidelity_audit_md_path = RESULTS / "external_fidelity_provenance_audit.md"
+    for path in (
+        ROOT / "scripts" / "build_external_fidelity_provenance_packet.py",
+        fidelity_packet_path,
+        fidelity_packet_md_path,
+        fidelity_orders_path,
+        fidelity_audit_path,
+        fidelity_audit_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external fidelity provenance packet artifact: {path}")
+    fidelity_packet = json.loads(fidelity_packet_path.read_text(encoding="utf-8"))
+    fidelity_audit = json.loads(fidelity_audit_path.read_text(encoding="utf-8"))
+    if fidelity_packet.get("version") != "external_fidelity_provenance_packet_v1":
+        fail("external fidelity provenance packet version mismatch")
+    if fidelity_packet.get("not_external_evidence") is not True:
+        fail("external fidelity provenance packet must declare that it is not evidence")
+    if fidelity_packet.get("fidelity_provenance_packet_ready") is not True:
+        fail("external fidelity provenance packet must report fidelity_provenance_packet_ready=true")
+    if fidelity_packet.get("strict_fidelity_evidence_ready") is not False:
+        fail("external fidelity provenance packet must not claim strict fidelity evidence readiness")
+    if fidelity_packet.get("strict_external_evidence_ready") is not False:
+        fail("external fidelity provenance packet must not claim strict external evidence readiness")
+    if fidelity_packet.get("acceptance_ready") is not False:
+        fail("external fidelity provenance packet must not claim acceptance readiness")
+    if fidelity_packet.get("manifest_written") is not False:
+        fail("external fidelity provenance packet must not write the real manifest")
+    if int(fidelity_packet.get("blocking_missing_count", 0) or 0) < 10:
+        fail("external fidelity provenance packet should expose current fidelity blockers")
+    if len(fidelity_packet.get("work_orders", []) or []) < 6:
+        fail("external fidelity provenance packet has too few work orders")
+    command_text = "\n".join(fidelity_packet.get("strict_acceptance_commands", []) or [])
+    for fragment in (
+        "build_external_fidelity_provenance_packet.py",
+        "build_external_platform_onboarding.py",
+        "audit_external_fidelity_acceptance.py --strict",
+        "build_external_manifest.py --write",
+        "audit_external_collection_readiness.py --strict",
+        "validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "audit_external_evidence.py --strict",
+    ):
+        if fragment not in command_text:
+            fail(f"external fidelity provenance packet missing strict command fragment: {fragment}")
+    if fidelity_audit.get("version") != "external_fidelity_provenance_audit_v1":
+        fail("external fidelity provenance audit version mismatch")
+    if fidelity_audit.get("passed") is not True:
+        fail("external fidelity provenance audit did not pass")
+    if fidelity_audit.get("not_external_evidence") is not True:
+        fail("external fidelity provenance audit must declare that it is not evidence")
+    if fidelity_audit.get("fidelity_provenance_packet_ready") is not True:
+        fail("external fidelity provenance audit must report fidelity_provenance_packet_ready=true")
+    if fidelity_audit.get("strict_fidelity_evidence_ready") is not False:
+        fail("external fidelity provenance audit must keep strict fidelity evidence false")
+    if fidelity_audit.get("strict_external_evidence_ready") is not False:
+        fail("external fidelity provenance audit must keep strict external evidence false")
+    fidelity_checks = {check.get("name"): check.get("passed") for check in fidelity_audit.get("checks", [])}
+    for required_check in (
+        "packet_is_non_evidence_and_fail_closed",
+        "fidelity_acceptance_contract_ready_but_not_evidence",
+        "platform_onboarding_packet_ready",
+        "independent_route_and_collection_still_fail_closed",
+        "template_declares_required_platform_and_gate_fields",
+        "work_orders_cover_fidelity_blockers",
+        "strict_commands_cover_fidelity_manifest_collection_and_evidence",
+        "acceptance_template_not_real_evidence",
+        "no_real_acceptance_or_manifest_written",
+        "packet_files_written",
+    ):
+        if fidelity_checks.get(required_check) is not True:
+            fail(f"external fidelity provenance audit missing passing check: {required_check}")
 
     rollout_packet_path = EXTERNAL / "rollout_evidence_packet.json"
     rollout_packet_md_path = EXTERNAL / "rollout_evidence_packet.md"
@@ -2244,6 +2338,7 @@ def main():
         "operator_packet_no_go_visible",
         "analysis_plan_visible",
         "platform_onboarding_visible",
+        "fidelity_provenance_packet_visible",
         "backend_integration_packet_visible",
         "runner_backend_probe_visible",
         "config_manifest_packet_visible",

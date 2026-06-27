@@ -117,6 +117,26 @@
     },
     {
       "detail": "passed",
+      "name": "external_fidelity_provenance_packet_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True, fidelity_provenance_packet_ready=True, strict_fidelity_evidence_ready=False, strict_external_evidence_ready=False",
+      "name": "external_fidelity_provenance_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "checks={'packet_is_non_evidence_and_fail_closed': True, 'fidelity_acceptance_contract_ready_but_not_evidence': True, 'platform_onboarding_packet_ready': True, 'independent_route_and_collection_still_fail_closed': True, 'template_declares_required_platform_and_gate_fields': True, 'work_orders_cover_fidelity_blockers': True, 'strict_commands_cover_fidelity_manifest_collection_and_evidence': True, 'acceptance_template_not_real_evidence': True, 'no_real_acceptance_or_manifest_written': True, 'packet_files_written': True}",
+      "name": "external_fidelity_provenance_covers_acceptance_blocker",
+      "passed": true
+    },
+    {
+      "detail": "checks={'packet_is_non_evidence_and_fail_closed': True, 'fidelity_acceptance_contract_ready_but_not_evidence': True, 'platform_onboarding_packet_ready': True, 'independent_route_and_collection_still_fail_closed': True, 'template_declares_required_platform_and_gate_fields': True, 'work_orders_cover_fidelity_blockers': True, 'strict_commands_cover_fidelity_manifest_collection_and_evidence': True, 'acceptance_template_not_real_evidence': True, 'no_real_acceptance_or_manifest_written': True, 'packet_files_written': True}",
+      "name": "external_fidelity_provenance_gate_order",
+      "passed": true
+    },
+    {
+      "detail": "passed",
       "name": "blind_eval_plan_ready",
       "passed": true
     },
@@ -401,12 +421,12 @@
       "passed": true
     },
     {
-      "detail": "missing_requirements=4, operator_actions=16",
+      "detail": "missing_requirements=4, operator_actions=17",
       "name": "external_acquisition_packet_maps_all_blockers",
       "passed": true
     },
     {
-      "detail": "checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'backend_integration_packet_ready': True, 'config_manifest_packet_ready': True, 'rollout_evidence_packet_ready': True, 'method_implementation_packet_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'platform_onboarding_ready': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}",
+      "detail": "checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'backend_integration_packet_ready': True, 'config_manifest_packet_ready': True, 'rollout_evidence_packet_ready': True, 'method_implementation_packet_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'platform_onboarding_ready': True, 'fidelity_provenance_packet_ready': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}",
       "name": "external_acquisition_packet_backend_gate",
       "passed": true
     },
@@ -446,7 +466,7 @@
       "passed": true
     },
     {
-      "detail": "included_file_count=203, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 52, 'operator_command_source': 20, 'operator_facing_input': 42, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "included_file_count=209, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 54, 'operator_command_source': 21, 'operator_facing_input': 45, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "external_operator_handoff_bundle_hash_manifest",
       "passed": true
     },
@@ -502,6 +522,7 @@
     "non-template backend module for external_validation/runner/real_collection_runner.py",
     "completed backend integration packet work orders with module/provenance/config/log/video hashes",
     "accepted robot/simulator fidelity acceptance file",
+    "completed fidelity provenance packet work orders with accepted platform/contact provenance",
     "preflight-cleared external evidence package",
     "released or hash-declared skill/checkpoint artifacts"
   ],

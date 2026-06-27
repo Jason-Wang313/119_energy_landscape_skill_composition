@@ -89,6 +89,9 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "statistical_analysis_plan.md",
         EXTERNAL / "platform_onboarding_packet.json",
         EXTERNAL / "platform_onboarding_packet.md",
+        EXTERNAL / "fidelity_provenance_packet.json",
+        EXTERNAL / "fidelity_provenance_packet.md",
+        EXTERNAL / "fidelity_provenance_work_orders.csv",
         EXTERNAL / "backend_integration_packet.json",
         EXTERNAL / "backend_integration_packet.md",
         EXTERNAL / "backend_integration_work_orders.csv",
@@ -122,6 +125,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_acquisition_packet.py",
         SCRIPTS / "build_external_analysis_plan.py",
         SCRIPTS / "build_external_platform_onboarding.py",
+        SCRIPTS / "build_external_fidelity_provenance_packet.py",
         SCRIPTS / "build_external_backend_integration_packet.py",
         SCRIPTS / "build_external_config_manifest_packet.py",
         SCRIPTS / "build_external_rollout_evidence_packet.py",
@@ -151,6 +155,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_analysis_plan_audit.md",
         RESULTS / "external_platform_onboarding_audit.json",
         RESULTS / "external_platform_onboarding_audit.md",
+        RESULTS / "external_fidelity_provenance_audit.json",
+        RESULTS / "external_fidelity_provenance_audit.md",
         RESULTS / "external_backend_integration_audit.json",
         RESULTS / "external_backend_integration_audit.md",
         RESULTS / "external_config_manifest_audit.json",
@@ -245,6 +251,7 @@ def build_payload() -> dict[str, Any]:
     pairing = require_payload(RESULTS / "external_pairing_integrity_audit.json", "external_pairing_integrity_audit_v1")
     analysis = require_payload(RESULTS / "external_analysis_plan_audit.json", "external_analysis_plan_audit_v1")
     onboarding = require_payload(RESULTS / "external_platform_onboarding_audit.json", "external_platform_onboarding_audit_v1")
+    fidelity_provenance = require_payload(RESULTS / "external_fidelity_provenance_audit.json", "external_fidelity_provenance_audit_v1")
     backend_integration = require_payload(RESULTS / "external_backend_integration_audit.json", "external_backend_integration_audit_v1")
     config_manifest = require_payload(RESULTS / "external_config_manifest_audit.json", "external_config_manifest_audit_v1")
     rollout_evidence = require_payload(RESULTS / "external_rollout_evidence_audit.json", "external_rollout_evidence_audit_v1")
@@ -364,6 +371,28 @@ def build_payload() -> dict[str, Any]:
             f"strict_evidence_ready={onboarding.get('strict_evidence_ready')!r}"
         ),
     )
+    fidelity_provenance_checks = {check.get("name"): check.get("passed") for check in fidelity_provenance.get("checks", []) or []}
+    add_check(
+        checks,
+        "fidelity_provenance_packet_included",
+        fidelity_provenance.get("passed") is True
+        and fidelity_provenance.get("not_external_evidence") is True
+        and fidelity_provenance.get("fidelity_provenance_packet_ready") is True
+        and fidelity_provenance.get("strict_fidelity_evidence_ready") is False
+        and fidelity_provenance.get("strict_external_evidence_ready") is False
+        and fidelity_provenance_checks.get("work_orders_cover_fidelity_blockers") is True
+        and fidelity_provenance_checks.get("strict_commands_cover_fidelity_manifest_collection_and_evidence") is True
+        and "external_validation/fidelity_provenance_packet.json" in paths
+        and "external_validation/fidelity_provenance_packet.md" in paths
+        and "external_validation/fidelity_provenance_work_orders.csv" in paths
+        and "results/external_fidelity_provenance_audit.json" in paths
+        and "scripts/build_external_fidelity_provenance_packet.py" in paths,
+        (
+            f"fidelity_provenance_packet_ready={fidelity_provenance.get('fidelity_provenance_packet_ready')!r}, "
+            f"strict_fidelity_evidence_ready={fidelity_provenance.get('strict_fidelity_evidence_ready')!r}, "
+            f"strict_external_evidence_ready={fidelity_provenance.get('strict_external_evidence_ready')!r}"
+        ),
+    )
     backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration.get("checks", []) or []}
     add_check(
         checks,
@@ -454,6 +483,7 @@ def build_payload() -> dict[str, Any]:
         "operator_actions_cover_evidence_collection",
         {
             "platform_onboarding",
+            "fidelity_provenance_packet",
             "backend_integration_packet",
             "config_manifest_packet",
             "rollout_evidence_packet",
@@ -467,7 +497,7 @@ def build_payload() -> dict[str, Any]:
             "strict_rollout_recompute",
             "final_strict_gate",
         }.issubset(action_ids),
-        f"missing={sorted({'platform_onboarding', 'backend_integration_packet', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
+        f"missing={sorted({'platform_onboarding', 'fidelity_provenance_packet', 'backend_integration_packet', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
     )
     add_check(
         checks,
@@ -511,6 +541,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_acquisition_packet.json",
             "results/external_analysis_plan_audit.json",
             "results/external_platform_onboarding_audit.json",
+            "results/external_fidelity_provenance_audit.json",
             "results/external_backend_integration_audit.json",
             "results/external_config_manifest_audit.json",
             "results/external_rollout_evidence_audit.json",

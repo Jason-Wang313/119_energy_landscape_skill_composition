@@ -100,6 +100,14 @@ python scripts\build_external_platform_onboarding.py
 
 This writes `external_validation/platform_onboarding_packet.{json,md}` and `results/external_platform_onboarding_audit.{json,md}`. It records the official source anchors, install/version-probe command, required simulator provenance, task onboarding files, backend requirements, and strict gate order for the ManiSkill/SAPIEN route. It is not evidence; the operator must still supply real platform versions, accepted fidelity provenance, real configs, backend implementations, logs, videos, manifests, and hashes.
 
+Build the external fidelity provenance packet:
+
+```powershell
+python scripts\build_external_fidelity_provenance_packet.py
+```
+
+This writes `external_validation/fidelity_provenance_packet.{json,md}`, `external_validation/fidelity_provenance_work_orders.csv`, and `results/external_fidelity_provenance_audit.{json,md}`. It turns platform physics/contact details, paired-reset replay, operator independence, calibration basis, code/skill hashes, manifest declaration, and strict fidelity gating into work orders. It is not evidence and still reports strict fidelity and external evidence as missing until a real acceptance file and manifest-declared artifacts exist.
+
 Build the external backend integration packet:
 
 ```powershell

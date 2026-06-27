@@ -185,6 +185,24 @@
     },
     {
       "artifacts": [
+        "external_validation/fidelity_provenance_packet.md",
+        "external_validation/fidelity_provenance_work_orders.csv",
+        "results/external_fidelity_provenance_audit.json"
+      ],
+      "closes": [
+        "Independent real-robot or accepted high-fidelity external validation evidence"
+      ],
+      "commands": [
+        "python scripts\\build_external_fidelity_provenance_packet.py",
+        "python scripts\\audit_external_fidelity_acceptance.py --strict",
+        "python scripts\\build_external_manifest.py --write --check-video-paths"
+      ],
+      "id": "fidelity_provenance_packet",
+      "operator_input": "complete platform physics/contact, paired-reset replay, operator independence, calibration basis, code commit, skill-library hash, and acceptance gates",
+      "title": "Use the fidelity provenance packet as the platform acceptance checklist"
+    },
+    {
+      "artifacts": [
         "external_validation/method_alias_map.json"
       ],
       "closes": [
@@ -354,7 +372,8 @@
     "results/external_acquisition_packet.json",
     "results/external_backend_contract_audit.json",
     "results/external_config_materialization_plan.json",
-    "results/external_rollout_evidence_audit.json"
+    "results/external_rollout_evidence_audit.json",
+    "results/external_fidelity_provenance_audit.json"
   ],
   "start_state": "DO_NOT_COLLECT_YET",
   "strict_collection_command": "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",

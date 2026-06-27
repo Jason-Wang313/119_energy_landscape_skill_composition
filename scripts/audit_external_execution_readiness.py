@@ -230,6 +230,44 @@ def main() -> int:
         "core external task-fidelity rows are declared in the acceptance template",
     )
 
+    fidelity_provenance_ok, fidelity_provenance, fidelity_provenance_detail = passed_json(
+        RESULTS / "external_fidelity_provenance_audit.json",
+        version="external_fidelity_provenance_audit_v1",
+    )
+    add_check(checks, "external_fidelity_provenance_packet_ready", fidelity_provenance_ok, fidelity_provenance_detail)
+    fidelity_provenance_checks = {check.get("name"): check.get("passed") for check in fidelity_provenance.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_fidelity_provenance_not_evidence",
+        fidelity_provenance.get("not_external_evidence") is True
+        and fidelity_provenance.get("fidelity_provenance_packet_ready") is True
+        and fidelity_provenance.get("strict_fidelity_evidence_ready") is False
+        and fidelity_provenance.get("strict_external_evidence_ready") is False,
+        (
+            f"not_external_evidence={fidelity_provenance.get('not_external_evidence')!r}, "
+            f"fidelity_provenance_packet_ready={fidelity_provenance.get('fidelity_provenance_packet_ready')!r}, "
+            f"strict_fidelity_evidence_ready={fidelity_provenance.get('strict_fidelity_evidence_ready')!r}, "
+            f"strict_external_evidence_ready={fidelity_provenance.get('strict_external_evidence_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "external_fidelity_provenance_covers_acceptance_blocker",
+        fidelity_provenance_checks.get("work_orders_cover_fidelity_blockers") is True
+        and fidelity_provenance_checks.get("fidelity_acceptance_contract_ready_but_not_evidence") is True
+        and (EXTERNAL / "fidelity_provenance_packet.json").exists()
+        and (EXTERNAL / "fidelity_provenance_packet.md").exists()
+        and (EXTERNAL / "fidelity_provenance_work_orders.csv").exists(),
+        f"checks={fidelity_provenance_checks}",
+    )
+    add_check(
+        checks,
+        "external_fidelity_provenance_gate_order",
+        fidelity_provenance_checks.get("strict_commands_cover_fidelity_manifest_collection_and_evidence") is True
+        and fidelity_provenance_checks.get("no_real_acceptance_or_manifest_written") is True,
+        f"checks={fidelity_provenance_checks}",
+    )
+
     blind_ok, blind, blind_detail = passed_json(
         RESULTS / "external_blind_eval_audit.json",
         version="external_blind_eval_plan_v1",
@@ -796,6 +834,9 @@ def main() -> int:
         EXTERNAL / "statistical_analysis_plan.md",
         EXTERNAL / "platform_onboarding_packet.json",
         EXTERNAL / "platform_onboarding_packet.md",
+        EXTERNAL / "fidelity_provenance_packet.json",
+        EXTERNAL / "fidelity_provenance_packet.md",
+        EXTERNAL / "fidelity_provenance_work_orders.csv",
         EXTERNAL / "backend_integration_packet.json",
         EXTERNAL / "backend_integration_packet.md",
         EXTERNAL / "backend_integration_work_orders.csv",
@@ -824,6 +865,7 @@ def main() -> int:
         RESULTS / "external_operator_handoff_bundle.md",
         RESULTS / "external_analysis_plan_audit.md",
         RESULTS / "external_platform_onboarding_audit.md",
+        RESULTS / "external_fidelity_provenance_audit.md",
         RESULTS / "external_backend_integration_audit.md",
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.md",
@@ -879,6 +921,10 @@ def main() -> int:
         "fidelity_acceptance_not_evidence",
         "fidelity_acceptance_fail_closed",
         "fidelity_acceptance_task_coverage",
+        "external_fidelity_provenance_packet_ready",
+        "external_fidelity_provenance_not_evidence",
+        "external_fidelity_provenance_covers_acceptance_blocker",
+        "external_fidelity_provenance_gate_order",
         "independent_validation_route_ready",
         "independent_route_not_evidence",
         "independent_route_primary_covers_tasks",
@@ -989,6 +1035,7 @@ def main() -> int:
             "non-template backend module for external_validation/runner/real_collection_runner.py",
             "completed backend integration packet work orders with module/provenance/config/log/video hashes",
             "accepted robot/simulator fidelity acceptance file",
+            "completed fidelity provenance packet work orders with accepted platform/contact provenance",
             "preflight-cleared external evidence package",
             "released or hash-declared skill/checkpoint artifacts",
         ],

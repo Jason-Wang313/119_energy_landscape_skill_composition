@@ -86,6 +86,8 @@ def main() -> int:
     analysis_plan = read_json(analysis_plan_path) if analysis_plan_path.exists() else {}
     platform_onboarding_path = RESULTS / "external_platform_onboarding_audit.json"
     platform_onboarding = read_json(platform_onboarding_path) if platform_onboarding_path.exists() else {}
+    fidelity_provenance_path = RESULTS / "external_fidelity_provenance_audit.json"
+    fidelity_provenance = read_json(fidelity_provenance_path) if fidelity_provenance_path.exists() else {}
     fidelity_acceptance_path = RESULTS / "external_fidelity_acceptance_audit.json"
     fidelity_acceptance = read_json(fidelity_acceptance_path) if fidelity_acceptance_path.exists() else {}
     route_audit_path = RESULTS / "independent_validation_route_audit.json"
@@ -316,12 +318,20 @@ def main() -> int:
         and platform_onboarding.get("not_external_evidence") is True
         and platform_onboarding.get("platform_onboarding_ready") is True
         and platform_onboarding.get("strict_evidence_ready") is False
+        and fidelity_provenance.get("passed") is True
+        and fidelity_provenance.get("not_external_evidence") is True
+        and fidelity_provenance.get("fidelity_provenance_packet_ready") is True
+        and fidelity_provenance.get("strict_fidelity_evidence_ready") is False
+        and fidelity_provenance.get("strict_external_evidence_ready") is False
         and exists_all(
             [
                 EXTERNAL / "statistical_analysis_plan.json",
                 EXTERNAL / "statistical_analysis_plan.md",
                 EXTERNAL / "platform_onboarding_packet.json",
                 EXTERNAL / "platform_onboarding_packet.md",
+                EXTERNAL / "fidelity_provenance_packet.json",
+                EXTERNAL / "fidelity_provenance_packet.md",
+                EXTERNAL / "fidelity_provenance_work_orders.csv",
                 EXTERNAL / "backend_integration_packet.json",
                 EXTERNAL / "backend_integration_packet.md",
                 EXTERNAL / "backend_integration_work_orders.csv",
@@ -392,10 +402,13 @@ def main() -> int:
             "results/external_execution_readiness_audit.json",
             "results/external_analysis_plan_audit.json",
             "results/external_platform_onboarding_audit.json",
+            "results/external_fidelity_provenance_audit.json",
             "external_validation/statistical_analysis_plan.json",
             "external_validation/statistical_analysis_plan.md",
             "external_validation/platform_onboarding_packet.json",
             "external_validation/platform_onboarding_packet.md",
+            "external_validation/fidelity_provenance_packet.md",
+            "external_validation/fidelity_provenance_work_orders.csv",
             "external_validation/backend_integration_packet.md",
             "external_validation/backend_integration_work_orders.csv",
             "external_validation/config_manifest_packet.md",
@@ -575,6 +588,7 @@ def main() -> int:
     acquisition_checks = {check.get("name"): check.get("passed") for check in acquisition_packet.get("checks", [])}
     handoff_checks = {check.get("name"): check.get("passed") for check in handoff_bundle.get("checks", [])}
     backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration.get("checks", [])}
+    fidelity_provenance_checks = {check.get("name"): check.get("passed") for check in fidelity_provenance.get("checks", [])}
     config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", [])}
     rollout_evidence_checks = {check.get("name"): check.get("passed") for check in rollout_evidence.get("checks", [])}
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", [])}
@@ -589,6 +603,7 @@ def main() -> int:
         and acquisition_checks.get("backend_integration_packet_ready") is True
         and acquisition_checks.get("config_manifest_packet_ready") is True
         and acquisition_checks.get("rollout_evidence_packet_ready") is True
+        and acquisition_checks.get("fidelity_provenance_packet_ready") is True
         and acquisition_checks.get("method_implementation_packet_ready") is True
         and acquisition_checks.get("post_collection_strict_commands_cover_all_gates") is True
         and acquisition_checks.get("no_real_manifest_written") is True
@@ -597,6 +612,12 @@ def main() -> int:
         and backend_integration.get("backend_integration_packet_ready") is True
         and backend_integration.get("strict_backend_ready") is False
         and backend_integration_checks.get("work_orders_cover_backend_to_manifest_path") is True
+        and fidelity_provenance.get("passed") is True
+        and fidelity_provenance.get("not_external_evidence") is True
+        and fidelity_provenance.get("fidelity_provenance_packet_ready") is True
+        and fidelity_provenance.get("strict_fidelity_evidence_ready") is False
+        and fidelity_provenance.get("strict_external_evidence_ready") is False
+        and fidelity_provenance_checks.get("work_orders_cover_fidelity_blockers") is True
         and config_manifest.get("passed") is True
         and config_manifest.get("not_external_evidence") is True
         and config_manifest.get("config_manifest_packet_ready") is True
@@ -620,6 +641,7 @@ def main() -> int:
         and handoff_bundle.get("start_state") == "DO_NOT_COLLECT_YET"
         and handoff_checks.get("bundle_excludes_rollout_evidence_artifacts") is True
         and handoff_checks.get("backend_integration_packet_included") is True
+        and handoff_checks.get("fidelity_provenance_packet_included") is True
         and handoff_checks.get("config_manifest_packet_included") is True
         and handoff_checks.get("rollout_evidence_packet_included") is True
         and handoff_checks.get("method_implementation_packet_included") is True
@@ -629,11 +651,14 @@ def main() -> int:
                 ROOT / "scripts" / "build_external_acquisition_packet.py",
                 ROOT / "scripts" / "build_external_operator_handoff_bundle.py",
                 ROOT / "scripts" / "build_external_backend_integration_packet.py",
+                ROOT / "scripts" / "build_external_fidelity_provenance_packet.py",
                 ROOT / "scripts" / "build_external_config_manifest_packet.py",
                 ROOT / "scripts" / "build_external_rollout_evidence_packet.py",
                 ROOT / "scripts" / "build_external_method_implementation_packet.py",
                 EXTERNAL / "backend_integration_packet.md",
                 EXTERNAL / "backend_integration_work_orders.csv",
+                EXTERNAL / "fidelity_provenance_packet.md",
+                EXTERNAL / "fidelity_provenance_work_orders.csv",
                 EXTERNAL / "config_manifest_packet.md",
                 EXTERNAL / "config_manifest_work_orders.csv",
                 EXTERNAL / "rollout_evidence_packet.md",
@@ -644,6 +669,8 @@ def main() -> int:
                 RESULTS / "external_acquisition_packet.md",
                 RESULTS / "external_backend_integration_audit.json",
                 RESULTS / "external_backend_integration_audit.md",
+                RESULTS / "external_fidelity_provenance_audit.json",
+                RESULTS / "external_fidelity_provenance_audit.md",
                 RESULTS / "external_config_manifest_audit.json",
                 RESULTS / "external_config_manifest_audit.md",
                 RESULTS / "external_rollout_evidence_audit.json",
@@ -663,11 +690,14 @@ def main() -> int:
             "scripts/build_external_acquisition_packet.py",
             "scripts/build_external_operator_handoff_bundle.py",
             "scripts/build_external_backend_integration_packet.py",
+            "scripts/build_external_fidelity_provenance_packet.py",
             "scripts/build_external_config_manifest_packet.py",
             "scripts/build_external_rollout_evidence_packet.py",
             "scripts/build_external_method_implementation_packet.py",
             "external_validation/backend_integration_packet.md",
             "external_validation/backend_integration_work_orders.csv",
+            "external_validation/fidelity_provenance_packet.md",
+            "external_validation/fidelity_provenance_work_orders.csv",
             "external_validation/config_manifest_packet.md",
             "external_validation/config_manifest_work_orders.csv",
             "external_validation/rollout_evidence_packet.md",
@@ -678,6 +708,8 @@ def main() -> int:
             "results/external_acquisition_packet.md",
             "results/external_backend_integration_audit.json",
             "results/external_backend_integration_audit.md",
+            "results/external_fidelity_provenance_audit.json",
+            "results/external_fidelity_provenance_audit.md",
             "results/external_config_manifest_audit.json",
             "results/external_config_manifest_audit.md",
             "results/external_rollout_evidence_audit.json",

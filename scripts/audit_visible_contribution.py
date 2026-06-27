@@ -45,6 +45,7 @@ def main() -> int:
     handoff = read_json(RESULTS / "external_operator_handoff_bundle.json")
     analysis = read_json(RESULTS / "external_analysis_plan_audit.json")
     onboarding = read_json(RESULTS / "external_platform_onboarding_audit.json")
+    fidelity_provenance = read_json(RESULTS / "external_fidelity_provenance_audit.json")
     backend_integration = read_json(RESULTS / "external_backend_integration_audit.json")
     runner_probe = read_json(RESULTS / "external_runner_backend_self_test.json")
     config_manifest = read_json(RESULTS / "external_config_manifest_audit.json")
@@ -126,6 +127,22 @@ def main() -> int:
         (
             f"platform_onboarding_ready={onboarding.get('platform_onboarding_ready')!r}, "
             f"strict_evidence_ready={onboarding.get('strict_evidence_ready')!r}"
+        ),
+    )
+    fidelity_provenance_checks = {check.get("name"): check.get("passed") for check in fidelity_provenance.get("checks", []) or []}
+    add_check(
+        checks,
+        "fidelity_provenance_packet_visible",
+        fidelity_provenance.get("passed") is True
+        and fidelity_provenance.get("not_external_evidence") is True
+        and fidelity_provenance.get("fidelity_provenance_packet_ready") is True
+        and fidelity_provenance.get("strict_fidelity_evidence_ready") is False
+        and fidelity_provenance.get("strict_external_evidence_ready") is False
+        and fidelity_provenance_checks.get("work_orders_cover_fidelity_blockers") is True,
+        (
+            f"fidelity_provenance_packet_ready={fidelity_provenance.get('fidelity_provenance_packet_ready')!r}, "
+            f"strict_fidelity_evidence_ready={fidelity_provenance.get('strict_fidelity_evidence_ready')!r}, "
+            f"strict_external_evidence_ready={fidelity_provenance.get('strict_external_evidence_ready')!r}"
         ),
     )
     backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration.get("checks", []) or []}
@@ -227,6 +244,7 @@ def main() -> int:
             "external_operator_handoff_bundle_claim",
             "external_analysis_plan_claim",
             "external_platform_onboarding_claim",
+            "external_fidelity_provenance_packet_claim",
             "external_backend_integration_packet_claim",
             "external_runner_backend_probe_claim",
             "external_config_manifest_packet_claim",
@@ -234,7 +252,7 @@ def main() -> int:
             "external_method_implementation_packet_claim",
             "external_config_materialization_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_backend_integration_packet_claim', 'external_runner_backend_probe_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_config_materialization_claim'} - claim_names)}",
+        f"missing={sorted({'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_backend_integration_packet_claim', 'external_runner_backend_probe_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_config_materialization_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -243,6 +261,7 @@ def main() -> int:
             "External config materialization plan",
             "External analysis plan",
             "External platform onboarding packet",
+            "External fidelity provenance packet",
             "External backend integration packet",
             "External runner backend probe self-test",
             "External config manifest packet",
@@ -256,6 +275,7 @@ def main() -> int:
             "External config materialization plan",
             "External analysis plan",
             "External platform onboarding packet",
+            "External fidelity provenance packet",
             "External backend integration packet",
             "External runner backend probe self-test",
             "External config manifest packet",
@@ -270,6 +290,7 @@ def main() -> int:
             "guarded config materialization plan",
             "external analysis plan",
             "external platform onboarding packet",
+            "external fidelity provenance packet",
             "external backend integration packet",
             "external runner backend probe self-test",
             "external config manifest packet",
@@ -284,6 +305,7 @@ def main() -> int:
             "External config materialization plan",
             "External analysis plan",
             "External platform onboarding packet",
+            "External fidelity provenance packet",
             "External backend integration packet",
             "External runner backend probe self-test",
             "External config manifest packet",
@@ -298,6 +320,7 @@ def main() -> int:
             "scripts/materialize_external_configs.py",
             "scripts/build_external_analysis_plan.py",
             "scripts/build_external_platform_onboarding.py",
+            "scripts/build_external_fidelity_provenance_packet.py",
             "scripts/build_external_backend_integration_packet.py",
             "scripts/self_test_external_runner_backend.py",
             "scripts/build_external_config_manifest_packet.py",
@@ -311,6 +334,7 @@ def main() -> int:
             "external config materialization plan",
             "external analysis plan",
             "external platform onboarding packet",
+            "external fidelity provenance packet",
             "external backend integration packet",
             "external runner backend probe self-test",
             "external config manifest packet",
@@ -347,7 +371,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform onboarding packet, the external backend integration packet, the external runner backend probe self-test, the external method implementation packet, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform onboarding packet, the external fidelity provenance packet, the external backend integration packet, the external runner backend probe self-test, the external method implementation packet, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

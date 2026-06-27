@@ -23,6 +23,7 @@
 - External collection planner: `scripts/build_external_collection_plan.py`
 - External analysis plan builder: `scripts/build_external_analysis_plan.py`
 - External platform onboarding builder: `scripts/build_external_platform_onboarding.py`
+- External fidelity provenance packet builder: `scripts/build_external_fidelity_provenance_packet.py`
 - External collection runbook builder: `scripts/build_external_runbook.py`
 - External backend contract validator: `scripts/audit_external_backend_contract.py`
 - External backend integration packet builder: `scripts/build_external_backend_integration_packet.py`
@@ -118,6 +119,11 @@
   - `external_validation/platform_onboarding_packet.md`
   - `results/external_platform_onboarding_audit.json`
   - `results/external_platform_onboarding_audit.md`
+  - `external_validation/fidelity_provenance_packet.json`
+  - `external_validation/fidelity_provenance_packet.md`
+  - `external_validation/fidelity_provenance_work_orders.csv`
+  - `results/external_fidelity_provenance_audit.json`
+  - `results/external_fidelity_provenance_audit.md`
   - `external_validation/backend_integration_packet.json`
   - `external_validation/backend_integration_packet.md`
   - `external_validation/backend_integration_work_orders.csv`
@@ -189,6 +195,9 @@
   - `external_validation/config_templates/door_open_navigation.json`
   - `external_validation/config_templates/cable_route_insert.json`
   - `external_validation/config_schema_v1.json`
+  - `external_validation/fidelity_provenance_packet.json`
+  - `external_validation/fidelity_provenance_packet.md`
+  - `external_validation/fidelity_provenance_work_orders.csv`
   - `external_validation/config_manifest_packet.json`
   - `external_validation/config_manifest_packet.md`
   - `external_validation/config_manifest_work_orders.csv`

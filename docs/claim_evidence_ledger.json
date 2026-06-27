@@ -76,6 +76,11 @@
       "evidence": ["scripts/build_external_platform_onboarding.py", "external_validation/platform_onboarding_packet.json", "external_validation/platform_onboarding_packet.md", "results/external_platform_onboarding_audit.json", "results/external_platform_onboarding_audit.md", "results/independent_validation_route_audit.json", "external_validation/fidelity_acceptance_template.json"]
     },
     {
+      "name": "external_fidelity_provenance_packet_claim",
+      "claim": "The repository provides a non-evidence fidelity provenance packet that turns the missing platform physics/contact, paired-reset replay, operator independence, calibration basis, code/skill hashes, manifest declaration, and strict fidelity gate into concrete operator work orders while strict fidelity and external evidence remain false.",
+      "evidence": ["scripts/build_external_fidelity_provenance_packet.py", "external_validation/fidelity_provenance_packet.json", "external_validation/fidelity_provenance_packet.md", "external_validation/fidelity_provenance_work_orders.csv", "results/external_fidelity_provenance_audit.json", "results/external_fidelity_provenance_audit.md", "results/external_fidelity_acceptance_audit.json", "external_validation/fidelity_acceptance_template.json"]
+    },
+    {
       "name": "external_backend_integration_packet_claim",
       "claim": "The repository provides a non-evidence backend integration packet that turns the missing non-template public-simulator backend module into concrete work orders while strict backend readiness and strict external evidence remain false.",
       "evidence": ["scripts/build_external_backend_integration_packet.py", "external_validation/backend_integration_packet.json", "external_validation/backend_integration_packet.md", "external_validation/backend_integration_work_orders.csv", "results/external_backend_integration_audit.json", "results/external_backend_integration_audit.md", "results/external_backend_contract_audit.json", "results/external_collection_readiness_audit.json"]
@@ -256,6 +261,7 @@
     "external_validation/platform_qualification_checklist.md",
     "external_validation/statistical_analysis_plan.md",
     "external_validation/platform_onboarding_packet.md",
+    "external_validation/fidelity_provenance_packet.md",
     "external_validation/backend_integration_packet.md",
     "external_validation/config_manifest_packet.md",
     "external_validation/rollout_evidence_packet.md",
@@ -263,6 +269,7 @@
     "external_validation/README.md",
     "results/external_analysis_plan_audit.md",
     "results/external_platform_onboarding_audit.md",
+    "results/external_fidelity_provenance_audit.md",
     "results/external_backend_integration_audit.md",
     "results/external_runner_backend_self_test.md",
     "results/external_config_manifest_audit.md",

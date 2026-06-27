@@ -20,6 +20,7 @@ REQUIRED_COMMANDS = [
     r"python scripts\build_external_analysis_plan.py",
     r"python scripts\build_independent_validation_route.py",
     r"python scripts\build_external_platform_onboarding.py",
+    r"python scripts\build_external_fidelity_provenance_packet.py",
     r"python scripts\build_external_backend_integration_packet.py",
     r"python scripts\build_external_config_manifest_packet.py",
     r"python scripts\build_external_rollout_evidence_packet.py",

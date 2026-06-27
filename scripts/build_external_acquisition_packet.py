@@ -16,6 +16,7 @@ OUT_MD = RESULTS / "external_acquisition_packet.md"
 MISSING_REQUIREMENT_ACTIONS = {
     "Independent real-robot or accepted high-fidelity external validation evidence": [
         "platform_onboarding",
+        "fidelity_provenance_packet",
         "backend_integration_packet",
         "rollout_evidence_packet",
         "backend_module",
@@ -137,6 +138,21 @@ ACTION_CATALOG = {
         "operator_input": "accepted simulator or robot evidence, contact/dynamics/camera/state provenance, and task coverage",
         "artifacts": ["external_validation/fidelity_acceptance.json"],
         "commands": ["python scripts\\audit_external_fidelity_acceptance.py --strict"],
+        "closes": ["Independent real-robot or accepted high-fidelity external validation evidence"],
+    },
+    "fidelity_provenance_packet": {
+        "title": "Use the fidelity provenance packet as the platform acceptance checklist",
+        "operator_input": "complete platform physics/contact, paired-reset replay, operator independence, calibration basis, code commit, skill-library hash, and acceptance gates",
+        "artifacts": [
+            "external_validation/fidelity_provenance_packet.md",
+            "external_validation/fidelity_provenance_work_orders.csv",
+            "results/external_fidelity_provenance_audit.json",
+        ],
+        "commands": [
+            "python scripts\\build_external_fidelity_provenance_packet.py",
+            "python scripts\\audit_external_fidelity_acceptance.py --strict",
+            "python scripts\\build_external_manifest.py --write --check-video-paths",
+        ],
         "closes": ["Independent real-robot or accepted high-fidelity external validation evidence"],
     },
     "alias_unseal": {
@@ -301,6 +317,7 @@ def main() -> int:
     preflight_path = RESULTS / "external_evidence_preflight.json"
     route_path = RESULTS / "independent_validation_route_audit.json"
     onboarding_path = RESULTS / "external_platform_onboarding_audit.json"
+    fidelity_provenance_path = RESULTS / "external_fidelity_provenance_audit.json"
     config_materialization_path = RESULTS / "external_config_materialization_plan.json"
     backend_contract_path = RESULTS / "external_backend_contract_audit.json"
     backend_integration_path = RESULTS / "external_backend_integration_audit.json"
@@ -313,6 +330,7 @@ def main() -> int:
     preflight = require_json(preflight_path)
     route = require_json(route_path)
     onboarding = require_json(onboarding_path)
+    fidelity_provenance = require_json(fidelity_provenance_path)
     config_materialization = require_json(config_materialization_path)
     backend_contract = require_json(backend_contract_path)
     backend_integration = require_json(backend_integration_path)
@@ -339,6 +357,7 @@ def main() -> int:
                 preflight_path,
                 route_path,
                 onboarding_path,
+                fidelity_provenance_path,
                 config_materialization_path,
                 backend_contract_path,
                 backend_integration_path,
@@ -354,6 +373,7 @@ def main() -> int:
                 preflight_path,
                 route_path,
                 onboarding_path,
+                fidelity_provenance_path,
                 config_materialization_path,
                 backend_contract_path,
                 backend_integration_path,
@@ -540,6 +560,25 @@ def main() -> int:
             f"strict_evidence_ready={onboarding.get('strict_evidence_ready')!r}"
         ),
     )
+    fidelity_provenance_checks = {check.get("name"): check.get("passed") for check in fidelity_provenance.get("checks", []) or []}
+    add_check(
+        checks,
+        "fidelity_provenance_packet_ready",
+        fidelity_provenance.get("passed") is True
+        and fidelity_provenance.get("not_external_evidence") is True
+        and fidelity_provenance.get("fidelity_provenance_packet_ready") is True
+        and fidelity_provenance.get("strict_fidelity_evidence_ready") is False
+        and fidelity_provenance.get("strict_external_evidence_ready") is False
+        and fidelity_provenance_checks.get("work_orders_cover_fidelity_blockers") is True
+        and fidelity_provenance_checks.get("fidelity_acceptance_contract_ready_but_not_evidence") is True
+        and (EXTERNAL / "fidelity_provenance_packet.md").exists()
+        and (EXTERNAL / "fidelity_provenance_work_orders.csv").exists(),
+        (
+            f"fidelity_provenance_packet_ready={fidelity_provenance.get('fidelity_provenance_packet_ready')!r}, "
+            f"strict_fidelity_evidence_ready={fidelity_provenance.get('strict_fidelity_evidence_ready')!r}, "
+            f"strict_external_evidence_ready={fidelity_provenance.get('strict_external_evidence_ready')!r}"
+        ),
+    )
 
     post_collection_commands = collection.get("post_collection_strict_commands", []) or []
     required_command_fragments = [
@@ -555,6 +594,7 @@ def main() -> int:
         "build_external_backend_integration_packet.py",
         "build_external_config_manifest_packet.py",
         "build_external_rollout_evidence_packet.py",
+        "build_external_fidelity_provenance_packet.py",
         "build_external_platform_onboarding.py",
         "build_external_method_implementation_packet.py",
     ]
@@ -603,6 +643,7 @@ def main() -> int:
                 preflight_path,
                 route_path,
                 onboarding_path,
+                fidelity_provenance_path,
                 config_materialization_path,
                 backend_contract_path,
                 backend_integration_path,

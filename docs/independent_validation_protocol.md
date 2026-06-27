@@ -173,6 +173,22 @@ python scripts\build_independent_validation_route.py
 
 This route is also not evidence. It makes the non-Haonan path explicit: a primary ManiSkill/SAPIEN public-simulator route, MuJoCo/robosuite and Isaac Sim/Isaac Lab secondary routes, and a third-party robot-lab route. Any route still has to produce manifest-backed JSONL logs, videos, real configs, platform provenance, and independent baseline implementations before it can satisfy the external gate.
 
+External fidelity provenance packet:
+
+- `external_validation/fidelity_provenance_packet.json`
+- `external_validation/fidelity_provenance_packet.md`
+- `external_validation/fidelity_provenance_work_orders.csv`
+- `results/external_fidelity_provenance_audit.json`
+- `results/external_fidelity_provenance_audit.md`
+
+Generate it with:
+
+```powershell
+python scripts\build_external_fidelity_provenance_packet.py
+```
+
+This packet is not evidence. It turns the missing platform physics/contact details, paired-reset replay, operator independence, calibration basis, code/skill hashes, manifest declaration, and strict fidelity gate into concrete work orders while strict fidelity and external evidence remain false.
+
 External backend integration packet:
 
 - `external_validation/backend_integration_packet.json`
