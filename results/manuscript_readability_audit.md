@@ -2,7 +2,7 @@
 
 Passed: `true`.
 Not evidence: `true`.
-Abstract words: `255`.
+Abstract words: `256`.
 World/action phrase count: `7`.
 Contact-rich phrase count: `1`.
 
@@ -10,10 +10,10 @@ This audit checks that the generated manuscript is naturally framed around a bou
 
 ## Checks
 
-- `pass` `abstract_exists`: words=255
-- `pass` `abstract_length_conference_reasonable`: words=255
-- `pass` `required_sections_present`: positions=[2339, 5946, 9220, 11070, 11944, 13478, 21226, 25149]
-- `pass` `required_sections_in_order`: positions=[2339, 5946, 9220, 11070, 11944, 13478, 21226, 25149]
+- `pass` `abstract_exists`: words=256
+- `pass` `abstract_length_conference_reasonable`: words=256
+- `pass` `required_sections_present`: positions=[2345, 6054, 9328, 11178, 12052, 13586, 21334, 25982]
+- `pass` `required_sections_in_order`: positions=[2345, 6054, 9328, 11178, 12052, 13586, 21334, 25982]
 - `pass` `core_frame_term_local world/action-modeling prob`: local world/action-modeling problem
 - `pass` `core_frame_term_compact predictive interface bet`: compact predictive interface between a skill library and a planner
 - `pass` `core_frame_term_action-conditioned physical inte`: action-conditioned physical interface between a skill library and a planner

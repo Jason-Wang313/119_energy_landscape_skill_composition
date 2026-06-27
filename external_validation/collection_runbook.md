@@ -63,6 +63,8 @@ This runbook turns the independent validation protocol into operator-facing coll
 - `python scripts\build_external_analysis_plan.py`
 - `python scripts\build_independent_validation_route.py`
 - `python scripts\build_external_platform_onboarding.py`
+- `python scripts\build_external_backend_integration_packet.py`
+- `python scripts\build_external_config_manifest_packet.py`
 - `python scripts\audit_external_fidelity_acceptance.py`
 - `python scripts\build_external_blind_eval_plan.py`
 - `python scripts\audit_external_collection_readiness.py`
@@ -70,6 +72,7 @@ This runbook turns the independent validation protocol into operator-facing coll
 - `python scripts\build_external_baseline_contract.py`
 - `python scripts\build_external_adapter_scaffolds.py`
 - `python scripts\validate_external_adapters.py`
+- `python scripts\build_external_method_implementation_packet.py`
 - `python scripts\validate_external_configs.py --strict`
 - `python scripts\validate_external_adapters.py --strict`
 - `python scripts\build_external_manifest.py --write --check-video-paths`

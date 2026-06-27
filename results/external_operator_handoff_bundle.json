@@ -710,11 +710,11 @@
       "sha256": "BAAF6BC6B7BFA0DAD346498D8C7FACEE413FD2A0844E5F833A519BBAD4BEEBF5"
     },
     {
-      "bytes": 3516,
+      "bytes": 3709,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/collection_runbook.md",
-      "sha256": "0285B7A3EF5786964DC95F5516C9A30BAFBF602549A347DD1349F80EE24BC6AF"
+      "sha256": "E205BF2FAEB35B78C88D0641A461A89A9CC9D4587B98386823D6EBEA34BC9351"
     },
     {
       "bytes": 9996,
@@ -1193,18 +1193,18 @@
       "sha256": "B68911C22003E7E03E48D7486AB58F53AD10457F0C25ABCD47A134E37A247892"
     },
     {
-      "bytes": 20019,
+      "bytes": 21882,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.json",
-      "sha256": "EFAAE82608C176718A2DB7A0EA9FD039ACA0B69807510A358FE3FEFFCCC3F960"
+      "sha256": "2D0239C2F19CF8DB196F82F35A587E8F0298A5718FF51B199C3AF362E11D052B"
     },
     {
-      "bytes": 14820,
+      "bytes": 16432,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.md",
-      "sha256": "B1716515D8AD3777F0187CD604E6DF531F0ACB404A45637C7F313DA501A1B8E9"
+      "sha256": "6480DF7878A3ED747A4D947BCED8DD873A5EE8311AC4F2A52E0AAA09ECA0FF57"
     },
     {
       "bytes": 7157,

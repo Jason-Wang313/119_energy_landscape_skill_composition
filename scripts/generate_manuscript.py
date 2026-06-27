@@ -380,13 +380,13 @@ def make_manuscript(summary):
         "A barrier-certified energy composer implements that interface, acting on a skill edge only when basin overlap, barrier height, descent continuity, repair cost, and fixed-risk calibration are jointly favorable. "
         f"In a frozen local rollout suite with 12 methods, 6 task families, 8 seam regimes, and 10 paired seeds, the composer reaches hard-slice success {fmt(metrics['hard_success_proposed'])} and utility {fmt(metrics['hard_utility_proposed'])}, compared with {fmt(metrics['hard_success_strongest'])} and {fmt(metrics['hard_utility_strongest'])} for the strongest non-oracle predecessor. "
         "It reduces seam failure, barrier violation, damage, calibration error, and realized seam breach while improving basin alignment and descent continuity. "
-        "The current evidence supports a bounded claim: treating a skill seam as a local world/action model improves composition when the relevant basin, barrier, and descent quantities are estimable and their outcomes update future planning. This is a bridge toward adaptive physical world/action models, while external robot or high-fidelity validation remains necessary before deployment-level claims."
+        "The current evidence supports a bounded claim: treating a skill seam as a local world/action model improves composition when the relevant basin, barrier, and descent quantities are estimable and their outcomes update future planning. This is one local step toward adaptive physical world/action models, while external robot or high-fidelity validation remains necessary before deployment-level claims."
     )
     a(r"\end{abstract}")
 
     a(r"\section{Motivation}")
     a(
-        "A reusable robot skill library still leaves a planning problem: the robot must know what the end of one skill makes possible for the next. We focus on that seam, the narrow place where an action model can be smaller than a full simulator but richer than a graph edge: it predicts what a completed skill makes true, risky, repairable, or impossible for the next skill. At this scale, the useful prediction is how a transition changes the next feasible action."
+        "A reusable robot skill library still leaves a planning problem: the robot must know what the end of one skill makes possible for the next. We focus on that seam, the narrow place where an action model can be smaller than a full simulator but richer than a graph edge: it predicts what a completed skill makes true, risky, repairable, or impossible for the next skill. The model's job is not to operate either primitive; it is to make the transition legible to planning. At this scale, the useful prediction is how a transition changes the next feasible action."
     )
     a(
         "Potential fields, navigation functions, energy-based learning, trajectory optimization, DMPs, and stable dynamical systems have long used scalar landscapes to encode motion and control structure \\citep{khatib1986potential,koditschek1989navigation,lecun2006energy,ratliff2009chomp,ijspeert2013dmp,khansari2011stable}. "
@@ -504,8 +504,8 @@ def make_manuscript(summary):
         f"Realized breach is monotone across ten risk deciles; the highest-risk decile has realized breach {fmt(calibration_derived['highest_lowest_decile_breach_delta'], 3)} higher and utility {fmt(-calibration_derived['highest_lowest_decile_utility_delta'], 3)} lower than the lowest-risk decile. "
         "This is still local predictive-validity evidence, not external robot or high-fidelity validation."
     )
-    a(r"\begin{center}\small\resizebox{\linewidth}{!}{\input{generated_seam_prediction_calibration_table.tex}}\end{center}")
     a(r"\noindent{\small\textbf{Predictive calibration table.} Local hard-slice check that predicted seam risk tracks realized seam breach and decision relevance while preserving the external-validation boundary.}")
+    a(r"\begin{center}\small\resizebox{\linewidth}{!}{\input{generated_seam_prediction_calibration_table.tex}}\end{center}")
 
     a(r"\subsection{Local Falsification Audit}")
     a(
@@ -552,11 +552,16 @@ def make_manuscript(summary):
     )
     a(
         "Robot foundation-policy and large-data systems broaden the available skill library \\citep{florence2022implicit,brohan2023rt1,openx2023}, while diffusion/action generation, action tokenization, policy composition, latent skill transfer, and language-action compositionality study how actions, skills, or policies can be represented, generated, reused, and combined \\citep{chi2023diffusionpolicy,wang2024poco,liu2026oat,julian2020latent,vijayaraghavan2025compositionality}. "
-        "Those systems create more opportunities for composition. This paper asks a complementary reliability question: when a proposed transition between already available skills should be trusted, repaired, probed, or avoided."
+        "Those systems create more opportunities for composition. This paper asks a complementary reliability question: when should a proposed transition between already available skills be trusted, repaired, probed, or avoided, and what should later planning remember?"
     )
     a(
         "Recent work on behavior composition and simulation-in-the-loop physical reasoning is especially close \\citep{chen2026costream,liu2026simpact}, and robot world-model surveys frame predictive action-conditioned representations as central to planning and evaluation \\citep{hou2026worldmodel}. "
         "The natural boundary is scale and role: this paper is not a full behavior-composition stack, action tokenizer, foundation policy, or simulation world model. It is a seam-level reliability layer meant to improve future planning by turning handoff predictions and failures into updated planner edge beliefs. The connection is intentionally narrow: physical prediction is local, actions are skill transitions, and adaptation happens through planner memory rather than through a claim of general-purpose simulation."
+    )
+
+    a(r"\section{Discussion}")
+    a(
+        "The interpretation is intentionally modest. A skill seam is a small place where a robot action representation has to become predictive: the same transition can be safe, repairable, uncertain, or impossible depending on terminal state, basin geometry, contact mode, and accumulated seam evidence. This paper makes that representation explicit enough for planning. Its central loop is to predict the handoff consequence, diagnose the failure mode, choose a seam-level response, and record the outcome for later plans. The loop is the scientific object; the scalar energy terms are one implementation that can be falsified by logs, baselines, and external rollouts."
     )
 
     a(r"\section{Scope And Validation}")
@@ -564,7 +569,7 @@ def make_manuscript(summary):
         "The local gates pass, but the evidence should be read as a controlled seam-composition study rather than a deployment claim. "
         "A complete submission package still needs real robot rollouts or accepted high-fidelity skill-composition simulation, released skill-energy or policy checkpoints, calibrated contact-force/camera/state logs, rollout videos, and manifest-declared independent baseline evidence from real external runs. "
         "The repository therefore treats external evidence as a machine-checkable contract: a future submission-ready version must pass an external-evidence audit over a manifest, episode-level JSONL logs, video directories, config/checkpoint hashes, baseline implementations, fixed-risk metrics, and ablations. "
-        "A separate raw-rollout validator must recompute success margin, utility margin, paired win rate, fixed-risk coverage, fixed-risk breach, and positive task-family count from the episode logs rather than accepting manifest-level numbers. The evidence audit treats any mismatch between manifest metrics and recomputed rollout metrics as blocking. Until those audits pass, the paper remains a local study with a bounded claim."
+        "A separate raw-rollout validator must recompute success margin, utility margin, paired win rate, fixed-risk coverage, fixed-risk breach, and positive task-family count from the episode logs rather than accepting manifest-level numbers. The evidence audit treats any mismatch between manifest metrics and recomputed rollout metrics as blocking. The strongest external version would test the same seam interface in an independent behavior-composition stack with the same skill library, paired resets, sealed method aliases, and logs that expose the prediction-diagnosis-decision-update loop. Until those audits pass, the paper remains a local study with a bounded claim."
     )
 
     a(r"\clearpage")
