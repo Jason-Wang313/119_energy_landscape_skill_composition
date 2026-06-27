@@ -20,13 +20,18 @@
       "passed": true
     },
     {
-      "detail": "files=218, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=221, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
     {
       "detail": "analysis_plan_ready=True, strict_evidence_ready=False",
       "name": "analysis_plan_visible",
+      "passed": true
+    },
+    {
+      "detail": "primary_route_install_ready=True, missing=[]",
+      "name": "platform_probe_visible",
       "passed": true
     },
     {

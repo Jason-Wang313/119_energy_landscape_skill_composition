@@ -15,6 +15,7 @@ OUT_MD = RESULTS / "external_acquisition_packet.md"
 
 MISSING_REQUIREMENT_ACTIONS = {
     "Independent real-robot or accepted high-fidelity external validation evidence": [
+        "platform_probe",
         "platform_onboarding",
         "fidelity_provenance_packet",
         "backend_integration_packet",
@@ -46,15 +47,30 @@ EXPECTED_MISSING_REQUIREMENTS = list(MISSING_REQUIREMENT_ACTIONS)
 
 
 ACTION_CATALOG = {
+    "platform_probe": {
+        "title": "Probe the selected external platform machine",
+        "operator_input": "run the non-evidence probe on the GPU workstation or accepted robot/simulator machine before backend qualification",
+        "artifacts": [
+            "results/external_platform_probe.json",
+            "results/external_platform_probe.md",
+        ],
+        "commands": [
+            "python scripts\\probe_external_platform.py",
+            "python scripts\\probe_external_platform.py --strict",
+        ],
+        "closes": ["platform package, GPU, renderer, code, config, and backend hash provenance before fidelity acceptance"],
+    },
     "platform_onboarding": {
         "title": "Onboard the public simulator platform",
         "operator_input": "GPU workstation or accepted robot/simulator platform plus recorded version/provenance fields",
         "artifacts": [
             "external_validation/platform_onboarding_packet.md",
             "external_validation/platform_onboarding_packet.json",
+            "results/external_platform_probe.json",
             "results/external_platform_onboarding_audit.json",
         ],
         "commands": [
+            "python scripts\\probe_external_platform.py",
             "python scripts\\build_external_platform_onboarding.py",
             "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
             "python scripts\\audit_external_fidelity_acceptance.py --strict",
@@ -332,6 +348,7 @@ def main() -> int:
     collection_path = RESULTS / "external_collection_readiness_audit.json"
     preflight_path = RESULTS / "external_evidence_preflight.json"
     route_path = RESULTS / "independent_validation_route_audit.json"
+    platform_probe_path = RESULTS / "external_platform_probe.json"
     onboarding_path = RESULTS / "external_platform_onboarding_audit.json"
     fidelity_provenance_path = RESULTS / "external_fidelity_provenance_audit.json"
     config_materialization_path = RESULTS / "external_config_materialization_plan.json"
@@ -346,6 +363,7 @@ def main() -> int:
     collection = require_json(collection_path)
     preflight = require_json(preflight_path)
     route = require_json(route_path)
+    platform_probe = require_json(platform_probe_path)
     onboarding = require_json(onboarding_path)
     fidelity_provenance = require_json(fidelity_provenance_path)
     config_materialization = require_json(config_materialization_path)
@@ -374,6 +392,7 @@ def main() -> int:
                 collection_path,
                 preflight_path,
                 route_path,
+                platform_probe_path,
                 onboarding_path,
                 fidelity_provenance_path,
                 config_materialization_path,
@@ -391,6 +410,7 @@ def main() -> int:
                 collection_path,
                 preflight_path,
                 route_path,
+                platform_probe_path,
                 onboarding_path,
                 fidelity_provenance_path,
                 config_materialization_path,
@@ -581,6 +601,19 @@ def main() -> int:
         and route_checks.get("primary_route_covers_collection_tasks") is True,
         f"primary_route={route.get('primary_route')!r}",
     )
+    add_check(
+        checks,
+        "platform_probe_ready",
+        platform_probe.get("version") == "external_platform_probe_v1"
+        and platform_probe.get("passed") is True
+        and platform_probe.get("not_external_evidence") is True
+        and platform_probe.get("platform_probe_ready") is True
+        and platform_probe.get("strict_external_evidence_ready") is False,
+        (
+            f"primary_route_install_ready={platform_probe.get('primary_route_install_ready')!r}, "
+            f"missing={platform_probe.get('primary_route_missing_packages')!r}"
+        ),
+    )
     onboarding_checks = {check.get("name"): check.get("passed") for check in onboarding.get("checks", []) or []}
     add_check(
         checks,
@@ -633,6 +666,7 @@ def main() -> int:
         "build_external_rollout_evidence_packet.py",
         "build_external_fidelity_provenance_packet.py",
         "build_external_platform_onboarding.py",
+        "probe_external_platform.py",
         "build_external_method_implementation_packet.py",
         "build_external_pilot_smoke_packet.py",
         "audit_external_pilot_smoke.py",
@@ -681,6 +715,7 @@ def main() -> int:
                 collection_path,
                 preflight_path,
                 route_path,
+                platform_probe_path,
                 onboarding_path,
                 fidelity_provenance_path,
                 config_materialization_path,

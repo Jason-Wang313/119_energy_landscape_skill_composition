@@ -82,6 +82,7 @@ PRIMARY_PROVENANCE_FIELDS = [
 
 STRICT_COMMANDS = [
     r"python scripts\build_external_platform_onboarding.py",
+    r"python scripts\probe_external_platform.py --strict",
     r"python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --alias-map external_validation\method_alias_map.json",
     r"python scripts\materialize_external_configs.py --platform-type high_fidelity_sim --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
     r"python scripts\validate_external_configs.py --strict",
@@ -128,7 +129,12 @@ def planned_tasks(collection_plan: dict[str, Any]) -> list[str]:
     ]
 
 
-def build_packet(collection_plan: dict[str, Any], route_audit: dict[str, Any], analysis_audit: dict[str, Any]) -> dict[str, Any]:
+def build_packet(
+    collection_plan: dict[str, Any],
+    route_audit: dict[str, Any],
+    analysis_audit: dict[str, Any],
+    platform_probe: dict[str, Any],
+) -> dict[str, Any]:
     primary_route = route_by_id(route_audit, "maniskill_sapien_primary")
     tasks = planned_tasks(collection_plan)
     task_onboarding = [
@@ -160,6 +166,7 @@ def build_packet(collection_plan: dict[str, Any], route_audit: dict[str, Any], a
             rel(RESULTS / "external_collection_plan.json"),
             rel(RESULTS / "independent_validation_route_audit.json"),
             rel(RESULTS / "external_analysis_plan_audit.json"),
+            rel(RESULTS / "external_platform_probe.json"),
         ],
         "primary_route": primary_route.get("route_id", "maniskill_sapien_primary"),
         "primary_platform_family": primary_route.get("platform_family", "ManiSkill/SAPIEN"),
@@ -174,7 +181,12 @@ def build_packet(collection_plan: dict[str, Any], route_audit: dict[str, Any], a
         "primary_install_probe": {
             "install_command_from_official_docs": "python -m pip install --upgrade mani_skill; python -m pip install torch torchvision torchaudio",
             "version_capture_command": "python -c \"import platform, torch, mani_skill, sapien; print(platform.platform()); print(torch.__version__); print(getattr(mani_skill, '__version__', 'unknown')); print(getattr(sapien, '__version__', 'unknown'))\"",
-            "local_status": "not_run_by_this_repo; operator must run on the selected GPU workstation and record exact versions in fidelity_acceptance.json",
+            "machine_probe_command": r"python scripts\probe_external_platform.py",
+            "strict_machine_probe_command": r"python scripts\probe_external_platform.py --strict",
+            "latest_probe_report": "results/external_platform_probe.json",
+            "latest_probe_install_ready": platform_probe.get("primary_route_install_ready") is True,
+            "latest_probe_missing_packages": list(platform_probe.get("primary_route_missing_packages", []) or []),
+            "local_status": "probe is non-evidence; operator must rerun it on the selected GPU workstation and record exact versions in fidelity_acceptance.json",
         },
         "required_platform_provenance_fields": PRIMARY_PROVENANCE_FIELDS,
         "task_onboarding": task_onboarding,
@@ -205,7 +217,12 @@ def build_packet(collection_plan: dict[str, Any], route_audit: dict[str, Any], a
     }
 
 
-def audit_packet(packet: dict[str, Any], collection_plan: dict[str, Any], route_audit: dict[str, Any]) -> dict[str, Any]:
+def audit_packet(
+    packet: dict[str, Any],
+    collection_plan: dict[str, Any],
+    route_audit: dict[str, Any],
+    platform_probe: dict[str, Any],
+) -> dict[str, Any]:
     checks: list[dict[str, Any]] = []
     route_checks = {check.get("name"): check.get("passed") for check in route_audit.get("checks", []) or []}
     task_set = set(packet.get("planned_tasks", []) or [])
@@ -282,8 +299,33 @@ def audit_packet(packet: dict[str, Any], collection_plan: dict[str, Any], route_
         }.issubset(provenance),
         f"missing={sorted({'contact_solver', 'friction_model', 'camera_intrinsics_and_resolution', 'state_observation_keys', 'contact_signal_keys', 'task_config_sha256', 'backend_module_sha256', 'skill_library_hash', 'code_commit'} - provenance)}",
     )
+    install_probe = packet.get("primary_install_probe", {})
+    install_probe = install_probe if isinstance(install_probe, dict) else {}
+    add_check(
+        checks,
+        "platform_probe_report_ready",
+        platform_probe.get("version") == "external_platform_probe_v1"
+        and platform_probe.get("passed") is True
+        and platform_probe.get("not_external_evidence") is True
+        and platform_probe.get("platform_probe_ready") is True
+        and platform_probe.get("strict_fidelity_evidence_ready") is False
+        and platform_probe.get("strict_external_evidence_ready") is False
+        and platform_probe.get("primary_route") == "maniskill_sapien_primary",
+        (
+            f"primary_route_install_ready={platform_probe.get('primary_route_install_ready')!r}, "
+            f"missing={platform_probe.get('primary_route_missing_packages')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "primary_install_probe_has_machine_probe_command",
+        "probe_external_platform.py" in str(install_probe.get("machine_probe_command", ""))
+        and "probe_external_platform.py --strict" in str(install_probe.get("strict_machine_probe_command", "")),
+        f"install_probe={install_probe}",
+    )
     for fragment in (
         "build_external_platform_onboarding.py",
+        "probe_external_platform.py --strict",
         "audit_external_backend_contract.py --strict",
         "materialize_external_configs.py",
         "validate_external_configs.py --strict",
@@ -355,6 +397,11 @@ def write_packet_md(packet: dict[str, Any]) -> None:
             "",
             f"- Install command from official docs: `{packet['primary_install_probe']['install_command_from_official_docs']}`",
             f"- Version capture command: `{packet['primary_install_probe']['version_capture_command']}`",
+            f"- Machine probe command: `{packet['primary_install_probe']['machine_probe_command']}`",
+            f"- Strict machine probe command: `{packet['primary_install_probe']['strict_machine_probe_command']}`",
+            f"- Latest probe report: `{packet['primary_install_probe']['latest_probe_report']}`",
+            f"- Latest probe install ready: `{str(packet['primary_install_probe']['latest_probe_install_ready']).lower()}`",
+            f"- Latest probe missing packages: `{packet['primary_install_probe']['latest_probe_missing_packages']}`",
             f"- Local status: {packet['primary_install_probe']['local_status']}",
             "",
             "## Required Platform Provenance",
@@ -413,11 +460,12 @@ def main() -> int:
     collection_plan = read_json(RESULTS / "external_collection_plan.json")
     route_audit = read_json(RESULTS / "independent_validation_route_audit.json")
     analysis_audit = read_json(RESULTS / "external_analysis_plan_audit.json")
+    platform_probe = read_json(RESULTS / "external_platform_probe.json")
 
-    packet = build_packet(collection_plan, route_audit, analysis_audit)
+    packet = build_packet(collection_plan, route_audit, analysis_audit, platform_probe)
     PACKET_JSON.write_text(json.dumps(packet, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_packet_md(packet)
-    audit = audit_packet(packet, collection_plan, route_audit)
+    audit = audit_packet(packet, collection_plan, route_audit, platform_probe)
     AUDIT_JSON.write_text(json.dumps(audit, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_audit_md(audit)
 

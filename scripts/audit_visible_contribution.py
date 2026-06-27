@@ -44,6 +44,7 @@ def main() -> int:
     operator = read_json(RESULTS / "external_operator_packet.json")
     handoff = read_json(RESULTS / "external_operator_handoff_bundle.json")
     analysis = read_json(RESULTS / "external_analysis_plan_audit.json")
+    platform_probe = read_json(RESULTS / "external_platform_probe.json")
     onboarding = read_json(RESULTS / "external_platform_onboarding_audit.json")
     fidelity_provenance = read_json(RESULTS / "external_fidelity_provenance_audit.json")
     backend_integration = read_json(RESULTS / "external_backend_integration_audit.json")
@@ -116,6 +117,20 @@ def main() -> int:
         (
             f"analysis_plan_ready={analysis.get('analysis_plan_ready')!r}, "
             f"strict_evidence_ready={analysis.get('strict_evidence_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "platform_probe_visible",
+        platform_probe.get("version") == "external_platform_probe_v1"
+        and platform_probe.get("passed") is True
+        and platform_probe.get("not_external_evidence") is True
+        and platform_probe.get("platform_probe_ready") is True
+        and platform_probe.get("strict_fidelity_evidence_ready") is False
+        and platform_probe.get("strict_external_evidence_ready") is False,
+        (
+            f"primary_route_install_ready={platform_probe.get('primary_route_install_ready')!r}, "
+            f"missing={platform_probe.get('primary_route_missing_packages')!r}"
         ),
     )
     add_check(
@@ -255,6 +270,7 @@ def main() -> int:
         checks,
         "ledger_tracks_new_visible_claims",
         {
+            "external_platform_probe_claim",
             "external_operator_packet_claim",
             "external_operator_handoff_bundle_claim",
             "external_analysis_plan_claim",
@@ -268,7 +284,7 @@ def main() -> int:
             "external_method_implementation_packet_claim",
             "external_config_materialization_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_backend_integration_packet_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_config_materialization_claim'} - claim_names)}",
+        f"missing={sorted({'external_platform_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_backend_integration_packet_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_config_materialization_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -276,6 +292,7 @@ def main() -> int:
             "adaptive physical world/action model for skill seams",
             "External config materialization plan",
             "External analysis plan",
+            "External platform probe",
             "External platform onboarding packet",
             "External fidelity provenance packet",
             "External backend integration packet",
@@ -291,6 +308,7 @@ def main() -> int:
         "final_audit": [
             "External config materialization plan",
             "External analysis plan",
+            "External platform probe",
             "External platform onboarding packet",
             "External fidelity provenance packet",
             "External backend integration packet",
@@ -307,6 +325,7 @@ def main() -> int:
         "readiness_decision": [
             "guarded config materialization plan",
             "external analysis plan",
+            "external platform probe",
             "external platform onboarding packet",
             "external fidelity provenance packet",
             "external backend integration packet",
@@ -323,6 +342,7 @@ def main() -> int:
         "readiness_audit": [
             "External config materialization plan",
             "External analysis plan",
+            "External platform probe",
             "External platform onboarding packet",
             "External fidelity provenance packet",
             "External backend integration packet",
@@ -339,6 +359,7 @@ def main() -> int:
         "version_log": [
             "scripts/materialize_external_configs.py",
             "scripts/build_external_analysis_plan.py",
+            "scripts/probe_external_platform.py",
             "scripts/build_external_platform_onboarding.py",
             "scripts/build_external_fidelity_provenance_packet.py",
             "scripts/build_external_backend_integration_packet.py",
@@ -355,6 +376,7 @@ def main() -> int:
         "child_status": [
             "external config materialization plan",
             "external analysis plan",
+            "external platform probe",
             "external platform onboarding packet",
             "external fidelity provenance packet",
             "external backend integration packet",
@@ -394,7 +416,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform onboarding packet, the external fidelity provenance packet, the external backend integration packet, the external runner backend probe self-test, the external pilot smoke packet, the external method implementation packet, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the external platform onboarding packet, the external fidelity provenance packet, the external backend integration packet, the external runner backend probe self-test, the external pilot smoke packet, the external method implementation packet, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

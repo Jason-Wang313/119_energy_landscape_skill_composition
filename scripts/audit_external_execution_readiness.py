@@ -124,6 +124,24 @@ def main() -> int:
         f"readiness_blockers={route.get('readiness_blockers', [])!r}",
     )
 
+    platform_probe_ok, platform_probe, platform_probe_detail = passed_json(
+        RESULTS / "external_platform_probe.json",
+        version="external_platform_probe_v1",
+    )
+    add_check(checks, "external_platform_probe_ready", platform_probe_ok, platform_probe_detail)
+    add_check(
+        checks,
+        "external_platform_probe_not_evidence",
+        platform_probe.get("not_external_evidence") is True
+        and platform_probe.get("platform_probe_ready") is True
+        and platform_probe.get("strict_fidelity_evidence_ready") is False
+        and platform_probe.get("strict_external_evidence_ready") is False,
+        (
+            f"primary_route_install_ready={platform_probe.get('primary_route_install_ready')!r}, "
+            f"strict_external_evidence_ready={platform_probe.get('strict_external_evidence_ready')!r}"
+        ),
+    )
+
     onboarding_ok, onboarding, onboarding_detail = passed_json(
         RESULTS / "external_platform_onboarding_audit.json",
         version="external_platform_onboarding_audit_v1",

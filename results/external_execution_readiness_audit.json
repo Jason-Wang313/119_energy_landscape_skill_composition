@@ -57,6 +57,16 @@
     },
     {
       "detail": "passed",
+      "name": "external_platform_probe_ready",
+      "passed": true
+    },
+    {
+      "detail": "primary_route_install_ready=True, strict_external_evidence_ready=False",
+      "name": "external_platform_probe_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "passed",
       "name": "external_platform_onboarding_ready",
       "passed": true
     },
@@ -66,12 +76,12 @@
       "passed": true
     },
     {
-      "detail": "onboarding_checks={'packet_is_non_evidence_and_fail_closed': True, 'primary_route_matches_independent_plan': True, 'task_onboarding_covers_collection_plan': True, 'record_budget_preserved': True, 'all_remaining_blockers_addressed': True, 'official_sources_are_primary_and_currently_checked': True, 'platform_provenance_fields_cover_fidelity_hashes_and_observations': True, 'strict_command_includes_build_external_platform_onboarding': True, 'strict_command_includes_audit_external_backend_contract': True, 'strict_command_includes_materialize_external_configs': True, 'strict_command_includes_validate_external_configs': True, 'strict_command_includes_audit_external_fidelity_acceptance': True, 'strict_command_includes_audit_external_collection_readiness': True, 'strict_command_includes_real_collection_runner': True, 'strict_command_includes_build_external_manifest': True, 'strict_command_includes_validate_external_rollouts': True, 'strict_command_includes_audit_external_pairing_integrity': True, 'strict_command_includes_audit_external_release_package': True, 'strict_command_includes_audit_external_evidence': True, 'pilot_sequence_preserves_gate_order': True, 'packet_files_written': True}",
+      "detail": "onboarding_checks={'packet_is_non_evidence_and_fail_closed': True, 'primary_route_matches_independent_plan': True, 'task_onboarding_covers_collection_plan': True, 'record_budget_preserved': True, 'all_remaining_blockers_addressed': True, 'official_sources_are_primary_and_currently_checked': True, 'platform_provenance_fields_cover_fidelity_hashes_and_observations': True, 'platform_probe_report_ready': True, 'primary_install_probe_has_machine_probe_command': True, 'strict_command_includes_build_external_platform_onboarding': True, 'strict_command_includes_probe_external_platform': True, 'strict_command_includes_audit_external_backend_contract': True, 'strict_command_includes_materialize_external_configs': True, 'strict_command_includes_validate_external_configs': True, 'strict_command_includes_audit_external_fidelity_acceptance': True, 'strict_command_includes_audit_external_collection_readiness': True, 'strict_command_includes_real_collection_runner': True, 'strict_command_includes_build_external_manifest': True, 'strict_command_includes_validate_external_rollouts': True, 'strict_command_includes_audit_external_pairing_integrity': True, 'strict_command_includes_audit_external_release_package': True, 'strict_command_includes_audit_external_evidence': True, 'pilot_sequence_preserves_gate_order': True, 'packet_files_written': True}",
       "name": "external_platform_onboarding_sources_and_provenance",
       "passed": true
     },
     {
-      "detail": "onboarding_checks={'packet_is_non_evidence_and_fail_closed': True, 'primary_route_matches_independent_plan': True, 'task_onboarding_covers_collection_plan': True, 'record_budget_preserved': True, 'all_remaining_blockers_addressed': True, 'official_sources_are_primary_and_currently_checked': True, 'platform_provenance_fields_cover_fidelity_hashes_and_observations': True, 'strict_command_includes_build_external_platform_onboarding': True, 'strict_command_includes_audit_external_backend_contract': True, 'strict_command_includes_materialize_external_configs': True, 'strict_command_includes_validate_external_configs': True, 'strict_command_includes_audit_external_fidelity_acceptance': True, 'strict_command_includes_audit_external_collection_readiness': True, 'strict_command_includes_real_collection_runner': True, 'strict_command_includes_build_external_manifest': True, 'strict_command_includes_validate_external_rollouts': True, 'strict_command_includes_audit_external_pairing_integrity': True, 'strict_command_includes_audit_external_release_package': True, 'strict_command_includes_audit_external_evidence': True, 'pilot_sequence_preserves_gate_order': True, 'packet_files_written': True}",
+      "detail": "onboarding_checks={'packet_is_non_evidence_and_fail_closed': True, 'primary_route_matches_independent_plan': True, 'task_onboarding_covers_collection_plan': True, 'record_budget_preserved': True, 'all_remaining_blockers_addressed': True, 'official_sources_are_primary_and_currently_checked': True, 'platform_provenance_fields_cover_fidelity_hashes_and_observations': True, 'platform_probe_report_ready': True, 'primary_install_probe_has_machine_probe_command': True, 'strict_command_includes_build_external_platform_onboarding': True, 'strict_command_includes_probe_external_platform': True, 'strict_command_includes_audit_external_backend_contract': True, 'strict_command_includes_materialize_external_configs': True, 'strict_command_includes_validate_external_configs': True, 'strict_command_includes_audit_external_fidelity_acceptance': True, 'strict_command_includes_audit_external_collection_readiness': True, 'strict_command_includes_real_collection_runner': True, 'strict_command_includes_build_external_manifest': True, 'strict_command_includes_validate_external_rollouts': True, 'strict_command_includes_audit_external_pairing_integrity': True, 'strict_command_includes_audit_external_release_package': True, 'strict_command_includes_audit_external_evidence': True, 'pilot_sequence_preserves_gate_order': True, 'packet_files_written': True}",
       "name": "external_platform_onboarding_gate_order",
       "passed": true
     },
@@ -126,12 +136,12 @@
       "passed": true
     },
     {
-      "detail": "checks={'packet_is_non_evidence_and_fail_closed': True, 'fidelity_acceptance_contract_ready_but_not_evidence': True, 'platform_onboarding_packet_ready': True, 'independent_route_and_collection_still_fail_closed': True, 'template_declares_required_platform_and_gate_fields': True, 'work_orders_cover_fidelity_blockers': True, 'strict_commands_cover_fidelity_manifest_collection_and_evidence': True, 'acceptance_template_not_real_evidence': True, 'no_real_acceptance_or_manifest_written': True, 'packet_files_written': True}",
+      "detail": "checks={'packet_is_non_evidence_and_fail_closed': True, 'fidelity_acceptance_contract_ready_but_not_evidence': True, 'platform_onboarding_packet_ready': True, 'external_platform_probe_ready': True, 'independent_route_and_collection_still_fail_closed': True, 'template_declares_required_platform_and_gate_fields': True, 'work_orders_cover_fidelity_blockers': True, 'strict_commands_cover_fidelity_manifest_collection_and_evidence': True, 'acceptance_template_not_real_evidence': True, 'no_real_acceptance_or_manifest_written': True, 'packet_files_written': True}",
       "name": "external_fidelity_provenance_covers_acceptance_blocker",
       "passed": true
     },
     {
-      "detail": "checks={'packet_is_non_evidence_and_fail_closed': True, 'fidelity_acceptance_contract_ready_but_not_evidence': True, 'platform_onboarding_packet_ready': True, 'independent_route_and_collection_still_fail_closed': True, 'template_declares_required_platform_and_gate_fields': True, 'work_orders_cover_fidelity_blockers': True, 'strict_commands_cover_fidelity_manifest_collection_and_evidence': True, 'acceptance_template_not_real_evidence': True, 'no_real_acceptance_or_manifest_written': True, 'packet_files_written': True}",
+      "detail": "checks={'packet_is_non_evidence_and_fail_closed': True, 'fidelity_acceptance_contract_ready_but_not_evidence': True, 'platform_onboarding_packet_ready': True, 'external_platform_probe_ready': True, 'independent_route_and_collection_still_fail_closed': True, 'template_declares_required_platform_and_gate_fields': True, 'work_orders_cover_fidelity_blockers': True, 'strict_commands_cover_fidelity_manifest_collection_and_evidence': True, 'acceptance_template_not_real_evidence': True, 'no_real_acceptance_or_manifest_written': True, 'packet_files_written': True}",
       "name": "external_fidelity_provenance_gate_order",
       "passed": true
     },
@@ -441,12 +451,12 @@
       "passed": true
     },
     {
-      "detail": "missing_requirements=4, operator_actions=18",
+      "detail": "missing_requirements=4, operator_actions=19",
       "name": "external_acquisition_packet_maps_all_blockers",
       "passed": true
     },
     {
-      "detail": "checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'backend_integration_packet_ready': True, 'config_manifest_packet_ready': True, 'rollout_evidence_packet_ready': True, 'pilot_smoke_packet_ready': True, 'method_implementation_packet_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'platform_onboarding_ready': True, 'fidelity_provenance_packet_ready': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}",
+      "detail": "checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'backend_integration_packet_ready': True, 'config_manifest_packet_ready': True, 'rollout_evidence_packet_ready': True, 'pilot_smoke_packet_ready': True, 'method_implementation_packet_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'platform_probe_ready': True, 'platform_onboarding_ready': True, 'fidelity_provenance_packet_ready': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}",
       "name": "external_acquisition_packet_backend_gate",
       "passed": true
     },
@@ -486,7 +496,7 @@
       "passed": true
     },
     {
-      "detail": "included_file_count=218, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 58, 'operator_command_source': 23, 'operator_facing_input': 48, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "included_file_count=221, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 60, 'operator_command_source': 24, 'operator_facing_input': 48, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "external_operator_handoff_bundle_hash_manifest",
       "passed": true
     },

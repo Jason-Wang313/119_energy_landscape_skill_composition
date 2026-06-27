@@ -22,6 +22,7 @@ AUDIT_VERSION = "external_fidelity_provenance_audit_v1"
 STRICT_ACCEPTANCE_COMMANDS = [
     r"python scripts\build_external_fidelity_provenance_packet.py",
     r"python scripts\build_external_platform_onboarding.py",
+    r"python scripts\probe_external_platform.py --strict",
     r"python scripts\audit_external_fidelity_acceptance.py --strict",
     r"python scripts\build_external_manifest.py --write --check-video-paths",
     r"python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map",
@@ -77,9 +78,9 @@ def build_work_orders(fidelity: dict[str, Any], template: dict[str, Any]) -> lis
         {
             "id": "fill_platform_identity_and_physics",
             "scope": "platform",
-            "operator_input": "fill platform_name, platform_version, physics engine, contact solver, timestep, substeps, robot model, assets, sensors, and contact/force channels",
-            "required_artifacts": ["external_validation/fidelity_acceptance.json"],
-            "acceptance_commands": STRICT_ACCEPTANCE_COMMANDS[:3],
+            "operator_input": "run the external platform probe on the selected machine, then fill platform_name, platform_version, physics engine, contact solver, timestep, substeps, robot model, assets, sensors, and contact/force channels",
+            "required_artifacts": ["results/external_platform_probe.json", "external_validation/fidelity_acceptance.json"],
+            "acceptance_commands": STRICT_ACCEPTANCE_COMMANDS[:4],
             "blocks": [item for item in blockers if "platform" in item or "route" in item],
         },
         {
@@ -87,7 +88,7 @@ def build_work_orders(fidelity: dict[str, Any], template: dict[str, Any]) -> lis
             "scope": "task_fidelity",
             "operator_input": "document why each skill seam exposes the contact/dynamics failures needed for Paper 119's diagnosis and risk estimates",
             "required_artifacts": ["external_validation/fidelity_acceptance.json", "external_validation/videos/<task_family>/*"],
-            "acceptance_commands": [STRICT_ACCEPTANCE_COMMANDS[2], STRICT_ACCEPTANCE_COMMANDS[6]],
+            "acceptance_commands": [STRICT_ACCEPTANCE_COMMANDS[2], STRICT_ACCEPTANCE_COMMANDS[3], STRICT_ACCEPTANCE_COMMANDS[7]],
             "blocks": [item for item in blockers if "qualification_text" in item or "all_acceptance_gates" in item],
         },
         {
@@ -95,7 +96,7 @@ def build_work_orders(fidelity: dict[str, Any], template: dict[str, Any]) -> lis
             "scope": "collection",
             "operator_input": "prove the selected platform can replay the same scene, seed, skill pair, and initial-state hash across every method panel",
             "required_artifacts": ["external_validation/fidelity_acceptance.json", "external_validation/blinded_operator_sheet.csv"],
-            "acceptance_commands": [STRICT_ACCEPTANCE_COMMANDS[2], STRICT_ACCEPTANCE_COMMANDS[4]],
+            "acceptance_commands": [STRICT_ACCEPTANCE_COMMANDS[2], STRICT_ACCEPTANCE_COMMANDS[3], STRICT_ACCEPTANCE_COMMANDS[5]],
             "blocks": [item for item in blockers if "paired" in item or "acceptance_gates" in item],
         },
         {
@@ -103,7 +104,7 @@ def build_work_orders(fidelity: dict[str, Any], template: dict[str, Any]) -> lis
             "scope": "provenance",
             "operator_input": "record independent operator/lab, date lock, calibration or benchmark basis, known limitations, and no target-collaborator dependency",
             "required_artifacts": ["external_validation/fidelity_acceptance.json"],
-            "acceptance_commands": [STRICT_ACCEPTANCE_COMMANDS[2]],
+            "acceptance_commands": [STRICT_ACCEPTANCE_COMMANDS[2], STRICT_ACCEPTANCE_COMMANDS[3]],
             "blocks": [item for item in blockers if "operator" in item or "date_locked" in item],
         },
         {
@@ -111,7 +112,7 @@ def build_work_orders(fidelity: dict[str, Any], template: dict[str, Any]) -> lis
             "scope": "release",
             "operator_input": "fill code commit, skill-library hash, artifact hash policy, manifest path, and manifest-declared fidelity_acceptance_path",
             "required_artifacts": ["external_validation/fidelity_acceptance.json", "external_validation/manifest.json"],
-            "acceptance_commands": STRICT_ACCEPTANCE_COMMANDS[2:4],
+            "acceptance_commands": STRICT_ACCEPTANCE_COMMANDS[2:5],
             "blocks": [item for item in blockers if "commit" in item or "hash" in item or "manifest" in item],
         },
         {
@@ -135,6 +136,7 @@ def build_packet(
     collection: dict[str, Any],
     route: dict[str, Any],
     template: dict[str, Any],
+    platform_probe: dict[str, Any],
 ) -> dict[str, Any]:
     return {
         "version": PACKET_VERSION,
@@ -151,6 +153,9 @@ def build_packet(
         "blocking_missing": list(fidelity.get("blocking_missing", []) or []),
         "primary_route": route.get("primary_route", ""),
         "platform_onboarding_ready": onboarding.get("platform_onboarding_ready") is True,
+        "platform_probe_ready": platform_probe.get("platform_probe_ready") is True,
+        "platform_probe_primary_route_install_ready": platform_probe.get("primary_route_install_ready") is True,
+        "platform_probe_missing_packages": list(platform_probe.get("primary_route_missing_packages", []) or []),
         "collection_ready": collection.get("collection_ready") is True,
         "template_platform_fields": platform_fields(template),
         "template_qualification_fields": qualification_fields(template),
@@ -171,6 +176,7 @@ def build_packet(
             rel(RESULTS / "external_collection_readiness_audit.json"),
             rel(RESULTS / "independent_validation_route_audit.json"),
             rel(EXTERNAL / "fidelity_acceptance_template.json"),
+            rel(RESULTS / "external_platform_probe.json"),
         ],
     }
 
@@ -182,6 +188,7 @@ def audit_packet(
     collection: dict[str, Any],
     route: dict[str, Any],
     template: dict[str, Any],
+    platform_probe: dict[str, Any],
 ) -> dict[str, Any]:
     checks: list[dict[str, Any]] = []
     work_orders = packet.get("work_orders", []) or []
@@ -238,6 +245,20 @@ def audit_packet(
     )
     add_check(
         checks,
+        "external_platform_probe_ready",
+        platform_probe.get("version") == "external_platform_probe_v1"
+        and platform_probe.get("passed") is True
+        and platform_probe.get("not_external_evidence") is True
+        and platform_probe.get("platform_probe_ready") is True
+        and platform_probe.get("strict_fidelity_evidence_ready") is False
+        and platform_probe.get("strict_external_evidence_ready") is False,
+        (
+            f"primary_route_install_ready={platform_probe.get('primary_route_install_ready')!r}, "
+            f"missing={platform_probe.get('primary_route_missing_packages')!r}"
+        ),
+    )
+    add_check(
+        checks,
         "independent_route_and_collection_still_fail_closed",
         route.get("passed") is True
         and route.get("not_external_evidence") is True
@@ -267,6 +288,7 @@ def audit_packet(
     required_fragments = [
         "build_external_fidelity_provenance_packet.py",
         "build_external_platform_onboarding.py",
+        "probe_external_platform.py --strict",
         "audit_external_fidelity_acceptance.py --strict",
         "build_external_manifest.py --write",
         "audit_external_collection_readiness.py --strict",
@@ -351,6 +373,9 @@ def write_packet_md(packet: dict[str, Any]) -> None:
         "Not evidence: `true`.",
         f"Strict fidelity evidence ready: `{str(packet['strict_fidelity_evidence_ready']).lower()}`.",
         f"Strict external evidence ready: `{str(packet['strict_external_evidence_ready']).lower()}`.",
+        f"Platform probe ready: `{str(packet['platform_probe_ready']).lower()}`.",
+        f"Primary route install ready in latest probe: `{str(packet['platform_probe_primary_route_install_ready']).lower()}`.",
+        f"Latest probe missing packages: `{packet['platform_probe_missing_packages']}`.",
         f"Blocking missing items: `{packet['blocking_missing_count']}`.",
         "",
         "This packet is a non-evidence work-order layer for platform fidelity and provenance. It exists so an independent operator can fill the real acceptance file before any robot or high-fidelity simulator rollout counts as evidence.",
@@ -398,13 +423,14 @@ def main() -> int:
     collection = read_json(RESULTS / "external_collection_readiness_audit.json")
     route = read_json(RESULTS / "independent_validation_route_audit.json")
     template = read_json(EXTERNAL / "fidelity_acceptance_template.json")
+    platform_probe = read_json(RESULTS / "external_platform_probe.json")
 
-    packet = build_packet(fidelity, onboarding, collection, route, template)
+    packet = build_packet(fidelity, onboarding, collection, route, template, platform_probe)
     PACKET_JSON.write_text(json.dumps(packet, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_work_orders(packet)
     write_packet_md(packet)
 
-    audit = audit_packet(packet, fidelity, onboarding, collection, route, template)
+    audit = audit_packet(packet, fidelity, onboarding, collection, route, template, platform_probe)
     AUDIT_JSON.write_text(json.dumps(audit, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_audit_md(audit)
 

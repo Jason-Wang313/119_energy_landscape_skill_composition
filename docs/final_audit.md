@@ -29,18 +29,19 @@ Continuation audit additions:
 - Numeric integrity: validator passed with no missing required outputs, invalid numeric values, or artifact-placement violations.
 - Claim boundary audit: `results/claim_boundary_audit.md` passes and blocks premature deployment, hardware, or ICLR-main readiness claims.
 - Submission readiness gap audit: `results/submission_readiness_gap_audit.md` maps the active objective to 21 concrete requirements; it currently reports 17 satisfied, 4 blocking external gaps, and 0 human-polish items, so the objective is not complete.
-- Visible contribution audit: `results/visible_contribution_audit.md` checks that README, final audit, readiness docs, version log, child status, and outreach package all describe the current materializer/config-manifest/rollout-evidence/analysis-plan/platform-onboarding/backend-integration/method-implementation/operator-packet/outreach state while preserving the 17 satisfied, 4 blocking external gaps boundary.
+- Visible contribution audit: `results/visible_contribution_audit.md` checks that README, final audit, readiness docs, version log, child status, and outreach package all describe the current materializer/config-manifest/rollout-evidence/analysis-plan/platform-probe/platform-onboarding/backend-integration/method-implementation/operator-packet/outreach state while preserving the 17 satisfied, 4 blocking external gaps boundary.
 - Full local build script: `scripts/build_submission_artifacts.ps1`.
 - GitHub validation workflow: `.github/workflows/paper119-validation.yml` runs the core runner/readiness/submission/outreach validators on pushed branches and pull requests, with the repository PDF used as the CI canonical artifact.
 - Canonical PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `8E5935AD2DC26D2C9C2B1E046A88533FD0032803B1A9CC519F7AC4FFE867C792`.
-- PDF size: `466648` bytes.
+- PDF SHA256: `5C83674F8670E21C36D679A936129DB83C92C332CD849B65666322A35832100D`.
+- PDF size: `467695` bytes.
 - PDF pages: `29`.
 - Desktop PDF copy: absent.
 - Visual QA: final title page, overview page, main result figures, fixed-risk figures, and outreach preview figure page inspected after the reframing/figure pass.
 - Independent validation protocol: `docs/independent_validation_protocol.md`.
 - External collection plan: `results/external_collection_plan.md` expands the current high-fidelity route into 1,440 required JSONL records and is explicitly marked as non-evidence.
 - External analysis plan: `external_validation/statistical_analysis_plan.md` and `results/external_analysis_plan_audit.md` lock the external primary hypotheses, schema thresholds, paired-comparison key, exclusion/unblinding policy, and required reporting before independent rollout collection; this is non-evidence and does not change the strict evidence gate.
+- External platform probe: `scripts/probe_external_platform.py` and `results/external_platform_probe.md` record Python, package, GPU/renderer, code-commit, and config/backend hash provenance for the selected public-simulator machine; this is non-evidence and does not change the strict evidence gate.
 - External platform onboarding packet: `external_validation/platform_onboarding_packet.md` and `results/external_platform_onboarding_audit.md` bind the primary ManiSkill/SAPIEN route to official source anchors, required simulator provenance, task onboarding files, backend requirements, and strict gate order; this is non-evidence and does not change the strict evidence gate.
 - External fidelity provenance packet: `external_validation/fidelity_provenance_packet.md`, `external_validation/fidelity_provenance_work_orders.csv`, and `results/external_fidelity_provenance_audit.md` turn platform physics/contact, paired-reset replay, operator independence, calibration basis, code/skill hashes, manifest declaration, and strict fidelity gating into work orders while strict fidelity evidence remains false.
 - External backend integration packet: `external_validation/backend_integration_packet.md`, `external_validation/backend_integration_work_orders.csv`, and `results/external_backend_integration_audit.md` turn the missing non-template public-simulator backend module into concrete work orders while strict backend readiness and strict external evidence remain false; this is non-evidence and does not change the strict evidence gate.

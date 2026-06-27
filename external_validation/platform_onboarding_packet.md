@@ -20,7 +20,12 @@ This packet turns the non-Haonan public-simulator route into an operator onboard
 
 - Install command from official docs: `python -m pip install --upgrade mani_skill; python -m pip install torch torchvision torchaudio`
 - Version capture command: `python -c "import platform, torch, mani_skill, sapien; print(platform.platform()); print(torch.__version__); print(getattr(mani_skill, '__version__', 'unknown')); print(getattr(sapien, '__version__', 'unknown'))"`
-- Local status: not_run_by_this_repo; operator must run on the selected GPU workstation and record exact versions in fidelity_acceptance.json
+- Machine probe command: `python scripts\probe_external_platform.py`
+- Strict machine probe command: `python scripts\probe_external_platform.py --strict`
+- Latest probe report: `results/external_platform_probe.json`
+- Latest probe install ready: `true`
+- Latest probe missing packages: `[]`
+- Local status: probe is non-evidence; operator must rerun it on the selected GPU workstation and record exact versions in fidelity_acceptance.json
 
 ## Required Platform Provenance
 
@@ -127,6 +132,7 @@ Must document:
 ## Strict Commands
 
 - `python scripts\build_external_platform_onboarding.py`
+- `python scripts\probe_external_platform.py --strict`
 - `python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --alias-map external_validation\method_alias_map.json`
 - `python scripts\materialize_external_configs.py --platform-type high_fidelity_sim --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write`
 - `python scripts\validate_external_configs.py --strict`

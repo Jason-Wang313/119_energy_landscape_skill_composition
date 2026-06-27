@@ -91,6 +91,9 @@ jobs:
       - name: Build external analysis plan
         run: python scripts/build_external_analysis_plan.py
 
+      - name: Probe external platform environment
+        run: python scripts/probe_external_platform.py
+
       - name: Build external platform onboarding
         run: python scripts/build_external_platform_onboarding.py
 

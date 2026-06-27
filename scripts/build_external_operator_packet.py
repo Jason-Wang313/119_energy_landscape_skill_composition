@@ -70,6 +70,7 @@ def build_payload() -> dict[str, Any]:
         post_collection_commands = list(acquisition.get("post_collection_strict_commands", []) or [])
 
     required_action_ids = {
+        "platform_probe",
         "platform_onboarding",
         "fidelity_provenance_packet",
         "backend_integration_packet",
@@ -222,6 +223,7 @@ def build_payload() -> dict[str, Any]:
         "source_reports": [
             "results/external_collection_readiness_audit.json",
             "results/external_acquisition_packet.json",
+            "results/external_platform_probe.json",
             "results/external_backend_contract_audit.json",
             "results/external_config_materialization_plan.json",
             "results/external_rollout_evidence_audit.json",

@@ -13,11 +13,13 @@ This audit checks that the platform fidelity/provenance packet is complete as an
 - `pass` `packet_is_non_evidence_and_fail_closed`: not_external_evidence=True, strict_fidelity_evidence_ready=False, strict_external_evidence_ready=False
 - `pass` `fidelity_acceptance_contract_ready_but_not_evidence`: acceptance_ready=False, blocking_missing_count=14
 - `pass` `platform_onboarding_packet_ready`: platform_onboarding_ready=True, strict_evidence_ready=False
+- `pass` `external_platform_probe_ready`: primary_route_install_ready=True, missing=[]
 - `pass` `independent_route_and_collection_still_fail_closed`: primary_route='maniskill_sapien_primary', collection_ready=False
 - `pass` `template_declares_required_platform_and_gate_fields`: platform_fields=12, qualification_fields=14, gates=5, tasks=4
 - `pass` `work_orders_cover_fidelity_blockers`: missing_orders=[]
 - `pass` `strict_commands_cover_fidelity_manifest_collection_and_evidence`: python scripts\build_external_fidelity_provenance_packet.py
 python scripts\build_external_platform_onboarding.py
+python scripts\probe_external_platform.py --strict
 python scripts\audit_external_fidelity_acceptance.py --strict
 python scripts\build_external_manifest.py --write --check-video-paths
 python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map

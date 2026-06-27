@@ -1,0 +1,281 @@
+{
+  "checks": [
+    {
+      "detail": "not_external_evidence=True",
+      "name": "probe_is_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "maniskill_sapien_primary",
+      "name": "primary_route_declared",
+      "passed": true
+    },
+    {
+      "detail": "checked=['gymnasium', 'isaaclab', 'isaacsim', 'mani_skill', 'mujoco', 'robosuite', 'sapien', 'torch']",
+      "name": "primary_packages_checked",
+      "passed": true
+    },
+    {
+      "detail": "primary_missing=[]",
+      "name": "primary_install_readiness_reported",
+      "passed": true
+    },
+    {
+      "detail": "commit='d2ab7a326bc61f243e332e1cbcc5b1c885578775'",
+      "name": "repo_commit_reported",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "required_hashes_recorded",
+      "passed": true
+    },
+    {
+      "detail": "commands=['nvidia_smi', 'vulkaninfo_summary']",
+      "name": "gpu_renderer_commands_attempted",
+      "passed": true
+    },
+    {
+      "detail": "probe cannot satisfy external fidelity or rollout evidence",
+      "name": "strict_evidence_remains_false",
+      "passed": true
+    }
+  ],
+  "environment": {
+    "machine": "AMD64",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+    "python_executable": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\python.exe",
+    "python_version": "3.10.11 (tags/v3.10.11:7d4cc5a, Apr  5 2023, 00:38:17) [MSC v.1929 64 bit (AMD64)]",
+    "release": "10",
+    "relevant_environment_variables": {},
+    "system": "Windows"
+  },
+  "failed_checks": [],
+  "gpu_renderer_probe": {
+    "nvidia_smi": {
+      "available": false,
+      "command": [
+        "nvidia-smi",
+        "--query-gpu=name,driver_version,memory.total",
+        "--format=csv,noheader"
+      ],
+      "returncode": null,
+      "stderr": "nvidia-smi not found on PATH",
+      "stdout": ""
+    },
+    "vulkaninfo_summary": {
+      "available": true,
+      "command": [
+        "vulkaninfo",
+        "--summary"
+      ],
+      "returncode": 0,
+      "stderr": "WARNING: [Loader Message] Code 0 : windows_read_data_files_in_registry: Registry lookup failed to get layer manifest files.\n",
+      "stdout": "==========\nVULKANINFO\n==========\n\nVulkan Instance Version: 1.4.313\n\n\nInstance Extensions: count = 13\n-------------------------------\nVK_EXT_debug_report                    : extension revision 10\nVK_EXT_debug_utils                     : extension revision 2\nVK_EXT_swapchain_colorspace            : extension revision 5\nVK_KHR_device_group_creation           : extension revision 1\nVK_KHR_external_fence_capabilities     : extension revision 1\nVK_KHR_external_memory_capabilities    : extension revision 1\nVK_KHR_external_semaphore_capabilities : extension revision 1\nVK_KHR_get_physical_device_properties2 : extension revision 2\nVK_KHR_get_surface_capabilities2       : extension revision 1\nVK_KHR_portability_enumeration         : extension revision 1\nVK_KHR_surface                         : extension revision 25\nVK_KHR_win32_surface                   : extension revision 6\nVK_LUNARG_direct_driver_loading        : extension revision 1\n\nInstance Layers:\n----------------\n\nDevices:\n========\nGPU0:\n\tapiVersion         = 1.4.323\n\tdriverVersion      = 101.7085\n\tvendorID           = 0x8086\n\tdeviceID           = 0x9a49\n\tdeviceType         = PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU\n\tdeviceName         = Intel(R) Iris(R) Xe Graphics\n\tdriverID           = DRIVER_ID_INTEL_PROPRIETARY_WINDOWS\n\tdriverName         = Intel Corporation\n\tdriverInfo         = 101.7085\n\tconformanceVersion = 1.4.0.0\n\tdeviceUUID         = 8680499a-0100-0000-0002-000000000000\n\tdriverUUID         = 33322e30-2e31-3031-2e37-303835000000\n"
+    }
+  },
+  "not_external_evidence": true,
+  "operator_next_steps": [
+    "Run this probe on the selected external GPU workstation.",
+    "If primary_route_install_ready is false, install/repair ManiSkill, SAPIEN, Torch, and Gymnasium before backend qualification.",
+    "Copy exact package, GPU, renderer, code commit, config hash, and backend hash values into external_validation/fidelity_acceptance.json.",
+    "Then run python scripts\\audit_external_fidelity_acceptance.py --strict and python scripts\\audit_external_collection_readiness.py --strict with the real backend."
+  ],
+  "packages": {
+    "gymnasium": {
+      "distribution_version": "1.2.3",
+      "module": "gymnasium",
+      "module_available": true,
+      "route": "primary"
+    },
+    "isaaclab": {
+      "distribution_version": null,
+      "module": "isaaclab",
+      "module_available": false,
+      "route": "secondary"
+    },
+    "isaacsim": {
+      "distribution_version": null,
+      "module": "isaacsim",
+      "module_available": false,
+      "route": "secondary"
+    },
+    "mani_skill": {
+      "distribution_version": "3.0.1",
+      "module": "mani_skill",
+      "module_available": true,
+      "route": "primary"
+    },
+    "mujoco": {
+      "distribution_version": "3.9.0",
+      "module": "mujoco",
+      "module_available": true,
+      "route": "secondary"
+    },
+    "robosuite": {
+      "distribution_version": "1.5.2",
+      "module": "robosuite",
+      "module_available": true,
+      "route": "secondary"
+    },
+    "sapien": {
+      "distribution_version": "3.0.3",
+      "module": "sapien",
+      "module_available": true,
+      "route": "primary"
+    },
+    "torch": {
+      "distribution_version": "2.10.0",
+      "module": "torch",
+      "module_available": true,
+      "route": "primary",
+      "torch_cuda_available": false,
+      "torch_cuda_device_count": 0,
+      "torch_cuda_version": null,
+      "torch_version": "2.10.0+cpu"
+    }
+  },
+  "passed": true,
+  "platform_probe_ready": true,
+  "primary_route": "maniskill_sapien_primary",
+  "primary_route_install_ready": true,
+  "primary_route_missing_packages": [],
+  "repo": {
+    "branch": "codex/paper119-submission-hardening",
+    "commit": "d2ab7a326bc61f243e332e1cbcc5b1c885578775",
+    "dirty_status_lines": [
+      " M .github/workflows/paper119-validation.yml",
+      " M README.md",
+      " M child_status.md",
+      " M docs/claim_evidence_ledger.json",
+      " M docs/final_audit.md",
+      " M docs/submission_readiness_audit_v5.md",
+      " M docs/submission_readiness_decision.md",
+      " M docs/submission_version_log.md",
+      " M external_validation/README.md",
+      " M external_validation/collection_runbook.md",
+      " M external_validation/fidelity_provenance_packet.json",
+      " M external_validation/fidelity_provenance_packet.md",
+      " M external_validation/fidelity_provenance_work_orders.csv",
+      " M external_validation/platform_onboarding_packet.json",
+      " M external_validation/platform_onboarding_packet.md",
+      " M results/external_acquisition_packet.json",
+      " M results/external_acquisition_packet.md",
+      " M results/external_collection_plan.json",
+      " M results/external_collection_plan.md",
+      " M results/external_execution_readiness_audit.json",
+      " M results/external_execution_readiness_audit.md",
+      " M results/external_fidelity_provenance_audit.json",
+      " M results/external_fidelity_provenance_audit.md",
+      " M results/external_operator_handoff_bundle.json",
+      " M results/external_operator_handoff_bundle.md",
+      " M results/external_operator_packet.json",
+      " M results/external_operator_packet.md",
+      " M results/external_platform_onboarding_audit.json",
+      " M results/external_platform_onboarding_audit.md",
+      " M results/visible_contribution_audit.json",
+      " M results/visible_contribution_audit.md",
+      " M scripts/audit_external_execution_readiness.py",
+      " M scripts/audit_visible_contribution.py",
+      " M scripts/build_external_acquisition_packet.py",
+      " M scripts/build_external_collection_plan.py",
+      " M scripts/build_external_fidelity_provenance_packet.py",
+      " M scripts/build_external_operator_handoff_bundle.py",
+      " M scripts/build_external_operator_packet.py",
+      " M scripts/build_external_platform_onboarding.py",
+      " M scripts/build_submission_artifacts.ps1",
+      " M scripts/validate_submission_artifacts.py",
+      "?? results/external_platform_probe.json",
+      "?? results/external_platform_probe.md",
+      "?? scripts/probe_external_platform.py"
+    ],
+    "git_commands": {
+      "rev_parse_branch": {
+        "available": true,
+        "command": [
+          "git",
+          "rev-parse",
+          "--abbrev-ref",
+          "HEAD"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "codex/paper119-submission-hardening\n"
+      },
+      "rev_parse_head": {
+        "available": true,
+        "command": [
+          "git",
+          "rev-parse",
+          "HEAD"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "d2ab7a326bc61f243e332e1cbcc5b1c885578775\n"
+      },
+      "status_short": {
+        "available": true,
+        "command": [
+          "git",
+          "status",
+          "--short"
+        ],
+        "returncode": 0,
+        "stderr": "",
+        "stdout": " M .github/workflows/paper119-validation.yml\n M README.md\n M child_status.md\n M docs/claim_evidence_ledger.json\n M docs/final_audit.md\n M docs/submission_readiness_audit_v5.md\n M docs/submission_readiness_decision.md\n M docs/submission_version_log.md\n M external_validation/README.md\n M external_validation/collection_runbook.md\n M external_validation/fidelity_provenance_packet.json\n M external_validation/fidelity_provenance_packet.md\n M external_validation/fidelity_provenance_work_orders.csv\n M external_validation/platform_onboarding_packet.json\n M external_validation/platform_onboarding_packet.md\n M results/external_acquisition_packet.json\n M results/external_acquisition_packet.md\n M results/external_collection_plan.json\n M results/external_collection_plan.md\n M results/external_execution_readiness_audit.json\n M results/external_execution_readiness_audit.md\n M results/external_fidelity_provenance_audit.json\n M results/external_fidelity_provenance_audit.md\n M results/external_operator_handoff_bundle.json\n M results/external_operator_handoff_bundle.md\n M results/external_operator_packet.json\n M results/external_operator_packet.md\n M results/external_platform_onboarding_audit.json\n M results/external_platform_onboarding_audit.md\n M results/visible_contribution_audit.json\n M results/visible_contribution_audit.md\n M scripts/audit_external_execution_readiness.py\n M scripts/audit_visible_contribution.py\n M scripts/build_external_acquisition_packet.py\n M scripts/build_external_collection_plan.py\n M scripts/build_external_fidelity_provenance_packet.py\n M scripts/build_external_operator_handoff_bundle.py\n M scripts/build_external_operator_packet.py\n M scripts/build_external_platform_onboarding.py\n M scripts/build_submission_artifacts.ps1\n M scripts/validate_submission_artifacts.py\n?? results/external_platform_probe.json\n?? results/external_platform_probe.md\n?? scripts/probe_external_platform.py\n"
+      }
+    }
+  },
+  "strict_external_evidence_ready": false,
+  "strict_fidelity_evidence_ready": false,
+  "strict_operator_command": "python scripts\\probe_external_platform.py --strict",
+  "tracked_hashes": {
+    "external_validation/config_schema_v1.json": {
+      "bytes": 1823,
+      "exists": true,
+      "sha256": "6936B85F4D47F87CC509E272E37F577BD3FF2EC0B505EEAEE0C3180207189573"
+    },
+    "external_validation/configs/cable_route_insert.json": {
+      "bytes": 1502,
+      "exists": true,
+      "sha256": "15D687A12F9213E1EB410876203CE93F73E667C30E039685E151438017B3D7AD"
+    },
+    "external_validation/configs/door_open_navigation.json": {
+      "bytes": 1503,
+      "exists": true,
+      "sha256": "39697F0BA1ECBE013C1790455F26B68C927EEF97415A2BB49C6FD1440DEBEA9C"
+    },
+    "external_validation/configs/drawer_to_pick_transfer.json": {
+      "bytes": 1486,
+      "exists": true,
+      "sha256": "EABEA38D21F936A46C69E566D0324F7C42A8693CAA1D441B81C7E87B595FCA0D"
+    },
+    "external_validation/configs/peg_place_regrasp.json": {
+      "bytes": 1487,
+      "exists": true,
+      "sha256": "8D041F5E869F4D81E2352D77A01C85EE585DF2040E45987750DF84B86EA94086"
+    },
+    "external_validation/fidelity_acceptance_template.json": {
+      "bytes": 4582,
+      "exists": true,
+      "sha256": "0BED23F5E73145C7D3283605C0EFDCCF0970CBC989CAAC6DF4E45445D30496E0"
+    },
+    "external_validation/runner/backend_contract.py": {
+      "bytes": 3269,
+      "exists": true,
+      "sha256": "724802B452269859B9F9686942CC9788A078B907EDD32EC9C857CF5A1427801A"
+    },
+    "external_validation/runner/backend_templates/maniskill_backend.py": {
+      "bytes": 299,
+      "exists": true,
+      "sha256": "57C8C99918AF4480A1ABF1118B5FF38F738E0CAFF23B36D8376F40B18A4FC9FD"
+    },
+    "external_validation/runner/real_collection_runner.py": {
+      "bytes": 15097,
+      "exists": true,
+      "sha256": "E18DDE573F0269B387FADD3E3BC6BCCC4620A685000281D15FD50E8E184FB071"
+    }
+  },
+  "version": "external_platform_probe_v1"
+}

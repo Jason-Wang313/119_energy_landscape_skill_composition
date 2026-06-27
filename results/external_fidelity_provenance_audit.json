@@ -18,6 +18,11 @@
       "passed": true
     },
     {
+      "detail": "primary_route_install_ready=True, missing=[]",
+      "name": "external_platform_probe_ready",
+      "passed": true
+    },
+    {
       "detail": "primary_route='maniskill_sapien_primary', collection_ready=False",
       "name": "independent_route_and_collection_still_fail_closed",
       "passed": true
@@ -33,7 +38,7 @@
       "passed": true
     },
     {
-      "detail": "python scripts\\build_external_fidelity_provenance_packet.py\npython scripts\\build_external_platform_onboarding.py\npython scripts\\audit_external_fidelity_acceptance.py --strict\npython scripts\\build_external_manifest.py --write --check-video-paths\npython scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map\npython scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict\npython scripts\\audit_external_evidence.py --strict",
+      "detail": "python scripts\\build_external_fidelity_provenance_packet.py\npython scripts\\build_external_platform_onboarding.py\npython scripts\\probe_external_platform.py --strict\npython scripts\\audit_external_fidelity_acceptance.py --strict\npython scripts\\build_external_manifest.py --write --check-video-paths\npython scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map\npython scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict\npython scripts\\audit_external_evidence.py --strict",
       "name": "strict_commands_cover_fidelity_manifest_collection_and_evidence",
       "passed": true
     },

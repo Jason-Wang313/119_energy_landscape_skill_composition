@@ -39,14 +39,14 @@ ICLR-main ready: no
 ## Artifact Checks
 
 - PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `8E5935AD2DC26D2C9C2B1E046A88533FD0032803B1A9CC519F7AC4FFE867C792`.
-- PDF size: `466648` bytes.
+- PDF SHA256: `5C83674F8670E21C36D679A936129DB83C92C332CD849B65666322A35832100D`.
+- PDF size: `467695` bytes.
 - PDF pages: `29`.
 - Numbered PDF placement: Downloads only.
 - Desktop numbered PDF: absent.
 - Validator: passed.
 - Claim boundary audit: `results/claim_boundary_audit.md` passed and confirms the current package keeps the claim bounded.
-- Visible contribution audit: `results/visible_contribution_audit.md` passed and checks that public-facing docs mention the current materializer, External config manifest packet, External rollout evidence packet, External analysis plan, External platform onboarding packet, External fidelity provenance packet, External backend integration packet, External runner backend probe self-test, External pilot smoke packet, External method implementation packet, external operator packet, outreach stance, and 17/21 objective requirements satisfied boundary.
+- Visible contribution audit: `results/visible_contribution_audit.md` passed and checks that public-facing docs mention the current materializer, External config manifest packet, External rollout evidence packet, External analysis plan, External platform probe, External platform onboarding packet, External fidelity provenance packet, External backend integration packet, External runner backend probe self-test, External pilot smoke packet, External method implementation packet, external operator packet, outreach stance, and 17/21 objective requirements satisfied boundary.
 - Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 17/21 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
 - Local falsification audit: `results/local_falsification_audit.md` passed and is included in the generated manuscript.
 - Holdout robustness audit: `results/holdout_robustness_audit.md` passed and is included in the generated manuscript.
@@ -64,6 +64,7 @@ ICLR-main ready: no
 - GitHub validation workflow: `.github/workflows/paper119-validation.yml` runs the core runner/readiness/submission/outreach validators on pushed branches and pull requests, with `PAPER119_CANONICAL_PDF=paper/main.pdf` for CI artifact parity.
 - External collection plan: `results/external_collection_plan.md` exists, passes, and expands the current high-fidelity route into 1,440 required JSONL records while explicitly remaining non-evidence.
 - External analysis plan: `external_validation/statistical_analysis_plan.md` and `results/external_analysis_plan_audit.md` exist, pass, and pre-register external hypotheses, rollout-schema thresholds, paired-reset comparisons, exclusion/unblinding policy, strict gates, and reporting while explicitly remaining non-evidence.
+- External platform probe: `scripts/probe_external_platform.py` and `results/external_platform_probe.md` exist, pass, and record Python, package, GPU/renderer, code-commit, and config/backend hash provenance for the selected public-simulator route while explicitly remaining non-evidence.
 - External platform onboarding packet: `external_validation/platform_onboarding_packet.md` and `results/external_platform_onboarding_audit.md` exist, pass, and specify official source anchors, required simulator provenance, task onboarding files, backend requirements, and strict gate order for the primary ManiSkill/SAPIEN route while explicitly remaining non-evidence.
 - External fidelity provenance packet: `external_validation/fidelity_provenance_packet.md`, `external_validation/fidelity_provenance_work_orders.csv`, and `results/external_fidelity_provenance_audit.md` exist, pass, and turn the platform physics/contact, paired-reset replay, operator independence, calibration basis, code/skill hashes, manifest declaration, and strict fidelity gate into work orders while strict fidelity evidence remains false.
 - External backend integration packet: `external_validation/backend_integration_packet.md`, `external_validation/backend_integration_work_orders.csv`, and `results/external_backend_integration_audit.md` exist, pass, and convert the missing non-template public-simulator backend module into work orders while strict backend readiness and strict external evidence remain false.

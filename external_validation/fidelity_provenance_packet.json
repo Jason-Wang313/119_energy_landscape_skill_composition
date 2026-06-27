@@ -30,6 +30,9 @@
   "manifest_written": false,
   "not_external_evidence": true,
   "platform_onboarding_ready": true,
+  "platform_probe_missing_packages": [],
+  "platform_probe_primary_route_install_ready": true,
+  "platform_probe_ready": true,
   "primary_route": "maniskill_sapien_primary",
   "purpose": "Convert the platform fidelity/provenance blocker into fillable, auditable work orders before any external rollout can count as evidence.",
   "readiness_state": "COLLECT_PLATFORM_PROVENANCE",
@@ -38,11 +41,13 @@
     "results/external_platform_onboarding_audit.json",
     "results/external_collection_readiness_audit.json",
     "results/independent_validation_route_audit.json",
-    "external_validation/fidelity_acceptance_template.json"
+    "external_validation/fidelity_acceptance_template.json",
+    "results/external_platform_probe.json"
   ],
   "strict_acceptance_commands": [
     "python scripts\\build_external_fidelity_provenance_packet.py",
     "python scripts\\build_external_platform_onboarding.py",
+    "python scripts\\probe_external_platform.py --strict",
     "python scripts\\audit_external_fidelity_acceptance.py --strict",
     "python scripts\\build_external_manifest.py --write --check-video-paths",
     "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
@@ -100,6 +105,7 @@
       "acceptance_commands": [
         "python scripts\\build_external_fidelity_provenance_packet.py",
         "python scripts\\build_external_platform_onboarding.py",
+        "python scripts\\probe_external_platform.py --strict",
         "python scripts\\audit_external_fidelity_acceptance.py --strict"
       ],
       "blocks": [
@@ -109,14 +115,16 @@
         "all_acceptance_gates_passed: unpassed=['platform_provenance_complete', 'paired_reset_replay_verified', 'contact_failure_observable', 'non_oracle_methods_fair', 'raw_logs_drive_metrics']"
       ],
       "id": "fill_platform_identity_and_physics",
-      "operator_input": "fill platform_name, platform_version, physics engine, contact solver, timestep, substeps, robot model, assets, sensors, and contact/force channels",
+      "operator_input": "run the external platform probe on the selected machine, then fill platform_name, platform_version, physics engine, contact solver, timestep, substeps, robot model, assets, sensors, and contact/force channels",
       "required_artifacts": [
+        "results/external_platform_probe.json",
         "external_validation/fidelity_acceptance.json"
       ],
       "scope": "platform"
     },
     {
       "acceptance_commands": [
+        "python scripts\\probe_external_platform.py --strict",
         "python scripts\\audit_external_fidelity_acceptance.py --strict",
         "python scripts\\audit_external_evidence.py --strict"
       ],
@@ -134,6 +142,7 @@
     },
     {
       "acceptance_commands": [
+        "python scripts\\probe_external_platform.py --strict",
         "python scripts\\audit_external_fidelity_acceptance.py --strict",
         "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map"
       ],
@@ -151,6 +160,7 @@
     },
     {
       "acceptance_commands": [
+        "python scripts\\probe_external_platform.py --strict",
         "python scripts\\audit_external_fidelity_acceptance.py --strict"
       ],
       "blocks": [
@@ -167,6 +177,7 @@
     },
     {
       "acceptance_commands": [
+        "python scripts\\probe_external_platform.py --strict",
         "python scripts\\audit_external_fidelity_acceptance.py --strict",
         "python scripts\\build_external_manifest.py --write --check-video-paths"
       ],
@@ -187,6 +198,7 @@
     },
     {
       "acceptance_commands": [
+        "python scripts\\probe_external_platform.py --strict",
         "python scripts\\audit_external_fidelity_acceptance.py --strict",
         "python scripts\\build_external_manifest.py --write --check-video-paths",
         "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",

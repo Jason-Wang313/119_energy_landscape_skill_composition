@@ -107,6 +107,7 @@ def main():
         "scripts\\build_external_collection_plan.py",
         "scripts\\build_external_analysis_plan.py",
         "scripts\\build_independent_validation_route.py",
+        "scripts\\probe_external_platform.py",
         "scripts\\build_external_platform_onboarding.py",
         "scripts\\build_external_fidelity_provenance_packet.py",
         "scripts\\audit_external_fidelity_acceptance.py",
@@ -191,6 +192,7 @@ def main():
         "python scripts/build_external_config_manifest_packet.py",
         "python scripts/build_external_rollout_evidence_packet.py",
         "python scripts/build_external_analysis_plan.py",
+        "python scripts/probe_external_platform.py",
         "python scripts/build_external_platform_onboarding.py",
         "python scripts/build_external_fidelity_provenance_packet.py",
         "python scripts/build_external_backend_integration_packet.py",
@@ -267,6 +269,8 @@ def main():
         fail("external collection plan must include the blind evaluation plan command")
     if "python scripts\\build_independent_validation_route.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the independent validation route command")
+    if "python scripts\\probe_external_platform.py" not in collection_plan.get("validation_commands", []):
+        fail("external collection plan must include the external platform probe command")
     if "python scripts\\build_external_platform_onboarding.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the external platform onboarding command")
     if "python scripts\\build_external_fidelity_provenance_packet.py" not in collection_plan.get("validation_commands", []):
@@ -382,6 +386,42 @@ def main():
         if not path.exists():
             fail(f"missing independent validation route artifact: {path}")
 
+    platform_probe_path = RESULTS / "external_platform_probe.json"
+    platform_probe_md_path = RESULTS / "external_platform_probe.md"
+    if not platform_probe_path.exists():
+        fail("missing results/external_platform_probe.json; run scripts/probe_external_platform.py")
+    if not platform_probe_md_path.exists():
+        fail("missing results/external_platform_probe.md")
+    if not (ROOT / "scripts" / "probe_external_platform.py").exists():
+        fail("missing scripts/probe_external_platform.py")
+    platform_probe = json.loads(platform_probe_path.read_text(encoding="utf-8"))
+    if platform_probe.get("version") != "external_platform_probe_v1":
+        fail("external platform probe version mismatch")
+    if platform_probe.get("passed") is not True:
+        fail("external platform probe did not pass")
+    if platform_probe.get("not_external_evidence") is not True:
+        fail("external platform probe must declare that it is not evidence")
+    if platform_probe.get("platform_probe_ready") is not True:
+        fail("external platform probe must report platform_probe_ready=true")
+    if platform_probe.get("strict_fidelity_evidence_ready") is not False or platform_probe.get("strict_external_evidence_ready") is not False:
+        fail("external platform probe must not claim strict fidelity or external evidence readiness")
+    if platform_probe.get("primary_route") != "maniskill_sapien_primary":
+        fail("external platform probe must target the primary ManiSkill/SAPIEN route")
+    if not isinstance(platform_probe.get("primary_route_install_ready"), bool):
+        fail("external platform probe must report primary_route_install_ready as a boolean")
+    probe_checks = {check.get("name"): check.get("passed") for check in platform_probe.get("checks", [])}
+    for required_check in (
+        "probe_is_non_evidence",
+        "primary_packages_checked",
+        "primary_install_readiness_reported",
+        "repo_commit_reported",
+        "required_hashes_recorded",
+        "gpu_renderer_commands_attempted",
+        "strict_evidence_remains_false",
+    ):
+        if probe_checks.get(required_check) is not True:
+            fail(f"external platform probe missing passing check: {required_check}")
+
     onboarding_packet_path = EXTERNAL / "platform_onboarding_packet.json"
     onboarding_packet_md_path = EXTERNAL / "platform_onboarding_packet.md"
     onboarding_audit_path = RESULTS / "external_platform_onboarding_audit.json"
@@ -426,6 +466,7 @@ def main():
             fail(f"external platform onboarding missing provenance field: {field}")
     strict_onboarding_commands = "\n".join(onboarding_packet.get("strict_commands", []) or [])
     for fragment in (
+        "probe_external_platform.py --strict",
         "audit_external_backend_contract.py --strict",
         "materialize_external_configs.py",
         "validate_external_configs.py --strict",
@@ -457,6 +498,8 @@ def main():
         "all_remaining_blockers_addressed",
         "official_sources_are_primary_and_currently_checked",
         "platform_provenance_fields_cover_fidelity_hashes_and_observations",
+        "platform_probe_report_ready",
+        "primary_install_probe_has_machine_probe_command",
         "pilot_sequence_preserves_gate_order",
     ):
         if onboarding_checks.get(required_check) is not True:
@@ -1674,6 +1717,8 @@ def main():
         "independent_route_not_evidence",
         "independent_route_primary_covers_tasks",
         "independent_route_closes_blockers",
+        "external_platform_probe_ready",
+        "external_platform_probe_not_evidence",
         "external_platform_onboarding_ready",
         "external_platform_onboarding_not_evidence",
         "external_platform_onboarding_sources_and_provenance",
@@ -1838,6 +1883,7 @@ def main():
         "method_implementation_packet_ready",
         "preflight_operator_actions_present",
         "route_independent_of_haonan",
+        "platform_probe_ready",
         "platform_onboarding_ready",
         "fidelity_provenance_packet_ready",
         "post_collection_strict_commands_cover_all_gates",
@@ -1869,6 +1915,12 @@ def main():
     operator_actions = operator_packet.get("operator_actions", []) or []
     if len(operator_actions) < 10:
         fail("external operator packet has too few operator actions")
+    platform_probe_actions = [action for action in operator_actions if action.get("id") == "platform_probe"]
+    if not platform_probe_actions:
+        fail("external operator packet missing platform_probe action")
+    platform_probe_commands = "\n".join(platform_probe_actions[0].get("commands", []) or [])
+    if "probe_external_platform.py" not in platform_probe_commands or "probe_external_platform.py --strict" not in platform_probe_commands:
+        fail("external operator packet platform probe action must include non-strict and strict probe commands")
     backend_integration_actions = [action for action in operator_actions if action.get("id") == "backend_integration_packet"]
     if not backend_integration_actions:
         fail("external operator packet missing backend_integration_packet action")
@@ -2103,6 +2155,7 @@ def main():
     for fragment in (
         "build_external_fidelity_provenance_packet.py",
         "build_external_platform_onboarding.py",
+        "probe_external_platform.py --strict",
         "audit_external_fidelity_acceptance.py --strict",
         "build_external_manifest.py --write",
         "audit_external_collection_readiness.py --strict",
@@ -2128,6 +2181,7 @@ def main():
         "packet_is_non_evidence_and_fail_closed",
         "fidelity_acceptance_contract_ready_but_not_evidence",
         "platform_onboarding_packet_ready",
+        "external_platform_probe_ready",
         "independent_route_and_collection_still_fail_closed",
         "template_declares_required_platform_and_gate_fields",
         "work_orders_cover_fidelity_blockers",

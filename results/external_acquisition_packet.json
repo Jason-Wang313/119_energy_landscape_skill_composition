@@ -2,7 +2,7 @@
   "acquisition_packet_ready": true,
   "checks": [
     {
-      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_onboarding_audit.json, results/external_fidelity_provenance_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/external_config_manifest_audit.json, results/external_rollout_evidence_audit.json, results/external_method_implementation_audit.json, results/external_pilot_smoke_packet_audit.json",
+      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_probe.json, results/external_platform_onboarding_audit.json, results/external_fidelity_provenance_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/external_config_manifest_audit.json, results/external_rollout_evidence_audit.json, results/external_method_implementation_audit.json, results/external_pilot_smoke_packet_audit.json",
       "name": "source_audits_exist",
       "passed": true
     },
@@ -77,6 +77,11 @@
       "passed": true
     },
     {
+      "detail": "primary_route_install_ready=True, missing=[]",
+      "name": "platform_probe_ready",
+      "passed": true
+    },
+    {
       "detail": "platform_onboarding_ready=True, strict_evidence_ready=False",
       "name": "platform_onboarding_ready",
       "passed": true
@@ -97,7 +102,7 @@
       "passed": true
     },
     {
-      "detail": "Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Fill platform fidelity acceptance with real provenance Run a quarantined first-panel backend smoke test Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
+      "detail": "Probe the selected external platform machine Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Fill platform fidelity acceptance with real provenance Run a quarantined first-panel backend smoke test Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
       "name": "operator_actions_cover_collection_blockers",
       "passed": true
     },
@@ -117,6 +122,7 @@
     {
       "blocker": "strict external evidence audit is NOT_READY; real manifest/log/video/checkpoint evidence and accepted robot/simulator fidelity provenance are missing",
       "mapped_actions": [
+        "platform_probe",
         "platform_onboarding",
         "fidelity_provenance_packet",
         "backend_integration_packet",
@@ -161,14 +167,32 @@
   "operator_actions": [
     {
       "artifacts": [
+        "results/external_platform_probe.json",
+        "results/external_platform_probe.md"
+      ],
+      "closes": [
+        "platform package, GPU, renderer, code, config, and backend hash provenance before fidelity acceptance"
+      ],
+      "commands": [
+        "python scripts\\probe_external_platform.py",
+        "python scripts\\probe_external_platform.py --strict"
+      ],
+      "id": "platform_probe",
+      "operator_input": "run the non-evidence probe on the GPU workstation or accepted robot/simulator machine before backend qualification",
+      "title": "Probe the selected external platform machine"
+    },
+    {
+      "artifacts": [
         "external_validation/platform_onboarding_packet.md",
         "external_validation/platform_onboarding_packet.json",
+        "results/external_platform_probe.json",
         "results/external_platform_onboarding_audit.json"
       ],
       "closes": [
         "platform onboarding for independent high-fidelity or robot evidence capture"
       ],
       "commands": [
+        "python scripts\\probe_external_platform.py",
         "python scripts\\build_external_platform_onboarding.py",
         "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
         "python scripts\\audit_external_fidelity_acceptance.py --strict"
@@ -478,6 +502,7 @@
     "results/external_collection_readiness_audit.json",
     "results/external_evidence_preflight.json",
     "results/independent_validation_route_audit.json",
+    "results/external_platform_probe.json",
     "results/external_platform_onboarding_audit.json",
     "results/external_fidelity_provenance_audit.json",
     "results/external_config_materialization_plan.json",

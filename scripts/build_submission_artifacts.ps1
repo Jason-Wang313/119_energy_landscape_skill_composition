@@ -91,6 +91,7 @@ try {
         Invoke-Native python scripts\build_external_collection_plan.py
         Invoke-Native python scripts\build_external_analysis_plan.py
         Invoke-Native python scripts\build_independent_validation_route.py
+        Invoke-Native python scripts\probe_external_platform.py
         Invoke-Native python scripts\build_external_platform_onboarding.py
         Invoke-Native python scripts\audit_external_fidelity_acceptance.py
         Invoke-Native python scripts\build_external_fidelity_provenance_packet.py

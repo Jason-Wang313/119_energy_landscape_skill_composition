@@ -65,14 +65,32 @@
   "operator_actions": [
     {
       "artifacts": [
+        "results/external_platform_probe.json",
+        "results/external_platform_probe.md"
+      ],
+      "closes": [
+        "platform package, GPU, renderer, code, config, and backend hash provenance before fidelity acceptance"
+      ],
+      "commands": [
+        "python scripts\\probe_external_platform.py",
+        "python scripts\\probe_external_platform.py --strict"
+      ],
+      "id": "platform_probe",
+      "operator_input": "run the non-evidence probe on the GPU workstation or accepted robot/simulator machine before backend qualification",
+      "title": "Probe the selected external platform machine"
+    },
+    {
+      "artifacts": [
         "external_validation/platform_onboarding_packet.md",
         "external_validation/platform_onboarding_packet.json",
+        "results/external_platform_probe.json",
         "results/external_platform_onboarding_audit.json"
       ],
       "closes": [
         "platform onboarding for independent high-fidelity or robot evidence capture"
       ],
       "commands": [
+        "python scripts\\probe_external_platform.py",
         "python scripts\\build_external_platform_onboarding.py",
         "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
         "python scripts\\audit_external_fidelity_acceptance.py --strict"
@@ -388,6 +406,7 @@
   "source_reports": [
     "results/external_collection_readiness_audit.json",
     "results/external_acquisition_packet.json",
+    "results/external_platform_probe.json",
     "results/external_backend_contract_audit.json",
     "results/external_config_materialization_plan.json",
     "results/external_rollout_evidence_audit.json",

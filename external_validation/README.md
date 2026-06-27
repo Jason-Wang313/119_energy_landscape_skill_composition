@@ -101,6 +101,14 @@ python scripts\build_independent_validation_route.py
 
 This writes `external_validation/independent_validation_route.md`, `external_validation/independent_validation_route_matrix.csv`, and `results/independent_validation_route_audit.{json,md}`. It names a primary public-simulator route, secondary cross-engine routes, and a third-party robot-lab route for collecting the missing manifest-backed logs, videos, configs, platform provenance, and independent baseline implementations. It is route planning only, not evidence.
 
+Probe the selected external platform machine:
+
+```powershell
+python scripts\probe_external_platform.py
+```
+
+This writes `results/external_platform_probe.{json,md}` with Python, package, GPU/renderer, code-commit, and config/backend hash provenance for the selected public-simulator route. It is not evidence; rerun it on the actual external GPU workstation and use `--strict` only as an install-readiness gate before collection.
+
 Build the external platform onboarding packet for the primary public-simulator route:
 
 ```powershell

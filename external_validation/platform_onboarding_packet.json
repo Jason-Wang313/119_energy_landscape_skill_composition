@@ -64,7 +64,12 @@
   "platform_onboarding_ready": true,
   "primary_install_probe": {
     "install_command_from_official_docs": "python -m pip install --upgrade mani_skill; python -m pip install torch torchvision torchaudio",
-    "local_status": "not_run_by_this_repo; operator must run on the selected GPU workstation and record exact versions in fidelity_acceptance.json",
+    "latest_probe_install_ready": true,
+    "latest_probe_missing_packages": [],
+    "latest_probe_report": "results/external_platform_probe.json",
+    "local_status": "probe is non-evidence; operator must rerun it on the selected GPU workstation and record exact versions in fidelity_acceptance.json",
+    "machine_probe_command": "python scripts\\probe_external_platform.py",
+    "strict_machine_probe_command": "python scripts\\probe_external_platform.py --strict",
     "version_capture_command": "python -c \"import platform, torch, mani_skill, sapien; print(platform.platform()); print(torch.__version__); print(getattr(mani_skill, '__version__', 'unknown')); print(getattr(sapien, '__version__', 'unknown'))\""
   },
   "primary_platform_family": "ManiSkill/SAPIEN",
@@ -104,10 +109,12 @@
   "source_reports": [
     "results/external_collection_plan.json",
     "results/independent_validation_route_audit.json",
-    "results/external_analysis_plan_audit.json"
+    "results/external_analysis_plan_audit.json",
+    "results/external_platform_probe.json"
   ],
   "strict_commands": [
     "python scripts\\build_external_platform_onboarding.py",
+    "python scripts\\probe_external_platform.py --strict",
     "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
     "python scripts\\materialize_external_configs.py --platform-type high_fidelity_sim --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
     "python scripts\\validate_external_configs.py --strict",
