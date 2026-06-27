@@ -3,9 +3,9 @@
   "category_counts": {
     "baseline_spec": 12,
     "config_template": 4,
-    "generated_non_evidence_report": 64,
-    "operator_command_source": 26,
-    "operator_facing_input": 49,
+    "generated_non_evidence_report": 66,
+    "operator_command_source": 27,
+    "operator_facing_input": 50,
     "prepared_config_input": 4,
     "reference_adapter": 60,
     "runner_backend_template": 5,
@@ -23,7 +23,7 @@
       "passed": true
     },
     {
-      "detail": "analysis=False, onboarding=False, preflight=False, release=False, pairing=False",
+      "detail": "analysis=False, onboarding=False, reference_backend_official=False, preflight=False, release=False, pairing=False",
       "name": "strict_evidence_gates_remain_fail_closed",
       "passed": true
     },
@@ -43,7 +43,7 @@
       "passed": true
     },
     {
-      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 64, 'operator_command_source': 26, 'operator_facing_input': 49, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 66, 'operator_command_source': 27, 'operator_facing_input': 50, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "handoff_has_task_config_and_baseline_assets",
       "passed": true
     },
@@ -65,6 +65,11 @@
     {
       "detail": "backend_integration_packet_ready=True, strict_backend_ready=False",
       "name": "backend_integration_packet_included",
+      "passed": true
+    },
+    {
+      "detail": "backend_contract_ready=True, official_collection_ready=False",
+      "name": "maniskill_reference_backend_included",
       "passed": true
     },
     {
@@ -98,7 +103,7 @@
       "passed": true
     },
     {
-      "detail": "hashed_files=228",
+      "detail": "hashed_files=232",
       "name": "file_hashes_are_recorded",
       "passed": true
     }
@@ -113,14 +118,14 @@
     "placeholder_not_external_evidence"
   ],
   "handoff_bundle_ready": true,
-  "included_file_count": 228,
+  "included_file_count": 232,
   "included_files": [
     {
-      "bytes": 13975,
+      "bytes": 14222,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "FDAAA8D4EAF9C9870B930341E8B3217B8F2D80F79B6461EF87B7F654F747432C"
+      "sha256": "CF1F1DF61327E62DABDACD33142604FD88607049B55D38F8D8D0EB4FD9C3A149"
     },
     {
       "bytes": 10521,
@@ -144,18 +149,18 @@
       "sha256": "05032C3C17DD4491C67672780BE343BEA357377536D7F06F31FC7DF09BF30297"
     },
     {
-      "bytes": 5345,
+      "bytes": 5608,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "1A0E6D1ADDFC356E5C7A7EB1A336017584F93DC8A3051C9BA98104D4A9842708"
+      "sha256": "A3AA31F5979D0F70E6C02346CB741328E818F27446D01705E270C02060213D81"
     },
     {
-      "bytes": 27328,
+      "bytes": 27932,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/README.md",
-      "sha256": "AD266D469B3F9748D99164B4451970C72C85D622AC16FEEED5E0D8AA97B663AA"
+      "sha256": "A84D64FB04B35C7F0F82BFB5960F9409995E6EB667832A3F3E47F17A16B24EF8"
     },
     {
       "bytes": 8780,
@@ -984,11 +989,11 @@
       "sha256": "C20FE327337FA1FC2988744B8DE9419F67BEBF4F4D0B10FDA2EB2BAD4CAAC642"
     },
     {
-      "bytes": 2701,
+      "bytes": 3285,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/runner/README.md",
-      "sha256": "8ABB774A04DBD8DBA24902251F234504E5990B3EDDAF59C3D690E10480B5F637"
+      "sha256": "254A5E6282F91DB18263B1B8765696285F880409FED09818C392A76EE68F86F9"
     },
     {
       "bytes": 3269,
@@ -1031,6 +1036,13 @@
       "exists": true,
       "path": "external_validation/runner/backend_templates/robot_lab_backend.py",
       "sha256": "EE4971A48430683585DC4CA899A9C3BECA7659A70710F4E5E3A9439F1ED6EFB9"
+    },
+    {
+      "bytes": 13283,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "external_validation/runner/maniskill_reference_backend.py",
+      "sha256": "0BDF123E0EC4E7EF4513D5269703172A798A3B37AB403840D137B151BA64008E"
     },
     {
       "bytes": 15097,
@@ -1082,18 +1094,18 @@
       "sha256": "357F6A44637AD1D55E6E98775B60640FE0E7C0A32FE0C1707FC5863C00D3CDB9"
     },
     {
-      "bytes": 26857,
+      "bytes": 28172,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.json",
-      "sha256": "657297018F0C78586ED858933F298D83DBA3A4B5D6CAA2652C3687AFB80CDCEF"
+      "sha256": "A2B8EBAA35B3C4030664209CC9BA936CBA1FC330F13ED1F29EE835D6924270BA"
     },
     {
-      "bytes": 17927,
+      "bytes": 18657,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.md",
-      "sha256": "0090BF0B7A9DD4AB96545176EF740F1F7DCEB2C6E39729C1F597455F1FEE5BB1"
+      "sha256": "E3F61B1CF020561CE530640DE739E33B1C09A6F3DF31CA9F98173E3682E4460C"
     },
     {
       "bytes": 3130,
@@ -1334,18 +1346,18 @@
       "sha256": "428B997AE9D07EF6B24950444186AAC256634822B715B632D2BC4F2451C2C2E1"
     },
     {
-      "bytes": 21661,
+      "bytes": 22543,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.json",
-      "sha256": "B1B0E80BCE9035B90508F063C89A2C257F22DA02BE4CE340DEABD6D5BBBA08CB"
+      "sha256": "F0940E18D060FF547359DED8EC9B0649E102A24842605063212F2729CD239B07"
     },
     {
-      "bytes": 5967,
+      "bytes": 6073,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.md",
-      "sha256": "3C602EBEC1CE349DDD0BC9CFAB455CF7F4BECCB0AD0AB38F5C447A5CC026AB00"
+      "sha256": "465E5B537CB3CF25CA4B78C36847636DACFB9F80F6267D663A8EA96FB475025E"
     },
     {
       "bytes": 525,
@@ -1502,6 +1514,20 @@
       "sha256": "81BC82F771937391FE904EE175EAAE85AE78080C5866D5874092E8AD822C5CE1"
     },
     {
+      "bytes": 4515,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/maniskill_backend_readiness_audit.json",
+      "sha256": "F04758662DEAF56FB4CA505A4E63416393242E94A1FD2866473BDF7A4999FC88"
+    },
+    {
+      "bytes": 2864,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/maniskill_backend_readiness_audit.md",
+      "sha256": "4487E46A7F1BB4DBEB51DBB03285ACD482A851E558BC593D79685EE0D4D03FF5"
+    },
+    {
       "bytes": 25617,
       "category": "generated_non_evidence_report",
       "exists": true,
@@ -1579,11 +1605,18 @@
       "sha256": "C7AAE093CBACD927A3803C328DDCD5316F5A624842FDCF8C9E30F878AD5D6804"
     },
     {
-      "bytes": 42809,
+      "bytes": 7510,
+      "category": "operator_command_source",
+      "exists": true,
+      "path": "scripts/audit_maniskill_backend_readiness.py",
+      "sha256": "81F9C70901FC1D2D4FB9CB8FC8C8A3577012C46C2A62A8410F65BC28CA160A3B"
+    },
+    {
+      "bytes": 45046,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_acquisition_packet.py",
-      "sha256": "4E9D6C2F981AD0B0940E423C54AEDC7FDA69C90710DB7B4F8ED129358EB1D842"
+      "sha256": "44DB80762172E7A95FDE0F54664E0DED9272C106B64F801684195D9A87C5CCC4"
     },
     {
       "bytes": 16556,
@@ -1628,18 +1661,18 @@
       "sha256": "2BBE4A63230A15DC53D69B3D5798765D61EA7F07944B6FBD533AD1F9788FE101"
     },
     {
-      "bytes": 35532,
+      "bytes": 37552,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "766A0BBE6D546BED939A39C7284948A047DFEE99F4EEDD239E30A460EDA153E7"
+      "sha256": "0366C453C624741F5D02B80096A7D89278C063DBBCE3C19C409F703C266F410C"
     },
     {
-      "bytes": 12614,
+      "bytes": 12721,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_packet.py",
-      "sha256": "C0C0BDA49E7A1F7198A1CD7A487BEDF24A0770CB295BEFED5EA796D062FE9CAA"
+      "sha256": "8E1621FD9A7CE16CB75AB80E2B4BC6B3E0E3257F5AFA81A59C207CF326AB2F47"
     },
     {
       "bytes": 11266,
@@ -1819,6 +1852,22 @@
       "id": "backend_integration_packet",
       "operator_input": "complete the non-template backend work orders with real module, provenance, task binding, hashes, logs, and videos",
       "title": "Use the backend integration packet as the public-simulator backend checklist"
+    },
+    {
+      "artifacts": [
+        "external_validation/runner/maniskill_reference_backend.py",
+        "results/maniskill_backend_readiness_audit.json",
+        "results/maniskill_backend_readiness_audit.md"
+      ],
+      "closes": [
+        "reference backend contract qualification only; official collection still requires a real enabled backend, real MP4 export, logs, manifests, and strict evidence gates"
+      ],
+      "commands": [
+        "python scripts\\audit_maniskill_backend_readiness.py"
+      ],
+      "id": "maniskill_reference_backend_audit",
+      "operator_input": "use the tracked reference backend to inspect API/config/adapter wiring before replacing or wrapping it with a real evidence backend",
+      "title": "Audit the repository ManiSkill/SAPIEN reference backend candidate"
     },
     {
       "artifacts": [
@@ -2092,6 +2141,7 @@
     "results/external_platform_onboarding_audit.json",
     "results/external_fidelity_provenance_audit.json",
     "results/external_backend_integration_audit.json",
+    "results/maniskill_backend_readiness_audit.json",
     "results/external_config_manifest_audit.json",
     "results/external_rollout_evidence_audit.json",
     "results/external_pilot_smoke_packet_audit.json",

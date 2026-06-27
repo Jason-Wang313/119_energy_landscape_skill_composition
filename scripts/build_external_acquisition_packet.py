@@ -21,6 +21,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "platform_onboarding",
         "fidelity_provenance_packet",
         "backend_integration_packet",
+        "maniskill_reference_backend_audit",
         "rollout_evidence_packet",
         "backend_module",
         "platform_fidelity",
@@ -133,6 +134,19 @@ ACTION_CATALOG = {
             "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
         ],
         "closes": ["actual collection backend readiness"],
+    },
+    "maniskill_reference_backend_audit": {
+        "title": "Audit the repository ManiSkill/SAPIEN reference backend candidate",
+        "operator_input": "use the tracked reference backend to inspect API/config/adapter wiring before replacing or wrapping it with a real evidence backend",
+        "artifacts": [
+            "external_validation/runner/maniskill_reference_backend.py",
+            "results/maniskill_backend_readiness_audit.json",
+            "results/maniskill_backend_readiness_audit.md",
+        ],
+        "commands": [
+            "python scripts\\audit_maniskill_backend_readiness.py",
+        ],
+        "closes": ["reference backend contract qualification only; official collection still requires a real enabled backend, real MP4 export, logs, manifests, and strict evidence gates"],
     },
     "real_task_configs": {
         "title": "Create real manifest-declared task configs",
@@ -389,6 +403,7 @@ def main() -> int:
     config_materialization_path = RESULTS / "external_config_materialization_plan.json"
     backend_contract_path = RESULTS / "external_backend_contract_audit.json"
     backend_integration_path = RESULTS / "external_backend_integration_audit.json"
+    maniskill_backend_path = RESULTS / "maniskill_backend_readiness_audit.json"
     config_manifest_path = RESULTS / "external_config_manifest_audit.json"
     rollout_evidence_path = RESULTS / "external_rollout_evidence_audit.json"
     method_packet_path = RESULTS / "external_method_implementation_audit.json"
@@ -406,6 +421,7 @@ def main() -> int:
     config_materialization = require_json(config_materialization_path)
     backend_contract = require_json(backend_contract_path)
     backend_integration = require_json(backend_integration_path)
+    maniskill_backend = require_json(maniskill_backend_path)
     config_manifest = require_json(config_manifest_path)
     rollout_evidence = require_json(rollout_evidence_path)
     method_packet = require_json(method_packet_path)
@@ -437,6 +453,7 @@ def main() -> int:
                 config_materialization_path,
                 backend_contract_path,
                 backend_integration_path,
+                maniskill_backend_path,
                 config_manifest_path,
                 rollout_evidence_path,
                 method_packet_path,
@@ -457,6 +474,7 @@ def main() -> int:
                 config_materialization_path,
                 backend_contract_path,
                 backend_integration_path,
+                maniskill_backend_path,
                 config_manifest_path,
                 rollout_evidence_path,
                 method_packet_path,
@@ -554,6 +572,23 @@ def main() -> int:
         (
             f"backend_integration_packet_ready={backend_integration.get('backend_integration_packet_ready')!r}, "
             f"strict_backend_ready={backend_integration.get('strict_backend_ready')!r}"
+        ),
+    )
+    maniskill_backend_checks = {check.get("name"): check.get("passed") for check in maniskill_backend.get("checks", []) or []}
+    add_check(
+        checks,
+        "maniskill_reference_backend_audit_ready",
+        maniskill_backend.get("passed") is True
+        and maniskill_backend.get("not_external_evidence") is True
+        and maniskill_backend.get("backend_contract_ready") is True
+        and maniskill_backend.get("reference_backend_available") is True
+        and maniskill_backend.get("official_collection_ready") is False
+        and maniskill_backend.get("strict_external_evidence_ready") is False
+        and maniskill_backend_checks.get("official_collection_fail_closed_without_enable_flag") is True
+        and maniskill_backend_checks.get("video_export_remains_operator_backend_requirement") is True,
+        (
+            f"backend_contract_ready={maniskill_backend.get('backend_contract_ready')!r}, "
+            f"official_collection_ready={maniskill_backend.get('official_collection_ready')!r}"
         ),
     )
     method_packet_checks = {check.get("name"): check.get("passed") for check in method_packet.get("checks", []) or []}
@@ -787,11 +822,14 @@ def main() -> int:
                 preflight_path,
                 route_path,
                 platform_probe_path,
+                task_binding_probe_path,
+                env_smoke_probe_path,
                 onboarding_path,
                 fidelity_provenance_path,
                 config_materialization_path,
                 backend_contract_path,
                 backend_integration_path,
+                maniskill_backend_path,
                 config_manifest_path,
                 rollout_evidence_path,
                 method_packet_path,

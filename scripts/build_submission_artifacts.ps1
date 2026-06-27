@@ -102,6 +102,7 @@ try {
         Invoke-Native python scripts\build_external_runbook.py
         Invoke-Native python scripts\audit_external_runner_harness.py
         Invoke-Native python scripts\audit_external_backend_contract.py
+        Invoke-Native python scripts\audit_maniskill_backend_readiness.py
         Invoke-Native python scripts\build_external_backend_integration_packet.py
         Invoke-Native python scripts\audit_external_collection_readiness.py
         Invoke-Native python scripts\self_test_external_runner_backend.py

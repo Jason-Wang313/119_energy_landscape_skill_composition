@@ -43,6 +43,9 @@ jobs:
       - name: Audit external backend contract
         run: python scripts/audit_external_backend_contract.py
 
+      - name: Audit ManiSkill reference backend readiness
+        run: python scripts/audit_maniskill_backend_readiness.py
+
       - name: Build external backend integration packet
         run: python scripts/build_external_backend_integration_packet.py
 

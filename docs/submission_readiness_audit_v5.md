@@ -39,14 +39,14 @@ ICLR-main ready: no
 ## Artifact Checks
 
 - PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `8FA71C4D2189E1638062AB64F8F8BE04DABD5C8422FFC4246BE70A38F07E7014`.
-- PDF size: `467695` bytes.
+- PDF SHA256: `92B00B24D439B892D5567ACA2E1D42D13AA15F754A20442D36892A6590D98C80`.
+- PDF size: `467903` bytes.
 - PDF pages: `29`.
 - Numbered PDF placement: Downloads only.
 - Desktop numbered PDF: absent.
 - Validator: passed.
 - Claim boundary audit: `results/claim_boundary_audit.md` passed and confirms the current package keeps the claim bounded.
-- Visible contribution audit: `results/visible_contribution_audit.md` passed and checks that public-facing docs mention the current materializer, External config manifest packet, External rollout evidence packet, External analysis plan, External platform probe, ManiSkill task binding probe, ManiSkill env smoke probe, External platform onboarding packet, External fidelity provenance packet, External backend integration packet, External runner backend probe self-test, External pilot smoke packet, External method implementation packet, external operator packet, outreach stance, and 17/21 objective requirements satisfied boundary.
+- Visible contribution audit: `results/visible_contribution_audit.md` passed and checks that public-facing docs mention the current materializer, External config manifest packet, External rollout evidence packet, External analysis plan, External platform probe, ManiSkill task binding probe, ManiSkill env smoke probe, External platform onboarding packet, External fidelity provenance packet, External backend integration packet, ManiSkill reference backend readiness audit, External runner backend probe self-test, External pilot smoke packet, External method implementation packet, external operator packet, outreach stance, and 17/21 objective requirements satisfied boundary.
 - Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 17/21 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
 - Local falsification audit: `results/local_falsification_audit.md` passed and is included in the generated manuscript.
 - Holdout robustness audit: `results/holdout_robustness_audit.md` passed and is included in the generated manuscript.
@@ -70,6 +70,7 @@ ICLR-main ready: no
 - External platform onboarding packet: `external_validation/platform_onboarding_packet.md` and `results/external_platform_onboarding_audit.md` exist, pass, and specify official source anchors, required simulator provenance, task onboarding files, backend requirements, and strict gate order for the primary ManiSkill/SAPIEN route while explicitly remaining non-evidence.
 - External fidelity provenance packet: `external_validation/fidelity_provenance_packet.md`, `external_validation/fidelity_provenance_work_orders.csv`, and `results/external_fidelity_provenance_audit.md` exist, pass, and turn the platform physics/contact, paired-reset replay, operator independence, calibration basis, code/skill hashes, manifest declaration, and strict fidelity gate into work orders while strict fidelity evidence remains false.
 - External backend integration packet: `external_validation/backend_integration_packet.md`, `external_validation/backend_integration_work_orders.csv`, and `results/external_backend_integration_audit.md` exist, pass, and convert the missing non-template public-simulator backend module into work orders while strict backend readiness and strict external evidence remain false.
+- ManiSkill reference backend readiness audit: `results/maniskill_backend_readiness_audit.md` exists, passes, and contract-qualifies an adapter-backed ManiSkill/SAPIEN backend candidate while official collection and strict external evidence remain false.
 - External runner backend probe self-test: `scripts/self_test_external_runner_backend.py` and `results/external_runner_backend_self_test.md` exist, pass, write schema-valid temporary JSONL records and videos through the actual collection runner, and keep the real manifest untouched while remaining non-evidence.
 - External pilot smoke packet: `external_validation/pilot_smoke_packet.md`, `external_validation/pilot_smoke_work_orders.csv`, `results/external_pilot_smoke_packet_audit.md`, and `results/external_pilot_smoke_audit.md` exist, pass as non-evidence tooling, and define a quarantined 12-row first-panel backend smoke test whose pilot outputs must not enter the official manifest.
 - External method implementation packet: `external_validation/method_implementation_packet.md`, `external_validation/method_implementation_work_orders.csv`, and `results/external_method_implementation_audit.md` exist, pass, cover all missing non-oracle method work orders, exclude the oracle from implementation work, and remain non-evidence while strict adapter evidence is missing.

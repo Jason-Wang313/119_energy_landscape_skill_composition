@@ -33,8 +33,8 @@ Continuation audit additions:
 - Full local build script: `scripts/build_submission_artifacts.ps1`.
 - GitHub validation workflow: `.github/workflows/paper119-validation.yml` runs the core runner/readiness/submission/outreach validators on pushed branches and pull requests, with the repository PDF used as the CI canonical artifact.
 - Canonical PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `8FA71C4D2189E1638062AB64F8F8BE04DABD5C8422FFC4246BE70A38F07E7014`.
-- PDF size: `467695` bytes.
+- PDF SHA256: `92B00B24D439B892D5567ACA2E1D42D13AA15F754A20442D36892A6590D98C80`.
+- PDF size: `467903` bytes.
 - PDF pages: `29`.
 - Desktop PDF copy: absent.
 - Visual QA: final title page, overview page, main result figures, fixed-risk figures, and outreach preview figure page inspected after the reframing/figure pass.
@@ -47,6 +47,7 @@ Continuation audit additions:
 - External platform onboarding packet: `external_validation/platform_onboarding_packet.md` and `results/external_platform_onboarding_audit.md` bind the primary ManiSkill/SAPIEN route to official source anchors, required simulator provenance, task onboarding files, backend requirements, and strict gate order; this is non-evidence and does not change the strict evidence gate.
 - External fidelity provenance packet: `external_validation/fidelity_provenance_packet.md`, `external_validation/fidelity_provenance_work_orders.csv`, and `results/external_fidelity_provenance_audit.md` turn platform physics/contact, paired-reset replay, operator independence, calibration basis, code/skill hashes, manifest declaration, and strict fidelity gating into work orders while strict fidelity evidence remains false.
 - External backend integration packet: `external_validation/backend_integration_packet.md`, `external_validation/backend_integration_work_orders.csv`, and `results/external_backend_integration_audit.md` turn the missing non-template public-simulator backend module into concrete work orders while strict backend readiness and strict external evidence remain false; this is non-evidence and does not change the strict evidence gate.
+- ManiSkill reference backend readiness audit: `external_validation/runner/maniskill_reference_backend.py`, `scripts/audit_maniskill_backend_readiness.py`, and `results/maniskill_backend_readiness_audit.md` contract-qualify an adapter-backed ManiSkill/SAPIEN backend candidate while official collection, video export, and strict external evidence remain fail-closed; this is non-evidence and does not change the strict evidence gate.
 - External runner backend probe self-test: `scripts/self_test_external_runner_backend.py` and `results/external_runner_backend_self_test.md` exercise the actual collection runner with a temporary non-template backend, write schema-valid temporary JSONL records and videos, and leave the real manifest untouched; this is non-evidence and does not change the strict evidence gate.
 - External pilot smoke packet: `external_validation/pilot_smoke_packet.md`, `external_validation/pilot_smoke_work_orders.csv`, `results/external_pilot_smoke_packet_audit.md`, and `results/external_pilot_smoke_audit.md` give an independent operator a quarantined 12-row first-panel backend smoke test before official collection; pilot logs and videos are explicitly non-evidence and must not enter the real manifest.
 - External method implementation packet: `external_validation/method_implementation_packet.md`, `external_validation/method_implementation_work_orders.csv`, and `results/external_method_implementation_audit.md` turn the missing non-oracle baseline layer into concrete work orders while strict adapter evidence remains false; this is non-evidence and does not change the strict evidence gate.

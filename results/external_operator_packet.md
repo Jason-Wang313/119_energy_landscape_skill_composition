@@ -63,6 +63,7 @@ Post-collection strict gates:
 - `platform_onboarding`: Onboard the public simulator platform
 - `backend_module`: Select a non-template backend module
 - `backend_integration_packet`: Use the backend integration packet as the public-simulator backend checklist
+- `maniskill_reference_backend_audit`: Audit the repository ManiSkill/SAPIEN reference backend candidate
 - `real_task_configs`: Create real manifest-declared task configs
 - `config_manifest_packet`: Use the config manifest packet as the task-config evidence checklist
 - `rollout_evidence_packet`: Use the rollout evidence packet as the raw-log evidence checklist

@@ -12,12 +12,12 @@
       "passed": true
     },
     {
-      "detail": "positions=[2352, 6080, 9354, 11204, 12078, 13612, 21360, 26008]",
+      "detail": "positions=[2352, 6282, 9725, 11612, 12486, 14020, 21768, 26416]",
       "name": "required_sections_present",
       "passed": true
     },
     {
-      "detail": "positions=[2352, 6080, 9354, 11204, 12078, 13612, 21360, 26008]",
+      "detail": "positions=[2352, 6282, 9725, 11612, 12486, 14020, 21768, 26416]",
       "name": "required_sections_in_order",
       "passed": true
     },

@@ -118,6 +118,7 @@ def main():
         "scripts\\build_external_runbook.py",
         "scripts\\audit_external_runner_harness.py",
         "scripts\\audit_external_backend_contract.py",
+        "scripts\\audit_maniskill_backend_readiness.py",
         "scripts\\build_external_backend_integration_packet.py",
         "scripts\\audit_external_collection_readiness.py",
         "scripts\\audit_external_pilot_smoke.py",
@@ -179,6 +180,7 @@ def main():
         "python -m compileall",
         "python scripts/audit_external_runner_harness.py",
         "python scripts/audit_external_backend_contract.py",
+        "python scripts/audit_maniskill_backend_readiness.py",
         "python scripts/self_test_external_backend_contract.py",
         "python scripts/audit_external_fidelity_acceptance.py",
         "python scripts/self_test_external_fidelity_acceptance.py",
@@ -882,6 +884,49 @@ def main():
         fail("external backend contract audit should expose the missing real backend module in default mode")
     if not (RESULTS / "external_backend_contract_audit.md").exists():
         fail("missing results/external_backend_contract_audit.md")
+
+    maniskill_backend_paths = [
+        EXTERNAL / "runner" / "maniskill_reference_backend.py",
+        ROOT / "scripts" / "audit_maniskill_backend_readiness.py",
+        RESULTS / "maniskill_backend_readiness_audit.json",
+        RESULTS / "maniskill_backend_readiness_audit.md",
+    ]
+    for path in maniskill_backend_paths:
+        if not path.exists():
+            fail(f"missing ManiSkill reference backend readiness artifact: {path}")
+    maniskill_backend = json.loads((RESULTS / "maniskill_backend_readiness_audit.json").read_text(encoding="utf-8"))
+    if maniskill_backend.get("version") != "maniskill_reference_backend_audit_v1":
+        fail("ManiSkill reference backend readiness audit version mismatch")
+    if maniskill_backend.get("passed") is not True:
+        fail("ManiSkill reference backend readiness audit did not pass")
+    if maniskill_backend.get("not_external_evidence") is not True:
+        fail("ManiSkill reference backend readiness audit must declare that it is not evidence")
+    if maniskill_backend.get("backend_module") != "external_validation.runner.maniskill_reference_backend":
+        fail("ManiSkill reference backend audit should qualify the tracked backend module")
+    if maniskill_backend.get("backend_contract_ready") is not True:
+        fail("ManiSkill reference backend should pass the backend API/config contract")
+    if maniskill_backend.get("reference_backend_available") is not True:
+        fail("ManiSkill reference backend should be available as a non-evidence candidate")
+    if maniskill_backend.get("reference_backend_collection_enabled") is not False:
+        fail("ManiSkill reference backend collection must be disabled by default")
+    if maniskill_backend.get("official_collection_ready") is not False:
+        fail("ManiSkill reference backend audit must not mark official collection ready")
+    if maniskill_backend.get("strict_external_evidence_ready") is not False:
+        fail("ManiSkill reference backend audit must not mark strict external evidence ready")
+    if int(maniskill_backend.get("method_adapter_count", 0) or 0) < 12:
+        fail("ManiSkill reference backend should cover all 12 reference adapters")
+    maniskill_backend_checks = {check.get("name"): check.get("passed") for check in maniskill_backend.get("checks", [])}
+    for required_check in (
+        "backend_contract_strict_passes",
+        "backend_is_non_template",
+        "platform_provenance_marks_non_evidence",
+        "delegates_to_reference_adapters",
+        "official_collection_fail_closed_without_enable_flag",
+        "video_export_remains_operator_backend_requirement",
+        "strict_evidence_remains_false",
+    ):
+        if maniskill_backend_checks.get(required_check) is not True:
+            fail(f"ManiSkill reference backend audit missing passing check: {required_check}")
 
     backend_integration_paths = [
         EXTERNAL / "backend_integration_packet.json",
@@ -1976,6 +2021,7 @@ def main():
         "rollout_evidence_packet_ready",
         "backend_contract_gate_ready",
         "backend_integration_packet_ready",
+        "maniskill_reference_backend_audit_ready",
         "pilot_smoke_packet_ready",
         "method_implementation_packet_ready",
         "preflight_operator_actions_present",
@@ -2037,6 +2083,11 @@ def main():
         fail("external operator packet missing backend_integration_packet action")
     if "build_external_backend_integration_packet.py" not in "\n".join(backend_integration_actions[0].get("commands", []) or []):
         fail("external operator packet backend integration action must rebuild the backend integration packet")
+    reference_backend_actions = [action for action in operator_actions if action.get("id") == "maniskill_reference_backend_audit"]
+    if not reference_backend_actions:
+        fail("external operator packet missing maniskill_reference_backend_audit action")
+    if "audit_maniskill_backend_readiness.py" not in "\n".join(reference_backend_actions[0].get("commands", []) or []):
+        fail("external operator packet reference backend action must run the readiness audit")
     config_manifest_actions = [action for action in operator_actions if action.get("id") == "config_manifest_packet"]
     if not config_manifest_actions:
         fail("external operator packet missing config_manifest_packet action")
@@ -2124,6 +2175,7 @@ def main():
         "platform_onboarding_included",
         "fidelity_provenance_packet_included",
         "backend_integration_packet_included",
+        "maniskill_reference_backend_included",
         "config_manifest_packet_included",
         "rollout_evidence_packet_included",
         "pilot_smoke_packet_included",

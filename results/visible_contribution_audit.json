@@ -20,7 +20,7 @@
       "passed": true
     },
     {
-      "detail": "files=228, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=232, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -57,6 +57,11 @@
     {
       "detail": "backend_integration_packet_ready=True, strict_backend_ready=False",
       "name": "backend_integration_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "backend_contract_ready=True, official_collection_ready=False, strict_external_evidence_ready=False",
+      "name": "maniskill_reference_backend_visible",
       "passed": true
     },
     {
