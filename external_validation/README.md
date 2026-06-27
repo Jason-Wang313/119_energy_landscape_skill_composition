@@ -194,6 +194,14 @@ python scripts\audit_external_release_package.py
 
 This writes `results/external_release_package_audit.{json,md}`. It verifies that manifest-declared code, config, log, video, and checkpoint artifacts exist and match their SHA256 hashes, and it rejects local dry-run, template, scaffold, or placeholder artifacts. It remains `release_package_ready: false` until a real manifest exists.
 
+Test the release-package hash gate without creating evidence:
+
+```powershell
+python scripts\self_test_external_release_package.py
+```
+
+This writes `results/external_release_package_self_test.{json,md}`. It creates temporary complete artifacts to prove the hash gate can pass, then checks that missing manifests and local-dry-run/template/scaffold/placeholder artifacts remain fail-closed.
+
 Audit paired-reset and method-panel integrity:
 
 ```powershell
@@ -232,6 +240,7 @@ python scripts\audit_external_runner_harness.py
 python scripts\audit_external_backend_contract.py
 python scripts\audit_external_collection_readiness.py
 python scripts\audit_external_release_package.py
+python scripts\self_test_external_release_package.py
 python scripts\audit_external_evidence_preflight.py
 python scripts\audit_external_pairing_integrity.py
 python scripts\validate_external_adapters.py
@@ -241,6 +250,7 @@ python scripts\self_test_external_backend_contract.py
 python scripts\self_test_external_config_evidence.py
 python scripts\self_test_external_adapter_evidence.py
 python scripts\self_test_external_fidelity_acceptance.py
+python scripts\self_test_external_release_package.py
 python scripts\self_test_external_rollout_validator.py
 python scripts\self_test_external_evidence_pipeline.py
 python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict

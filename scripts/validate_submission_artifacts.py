@@ -124,6 +124,7 @@ def main():
         "scripts\\self_test_external_adapter_evidence.py",
         "scripts\\build_external_manifest.py --allow-missing",
         "scripts\\audit_external_release_package.py",
+        "scripts\\self_test_external_release_package.py",
         "scripts\\audit_external_evidence_preflight.py",
         "scripts\\build_external_acquisition_packet.py",
         "scripts\\build_external_operator_packet.py",
@@ -177,6 +178,7 @@ def main():
         "python scripts/build_external_acquisition_packet.py",
         "python scripts/build_external_operator_packet.py",
         "python scripts/audit_external_release_package.py",
+        "python scripts/self_test_external_release_package.py",
         "python scripts/audit_external_execution_readiness.py",
         "python scripts/audit_external_pairing_integrity.py",
         "python scripts/audit_submission_readiness_gap.py",
@@ -350,6 +352,38 @@ def main():
         fail("external release package audit should identify the missing real manifest")
     if not (RESULTS / "external_release_package_audit.md").exists():
         fail("missing results/external_release_package_audit.md")
+
+    release_package_self_test_path = RESULTS / "external_release_package_self_test.json"
+    if not release_package_self_test_path.exists():
+        fail("missing results/external_release_package_self_test.json; run scripts/self_test_external_release_package.py")
+    if not (ROOT / "scripts" / "self_test_external_release_package.py").exists():
+        fail("missing scripts/self_test_external_release_package.py")
+    release_package_self_test = json.loads(release_package_self_test_path.read_text(encoding="utf-8"))
+    if release_package_self_test.get("version") != "external_release_package_self_test_v1":
+        fail("external release package self-test version mismatch")
+    if release_package_self_test.get("passed") is not True:
+        fail("external release package self-test did not pass")
+    if release_package_self_test.get("not_external_evidence") is not True:
+        fail("external release package self-test must declare that it is not evidence")
+    if release_package_self_test.get("synthetic_release_package_ready") is not True:
+        fail("external release package self-test should make temporary manifest-declared release artifacts ready")
+    if release_package_self_test.get("bad_release_package_ready") is not False:
+        fail("external release package self-test should reject bad local-dry-run/template/scaffold/placeholder artifacts")
+    if release_package_self_test.get("missing_manifest_ready") is not False:
+        fail("external release package self-test should reject a missing manifest")
+    release_package_self_checks = {check.get("name"): check.get("passed") for check in release_package_self_test.get("checks", [])}
+    for required_check in (
+        "synthetic_release_package_passes",
+        "missing_manifest_fails_release_readiness",
+        "bad_artifacts_rejected_as_release_evidence",
+        "release_hashes_are_recomputed",
+        "real_release_package_report_not_overwritten",
+    ):
+        if release_package_self_checks.get(required_check) is not True:
+            fail(f"external release package self-test missing passing check: {required_check}")
+    if not (RESULTS / "external_release_package_self_test.md").exists():
+        fail("missing results/external_release_package_self_test.md")
+
     manifest_builder_text = (ROOT / "scripts" / "build_external_manifest.py").read_text(encoding="utf-8")
     if "CORE_CODE_ARTIFACTS" not in manifest_builder_text or "release[\"code\"]" not in manifest_builder_text:
         fail("external manifest builder must populate release_artifacts.code")

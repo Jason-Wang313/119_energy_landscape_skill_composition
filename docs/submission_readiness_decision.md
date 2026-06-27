@@ -15,6 +15,7 @@ Why strong-revise:
 - Fixed-risk audit reports coverage `0.863021`, breach `0.000302`, and gated success `0.760108` at risk budget `0.15`.
 - External reference adapters pass for all 12 methods as implementation-only harness checks, reducing future validation friction without counting as rollout evidence.
 - The adapter evidence self-test proves the strict manifest-declared implementation gate can pass on temporary real-style adapters while still rejecting missing manifests and scaffold templates.
+- The release-package self-test proves the hash-lock gate can pass on temporary complete artifacts while still rejecting missing manifests and local-dry-run/template/scaffold/placeholder files.
 - The guarded config materialization plan is ready to write real task configs only after a platform and compute budget are supplied with `--confirm-real-platform --write`.
 - The generated external operator packet is a no-go handoff for independent validation: after materializing the high-fidelity route configs, it lists four remaining pre-collection blockers, the exact collection command, and post-collection strict gates without claiming evidence.
 - The outreach package now frames Haonan's role as fit/falsification advice around CoStream-style behavior composition, not as responsibility for supplying the missing proof.

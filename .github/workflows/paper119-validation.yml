@@ -82,6 +82,9 @@ jobs:
       - name: Audit external release package
         run: python scripts/audit_external_release_package.py
 
+      - name: Self-test external release package
+        run: python scripts/self_test_external_release_package.py
+
       - name: Audit external pairing integrity
         run: python scripts/audit_external_pairing_integrity.py
 

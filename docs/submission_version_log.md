@@ -45,6 +45,7 @@
 - Added `scripts/validate_external_adapters.py` so external baseline adapters must expose the seam-model API, proposal fields, log fields, and policy/config hash reporting; strict mode remains blocked until manifest-declared real implementations replace scaffolds.
 - Added `scripts/self_test_external_adapter_evidence.py` so strict manifest-declared adapter evidence is tested on temporary complete implementations while missing manifests and scaffold templates remain fail-closed.
 - Added `scripts/build_external_manifest.py` so real or high-fidelity rollout logs, videos, configs, checkpoints, hashes, and recomputed metrics can be assembled into `external_validation/manifest.json` without hand-editing evidence.
+- Added `scripts/self_test_external_release_package.py` so the release-package hash gate is tested on temporary complete artifacts while missing manifests and local-dry-run/template/scaffold/placeholder artifacts remain fail-closed.
 - Added `external_validation/log_schema_v1.json` and `scripts/validate_external_rollouts.py` so external success/utility margins, paired win rate, fixed-risk coverage, fixed-risk breach, and positive task-family count must be recomputed from raw episode logs.
 - Tightened `scripts/audit_external_evidence.py` so a future evidence package is blocked unless manifest metrics agree with recomputed rollout metrics.
 - Added `scripts/self_test_external_rollout_validator.py` to test the external rollout validator on temporary synthetic records without treating them as evidence.

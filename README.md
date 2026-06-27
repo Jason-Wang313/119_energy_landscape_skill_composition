@@ -103,6 +103,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External adapter evidence self-test: `results/external_adapter_evidence_self_test.md`
 - External manifest builder report: `results/external_manifest_builder_report.md`
 - External release package audit: `results/external_release_package_audit.md`
+- External release package self-test: `results/external_release_package_self_test.md`
 - External evidence preflight matrix: `results/external_evidence_preflight.md`
 - External evidence acquisition packet: `results/external_acquisition_packet.md`
 - External operator packet: `results/external_operator_packet.md`

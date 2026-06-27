@@ -108,6 +108,7 @@ try {
         Invoke-Native python scripts\self_test_external_adapter_evidence.py
         Invoke-Native python scripts\build_external_manifest.py --allow-missing
         Invoke-Native python scripts\audit_external_release_package.py
+        Invoke-Native python scripts\self_test_external_release_package.py
         Invoke-Native python scripts\audit_external_evidence_preflight.py
         Invoke-Native python scripts\build_external_acquisition_packet.py
         Invoke-Native python scripts\build_external_operator_packet.py
