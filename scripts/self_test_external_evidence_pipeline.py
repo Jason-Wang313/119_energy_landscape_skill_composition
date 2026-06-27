@@ -8,6 +8,8 @@ from typing import Any
 
 import audit_external_evidence as evidence
 import audit_external_fidelity_acceptance as fidelity_acceptance
+import audit_external_pairing_integrity as pairing_integrity
+import audit_external_release_package as release_package
 import validate_external_adapters as adapter_validator
 import validate_external_configs as config_validator
 import validate_external_rollouts as rollout
@@ -326,7 +328,7 @@ def write_task_artifacts(root: Path, external: Path) -> tuple[list[dict[str, Any
             for scene_index in range(30):
                 for method in METHODS:
                     video_path = video_dir / f"{scene_index:03d}_{method}.mp4"
-                    video_path.write_bytes(b"synthetic self-test video placeholder\n")
+                    video_path.write_bytes((f"synthetic self-test video bytes for {task} {scene_index} {method}\n".encode("utf-8")) * 32)
                     record = make_record(root, task, scene_index, method, video_path)
                     handle.write(json.dumps(record, sort_keys=True) + "\n")
                     if scene_index == 0 and method in {rollout.PRIMARY_METHOD, "proposed_energy_landscape_composer_v4_1", rollout.ORACLE_METHOD}:
@@ -390,6 +392,21 @@ def patch_module_paths(root: Path, external: Path, results: Path) -> None:
     fidelity_acceptance.OUT_JSON = results / "external_fidelity_acceptance_audit.json"
     fidelity_acceptance.OUT_MD = results / "external_fidelity_acceptance_audit.md"
 
+    pairing_integrity.ROOT = root
+    pairing_integrity.EXTERNAL = external
+    pairing_integrity.RESULTS = results
+    pairing_integrity.DEFAULT_MANIFEST = external / "manifest.json"
+    pairing_integrity.DEFAULT_SCHEMA = external / "log_schema_v1.json"
+    pairing_integrity.OUT_JSON = results / "external_pairing_integrity_audit.json"
+    pairing_integrity.OUT_MD = results / "external_pairing_integrity_audit.md"
+
+    release_package.ROOT = root
+    release_package.EXTERNAL = external
+    release_package.RESULTS = results
+    release_package.DEFAULT_MANIFEST = external / "manifest.json"
+    release_package.OUT_JSON = results / "external_release_package_audit.json"
+    release_package.OUT_MD = results / "external_release_package_audit.md"
+
     evidence.ROOT = root
     evidence.RESULTS = results
     evidence.CONTRACT_DIR = external
@@ -400,6 +417,8 @@ def patch_module_paths(root: Path, external: Path, results: Path) -> None:
     evidence.LOG_SCHEMA = external / "log_schema_v1.json"
     evidence.ROLLOUT_VALIDATOR = root / "scripts" / "validate_external_rollouts.py"
     evidence.ROLLOUT_METRICS_JSON = results / "external_rollout_metrics.json"
+    evidence.PAIRING_INTEGRITY_JSON = results / "external_pairing_integrity_audit.json"
+    evidence.RELEASE_PACKAGE_JSON = results / "external_release_package_audit.json"
     evidence.BASELINE_CONTRACT_JSON = results / "external_baseline_contract_audit.json"
     evidence.ADAPTER_SCAFFOLD_JSON = results / "external_adapter_scaffold_audit.json"
     evidence.ADAPTER_CONTRACT_JSON = results / "external_adapter_contract_audit.json"
@@ -447,6 +466,8 @@ def main() -> int:
             "synthetic_self_test_only": True,
             "log_schema": "external_validation/log_schema_v1.json",
             "route": "high_fidelity_sim",
+            "code_commit": "synthetic-fixture",
+            "skill_library_hash": digest_text("synthetic skill library"),
             "fidelity_acceptance_path": "external_validation/fidelity_acceptance.json",
             "shared_skill_library": True,
             "same_initial_states": True,
@@ -602,6 +623,16 @@ def reset(reset_context):
         }
         write_json(results / "external_fidelity_acceptance_audit.json", fidelity_result)
         fidelity_acceptance.write_markdown(fidelity_result)
+
+        pairing_result = pairing_integrity.build_payload(external / "manifest.json", external / "log_schema_v1.json")
+        if pairing_result["pairing_ready"] is not True:
+            raise AssertionError(f"synthetic pairing integrity failed: {pairing_result['blocking_missing']}")
+        pairing_integrity.write_outputs(pairing_result)
+
+        release_result = release_package.build_payload(external / "manifest.json")
+        if release_result["release_package_ready"] is not True:
+            raise AssertionError(f"synthetic release package failed: {release_result['blocking_missing']}")
+        release_package.write_outputs(release_result)
 
         write_json(
             results / "external_blind_eval_audit.json",

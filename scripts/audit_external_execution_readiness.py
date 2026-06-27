@@ -199,6 +199,21 @@ def main() -> int:
         ),
     )
 
+    release_ok, release, release_detail = passed_json(
+        RESULTS / "external_release_package_audit.json",
+        version="external_release_package_audit_v1",
+    )
+    add_check(checks, "external_release_package_audit_ready", release_ok, release_detail)
+    add_check(
+        checks,
+        "external_release_package_not_evidence",
+        release.get("not_external_evidence") is True and release.get("release_package_ready") is False,
+        (
+            f"not_external_evidence={release.get('not_external_evidence')!r}, "
+            f"release_package_ready={release.get('release_package_ready')!r}"
+        ),
+    )
+
     config_template_ok, config_template, config_template_detail = passed_json(
         RESULTS / "external_config_template_audit.json",
         version="external_config_template_audit_v1",
@@ -412,6 +427,8 @@ def main() -> int:
         "external_runner_harness_fail_closed",
         "external_pairing_integrity_audit_ready",
         "external_pairing_integrity_not_evidence",
+        "external_release_package_audit_ready",
+        "external_release_package_not_evidence",
         "config_templates_ready",
         "config_schema_exists",
         "baseline_contract_ready",
@@ -456,6 +473,7 @@ def main() -> int:
             "external_validation/manifest.json",
             "manifest-declared JSONL rollout logs",
             "complete paired-reset method panels with no duplicates",
+            "manifest-declared release artifact hashes with no local dry-run/template placeholders",
             "manifest-declared task configs with hashes",
             "manifest-declared videos",
             "manifest-declared independent non-oracle adapter implementations",

@@ -117,9 +117,11 @@ The prose protocol is implemented as an external-evidence audit:
 
 ```powershell
 python scripts\validate_external_rollouts.py --write-results
+python scripts\audit_external_release_package.py
 python scripts\audit_external_pairing_integrity.py
 python scripts\audit_external_evidence.py
 python scripts\validate_external_rollouts.py --strict --write-results --check-video-paths
+python scripts\audit_external_release_package.py --strict
 python scripts\audit_external_pairing_integrity.py --strict
 python scripts\audit_external_evidence.py --strict
 ```
@@ -127,6 +129,8 @@ python scripts\audit_external_evidence.py --strict
 The non-strict commands write `results/external_rollout_metrics.{json,md}` and `results/external_evidence_audit.{json,md}`. The strict commands must return success before the paper can be called independently submission-ready.
 
 The pairing-integrity command writes `results/external_pairing_integrity_audit.{json,md}` and is also required before any external logs count as evidence. It checks that paired resets contain complete, duplicate-free method panels with equal per-method coverage and consistent terminal samples, platform, and fixed-risk budget.
+
+The release-package command writes `results/external_release_package_audit.{json,md}` and is required before a manifest can count as reproducible evidence. It verifies manifest-declared code, configs, logs, videos, and checkpoints by SHA256 and blocks local dry-run, template, scaffold, or placeholder artifacts.
 
 Collection plan:
 
@@ -175,6 +179,8 @@ Operator runbook:
 - `results/external_runbook_audit.md`
 - `results/external_runner_harness_audit.json`
 - `results/external_runner_harness_audit.md`
+- `results/external_release_package_audit.json`
+- `results/external_release_package_audit.md`
 - `results/external_pairing_integrity_audit.json`
 - `results/external_pairing_integrity_audit.md`
 
@@ -184,10 +190,11 @@ Generate it with:
 python scripts\build_external_blind_eval_plan.py
 python scripts\build_external_runbook.py
 python scripts\audit_external_runner_harness.py
+python scripts\audit_external_release_package.py
 python scripts\audit_external_pairing_integrity.py
 ```
 
-The runbook, blinded evaluation packet, runner harness, and pairing-integrity audit are also not evidence. They convert the collection plan into task cards, per-run record rows, deterministic per-reset randomized alias order, starter config templates, a fail-closed execution path, and a paired-panel fairness gate so a real robot or high-fidelity-sim operator can collect the missing validation layer consistently. The runner dry-run writes no logs; actual collection rejects template backends/configs, requires explicit alias unsealing, and still must produce manifest-backed JSONL logs, videos, configs, checkpoints, implementation hashes, and a skill-library hash. The alias map should stay sealed until those artifacts are frozen.
+The runbook, blinded evaluation packet, runner harness, release-package audit, and pairing-integrity audit are also not evidence. They convert the collection plan into task cards, per-run record rows, deterministic per-reset randomized alias order, starter config templates, a fail-closed execution path, hash-locked release checks, and a paired-panel fairness gate so a real robot or high-fidelity-sim operator can collect the missing validation layer consistently. The runner dry-run writes no logs; actual collection rejects template backends/configs, requires explicit alias unsealing, and still must produce manifest-backed JSONL logs, videos, configs, checkpoints, implementation hashes, and a skill-library hash. The alias map should stay sealed until those artifacts are frozen.
 
 Platform qualification:
 

@@ -158,6 +158,12 @@
     },
     {
       "blocking": true,
+      "detail": "release_package_ready=False, blocking_missing_count=1",
+      "name": "external_release_package_ready",
+      "passed": false
+    },
+    {
+      "blocking": true,
       "detail": "external_success_margin: manifest=None, rollout=None; external_utility_margin: manifest=None, rollout=None; paired_win_rate: manifest=None, rollout=None; fixed_risk_breach: manifest=None, rollout=None",
       "name": "manifest_metrics_match_rollout",
       "passed": false
@@ -546,6 +552,18 @@
       "blocking": true,
       "detail": "pairing_ready=False, blocking_missing_count=1",
       "name": "external_pairing_integrity_ready",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\results\\external_release_package_audit.json",
+      "name": "external_release_package_audit_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "release_package_ready=False, blocking_missing_count=1",
+      "name": "external_release_package_ready",
       "passed": false
     },
     {

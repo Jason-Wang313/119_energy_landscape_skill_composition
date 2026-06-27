@@ -18,6 +18,7 @@ LOG_SCHEMA = CONTRACT_DIR / "log_schema_v1.json"
 ROLLOUT_VALIDATOR = ROOT / "scripts" / "validate_external_rollouts.py"
 ROLLOUT_METRICS_JSON = RESULTS / "external_rollout_metrics.json"
 PAIRING_INTEGRITY_JSON = RESULTS / "external_pairing_integrity_audit.json"
+RELEASE_PACKAGE_JSON = RESULTS / "external_release_package_audit.json"
 BASELINE_CONTRACT_JSON = RESULTS / "external_baseline_contract_audit.json"
 ADAPTER_SCAFFOLD_JSON = RESULTS / "external_adapter_scaffold_audit.json"
 ADAPTER_CONTRACT_JSON = RESULTS / "external_adapter_contract_audit.json"
@@ -466,6 +467,18 @@ def audit_manifest(manifest: dict[str, Any], manifest_exists: bool) -> dict[str,
         (
             f"pairing_ready={pairing_integrity.get('pairing_ready')!r}, "
             f"blocking_missing_count={pairing_integrity.get('blocking_missing_count')!r}"
+        ),
+    )
+    release_package_exists = RELEASE_PACKAGE_JSON.exists()
+    release_package = read_json(RELEASE_PACKAGE_JSON) if release_package_exists else {}
+    add_check(checks, "external_release_package_audit_exists", release_package_exists, str(RELEASE_PACKAGE_JSON))
+    add_check(
+        checks,
+        "external_release_package_ready",
+        release_package.get("release_package_ready") is True,
+        (
+            f"release_package_ready={release_package.get('release_package_ready')!r}, "
+            f"blocking_missing_count={release_package.get('blocking_missing_count')!r}"
         ),
     )
     metric_mismatches = []

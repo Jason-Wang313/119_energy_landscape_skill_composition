@@ -12,12 +12,12 @@
       "passed": true
     },
     {
-      "detail": "positions=[2145, 5187, 8375, 10153, 11027, 12545, 20305, 24179]",
+      "detail": "positions=[2145, 5222, 8410, 10188, 11062, 12580, 20340, 24173]",
       "name": "required_sections_present",
       "passed": true
     },
     {
-      "detail": "positions=[2145, 5187, 8375, 10153, 11027, 12545, 20305, 24179]",
+      "detail": "positions=[2145, 5222, 8410, 10188, 11062, 12580, 20340, 24173]",
       "name": "required_sections_in_order",
       "passed": true
     },
@@ -122,7 +122,7 @@
       "passed": true
     },
     {
-      "detail": "count=8",
+      "detail": "count=7",
       "name": "world_action_framing_not_overdone",
       "passed": true
     },
@@ -193,5 +193,5 @@
   "not_external_evidence": true,
   "passed": true,
   "version": "manuscript_readability_audit_v1",
-  "world_action_phrase_count": 8
+  "world_action_phrase_count": 7
 }

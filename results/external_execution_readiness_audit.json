@@ -112,6 +112,16 @@
     },
     {
       "detail": "passed",
+      "name": "external_release_package_audit_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True, release_package_ready=False",
+      "name": "external_release_package_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "passed",
       "name": "config_templates_ready",
       "passed": true
     },
@@ -236,6 +246,7 @@
     "external_validation/manifest.json",
     "manifest-declared JSONL rollout logs",
     "complete paired-reset method panels with no duplicates",
+    "manifest-declared release artifact hashes with no local dry-run/template placeholders",
     "manifest-declared task configs with hashes",
     "manifest-declared videos",
     "manifest-declared independent non-oracle adapter implementations",

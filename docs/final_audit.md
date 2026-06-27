@@ -28,11 +28,11 @@ Continuation audit additions:
 - Camera-ready design audit: `results/camera_ready_design_audit.md` renders all 29 PDF pages and checks page density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
 - Numeric integrity: validator passed with no missing required outputs, invalid numeric values, or artifact-placement violations.
 - Claim boundary audit: `results/claim_boundary_audit.md` passes and blocks premature deployment, hardware, or ICLR-main readiness claims.
-- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` maps the active objective to 18 concrete requirements; it currently reports 14 satisfied, 4 blocking external gaps, and 0 human-polish items, so the objective is not complete.
+- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` maps the active objective to 19 concrete requirements; it currently reports 15 satisfied, 4 blocking external gaps, and 0 human-polish items, so the objective is not complete.
 - Full local build script: `scripts/build_submission_artifacts.ps1`.
 - GitHub validation workflow: `.github/workflows/paper119-validation.yml` runs the core runner/readiness/submission/outreach validators on pushed branches and pull requests, with the repository PDF used as the CI canonical artifact.
 - Canonical PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `0996818722E25CD719E418DDAB3444FA774036F637BC81C4085CD33A66D8736B`.
+- PDF SHA256: `9C67A1B4A55315DB6474EF9F25C046916BFDEC87355C04AFCACA7996D2C455EB`.
 - PDF size: `464927` bytes.
 - PDF pages: `29`.
 - Desktop PDF copy: absent.
@@ -53,6 +53,7 @@ Continuation audit additions:
 - External reference adapters: `external_validation/baselines/common_reference_adapter.py`, per-method `adapter.py` files, `external_validation/reference_adapter_report.md`, and `results/external_reference_adapter_audit.md` provide executable implementation-only adapters for all 12 methods and pass the contract audit, but they are not rollout evidence and do not replace independent manifest-declared external runs.
 - External local dry run: `external_validation/local_dry_run/manifest.json`, dry-run JSONL logs, and `results/external_local_dry_run_metrics.md` exercise the external schema on 1,440 frozen local records and recompute external-style metrics, while explicitly remaining non-evidence.
 - External manifest builder: `scripts/build_external_manifest.py` writes `results/external_manifest_builder_report.md` in report-only mode and can hash real logs/videos/configs/checkpoints into `external_validation/manifest.json` when evidence exists.
+- External release package audit: `results/external_release_package_audit.md` reports `release_package_ready=false` until a real manifest declares existing code/config/log/video/checkpoint artifacts with matching SHA256 hashes and no local-dry-run/template placeholders.
 - External evidence preflight: `results/external_evidence_preflight.md` is a fail-closed operator checklist over task logs/videos/configs, method implementations/checkpoints, and expected JSONL records; it expects 1,440 records, observes 0 real external records, reports `evidence_ready=false`, and is explicitly not evidence.
 - External evidence audit: `results/external_evidence_audit.md` reports `submission_ready=false` with no external manifest/log/video/checkpoint evidence or manifest-vs-rollout metric agreement yet.
 - External rollout metric audit: `results/external_rollout_metrics.md` reports `passed=false` because no manifest/log evidence exists yet.

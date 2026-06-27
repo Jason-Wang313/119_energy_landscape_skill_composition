@@ -27,6 +27,7 @@ REQUIRED_COMMANDS = [
     r"python scripts\validate_external_configs.py --strict",
     r"python scripts\validate_external_adapters.py --strict",
     r"python scripts\build_external_manifest.py --write --check-video-paths",
+    r"python scripts\audit_external_release_package.py --strict",
     r"python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict",
     r"python scripts\audit_external_pairing_integrity.py --strict",
     r"python scripts\audit_external_evidence.py --strict",

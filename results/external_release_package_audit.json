@@ -1,0 +1,19 @@
+{
+  "artifact_counts": {
+    "checkpoints": 0,
+    "code": 0,
+    "configs": 0,
+    "logs": 0,
+    "videos": 0
+  },
+  "blocking_missing": [
+    "external_validation/manifest.json has not been written from real evidence"
+  ],
+  "blocking_missing_count": 1,
+  "entry_reports": [],
+  "manifest_path": "external_validation/manifest.json",
+  "not_external_evidence": true,
+  "passed": true,
+  "release_package_ready": false,
+  "version": "external_release_package_audit_v1"
+}

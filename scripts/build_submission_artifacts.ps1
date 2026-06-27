@@ -101,6 +101,7 @@ try {
         Invoke-Native python scripts\build_external_local_dry_run.py
         Invoke-Native python scripts\validate_external_adapters.py
         Invoke-Native python scripts\build_external_manifest.py --allow-missing
+        Invoke-Native python scripts\audit_external_release_package.py
         Invoke-Native python scripts\audit_external_evidence_preflight.py
         Invoke-Native python scripts\self_test_external_adapter_scaffold_guard.py
         Invoke-Native python scripts\self_test_external_rollout_validator.py

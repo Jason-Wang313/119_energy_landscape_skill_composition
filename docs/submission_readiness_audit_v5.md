@@ -39,14 +39,14 @@ ICLR-main ready: no
 ## Artifact Checks
 
 - PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `0996818722E25CD719E418DDAB3444FA774036F637BC81C4085CD33A66D8736B`.
+- PDF SHA256: `9C67A1B4A55315DB6474EF9F25C046916BFDEC87355C04AFCACA7996D2C455EB`.
 - PDF size: `464927` bytes.
 - PDF pages: `29`.
 - Numbered PDF placement: Downloads only.
 - Desktop numbered PDF: absent.
 - Validator: passed.
 - Claim boundary audit: `results/claim_boundary_audit.md` passed and confirms the current package keeps the claim bounded.
-- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 14/18 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
+- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 15/19 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
 - Local falsification audit: `results/local_falsification_audit.md` passed and is included in the generated manuscript.
 - Holdout robustness audit: `results/holdout_robustness_audit.md` passed and is included in the generated manuscript.
 - Diagnostic mechanism audit: `results/diagnostic_mechanism_audit.md` passed and is included in the generated manuscript.
@@ -76,6 +76,7 @@ ICLR-main ready: no
 - External local dry-run audit: `scripts/build_external_local_dry_run.py`, `external_validation/local_dry_run/manifest.json`, and `results/external_local_dry_run_metrics.md` exist, pass over 1,440 schema-compatible local records, and are explicitly marked as non-evidence.
 - External adapter scaffold guard self-test: `scripts/self_test_external_adapter_scaffold_guard.py` passes and protects the strict audit against scaffold-as-evidence regression.
 - External manifest builder report: `results/external_manifest_builder_report.md` exists and confirms no manifest is written until real external logs/configs/checkpoints are supplied.
+- External release package audit: `results/external_release_package_audit.md` exists and reports `release_package_ready=false` until a real manifest declares existing code/config/log/video/checkpoint artifacts with matching SHA256 hashes and no local-dry-run/template placeholders.
 - External evidence preflight matrix: `results/external_evidence_preflight.md` exists, passes as a fail-closed operator checklist, expects 1,440 external records, observes 0 real external records, reports `evidence_ready=false`, and is explicitly marked as non-evidence.
 - External evidence audit: `results/external_evidence_audit.md` exists and reports `submission_ready=false` because no real/high-fidelity manifest, logs, videos, checkpoints, manifest-declared independent baseline evidence, or manifest-vs-rollout metric agreement have been supplied.
 - External rollout metric audit: `results/external_rollout_metrics.md` exists and reports `passed=false` because no external manifest/log package has been supplied.
@@ -98,6 +99,7 @@ ICLR-main ready: no
 - No independent manifest-declared baseline evidence from real external runs.
 - Strict adapter-contract evidence validation over manifest-declared real implementations and logs does not pass yet.
 - External evidence strict audit does not pass yet.
+- External release-package strict validation does not pass yet.
 - External rollout-log strict validation does not pass yet.
 - External pairing-integrity strict validation does not pass yet.
 - Related-work/reference/readability coverage is now machine-audited across the target novelty boundary; human taste review can still improve prose, but it is no longer a tracked readiness gap.

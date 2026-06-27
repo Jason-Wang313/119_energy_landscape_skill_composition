@@ -2,7 +2,7 @@
 
 This directory is reserved for evidence that can make Paper 119 independently submission-ready.
 
-The current paper is not main-conference ready until `scripts/audit_external_evidence.py --strict`, `scripts\validate_external_rollouts.py --strict --write-results`, and `scripts\audit_external_pairing_integrity.py --strict` pass against a real `external_validation/manifest.json` and the referenced logs, videos, configs, checkpoints, and baseline implementations.
+The current paper is not main-conference ready until `scripts/audit_external_evidence.py --strict`, `scripts\validate_external_rollouts.py --strict --write-results`, `scripts\audit_external_pairing_integrity.py --strict`, and `scripts\audit_external_release_package.py --strict` pass against a real `external_validation/manifest.json` and the referenced logs, videos, configs, checkpoints, and baseline implementations.
 
 Use `manifest_template.json` as the required manifest structure and `log_schema_v1.json` as the required episode-level JSONL schema. A valid evidence package must prove one of:
 
@@ -147,6 +147,14 @@ python scripts\build_external_blind_eval_plan.py
 
 The preflight audit writes `results/external_evidence_preflight.{json,md}`. It is an operator-facing missing-evidence matrix over task logs, videos, configs, method implementations, checkpoint/config hashes, and expected JSONL record counts. It deliberately remains `not_external_evidence: true` and currently reports `evidence_ready: false` until a real `external_validation/manifest.json` and manifest-declared artifacts exist.
 
+Audit the manifest-declared release package:
+
+```powershell
+python scripts\audit_external_release_package.py
+```
+
+This writes `results/external_release_package_audit.{json,md}`. It verifies that manifest-declared code, config, log, video, and checkpoint artifacts exist and match their SHA256 hashes, and it rejects local dry-run, template, scaffold, or placeholder artifacts. It remains `release_package_ready: false` until a real manifest exists.
+
 Audit paired-reset and method-panel integrity:
 
 ```powershell
@@ -159,6 +167,7 @@ After real or accepted high-fidelity artifacts exist, run:
 
 ```powershell
 python scripts\build_external_manifest.py --write --check-video-paths
+python scripts\audit_external_release_package.py --strict
 python scripts\audit_external_fidelity_acceptance.py --strict
 python scripts\validate_external_adapters.py --strict
 python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict
@@ -180,6 +189,7 @@ python scripts\build_external_local_dry_run.py
 python scripts\audit_external_fidelity_acceptance.py
 python scripts\build_external_blind_eval_plan.py
 python scripts\audit_external_runner_harness.py
+python scripts\audit_external_release_package.py
 python scripts\audit_external_evidence_preflight.py
 python scripts\audit_external_pairing_integrity.py
 python scripts\validate_external_adapters.py
@@ -188,6 +198,7 @@ python scripts\validate_external_adapters.py --strict
 python scripts\self_test_external_rollout_validator.py
 python scripts\self_test_external_evidence_pipeline.py
 python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict
+python scripts\audit_external_release_package.py --strict
 python scripts\audit_external_pairing_integrity.py --strict
 python scripts\audit_external_evidence.py --strict
 ```
@@ -199,3 +210,5 @@ The full-pipeline self-test also uses a temporary synthetic package only. It ver
 The rollout validator recomputes the external success margin, utility margin, paired win rate, fixed-risk coverage, fixed-risk breach, and positive task-family count from raw JSONL records. The manifest metrics are therefore not accepted as evidence unless they are backed by episode logs with the seam prediction, diagnosis, decision, outcome, utility, video, and config/checkpoint hashes required by `log_schema_v1.json`. The evidence audit also blocks if manifest metrics disagree with the recomputed rollout metrics.
 
 The pairing integrity audit is a separate fairness gate over the same raw logs. It blocks incomplete paired reset panels, duplicate method records, undeclared methods, unequal method counts, and within-reset mismatches in terminal samples, platform, or fixed-risk budget.
+
+The release package audit is the hash-lock gate. It blocks stale or missing release artifacts, hash mismatches, local dry-run logs/videos, config templates, adapter scaffolds, and placeholder videos before any strict evidence claim can pass.

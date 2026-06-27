@@ -117,6 +117,7 @@ def main():
         "scripts\\build_external_local_dry_run.py",
         "scripts\\validate_external_adapters.py",
         "scripts\\build_external_manifest.py --allow-missing",
+        "scripts\\audit_external_release_package.py",
         "scripts\\audit_external_evidence_preflight.py",
         "scripts\\self_test_external_adapter_scaffold_guard.py",
         "scripts\\self_test_external_rollout_validator.py",
@@ -150,6 +151,7 @@ def main():
         "poppler-utils",
         "python -m compileall",
         "python scripts/audit_external_runner_harness.py",
+        "python scripts/audit_external_release_package.py",
         "python scripts/audit_external_execution_readiness.py",
         "python scripts/audit_external_pairing_integrity.py",
         "python scripts/audit_submission_readiness_gap.py",
@@ -186,6 +188,8 @@ def main():
         fail("external collection plan must include the adapter contract validation command")
     if "python scripts\\validate_external_adapters.py --strict" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the strict adapter implementation validation command")
+    if "python scripts\\audit_external_release_package.py --strict" not in collection_plan.get("validation_commands", []):
+        fail("external collection plan must include the strict release package audit command")
     if "python scripts\\audit_external_pairing_integrity.py --strict" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the strict pairing integrity audit command")
     if "python scripts\\validate_external_configs.py" not in collection_plan.get("validation_commands", []):
@@ -269,6 +273,26 @@ def main():
         fail("external pairing integrity audit should identify the missing real manifest")
     if not (RESULTS / "external_pairing_integrity_audit.md").exists():
         fail("missing results/external_pairing_integrity_audit.md")
+
+    release_package_path = RESULTS / "external_release_package_audit.json"
+    if not release_package_path.exists():
+        fail("missing results/external_release_package_audit.json; run scripts/audit_external_release_package.py")
+    release_package = json.loads(release_package_path.read_text(encoding="utf-8"))
+    if release_package.get("version") != "external_release_package_audit_v1":
+        fail("external release package audit version mismatch")
+    if release_package.get("passed") is not True:
+        fail("external release package audit did not pass")
+    if release_package.get("release_package_ready") is not False:
+        fail("external release package must not claim readiness before a real manifest/log package exists")
+    if release_package.get("not_external_evidence") is not True:
+        fail("external release package audit must declare that it is not current evidence")
+    if not any("manifest.json" in str(item) for item in release_package.get("blocking_missing", [])):
+        fail("external release package audit should identify the missing real manifest")
+    if not (RESULTS / "external_release_package_audit.md").exists():
+        fail("missing results/external_release_package_audit.md")
+    manifest_builder_text = (ROOT / "scripts" / "build_external_manifest.py").read_text(encoding="utf-8")
+    if "CORE_CODE_ARTIFACTS" not in manifest_builder_text or "release[\"code\"]" not in manifest_builder_text:
+        fail("external manifest builder must populate release_artifacts.code")
 
     blind_eval_path = RESULTS / "external_blind_eval_audit.json"
     if not blind_eval_path.exists():
@@ -831,6 +855,7 @@ def main():
         "external_rollout_metrics_exists",
         "external_rollout_metrics_version",
         "external_pairing_integrity_audit_exists",
+        "external_release_package_audit_exists",
         "fidelity_acceptance_audit_exists",
         "fidelity_acceptance_audit_version",
         "fidelity_acceptance_contract_passed",
@@ -853,6 +878,7 @@ def main():
         "episode_log_schema",
         "external_rollout_metrics_passed",
         "external_pairing_integrity_ready",
+        "external_release_package_ready",
         "external_fidelity_acceptance_ready",
         "manifest_metrics_match_rollout",
         "task_video_dirs",
@@ -921,6 +947,8 @@ def main():
         "external_runner_harness_fail_closed",
         "external_pairing_integrity_audit_ready",
         "external_pairing_integrity_not_evidence",
+        "external_release_package_audit_ready",
+        "external_release_package_not_evidence",
         "config_templates_ready",
         "baseline_contract_reports_missing_implementations",
         "adapter_contract_harness_ready",
@@ -944,6 +972,7 @@ def main():
         EXTERNAL / "runner" / "backend_contract.py",
         EXTERNAL / "runner" / "real_collection_runner.py",
         RESULTS / "external_pairing_integrity_audit.md",
+        RESULTS / "external_release_package_audit.md",
         RESULTS / "external_execution_readiness_audit.md",
         RESULTS / "external_fidelity_acceptance_audit.md",
         RESULTS / "external_blind_eval_audit.md",

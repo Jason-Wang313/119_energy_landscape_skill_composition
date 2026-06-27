@@ -144,6 +144,7 @@
         "results/external_blind_eval_audit.json",
         "results/external_runner_harness_audit.json",
         "results/external_pairing_integrity_audit.json",
+        "results/external_release_package_audit.json",
         "external_validation/platform_qualification_checklist.md",
         "external_validation/fidelity_acceptance_template.json",
         "external_validation/independent_validation_route.md",
@@ -155,6 +156,18 @@
         "external_validation/runner/real_collection_runner.py"
       ],
       "requirement": "Independent external-validation execution packet not dependent on Haonan",
+      "status": "satisfied",
+      "submission_blocking": true
+    },
+    {
+      "blocker": "",
+      "evidence": [
+        "scripts/audit_external_release_package.py",
+        "scripts/build_external_manifest.py",
+        "results/external_release_package_audit.json",
+        "results/external_release_package_audit.md"
+      ],
+      "requirement": "External release package hash-lock and no-local-dry-run gate",
       "status": "satisfied",
       "submission_blocking": true
     },
@@ -230,7 +243,7 @@
       "submission_blocking": false
     }
   ],
-  "satisfied_requirements": 14,
+  "satisfied_requirements": 15,
   "scope_gate_pass": false,
   "version": "submission_readiness_gap_audit_v1"
 }

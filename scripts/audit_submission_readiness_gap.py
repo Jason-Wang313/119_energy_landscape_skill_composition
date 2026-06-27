@@ -81,6 +81,8 @@ def main() -> int:
     runner_harness = read_json(runner_harness_path) if runner_harness_path.exists() else {}
     pairing_integrity_path = RESULTS / "external_pairing_integrity_audit.json"
     pairing_integrity = read_json(pairing_integrity_path) if pairing_integrity_path.exists() else {}
+    release_package_path = RESULTS / "external_release_package_audit.json"
+    release_package = read_json(release_package_path) if release_package_path.exists() else {}
     presentation_path = RESULTS / "presentation_quality_audit.json"
     presentation = read_json(presentation_path) if presentation_path.exists() else {}
     figure_readability_path = RESULTS / "figure_readability_audit.json"
@@ -278,6 +280,8 @@ def main() -> int:
         and runner_harness.get("actual_execution_ready") is False
         and pairing_integrity.get("passed") is True
         and pairing_integrity.get("pairing_ready") is False
+        and release_package.get("passed") is True
+        and release_package.get("release_package_ready") is False
     )
     add_requirement(
         requirements,
@@ -290,6 +294,7 @@ def main() -> int:
             "results/external_blind_eval_audit.json",
             "results/external_runner_harness_audit.json",
             "results/external_pairing_integrity_audit.json",
+            "results/external_release_package_audit.json",
             "external_validation/platform_qualification_checklist.md",
             "external_validation/fidelity_acceptance_template.json",
             "external_validation/independent_validation_route.md",
@@ -301,6 +306,34 @@ def main() -> int:
             "external_validation/runner/real_collection_runner.py",
         ],
         blocker="" if execution_packet_ok else "external execution packet audit is missing/failing or strict evidence readiness is incorrectly claimed",
+        submission_blocking=True,
+    )
+
+    release_package_ok = (
+        release_package.get("passed") is True
+        and release_package.get("version") == "external_release_package_audit_v1"
+        and release_package.get("release_package_ready") is False
+        and release_package.get("not_external_evidence") is True
+        and exists_all(
+            [
+                ROOT / "scripts" / "audit_external_release_package.py",
+                RESULTS / "external_release_package_audit.json",
+                RESULTS / "external_release_package_audit.md",
+                ROOT / "scripts" / "build_external_manifest.py",
+            ]
+        )
+    )
+    add_requirement(
+        requirements,
+        requirement="External release package hash-lock and no-local-dry-run gate",
+        status="satisfied" if release_package_ok else "missing",
+        evidence=[
+            "scripts/audit_external_release_package.py",
+            "scripts/build_external_manifest.py",
+            "results/external_release_package_audit.json",
+            "results/external_release_package_audit.md",
+        ],
+        blocker="" if release_package_ok else "external release package audit is missing/failing or incorrectly claims current evidence readiness",
         submission_blocking=True,
     )
 

@@ -28,6 +28,7 @@
 - External local dry-run builder: `scripts/build_external_local_dry_run.py`
 - External adapter contract validator: `scripts/validate_external_adapters.py`
 - External manifest builder: `scripts/build_external_manifest.py`
+- External release package validator: `scripts/audit_external_release_package.py`
 - External adapter scaffold guard self-test: `scripts/self_test_external_adapter_scaffold_guard.py`
 - External evidence validator: `scripts/audit_external_evidence.py`
 - External execution readiness validator: `scripts/audit_external_execution_readiness.py`
@@ -106,6 +107,8 @@
   - `results/external_adapter_contract_evidence_audit.md`
   - `results/external_manifest_builder_report.json`
   - `results/external_manifest_builder_report.md`
+  - `results/external_release_package_audit.json`
+  - `results/external_release_package_audit.md`
   - `results/external_pairing_integrity_audit.json`
   - `results/external_pairing_integrity_audit.md`
   - `results/external_execution_readiness_audit.json`

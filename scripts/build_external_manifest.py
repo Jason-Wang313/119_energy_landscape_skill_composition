@@ -27,6 +27,15 @@ ARTIFACT_DIR_NAMES = {
     "videos": "videos",
     "checkpoints": "checkpoints",
 }
+CORE_CODE_ARTIFACTS = [
+    "external_validation/config_schema_v1.json",
+    "external_validation/log_schema_v1.json",
+    "scripts/audit_external_evidence.py",
+    "scripts/audit_external_pairing_integrity.py",
+    "scripts/validate_external_adapters.py",
+    "scripts/validate_external_configs.py",
+    "scripts/validate_external_rollouts.py",
+]
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -72,8 +81,23 @@ def sha256_path(path: Path) -> str:
     raise FileNotFoundError(path)
 
 
-def scan_artifacts(root: Path, artifact_dirs: dict[str, Path]) -> dict[str, list[dict[str, str]]]:
+def code_artifact_paths(root: Path, manifest: dict[str, Any]) -> list[Path]:
+    paths: list[Path] = [rel_path(root, value) for value in CORE_CODE_ARTIFACTS]
+    for method in manifest.get("methods", []):
+        if not isinstance(method, dict) or method.get("name") == ORACLE_METHOD:
+            continue
+        implementation = str(method.get("implementation", "")).strip()
+        if implementation:
+            paths.append(rel_path(root, implementation))
+    return sorted({path.resolve() for path in paths if path.exists()}, key=lambda path: str(path))
+
+
+def scan_artifacts(root: Path, artifact_dirs: dict[str, Path], manifest: dict[str, Any]) -> dict[str, list[dict[str, str]]]:
     release = {"code": [], "configs": [], "logs": [], "videos": [], "checkpoints": []}
+    release["code"] = [
+        {"path": posix_rel(root, path), "sha256": sha256_path(path)}
+        for path in code_artifact_paths(root, manifest)
+    ]
     for kind, directory in artifact_dirs.items():
         if not directory.exists():
             continue
@@ -334,7 +358,7 @@ def main() -> int:
     warnings = update_manifest_hashes(root, manifest)
     external_root = root / "external_validation"
     artifact_dirs = {kind: external_root / name for kind, name in ARTIFACT_DIR_NAMES.items()}
-    manifest["release_artifacts"] = scan_artifacts(root, artifact_dirs)
+    manifest["release_artifacts"] = scan_artifacts(root, artifact_dirs, manifest)
 
     records, schema_errors = load_records(root, manifest, schema, check_video_paths=args.check_video_paths)
     summary: dict[str, Any] = {"episodes": 0}
