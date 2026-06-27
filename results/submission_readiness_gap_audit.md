@@ -33,7 +33,7 @@ This audit is meant to prevent false completion claims. It passes only while the
 - `satisfied` Top-conference presentation hygiene for the compiled PDF
   Evidence: results/presentation_quality_audit.json, results/figure_readability_audit.json, paper/main.pdf, C:/Users/wangz/Downloads/119.pdf
 - `satisfied` Canonical artifact placement and overclaim prevention
-  Evidence: results/claim_boundary_audit.json, paper/main.pdf, C:/Users/wangz/Downloads/119.pdf
+  Evidence: results/claim_boundary_audit.json, paper/main.pdf, C:\Users\wangz\Downloads\119.pdf
 - `satisfied` Single-command local reproducibility, GitHub CI, and validator self-tests
   Evidence: scripts/build_submission_artifacts.ps1, scripts/validate_submission_artifacts.py, scripts/self_test_external_rollout_validator.py, scripts/self_test_external_evidence_pipeline.py, .github/workflows/paper119-validation.yml, docs/reproducibility_checklist.md
 - `satisfied` Independent external-validation execution packet not dependent on Haonan

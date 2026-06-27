@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -14,6 +15,11 @@ EXTERNAL = ROOT / "external_validation"
 
 OUT_JSON = RESULTS / "submission_readiness_gap_audit.json"
 OUT_MD = RESULTS / "submission_readiness_gap_audit.md"
+
+
+def configured_path(env_name: str, default: str) -> Path:
+    path = Path(os.environ.get(env_name, default))
+    return path if path.is_absolute() else ROOT / path
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -56,6 +62,7 @@ def passed_json(path: Path) -> bool:
 def main() -> int:
     RESULTS.mkdir(exist_ok=True)
     requirements: list[dict[str, Any]] = []
+    canonical_pdf = configured_path("PAPER119_CANONICAL_PDF", "C:/Users/wangz/Downloads/119.pdf")
 
     summary_path = RESULTS / "summary.json"
     summary = read_json(summary_path) if summary_path.exists() else {}
@@ -218,12 +225,12 @@ def main() -> int:
         submission_blocking=True,
     )
 
-    artifact_ok = exists_all([PAPER / "main.pdf", Path("C:/Users/wangz/Downloads/119.pdf")]) and passed_json(RESULTS / "claim_boundary_audit.json")
+    artifact_ok = exists_all([PAPER / "main.pdf", canonical_pdf]) and passed_json(RESULTS / "claim_boundary_audit.json")
     add_requirement(
         requirements,
         requirement="Canonical artifact placement and overclaim prevention",
         status="satisfied" if artifact_ok and claim.get("passed") is True else "missing",
-        evidence=["results/claim_boundary_audit.json", "paper/main.pdf", "C:/Users/wangz/Downloads/119.pdf"],
+        evidence=["results/claim_boundary_audit.json", "paper/main.pdf", str(canonical_pdf)],
         blocker="" if artifact_ok and claim.get("passed") is True else "canonical PDF or claim-boundary audit is missing/failing",
         submission_blocking=True,
     )
