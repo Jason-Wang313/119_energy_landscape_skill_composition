@@ -485,6 +485,44 @@ def main() -> int:
         f"checks={config_manifest_checks}",
     )
 
+    rollout_evidence_ok, rollout_evidence, rollout_evidence_detail = passed_json(
+        RESULTS / "external_rollout_evidence_audit.json",
+        version="external_rollout_evidence_audit_v1",
+    )
+    add_check(checks, "external_rollout_evidence_packet_ready", rollout_evidence_ok, rollout_evidence_detail)
+    rollout_evidence_checks = {check.get("name"): check.get("passed") for check in rollout_evidence.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_rollout_evidence_not_evidence",
+        rollout_evidence.get("not_external_evidence") is True
+        and rollout_evidence.get("rollout_evidence_packet_ready") is True
+        and rollout_evidence.get("strict_rollout_evidence_ready") is False
+        and rollout_evidence.get("strict_external_evidence_ready") is False,
+        (
+            f"not_external_evidence={rollout_evidence.get('not_external_evidence')!r}, "
+            f"rollout_evidence_packet_ready={rollout_evidence.get('rollout_evidence_packet_ready')!r}, "
+            f"strict_rollout_evidence_ready={rollout_evidence.get('strict_rollout_evidence_ready')!r}, "
+            f"strict_external_evidence_ready={rollout_evidence.get('strict_external_evidence_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "external_rollout_evidence_covers_raw_log_blocker",
+        rollout_evidence_checks.get("task_work_orders_cover_all_planned_tasks") is True
+        and rollout_evidence_checks.get("strict_rollout_metrics_still_fail_without_manifest") is True
+        and (EXTERNAL / "rollout_evidence_packet.json").exists()
+        and (EXTERNAL / "rollout_evidence_packet.md").exists()
+        and (EXTERNAL / "rollout_evidence_work_orders.csv").exists(),
+        f"checks={rollout_evidence_checks}",
+    )
+    add_check(
+        checks,
+        "external_rollout_evidence_gate_order",
+        rollout_evidence_checks.get("strict_commands_cover_collection_manifest_rollout_pairing_release_evidence") is True
+        and rollout_evidence_checks.get("strict_gate_audits_remain_fail_closed") is True,
+        f"checks={rollout_evidence_checks}",
+    )
+
     baseline_ok, baseline, baseline_detail = passed_json(
         RESULTS / "external_baseline_contract_audit.json",
         version="external_baseline_contract_audit_v1",
@@ -736,6 +774,9 @@ def main() -> int:
         EXTERNAL / "config_manifest_packet.json",
         EXTERNAL / "config_manifest_packet.md",
         EXTERNAL / "config_manifest_work_orders.csv",
+        EXTERNAL / "rollout_evidence_packet.json",
+        EXTERNAL / "rollout_evidence_packet.md",
+        EXTERNAL / "rollout_evidence_work_orders.csv",
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
@@ -756,6 +797,7 @@ def main() -> int:
         RESULTS / "external_platform_onboarding_audit.md",
         RESULTS / "external_backend_integration_audit.md",
         RESULTS / "external_config_manifest_audit.md",
+        RESULTS / "external_rollout_evidence_audit.md",
         RESULTS / "external_method_implementation_audit.md",
         DOCS / "independent_validation_protocol.md",
     ]
@@ -850,6 +892,10 @@ def main() -> int:
         "external_config_manifest_not_evidence",
         "external_config_manifest_covers_manifest_config_blocker",
         "external_config_manifest_gate_order",
+        "external_rollout_evidence_packet_ready",
+        "external_rollout_evidence_not_evidence",
+        "external_rollout_evidence_covers_raw_log_blocker",
+        "external_rollout_evidence_gate_order",
         "baseline_contract_ready",
         "baseline_contract_reports_missing_implementations",
         "adapter_scaffolds_ready",
@@ -904,6 +950,7 @@ def main() -> int:
             "actual collection preflight cleared with backend, real configs, fidelity acceptance, alias unsealing, and specific run id",
             "manifest-declared task configs with hashes",
             "completed config manifest packet work orders with manifest-declared config hashes",
+            "completed rollout evidence packet work orders with manifest-declared JSONL logs and videos",
             "manifest-declared videos",
             "manifest-declared independent non-oracle adapter implementations",
             "completed method implementation packet work orders with source/config/checkpoint hashes",

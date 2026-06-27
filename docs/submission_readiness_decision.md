@@ -19,6 +19,7 @@ Why strong-revise:
 - The pairing-integrity self-test proves complete 1,440-record paired-reset panels can pass while duplicate method rows, incomplete panels, terminal-sample mismatches, and missing manifests fail.
 - The guarded config materialization plan is ready to write real task configs only after a platform and compute budget are supplied with `--confirm-real-platform --write`.
 - The external config manifest packet turns prepared task configs into manifest-declaration and hash-lock work orders while strict config evidence remains false.
+- The external rollout evidence packet turns the missing raw JSONL logs, videos, manifest, strict rollout recomputation, pairing, release, and final evidence gates into operator work orders while strict rollout and external evidence remain false.
 - The external analysis plan locks the external primary hypotheses, rollout-schema thresholds, paired-comparison key, exclusion/unblinding policy, and required reporting before collection while remaining non-evidence.
 - The external platform onboarding packet turns the primary ManiSkill/SAPIEN public-simulator route into a concrete non-evidence operator contract with official source anchors, provenance fields, task onboarding files, backend requirements, and strict gate order.
 - The external backend integration packet turns the missing non-template public-simulator backend into concrete work orders while strict backend readiness remains false.

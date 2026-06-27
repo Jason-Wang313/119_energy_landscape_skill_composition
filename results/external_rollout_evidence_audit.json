@@ -1,0 +1,62 @@
+{
+  "checks": [
+    {
+      "detail": "not_external_evidence=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False",
+      "name": "packet_is_non_evidence_and_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "passed=False, schema_errors=['missing manifest C:\\\\Users\\\\wangz\\\\robotics_massive_pool_paper_factory\\\\119_energy_landscape_skill_composition\\\\external_validation\\\\manifest.json']",
+      "name": "strict_rollout_metrics_still_fail_without_manifest",
+      "passed": true
+    },
+    {
+      "detail": "expected=1440, observed=0",
+      "name": "preflight_ready_but_observes_zero_real_records",
+      "passed": true
+    },
+    {
+      "detail": "records=1440, tasks=4, methods=12",
+      "name": "collection_plan_record_budget_ge_1440",
+      "passed": true
+    },
+    {
+      "detail": "tasks=['cable_route_insert', 'door_open_navigation', 'drawer_to_pick_transfer', 'peg_place_regrasp']",
+      "name": "task_work_orders_cover_all_planned_tasks",
+      "passed": true
+    },
+    {
+      "detail": "python scripts\\build_external_rollout_evidence_packet.py\npython scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json\npython scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map\npython external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map\npython scripts\\build_external_manifest.py --write --check-video-paths\npython scripts\\validate_external_configs.py --strict\npython scripts\\validate_external_adapters.py --strict\npython scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict\npython scripts\\audit_external_pairing_integrity.py --strict\npython scripts\\audit_external_release_package.py --strict\npython scripts\\audit_external_evidence.py --strict",
+      "name": "strict_commands_cover_collection_manifest_rollout_pairing_release_evidence",
+      "passed": true
+    },
+    {
+      "detail": "pairing_ready=False, release_package_ready=False, submission_ready=False",
+      "name": "strict_gate_audits_remain_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "manifest_exists=False, log_files=0, video_dirs=0",
+      "name": "no_real_manifest_or_logs_written",
+      "passed": true
+    },
+    {
+      "detail": "packet_json=True, packet_md=True, csv=True",
+      "name": "packet_files_written",
+      "passed": true
+    }
+  ],
+  "expected_records": 1440,
+  "failed_checks": [],
+  "method_count": 12,
+  "not_external_evidence": true,
+  "observed_records": 0,
+  "packet_path": "external_validation/rollout_evidence_packet.json",
+  "passed": true,
+  "rollout_evidence_packet_ready": true,
+  "strict_external_evidence_ready": false,
+  "strict_rollout_evidence_ready": false,
+  "task_count": 4,
+  "version": "external_rollout_evidence_audit_v1",
+  "work_orders_path": "external_validation/rollout_evidence_work_orders.csv"
+}

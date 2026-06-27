@@ -27,6 +27,7 @@
 - External backend contract validator: `scripts/audit_external_backend_contract.py`
 - External backend integration packet builder: `scripts/build_external_backend_integration_packet.py`
 - External config manifest packet builder: `scripts/build_external_config_manifest_packet.py`
+- External rollout evidence packet builder: `scripts/build_external_rollout_evidence_packet.py`
 - External collection readiness validator: `scripts/audit_external_collection_readiness.py`
 - External config validator: `scripts/validate_external_configs.py`
 - External baseline contract builder: `scripts/build_external_baseline_contract.py`
@@ -127,6 +128,11 @@
   - `external_validation/config_manifest_work_orders.csv`
   - `results/external_config_manifest_audit.json`
   - `results/external_config_manifest_audit.md`
+  - `external_validation/rollout_evidence_packet.json`
+  - `external_validation/rollout_evidence_packet.md`
+  - `external_validation/rollout_evidence_work_orders.csv`
+  - `results/external_rollout_evidence_audit.json`
+  - `results/external_rollout_evidence_audit.md`
   - `results/external_runbook_audit.json`
   - `results/external_runbook_audit.md`
   - `results/external_collection_readiness_audit.json`
@@ -186,6 +192,9 @@
   - `external_validation/config_manifest_packet.json`
   - `external_validation/config_manifest_packet.md`
   - `external_validation/config_manifest_work_orders.csv`
+  - `external_validation/rollout_evidence_packet.json`
+  - `external_validation/rollout_evidence_packet.md`
+  - `external_validation/rollout_evidence_work_orders.csv`
   - `external_validation/platform_qualification_checklist.md`
   - `external_validation/backend_integration_packet.json`
   - `external_validation/backend_integration_packet.md`

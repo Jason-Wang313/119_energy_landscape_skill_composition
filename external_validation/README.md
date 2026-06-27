@@ -42,6 +42,14 @@ python scripts\build_external_config_manifest_packet.py
 
 This writes `external_validation/config_manifest_packet.{json,md}`, `external_validation/config_manifest_work_orders.csv`, and `results/external_config_manifest_audit.{json,md}`. It turns prepared task configs into manifest-declaration and hash-lock work orders. It is not evidence and still reports strict config evidence as missing until a real manifest, rollout logs, videos, and artifact hashes exist.
 
+Build the external rollout evidence packet:
+
+```powershell
+python scripts\build_external_rollout_evidence_packet.py
+```
+
+This writes `external_validation/rollout_evidence_packet.{json,md}`, `external_validation/rollout_evidence_work_orders.csv`, and `results/external_rollout_evidence_audit.{json,md}`. It turns the missing raw JSONL logs, videos, manifest writing, strict rollout recomputation, pairing, release, and final evidence gates into work orders. It is not evidence and still reports strict rollout and external evidence as missing until real manifest-declared artifacts exist.
+
 Build the independent operator packet:
 
 ```powershell

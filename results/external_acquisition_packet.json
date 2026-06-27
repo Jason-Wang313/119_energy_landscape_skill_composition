@@ -2,7 +2,7 @@
   "acquisition_packet_ready": true,
   "checks": [
     {
-      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_onboarding_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/external_config_manifest_audit.json, results/external_method_implementation_audit.json",
+      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_onboarding_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/external_config_manifest_audit.json, results/external_rollout_evidence_audit.json, results/external_method_implementation_audit.json",
       "name": "source_audits_exist",
       "passed": true
     },
@@ -52,6 +52,11 @@
       "passed": true
     },
     {
+      "detail": "rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False",
+      "name": "rollout_evidence_packet_ready",
+      "passed": true
+    },
+    {
       "detail": "method_implementation_packet_ready=True, strict_adapter_evidence_ready=False",
       "name": "method_implementation_packet_ready",
       "passed": true
@@ -82,7 +87,7 @@
       "passed": true
     },
     {
-      "detail": "Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Fill platform fidelity acceptance with real provenance Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
+      "detail": "Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Fill platform fidelity acceptance with real provenance Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
       "name": "operator_actions_cover_collection_blockers",
       "passed": true
     },
@@ -104,6 +109,7 @@
       "mapped_actions": [
         "platform_onboarding",
         "backend_integration_packet",
+        "rollout_evidence_packet",
         "backend_module",
         "platform_fidelity",
         "run_collection",
@@ -114,6 +120,7 @@
     {
       "blocker": "strict rollout validation does not pass because external_validation/manifest.json and raw logs are missing",
       "mapped_actions": [
+        "rollout_evidence_packet",
         "run_collection",
         "strict_rollout_recompute"
       ],
@@ -225,6 +232,26 @@
       "id": "config_manifest_packet",
       "operator_input": "manifest-declare prepared configs with hashes only after real platform, log, and video artifacts exist",
       "title": "Use the config manifest packet as the task-config evidence checklist"
+    },
+    {
+      "artifacts": [
+        "external_validation/rollout_evidence_packet.md",
+        "external_validation/rollout_evidence_work_orders.csv",
+        "results/external_rollout_evidence_audit.json"
+      ],
+      "closes": [
+        "Independent real-robot or accepted high-fidelity external validation evidence",
+        "External rollout metrics recomputed from raw JSONL logs"
+      ],
+      "commands": [
+        "python scripts\\build_external_rollout_evidence_packet.py",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "id": "rollout_evidence_packet",
+      "operator_input": "complete the rollout work orders with manifest-declared JSONL logs, videos, config hashes, method hashes, and strict recomputation",
+      "title": "Use the rollout evidence packet as the raw-log evidence checklist"
     },
     {
       "artifacts": [
@@ -408,6 +435,7 @@
     "results/external_backend_contract_audit.json",
     "results/external_backend_integration_audit.json",
     "results/external_config_manifest_audit.json",
+    "results/external_rollout_evidence_audit.json",
     "results/external_method_implementation_audit.json"
   ],
   "strict_collection_command": "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",

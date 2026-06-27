@@ -131,6 +131,11 @@
       "evidence": ["scripts/build_external_config_manifest_packet.py", "external_validation/config_manifest_packet.json", "external_validation/config_manifest_packet.md", "external_validation/config_manifest_work_orders.csv", "results/external_config_manifest_audit.json", "results/external_config_manifest_audit.md", "results/external_config_materialization_plan.json", "results/external_config_evidence_audit.json"]
     },
     {
+      "name": "external_rollout_evidence_packet_claim",
+      "claim": "The repository provides a non-evidence rollout evidence packet that turns the missing raw JSONL rollout, video, manifest, pairing, release, and strict recomputation layer into operator work orders while strict rollout and external evidence remain false.",
+      "evidence": ["scripts/build_external_rollout_evidence_packet.py", "external_validation/rollout_evidence_packet.json", "external_validation/rollout_evidence_packet.md", "external_validation/rollout_evidence_work_orders.csv", "results/external_rollout_evidence_audit.json", "results/external_rollout_evidence_audit.md", "results/external_rollout_metrics.json", "results/external_evidence_preflight.json"]
+    },
+    {
       "name": "external_baseline_contract_claim",
       "claim": "The repository provides a non-evidence baseline implementation contract, method matrix, and per-method adapter specs, while explicitly recording that independent non-oracle implementations are still missing.",
       "evidence": ["scripts/build_external_baseline_contract.py", "external_validation/baseline_implementation_contract.md", "external_validation/baseline_implementation_matrix.csv", "external_validation/baseline_specs/barrier_certified_energy_composer_v5.json", "external_validation/baseline_specs/oracle_basin_composer.json", "results/external_baseline_contract_audit.json", "results/external_baseline_contract_audit.md"]
@@ -248,12 +253,14 @@
     "external_validation/platform_onboarding_packet.md",
     "external_validation/backend_integration_packet.md",
     "external_validation/config_manifest_packet.md",
+    "external_validation/rollout_evidence_packet.md",
     "external_validation/method_implementation_packet.md",
     "external_validation/README.md",
     "results/external_analysis_plan_audit.md",
     "results/external_platform_onboarding_audit.md",
     "results/external_backend_integration_audit.md",
     "results/external_config_manifest_audit.md",
+    "results/external_rollout_evidence_audit.md",
     "results/external_method_implementation_audit.md",
     "results/external_operator_packet.md",
     "results/external_operator_handoff_bundle.md",

@@ -120,6 +120,7 @@ def main():
         "scripts\\self_test_external_config_evidence.py",
         "scripts\\materialize_external_configs.py",
         "scripts\\build_external_config_manifest_packet.py",
+        "scripts\\build_external_rollout_evidence_packet.py",
         "scripts\\build_external_baseline_contract.py",
         "scripts\\build_external_adapter_scaffolds.py",
         "scripts\\build_external_reference_adapters.py",
@@ -183,6 +184,7 @@ def main():
         "python scripts/self_test_external_adapter_evidence.py",
         "python scripts/materialize_external_configs.py",
         "python scripts/build_external_config_manifest_packet.py",
+        "python scripts/build_external_rollout_evidence_packet.py",
         "python scripts/build_external_analysis_plan.py",
         "python scripts/build_external_platform_onboarding.py",
         "python scripts/build_external_backend_integration_packet.py",
@@ -235,6 +237,8 @@ def main():
         fail("external collection plan must include the backend integration packet command")
     if "python scripts\\build_external_config_manifest_packet.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the config manifest packet command")
+    if "python scripts\\build_external_rollout_evidence_packet.py" not in collection_plan.get("validation_commands", []):
+        fail("external collection plan must include the rollout evidence packet command")
     if "python scripts\\build_external_method_implementation_packet.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the method implementation packet command")
     if "python scripts\\validate_external_adapters.py --strict" not in collection_plan.get("validation_commands", []):
@@ -1655,6 +1659,10 @@ def main():
         "external_config_manifest_not_evidence",
         "external_config_manifest_covers_manifest_config_blocker",
         "external_config_manifest_gate_order",
+        "external_rollout_evidence_packet_ready",
+        "external_rollout_evidence_not_evidence",
+        "external_rollout_evidence_covers_raw_log_blocker",
+        "external_rollout_evidence_gate_order",
         "baseline_contract_reports_missing_implementations",
         "adapter_contract_harness_ready",
         "strict_evidence_gates_remain_not_ready",
@@ -1695,11 +1703,15 @@ def main():
         EXTERNAL / "config_manifest_packet.json",
         EXTERNAL / "config_manifest_packet.md",
         EXTERNAL / "config_manifest_work_orders.csv",
+        EXTERNAL / "rollout_evidence_packet.json",
+        EXTERNAL / "rollout_evidence_packet.md",
+        EXTERNAL / "rollout_evidence_work_orders.csv",
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "external_config_manifest_audit.md",
+        RESULTS / "external_rollout_evidence_audit.md",
         RESULTS / "external_config_materialization_plan.md",
         RESULTS / "external_execution_readiness_audit.md",
         RESULTS / "external_fidelity_acceptance_audit.md",
@@ -1732,6 +1744,7 @@ def main():
         "config_intake_directory_tracked",
         "config_materializer_ready",
         "config_manifest_packet_ready",
+        "rollout_evidence_packet_ready",
         "backend_contract_gate_ready",
         "backend_integration_packet_ready",
         "method_implementation_packet_ready",
@@ -1777,6 +1790,11 @@ def main():
         fail("external operator packet missing config_manifest_packet action")
     if "build_external_config_manifest_packet.py" not in "\n".join(config_manifest_actions[0].get("commands", []) or []):
         fail("external operator packet config manifest action must rebuild the config manifest packet")
+    rollout_evidence_actions = [action for action in operator_actions if action.get("id") == "rollout_evidence_packet"]
+    if not rollout_evidence_actions:
+        fail("external operator packet missing rollout_evidence_packet action")
+    if "build_external_rollout_evidence_packet.py" not in "\n".join(rollout_evidence_actions[0].get("commands", []) or []):
+        fail("external operator packet rollout evidence action must rebuild the rollout evidence packet")
     method_actions = [action for action in operator_actions if action.get("id") == "method_implementation_packet"]
     if not method_actions:
         fail("external operator packet missing method_implementation_packet action")
@@ -1843,6 +1861,7 @@ def main():
         "platform_onboarding_included",
         "backend_integration_packet_included",
         "config_manifest_packet_included",
+        "rollout_evidence_packet_included",
         "method_implementation_packet_included",
         "operator_actions_cover_evidence_collection",
         "post_collection_commands_cover_strict_gates",
@@ -1942,6 +1961,83 @@ def main():
     ):
         if config_manifest_checks.get(required_check) is not True:
             fail(f"external config manifest audit missing passing check: {required_check}")
+
+    rollout_packet_path = EXTERNAL / "rollout_evidence_packet.json"
+    rollout_packet_md_path = EXTERNAL / "rollout_evidence_packet.md"
+    rollout_orders_path = EXTERNAL / "rollout_evidence_work_orders.csv"
+    rollout_audit_path = RESULTS / "external_rollout_evidence_audit.json"
+    rollout_audit_md_path = RESULTS / "external_rollout_evidence_audit.md"
+    for path in (
+        ROOT / "scripts" / "build_external_rollout_evidence_packet.py",
+        rollout_packet_path,
+        rollout_packet_md_path,
+        rollout_orders_path,
+        rollout_audit_path,
+        rollout_audit_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external rollout evidence packet artifact: {path}")
+    rollout_packet = json.loads(rollout_packet_path.read_text(encoding="utf-8"))
+    rollout_audit = json.loads(rollout_audit_path.read_text(encoding="utf-8"))
+    if rollout_packet.get("version") != "external_rollout_evidence_packet_v1":
+        fail("external rollout evidence packet version mismatch")
+    if rollout_packet.get("not_external_evidence") is not True:
+        fail("external rollout evidence packet must declare that it is not evidence")
+    if rollout_packet.get("rollout_evidence_packet_ready") is not True:
+        fail("external rollout evidence packet must report rollout_evidence_packet_ready=true")
+    if rollout_packet.get("strict_rollout_evidence_ready") is not False:
+        fail("external rollout evidence packet must not claim strict rollout evidence readiness")
+    if rollout_packet.get("strict_external_evidence_ready") is not False:
+        fail("external rollout evidence packet must not claim strict external evidence readiness")
+    if rollout_packet.get("manifest_written") is not False:
+        fail("external rollout evidence packet must not write the real manifest")
+    if int(rollout_packet.get("expected_records", 0) or 0) < 1440:
+        fail("external rollout evidence packet has too few expected records")
+    if int(rollout_packet.get("observed_records", -1) or 0) != 0:
+        fail("external rollout evidence packet must still observe zero real records before collection")
+    if int(rollout_packet.get("task_count", 0) or 0) < 4:
+        fail("external rollout evidence packet covers too few tasks")
+    if len(rollout_packet.get("work_orders", []) or []) < 9:
+        fail("external rollout evidence packet has too few work orders")
+    command_text = "\n".join(rollout_packet.get("strict_acceptance_commands", []) or [])
+    for fragment in (
+        "build_external_rollout_evidence_packet.py",
+        "audit_external_collection_readiness.py --strict",
+        "real_collection_runner.py",
+        "build_external_manifest.py --write",
+        "validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "audit_external_pairing_integrity.py --strict",
+        "audit_external_release_package.py --strict",
+        "audit_external_evidence.py --strict",
+    ):
+        if fragment not in command_text:
+            fail(f"external rollout evidence packet missing strict command fragment: {fragment}")
+    if rollout_audit.get("version") != "external_rollout_evidence_audit_v1":
+        fail("external rollout evidence audit version mismatch")
+    if rollout_audit.get("passed") is not True:
+        fail("external rollout evidence audit did not pass")
+    if rollout_audit.get("not_external_evidence") is not True:
+        fail("external rollout evidence audit must declare that it is not evidence")
+    if rollout_audit.get("rollout_evidence_packet_ready") is not True:
+        fail("external rollout evidence audit must report rollout_evidence_packet_ready=true")
+    if rollout_audit.get("strict_rollout_evidence_ready") is not False:
+        fail("external rollout evidence audit must keep strict rollout evidence false")
+    if rollout_audit.get("strict_external_evidence_ready") is not False:
+        fail("external rollout evidence audit must keep strict external evidence false")
+    rollout_checks = {check.get("name"): check.get("passed") for check in rollout_audit.get("checks", [])}
+    for required_check in (
+        "packet_is_non_evidence_and_fail_closed",
+        "strict_rollout_metrics_still_fail_without_manifest",
+        "preflight_ready_but_observes_zero_real_records",
+        "collection_plan_record_budget_ge_1440",
+        "task_work_orders_cover_all_planned_tasks",
+        "strict_commands_cover_collection_manifest_rollout_pairing_release_evidence",
+        "strict_gate_audits_remain_fail_closed",
+        "no_real_manifest_or_logs_written",
+        "packet_files_written",
+    ):
+        if rollout_checks.get(required_check) is not True:
+            fail(f"external rollout evidence audit missing passing check: {required_check}")
 
     expected_files = {
         "dataset_summary": RESULTS / "dataset_summary.csv",
@@ -2146,6 +2242,7 @@ def main():
         "platform_onboarding_visible",
         "backend_integration_packet_visible",
         "config_manifest_packet_visible",
+        "rollout_evidence_packet_visible",
         "method_implementation_packet_visible",
         "materializer_guard_visible",
         "ledger_tracks_new_visible_claims",

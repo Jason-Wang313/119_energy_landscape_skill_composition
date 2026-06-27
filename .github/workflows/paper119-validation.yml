@@ -88,6 +88,21 @@ jobs:
       - name: Build external platform onboarding
         run: python scripts/build_external_platform_onboarding.py
 
+      - name: Audit external release package
+        run: python scripts/audit_external_release_package.py
+
+      - name: Validate external rollouts
+        run: python scripts/validate_external_rollouts.py --write-results
+
+      - name: Audit external pairing integrity
+        run: python scripts/audit_external_pairing_integrity.py
+
+      - name: Audit external evidence
+        run: python scripts/audit_external_evidence.py
+
+      - name: Build external rollout evidence packet
+        run: python scripts/build_external_rollout_evidence_packet.py
+
       - name: Build external acquisition packet
         run: python scripts/build_external_acquisition_packet.py
 
@@ -97,14 +112,8 @@ jobs:
       - name: Build external operator handoff bundle
         run: python scripts/build_external_operator_handoff_bundle.py
 
-      - name: Audit external release package
-        run: python scripts/audit_external_release_package.py
-
       - name: Self-test external release package
         run: python scripts/self_test_external_release_package.py
-
-      - name: Audit external pairing integrity
-        run: python scripts/audit_external_pairing_integrity.py
 
       - name: Self-test external pairing integrity
         run: python scripts/self_test_external_pairing_integrity.py

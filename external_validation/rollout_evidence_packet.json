@@ -1,0 +1,281 @@
+{
+  "expected_records": 1440,
+  "external_evidence_ready": false,
+  "forbidden_evidence_shortcuts": [
+    "treating external_validation/local_dry_run logs as external evidence",
+    "hand-entering manifest metrics without recomputing from JSONL logs",
+    "using rollout rows that do not have manifest-declared configs, videos, and method hashes",
+    "unsealing aliases before configs, implementations, and run id are frozen",
+    "counting logs without paired-reset method panels across the declared methods"
+  ],
+  "log_schema_version": "external_log_schema_v1",
+  "manifest_written": false,
+  "method_count": 12,
+  "not_external_evidence": true,
+  "observed_records": 0,
+  "paired_comparison_key": [
+    "task_family",
+    "platform_type",
+    "scene_id",
+    "seed",
+    "skill_i",
+    "skill_j",
+    "initial_state_hash"
+  ],
+  "pairing_ready": false,
+  "primary_method": "barrier_certified_energy_composer_v5",
+  "primary_thresholds": {
+    "external_success_margin": 0.05,
+    "external_utility_margin": 0.08,
+    "fixed_risk_breach": 0.02,
+    "fixed_risk_coverage": 0.55,
+    "paired_win_rate": 0.7,
+    "positive_task_families": 3
+  },
+  "purpose": "Convert the current external rollout blocker into manifest-declared raw-log, video, pairing, release, and recomputation work orders.",
+  "real_manifest_exists": false,
+  "release_package_ready": false,
+  "rollout_evidence_packet_ready": true,
+  "rollout_metrics_passed": false,
+  "rollout_schema_errors": [
+    "missing manifest C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\manifest.json"
+  ],
+  "source_reports": [
+    "results/external_collection_plan.json",
+    "results/external_evidence_preflight.json",
+    "results/external_rollout_metrics.json",
+    "results/external_pairing_integrity_audit.json",
+    "results/external_release_package_audit.json",
+    "results/external_evidence_audit.json",
+    "external_validation/log_schema_v1.json"
+  ],
+  "strict_acceptance_commands": [
+    "python scripts\\build_external_rollout_evidence_packet.py",
+    "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+    "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\validate_external_adapters.py --strict",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "strict_external_evidence_ready": false,
+  "strict_rollout_evidence_ready": false,
+  "task_count": 4,
+  "task_rollout_records": [
+    {
+      "config_exists": true,
+      "config_path": "external_validation/configs/peg_place_regrasp.json",
+      "episodes_per_method": 30,
+      "expected_records": 360,
+      "log_exists": false,
+      "log_jsonl": "external_validation/logs/peg_place_regrasp.jsonl",
+      "method_count": 12,
+      "observed_records": 0,
+      "platform_name": "",
+      "platform_type": "high_fidelity_sim",
+      "preflight_missing": [
+        "platform_name is empty",
+        "log_jsonl is missing: external_validation/logs/peg_place_regrasp.jsonl",
+        "video_dir is missing: external_validation/videos/peg_place_regrasp",
+        "config_hash is empty"
+      ],
+      "task_family": "peg_place_regrasp",
+      "video_dir": "external_validation/videos/peg_place_regrasp",
+      "video_dir_exists": false
+    },
+    {
+      "config_exists": true,
+      "config_path": "external_validation/configs/drawer_to_pick_transfer.json",
+      "episodes_per_method": 30,
+      "expected_records": 360,
+      "log_exists": false,
+      "log_jsonl": "external_validation/logs/drawer_to_pick_transfer.jsonl",
+      "method_count": 12,
+      "observed_records": 0,
+      "platform_name": "",
+      "platform_type": "high_fidelity_sim",
+      "preflight_missing": [
+        "platform_name is empty",
+        "log_jsonl is missing: external_validation/logs/drawer_to_pick_transfer.jsonl",
+        "video_dir is missing: external_validation/videos/drawer_to_pick_transfer",
+        "config_hash is empty"
+      ],
+      "task_family": "drawer_to_pick_transfer",
+      "video_dir": "external_validation/videos/drawer_to_pick_transfer",
+      "video_dir_exists": false
+    },
+    {
+      "config_exists": true,
+      "config_path": "external_validation/configs/door_open_navigation.json",
+      "episodes_per_method": 30,
+      "expected_records": 360,
+      "log_exists": false,
+      "log_jsonl": "external_validation/logs/door_open_navigation.jsonl",
+      "method_count": 12,
+      "observed_records": 0,
+      "platform_name": "",
+      "platform_type": "high_fidelity_sim",
+      "preflight_missing": [
+        "platform_name is empty",
+        "log_jsonl is missing: external_validation/logs/door_open_navigation.jsonl",
+        "video_dir is missing: external_validation/videos/door_open_navigation",
+        "config_hash is empty"
+      ],
+      "task_family": "door_open_navigation",
+      "video_dir": "external_validation/videos/door_open_navigation",
+      "video_dir_exists": false
+    },
+    {
+      "config_exists": true,
+      "config_path": "external_validation/configs/cable_route_insert.json",
+      "episodes_per_method": 30,
+      "expected_records": 360,
+      "log_exists": false,
+      "log_jsonl": "external_validation/logs/cable_route_insert.jsonl",
+      "method_count": 12,
+      "observed_records": 0,
+      "platform_name": "",
+      "platform_type": "high_fidelity_sim",
+      "preflight_missing": [
+        "platform_name is empty",
+        "log_jsonl is missing: external_validation/logs/cable_route_insert.jsonl",
+        "video_dir is missing: external_validation/videos/cable_route_insert",
+        "config_hash is empty"
+      ],
+      "task_family": "cable_route_insert",
+      "video_dir": "external_validation/videos/cable_route_insert",
+      "video_dir_exists": false
+    }
+  ],
+  "version": "external_rollout_evidence_packet_v1",
+  "work_orders": [
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_rollout_evidence_packet.py",
+        "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
+        "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map"
+      ],
+      "id": "freeze_rollout_manifest_contract",
+      "operator_input": "freeze platform identity, method aliases, task configs, backend module, run id, and paired reset schedule before collecting logs",
+      "required_artifacts": [
+        "external_validation/fidelity_acceptance.json",
+        "external_validation/method_alias_map.json",
+        "external_validation/configs/*.json"
+      ],
+      "scope": "all_tasks"
+    },
+    {
+      "acceptance_commands": [
+        "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map"
+      ],
+      "id": "collect_manifest_declared_rollout_logs",
+      "operator_input": "run the non-template backend to produce one manifest-declared JSONL record for each task-method-reset episode",
+      "required_artifacts": [
+        "external_validation/logs/*.jsonl"
+      ],
+      "scope": "all_tasks"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\validate_external_configs.py --strict",
+        "python scripts\\validate_external_adapters.py --strict"
+      ],
+      "id": "bind_videos_configs_and_method_hashes",
+      "operator_input": "ensure every JSONL record points to an existing video, manifest-declared config hash, and method policy/config hash",
+      "required_artifacts": [
+        "external_validation/videos/<task_family>/*",
+        "external_validation/manifest.json",
+        "external_validation/configs/*.json"
+      ],
+      "scope": "all_tasks"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+      ],
+      "id": "recompute_rollout_metrics_from_raw_jsonl",
+      "operator_input": "recompute external metrics from the raw JSONL logs with video-path checks enabled; do not hand-enter metrics",
+      "required_artifacts": [
+        "results/external_rollout_metrics.json",
+        "results/external_rollout_metrics.md"
+      ],
+      "scope": "all_tasks"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_release_package.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "id": "run_pairing_release_and_final_evidence_gates",
+      "operator_input": "only after logs/videos/configs/method hashes are real, run the paired-reset, release-package, and final evidence gates",
+      "required_artifacts": [
+        "results/external_pairing_integrity_audit.json",
+        "results/external_release_package_audit.json",
+        "results/external_evidence_audit.json"
+      ],
+      "scope": "all_tasks"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict"
+      ],
+      "id": "collect_peg_place_regrasp_jsonl_and_videos",
+      "operator_input": "collect 360 paired-reset records for peg_place_regrasp with videos under external_validation/videos/peg_place_regrasp",
+      "required_artifacts": [
+        "external_validation/logs/peg_place_regrasp.jsonl",
+        "external_validation/videos/peg_place_regrasp",
+        "external_validation/configs/peg_place_regrasp.json"
+      ],
+      "scope": "peg_place_regrasp"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict"
+      ],
+      "id": "collect_drawer_to_pick_transfer_jsonl_and_videos",
+      "operator_input": "collect 360 paired-reset records for drawer_to_pick_transfer with videos under external_validation/videos/drawer_to_pick_transfer",
+      "required_artifacts": [
+        "external_validation/logs/drawer_to_pick_transfer.jsonl",
+        "external_validation/videos/drawer_to_pick_transfer",
+        "external_validation/configs/drawer_to_pick_transfer.json"
+      ],
+      "scope": "drawer_to_pick_transfer"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict"
+      ],
+      "id": "collect_door_open_navigation_jsonl_and_videos",
+      "operator_input": "collect 360 paired-reset records for door_open_navigation with videos under external_validation/videos/door_open_navigation",
+      "required_artifacts": [
+        "external_validation/logs/door_open_navigation.jsonl",
+        "external_validation/videos/door_open_navigation",
+        "external_validation/configs/door_open_navigation.json"
+      ],
+      "scope": "door_open_navigation"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict"
+      ],
+      "id": "collect_cable_route_insert_jsonl_and_videos",
+      "operator_input": "collect 360 paired-reset records for cable_route_insert with videos under external_validation/videos/cable_route_insert",
+      "required_artifacts": [
+        "external_validation/logs/cable_route_insert.jsonl",
+        "external_validation/videos/cable_route_insert",
+        "external_validation/configs/cable_route_insert.json"
+      ],
+      "scope": "cable_route_insert"
+    }
+  ]
+}

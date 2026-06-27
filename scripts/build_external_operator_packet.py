@@ -74,6 +74,7 @@ def build_payload() -> dict[str, Any]:
         "backend_integration_packet",
         "backend_module",
         "config_manifest_packet",
+        "rollout_evidence_packet",
         "real_task_configs",
         "platform_fidelity",
         "alias_unseal",
@@ -219,9 +220,10 @@ def build_payload() -> dict[str, Any]:
         "source_reports": [
             "results/external_collection_readiness_audit.json",
             "results/external_acquisition_packet.json",
-            "results/external_backend_contract_audit.json",
-            "results/external_config_materialization_plan.json",
-        ],
+        "results/external_backend_contract_audit.json",
+        "results/external_config_materialization_plan.json",
+        "results/external_rollout_evidence_audit.json",
+    ],
         "checks": checks,
     }
 

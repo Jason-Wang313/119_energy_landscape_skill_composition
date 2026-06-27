@@ -18,6 +18,7 @@ This file is a collection schedule only. It does not count as external validatio
 - `python scripts\build_external_platform_onboarding.py`
 - `python scripts\build_external_backend_integration_packet.py`
 - `python scripts\build_external_config_manifest_packet.py`
+- `python scripts\build_external_rollout_evidence_packet.py`
 - `python scripts\audit_external_fidelity_acceptance.py`
 - `python scripts\build_external_blind_eval_plan.py`
 - `python scripts\audit_external_collection_readiness.py`

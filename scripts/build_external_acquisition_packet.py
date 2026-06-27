@@ -17,12 +17,14 @@ MISSING_REQUIREMENT_ACTIONS = {
     "Independent real-robot or accepted high-fidelity external validation evidence": [
         "platform_onboarding",
         "backend_integration_packet",
+        "rollout_evidence_packet",
         "backend_module",
         "platform_fidelity",
         "run_collection",
         "manifest_and_release",
     ],
     "External rollout metrics recomputed from raw JSONL logs": [
+        "rollout_evidence_packet",
         "run_collection",
         "strict_rollout_recompute",
     ],
@@ -110,6 +112,25 @@ ACTION_CATALOG = {
             "python scripts\\validate_external_configs.py --strict",
         ],
         "closes": ["Manifest-declared real task configs replace non-evidence templates"],
+    },
+    "rollout_evidence_packet": {
+        "title": "Use the rollout evidence packet as the raw-log evidence checklist",
+        "operator_input": "complete the rollout work orders with manifest-declared JSONL logs, videos, config hashes, method hashes, and strict recomputation",
+        "artifacts": [
+            "external_validation/rollout_evidence_packet.md",
+            "external_validation/rollout_evidence_work_orders.csv",
+            "results/external_rollout_evidence_audit.json",
+        ],
+        "commands": [
+            "python scripts\\build_external_rollout_evidence_packet.py",
+            "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+            "python scripts\\audit_external_pairing_integrity.py --strict",
+            "python scripts\\audit_external_evidence.py --strict",
+        ],
+        "closes": [
+            "Independent real-robot or accepted high-fidelity external validation evidence",
+            "External rollout metrics recomputed from raw JSONL logs",
+        ],
     },
     "platform_fidelity": {
         "title": "Fill platform fidelity acceptance with real provenance",
@@ -284,6 +305,7 @@ def main() -> int:
     backend_contract_path = RESULTS / "external_backend_contract_audit.json"
     backend_integration_path = RESULTS / "external_backend_integration_audit.json"
     config_manifest_path = RESULTS / "external_config_manifest_audit.json"
+    rollout_evidence_path = RESULTS / "external_rollout_evidence_audit.json"
     method_packet_path = RESULTS / "external_method_implementation_audit.json"
 
     gap = require_json(gap_path)
@@ -295,6 +317,7 @@ def main() -> int:
     backend_contract = require_json(backend_contract_path)
     backend_integration = require_json(backend_integration_path)
     config_manifest = require_json(config_manifest_path)
+    rollout_evidence = require_json(rollout_evidence_path)
     method_packet = require_json(method_packet_path)
 
     missing_requirements = missing_requirements_from_gap(gap)
@@ -320,6 +343,7 @@ def main() -> int:
                 backend_contract_path,
                 backend_integration_path,
                 config_manifest_path,
+                rollout_evidence_path,
                 method_packet_path,
             ]
         ),
@@ -334,6 +358,7 @@ def main() -> int:
                 backend_contract_path,
                 backend_integration_path,
                 config_manifest_path,
+                rollout_evidence_path,
                 method_packet_path,
             ]
         ),
@@ -449,6 +474,25 @@ def main() -> int:
             f"manifest_declared_config_ready={config_manifest.get('manifest_declared_config_ready')!r}"
         ),
     )
+    rollout_evidence_checks = {check.get("name"): check.get("passed") for check in rollout_evidence.get("checks", []) or []}
+    add_check(
+        checks,
+        "rollout_evidence_packet_ready",
+        rollout_evidence.get("passed") is True
+        and rollout_evidence.get("not_external_evidence") is True
+        and rollout_evidence.get("rollout_evidence_packet_ready") is True
+        and rollout_evidence.get("strict_rollout_evidence_ready") is False
+        and rollout_evidence.get("strict_external_evidence_ready") is False
+        and rollout_evidence_checks.get("task_work_orders_cover_all_planned_tasks") is True
+        and rollout_evidence_checks.get("strict_rollout_metrics_still_fail_without_manifest") is True
+        and (EXTERNAL / "rollout_evidence_packet.md").exists()
+        and (EXTERNAL / "rollout_evidence_work_orders.csv").exists(),
+        (
+            f"rollout_evidence_packet_ready={rollout_evidence.get('rollout_evidence_packet_ready')!r}, "
+            f"strict_rollout_evidence_ready={rollout_evidence.get('strict_rollout_evidence_ready')!r}, "
+            f"strict_external_evidence_ready={rollout_evidence.get('strict_external_evidence_ready')!r}"
+        ),
+    )
     add_check(
         checks,
         "method_implementation_packet_ready",
@@ -510,6 +554,7 @@ def main() -> int:
         "audit_external_backend_contract.py --strict",
         "build_external_backend_integration_packet.py",
         "build_external_config_manifest_packet.py",
+        "build_external_rollout_evidence_packet.py",
         "build_external_platform_onboarding.py",
         "build_external_method_implementation_packet.py",
     ]
@@ -562,6 +607,7 @@ def main() -> int:
                 backend_contract_path,
                 backend_integration_path,
                 config_manifest_path,
+                rollout_evidence_path,
                 method_packet_path,
             ]
             if path.exists()

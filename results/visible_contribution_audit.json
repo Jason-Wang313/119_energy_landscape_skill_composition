@@ -20,7 +20,7 @@
       "passed": true
     },
     {
-      "detail": "files=197, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=203, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -42,6 +42,11 @@
     {
       "detail": "config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False",
       "name": "config_manifest_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False",
+      "name": "rollout_evidence_packet_visible",
       "passed": true
     },
     {

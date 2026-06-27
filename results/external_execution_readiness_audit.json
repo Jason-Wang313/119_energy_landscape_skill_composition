@@ -282,6 +282,26 @@
     },
     {
       "detail": "passed",
+      "name": "external_rollout_evidence_packet_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True, rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False",
+      "name": "external_rollout_evidence_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "checks={'packet_is_non_evidence_and_fail_closed': True, 'strict_rollout_metrics_still_fail_without_manifest': True, 'preflight_ready_but_observes_zero_real_records': True, 'collection_plan_record_budget_ge_1440': True, 'task_work_orders_cover_all_planned_tasks': True, 'strict_commands_cover_collection_manifest_rollout_pairing_release_evidence': True, 'strict_gate_audits_remain_fail_closed': True, 'no_real_manifest_or_logs_written': True, 'packet_files_written': True}",
+      "name": "external_rollout_evidence_covers_raw_log_blocker",
+      "passed": true
+    },
+    {
+      "detail": "checks={'packet_is_non_evidence_and_fail_closed': True, 'strict_rollout_metrics_still_fail_without_manifest': True, 'preflight_ready_but_observes_zero_real_records': True, 'collection_plan_record_budget_ge_1440': True, 'task_work_orders_cover_all_planned_tasks': True, 'strict_commands_cover_collection_manifest_rollout_pairing_release_evidence': True, 'strict_gate_audits_remain_fail_closed': True, 'no_real_manifest_or_logs_written': True, 'packet_files_written': True}",
+      "name": "external_rollout_evidence_gate_order",
+      "passed": true
+    },
+    {
+      "detail": "passed",
       "name": "baseline_contract_ready",
       "passed": true
     },
@@ -366,12 +386,12 @@
       "passed": true
     },
     {
-      "detail": "missing_requirements=4, operator_actions=15",
+      "detail": "missing_requirements=4, operator_actions=16",
       "name": "external_acquisition_packet_maps_all_blockers",
       "passed": true
     },
     {
-      "detail": "checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'backend_integration_packet_ready': True, 'config_manifest_packet_ready': True, 'method_implementation_packet_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'platform_onboarding_ready': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}",
+      "detail": "checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'backend_integration_packet_ready': True, 'config_manifest_packet_ready': True, 'rollout_evidence_packet_ready': True, 'method_implementation_packet_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'platform_onboarding_ready': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}",
       "name": "external_acquisition_packet_backend_gate",
       "passed": true
     },
@@ -411,7 +431,7 @@
       "passed": true
     },
     {
-      "detail": "included_file_count=197, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 50, 'operator_command_source': 19, 'operator_facing_input': 39, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "included_file_count=203, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 52, 'operator_command_source': 20, 'operator_facing_input': 42, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "external_operator_handoff_bundle_hash_manifest",
       "passed": true
     },
@@ -460,6 +480,7 @@
     "actual collection preflight cleared with backend, real configs, fidelity acceptance, alias unsealing, and specific run id",
     "manifest-declared task configs with hashes",
     "completed config manifest packet work orders with manifest-declared config hashes",
+    "completed rollout evidence packet work orders with manifest-declared JSONL logs and videos",
     "manifest-declared videos",
     "manifest-declared independent non-oracle adapter implementations",
     "completed method implementation packet work orders with source/config/checkpoint hashes",
