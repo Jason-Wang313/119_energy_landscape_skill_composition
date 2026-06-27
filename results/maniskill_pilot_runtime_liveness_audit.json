@@ -1,0 +1,57 @@
+{
+  "blocking_missing": [
+    "bounded ManiSkill reference runner did not produce a complete schema-valid pilot row/video on this machine; use an accepted GPU/render machine or fix the backend before official collection"
+  ],
+  "checks": [
+    {
+      "detail": "the guard writes only a liveness report and quarantined pilot_runtime_guard outputs",
+      "name": "runtime_guard_is_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "log_dir=external_validation/pilot_runtime_guard/logs, video_dir=external_validation/pilot_runtime_guard/videos",
+      "name": "quarantine_paths_are_not_official_evidence",
+      "passed": true
+    },
+    {
+      "detail": "timeout_seconds=60, timed_out=True, returncode=None",
+      "name": "bounded_runner_subprocess_exercised",
+      "passed": true
+    },
+    {
+      "detail": "pilot_runtime_ready=False",
+      "name": "timeout_or_result_recorded_as_readiness_state",
+      "passed": true
+    },
+    {
+      "detail": "records=0, videos=0, schema_errors=0",
+      "name": "ready_requires_schema_valid_records_and_videos",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json remains absent",
+      "name": "no_real_manifest_written",
+      "passed": true
+    }
+  ],
+  "command": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\python.exe external_validation/runner/real_collection_runner.py --backend-module external_validation/runner/maniskill_reference_backend.py --task-config-dir external_validation/configs --output-log-dir external_validation/pilot_runtime_guard/logs --video-dir external_validation/pilot_runtime_guard/videos --run-id paper119_pilot_runtime_guard_local_20260628 --unsealed-alias-map --max-rows 1 --force",
+  "log_dir": "external_validation/pilot_runtime_guard/logs",
+  "log_files": [],
+  "max_rows": 1,
+  "not_external_evidence": true,
+  "passed": true,
+  "pilot_runtime_ready": false,
+  "readiness_state": "PILOT_RUNTIME_NOT_READY",
+  "records_observed": 0,
+  "returncode": null,
+  "run_id": "paper119_pilot_runtime_guard_local_20260628",
+  "schema_errors": [],
+  "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 07:23:35,266 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+  "stdout_tail": "",
+  "strict_external_evidence_ready": false,
+  "timed_out": true,
+  "timeout_seconds": 60,
+  "version": "maniskill_pilot_runtime_liveness_audit_v1",
+  "video_dir": "external_validation/pilot_runtime_guard/videos",
+  "videos_written": 0
+}

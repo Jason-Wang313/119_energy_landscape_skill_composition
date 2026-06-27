@@ -2,7 +2,7 @@
   "acquisition_packet_ready": true,
   "checks": [
     {
-      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_probe.json, results/maniskill_task_binding_probe.json, results/maniskill_env_smoke_probe.json, results/external_platform_onboarding_audit.json, results/external_fidelity_provenance_audit.json, results/external_fidelity_acceptance_draft_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/maniskill_backend_readiness_audit.json, results/maniskill_reference_collection_preflight_audit.json, results/external_config_manifest_audit.json, results/external_rollout_evidence_audit.json, results/external_method_implementation_audit.json, results/external_pilot_smoke_packet_audit.json",
+      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_probe.json, results/maniskill_task_binding_probe.json, results/maniskill_env_smoke_probe.json, results/external_platform_onboarding_audit.json, results/external_fidelity_provenance_audit.json, results/external_fidelity_acceptance_draft_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/maniskill_backend_readiness_audit.json, results/maniskill_reference_collection_preflight_audit.json, results/external_config_manifest_audit.json, results/external_rollout_evidence_audit.json, results/external_method_implementation_audit.json, results/external_pilot_smoke_packet_audit.json, results/maniskill_pilot_runtime_liveness_audit.json",
       "name": "source_audits_exist",
       "passed": true
     },
@@ -72,6 +72,11 @@
       "passed": true
     },
     {
+      "detail": "pilot_runtime_ready=False, timed_out=True, records=0, videos=0",
+      "name": "maniskill_pilot_runtime_liveness_ready",
+      "passed": true
+    },
+    {
       "detail": "method_implementation_packet_ready=True, strict_adapter_evidence_ready=False",
       "name": "method_implementation_packet_ready",
       "passed": true
@@ -132,7 +137,7 @@
       "passed": true
     },
     {
-      "detail": "Probe the selected external platform machine Probe ManiSkill task-family bindings Smoke-test bound ManiSkill environments Probe ManiSkill/SAPIEN fidelity metadata Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Audit the repository ManiSkill/SAPIEN reference backend candidate Audit explicit reference-backend collection preflight Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Fill platform fidelity acceptance with real provenance Generate the tracked ManiSkill fidelity acceptance draft Run a quarantined first-panel backend smoke test Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
+      "detail": "Probe the selected external platform machine Probe ManiSkill task-family bindings Smoke-test bound ManiSkill environments Probe ManiSkill/SAPIEN fidelity metadata Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Audit the repository ManiSkill/SAPIEN reference backend candidate Audit explicit reference-backend collection preflight Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Fill platform fidelity acceptance with real provenance Generate the tracked ManiSkill fidelity acceptance draft Run a quarantined first-panel backend smoke test Audit bounded ManiSkill pilot runtime liveness Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
       "name": "operator_actions_cover_collection_blockers",
       "passed": true
     },
@@ -166,6 +171,7 @@
         "backend_module",
         "platform_fidelity",
         "pilot_smoke_packet",
+        "maniskill_pilot_runtime_liveness",
         "run_collection",
         "manifest_and_release"
       ],
@@ -463,6 +469,22 @@
     },
     {
       "artifacts": [
+        "scripts/audit_maniskill_pilot_runtime_liveness.py",
+        "results/maniskill_pilot_runtime_liveness_audit.json",
+        "results/maniskill_pilot_runtime_liveness_audit.md"
+      ],
+      "closes": [
+        "pre-collection runtime liveness check for the tracked ManiSkill route; not evidence"
+      ],
+      "commands": [
+        "python scripts\\audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 60 --max-rows 1"
+      ],
+      "id": "maniskill_pilot_runtime_liveness",
+      "operator_input": "tracked reference backend, prepared configs, unsealed aliases, pilot-specific run id, and a bounded timeout on the selected runtime machine",
+      "title": "Audit bounded ManiSkill pilot runtime liveness"
+    },
+    {
+      "artifacts": [
         "external_validation/fidelity_provenance_packet.md",
         "external_validation/fidelity_provenance_work_orders.csv",
         "results/external_fidelity_provenance_audit.json"
@@ -655,7 +677,8 @@
     "results/maniskill_backend_readiness_audit.json",
     "results/external_config_manifest_audit.json",
     "results/external_rollout_evidence_audit.json",
-    "results/external_method_implementation_audit.json"
+    "results/external_method_implementation_audit.json",
+    "results/maniskill_pilot_runtime_liveness_audit.json"
   ],
   "strict_collection_command": "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
   "strict_evidence_ready": false,

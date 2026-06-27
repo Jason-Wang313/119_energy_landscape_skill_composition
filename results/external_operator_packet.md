@@ -132,6 +132,7 @@ Post-collection strict gates:
 - `platform_fidelity`: Fill platform fidelity acceptance with real provenance
 - `fidelity_acceptance_draft`: Generate the tracked ManiSkill fidelity acceptance draft
 - `pilot_smoke_packet`: Run a quarantined first-panel backend smoke test
+- `maniskill_pilot_runtime_liveness`: Audit bounded ManiSkill pilot runtime liveness
 - `fidelity_provenance_packet`: Use the fidelity provenance packet as the platform acceptance checklist
 - `alias_unseal`: Unseal method aliases only after configs, implementations, and run plan are frozen
 - `specific_run_id`: Use a specific immutable external run id

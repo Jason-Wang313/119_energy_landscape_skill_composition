@@ -1959,6 +1959,39 @@ def main():
     ):
         if pilot_smoke_packet_checks.get(required_check) is not True:
             fail(f"external pilot smoke packet audit missing passing check: {required_check}")
+    pilot_runtime_path = RESULTS / "maniskill_pilot_runtime_liveness_audit.json"
+    pilot_runtime_md_path = RESULTS / "maniskill_pilot_runtime_liveness_audit.md"
+    for path in (
+        ROOT / "scripts" / "audit_maniskill_pilot_runtime_liveness.py",
+        pilot_runtime_path,
+        pilot_runtime_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing ManiSkill pilot runtime liveness artifact: {path}")
+    pilot_runtime = json.loads(pilot_runtime_path.read_text(encoding="utf-8"))
+    if pilot_runtime.get("version") != "maniskill_pilot_runtime_liveness_audit_v1":
+        fail("ManiSkill pilot runtime liveness audit version mismatch")
+    if pilot_runtime.get("passed") is not True:
+        fail("ManiSkill pilot runtime liveness audit did not pass")
+    if pilot_runtime.get("not_external_evidence") is not True:
+        fail("ManiSkill pilot runtime liveness audit must declare that it is not evidence")
+    if pilot_runtime.get("strict_external_evidence_ready") is not False:
+        fail("ManiSkill pilot runtime liveness audit must not claim strict external evidence readiness")
+    if pilot_runtime.get("pilot_runtime_ready") is not False:
+        fail("current local ManiSkill pilot runtime should remain not ready before accepted runtime evidence")
+    if int(pilot_runtime.get("records_observed", -1) or 0) != 0 or int(pilot_runtime.get("videos_written", -1) or 0) != 0:
+        fail("current local ManiSkill pilot runtime liveness audit should not record pilot rows/videos")
+    pilot_runtime_checks = {check.get("name"): check.get("passed") for check in pilot_runtime.get("checks", [])}
+    for required_check in (
+        "runtime_guard_is_non_evidence",
+        "quarantine_paths_are_not_official_evidence",
+        "bounded_runner_subprocess_exercised",
+        "timeout_or_result_recorded_as_readiness_state",
+        "ready_requires_schema_valid_records_and_videos",
+        "no_real_manifest_written",
+    ):
+        if pilot_runtime_checks.get(required_check) is not True:
+            fail(f"ManiSkill pilot runtime liveness audit missing passing check: {required_check}")
     if not (ROOT / "scripts" / "self_test_external_rollout_validator.py").exists():
         fail("missing scripts/self_test_external_rollout_validator.py")
     rollout_metrics = json.loads(rollout_metrics_path.read_text(encoding="utf-8"))
@@ -2035,6 +2068,8 @@ def main():
         "external_pilot_smoke_not_evidence",
         "external_pilot_smoke_packet_ready",
         "external_pilot_smoke_quarantine_gate",
+        "maniskill_pilot_runtime_liveness_ready",
+        "maniskill_pilot_runtime_liveness_not_evidence",
         "external_backend_contract_ready",
         "external_backend_contract_not_evidence",
         "external_backend_contract_fail_closed",
@@ -2332,6 +2367,12 @@ def main():
     pilot_commands = "\n".join(pilot_actions[0].get("commands", []) or [])
     if "build_external_pilot_smoke_packet.py" not in pilot_commands or "audit_external_pilot_smoke.py" not in pilot_commands:
         fail("external operator packet pilot smoke action must rebuild and audit the pilot smoke packet")
+    pilot_runtime_actions = [action for action in operator_actions if action.get("id") == "maniskill_pilot_runtime_liveness"]
+    if not pilot_runtime_actions:
+        fail("external operator packet missing maniskill_pilot_runtime_liveness action")
+    pilot_runtime_commands = "\n".join(pilot_runtime_actions[0].get("commands", []) or [])
+    if "audit_maniskill_pilot_runtime_liveness.py" not in pilot_runtime_commands:
+        fail("external operator packet liveness action must run the ManiSkill pilot runtime liveness audit")
     if "audit_external_collection_readiness.py --strict" not in operator_packet.get("pre_collection_gate_command", ""):
         fail("external operator packet missing strict pre-collection gate command")
     if "audit_external_backend_contract.py --strict" not in operator_packet.get("backend_contract_gate_command", ""):
@@ -2400,6 +2441,7 @@ def main():
         "config_manifest_packet_included",
         "rollout_evidence_packet_included",
         "pilot_smoke_packet_included",
+        "maniskill_pilot_runtime_liveness_included",
         "method_implementation_packet_included",
         "operator_actions_cover_evidence_collection",
         "post_collection_commands_cover_strict_gates",
@@ -2932,6 +2974,7 @@ def main():
         "config_manifest_packet_visible",
         "rollout_evidence_packet_visible",
         "method_implementation_packet_visible",
+        "maniskill_pilot_runtime_liveness_visible",
         "materializer_guard_visible",
         "planner_edge_policy_visible",
         "ledger_tracks_new_visible_claims",

@@ -470,6 +470,28 @@ def main() -> int:
         f"checks={pilot_packet_checks}",
     )
 
+    pilot_runtime_ok, pilot_runtime, pilot_runtime_detail = passed_json(
+        RESULTS / "maniskill_pilot_runtime_liveness_audit.json",
+        version="maniskill_pilot_runtime_liveness_audit_v1",
+    )
+    add_check(checks, "maniskill_pilot_runtime_liveness_ready", pilot_runtime_ok, pilot_runtime_detail)
+    pilot_runtime_checks = {check.get("name"): check.get("passed") for check in pilot_runtime.get("checks", []) or []}
+    add_check(
+        checks,
+        "maniskill_pilot_runtime_liveness_not_evidence",
+        pilot_runtime.get("not_external_evidence") is True
+        and pilot_runtime.get("strict_external_evidence_ready") is False
+        and pilot_runtime.get("pilot_runtime_ready") is False
+        and pilot_runtime_checks.get("bounded_runner_subprocess_exercised") is True
+        and pilot_runtime_checks.get("timeout_or_result_recorded_as_readiness_state") is True,
+        (
+            f"pilot_runtime_ready={pilot_runtime.get('pilot_runtime_ready')!r}, "
+            f"timed_out={pilot_runtime.get('timed_out')!r}, "
+            f"records={pilot_runtime.get('records_observed')!r}, "
+            f"videos={pilot_runtime.get('videos_written')!r}"
+        ),
+    )
+
     backend_contract_ok, backend_contract, backend_contract_detail = passed_json(
         RESULTS / "external_backend_contract_audit.json",
         version="external_backend_contract_audit_v1",
@@ -1004,6 +1026,7 @@ def main() -> int:
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.md",
         RESULTS / "external_method_implementation_audit.md",
+        RESULTS / "maniskill_pilot_runtime_liveness_audit.md",
         DOCS / "independent_validation_protocol.md",
     ]
     missing_packet_paths = [rel(path) for path in required_packet_paths if not path.exists()]
@@ -1083,6 +1106,8 @@ def main() -> int:
         "external_runner_backend_probe_ready",
         "external_runner_backend_probe_not_evidence",
         "external_runner_backend_probe_exercises_actual_runner_path",
+        "maniskill_pilot_runtime_liveness_ready",
+        "maniskill_pilot_runtime_liveness_not_evidence",
         "external_backend_contract_ready",
         "external_backend_contract_not_evidence",
         "external_backend_contract_fail_closed",
@@ -1173,6 +1198,7 @@ def main() -> int:
             "accepted robot/simulator fidelity acceptance file",
             "completed fidelity provenance packet work orders with accepted platform/contact provenance",
             "preflight-cleared external evidence package",
+            "bounded ManiSkill pilot runtime liveness on the selected runtime machine",
             "released or hash-declared skill/checkpoint artifacts",
         ],
         "checks": checks,

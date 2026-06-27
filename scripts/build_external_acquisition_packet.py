@@ -29,6 +29,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "backend_module",
         "platform_fidelity",
         "pilot_smoke_packet",
+        "maniskill_pilot_runtime_liveness",
         "run_collection",
         "manifest_and_release",
     ],
@@ -264,6 +265,19 @@ ACTION_CATALOG = {
         ],
         "closes": ["operator backend smoke test before official collection; not evidence"],
     },
+    "maniskill_pilot_runtime_liveness": {
+        "title": "Audit bounded ManiSkill pilot runtime liveness",
+        "operator_input": "tracked reference backend, prepared configs, unsealed aliases, pilot-specific run id, and a bounded timeout on the selected runtime machine",
+        "artifacts": [
+            "scripts/audit_maniskill_pilot_runtime_liveness.py",
+            "results/maniskill_pilot_runtime_liveness_audit.json",
+            "results/maniskill_pilot_runtime_liveness_audit.md",
+        ],
+        "commands": [
+            "python scripts\\audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 60 --max-rows 1",
+        ],
+        "closes": ["pre-collection runtime liveness check for the tracked ManiSkill route; not evidence"],
+    },
     "fidelity_provenance_packet": {
         "title": "Use the fidelity provenance packet as the platform acceptance checklist",
         "operator_input": "complete platform physics/contact, paired-reset replay, operator independence, calibration basis, code commit, skill-library hash, and acceptance gates",
@@ -456,6 +470,7 @@ def main() -> int:
     rollout_evidence_path = RESULTS / "external_rollout_evidence_audit.json"
     method_packet_path = RESULTS / "external_method_implementation_audit.json"
     pilot_smoke_path = RESULTS / "external_pilot_smoke_packet_audit.json"
+    pilot_runtime_path = RESULTS / "maniskill_pilot_runtime_liveness_audit.json"
 
     gap = require_json(gap_path)
     collection = require_json(collection_path)
@@ -477,6 +492,7 @@ def main() -> int:
     rollout_evidence = require_json(rollout_evidence_path)
     method_packet = require_json(method_packet_path)
     pilot_smoke = require_json(pilot_smoke_path)
+    pilot_runtime = require_json(pilot_runtime_path)
 
     missing_requirements = missing_requirements_from_gap(gap)
     missing_names = [row.get("requirement", "") for row in missing_requirements]
@@ -511,6 +527,7 @@ def main() -> int:
                 rollout_evidence_path,
                 method_packet_path,
                 pilot_smoke_path,
+                pilot_runtime_path,
             ]
         ),
         ", ".join(
@@ -534,6 +551,7 @@ def main() -> int:
                 rollout_evidence_path,
                 method_packet_path,
                 pilot_smoke_path,
+                pilot_runtime_path,
             ]
         ),
     )
@@ -722,6 +740,26 @@ def main() -> int:
             f"strict_evidence_ready={pilot_smoke.get('strict_evidence_ready')!r}"
         ),
     )
+    pilot_runtime_checks = {check.get("name"): check.get("passed") for check in pilot_runtime.get("checks", []) or []}
+    add_check(
+        checks,
+        "maniskill_pilot_runtime_liveness_ready",
+        pilot_runtime.get("version") == "maniskill_pilot_runtime_liveness_audit_v1"
+        and pilot_runtime.get("passed") is True
+        and pilot_runtime.get("not_external_evidence") is True
+        and pilot_runtime.get("strict_external_evidence_ready") is False
+        and pilot_runtime.get("pilot_runtime_ready") is False
+        and pilot_runtime_checks.get("bounded_runner_subprocess_exercised") is True
+        and pilot_runtime_checks.get("timeout_or_result_recorded_as_readiness_state") is True
+        and (ROOT / "scripts" / "audit_maniskill_pilot_runtime_liveness.py").exists()
+        and (RESULTS / "maniskill_pilot_runtime_liveness_audit.md").exists(),
+        (
+            f"pilot_runtime_ready={pilot_runtime.get('pilot_runtime_ready')!r}, "
+            f"timed_out={pilot_runtime.get('timed_out')!r}, "
+            f"records={pilot_runtime.get('records_observed')!r}, "
+            f"videos={pilot_runtime.get('videos_written')!r}"
+        ),
+    )
     add_check(
         checks,
         "method_implementation_packet_ready",
@@ -889,6 +927,7 @@ def main() -> int:
         "build_external_method_implementation_packet.py",
         "build_external_pilot_smoke_packet.py",
         "audit_external_pilot_smoke.py",
+        "audit_maniskill_pilot_runtime_liveness.py",
     ]
     command_text = "\n".join(post_collection_commands + [cmd for action in actions for cmd in action["commands"]])
     missing_command_fragments = [fragment for fragment in required_command_fragments if fragment not in command_text]
@@ -948,6 +987,7 @@ def main() -> int:
                 config_manifest_path,
                 rollout_evidence_path,
                 method_packet_path,
+                pilot_runtime_path,
             ]
             if path.exists()
         ],

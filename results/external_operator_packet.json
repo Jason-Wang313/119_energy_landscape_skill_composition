@@ -397,6 +397,22 @@
     },
     {
       "artifacts": [
+        "scripts/audit_maniskill_pilot_runtime_liveness.py",
+        "results/maniskill_pilot_runtime_liveness_audit.json",
+        "results/maniskill_pilot_runtime_liveness_audit.md"
+      ],
+      "closes": [
+        "pre-collection runtime liveness check for the tracked ManiSkill route; not evidence"
+      ],
+      "commands": [
+        "python scripts\\audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 60 --max-rows 1"
+      ],
+      "id": "maniskill_pilot_runtime_liveness",
+      "operator_input": "tracked reference backend, prepared configs, unsealed aliases, pilot-specific run id, and a bounded timeout on the selected runtime machine",
+      "title": "Audit bounded ManiSkill pilot runtime liveness"
+    },
+    {
+      "artifacts": [
         "external_validation/fidelity_provenance_packet.md",
         "external_validation/fidelity_provenance_work_orders.csv",
         "results/external_fidelity_provenance_audit.json"
@@ -595,7 +611,8 @@
     "results/external_config_materialization_plan.json",
     "results/external_rollout_evidence_audit.json",
     "results/external_fidelity_provenance_audit.json",
-    "results/external_pilot_smoke_packet_audit.json"
+    "results/external_pilot_smoke_packet_audit.json",
+    "results/maniskill_pilot_runtime_liveness_audit.json"
   ],
   "start_state": "DO_NOT_COLLECT_YET",
   "strict_collection_command": "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",

@@ -136,6 +136,11 @@
       "evidence": ["scripts/build_external_pilot_smoke_packet.py", "scripts/audit_external_pilot_smoke.py", "external_validation/pilot_smoke_packet.json", "external_validation/pilot_smoke_packet.md", "external_validation/pilot_smoke_work_orders.csv", "results/external_pilot_smoke_packet_audit.json", "results/external_pilot_smoke_packet_audit.md", "results/external_pilot_smoke_audit.json", "results/external_pilot_smoke_audit.md"]
     },
     {
+      "name": "maniskill_pilot_runtime_liveness_claim",
+      "claim": "The repository provides a non-evidence bounded ManiSkill pilot runtime liveness audit that launches the tracked reference runner in quarantined output directories, records that the current local CPU/render path times out before producing one schema-valid pilot row/video, and keeps official collection blocked until an accepted runtime path is available.",
+      "evidence": ["scripts/audit_maniskill_pilot_runtime_liveness.py", "results/maniskill_pilot_runtime_liveness_audit.json", "results/maniskill_pilot_runtime_liveness_audit.md", "external_validation/README.md"]
+    },
+    {
       "name": "external_method_implementation_packet_claim",
       "claim": "The repository provides a non-evidence method implementation packet that turns the missing independent non-oracle baseline layer into per-method work orders while strict adapter evidence remains missing.",
       "evidence": ["scripts/build_external_method_implementation_packet.py", "external_validation/method_implementation_packet.json", "external_validation/method_implementation_packet.md", "external_validation/method_implementation_work_orders.csv", "results/external_method_implementation_audit.json", "results/external_method_implementation_audit.md", "results/external_baseline_contract_audit.json", "results/external_adapter_contract_evidence_audit.json"]
@@ -322,6 +327,7 @@
     "results/external_config_manifest_audit.md",
     "results/external_rollout_evidence_audit.md",
     "results/external_method_implementation_audit.md",
+    "results/maniskill_pilot_runtime_liveness_audit.md",
     "results/external_operator_packet.md",
     "results/external_operator_handoff_bundle.md",
     "results/submission_readiness_gap_audit.md"

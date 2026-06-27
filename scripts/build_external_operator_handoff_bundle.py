@@ -143,6 +143,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_rollout_evidence_packet.py",
         SCRIPTS / "audit_external_pilot_smoke.py",
         SCRIPTS / "build_external_pilot_smoke_packet.py",
+        SCRIPTS / "audit_maniskill_pilot_runtime_liveness.py",
         SCRIPTS / "build_external_method_implementation_packet.py",
         SCRIPTS / "materialize_external_configs.py",
         SCRIPTS / "audit_external_backend_contract.py",
@@ -193,6 +194,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_pilot_smoke_audit.md",
         RESULTS / "external_pilot_smoke_packet_audit.json",
         RESULTS / "external_pilot_smoke_packet_audit.md",
+        RESULTS / "maniskill_pilot_runtime_liveness_audit.json",
+        RESULTS / "maniskill_pilot_runtime_liveness_audit.md",
         RESULTS / "external_method_implementation_audit.json",
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "independent_validation_route_audit.json",
@@ -301,6 +304,7 @@ def build_payload() -> dict[str, Any]:
     rollout_evidence = require_payload(RESULTS / "external_rollout_evidence_audit.json", "external_rollout_evidence_audit_v1")
     method_implementation = require_payload(RESULTS / "external_method_implementation_audit.json", "external_method_implementation_audit_v1")
     pilot_smoke = require_payload(RESULTS / "external_pilot_smoke_packet_audit.json", "external_pilot_smoke_packet_audit_v1")
+    pilot_runtime = require_payload(RESULTS / "maniskill_pilot_runtime_liveness_audit.json", "maniskill_pilot_runtime_liveness_audit_v1")
 
     files = build_file_manifest()
     records = file_records(files)
@@ -645,6 +649,23 @@ def build_payload() -> dict[str, Any]:
             f"strict_evidence_ready={pilot_smoke.get('strict_evidence_ready')!r}"
         ),
     )
+    pilot_runtime_checks = {check.get("name"): check.get("passed") for check in pilot_runtime.get("checks", []) or []}
+    add_check(
+        checks,
+        "maniskill_pilot_runtime_liveness_included",
+        pilot_runtime.get("passed") is True
+        and pilot_runtime.get("not_external_evidence") is True
+        and pilot_runtime.get("strict_external_evidence_ready") is False
+        and pilot_runtime.get("pilot_runtime_ready") is False
+        and pilot_runtime_checks.get("bounded_runner_subprocess_exercised") is True
+        and "scripts/audit_maniskill_pilot_runtime_liveness.py" in paths
+        and "results/maniskill_pilot_runtime_liveness_audit.json" in paths
+        and "results/maniskill_pilot_runtime_liveness_audit.md" in paths,
+        (
+            f"pilot_runtime_ready={pilot_runtime.get('pilot_runtime_ready')!r}, "
+            f"timed_out={pilot_runtime.get('timed_out')!r}"
+        ),
+    )
     add_check(
         checks,
         "method_implementation_packet_included",
@@ -682,13 +703,14 @@ def build_payload() -> dict[str, Any]:
             "platform_fidelity",
             "method_implementation_packet",
             "pilot_smoke_packet",
+            "maniskill_pilot_runtime_liveness",
             "real_method_implementations",
             "run_collection",
             "manifest_and_release",
             "strict_rollout_recompute",
             "final_strict_gate",
         }.issubset(action_ids),
-        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
+        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'maniskill_pilot_runtime_liveness', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
     )
     add_check(
         checks,
@@ -741,6 +763,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_rollout_evidence_audit.json",
             "results/external_pilot_smoke_packet_audit.json",
             "results/external_pilot_smoke_audit.json",
+            "results/maniskill_pilot_runtime_liveness_audit.json",
             "results/external_method_implementation_audit.json",
             "results/external_evidence_preflight.json",
             "results/external_release_package_audit.json",

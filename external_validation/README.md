@@ -59,6 +59,14 @@ python scripts\build_external_pilot_smoke_packet.py
 
 This writes `external_validation/pilot_smoke_packet.{json,md}`, `external_validation/pilot_smoke_work_orders.csv`, `results/external_pilot_smoke_audit.{json,md}`, and `results/external_pilot_smoke_packet_audit.{json,md}`. It gives an independent operator a quarantined 12-row first-panel backend smoke test before official collection. Pilot logs and videos must stay under `external_validation/pilot_smoke/` and must never be declared in `external_validation/manifest.json`.
 
+Audit bounded ManiSkill pilot runtime liveness:
+
+```powershell
+python scripts\audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 60 --max-rows 1
+```
+
+This writes `results/maniskill_pilot_runtime_liveness_audit.{json,md}`. It launches the tracked ManiSkill reference runner in quarantined `external_validation/pilot_runtime_guard/` directories with a strict timeout. It is not evidence and does not replace the pilot-smoke packet. The current local report is fail-closed: `pilot_runtime_ready=false`, with zero schema-valid pilot rows/videos before timeout on the CPU/render fallback path. Use an accepted GPU/render machine or fix the backend before official collection.
+
 Build the independent operator packet:
 
 ```powershell

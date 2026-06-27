@@ -25,7 +25,7 @@
       "passed": true
     },
     {
-      "detail": "files=243, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=246, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -92,6 +92,11 @@
     {
       "detail": "pilot_smoke_packet_ready=True, strict_evidence_ready=False",
       "name": "pilot_smoke_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "pilot_runtime_ready=False, timed_out=True, records=0, videos=0",
+      "name": "maniskill_pilot_runtime_liveness_visible",
       "passed": true
     },
     {
