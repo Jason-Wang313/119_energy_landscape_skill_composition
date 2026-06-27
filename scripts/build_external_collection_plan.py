@@ -24,6 +24,8 @@ REQUIRED_COMMANDS = [
     r"python scripts\build_external_backend_integration_packet.py",
     r"python scripts\build_external_config_manifest_packet.py",
     r"python scripts\build_external_rollout_evidence_packet.py",
+    r"python scripts\audit_external_pilot_smoke.py",
+    r"python scripts\build_external_pilot_smoke_packet.py",
     r"python scripts\audit_external_fidelity_acceptance.py",
     r"python scripts\build_external_blind_eval_plan.py",
     r"python scripts\audit_external_collection_readiness.py",

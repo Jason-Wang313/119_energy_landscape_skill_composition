@@ -101,6 +101,9 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "rollout_evidence_packet.json",
         EXTERNAL / "rollout_evidence_packet.md",
         EXTERNAL / "rollout_evidence_work_orders.csv",
+        EXTERNAL / "pilot_smoke_packet.json",
+        EXTERNAL / "pilot_smoke_packet.md",
+        EXTERNAL / "pilot_smoke_work_orders.csv",
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
@@ -129,6 +132,8 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_backend_integration_packet.py",
         SCRIPTS / "build_external_config_manifest_packet.py",
         SCRIPTS / "build_external_rollout_evidence_packet.py",
+        SCRIPTS / "audit_external_pilot_smoke.py",
+        SCRIPTS / "build_external_pilot_smoke_packet.py",
         SCRIPTS / "build_external_method_implementation_packet.py",
         SCRIPTS / "materialize_external_configs.py",
         SCRIPTS / "audit_external_backend_contract.py",
@@ -163,6 +168,10 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.json",
         RESULTS / "external_rollout_evidence_audit.md",
+        RESULTS / "external_pilot_smoke_audit.json",
+        RESULTS / "external_pilot_smoke_audit.md",
+        RESULTS / "external_pilot_smoke_packet_audit.json",
+        RESULTS / "external_pilot_smoke_packet_audit.md",
         RESULTS / "external_method_implementation_audit.json",
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "independent_validation_route_audit.json",
@@ -256,6 +265,7 @@ def build_payload() -> dict[str, Any]:
     config_manifest = require_payload(RESULTS / "external_config_manifest_audit.json", "external_config_manifest_audit_v1")
     rollout_evidence = require_payload(RESULTS / "external_rollout_evidence_audit.json", "external_rollout_evidence_audit_v1")
     method_implementation = require_payload(RESULTS / "external_method_implementation_audit.json", "external_method_implementation_audit_v1")
+    pilot_smoke = require_payload(RESULTS / "external_pilot_smoke_packet_audit.json", "external_pilot_smoke_packet_audit_v1")
 
     files = build_file_manifest()
     records = file_records(files)
@@ -459,6 +469,27 @@ def build_payload() -> dict[str, Any]:
             f"strict_external_evidence_ready={rollout_evidence.get('strict_external_evidence_ready')!r}"
         ),
     )
+    pilot_smoke_checks = {check.get("name"): check.get("passed") for check in pilot_smoke.get("checks", []) or []}
+    add_check(
+        checks,
+        "pilot_smoke_packet_included",
+        pilot_smoke.get("passed") is True
+        and pilot_smoke.get("not_external_evidence") is True
+        and pilot_smoke.get("pilot_smoke_packet_ready") is True
+        and pilot_smoke.get("strict_evidence_ready") is False
+        and pilot_smoke_checks.get("quarantine_dirs_are_separate_from_official_evidence") is True
+        and pilot_smoke_checks.get("pilot_commands_preserve_gate_order") is True
+        and "external_validation/pilot_smoke_packet.json" in paths
+        and "external_validation/pilot_smoke_packet.md" in paths
+        and "external_validation/pilot_smoke_work_orders.csv" in paths
+        and "results/external_pilot_smoke_packet_audit.json" in paths
+        and "scripts/build_external_pilot_smoke_packet.py" in paths
+        and "scripts/audit_external_pilot_smoke.py" in paths,
+        (
+            f"pilot_smoke_packet_ready={pilot_smoke.get('pilot_smoke_packet_ready')!r}, "
+            f"strict_evidence_ready={pilot_smoke.get('strict_evidence_ready')!r}"
+        ),
+    )
     add_check(
         checks,
         "method_implementation_packet_included",
@@ -491,13 +522,14 @@ def build_payload() -> dict[str, Any]:
             "real_task_configs",
             "platform_fidelity",
             "method_implementation_packet",
+            "pilot_smoke_packet",
             "real_method_implementations",
             "run_collection",
             "manifest_and_release",
             "strict_rollout_recompute",
             "final_strict_gate",
         }.issubset(action_ids),
-        f"missing={sorted({'platform_onboarding', 'fidelity_provenance_packet', 'backend_integration_packet', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
+        f"missing={sorted({'platform_onboarding', 'fidelity_provenance_packet', 'backend_integration_packet', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
     )
     add_check(
         checks,
@@ -545,6 +577,8 @@ def build_payload() -> dict[str, Any]:
             "results/external_backend_integration_audit.json",
             "results/external_config_manifest_audit.json",
             "results/external_rollout_evidence_audit.json",
+            "results/external_pilot_smoke_packet_audit.json",
+            "results/external_pilot_smoke_audit.json",
             "results/external_method_implementation_audit.json",
             "results/external_evidence_preflight.json",
             "results/external_release_package_audit.json",

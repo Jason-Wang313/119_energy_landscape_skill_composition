@@ -82,6 +82,7 @@ def build_payload() -> dict[str, Any]:
         "specific_run_id",
         "method_implementation_packet",
         "real_method_implementations",
+        "pilot_smoke_packet",
         "run_collection",
         "manifest_and_release",
         "strict_rollout_recompute",
@@ -225,6 +226,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_config_materialization_plan.json",
             "results/external_rollout_evidence_audit.json",
             "results/external_fidelity_provenance_audit.json",
+            "results/external_pilot_smoke_packet_audit.json",
         ],
         "checks": checks,
     }

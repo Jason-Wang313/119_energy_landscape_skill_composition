@@ -117,6 +117,8 @@ def main():
         "scripts\\audit_external_backend_contract.py",
         "scripts\\build_external_backend_integration_packet.py",
         "scripts\\audit_external_collection_readiness.py",
+        "scripts\\audit_external_pilot_smoke.py",
+        "scripts\\build_external_pilot_smoke_packet.py",
         "scripts\\validate_external_configs.py",
         "scripts\\self_test_external_config_evidence.py",
         "scripts\\materialize_external_configs.py",
@@ -180,6 +182,8 @@ def main():
         "python scripts/self_test_external_runner_backend.py",
         "python scripts/self_test_external_collection_preflight.py",
         "python scripts/audit_external_collection_readiness.py",
+        "python scripts/audit_external_pilot_smoke.py",
+        "python scripts/build_external_pilot_smoke_packet.py",
         "python scripts/audit_external_evidence_preflight.py",
         "python scripts/self_test_external_config_evidence.py",
         "python scripts/self_test_external_adapter_evidence.py",
@@ -241,6 +245,10 @@ def main():
         fail("external collection plan must include the config manifest packet command")
     if "python scripts\\build_external_rollout_evidence_packet.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the rollout evidence packet command")
+    if "python scripts\\audit_external_pilot_smoke.py" not in collection_plan.get("validation_commands", []):
+        fail("external collection plan must include the pilot smoke audit command")
+    if "python scripts\\build_external_pilot_smoke_packet.py" not in collection_plan.get("validation_commands", []):
+        fail("external collection plan must include the pilot smoke packet command")
     if "python scripts\\build_external_method_implementation_packet.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the method implementation packet command")
     if "python scripts\\validate_external_adapters.py --strict" not in collection_plan.get("validation_commands", []):
@@ -1567,6 +1575,60 @@ def main():
             fail(f"external runner backend self-test missing passing check: {required_check}")
     if not (RESULTS / "external_runner_backend_self_test.md").exists():
         fail("missing results/external_runner_backend_self_test.md")
+    pilot_smoke_audit_path = RESULTS / "external_pilot_smoke_audit.json"
+    pilot_smoke_packet_audit_path = RESULTS / "external_pilot_smoke_packet_audit.json"
+    for path in (
+        ROOT / "scripts" / "audit_external_pilot_smoke.py",
+        ROOT / "scripts" / "build_external_pilot_smoke_packet.py",
+        EXTERNAL / "pilot_smoke_packet.json",
+        EXTERNAL / "pilot_smoke_packet.md",
+        EXTERNAL / "pilot_smoke_work_orders.csv",
+        pilot_smoke_audit_path,
+        RESULTS / "external_pilot_smoke_audit.md",
+        pilot_smoke_packet_audit_path,
+        RESULTS / "external_pilot_smoke_packet_audit.md",
+    ):
+        if not path.exists():
+            fail(f"missing external pilot smoke artifact: {path}")
+    pilot_smoke_audit = json.loads(pilot_smoke_audit_path.read_text(encoding="utf-8"))
+    if pilot_smoke_audit.get("version") != "external_pilot_smoke_audit_v1":
+        fail("external pilot smoke audit version mismatch")
+    if pilot_smoke_audit.get("passed") is not True:
+        fail("external pilot smoke audit did not pass")
+    if pilot_smoke_audit.get("not_external_evidence") is not True:
+        fail("external pilot smoke audit must declare that it is not evidence")
+    if pilot_smoke_audit.get("strict_evidence_ready") is not False:
+        fail("external pilot smoke audit must not claim strict evidence readiness")
+    if int(pilot_smoke_audit.get("records_observed", 0) or 0) != 0:
+        fail("external pilot smoke audit should observe zero repository pilot records before an operator run")
+    pilot_smoke_packet = json.loads((EXTERNAL / "pilot_smoke_packet.json").read_text(encoding="utf-8"))
+    if pilot_smoke_packet.get("version") != "external_pilot_smoke_packet_v1":
+        fail("external pilot smoke packet version mismatch")
+    if pilot_smoke_packet.get("not_external_evidence") is not True:
+        fail("external pilot smoke packet must declare that it is not evidence")
+    if int(pilot_smoke_packet.get("pilot_rows", 0) or 0) != 12:
+        fail("external pilot smoke packet should use a 12-row first-panel smoke test")
+    if "external_validation/pilot_smoke" not in str(pilot_smoke_packet.get("quarantine_root", "")):
+        fail("external pilot smoke packet must use the pilot_smoke quarantine root")
+    pilot_smoke_packet_audit = json.loads(pilot_smoke_packet_audit_path.read_text(encoding="utf-8"))
+    if pilot_smoke_packet_audit.get("version") != "external_pilot_smoke_packet_audit_v1":
+        fail("external pilot smoke packet audit version mismatch")
+    if pilot_smoke_packet_audit.get("passed") is not True:
+        fail("external pilot smoke packet audit did not pass")
+    if pilot_smoke_packet_audit.get("not_external_evidence") is not True:
+        fail("external pilot smoke packet audit must declare that it is not evidence")
+    pilot_smoke_packet_checks = {check.get("name"): check.get("passed") for check in pilot_smoke_packet_audit.get("checks", [])}
+    for required_check in (
+        "packet_is_non_evidence_and_fail_closed",
+        "quarantine_dirs_are_separate_from_official_evidence",
+        "runner_backend_probe_already_exercises_actual_runner",
+        "pilot_commands_preserve_gate_order",
+        "pilot_audit_reports_non_evidence_state",
+        "collection_readiness_remains_official_gate",
+        "packet_files_written",
+    ):
+        if pilot_smoke_packet_checks.get(required_check) is not True:
+            fail(f"external pilot smoke packet audit missing passing check: {required_check}")
     if not (ROOT / "scripts" / "self_test_external_rollout_validator.py").exists():
         fail("missing scripts/self_test_external_rollout_validator.py")
     rollout_metrics = json.loads(rollout_metrics_path.read_text(encoding="utf-8"))
@@ -1631,6 +1693,10 @@ def main():
         "external_runner_backend_probe_ready",
         "external_runner_backend_probe_not_evidence",
         "external_runner_backend_probe_exercises_actual_runner_path",
+        "external_pilot_smoke_audit_ready",
+        "external_pilot_smoke_not_evidence",
+        "external_pilot_smoke_packet_ready",
+        "external_pilot_smoke_quarantine_gate",
         "external_backend_contract_ready",
         "external_backend_contract_not_evidence",
         "external_backend_contract_fail_closed",
@@ -1722,12 +1788,17 @@ def main():
         EXTERNAL / "rollout_evidence_packet.json",
         EXTERNAL / "rollout_evidence_packet.md",
         EXTERNAL / "rollout_evidence_work_orders.csv",
+        EXTERNAL / "pilot_smoke_packet.json",
+        EXTERNAL / "pilot_smoke_packet.md",
+        EXTERNAL / "pilot_smoke_work_orders.csv",
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.md",
+        RESULTS / "external_pilot_smoke_audit.md",
+        RESULTS / "external_pilot_smoke_packet_audit.md",
         RESULTS / "external_config_materialization_plan.md",
         RESULTS / "external_execution_readiness_audit.md",
         RESULTS / "external_fidelity_acceptance_audit.md",
@@ -1763,6 +1834,7 @@ def main():
         "rollout_evidence_packet_ready",
         "backend_contract_gate_ready",
         "backend_integration_packet_ready",
+        "pilot_smoke_packet_ready",
         "method_implementation_packet_ready",
         "preflight_operator_actions_present",
         "route_independent_of_haonan",
@@ -1822,6 +1894,12 @@ def main():
         fail("external operator packet missing method_implementation_packet action")
     if "build_external_method_implementation_packet.py" not in "\n".join(method_actions[0].get("commands", []) or []):
         fail("external operator packet method action must rebuild the method implementation packet")
+    pilot_actions = [action for action in operator_actions if action.get("id") == "pilot_smoke_packet"]
+    if not pilot_actions:
+        fail("external operator packet missing pilot_smoke_packet action")
+    pilot_commands = "\n".join(pilot_actions[0].get("commands", []) or [])
+    if "build_external_pilot_smoke_packet.py" not in pilot_commands or "audit_external_pilot_smoke.py" not in pilot_commands:
+        fail("external operator packet pilot smoke action must rebuild and audit the pilot smoke packet")
     if "audit_external_collection_readiness.py --strict" not in operator_packet.get("pre_collection_gate_command", ""):
         fail("external operator packet missing strict pre-collection gate command")
     if "audit_external_backend_contract.py --strict" not in operator_packet.get("backend_contract_gate_command", ""):
@@ -1885,6 +1963,7 @@ def main():
         "backend_integration_packet_included",
         "config_manifest_packet_included",
         "rollout_evidence_packet_included",
+        "pilot_smoke_packet_included",
         "method_implementation_packet_included",
         "operator_actions_cover_evidence_collection",
         "post_collection_commands_cover_strict_gates",

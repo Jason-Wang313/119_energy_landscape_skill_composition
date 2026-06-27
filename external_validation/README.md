@@ -50,6 +50,15 @@ python scripts\build_external_rollout_evidence_packet.py
 
 This writes `external_validation/rollout_evidence_packet.{json,md}`, `external_validation/rollout_evidence_work_orders.csv`, and `results/external_rollout_evidence_audit.{json,md}`. It turns the missing raw JSONL logs, videos, manifest writing, strict rollout recomputation, pairing, release, and final evidence gates into work orders. It is not evidence and still reports strict rollout and external evidence as missing until real manifest-declared artifacts exist.
 
+Build the external pilot smoke packet:
+
+```powershell
+python scripts\audit_external_pilot_smoke.py
+python scripts\build_external_pilot_smoke_packet.py
+```
+
+This writes `external_validation/pilot_smoke_packet.{json,md}`, `external_validation/pilot_smoke_work_orders.csv`, `results/external_pilot_smoke_audit.{json,md}`, and `results/external_pilot_smoke_packet_audit.{json,md}`. It gives an independent operator a quarantined 12-row first-panel backend smoke test before official collection. Pilot logs and videos must stay under `external_validation/pilot_smoke/` and must never be declared in `external_validation/manifest.json`.
+
 Build the independent operator packet:
 
 ```powershell

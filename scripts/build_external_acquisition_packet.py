@@ -21,6 +21,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "rollout_evidence_packet",
         "backend_module",
         "platform_fidelity",
+        "pilot_smoke_packet",
         "run_collection",
         "manifest_and_release",
     ],
@@ -139,6 +140,21 @@ ACTION_CATALOG = {
         "artifacts": ["external_validation/fidelity_acceptance.json"],
         "commands": ["python scripts\\audit_external_fidelity_acceptance.py --strict"],
         "closes": ["Independent real-robot or accepted high-fidelity external validation evidence"],
+    },
+    "pilot_smoke_packet": {
+        "title": "Run a quarantined first-panel backend smoke test",
+        "operator_input": "real backend, accepted fidelity gate, prepared configs, unsealed aliases, and a pilot-specific run id",
+        "artifacts": [
+            "external_validation/pilot_smoke_packet.md",
+            "external_validation/pilot_smoke_work_orders.csv",
+            "results/external_pilot_smoke_packet_audit.json",
+            "results/external_pilot_smoke_audit.json",
+        ],
+        "commands": [
+            "python scripts\\build_external_pilot_smoke_packet.py",
+            "python scripts\\audit_external_pilot_smoke.py --strict --expected-records 12 --check-video-paths",
+        ],
+        "closes": ["operator backend smoke test before official collection; not evidence"],
     },
     "fidelity_provenance_packet": {
         "title": "Use the fidelity provenance packet as the platform acceptance checklist",
@@ -324,6 +340,7 @@ def main() -> int:
     config_manifest_path = RESULTS / "external_config_manifest_audit.json"
     rollout_evidence_path = RESULTS / "external_rollout_evidence_audit.json"
     method_packet_path = RESULTS / "external_method_implementation_audit.json"
+    pilot_smoke_path = RESULTS / "external_pilot_smoke_packet_audit.json"
 
     gap = require_json(gap_path)
     collection = require_json(collection_path)
@@ -337,6 +354,7 @@ def main() -> int:
     config_manifest = require_json(config_manifest_path)
     rollout_evidence = require_json(rollout_evidence_path)
     method_packet = require_json(method_packet_path)
+    pilot_smoke = require_json(pilot_smoke_path)
 
     missing_requirements = missing_requirements_from_gap(gap)
     missing_names = [row.get("requirement", "") for row in missing_requirements]
@@ -364,6 +382,7 @@ def main() -> int:
                 config_manifest_path,
                 rollout_evidence_path,
                 method_packet_path,
+                pilot_smoke_path,
             ]
         ),
         ", ".join(
@@ -380,6 +399,7 @@ def main() -> int:
                 config_manifest_path,
                 rollout_evidence_path,
                 method_packet_path,
+                pilot_smoke_path,
             ]
         ),
     )
@@ -513,6 +533,23 @@ def main() -> int:
             f"strict_external_evidence_ready={rollout_evidence.get('strict_external_evidence_ready')!r}"
         ),
     )
+    pilot_smoke_checks = {check.get("name"): check.get("passed") for check in pilot_smoke.get("checks", []) or []}
+    add_check(
+        checks,
+        "pilot_smoke_packet_ready",
+        pilot_smoke.get("passed") is True
+        and pilot_smoke.get("not_external_evidence") is True
+        and pilot_smoke.get("pilot_smoke_packet_ready") is True
+        and pilot_smoke.get("strict_evidence_ready") is False
+        and pilot_smoke_checks.get("quarantine_dirs_are_separate_from_official_evidence") is True
+        and pilot_smoke_checks.get("pilot_commands_preserve_gate_order") is True
+        and (EXTERNAL / "pilot_smoke_packet.md").exists()
+        and (EXTERNAL / "pilot_smoke_work_orders.csv").exists(),
+        (
+            f"pilot_smoke_packet_ready={pilot_smoke.get('pilot_smoke_packet_ready')!r}, "
+            f"strict_evidence_ready={pilot_smoke.get('strict_evidence_ready')!r}"
+        ),
+    )
     add_check(
         checks,
         "method_implementation_packet_ready",
@@ -597,6 +634,8 @@ def main() -> int:
         "build_external_fidelity_provenance_packet.py",
         "build_external_platform_onboarding.py",
         "build_external_method_implementation_packet.py",
+        "build_external_pilot_smoke_packet.py",
+        "audit_external_pilot_smoke.py",
     ]
     command_text = "\n".join(post_collection_commands + [cmd for action in actions for cmd in action["commands"]])
     missing_command_fragments = [fragment for fragment in required_command_fragments if fragment not in command_text]

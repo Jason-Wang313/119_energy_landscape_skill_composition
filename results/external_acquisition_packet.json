@@ -2,7 +2,7 @@
   "acquisition_packet_ready": true,
   "checks": [
     {
-      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_onboarding_audit.json, results/external_fidelity_provenance_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/external_config_manifest_audit.json, results/external_rollout_evidence_audit.json, results/external_method_implementation_audit.json",
+      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_onboarding_audit.json, results/external_fidelity_provenance_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/external_config_manifest_audit.json, results/external_rollout_evidence_audit.json, results/external_method_implementation_audit.json, results/external_pilot_smoke_packet_audit.json",
       "name": "source_audits_exist",
       "passed": true
     },
@@ -57,6 +57,11 @@
       "passed": true
     },
     {
+      "detail": "pilot_smoke_packet_ready=True, strict_evidence_ready=False",
+      "name": "pilot_smoke_packet_ready",
+      "passed": true
+    },
+    {
       "detail": "method_implementation_packet_ready=True, strict_adapter_evidence_ready=False",
       "name": "method_implementation_packet_ready",
       "passed": true
@@ -92,7 +97,7 @@
       "passed": true
     },
     {
-      "detail": "Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Fill platform fidelity acceptance with real provenance Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
+      "detail": "Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Fill platform fidelity acceptance with real provenance Run a quarantined first-panel backend smoke test Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
       "name": "operator_actions_cover_collection_blockers",
       "passed": true
     },
@@ -118,6 +123,7 @@
         "rollout_evidence_packet",
         "backend_module",
         "platform_fidelity",
+        "pilot_smoke_packet",
         "run_collection",
         "manifest_and_release"
       ],
@@ -272,6 +278,24 @@
       "id": "platform_fidelity",
       "operator_input": "accepted simulator or robot evidence, contact/dynamics/camera/state provenance, and task coverage",
       "title": "Fill platform fidelity acceptance with real provenance"
+    },
+    {
+      "artifacts": [
+        "external_validation/pilot_smoke_packet.md",
+        "external_validation/pilot_smoke_work_orders.csv",
+        "results/external_pilot_smoke_packet_audit.json",
+        "results/external_pilot_smoke_audit.json"
+      ],
+      "closes": [
+        "operator backend smoke test before official collection; not evidence"
+      ],
+      "commands": [
+        "python scripts\\build_external_pilot_smoke_packet.py",
+        "python scripts\\audit_external_pilot_smoke.py --strict --expected-records 12 --check-video-paths"
+      ],
+      "id": "pilot_smoke_packet",
+      "operator_input": "real backend, accepted fidelity gate, prepared configs, unsealed aliases, and a pilot-specific run id",
+      "title": "Run a quarantined first-panel backend smoke test"
     },
     {
       "artifacts": [

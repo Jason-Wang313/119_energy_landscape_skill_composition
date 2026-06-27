@@ -48,6 +48,7 @@ def main() -> int:
     fidelity_provenance = read_json(RESULTS / "external_fidelity_provenance_audit.json")
     backend_integration = read_json(RESULTS / "external_backend_integration_audit.json")
     runner_probe = read_json(RESULTS / "external_runner_backend_self_test.json")
+    pilot_smoke = read_json(RESULTS / "external_pilot_smoke_packet_audit.json")
     config_manifest = read_json(RESULTS / "external_config_manifest_audit.json")
     rollout_evidence = read_json(RESULTS / "external_rollout_evidence_audit.json")
     method_implementation = read_json(RESULTS / "external_method_implementation_audit.json")
@@ -177,6 +178,20 @@ def main() -> int:
             f"schema_errors={runner_probe.get('schema_errors')!r}"
         ),
     )
+    pilot_smoke_checks = {check.get("name"): check.get("passed") for check in pilot_smoke.get("checks", []) or []}
+    add_check(
+        checks,
+        "pilot_smoke_packet_visible",
+        pilot_smoke.get("passed") is True
+        and pilot_smoke.get("not_external_evidence") is True
+        and pilot_smoke.get("pilot_smoke_packet_ready") is True
+        and pilot_smoke.get("strict_evidence_ready") is False
+        and pilot_smoke_checks.get("quarantine_dirs_are_separate_from_official_evidence") is True,
+        (
+            f"pilot_smoke_packet_ready={pilot_smoke.get('pilot_smoke_packet_ready')!r}, "
+            f"strict_evidence_ready={pilot_smoke.get('strict_evidence_ready')!r}"
+        ),
+    )
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", []) or []}
     config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", []) or []}
     rollout_evidence_checks = {check.get("name"): check.get("passed") for check in rollout_evidence.get("checks", []) or []}
@@ -247,12 +262,13 @@ def main() -> int:
             "external_fidelity_provenance_packet_claim",
             "external_backend_integration_packet_claim",
             "external_runner_backend_probe_claim",
+            "external_pilot_smoke_packet_claim",
             "external_config_manifest_packet_claim",
             "external_rollout_evidence_packet_claim",
             "external_method_implementation_packet_claim",
             "external_config_materialization_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_backend_integration_packet_claim', 'external_runner_backend_probe_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_config_materialization_claim'} - claim_names)}",
+        f"missing={sorted({'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_backend_integration_packet_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_config_materialization_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -264,6 +280,7 @@ def main() -> int:
             "External fidelity provenance packet",
             "External backend integration packet",
             "External runner backend probe self-test",
+            "External pilot smoke packet",
             "External config manifest packet",
             "External rollout evidence packet",
             "External method implementation packet",
@@ -278,6 +295,7 @@ def main() -> int:
             "External fidelity provenance packet",
             "External backend integration packet",
             "External runner backend probe self-test",
+            "External pilot smoke packet",
             "External config manifest packet",
             "External rollout evidence packet",
             "External method implementation packet",
@@ -293,6 +311,7 @@ def main() -> int:
             "external fidelity provenance packet",
             "external backend integration packet",
             "external runner backend probe self-test",
+            "external pilot smoke packet",
             "external config manifest packet",
             "external rollout evidence packet",
             "external method implementation packet",
@@ -308,6 +327,7 @@ def main() -> int:
             "External fidelity provenance packet",
             "External backend integration packet",
             "External runner backend probe self-test",
+            "External pilot smoke packet",
             "External config manifest packet",
             "External rollout evidence packet",
             "External method implementation packet",
@@ -323,6 +343,8 @@ def main() -> int:
             "scripts/build_external_fidelity_provenance_packet.py",
             "scripts/build_external_backend_integration_packet.py",
             "scripts/self_test_external_runner_backend.py",
+            "scripts/build_external_pilot_smoke_packet.py",
+            "scripts/audit_external_pilot_smoke.py",
             "scripts/build_external_config_manifest_packet.py",
             "scripts/build_external_rollout_evidence_packet.py",
             "scripts/build_external_method_implementation_packet.py",
@@ -337,6 +359,7 @@ def main() -> int:
             "external fidelity provenance packet",
             "external backend integration packet",
             "external runner backend probe self-test",
+            "external pilot smoke packet",
             "external config manifest packet",
             "external rollout evidence packet",
             "external method implementation packet",
@@ -371,7 +394,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform onboarding packet, the external fidelity provenance packet, the external backend integration packet, the external runner backend probe self-test, the external method implementation packet, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform onboarding packet, the external fidelity provenance packet, the external backend integration packet, the external runner backend probe self-test, the external pilot smoke packet, the external method implementation packet, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

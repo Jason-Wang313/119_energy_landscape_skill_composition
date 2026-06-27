@@ -1,0 +1,5 @@
+id,title,operator_input,artifact,evidence_boundary
+pilot_backend_preflight,Run strict collection readiness against quarantine output dirs,"--backend-module, accepted fidelity file, unsealed aliases, specific pilot run id",results/external_collection_readiness_audit.json,not evidence; preflight only
+pilot_first_panel,Collect the first 12-row method panel into pilot_smoke,real backend plus prepared configs,external_validation/pilot_smoke/logs/*.jsonl and pilot_smoke/videos/*,quarantined smoke output; excluded from official manifest
+pilot_schema_video_audit,"Audit pilot records, videos, run ids, and quarantine paths",pilot_smoke logs/videos,results/external_pilot_smoke_audit.json,does not satisfy rollout or external evidence gates
+clear_pilot_before_full_collection,Remove or archive pilot output before official collection,operator confirmation that manifest will not include pilot paths,clean external_validation/logs and external_validation/videos before official run,prevents pilot contamination of official evidence

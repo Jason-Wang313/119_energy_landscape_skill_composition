@@ -359,6 +359,42 @@ def main() -> int:
         f"checks={runner_probe_checks}",
     )
 
+    pilot_audit_ok, pilot_audit, pilot_audit_detail = passed_json(
+        RESULTS / "external_pilot_smoke_audit.json",
+        version="external_pilot_smoke_audit_v1",
+    )
+    add_check(checks, "external_pilot_smoke_audit_ready", pilot_audit_ok, pilot_audit_detail)
+    add_check(
+        checks,
+        "external_pilot_smoke_not_evidence",
+        pilot_audit.get("not_external_evidence") is True
+        and pilot_audit.get("strict_evidence_ready") is False
+        and pilot_audit.get("pilot_smoke_ready") is False,
+        (
+            f"not_external_evidence={pilot_audit.get('not_external_evidence')!r}, "
+            f"pilot_smoke_ready={pilot_audit.get('pilot_smoke_ready')!r}, "
+            f"strict_evidence_ready={pilot_audit.get('strict_evidence_ready')!r}"
+        ),
+    )
+    pilot_packet_ok, pilot_packet, pilot_packet_detail = passed_json(
+        RESULTS / "external_pilot_smoke_packet_audit.json",
+        version="external_pilot_smoke_packet_audit_v1",
+    )
+    add_check(checks, "external_pilot_smoke_packet_ready", pilot_packet_ok, pilot_packet_detail)
+    pilot_packet_checks = {check.get("name"): check.get("passed") for check in pilot_packet.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_pilot_smoke_quarantine_gate",
+        pilot_packet.get("not_external_evidence") is True
+        and pilot_packet.get("pilot_smoke_packet_ready") is True
+        and pilot_packet.get("strict_evidence_ready") is False
+        and pilot_packet_checks.get("quarantine_dirs_are_separate_from_official_evidence") is True
+        and pilot_packet_checks.get("pilot_commands_preserve_gate_order") is True
+        and (EXTERNAL / "pilot_smoke_packet.md").exists()
+        and (EXTERNAL / "pilot_smoke_work_orders.csv").exists(),
+        f"checks={pilot_packet_checks}",
+    )
+
     backend_contract_ok, backend_contract, backend_contract_detail = passed_json(
         RESULTS / "external_backend_contract_audit.json",
         version="external_backend_contract_audit_v1",

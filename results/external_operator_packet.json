@@ -185,6 +185,24 @@
     },
     {
       "artifacts": [
+        "external_validation/pilot_smoke_packet.md",
+        "external_validation/pilot_smoke_work_orders.csv",
+        "results/external_pilot_smoke_packet_audit.json",
+        "results/external_pilot_smoke_audit.json"
+      ],
+      "closes": [
+        "operator backend smoke test before official collection; not evidence"
+      ],
+      "commands": [
+        "python scripts\\build_external_pilot_smoke_packet.py",
+        "python scripts\\audit_external_pilot_smoke.py --strict --expected-records 12 --check-video-paths"
+      ],
+      "id": "pilot_smoke_packet",
+      "operator_input": "real backend, accepted fidelity gate, prepared configs, unsealed aliases, and a pilot-specific run id",
+      "title": "Run a quarantined first-panel backend smoke test"
+    },
+    {
+      "artifacts": [
         "external_validation/fidelity_provenance_packet.md",
         "external_validation/fidelity_provenance_work_orders.csv",
         "results/external_fidelity_provenance_audit.json"
@@ -373,7 +391,8 @@
     "results/external_backend_contract_audit.json",
     "results/external_config_materialization_plan.json",
     "results/external_rollout_evidence_audit.json",
-    "results/external_fidelity_provenance_audit.json"
+    "results/external_fidelity_provenance_audit.json",
+    "results/external_pilot_smoke_packet_audit.json"
   ],
   "start_state": "DO_NOT_COLLECT_YET",
   "strict_collection_command": "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",

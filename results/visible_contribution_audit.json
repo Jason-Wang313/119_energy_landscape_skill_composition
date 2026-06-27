@@ -20,7 +20,7 @@
       "passed": true
     },
     {
-      "detail": "files=209, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=218, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -47,6 +47,11 @@
     {
       "detail": "records_written=2, schema_errors=[]",
       "name": "runner_backend_probe_visible",
+      "passed": true
+    },
+    {
+      "detail": "pilot_smoke_packet_ready=True, strict_evidence_ready=False",
+      "name": "pilot_smoke_packet_visible",
       "passed": true
     },
     {

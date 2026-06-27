@@ -101,6 +101,9 @@ try {
         Invoke-Native python scripts\audit_external_backend_contract.py
         Invoke-Native python scripts\build_external_backend_integration_packet.py
         Invoke-Native python scripts\audit_external_collection_readiness.py
+        Invoke-Native python scripts\self_test_external_runner_backend.py
+        Invoke-Native python scripts\audit_external_pilot_smoke.py
+        Invoke-Native python scripts\build_external_pilot_smoke_packet.py
         Invoke-Native python scripts\validate_external_configs.py
         Invoke-Native python scripts\self_test_external_config_evidence.py
         Invoke-Native python scripts\materialize_external_configs.py
@@ -126,7 +129,6 @@ try {
         Invoke-Native python scripts\self_test_external_adapter_scaffold_guard.py
         Invoke-Native python scripts\self_test_external_backend_contract.py
         Invoke-Native python scripts\self_test_external_collection_preflight.py
-        Invoke-Native python scripts\self_test_external_runner_backend.py
         Invoke-Native python scripts\self_test_external_rollout_validator.py
         Invoke-Native python scripts\self_test_external_evidence_pipeline.py
         Invoke-Native python scripts\self_test_external_pairing_integrity.py

@@ -64,6 +64,12 @@ jobs:
       - name: Audit external collection readiness
         run: python scripts/audit_external_collection_readiness.py
 
+      - name: Audit external pilot smoke
+        run: python scripts/audit_external_pilot_smoke.py
+
+      - name: Build external pilot smoke packet
+        run: python scripts/build_external_pilot_smoke_packet.py
+
       - name: Audit external evidence preflight
         run: python scripts/audit_external_evidence_preflight.py
 

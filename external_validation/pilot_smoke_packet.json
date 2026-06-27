@@ -1,0 +1,56 @@
+{
+  "commands": [
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\pilot_smoke\\logs --video-dir external_validation\\pilot_smoke\\videos --run-id paper119_pilot_smoke_<platform>_<date> --unsealed-alias-map --force",
+    "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\pilot_smoke\\logs --video-dir external_validation\\pilot_smoke\\videos --run-id paper119_pilot_smoke_<platform>_<date> --unsealed-alias-map --max-rows 12 --force",
+    "python scripts\\audit_external_pilot_smoke.py --strict --expected-records 12 --check-video-paths",
+    "Remove or archive external_validation\\pilot_smoke before official collection; pilot logs/videos must never be listed in external_validation\\manifest.json"
+  ],
+  "forbidden_as_evidence": [
+    "external_validation/pilot_smoke/logs/*.jsonl",
+    "external_validation/pilot_smoke/videos/*",
+    "external_validation/pilot_smoke/manifest.json"
+  ],
+  "not_external_evidence": true,
+  "official_evidence_dirs": [
+    "external_validation/logs",
+    "external_validation/videos",
+    "external_validation/manifest.json"
+  ],
+  "pilot_log_dir": "external_validation\\pilot_smoke\\logs",
+  "pilot_rows": 12,
+  "pilot_video_dir": "external_validation\\pilot_smoke\\videos",
+  "purpose": "Quarantined first-panel smoke test for a real backend before full external collection.",
+  "quarantine_root": "external_validation/pilot_smoke",
+  "strict_evidence_ready": false,
+  "version": "external_pilot_smoke_packet_v1",
+  "work_orders": [
+    {
+      "artifact": "results/external_collection_readiness_audit.json",
+      "evidence_boundary": "not evidence; preflight only",
+      "id": "pilot_backend_preflight",
+      "operator_input": "--backend-module, accepted fidelity file, unsealed aliases, specific pilot run id",
+      "title": "Run strict collection readiness against quarantine output dirs"
+    },
+    {
+      "artifact": "external_validation/pilot_smoke/logs/*.jsonl and pilot_smoke/videos/*",
+      "evidence_boundary": "quarantined smoke output; excluded from official manifest",
+      "id": "pilot_first_panel",
+      "operator_input": "real backend plus prepared configs",
+      "title": "Collect the first 12-row method panel into pilot_smoke"
+    },
+    {
+      "artifact": "results/external_pilot_smoke_audit.json",
+      "evidence_boundary": "does not satisfy rollout or external evidence gates",
+      "id": "pilot_schema_video_audit",
+      "operator_input": "pilot_smoke logs/videos",
+      "title": "Audit pilot records, videos, run ids, and quarantine paths"
+    },
+    {
+      "artifact": "clean external_validation/logs and external_validation/videos before official run",
+      "evidence_boundary": "prevents pilot contamination of official evidence",
+      "id": "clear_pilot_before_full_collection",
+      "operator_input": "operator confirmation that manifest will not include pilot paths",
+      "title": "Remove or archive pilot output before official collection"
+    }
+  ]
+}

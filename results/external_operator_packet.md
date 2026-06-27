@@ -64,6 +64,7 @@ Post-collection strict gates:
 - `config_manifest_packet`: Use the config manifest packet as the task-config evidence checklist
 - `rollout_evidence_packet`: Use the rollout evidence packet as the raw-log evidence checklist
 - `platform_fidelity`: Fill platform fidelity acceptance with real provenance
+- `pilot_smoke_packet`: Run a quarantined first-panel backend smoke test
 - `fidelity_provenance_packet`: Use the fidelity provenance packet as the platform acceptance checklist
 - `alias_unseal`: Unseal method aliases only after configs, implementations, and run plan are frozen
 - `specific_run_id`: Use a specific immutable external run id
