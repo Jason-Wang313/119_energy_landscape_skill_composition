@@ -62,7 +62,7 @@
     },
     {
       "name": "visible_contribution_claim",
-      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, and outreach package synchronized with the current materializer, operator packet, outreach stance, and readiness boundary.",
+      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, and outreach package synchronized with the current materializer, operator packet, tracked reference route, outreach stance, and readiness boundary.",
       "evidence": ["scripts/audit_visible_contribution.py", "README.md", "docs/final_audit.md", "docs/submission_readiness_decision.md", "docs/submission_readiness_audit_v5.md", "docs/submission_version_log.md", "child_status.md", "docs/haonan_yilun_outreach_package.md"]
     },
     {
@@ -152,8 +152,8 @@
     },
     {
       "name": "external_operator_packet_claim",
-      "claim": "The repository provides a generated non-evidence operator packet with a go/no-go state, backend qualification gate, pre-collection blockers, exact collection commands, and post-collection strict gates for an independent validation operator.",
-      "evidence": ["scripts/build_external_operator_packet.py", "results/external_operator_packet.json", "results/external_operator_packet.md", "results/external_backend_contract_audit.json", "results/external_collection_readiness_audit.json", "results/external_acquisition_packet.json"]
+      "claim": "The repository provides a generated non-evidence operator packet with a go/no-go state, backend qualification gate, generic pre-collection blockers, a tracked ManiSkill reference route that reaches the single fidelity-acceptance blocker, exact collection commands, and post-collection strict gates for an independent validation operator.",
+      "evidence": ["scripts/build_external_operator_packet.py", "results/external_operator_packet.json", "results/external_operator_packet.md", "results/external_backend_contract_audit.json", "results/external_collection_readiness_audit.json", "results/maniskill_reference_collection_preflight_audit.json", "results/external_acquisition_packet.json"]
     },
     {
       "name": "external_operator_handoff_bundle_claim",

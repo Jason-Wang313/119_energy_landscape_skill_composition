@@ -58,6 +58,10 @@ def build_payload() -> dict[str, Any]:
         RESULTS / "external_backend_contract_audit.json",
         "external_backend_contract_audit_v1",
     )
+    reference_preflight = require_payload(
+        RESULTS / "maniskill_reference_collection_preflight_audit.json",
+        "maniskill_reference_collection_preflight_audit_v1",
+    )
     materialization = require_payload(
         RESULTS / "external_config_materialization_plan.json",
         "external_config_materialization_plan_v1",
@@ -118,6 +122,19 @@ def build_payload() -> dict[str, Any]:
             f"collection_ready={collection.get('collection_ready')!r}, "
             f"blocking_missing_count={collection.get('blocking_missing_count')!r}"
         ),
+    )
+    reference_blockers = list(reference_preflight.get("collection_blocking_missing", []) or [])
+    add_check(
+        checks,
+        "maniskill_reference_preflight_reaches_only_fidelity_gate",
+        reference_preflight.get("passed") is True
+        and reference_preflight.get("not_external_evidence") is True
+        and reference_preflight.get("reference_backend_contract_ready") is True
+        and reference_preflight.get("collection_ready") is False
+        and int(reference_preflight.get("collection_blocking_missing_count", 0) or 0) == 1
+        and len(reference_blockers) == 1
+        and "fidelity_acceptance_ready" in reference_blockers[0],
+        f"blocking={reference_blockers}",
     )
     add_check(
         checks,
@@ -203,6 +220,19 @@ def build_payload() -> dict[str, Any]:
 
     passed = all(check["passed"] for check in checks)
     go_to_collect = collection.get("collection_ready") is True
+    reference_backend = str(reference_preflight.get("backend_module", "external_validation/runner/maniskill_reference_backend.py")).replace("/", "\\")
+    reference_run_id = str(reference_preflight.get("run_id", "maniskill_sapien_reference_preflight_protocol_v1"))
+    reference_pre_collection_gate_command = (
+        "python scripts\\audit_external_collection_readiness.py --strict "
+        f"--backend-module {reference_backend} --task-config-dir external_validation\\configs "
+        f"--run-id {reference_run_id} --unsealed-alias-map"
+    )
+    reference_collection_command = (
+        "python external_validation\\runner\\real_collection_runner.py "
+        f"--backend-module {reference_backend} --task-config-dir external_validation\\configs "
+        "--output-log-dir external_validation\\logs --video-dir external_validation\\videos "
+        f"--run-id {reference_run_id} --unsealed-alias-map"
+    )
     return {
         "version": "external_operator_packet_v1",
         "passed": passed,
@@ -214,6 +244,18 @@ def build_payload() -> dict[str, Any]:
         "collection_ready": collection.get("collection_ready"),
         "blocking_missing_count": int(collection.get("blocking_missing_count", 0) or 0),
         "pre_collection_blockers": collection_blockers,
+        "tracked_maniskill_reference_route": {
+            "not_external_evidence": True,
+            "backend_module": reference_backend,
+            "run_id": reference_run_id,
+            "reference_backend_contract_ready": reference_preflight.get("reference_backend_contract_ready") is True,
+            "collection_ready": reference_preflight.get("collection_ready") is True,
+            "blocking_missing_count": int(reference_preflight.get("collection_blocking_missing_count", 0) or 0),
+            "blocking_missing": reference_blockers,
+            "pre_collection_gate_command": reference_pre_collection_gate_command,
+            "collection_command_after_fidelity_acceptance": reference_collection_command,
+            "audit_command": "python scripts\\audit_maniskill_reference_collection_preflight.py",
+        },
         "pre_collection_gate_command": (
             "python scripts\\audit_external_collection_readiness.py --strict "
             "--backend-module <module_or_path> --task-config-dir external_validation\\configs "
@@ -232,6 +274,7 @@ def build_payload() -> dict[str, Any]:
             "results/maniskill_env_smoke_probe.json",
             "results/external_backend_contract_audit.json",
             "results/maniskill_backend_readiness_audit.json",
+            "results/maniskill_reference_collection_preflight_audit.json",
             "results/external_config_materialization_plan.json",
             "results/external_rollout_evidence_audit.json",
             "results/external_fidelity_provenance_audit.json",
@@ -262,6 +305,40 @@ def write_md(payload: dict[str, Any]) -> None:
     lines.extend(["", "## Pre-Collection Blockers", ""])
     for blocker in payload["pre_collection_blockers"] or ["none"]:
         lines.append(f"- {blocker}")
+
+    reference = payload["tracked_maniskill_reference_route"]
+    lines.extend(
+        [
+            "",
+            "## Tracked ManiSkill Reference Route",
+            "",
+            "This tracked public-simulator route is not evidence and does not authorize collection. It shows that, after selecting the repository ManiSkill reference backend, prepared configs, an explicit run id, and unsealed aliases, the pre-collection path reaches the fidelity-acceptance gate.",
+            "",
+            f"- Backend module: `{reference['backend_module']}`",
+            f"- Run id: `{reference['run_id']}`",
+            f"- Reference backend contract ready: `{str(reference['reference_backend_contract_ready']).lower()}`",
+            f"- Collection ready: `{str(reference['collection_ready']).lower()}`",
+            f"- Remaining blockers after reference-route preflight: `{reference['blocking_missing_count']}`",
+        ]
+    )
+    for blocker in reference["blocking_missing"] or ["none"]:
+        lines.append(f"- {blocker}")
+    lines.extend(
+        [
+            "",
+            "Reference-route pre-collection gate:",
+            "",
+            "```powershell",
+            reference["pre_collection_gate_command"],
+            "```",
+            "",
+            "Reference-route collection command after fidelity acceptance passes:",
+            "",
+            "```powershell",
+            reference["collection_command_after_fidelity_acceptance"],
+            "```",
+        ]
+    )
 
     lines.extend(
         [

@@ -20,6 +20,11 @@
       "passed": true
     },
     {
+      "detail": "backend='external_validation\\\\runner\\\\maniskill_reference_backend.py', run_id='maniskill_sapien_reference_preflight_protocol_v1', blocking=[\"fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'\"]",
+      "name": "operator_packet_tracked_reference_route_visible",
+      "passed": true
+    },
+    {
       "detail": "files=235, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true

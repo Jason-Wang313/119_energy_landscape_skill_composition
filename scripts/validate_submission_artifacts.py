@@ -2152,6 +2152,24 @@ def main():
         fail("external operator packet must remain a no-go until strict collection preflight passes")
     if int(operator_packet.get("blocking_missing_count", 0) or 0) < 4:
         fail("external operator packet should expose the current pre-collection blockers")
+    reference_route = operator_packet.get("tracked_maniskill_reference_route", {}) or {}
+    reference_blockers = reference_route.get("blocking_missing", []) or []
+    if reference_route.get("not_external_evidence") is not True:
+        fail("external operator packet tracked ManiSkill reference route must be marked non-evidence")
+    if "maniskill_reference_backend.py" not in str(reference_route.get("backend_module", "")):
+        fail("external operator packet tracked ManiSkill route must name the reference backend")
+    if reference_route.get("run_id") != "maniskill_sapien_reference_preflight_protocol_v1":
+        fail("external operator packet tracked ManiSkill route must use the explicit reference preflight run id")
+    if reference_route.get("reference_backend_contract_ready") is not True:
+        fail("external operator packet tracked ManiSkill route must expose reference backend contract readiness")
+    if reference_route.get("collection_ready") is not False:
+        fail("external operator packet tracked ManiSkill route must preserve collection_ready=false until fidelity acceptance")
+    if int(reference_route.get("blocking_missing_count", 99) or 99) != 1 or len(reference_blockers) != 1 or "fidelity_acceptance_ready" not in reference_blockers[0]:
+        fail("external operator packet tracked ManiSkill route must show fidelity acceptance as the single remaining pre-collection blocker")
+    if "audit_external_collection_readiness.py --strict" not in str(reference_route.get("pre_collection_gate_command", "")) or "--unsealed-alias-map" not in str(reference_route.get("pre_collection_gate_command", "")):
+        fail("external operator packet tracked ManiSkill route must include the strict pre-collection gate command")
+    if "real_collection_runner.py" not in str(reference_route.get("collection_command_after_fidelity_acceptance", "")) or "maniskill_reference_backend.py" not in str(reference_route.get("collection_command_after_fidelity_acceptance", "")):
+        fail("external operator packet tracked ManiSkill route must include the reference collection command")
     operator_actions = operator_packet.get("operator_actions", []) or []
     if len(operator_actions) < 10:
         fail("external operator packet has too few operator actions")

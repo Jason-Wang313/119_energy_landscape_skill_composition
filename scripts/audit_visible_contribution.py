@@ -97,6 +97,27 @@ def main() -> int:
             f"blocking_missing_count={operator.get('blocking_missing_count')!r}"
         ),
     )
+    reference_route = operator.get("tracked_maniskill_reference_route", {}) or {}
+    reference_blockers = reference_route.get("blocking_missing", []) or []
+    add_check(
+        checks,
+        "operator_packet_tracked_reference_route_visible",
+        reference_route.get("not_external_evidence") is True
+        and "maniskill_reference_backend.py" in str(reference_route.get("backend_module", ""))
+        and reference_route.get("run_id") == "maniskill_sapien_reference_preflight_protocol_v1"
+        and reference_route.get("reference_backend_contract_ready") is True
+        and reference_route.get("collection_ready") is False
+        and int(reference_route.get("blocking_missing_count", 99) or 99) == 1
+        and len(reference_blockers) == 1
+        and "fidelity_acceptance_ready" in reference_blockers[0]
+        and "audit_external_collection_readiness.py --strict" in str(reference_route.get("pre_collection_gate_command", ""))
+        and "real_collection_runner.py" in str(reference_route.get("collection_command_after_fidelity_acceptance", "")),
+        (
+            f"backend={reference_route.get('backend_module')!r}, "
+            f"run_id={reference_route.get('run_id')!r}, "
+            f"blocking={reference_blockers!r}"
+        ),
+    )
     add_check(
         checks,
         "operator_handoff_bundle_visible",

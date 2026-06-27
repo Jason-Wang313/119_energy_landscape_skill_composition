@@ -13,6 +13,11 @@
       "passed": true
     },
     {
+      "detail": "blocking=[\"fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'\"]",
+      "name": "maniskill_reference_preflight_reaches_only_fidelity_gate",
+      "passed": true
+    },
+    {
       "detail": "missing=[]",
       "name": "operator_actions_cover_start_to_finish",
       "passed": true
@@ -480,6 +485,7 @@
     "results/maniskill_env_smoke_probe.json",
     "results/external_backend_contract_audit.json",
     "results/maniskill_backend_readiness_audit.json",
+    "results/maniskill_reference_collection_preflight_audit.json",
     "results/external_config_materialization_plan.json",
     "results/external_rollout_evidence_audit.json",
     "results/external_fidelity_provenance_audit.json",
@@ -488,5 +494,19 @@
   "start_state": "DO_NOT_COLLECT_YET",
   "strict_collection_command": "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
   "strict_evidence_ready": false,
+  "tracked_maniskill_reference_route": {
+    "audit_command": "python scripts\\audit_maniskill_reference_collection_preflight.py",
+    "backend_module": "external_validation\\runner\\maniskill_reference_backend.py",
+    "blocking_missing": [
+      "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"
+    ],
+    "blocking_missing_count": 1,
+    "collection_command_after_fidelity_acceptance": "python external_validation\\runner\\real_collection_runner.py --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id maniskill_sapien_reference_preflight_protocol_v1 --unsealed-alias-map",
+    "collection_ready": false,
+    "not_external_evidence": true,
+    "pre_collection_gate_command": "python scripts\\audit_external_collection_readiness.py --strict --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --run-id maniskill_sapien_reference_preflight_protocol_v1 --unsealed-alias-map",
+    "reference_backend_contract_ready": true,
+    "run_id": "maniskill_sapien_reference_preflight_protocol_v1"
+  },
   "version": "external_operator_packet_v1"
 }

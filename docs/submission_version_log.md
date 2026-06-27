@@ -51,6 +51,7 @@
 - Added `scripts/build_external_operator_packet.py` so the independent validation path has a generated go/no-go packet with pre-collection blockers, collection commands, and post-collection strict gates.
 - Added `scripts/build_external_operator_handoff_bundle.py` so the independent validation path has a hash-listed non-evidence handoff manifest that excludes rollout logs, videos, checkpoints, local dry-run artifacts, placeholder media, and real evidence manifests.
 - Updated the acquisition and operator packets so backend selection first runs the strict backend qualification audit before collection readiness or actual collection commands.
+- Updated the operator packet so it exposes the tracked ManiSkill reference route with exact strict preflight/collection commands and the single route-specific fidelity-acceptance blocker while the official no-go state remains.
 - Updated the outreach memo, four-page preview, and Haonan/Yilun package to reflect the operator-packet/no-go stance while keeping Haonan's role framed as scientific fit and falsification advice.
 - Added `external_validation/config_schema_v1.json` and `scripts/validate_external_configs.py` so task config templates and future strict evidence configs are machine-checked separately.
 - Added `scripts/build_external_baseline_contract.py` so the external package has a non-evidence baseline implementation contract, method matrix, per-method adapter specs, and an audit that still marks independent non-oracle implementations as missing.

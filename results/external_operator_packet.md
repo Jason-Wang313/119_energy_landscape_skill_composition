@@ -18,6 +18,29 @@ This packet is the independent operator entry point for turning the current non-
 - alias_unsealing_explicit: unsealed_alias_map=False
 - run_id_specific: run_id='paper119_external_validation_run'
 
+## Tracked ManiSkill Reference Route
+
+This tracked public-simulator route is not evidence and does not authorize collection. It shows that, after selecting the repository ManiSkill reference backend, prepared configs, an explicit run id, and unsealed aliases, the pre-collection path reaches the fidelity-acceptance gate.
+
+- Backend module: `external_validation\runner\maniskill_reference_backend.py`
+- Run id: `maniskill_sapien_reference_preflight_protocol_v1`
+- Reference backend contract ready: `true`
+- Collection ready: `false`
+- Remaining blockers after reference-route preflight: `1`
+- fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'
+
+Reference-route pre-collection gate:
+
+```powershell
+python scripts\audit_external_collection_readiness.py --strict --backend-module external_validation\runner\maniskill_reference_backend.py --task-config-dir external_validation\configs --run-id maniskill_sapien_reference_preflight_protocol_v1 --unsealed-alias-map
+```
+
+Reference-route collection command after fidelity acceptance passes:
+
+```powershell
+python external_validation\runner\real_collection_runner.py --backend-module external_validation\runner\maniskill_reference_backend.py --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id maniskill_sapien_reference_preflight_protocol_v1 --unsealed-alias-map
+```
+
 ## Commands
 
 Materialize real configs after platform selection:
@@ -85,6 +108,7 @@ Post-collection strict gates:
 
 - `pass` `acquisition_packet_ready`: passed=True, strict_evidence_ready=False
 - `pass` `collection_preflight_fail_closed`: collection_ready=False, blocking_missing_count=4
+- `pass` `maniskill_reference_preflight_reaches_only_fidelity_gate`: blocking=["fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
 - `pass` `operator_actions_cover_start_to_finish`: missing=[]
 - `pass` `operator_action_titles_present`: missing_titles=[]
 - `pass` `config_materializer_is_guarded`: write_enabled=False, task_count=4

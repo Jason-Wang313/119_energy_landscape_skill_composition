@@ -9,6 +9,7 @@ This audit checks that the public-facing contribution docs describe the current 
 
 - `pass` `readiness_gap_state_visible`: objective_complete=False, satisfied=17, blocking=4
 - `pass` `operator_packet_no_go_visible`: start_state='DO_NOT_COLLECT_YET', blocking_missing_count=4
+- `pass` `operator_packet_tracked_reference_route_visible`: backend='external_validation\\runner\\maniskill_reference_backend.py', run_id='maniskill_sapien_reference_preflight_protocol_v1', blocking=["fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
 - `pass` `operator_handoff_bundle_visible`: files=235, forbidden=[], start_state='DO_NOT_COLLECT_YET'
 - `pass` `analysis_plan_visible`: analysis_plan_ready=True, strict_evidence_ready=False
 - `pass` `platform_probe_visible`: primary_route_install_ready=True, missing=[]

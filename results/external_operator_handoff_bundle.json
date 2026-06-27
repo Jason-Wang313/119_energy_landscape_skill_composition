@@ -126,11 +126,11 @@
   "included_file_count": 235,
   "included_files": [
     {
-      "bytes": 14996,
+      "bytes": 15129,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "CF28A0D76CA65056C1DFDD376B09738C0121E0EA5A62E78A8BEFEA16DCD009F7"
+      "sha256": "76E6C52B21D381DBE50292B8194A2DD60766676884B9B2BC9537A42BA31705C8"
     },
     {
       "bytes": 10521,
@@ -154,11 +154,11 @@
       "sha256": "624713DD0B7A6569740FBE7E901A2641CDC28193FAEFB2AAE7784B5EBF650358"
     },
     {
-      "bytes": 6387,
+      "bytes": 6475,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "57E375B61F92645921BD05821AC1B8DEA3CEA80254AB49D97F7AF2BA24206AF6"
+      "sha256": "76AE56E4C39E5C7251AB6EF3DF07D6C1143B215FA1D04D7694DFD04259C47461"
     },
     {
       "bytes": 28622,
@@ -1351,18 +1351,18 @@
       "sha256": "428B997AE9D07EF6B24950444186AAC256634822B715B632D2BC4F2451C2C2E1"
     },
     {
-      "bytes": 23461,
+      "bytes": 25064,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.json",
-      "sha256": "2A3F73C24BB943F5F97F5A8C1DFC7AF7D4C98E3705B53786EA78F09AC897C556"
+      "sha256": "098E1C30CF2F9ABA9D64A9A05F8CFEFAFB34309AE8FE140100BB29EDA5A3AEDD"
     },
     {
-      "bytes": 6174,
+      "bytes": 7818,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.md",
-      "sha256": "8EE88E39A3F5CFD9136C23F1C9393ACCB1502ED0AFA3C42CD14960BDE8695770"
+      "sha256": "B1A521EDE60A1E29CE9B8FCAB8363B70DB114CD9024C8CA306EDADBAFA82EC65"
     },
     {
       "bytes": 525,
@@ -1421,18 +1421,18 @@
       "sha256": "3420BD6F90C15E486CE03922E94B06B70C94C897A0B379C88B6363647ADAB623"
     },
     {
-      "bytes": 11814,
+      "bytes": 10609,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_platform_probe.json",
-      "sha256": "52393ACB26881ECF4CE89B31D523BE2B34ED34B477FC577A9DD6937FD49C8EB5"
+      "sha256": "65922AE189F7F8DF02476C39F45862F47E89ACCECFAE8B80F5CEC551A5018516"
     },
     {
       "bytes": 2287,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_platform_probe.md",
-      "sha256": "79F6CCF82992905FE73923E8F2540AD971F68E8207EE94EE266E86755A8069D7"
+      "sha256": "1808AFF76081EB2508E9276BF3142B7D70B9B51DE2E3E42E0F84F368C5DFAC5E"
     },
     {
       "bytes": 7221,
@@ -1533,11 +1533,11 @@
       "sha256": "A1EF93BA23A41BD7011C3289F80C58AF4D8BC815EC14B27B14987BE94EC31323"
     },
     {
-      "bytes": 13636,
+      "bytes": 13632,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_env_smoke_probe.json",
-      "sha256": "CE2EEA210E5071DC96D1C7515EECF7CDA6B0394F921297822C0F0F6A4DC9F221"
+      "sha256": "7AAF0959A4370888FD050C50591B62E7581BF4A616BE543D49407DB6BD118E77"
     },
     {
       "bytes": 2044,
@@ -1694,11 +1694,11 @@
       "sha256": "F96BCE86C51018A29B80AEB779E092F09A0287C18B9E3D51F13D9A163680D1CD"
     },
     {
-      "bytes": 12773,
+      "bytes": 16970,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_packet.py",
-      "sha256": "F9B6ACD8DD4DFBB45F7ECCEDBB097540928634D46C3A7A93DBD0E4CAD775A6AD"
+      "sha256": "DAC13B1CD6BDB12A6BA835CD5D05E3F7C0CCC81B1BEAA3ED2ACCF3820540AFE1"
     },
     {
       "bytes": 11266,
