@@ -81,6 +81,11 @@
       "evidence": ["external_validation/config_schema_v1.json", "external_validation/config_templates/peg_place_regrasp.json", "external_validation/configs/README.md", "scripts/validate_external_configs.py", "results/external_config_template_audit.json", "results/external_config_template_audit.md"]
     },
     {
+      "name": "external_config_materialization_claim",
+      "claim": "The repository provides a guarded, non-evidence config materialization tool that can write real task configs only after an operator supplies concrete platform and compute values.",
+      "evidence": ["scripts/materialize_external_configs.py", "results/external_config_materialization_plan.json", "results/external_config_materialization_plan.md", "external_validation/configs/README.md"]
+    },
+    {
       "name": "external_baseline_contract_claim",
       "claim": "The repository provides a non-evidence baseline implementation contract, method matrix, and per-method adapter specs, while explicitly recording that independent non-oracle implementations are still missing.",
       "evidence": ["scripts/build_external_baseline_contract.py", "external_validation/baseline_implementation_contract.md", "external_validation/baseline_implementation_matrix.csv", "external_validation/baseline_specs/barrier_certified_energy_composer_v5.json", "external_validation/baseline_specs/oracle_basin_composer.json", "results/external_baseline_contract_audit.json", "results/external_baseline_contract_audit.md"]

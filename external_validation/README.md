@@ -26,6 +26,14 @@ python scripts\validate_external_configs.py --strict
 
 Strict config validation currently fails until `external_validation/manifest.json` points to real `external_validation/configs/*.json` files that are not marked as templates. The tracked `external_validation/configs/README.md` file makes the real-config intake directory explicit, but it is not evidence and does not replace the required task JSON files.
 
+Plan guarded materialization of real task configs:
+
+```powershell
+python scripts\materialize_external_configs.py
+```
+
+This writes `results/external_config_materialization_plan.{json,md}` only. It does not write real configs by default. After an operator has selected a real platform and compute budget, use the guarded write form shown in that report; the command requires `--confirm-real-platform --write` and rejects dry-run/template placeholders.
+
 ## Manifest Builder Workflow
 
 Before collecting rollouts, generate the non-evidence collection schedule:

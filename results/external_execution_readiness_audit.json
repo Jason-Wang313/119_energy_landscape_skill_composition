@@ -152,6 +152,21 @@
     },
     {
       "detail": "passed",
+      "name": "config_materialization_plan_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True, write_enabled=False, strict_config_evidence_ready=False",
+      "name": "config_materialization_plan_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "task_count=4",
+      "name": "config_materialization_covers_tasks",
+      "passed": true
+    },
+    {
+      "detail": "passed",
       "name": "baseline_contract_ready",
       "passed": true
     },

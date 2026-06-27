@@ -55,7 +55,10 @@ ACTION_CATALOG = {
             "external_validation/configs/door_open_navigation.json",
             "external_validation/configs/cable_route_insert.json",
         ],
-        "commands": ["python scripts\\validate_external_configs.py --strict"],
+        "commands": [
+            "python scripts\\materialize_external_configs.py --platform-type <real_robot|high_fidelity_sim> --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
+            "python scripts\\validate_external_configs.py --strict",
+        ],
         "closes": ["Manifest-declared real task configs replace non-evidence templates"],
     },
     "platform_fidelity": {
@@ -212,11 +215,13 @@ def main() -> int:
     collection_path = RESULTS / "external_collection_readiness_audit.json"
     preflight_path = RESULTS / "external_evidence_preflight.json"
     route_path = RESULTS / "independent_validation_route_audit.json"
+    config_materialization_path = RESULTS / "external_config_materialization_plan.json"
 
     gap = require_json(gap_path)
     collection = require_json(collection_path)
     preflight = require_json(preflight_path)
     route = require_json(route_path)
+    config_materialization = require_json(config_materialization_path)
 
     missing_requirements = missing_requirements_from_gap(gap)
     missing_names = [row.get("requirement", "") for row in missing_requirements]
@@ -230,8 +235,8 @@ def main() -> int:
     add_check(
         checks,
         "source_audits_exist",
-        all(path.exists() for path in [collection_path, preflight_path, route_path]),
-        ", ".join(rel(path) for path in [collection_path, preflight_path, route_path]),
+        all(path.exists() for path in [collection_path, preflight_path, route_path, config_materialization_path]),
+        ", ".join(rel(path) for path in [collection_path, preflight_path, route_path, config_materialization_path]),
     )
     add_check(
         checks,
@@ -276,6 +281,19 @@ def main() -> int:
         "config_intake_directory_tracked",
         collection_checks.get("task_config_dir_exists") is True,
         f"task_config_dir_exists={collection_checks.get('task_config_dir_exists')!r}",
+    )
+    add_check(
+        checks,
+        "config_materializer_ready",
+        config_materialization.get("passed") is True
+        and config_materialization.get("not_external_evidence") is True
+        and config_materialization.get("write_enabled") is False
+        and int(config_materialization.get("task_count", 0) or 0) >= 4,
+        (
+            f"passed={config_materialization.get('passed')!r}, "
+            f"write_enabled={config_materialization.get('write_enabled')!r}, "
+            f"task_count={config_materialization.get('task_count')!r}"
+        ),
     )
     preflight_actions = preflight.get("operator_next_actions", []) or []
     add_check(
@@ -334,7 +352,7 @@ def main() -> int:
         "not_external_evidence": True,
         "acquisition_packet_ready": passed,
         "strict_evidence_ready": False,
-        "source_reports": [rel(path) for path in [gap_path, collection_path, preflight_path, route_path] if path.exists()],
+        "source_reports": [rel(path) for path in [gap_path, collection_path, preflight_path, route_path, config_materialization_path] if path.exists()],
         "missing_requirements": [
             {
                 "requirement": row.get("requirement"),

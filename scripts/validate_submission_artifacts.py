@@ -112,6 +112,7 @@ def main():
         "scripts\\audit_external_runner_harness.py",
         "scripts\\audit_external_collection_readiness.py",
         "scripts\\validate_external_configs.py",
+        "scripts\\materialize_external_configs.py",
         "scripts\\build_external_baseline_contract.py",
         "scripts\\build_external_adapter_scaffolds.py",
         "scripts\\build_external_reference_adapters.py",
@@ -155,6 +156,7 @@ def main():
         "python scripts/audit_external_runner_harness.py",
         "python scripts/audit_external_collection_readiness.py",
         "python scripts/audit_external_evidence_preflight.py",
+        "python scripts/materialize_external_configs.py",
         "python scripts/build_external_acquisition_packet.py",
         "python scripts/audit_external_release_package.py",
         "python scripts/audit_external_execution_readiness.py",
@@ -1001,6 +1003,9 @@ def main():
         "external_acquisition_packet_not_evidence",
         "external_acquisition_packet_maps_all_blockers",
         "config_templates_ready",
+        "config_materialization_plan_ready",
+        "config_materialization_plan_not_evidence",
+        "config_materialization_covers_tasks",
         "baseline_contract_reports_missing_implementations",
         "adapter_contract_harness_ready",
         "strict_evidence_gates_remain_not_ready",
@@ -1026,6 +1031,7 @@ def main():
         RESULTS / "external_release_package_audit.md",
         RESULTS / "external_collection_readiness_audit.md",
         RESULTS / "external_acquisition_packet.md",
+        RESULTS / "external_config_materialization_plan.md",
         RESULTS / "external_execution_readiness_audit.md",
         RESULTS / "external_fidelity_acceptance_audit.md",
         RESULTS / "external_blind_eval_audit.md",
@@ -1054,6 +1060,7 @@ def main():
         "all_missing_requirements_mapped",
         "collection_preflight_fail_closed",
         "config_intake_directory_tracked",
+        "config_materializer_ready",
         "preflight_operator_actions_present",
         "route_independent_of_haonan",
         "post_collection_strict_commands_cover_all_gates",
@@ -1062,6 +1069,25 @@ def main():
     ):
         if acquisition_checks.get(required_check) is not True:
             fail(f"external acquisition packet missing passing check: {required_check}")
+
+    config_materialization_path = RESULTS / "external_config_materialization_plan.json"
+    if not config_materialization_path.exists():
+        fail("missing results/external_config_materialization_plan.json; run scripts/materialize_external_configs.py")
+    config_materialization = json.loads(config_materialization_path.read_text(encoding="utf-8"))
+    if config_materialization.get("version") != "external_config_materialization_plan_v1":
+        fail("external config materialization plan version mismatch")
+    if config_materialization.get("passed") is not True:
+        fail("external config materialization plan did not pass")
+    if config_materialization.get("not_external_evidence") is not True:
+        fail("external config materialization plan must declare that it is not evidence")
+    if config_materialization.get("write_enabled") is not False:
+        fail("external config materialization plan should not write configs during validation")
+    if config_materialization.get("strict_config_evidence_ready") is not False:
+        fail("external config materialization plan must not claim strict config evidence readiness")
+    if int(config_materialization.get("task_count", 0) or 0) < 4:
+        fail("external config materialization plan covers too few tasks")
+    if not config_materialization.get("operator_write_command", "").endswith("--confirm-real-platform --write"):
+        fail("external config materialization plan missing guarded operator write command")
 
     expected_files = {
         "dataset_summary": RESULTS / "dataset_summary.csv",

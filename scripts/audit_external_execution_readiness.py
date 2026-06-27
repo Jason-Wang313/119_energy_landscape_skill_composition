@@ -258,6 +258,29 @@ def main() -> int:
         (EXTERNAL / "config_schema_v1.json").exists(),
         rel(EXTERNAL / "config_schema_v1.json"),
     )
+    config_materialization_ok, config_materialization, config_materialization_detail = passed_json(
+        RESULTS / "external_config_materialization_plan.json",
+        version="external_config_materialization_plan_v1",
+    )
+    add_check(checks, "config_materialization_plan_ready", config_materialization_ok, config_materialization_detail)
+    add_check(
+        checks,
+        "config_materialization_plan_not_evidence",
+        config_materialization.get("not_external_evidence") is True
+        and config_materialization.get("write_enabled") is False
+        and config_materialization.get("strict_config_evidence_ready") is False,
+        (
+            f"not_external_evidence={config_materialization.get('not_external_evidence')!r}, "
+            f"write_enabled={config_materialization.get('write_enabled')!r}, "
+            f"strict_config_evidence_ready={config_materialization.get('strict_config_evidence_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "config_materialization_covers_tasks",
+        int(config_materialization.get("task_count", 0) or 0) >= 4,
+        f"task_count={config_materialization.get('task_count')!r}",
+    )
 
     baseline_ok, baseline, baseline_detail = passed_json(
         RESULTS / "external_baseline_contract_audit.json",

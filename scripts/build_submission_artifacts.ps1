@@ -96,6 +96,7 @@ try {
         Invoke-Native python scripts\audit_external_runner_harness.py
         Invoke-Native python scripts\audit_external_collection_readiness.py
         Invoke-Native python scripts\validate_external_configs.py
+        Invoke-Native python scripts\materialize_external_configs.py
         Invoke-Native python scripts\build_external_baseline_contract.py
         Invoke-Native python scripts\build_external_adapter_scaffolds.py
         Invoke-Native python scripts\build_external_reference_adapters.py

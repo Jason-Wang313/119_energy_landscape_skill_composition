@@ -56,6 +56,9 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_release_package_not_evidence`: not_external_evidence=True, release_package_ready=False
 - `pass` `config_templates_ready`: passed
 - `pass` `config_schema_exists`: external_validation/config_schema_v1.json
+- `pass` `config_materialization_plan_ready`: passed
+- `pass` `config_materialization_plan_not_evidence`: not_external_evidence=True, write_enabled=False, strict_config_evidence_ready=False
+- `pass` `config_materialization_covers_tasks`: task_count=4
 - `pass` `baseline_contract_ready`: passed
 - `pass` `baseline_contract_reports_missing_implementations`: implementations_ready=False, missing=11
 - `pass` `adapter_scaffolds_ready`: passed

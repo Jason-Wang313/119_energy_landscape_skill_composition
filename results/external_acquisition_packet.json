@@ -2,7 +2,7 @@
   "acquisition_packet_ready": true,
   "checks": [
     {
-      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json",
+      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_config_materialization_plan.json",
       "name": "source_audits_exist",
       "passed": true
     },
@@ -29,6 +29,11 @@
     {
       "detail": "task_config_dir_exists=True",
       "name": "config_intake_directory_tracked",
+      "passed": true
+    },
+    {
+      "detail": "passed=True, write_enabled=False, task_count=4",
+      "name": "config_materializer_ready",
       "passed": true
     },
     {
@@ -126,6 +131,7 @@
         "Manifest-declared real task configs replace non-evidence templates"
       ],
       "commands": [
+        "python scripts\\materialize_external_configs.py --platform-type <real_robot|high_fidelity_sim> --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
         "python scripts\\validate_external_configs.py --strict"
       ],
       "id": "real_task_configs",
@@ -291,7 +297,8 @@
     "results/submission_readiness_gap_audit.json",
     "results/external_collection_readiness_audit.json",
     "results/external_evidence_preflight.json",
-    "results/independent_validation_route_audit.json"
+    "results/independent_validation_route_audit.json",
+    "results/external_config_materialization_plan.json"
   ],
   "strict_collection_command": "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
   "strict_evidence_ready": false,
