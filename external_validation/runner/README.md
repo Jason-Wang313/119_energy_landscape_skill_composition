@@ -12,6 +12,15 @@ Dry-run packet check:
 python external_validation\runner\real_collection_runner.py --dry-run --max-rows 12
 ```
 
+Backend contract qualification:
+
+```powershell
+python scripts\audit_external_backend_contract.py --strict `
+  --backend-module my_lab.paper119_maniskill_backend `
+  --task-config-dir external_validation\configs `
+  --alias-map external_validation\method_alias_map.json
+```
+
 Pre-flight actual collection readiness:
 
 ```powershell

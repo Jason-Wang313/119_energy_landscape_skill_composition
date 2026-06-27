@@ -22,6 +22,7 @@
 - Submission readiness gap validator: `scripts/audit_submission_readiness_gap.py`
 - External collection planner: `scripts/build_external_collection_plan.py`
 - External collection runbook builder: `scripts/build_external_runbook.py`
+- External backend contract validator: `scripts/audit_external_backend_contract.py`
 - External collection readiness validator: `scripts/audit_external_collection_readiness.py`
 - External config validator: `scripts/validate_external_configs.py`
 - External baseline contract builder: `scripts/build_external_baseline_contract.py`

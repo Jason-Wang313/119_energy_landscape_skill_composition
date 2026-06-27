@@ -110,6 +110,7 @@ def main():
         "scripts\\build_external_blind_eval_plan.py",
         "scripts\\build_external_runbook.py",
         "scripts\\audit_external_runner_harness.py",
+        "scripts\\audit_external_backend_contract.py",
         "scripts\\audit_external_collection_readiness.py",
         "scripts\\validate_external_configs.py",
         "scripts\\materialize_external_configs.py",
@@ -158,6 +159,7 @@ def main():
         "poppler-utils",
         "python -m compileall",
         "python scripts/audit_external_runner_harness.py",
+        "python scripts/audit_external_backend_contract.py",
         "python scripts/self_test_external_runner_backend.py",
         "python scripts/self_test_external_collection_preflight.py",
         "python scripts/audit_external_collection_readiness.py",
@@ -407,6 +409,43 @@ def main():
     ):
         if not path.exists():
             fail(f"missing external runner harness artifact: {path}")
+
+    backend_contract_path = RESULTS / "external_backend_contract_audit.json"
+    if not backend_contract_path.exists():
+        fail("missing results/external_backend_contract_audit.json; run scripts/audit_external_backend_contract.py")
+    backend_contract = json.loads(backend_contract_path.read_text(encoding="utf-8"))
+    if backend_contract.get("version") != "external_backend_contract_audit_v1":
+        fail("external backend contract audit version mismatch")
+    if backend_contract.get("passed") is not True:
+        fail("external backend contract audit did not pass")
+    if backend_contract.get("not_external_evidence") is not True:
+        fail("external backend contract audit must declare that it is not evidence")
+    if backend_contract.get("backend_contract_harness_ready") is not True:
+        fail("external backend contract harness is not ready")
+    if backend_contract.get("actual_backend_ready") is not False:
+        fail("external backend contract audit must not claim a real backend is ready by default")
+    if backend_contract.get("backend_required_for_collection") is not True:
+        fail("external backend contract audit must require a backend before collection")
+    if "audit_external_backend_contract.py --strict" not in str(backend_contract.get("strict_command", "")):
+        fail("external backend contract audit must document the strict backend command")
+    backend_contract_checks = {check.get("name"): check.get("passed") for check in backend_contract.get("checks", [])}
+    for required_check in (
+        "backend_contract_file_exists",
+        "backend_contract_mentions_required_backend_api",
+        "backend_contract_mentions_base_class",
+        "backend_contract_mentions_validator",
+        "backend_contract_mentions_base_implementation_rejection",
+        "backend_templates_fail_closed",
+        "runner_readme_declares_backend_audit",
+        "contract_accepts_complete_synthetic_backend",
+        "contract_rejects_incomplete_synthetic_backend",
+    ):
+        if backend_contract_checks.get(required_check) is not True:
+            fail(f"external backend contract audit missing passing check: {required_check}")
+    if backend_contract_checks.get("backend_module_supplied") is not False:
+        fail("external backend contract audit should expose the missing real backend module in default mode")
+    if not (RESULTS / "external_backend_contract_audit.md").exists():
+        fail("missing results/external_backend_contract_audit.md")
 
     collection_readiness_path = RESULTS / "external_collection_readiness_audit.json"
     if not collection_readiness_path.exists():

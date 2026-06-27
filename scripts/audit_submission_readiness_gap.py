@@ -86,6 +86,8 @@ def main() -> int:
     blind_eval = read_json(blind_eval_path) if blind_eval_path.exists() else {}
     runner_harness_path = RESULTS / "external_runner_harness_audit.json"
     runner_harness = read_json(runner_harness_path) if runner_harness_path.exists() else {}
+    backend_contract_path = RESULTS / "external_backend_contract_audit.json"
+    backend_contract = read_json(backend_contract_path) if backend_contract_path.exists() else {}
     collection_readiness_path = RESULTS / "external_collection_readiness_audit.json"
     collection_readiness = read_json(collection_readiness_path) if collection_readiness_path.exists() else {}
     pairing_integrity_path = RESULTS / "external_pairing_integrity_audit.json"
@@ -289,6 +291,10 @@ def main() -> int:
         and runner_harness.get("passed") is True
         and runner_harness.get("not_external_evidence") is True
         and runner_harness.get("actual_execution_ready") is False
+        and backend_contract.get("passed") is True
+        and backend_contract.get("not_external_evidence") is True
+        and backend_contract.get("backend_contract_harness_ready") is True
+        and backend_contract.get("actual_backend_ready") is False
         and collection_readiness.get("passed") is True
         and collection_readiness.get("collection_ready") is False
         and pairing_integrity.get("passed") is True
@@ -306,6 +312,7 @@ def main() -> int:
             "results/independent_validation_route_audit.json",
             "results/external_blind_eval_audit.json",
             "results/external_runner_harness_audit.json",
+            "results/external_backend_contract_audit.json",
             "results/external_collection_readiness_audit.json",
             "results/external_pairing_integrity_audit.json",
             "results/external_release_package_audit.json",
@@ -383,6 +390,9 @@ def main() -> int:
         runner_harness.get("passed") is True
         and runner_harness.get("runner_harness_ready") is True
         and runner_harness.get("actual_execution_ready") is False
+        and backend_contract.get("passed") is True
+        and backend_contract.get("backend_contract_harness_ready") is True
+        and backend_contract.get("actual_backend_ready") is False
         and exists_all(
             [
                 EXTERNAL / "runner" / "README.md",
@@ -392,22 +402,27 @@ def main() -> int:
                 EXTERNAL / "runner" / "backend_templates" / "mujoco_robosuite_backend.py",
                 EXTERNAL / "runner" / "backend_templates" / "isaac_backend.py",
                 EXTERNAL / "runner" / "backend_templates" / "robot_lab_backend.py",
+                ROOT / "scripts" / "audit_external_backend_contract.py",
+                RESULTS / "external_backend_contract_audit.json",
+                RESULTS / "external_backend_contract_audit.md",
             ]
         )
     )
     add_requirement(
         requirements,
-        requirement="Fail-closed external collection runner for independent evidence capture",
+        requirement="Fail-closed external collection runner and backend qualification gate for independent evidence capture",
         status="satisfied" if runner_ok else "missing",
         evidence=[
             "results/external_runner_harness_audit.json",
             "results/external_runner_harness_audit.md",
+            "results/external_backend_contract_audit.json",
+            "results/external_backend_contract_audit.md",
             "external_validation/runner/README.md",
             "external_validation/runner/backend_contract.py",
             "external_validation/runner/real_collection_runner.py",
             "external_validation/runner/backend_templates/maniskill_backend.py",
         ],
-        blocker="" if runner_ok else "external runner harness is missing/failing or incorrectly claims actual execution readiness",
+        blocker="" if runner_ok else "external runner/backend contract harness is missing/failing or incorrectly claims actual execution readiness",
         submission_blocking=True,
     )
 

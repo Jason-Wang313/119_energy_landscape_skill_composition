@@ -143,6 +143,7 @@
         "results/independent_validation_route_audit.json",
         "results/external_blind_eval_audit.json",
         "results/external_runner_harness_audit.json",
+        "results/external_backend_contract_audit.json",
         "results/external_collection_readiness_audit.json",
         "results/external_pairing_integrity_audit.json",
         "results/external_release_package_audit.json",
@@ -189,12 +190,14 @@
       "evidence": [
         "results/external_runner_harness_audit.json",
         "results/external_runner_harness_audit.md",
+        "results/external_backend_contract_audit.json",
+        "results/external_backend_contract_audit.md",
         "external_validation/runner/README.md",
         "external_validation/runner/backend_contract.py",
         "external_validation/runner/real_collection_runner.py",
         "external_validation/runner/backend_templates/maniskill_backend.py"
       ],
-      "requirement": "Fail-closed external collection runner for independent evidence capture",
+      "requirement": "Fail-closed external collection runner and backend qualification gate for independent evidence capture",
       "status": "satisfied",
       "submission_blocking": true
     },

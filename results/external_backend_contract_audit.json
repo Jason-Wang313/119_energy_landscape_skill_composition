@@ -1,0 +1,68 @@
+{
+  "actual_backend_ready": false,
+  "alias_map": "external_validation/method_alias_map.json",
+  "backend_contract_harness_ready": true,
+  "backend_module": "",
+  "backend_required_for_collection": true,
+  "blocking_missing": [
+    "backend_module_supplied: --backend-module not supplied"
+  ],
+  "checks": [
+    {
+      "detail": "external_validation/runner/backend_contract.py",
+      "name": "backend_contract_file_exists",
+      "passed": true
+    },
+    {
+      "detail": "REQUIRED_BACKEND_API",
+      "name": "backend_contract_mentions_required_backend_api",
+      "passed": true
+    },
+    {
+      "detail": "ExternalCollectionBackend",
+      "name": "backend_contract_mentions_base_class",
+      "passed": true
+    },
+    {
+      "detail": "validate_backend_object",
+      "name": "backend_contract_mentions_validator",
+      "passed": true
+    },
+    {
+      "detail": "backend uses base NotImplementedError implementation",
+      "name": "backend_contract_mentions_base_implementation_rejection",
+      "passed": true
+    },
+    {
+      "detail": "templates=4, errors=[]",
+      "name": "backend_templates_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "README documents backend qualification audit",
+      "name": "runner_readme_declares_backend_audit",
+      "passed": true
+    },
+    {
+      "detail": "complete backend passed",
+      "name": "contract_accepts_complete_synthetic_backend",
+      "passed": true
+    },
+    {
+      "detail": "backend uses base NotImplementedError implementation for load_task_config; backend uses base NotImplementedError implementation for reset_scene; backend uses base NotImplementedError implementation for capture_observation; backend uses base NotImplementedError implementation for terminal_samples; backend uses base NotImplementedError implementation for run_method; backend uses base NotImplementedError implementation for execute_skill_pair; backend uses base NotImplementedError implementation for record_video; backend uses base NotImplementedError implementation for policy_or_config_hash",
+      "name": "contract_rejects_incomplete_synthetic_backend",
+      "passed": true
+    },
+    {
+      "detail": "--backend-module not supplied",
+      "name": "backend_module_supplied",
+      "passed": false
+    }
+  ],
+  "not_external_evidence": true,
+  "passed": true,
+  "strict": false,
+  "strict_command": "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
+  "task_config_dir": "external_validation/configs",
+  "version": "external_backend_contract_audit_v1"
+}

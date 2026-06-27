@@ -40,6 +40,9 @@ jobs:
       - name: Audit external runner harness
         run: python scripts/audit_external_runner_harness.py
 
+      - name: Audit external backend contract
+        run: python scripts/audit_external_backend_contract.py
+
       - name: Self-test external runner backend path
         run: python scripts/self_test_external_runner_backend.py
 

@@ -42,7 +42,7 @@
       "passed": true
     },
     {
-      "detail": "{\n  \"alias_map_loaded\": false,\n  \"dry_run\": true,\n  \"method_aliases\": [\n    \"method_04\",\n    \"method_05\",\n    \"method_08\"\n  ],\n  \"not_external_evidence\": true,\n  \"rows_checked\": 3,\n  \"task_config_paths\": [\n    \"external_validation/config_templates/peg_place_regrasp.json\"\n  ],\n  \"task_families\": [\n  ",
+      "detail": "{\n  \"alias_map_loaded\": false,\n  \"dry_run\": true,\n  \"method_aliases\": [\n    \"method_04\",\n    \"method_05\",\n    \"method_08\"\n  ],\n  \"not_external_evidence\": true,\n  \"rows_checked\": 3,\n  \"task_config_paths\": [\n    \"external_validation/configs/peg_place_regrasp.json\"\n  ],\n  \"task_families\": [\n    \"peg_pl",
       "name": "runner_dry_run_passes_without_writes",
       "passed": true
     },

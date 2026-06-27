@@ -77,7 +77,10 @@ def validate_backend_object(backend: Any) -> list[str]:
     for name in REQUIRED_BACKEND_API:
         if not callable(getattr(backend, name, None)):
             errors.append(f"backend missing callable {name}")
+            continue
+        implementation = getattr(type(backend), name, None)
+        if implementation is getattr(ExternalCollectionBackend, name, None):
+            errors.append(f"backend uses base NotImplementedError implementation for {name}")
     if getattr(backend, "TEMPLATE_ONLY", True) is True:
         errors.append("backend has TEMPLATE_ONLY=True and cannot collect evidence")
     return errors
-

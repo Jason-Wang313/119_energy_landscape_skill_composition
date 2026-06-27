@@ -94,6 +94,7 @@ try {
         Invoke-Native python scripts\build_external_blind_eval_plan.py
         Invoke-Native python scripts\build_external_runbook.py
         Invoke-Native python scripts\audit_external_runner_harness.py
+        Invoke-Native python scripts\audit_external_backend_contract.py
         Invoke-Native python scripts\audit_external_collection_readiness.py
         Invoke-Native python scripts\validate_external_configs.py
         Invoke-Native python scripts\materialize_external_configs.py

@@ -36,10 +36,10 @@ This audit checks the fail-closed runner used to collect future external JSONL l
   "not_external_evidence": true,
   "rows_checked": 3,
   "task_config_paths": [
-    "external_validation/config_templates/peg_place_regrasp.json"
+    "external_validation/configs/peg_place_regrasp.json"
   ],
   "task_families": [
-  
+    "peg_pl
 - `pass` `runner_rejects_template_backend_for_actual_collection`: backend has TEMPLATE_ONLY=True and cannot collect evidence
 
 - `pass` `readme_declares_not_evidence`: README keeps evidence boundary
