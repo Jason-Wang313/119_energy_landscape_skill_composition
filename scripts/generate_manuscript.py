@@ -379,7 +379,7 @@ def make_manuscript(summary):
 
     a(r"\section{Motivation}")
     a(
-        "A reusable robot skill library still leaves a planning problem: the robot must know what the end of one skill makes possible for the next. We focus on that seam, where action-conditioned prediction can be smaller than a full simulator but richer than a graph edge."
+        "A reusable robot skill library still leaves a planning problem: the robot must know what the end of one skill makes possible for the next. We focus on that seam, the narrow place where an action model can be smaller than a full simulator but richer than a graph edge: it predicts what a completed skill makes true, risky, repairable, or impossible for the next skill."
     )
     a(
         "Potential fields, navigation functions, energy-based learning, trajectory optimization, DMPs, and stable dynamical systems have long used scalar landscapes to encode motion and control structure \\citep{khatib1986potential,koditschek1989navigation,lecun2006energy,ratliff2009chomp,ijspeert2013dmp,khansari2011stable}. "
@@ -390,7 +390,7 @@ def make_manuscript(summary):
         "The core failure mode is simple: skill one ends successfully, but its terminal distribution lies near a ridge or outside the basin of skill two. A module graph may mark the edge legal, while execution requires a high-energy repair, crosses a barrier, or enters a contact mode where the next controller no longer descends. The paper asks whether an explicit seam model can make composition more reliable by predicting whether a proposed transition will fail before the handoff, diagnosing the likely reason, deciding when to accept, repair, probe, abstain, or choose a different transition, and turning the outcome into planner memory for later compositions. Contact-rich examples matter here because they expose action consequences that a motion-only edge label misses; they are a testbed for the seam model, not the identity of the paper."
     )
     a(
-        "The broader question is how a robot represents the physical consequences of a skill transition, notices when that representation is incomplete, and adapts future planning from the outcome. We use the world/action-model view at a deliberately local scale: the model is not a whole robot simulator, and the prediction-action-update loop is limited to the handoff."
+        "The broader question is how a robot represents the physical consequences of a skill transition, notices when that representation is incomplete, and adapts future planning from the outcome. We use the world/action-model view at a deliberately local scale: the model is not a whole robot simulator, and the prediction-action-update loop is limited to the handoff. That restraint is intentional; the paper studies the small interface where a planner asks, before committing to the next skill, what this transition is likely to do and what should be remembered afterward."
     )
     a(
         "Concretely, the contribution is a seam-level predictive interface: estimate terminal/basin/barrier/descent/risk quantities, diagnose the likely failure mode, choose accept, repair, probe, abstain, or transition, and write the outcome back to planner-edge memory. The energy composer is the paper's implementation of that interface, not the identity of the contribution."

@@ -7,7 +7,7 @@ Readiness state: `COLLECT_EXTERNAL_EVIDENCE`.
 Manifest source: `external_validation/manifest_template.json`.
 Expected records: `1440`.
 Observed records: `0`.
-Blocking missing items: `60`.
+Blocking missing items: `56`.
 
 This report is an operator preflight for real external validation artifacts. It is not robot evidence, not accepted high-fidelity simulator evidence, and not a substitute for the strict external audits.
 
@@ -15,10 +15,10 @@ This report is an operator preflight for real external validation artifacts. It 
 
 | Task | Expected | Observed | Log | Videos | Config | Missing |
 |---|---:|---:|---|---:|---|---|
-| `peg_place_regrasp` | 360 | 0 | no | 0 | no | platform_name is empty; log_jsonl is missing: external_validation/logs/peg_place_regrasp.jsonl; video_dir is missing: external_validation/videos/peg_place_regrasp; config_path is missing: external_validation/configs/peg_place_regrasp.json; config_hash is empty |
-| `drawer_to_pick_transfer` | 360 | 0 | no | 0 | no | platform_name is empty; log_jsonl is missing: external_validation/logs/drawer_to_pick_transfer.jsonl; video_dir is missing: external_validation/videos/drawer_to_pick_transfer; config_path is missing: external_validation/configs/drawer_to_pick_transfer.json; config_hash is empty |
-| `door_open_navigation` | 360 | 0 | no | 0 | no | platform_name is empty; log_jsonl is missing: external_validation/logs/door_open_navigation.jsonl; video_dir is missing: external_validation/videos/door_open_navigation; config_path is missing: external_validation/configs/door_open_navigation.json; config_hash is empty |
-| `cable_route_insert` | 360 | 0 | no | 0 | no | platform_name is empty; log_jsonl is missing: external_validation/logs/cable_route_insert.jsonl; video_dir is missing: external_validation/videos/cable_route_insert; config_path is missing: external_validation/configs/cable_route_insert.json; config_hash is empty |
+| `peg_place_regrasp` | 360 | 0 | no | 0 | yes | platform_name is empty; log_jsonl is missing: external_validation/logs/peg_place_regrasp.jsonl; video_dir is missing: external_validation/videos/peg_place_regrasp; config_hash is empty |
+| `drawer_to_pick_transfer` | 360 | 0 | no | 0 | yes | platform_name is empty; log_jsonl is missing: external_validation/logs/drawer_to_pick_transfer.jsonl; video_dir is missing: external_validation/videos/drawer_to_pick_transfer; config_hash is empty |
+| `door_open_navigation` | 360 | 0 | no | 0 | yes | platform_name is empty; log_jsonl is missing: external_validation/logs/door_open_navigation.jsonl; video_dir is missing: external_validation/videos/door_open_navigation; config_hash is empty |
+| `cable_route_insert` | 360 | 0 | no | 0 | yes | platform_name is empty; log_jsonl is missing: external_validation/logs/cable_route_insert.jsonl; video_dir is missing: external_validation/videos/cable_route_insert; config_hash is empty |
 
 ## Method Matrix
 

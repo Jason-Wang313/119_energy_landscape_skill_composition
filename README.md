@@ -37,9 +37,9 @@ Use `-InstallDependencies` on the first run if the Python packages are not insta
 
 Canonical local PDF: `C:/Users/wangz/Downloads/119.pdf`
 
-PDF SHA256: `8282E9EF6C8008DA308B7908DC6192604E981213591A7E6C25F01DAAAF87EC2E`
+PDF SHA256: `011DFFB0BAA6A5CA4824D16455690BDBEA5EF268A615F3538A403F05EFBF8BD0`
 
-PDF size: `464829` bytes.
+PDF size: `465103` bytes.
 
 PDF pages: `29`.
 

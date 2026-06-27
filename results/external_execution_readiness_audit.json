@@ -241,7 +241,7 @@
       "passed": true
     },
     {
-      "detail": "evidence_ready=False, readiness_state='COLLECT_EXTERNAL_EVIDENCE', blocking_missing_count=60",
+      "detail": "evidence_ready=False, readiness_state='COLLECT_EXTERNAL_EVIDENCE', blocking_missing_count=56",
       "name": "external_evidence_preflight_fail_closed",
       "passed": true
     },

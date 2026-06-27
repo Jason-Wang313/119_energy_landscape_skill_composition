@@ -74,7 +74,7 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `manifest_builder_fail_closed`: manifest_written=False, records_loaded=0
 - `pass` `external_evidence_preflight_ready`: passed
 - `pass` `external_evidence_preflight_not_evidence`: not_external_evidence=True
-- `pass` `external_evidence_preflight_fail_closed`: evidence_ready=False, readiness_state='COLLECT_EXTERNAL_EVIDENCE', blocking_missing_count=60
+- `pass` `external_evidence_preflight_fail_closed`: evidence_ready=False, readiness_state='COLLECT_EXTERNAL_EVIDENCE', blocking_missing_count=56
 - `pass` `external_evidence_preflight_record_budget`: expected=1440, observed=0
 - `pass` `external_evidence_preflight_operator_actions`: operator_next_actions=5
 - `pass` `external_acquisition_packet_ready`: passed

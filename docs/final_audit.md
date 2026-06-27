@@ -33,8 +33,8 @@ Continuation audit additions:
 - Full local build script: `scripts/build_submission_artifacts.ps1`.
 - GitHub validation workflow: `.github/workflows/paper119-validation.yml` runs the core runner/readiness/submission/outreach validators on pushed branches and pull requests, with the repository PDF used as the CI canonical artifact.
 - Canonical PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `8282E9EF6C8008DA308B7908DC6192604E981213591A7E6C25F01DAAAF87EC2E`.
-- PDF size: `464829` bytes.
+- PDF SHA256: `011DFFB0BAA6A5CA4824D16455690BDBEA5EF268A615F3538A403F05EFBF8BD0`.
+- PDF size: `465103` bytes.
 - PDF pages: `29`.
 - Desktop PDF copy: absent.
 - Visual QA: final title page, overview page, main result figures, fixed-risk figures, and outreach preview figure page inspected after the reframing/figure pass.

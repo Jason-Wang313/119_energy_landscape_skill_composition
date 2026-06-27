@@ -10,7 +10,7 @@ Output: `C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape
 
 - Records loaded: `0`.
 - Schema errors: `4`.
-- Warnings: `15`.
+- Warnings: `11`.
 
 ## Schema Errors
 
@@ -21,10 +21,6 @@ Output: `C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape
 
 ## Warnings
 
-- peg_place_regrasp: no config_hash and no existing config_path
-- drawer_to_pick_transfer: no config_hash and no existing config_path
-- door_open_navigation: no config_hash and no existing config_path
-- cable_route_insert: no config_hash and no existing config_path
 - greedy_module_sequence: no checkpoint_or_config_hash and no hashable implementation/path
 - behavior_cloned_skill_chain: no checkpoint_or_config_hash and no hashable implementation/path
 - option_graph_planner: no checkpoint_or_config_hash and no hashable implementation/path

@@ -16,10 +16,6 @@
   "template": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\manifest_template.json",
   "version": "external_manifest_builder_report_v1",
   "warnings": [
-    "peg_place_regrasp: no config_hash and no existing config_path",
-    "drawer_to_pick_transfer: no config_hash and no existing config_path",
-    "door_open_navigation: no config_hash and no existing config_path",
-    "cable_route_insert: no config_hash and no existing config_path",
     "greedy_module_sequence: no checkpoint_or_config_hash and no hashable implementation/path",
     "behavior_cloned_skill_chain: no checkpoint_or_config_hash and no hashable implementation/path",
     "option_graph_planner: no checkpoint_or_config_hash and no hashable implementation/path",

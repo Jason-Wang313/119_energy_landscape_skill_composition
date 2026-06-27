@@ -10,22 +10,18 @@
     "peg_place_regrasp: platform_name is empty",
     "peg_place_regrasp: log_jsonl is missing: external_validation/logs/peg_place_regrasp.jsonl",
     "peg_place_regrasp: video_dir is missing: external_validation/videos/peg_place_regrasp",
-    "peg_place_regrasp: config_path is missing: external_validation/configs/peg_place_regrasp.json",
     "peg_place_regrasp: config_hash is empty",
     "drawer_to_pick_transfer: platform_name is empty",
     "drawer_to_pick_transfer: log_jsonl is missing: external_validation/logs/drawer_to_pick_transfer.jsonl",
     "drawer_to_pick_transfer: video_dir is missing: external_validation/videos/drawer_to_pick_transfer",
-    "drawer_to_pick_transfer: config_path is missing: external_validation/configs/drawer_to_pick_transfer.json",
     "drawer_to_pick_transfer: config_hash is empty",
     "door_open_navigation: platform_name is empty",
     "door_open_navigation: log_jsonl is missing: external_validation/logs/door_open_navigation.jsonl",
     "door_open_navigation: video_dir is missing: external_validation/videos/door_open_navigation",
-    "door_open_navigation: config_path is missing: external_validation/configs/door_open_navigation.json",
     "door_open_navigation: config_hash is empty",
     "cable_route_insert: platform_name is empty",
     "cable_route_insert: log_jsonl is missing: external_validation/logs/cable_route_insert.jsonl",
     "cable_route_insert: video_dir is missing: external_validation/videos/cable_route_insert",
-    "cable_route_insert: config_path is missing: external_validation/configs/cable_route_insert.json",
     "cable_route_insert: config_hash is empty",
     "greedy_module_sequence: implementation missing: implementation path is empty",
     "greedy_module_sequence: checkpoint_or_config_path is empty",
@@ -61,7 +57,7 @@
     "barrier_certified_energy_composer_v5: checkpoint_or_config_path is empty",
     "barrier_certified_energy_composer_v5: checkpoint_or_config_hash is empty"
   ],
-  "blocking_missing_count": 60,
+  "blocking_missing_count": 56,
   "evidence_ready": false,
   "expected_records": 1440,
   "global_blockers": [
@@ -227,15 +223,14 @@
   "task_count": 4,
   "task_reports": [
     {
-      "config_exists": false,
-      "config_is_template": null,
+      "config_exists": true,
+      "config_is_template": false,
       "expected_records": 360,
       "log_exists": false,
       "missing": [
         "platform_name is empty",
         "log_jsonl is missing: external_validation/logs/peg_place_regrasp.jsonl",
         "video_dir is missing: external_validation/videos/peg_place_regrasp",
-        "config_path is missing: external_validation/configs/peg_place_regrasp.json",
         "config_hash is empty"
       ],
       "non_placeholder_videos": 0,
@@ -246,15 +241,14 @@
       "video_dir_exists": false
     },
     {
-      "config_exists": false,
-      "config_is_template": null,
+      "config_exists": true,
+      "config_is_template": false,
       "expected_records": 360,
       "log_exists": false,
       "missing": [
         "platform_name is empty",
         "log_jsonl is missing: external_validation/logs/drawer_to_pick_transfer.jsonl",
         "video_dir is missing: external_validation/videos/drawer_to_pick_transfer",
-        "config_path is missing: external_validation/configs/drawer_to_pick_transfer.json",
         "config_hash is empty"
       ],
       "non_placeholder_videos": 0,
@@ -265,15 +259,14 @@
       "video_dir_exists": false
     },
     {
-      "config_exists": false,
-      "config_is_template": null,
+      "config_exists": true,
+      "config_is_template": false,
       "expected_records": 360,
       "log_exists": false,
       "missing": [
         "platform_name is empty",
         "log_jsonl is missing: external_validation/logs/door_open_navigation.jsonl",
         "video_dir is missing: external_validation/videos/door_open_navigation",
-        "config_path is missing: external_validation/configs/door_open_navigation.json",
         "config_hash is empty"
       ],
       "non_placeholder_videos": 0,
@@ -284,15 +277,14 @@
       "video_dir_exists": false
     },
     {
-      "config_exists": false,
-      "config_is_template": null,
+      "config_exists": true,
+      "config_is_template": false,
       "expected_records": 360,
       "log_exists": false,
       "missing": [
         "platform_name is empty",
         "log_jsonl is missing: external_validation/logs/cable_route_insert.jsonl",
         "video_dir is missing: external_validation/videos/cable_route_insert",
-        "config_path is missing: external_validation/configs/cable_route_insert.json",
         "config_hash is empty"
       ],
       "non_placeholder_videos": 0,
