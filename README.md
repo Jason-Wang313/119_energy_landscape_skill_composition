@@ -8,7 +8,7 @@ This rebuild expands the paper into a 29-page, CPU-only, RAM-light submission pa
 
 ## Visible Contribution
 
-Paper 119's contribution is an adaptive physical world/action model for skill seams: it scores whether two embodied skills can compose, explains likely failure modes, selects accept/repair/probe/abstain/transition actions at the seam, and records planner-facing memory for future attempts. The repository now makes that contribution visible through the generated manuscript, bounded claim ledger, mechanism/calibration/holdout/falsification audits, reproducible local experiments, a non-Haonan external validation packet, a fail-closed real-collection runner harness, and a separate Haonan/Yilun outreach package. The machine readiness audit currently reports `15/19` requirements satisfied; the remaining blockers are external-evidence blockers, not prose or packaging blockers.
+Paper 119's contribution is an adaptive physical world/action model for skill seams: it scores whether two embodied skills can compose, explains likely failure modes, selects accept/repair/probe/abstain/transition actions at the seam, and records planner-facing memory for future attempts. The repository now makes that contribution visible through the generated manuscript, bounded claim ledger, mechanism/calibration/holdout/falsification audits, reproducible local experiments, a non-Haonan external validation packet, a fail-closed real-collection runner harness, and a separate Haonan/Yilun outreach package. The machine readiness audit currently reports `16/20` requirements satisfied; the remaining blockers are external-evidence blockers, not prose or packaging blockers.
 
 ## Evidence Snapshot
 
@@ -37,9 +37,9 @@ Use `-InstallDependencies` on the first run if the Python packages are not insta
 
 Canonical local PDF: `C:/Users/wangz/Downloads/119.pdf`
 
-PDF SHA256: `9C67A1B4A55315DB6474EF9F25C046916BFDEC87355C04AFCACA7996D2C455EB`
+PDF SHA256: `D09E1145FFD01A542079EB31CE33B44553C80F45C69A90ECF43A6F96F63E9539`
 
-PDF size: `464927` bytes.
+PDF size: `464923` bytes.
 
 PDF pages: `29`.
 
@@ -78,6 +78,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External runbook audit: `results/external_runbook_audit.md`
 - External collection runner harness: `external_validation/runner/README.md`
 - External runner harness audit: `results/external_runner_harness_audit.md`
+- External collection readiness audit: `results/external_collection_readiness_audit.md`
 - External task config schema: `external_validation/config_schema_v1.json`
 - External config template audit: `results/external_config_template_audit.md`
 - External baseline implementation contract: `external_validation/baseline_implementation_contract.md`

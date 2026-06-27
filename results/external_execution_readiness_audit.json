@@ -102,6 +102,26 @@
     },
     {
       "detail": "passed",
+      "name": "external_collection_readiness_audit_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True",
+      "name": "external_collection_readiness_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "collection_ready=False, readiness_state='PREPARE_BACKEND_CONFIGS_AND_FIDELITY', blocking_missing_count=6",
+      "name": "external_collection_readiness_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "readiness_checks={'runner_exists': True, 'schema_exists': True, 'operator_sheet_exists': True, 'operator_sheet_columns': True, 'operator_sheet_row_budget': True, 'alias_map_exists': True, 'alias_map_complete': True, 'backend_module_ready': False, 'task_config_dir_exists': False, 'real_task_configs_ready': False, 'fidelity_acceptance_ready': False, 'alias_unsealing_explicit': False, 'run_id_specific': False, 'output_logs_empty_or_force': True, 'video_dir_parent_exists': True}",
+      "name": "external_collection_readiness_packet_shape",
+      "passed": true
+    },
+    {
+      "detail": "passed",
       "name": "external_pairing_integrity_audit_ready",
       "passed": true
     },
@@ -247,6 +267,7 @@
     "manifest-declared JSONL rollout logs",
     "complete paired-reset method panels with no duplicates",
     "manifest-declared release artifact hashes with no local dry-run/template placeholders",
+    "actual collection preflight cleared with backend, real configs, fidelity acceptance, alias unsealing, and specific run id",
     "manifest-declared task configs with hashes",
     "manifest-declared videos",
     "manifest-declared independent non-oracle adapter implementations",

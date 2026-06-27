@@ -2,7 +2,7 @@
 
 Passed: `true`.
 Objective complete: `false`.
-Satisfied requirements: `15/19`.
+Satisfied requirements: `16/20`.
 Blocking missing requirements: `4`.
 Human-polish requirements: `0`.
 
@@ -37,13 +37,15 @@ This audit is meant to prevent false completion claims. It passes only while the
 - `satisfied` Single-command local reproducibility, GitHub CI, and validator self-tests
   Evidence: scripts/build_submission_artifacts.ps1, scripts/validate_submission_artifacts.py, scripts/self_test_external_rollout_validator.py, scripts/self_test_external_evidence_pipeline.py, .github/workflows/paper119-validation.yml, docs/reproducibility_checklist.md
 - `satisfied` Independent external-validation execution packet not dependent on Haonan
-  Evidence: results/external_execution_readiness_audit.json, results/external_fidelity_acceptance_audit.json, results/independent_validation_route_audit.json, results/external_blind_eval_audit.json, results/external_runner_harness_audit.json, results/external_pairing_integrity_audit.json, results/external_release_package_audit.json, external_validation/platform_qualification_checklist.md, external_validation/fidelity_acceptance_template.json, external_validation/independent_validation_route.md, external_validation/independent_validation_route_matrix.csv, external_validation/blind_evaluation_protocol.md, external_validation/blinded_operator_sheet.csv, external_validation/collection_runbook.md, external_validation/operator_record_sheet.csv, external_validation/runner/real_collection_runner.py
+  Evidence: results/external_execution_readiness_audit.json, results/external_fidelity_acceptance_audit.json, results/independent_validation_route_audit.json, results/external_blind_eval_audit.json, results/external_runner_harness_audit.json, results/external_collection_readiness_audit.json, results/external_pairing_integrity_audit.json, results/external_release_package_audit.json, external_validation/platform_qualification_checklist.md, external_validation/fidelity_acceptance_template.json, external_validation/independent_validation_route.md, external_validation/independent_validation_route_matrix.csv, external_validation/blind_evaluation_protocol.md, external_validation/blinded_operator_sheet.csv, external_validation/collection_runbook.md, external_validation/operator_record_sheet.csv, external_validation/runner/real_collection_runner.py
 - `satisfied` External release package hash-lock and no-local-dry-run gate
   Evidence: scripts/audit_external_release_package.py, scripts/build_external_manifest.py, results/external_release_package_audit.json, results/external_release_package_audit.md
 - `satisfied` External paired-reset fairness and method-panel integrity gate
   Evidence: scripts/audit_external_pairing_integrity.py, results/external_pairing_integrity_audit.json, results/external_pairing_integrity_audit.md, external_validation/log_schema_v1.json
 - `satisfied` Fail-closed external collection runner for independent evidence capture
   Evidence: results/external_runner_harness_audit.json, results/external_runner_harness_audit.md, external_validation/runner/README.md, external_validation/runner/backend_contract.py, external_validation/runner/real_collection_runner.py, external_validation/runner/backend_templates/maniskill_backend.py
+- `satisfied` Actual external collection preflight gate before spending robot or simulator time
+  Evidence: scripts/audit_external_collection_readiness.py, results/external_collection_readiness_audit.json, results/external_collection_readiness_audit.md, external_validation/blinded_operator_sheet.csv, external_validation/method_alias_map.json
 - `satisfied` Concrete non-Haonan validation route with public simulator and robot options
   Evidence: results/independent_validation_route_audit.json, external_validation/independent_validation_route.md, external_validation/independent_validation_route_matrix.csv
 - `satisfied` Separate Haonan/Yilun outreach package derived from the strengthened paper

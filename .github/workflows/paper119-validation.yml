@@ -40,6 +40,9 @@ jobs:
       - name: Audit external runner harness
         run: python scripts/audit_external_runner_harness.py
 
+      - name: Audit external collection readiness
+        run: python scripts/audit_external_collection_readiness.py
+
       - name: Audit external release package
         run: python scripts/audit_external_release_package.py
 

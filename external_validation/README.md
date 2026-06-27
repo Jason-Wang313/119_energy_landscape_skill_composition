@@ -2,7 +2,7 @@
 
 This directory is reserved for evidence that can make Paper 119 independently submission-ready.
 
-The current paper is not main-conference ready until `scripts/audit_external_evidence.py --strict`, `scripts\validate_external_rollouts.py --strict --write-results`, `scripts\audit_external_pairing_integrity.py --strict`, and `scripts\audit_external_release_package.py --strict` pass against a real `external_validation/manifest.json` and the referenced logs, videos, configs, checkpoints, and baseline implementations.
+The current paper is not main-conference ready until `scripts/audit_external_evidence.py --strict`, `scripts\validate_external_rollouts.py --strict --write-results`, `scripts\audit_external_pairing_integrity.py --strict`, and `scripts\audit_external_release_package.py --strict` pass against a real `external_validation/manifest.json` and the referenced logs, videos, configs, checkpoints, and baseline implementations. Before spending robot or simulator time, `scripts\audit_external_collection_readiness.py --strict` must also pass with a real backend, real configs, accepted fidelity provenance, explicit alias unsealing, and a specific run id.
 
 Use `manifest_template.json` as the required manifest structure and `log_schema_v1.json` as the required episode-level JSONL schema. A valid evidence package must prove one of:
 
@@ -76,6 +76,15 @@ python scripts\audit_external_runner_harness.py
 
 This writes `results/external_runner_harness_audit.{json,md}` and checks the executable runner contract under `external_validation/runner/`. The runner can dry-run the blinded packet without writing logs, but actual collection requires a non-template backend module, real task configs, explicit alias unsealing, empty output logs unless `--force` is used, and later strict manifest/log/video validation. It is execution scaffolding only, not rollout evidence.
 
+Audit actual collection readiness before starting robot or simulator runs:
+
+```powershell
+python scripts\audit_external_collection_readiness.py
+python scripts\audit_external_collection_readiness.py --strict
+```
+
+This writes `results/external_collection_readiness_audit.{json,md}`. The non-strict form is a fail-closed status report; the strict form returns non-zero until the blinded sheet, alias map, non-template backend, real `external_validation/configs/*.json`, accepted fidelity audit, explicit alias unsealing, specific run id, and empty output logs are ready. It is not evidence; it prevents wasting an external run on an incomplete collection setup.
+
 Generate the independent-baseline implementation contract:
 
 ```powershell
@@ -133,6 +142,7 @@ python scripts\audit_external_fidelity_acceptance.py
 python scripts\build_external_blind_eval_plan.py
 python scripts\build_external_runbook.py
 python scripts\audit_external_runner_harness.py
+python scripts\audit_external_collection_readiness.py
 python scripts\validate_external_configs.py
 python scripts\build_external_baseline_contract.py
 python scripts\build_external_adapter_scaffolds.py
@@ -167,6 +177,7 @@ After real or accepted high-fidelity artifacts exist, run:
 
 ```powershell
 python scripts\build_external_manifest.py --write --check-video-paths
+python scripts\audit_external_collection_readiness.py --strict
 python scripts\audit_external_release_package.py --strict
 python scripts\audit_external_fidelity_acceptance.py --strict
 python scripts\validate_external_adapters.py --strict
@@ -189,6 +200,7 @@ python scripts\build_external_local_dry_run.py
 python scripts\audit_external_fidelity_acceptance.py
 python scripts\build_external_blind_eval_plan.py
 python scripts\audit_external_runner_harness.py
+python scripts\audit_external_collection_readiness.py
 python scripts\audit_external_release_package.py
 python scripts\audit_external_evidence_preflight.py
 python scripts\audit_external_pairing_integrity.py
@@ -212,3 +224,5 @@ The rollout validator recomputes the external success margin, utility margin, pa
 The pairing integrity audit is a separate fairness gate over the same raw logs. It blocks incomplete paired reset panels, duplicate method records, undeclared methods, unequal method counts, and within-reset mismatches in terminal samples, platform, or fixed-risk budget.
 
 The release package audit is the hash-lock gate. It blocks stale or missing release artifacts, hash mismatches, local dry-run logs/videos, config templates, adapter scaffolds, and placeholder videos before any strict evidence claim can pass.
+
+The collection readiness audit is the last pre-run gate. It blocks actual collection until the operator supplies a non-template backend, real task configs, accepted platform provenance, explicit alias unsealing, a specific run id, and empty output logs.

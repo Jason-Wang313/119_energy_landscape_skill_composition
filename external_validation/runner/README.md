@@ -12,6 +12,15 @@ Dry-run packet check:
 python external_validation\runner\real_collection_runner.py --dry-run --max-rows 12
 ```
 
+Pre-flight actual collection readiness:
+
+```powershell
+python scripts\audit_external_collection_readiness.py --strict `
+  --backend-module my_lab.paper119_maniskill_backend `
+  --run-id paper119_maniskill_sapien_YYYYMMDD `
+  --unsealed-alias-map
+```
+
 Actual collection requires all of the following:
 
 - a non-template backend module passed with `--backend-module`;
@@ -19,6 +28,7 @@ Actual collection requires all of the following:
 - intentional alias unsealing with `--unsealed-alias-map`;
 - empty output JSONL logs unless `--force` is explicitly used;
 - backend video export to `external_validation/videos`;
+- a passing strict collection-readiness audit before the run starts;
 - a later manifest build plus strict `validate_external_rollouts.py --strict --check-video-paths` and `audit_external_evidence.py --strict`.
 
 Example actual command after a real backend exists:
@@ -52,4 +62,3 @@ Template backends under `backend_templates/` keep `TEMPLATE_ONLY = True` and del
 ## Blinding Boundary
 
 The operator sheet stays blinded. The runner only resolves `method_alias` through `method_alias_map.json` when `--unsealed-alias-map` is supplied, making alias access explicit in the execution command. Do not unseal aliases until configs, implementation hashes, logs, and videos are frozen.
-

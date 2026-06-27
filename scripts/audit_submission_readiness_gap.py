@@ -79,6 +79,8 @@ def main() -> int:
     blind_eval = read_json(blind_eval_path) if blind_eval_path.exists() else {}
     runner_harness_path = RESULTS / "external_runner_harness_audit.json"
     runner_harness = read_json(runner_harness_path) if runner_harness_path.exists() else {}
+    collection_readiness_path = RESULTS / "external_collection_readiness_audit.json"
+    collection_readiness = read_json(collection_readiness_path) if collection_readiness_path.exists() else {}
     pairing_integrity_path = RESULTS / "external_pairing_integrity_audit.json"
     pairing_integrity = read_json(pairing_integrity_path) if pairing_integrity_path.exists() else {}
     release_package_path = RESULTS / "external_release_package_audit.json"
@@ -278,6 +280,8 @@ def main() -> int:
         and runner_harness.get("passed") is True
         and runner_harness.get("not_external_evidence") is True
         and runner_harness.get("actual_execution_ready") is False
+        and collection_readiness.get("passed") is True
+        and collection_readiness.get("collection_ready") is False
         and pairing_integrity.get("passed") is True
         and pairing_integrity.get("pairing_ready") is False
         and release_package.get("passed") is True
@@ -293,6 +297,7 @@ def main() -> int:
             "results/independent_validation_route_audit.json",
             "results/external_blind_eval_audit.json",
             "results/external_runner_harness_audit.json",
+            "results/external_collection_readiness_audit.json",
             "results/external_pairing_integrity_audit.json",
             "results/external_release_package_audit.json",
             "external_validation/platform_qualification_checklist.md",
@@ -394,6 +399,42 @@ def main() -> int:
             "external_validation/runner/backend_templates/maniskill_backend.py",
         ],
         blocker="" if runner_ok else "external runner harness is missing/failing or incorrectly claims actual execution readiness",
+        submission_blocking=True,
+    )
+
+    collection_checks = {check.get("name"): check.get("passed") for check in collection_readiness.get("checks", [])}
+    collection_readiness_ok = (
+        collection_readiness.get("passed") is True
+        and collection_readiness.get("version") == "external_collection_readiness_audit_v1"
+        and collection_readiness.get("collection_ready") is False
+        and collection_readiness.get("not_external_evidence") is True
+        and int(collection_readiness.get("row_count", 0) or 0) >= 1440
+        and collection_checks.get("operator_sheet_row_budget") is True
+        and collection_checks.get("alias_map_complete") is True
+        and collection_checks.get("backend_module_ready") is False
+        and collection_checks.get("real_task_configs_ready") is False
+        and exists_all(
+            [
+                ROOT / "scripts" / "audit_external_collection_readiness.py",
+                RESULTS / "external_collection_readiness_audit.json",
+                RESULTS / "external_collection_readiness_audit.md",
+                EXTERNAL / "blinded_operator_sheet.csv",
+                EXTERNAL / "method_alias_map.json",
+            ]
+        )
+    )
+    add_requirement(
+        requirements,
+        requirement="Actual external collection preflight gate before spending robot or simulator time",
+        status="satisfied" if collection_readiness_ok else "missing",
+        evidence=[
+            "scripts/audit_external_collection_readiness.py",
+            "results/external_collection_readiness_audit.json",
+            "results/external_collection_readiness_audit.md",
+            "external_validation/blinded_operator_sheet.csv",
+            "external_validation/method_alias_map.json",
+        ],
+        blocker="" if collection_readiness_ok else "external collection preflight audit is missing/failing or incorrectly claims actual collection readiness",
         submission_blocking=True,
     )
 

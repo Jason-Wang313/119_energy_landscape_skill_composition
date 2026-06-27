@@ -39,14 +39,14 @@ ICLR-main ready: no
 ## Artifact Checks
 
 - PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `9C67A1B4A55315DB6474EF9F25C046916BFDEC87355C04AFCACA7996D2C455EB`.
-- PDF size: `464927` bytes.
+- PDF SHA256: `D09E1145FFD01A542079EB31CE33B44553C80F45C69A90ECF43A6F96F63E9539`.
+- PDF size: `464923` bytes.
 - PDF pages: `29`.
 - Numbered PDF placement: Downloads only.
 - Desktop numbered PDF: absent.
 - Validator: passed.
 - Claim boundary audit: `results/claim_boundary_audit.md` passed and confirms the current package keeps the claim bounded.
-- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 15/19 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
+- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 16/20 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
 - Local falsification audit: `results/local_falsification_audit.md` passed and is included in the generated manuscript.
 - Holdout robustness audit: `results/holdout_robustness_audit.md` passed and is included in the generated manuscript.
 - Diagnostic mechanism audit: `results/diagnostic_mechanism_audit.md` passed and is included in the generated manuscript.
@@ -66,6 +66,7 @@ ICLR-main ready: no
 - External fidelity acceptance audit: `external_validation/fidelity_acceptance_template.json` and `results/external_fidelity_acceptance_audit.md` exist, pass as a contract audit, and currently report `acceptance_ready=false` until a real robot or simulator provenance file is filled and declared by the manifest.
 - External collection runbook: `external_validation/collection_runbook.md`, `external_validation/operator_record_sheet.csv`, task cards, config templates, and `results/external_runbook_audit.md` exist, pass, and remain non-evidence collection scaffolding.
 - External collection runner harness: `external_validation/runner/README.md`, `external_validation/runner/backend_contract.py`, `external_validation/runner/real_collection_runner.py`, backend templates, and `results/external_runner_harness_audit.md` exist, pass, dry-run without writing logs, reject template backends/configs for actual collection, and remain non-evidence execution scaffolding.
+- External collection readiness audit: `results/external_collection_readiness_audit.md` exists, passes as a fail-closed pre-collection gate, verifies 1,440 blinded rows and 12 aliases, and reports `collection_ready=false` until a real backend, real task configs, fidelity acceptance, explicit alias unsealing, and a specific run id are supplied.
 - External blind evaluation packet: `external_validation/blind_evaluation_protocol.md`, `external_validation/blinded_operator_sheet.csv`, `external_validation/method_alias_map.json`, and `results/external_blind_eval_audit.md` exist, pass, and provide deterministic per-reset randomization plus sealed method aliases while remaining non-evidence collection control.
 - External execution readiness audit: `external_validation/platform_qualification_checklist.md` and `results/external_execution_readiness_audit.md` exist, pass, and verify the independent operator packet is executable while strict evidence gates remain not ready.
 - External config schema/template audit: `external_validation/config_schema_v1.json` and `results/external_config_template_audit.md` exist and pass for templates; strict config evidence validation still fails until real configs exist.
@@ -100,6 +101,7 @@ ICLR-main ready: no
 - Strict adapter-contract evidence validation over manifest-declared real implementations and logs does not pass yet.
 - External evidence strict audit does not pass yet.
 - External release-package strict validation does not pass yet.
+- External collection-readiness strict preflight does not pass yet.
 - External rollout-log strict validation does not pass yet.
 - External pairing-integrity strict validation does not pass yet.
 - Related-work/reference/readability coverage is now machine-audited across the target novelty boundary; human taste review can still improve prose, but it is no longer a tracked readiness gap.

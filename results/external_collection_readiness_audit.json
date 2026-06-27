@@ -1,0 +1,119 @@
+{
+  "alias_count": 12,
+  "alias_map": "external_validation/method_alias_map.json",
+  "backend_module": "",
+  "blocking_missing": [
+    "backend_module_ready: --backend-module is required before actual collection",
+    "task_config_dir_exists: external_validation/configs",
+    "real_task_configs_ready: missing config: external_validation/configs/cable_route_insert.json; missing config: external_validation/configs/door_open_navigation.json; missing config: external_validation/configs/drawer_to_pick_transfer.json; missing config: external_validation/configs/peg_place_regrasp.json",
+    "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'",
+    "alias_unsealing_explicit: unsealed_alias_map=False",
+    "run_id_specific: run_id='paper119_external_validation_run'"
+  ],
+  "blocking_missing_count": 6,
+  "checks": [
+    {
+      "detail": "external_validation/runner/real_collection_runner.py",
+      "name": "runner_exists",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/log_schema_v1.json",
+      "name": "schema_exists",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/blinded_operator_sheet.csv",
+      "name": "operator_sheet_exists",
+      "passed": true
+    },
+    {
+      "detail": "required columns present",
+      "name": "operator_sheet_columns",
+      "passed": true
+    },
+    {
+      "detail": "rows=1440",
+      "name": "operator_sheet_row_budget",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/method_alias_map.json",
+      "name": "alias_map_exists",
+      "passed": true
+    },
+    {
+      "detail": "aliases=12, missing=[], errors=[]",
+      "name": "alias_map_complete",
+      "passed": true
+    },
+    {
+      "detail": "--backend-module is required before actual collection",
+      "name": "backend_module_ready",
+      "passed": false
+    },
+    {
+      "detail": "external_validation/configs",
+      "name": "task_config_dir_exists",
+      "passed": false
+    },
+    {
+      "detail": "missing config: external_validation/configs/cable_route_insert.json; missing config: external_validation/configs/door_open_navigation.json; missing config: external_validation/configs/drawer_to_pick_transfer.json; missing config: external_validation/configs/peg_place_regrasp.json",
+      "name": "real_task_configs_ready",
+      "passed": false
+    },
+    {
+      "detail": "acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'",
+      "name": "fidelity_acceptance_ready",
+      "passed": false
+    },
+    {
+      "detail": "unsealed_alias_map=False",
+      "name": "alias_unsealing_explicit",
+      "passed": false
+    },
+    {
+      "detail": "run_id='paper119_external_validation_run'",
+      "name": "run_id_specific",
+      "passed": false
+    },
+    {
+      "detail": "existing_nonempty_logs=[], force=False",
+      "name": "output_logs_empty_or_force",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/videos",
+      "name": "video_dir_parent_exists",
+      "passed": true
+    }
+  ],
+  "collection_ready": false,
+  "not_external_evidence": true,
+  "operator_sheet": "external_validation/blinded_operator_sheet.csv",
+  "output_log_dir": "external_validation/logs",
+  "passed": true,
+  "post_collection_strict_commands": [
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_fidelity_acceptance.py --strict",
+    "python scripts\\validate_external_adapters.py --strict",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "readiness_state": "PREPARE_BACKEND_CONFIGS_AND_FIDELITY",
+  "row_count": 1440,
+  "run_id": "paper119_external_validation_run",
+  "strict_collection_command": "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+  "task_config_dir": "external_validation/configs",
+  "task_families": [
+    "cable_route_insert",
+    "door_open_navigation",
+    "drawer_to_pick_transfer",
+    "peg_place_regrasp"
+  ],
+  "version": "external_collection_readiness_audit_v1",
+  "video_dir": "external_validation/videos"
+}

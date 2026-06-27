@@ -28,12 +28,12 @@ Continuation audit additions:
 - Camera-ready design audit: `results/camera_ready_design_audit.md` renders all 29 PDF pages and checks page density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
 - Numeric integrity: validator passed with no missing required outputs, invalid numeric values, or artifact-placement violations.
 - Claim boundary audit: `results/claim_boundary_audit.md` passes and blocks premature deployment, hardware, or ICLR-main readiness claims.
-- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` maps the active objective to 19 concrete requirements; it currently reports 15 satisfied, 4 blocking external gaps, and 0 human-polish items, so the objective is not complete.
+- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` maps the active objective to 20 concrete requirements; it currently reports 16 satisfied, 4 blocking external gaps, and 0 human-polish items, so the objective is not complete.
 - Full local build script: `scripts/build_submission_artifacts.ps1`.
 - GitHub validation workflow: `.github/workflows/paper119-validation.yml` runs the core runner/readiness/submission/outreach validators on pushed branches and pull requests, with the repository PDF used as the CI canonical artifact.
 - Canonical PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `9C67A1B4A55315DB6474EF9F25C046916BFDEC87355C04AFCACA7996D2C455EB`.
-- PDF size: `464927` bytes.
+- PDF SHA256: `D09E1145FFD01A542079EB31CE33B44553C80F45C69A90ECF43A6F96F63E9539`.
+- PDF size: `464923` bytes.
 - PDF pages: `29`.
 - Desktop PDF copy: absent.
 - Visual QA: final title page, overview page, main result figures, fixed-risk figures, and outreach preview figure page inspected after the reframing/figure pass.
@@ -43,6 +43,7 @@ Continuation audit additions:
 - External fidelity acceptance audit: `external_validation/fidelity_acceptance_template.json` and `results/external_fidelity_acceptance_audit.md` define the robot/simulator provenance, contact/dynamics, paired-reset replay, operator independence, and hash requirements for counting a high-fidelity route as credible; it currently reports `acceptance_ready=false` and remains non-evidence.
 - External collection runbook: `external_validation/collection_runbook.md`, `external_validation/operator_record_sheet.csv`, task cards, config templates, and `results/external_runbook_audit.md` turn that schedule into an operator packet while remaining non-evidence.
 - External collection runner harness: `external_validation/runner/README.md`, `external_validation/runner/backend_contract.py`, `external_validation/runner/real_collection_runner.py`, backend templates, and `results/external_runner_harness_audit.md` provide a fail-closed execution path that dry-runs without writing logs and rejects template backends/configs for actual collection while remaining non-evidence.
+- External collection readiness audit: `results/external_collection_readiness_audit.md` verifies the blinded sheet, alias map, output-log state, backend/config/fidelity prerequisites, explicit alias unsealing, and run-id specificity before any real robot or simulator collection starts; it currently reports `collection_ready=false` and remains non-evidence.
 - External blind evaluation packet: `external_validation/blind_evaluation_protocol.md`, `external_validation/blinded_operator_sheet.csv`, `external_validation/method_alias_map.json`, and `results/external_blind_eval_audit.md` add deterministic per-reset randomization and sealed method aliases for the 1,440-record route while remaining non-evidence.
 - External execution readiness audit: `external_validation/platform_qualification_checklist.md` and `results/external_execution_readiness_audit.md` verify that the independent operator packet is ready to execute while strict evidence gates still correctly report not ready.
 - External config schema: `external_validation/config_schema_v1.json` and `results/external_config_template_audit.md` validate non-evidence task templates, while strict config evidence validation remains blocked until real manifest configs exist.
@@ -74,6 +75,7 @@ The paper is not ICLR-main ready yet. Missing items remain:
 - calibrated contact-force, camera, or state logs;
 - hardware rollout videos;
 - independent manifest-declared implementations of all major baselines used in real external runs;
+- strict external collection-readiness preflight with a real backend, real configs, accepted fidelity provenance, explicit alias unsealing, and specific run id;
 - strict adapter-contract validation for manifest-declared real baseline implementations and their logs;
 - strict external evidence audit over manifest/logs/videos/checkpoints/baselines;
 - strict external rollout-log validation with recomputed metrics from JSONL records.

@@ -16,6 +16,7 @@ This file is a collection schedule only. It does not count as external validatio
 - `python scripts\build_independent_validation_route.py`
 - `python scripts\audit_external_fidelity_acceptance.py`
 - `python scripts\build_external_blind_eval_plan.py`
+- `python scripts\audit_external_collection_readiness.py`
 - `python scripts\validate_external_configs.py`
 - `python scripts\build_external_baseline_contract.py`
 - `python scripts\build_external_adapter_scaffolds.py`
@@ -23,6 +24,7 @@ This file is a collection schedule only. It does not count as external validatio
 - `python scripts\validate_external_configs.py --strict`
 - `python scripts\validate_external_adapters.py --strict`
 - `python scripts\build_external_manifest.py --write --check-video-paths`
+- `python scripts\audit_external_collection_readiness.py --strict`
 - `python scripts\audit_external_release_package.py --strict`
 - `python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict`
 - `python scripts\audit_external_pairing_integrity.py --strict`

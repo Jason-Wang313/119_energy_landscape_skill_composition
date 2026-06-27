@@ -184,6 +184,39 @@ def main() -> int:
         f"actual_execution_ready={runner.get('actual_execution_ready')!r}",
     )
 
+    collection_readiness_ok, collection_readiness, collection_readiness_detail = passed_json(
+        RESULTS / "external_collection_readiness_audit.json",
+        version="external_collection_readiness_audit_v1",
+    )
+    add_check(checks, "external_collection_readiness_audit_ready", collection_readiness_ok, collection_readiness_detail)
+    add_check(
+        checks,
+        "external_collection_readiness_not_evidence",
+        collection_readiness.get("not_external_evidence") is True,
+        f"not_external_evidence={collection_readiness.get('not_external_evidence')!r}",
+    )
+    add_check(
+        checks,
+        "external_collection_readiness_fail_closed",
+        collection_readiness.get("collection_ready") is False
+        and collection_readiness.get("readiness_state") == "PREPARE_BACKEND_CONFIGS_AND_FIDELITY"
+        and int(collection_readiness.get("blocking_missing_count", 0) or 0) >= 4,
+        (
+            f"collection_ready={collection_readiness.get('collection_ready')!r}, "
+            f"readiness_state={collection_readiness.get('readiness_state')!r}, "
+            f"blocking_missing_count={collection_readiness.get('blocking_missing_count')!r}"
+        ),
+    )
+    readiness_checks = {check.get("name"): check.get("passed") for check in collection_readiness.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_collection_readiness_packet_shape",
+        readiness_checks.get("operator_sheet_row_budget") is True
+        and readiness_checks.get("alias_map_complete") is True
+        and readiness_checks.get("output_logs_empty_or_force") is True,
+        f"readiness_checks={readiness_checks}",
+    )
+
     pairing_ok, pairing, pairing_detail = passed_json(
         RESULTS / "external_pairing_integrity_audit.json",
         version="external_pairing_integrity_audit_v1",
@@ -365,6 +398,7 @@ def main() -> int:
         EXTERNAL / "runner" / "README.md",
         EXTERNAL / "runner" / "backend_contract.py",
         EXTERNAL / "runner" / "real_collection_runner.py",
+        RESULTS / "external_collection_readiness_audit.md",
         DOCS / "independent_validation_protocol.md",
     ]
     missing_packet_paths = [rel(path) for path in required_packet_paths if not path.exists()]
@@ -425,6 +459,10 @@ def main() -> int:
         "external_runner_harness_ready",
         "external_runner_harness_not_evidence",
         "external_runner_harness_fail_closed",
+        "external_collection_readiness_audit_ready",
+        "external_collection_readiness_not_evidence",
+        "external_collection_readiness_fail_closed",
+        "external_collection_readiness_packet_shape",
         "external_pairing_integrity_audit_ready",
         "external_pairing_integrity_not_evidence",
         "external_release_package_audit_ready",
@@ -474,6 +512,7 @@ def main() -> int:
             "manifest-declared JSONL rollout logs",
             "complete paired-reset method panels with no duplicates",
             "manifest-declared release artifact hashes with no local dry-run/template placeholders",
+            "actual collection preflight cleared with backend, real configs, fidelity acceptance, alias unsealing, and specific run id",
             "manifest-declared task configs with hashes",
             "manifest-declared videos",
             "manifest-declared independent non-oracle adapter implementations",

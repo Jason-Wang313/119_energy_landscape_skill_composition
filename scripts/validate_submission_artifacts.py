@@ -110,6 +110,7 @@ def main():
         "scripts\\build_external_blind_eval_plan.py",
         "scripts\\build_external_runbook.py",
         "scripts\\audit_external_runner_harness.py",
+        "scripts\\audit_external_collection_readiness.py",
         "scripts\\validate_external_configs.py",
         "scripts\\build_external_baseline_contract.py",
         "scripts\\build_external_adapter_scaffolds.py",
@@ -151,6 +152,7 @@ def main():
         "poppler-utils",
         "python -m compileall",
         "python scripts/audit_external_runner_harness.py",
+        "python scripts/audit_external_collection_readiness.py",
         "python scripts/audit_external_release_package.py",
         "python scripts/audit_external_execution_readiness.py",
         "python scripts/audit_external_pairing_integrity.py",
@@ -202,6 +204,10 @@ def main():
         fail("external collection plan must include the blind evaluation plan command")
     if "python scripts\\build_independent_validation_route.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the independent validation route command")
+    if "python scripts\\audit_external_collection_readiness.py" not in collection_plan.get("validation_commands", []):
+        fail("external collection plan must include the collection readiness audit command")
+    if "python scripts\\audit_external_collection_readiness.py --strict" not in collection_plan.get("validation_commands", []):
+        fail("external collection plan must include the strict collection readiness audit command")
 
     route_audit_path = RESULTS / "independent_validation_route_audit.json"
     if not route_audit_path.exists():
@@ -387,6 +393,41 @@ def main():
     ):
         if not path.exists():
             fail(f"missing external runner harness artifact: {path}")
+
+    collection_readiness_path = RESULTS / "external_collection_readiness_audit.json"
+    if not collection_readiness_path.exists():
+        fail("missing results/external_collection_readiness_audit.json; run scripts/audit_external_collection_readiness.py")
+    collection_readiness = json.loads(collection_readiness_path.read_text(encoding="utf-8"))
+    if collection_readiness.get("version") != "external_collection_readiness_audit_v1":
+        fail("external collection readiness audit version mismatch")
+    if collection_readiness.get("passed") is not True:
+        fail("external collection readiness audit did not pass")
+    if collection_readiness.get("not_external_evidence") is not True:
+        fail("external collection readiness audit must declare that it is not evidence")
+    if collection_readiness.get("collection_ready") is not False:
+        fail("external collection readiness must not claim readiness before real backend/configs/fidelity exist")
+    if int(collection_readiness.get("row_count", 0) or 0) < 1440:
+        fail("external collection readiness audit has too few operator rows")
+    if int(collection_readiness.get("alias_count", 0) or 0) < 12:
+        fail("external collection readiness audit has too few method aliases")
+    collection_readiness_checks = {check.get("name"): check.get("passed") for check in collection_readiness.get("checks", [])}
+    for required_check in (
+        "runner_exists",
+        "schema_exists",
+        "operator_sheet_exists",
+        "operator_sheet_columns",
+        "operator_sheet_row_budget",
+        "alias_map_exists",
+        "alias_map_complete",
+        "output_logs_empty_or_force",
+    ):
+        if collection_readiness_checks.get(required_check) is not True:
+            fail(f"external collection readiness audit missing passing check: {required_check}")
+    for required_blocker in ("backend_module_ready", "real_task_configs_ready", "fidelity_acceptance_ready", "alias_unsealing_explicit"):
+        if collection_readiness_checks.get(required_blocker) is not False:
+            fail(f"external collection readiness should currently fail closed on {required_blocker}")
+    if not (RESULTS / "external_collection_readiness_audit.md").exists():
+        fail("missing results/external_collection_readiness_audit.md")
 
     config_template_audit_path = RESULTS / "external_config_template_audit.json"
     if not config_template_audit_path.exists():
@@ -945,6 +986,10 @@ def main():
         "external_runner_harness_ready",
         "external_runner_harness_not_evidence",
         "external_runner_harness_fail_closed",
+        "external_collection_readiness_audit_ready",
+        "external_collection_readiness_not_evidence",
+        "external_collection_readiness_fail_closed",
+        "external_collection_readiness_packet_shape",
         "external_pairing_integrity_audit_ready",
         "external_pairing_integrity_not_evidence",
         "external_release_package_audit_ready",
@@ -973,6 +1018,7 @@ def main():
         EXTERNAL / "runner" / "real_collection_runner.py",
         RESULTS / "external_pairing_integrity_audit.md",
         RESULTS / "external_release_package_audit.md",
+        RESULTS / "external_collection_readiness_audit.md",
         RESULTS / "external_execution_readiness_audit.md",
         RESULTS / "external_fidelity_acceptance_audit.md",
         RESULTS / "external_blind_eval_audit.md",
