@@ -2,7 +2,7 @@
 
 Passed: `true`.
 PDF pages: `29`.
-PDF size: `466648` bytes.
+PDF size: `466785` bytes.
 
 This audit checks presentation polish and artifact hygiene. It does not substitute for real external validation.
 
@@ -10,9 +10,9 @@ This audit checks presentation polish and artifact hygiene. It does not substitu
 
 - `pass` `pdf_page_count`: pages=29
 - `pass` `pdf_letter_size`: page_size='612 x 792 pts (letter)'
-- `pass` `pdf_size_reasonable`: bytes=466648
+- `pass` `pdf_size_reasonable`: bytes=466785
 - `pass` `canonical_matches_paper_pdf`: paper/main.pdf vs Downloads/119.pdf
-- `pass` `pdf_text_extractable`: text_chars=77224
+- `pass` `pdf_text_extractable`: text_chars=77343
 - `pass` `section_present_Motivation`: Motivation
 - `pass` `section_present_Problem Setup`: Problem Setup
 - `pass` `section_present_Skill Seams As Predictive Interfaces`: Skill Seams As Predictive Interfaces

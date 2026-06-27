@@ -380,7 +380,7 @@ def make_manuscript(summary):
         "A barrier-certified energy composer implements that interface, acting on a skill edge only when basin overlap, barrier height, descent continuity, repair cost, and fixed-risk calibration are jointly favorable. "
         f"In a frozen local rollout suite with 12 methods, 6 task families, 8 seam regimes, and 10 paired seeds, the composer reaches hard-slice success {fmt(metrics['hard_success_proposed'])} and utility {fmt(metrics['hard_utility_proposed'])}, compared with {fmt(metrics['hard_success_strongest'])} and {fmt(metrics['hard_utility_strongest'])} for the strongest non-oracle predecessor. "
         "It reduces seam failure, barrier violation, damage, calibration error, and realized seam breach while improving basin alignment and descent continuity. "
-        "The current evidence supports a bounded claim: a skill-seam world/action model improves composition when the relevant basin, barrier, and descent quantities are estimable and their outcomes update future planning, while external robot or high-fidelity validation remains necessary before deployment-level claims."
+        "The current evidence supports a bounded claim: treating a skill seam as a local world/action model improves composition when the relevant basin, barrier, and descent quantities are estimable and their outcomes update future planning. This is a bridge toward adaptive physical world/action models, while external robot or high-fidelity validation remains necessary before deployment-level claims."
     )
     a(r"\end{abstract}")
 
@@ -543,7 +543,7 @@ def make_manuscript(summary):
     )
     a(
         "Energy-based models and model-based policy optimization offer broad languages for implicit structure, composition, model trust, and long-horizon prediction \\citep{lecun2006energy,du2019implicit,janner2019mbpo}. "
-        "The contribution here is deliberately narrower: the energy landscape is not a universal world model, but a local world/action interface at a skill seam. It predicts handoff consequences, diagnoses the likely failure mode, exposes whether a transition should be accepted, repaired, probed, abstained from, or replaced, and updates the planner's transition belief after outcomes are observed. In that sense, energy is the implementation vocabulary, while the scientific object is a small but testable world/action model rather than a new low-level controller."
+        "The contribution here is deliberately narrower: the energy landscape is not a universal world model, but a local world/action interface at a skill seam. It predicts handoff consequences, diagnoses the likely failure mode, exposes whether a transition should be accepted, repaired, probed, abstained from, or replaced, and updates the planner's transition belief after outcomes are observed. In that sense, energy is the implementation vocabulary, while the scientific object is a small, testable seam-action interface in the world/action-modeling family rather than a new low-level controller."
     )
     a(
         "Temporal abstraction, skill chaining, and TAMP treat skills and symbolic/geometric feasibility as planning objects \\citep{sutton1999options,konidaris2009skillchaining,kaelbling2011tamp,garrett2021integrated}. "

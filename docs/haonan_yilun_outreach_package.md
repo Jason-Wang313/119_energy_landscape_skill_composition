@@ -4,7 +4,7 @@ Purpose: turn the strengthened Paper 119 into a serious collaboration pitch whil
 
 ## One-Line Positioning
 
-Paper 119 is a local world/action model for behavior-composition seams: given two skills, predict whether the handoff will work, diagnose why it may fail, choose repair/probe/abstain/transition, and use the outcome to improve future planning.
+Paper 119 is a local world/action-modeling interface for behavior-composition seams: given two skills, predict whether the handoff will work, diagnose why it may fail, choose repair/probe/abstain/transition, and use the outcome to improve future planning.
 
 This framing is natural for Jason's agenda because it links action representation, prediction, failure diagnosis, repair, and transfer without turning the project into a narrow low-level controller paper.
 
@@ -76,7 +76,7 @@ Hi Haonan,
 
 I'm Jason Wang, an independent researcher working on adaptive physical world/action models for robot behavior composition.
 
-I have been developing a local world/action model for skill-seam certification: before chaining two learned skills, the system predicts whether the next skill's basin can take over, whether a small repair is enough, or whether the seam should be rejected and routed elsewhere. The current local evidence is strongest on hard handoff regimes where naive skill sequencing looks feasible but fails through basin mismatch, high-energy barriers, or contact-mode discontinuities.
+I have been developing a local skill-seam action model: before chaining two learned skills, the system predicts whether the next skill's basin can take over, whether a small repair is enough, or whether the seam should be rejected and routed elsewhere. The current local evidence is strongest on hard handoff regimes where naive skill sequencing looks feasible but fails through basin mismatch, high-energy barriers, or contact-mode discontinuities.
 
 I thought of your CoStream work because it makes behavior composition the right object of study. My project is complementary: it is not another behavior module, but a seam critic for deciding when composed behaviors should be accepted, repaired, probed, or abstained from.
 

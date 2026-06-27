@@ -8,7 +8,7 @@ This rebuild expands the paper into a 29-page, CPU-only, RAM-light submission pa
 
 ## Visible Contribution
 
-Paper 119's contribution is an adaptive physical world/action model for skill seams: it scores whether two embodied skills can compose, explains likely failure modes, selects accept/repair/probe/abstain/transition actions at the seam, and records planner-facing memory for future attempts. Energy landscapes are the implementation vocabulary; the identity of the paper is the skill-seam action model. The repository now makes that contribution visible through the generated manuscript, bounded claim ledger, mechanism/calibration/holdout/falsification audits, reproducible local experiments, a non-Haonan external validation packet, a guarded config materializer, an External analysis plan that locks hypotheses and exclusion policy before collection, an External platform onboarding packet for the primary public-simulator route, an External backend integration packet for the public-simulator backend blocker, an External method implementation packet for non-oracle baseline work orders, a no-go external operator packet, an audited External operator handoff bundle, a fail-closed real-collection runner harness, and a separate Haonan/Yilun outreach package. The machine readiness audit currently reports `17/21` requirements satisfied; the remaining blockers are external-evidence blockers, not prose or packaging blockers.
+Paper 119 is a local bridge toward an adaptive physical world/action model for skill seams: it scores whether two embodied skills can compose, explains likely failure modes, selects accept/repair/probe/abstain/transition actions at the seam, and records planner-facing memory for future attempts. Energy landscapes are the implementation vocabulary; the identity of the paper is the bounded skill-seam action model, not a full robot simulator or a low-level controller. The repository now makes that contribution visible through the generated manuscript, bounded claim ledger, mechanism/calibration/holdout/falsification audits, reproducible local experiments, a non-Haonan external validation packet, a guarded config materializer, an External analysis plan that locks hypotheses and exclusion policy before collection, an External platform onboarding packet for the primary public-simulator route, an External backend integration packet for the public-simulator backend blocker, an External method implementation packet for non-oracle baseline work orders, a no-go external operator packet, an audited External operator handoff bundle, a fail-closed real-collection runner harness, and a separate Haonan/Yilun outreach package. The machine readiness audit currently reports `17/21` requirements satisfied; the remaining blockers are external-evidence blockers, not prose or packaging blockers.
 
 ## Evidence Snapshot
 
@@ -37,9 +37,9 @@ Use `-InstallDependencies` on the first run if the Python packages are not insta
 
 Canonical local PDF: `C:/Users/wangz/Downloads/119.pdf`
 
-PDF SHA256: `8E5935AD2DC26D2C9C2B1E046A88533FD0032803B1A9CC519F7AC4FFE867C792`
+PDF SHA256: `1B431C46459C27ED14D9C15F281C21503179A880ADCBEC83F2BB1257782652B3`
 
-PDF size: `466648` bytes.
+PDF size: `466785` bytes.
 
 PDF pages: `29`.
 
