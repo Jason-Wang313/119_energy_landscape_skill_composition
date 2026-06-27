@@ -241,6 +241,7 @@ def main() -> int:
         [
             ROOT / "scripts" / "build_submission_artifacts.ps1",
             ROOT / "scripts" / "validate_submission_artifacts.py",
+            ROOT / "scripts" / "self_test_external_backend_contract.py",
             ROOT / "scripts" / "self_test_external_evidence_pipeline.py",
             ROOT / ".github" / "workflows" / "paper119-validation.yml",
             DOCS / "reproducibility_checklist.md",
@@ -253,6 +254,7 @@ def main() -> int:
         evidence=[
             "scripts/build_submission_artifacts.ps1",
             "scripts/validate_submission_artifacts.py",
+            "scripts/self_test_external_backend_contract.py",
             "scripts/self_test_external_rollout_validator.py",
             "scripts/self_test_external_evidence_pipeline.py",
             ".github/workflows/paper119-validation.yml",

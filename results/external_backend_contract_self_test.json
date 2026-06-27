@@ -1,0 +1,33 @@
+{
+  "checks": [
+    {
+      "detail": "passed=True, actual_backend_ready=True",
+      "name": "strict_complete_backend_passes",
+      "passed": true
+    },
+    {
+      "detail": "backend_contract_complete: backend uses base NotImplementedError implementation for load_task_config; backend uses base NotImplementedError implementation for reset_scene; backend uses base NotImplementedError implementation for capture_observation; backend uses base NotImplementedError implementation for terminal_samples; backend uses base NotImplementedError implementation for run_method; backend uses base NotImplementedError implementation for execute_skill_pair; backend uses base NotImplemen",
+      "name": "strict_incomplete_backend_fails",
+      "passed": true
+    },
+    {
+      "detail": "backend_contract_complete: backend has TEMPLATE_ONLY=True and cannot collect evidence\nbackend_platform_provenance_complete: NotImplementedError: real backend must report platform provenance\nbackend_loads_all_task_configs: cable_route_insert: NotImplementedError: real backend must load task config; door_open_navigation: NotImplementedError: real backend must load task config; drawer_to_pick_transfer: NotImplementedError: real backend must load task config; peg_place_regrasp: NotImplementedError: ",
+      "name": "strict_template_backend_fails",
+      "passed": true
+    },
+    {
+      "detail": "passed=True, actual_backend_ready=False",
+      "name": "default_missing_backend_remains_nonready",
+      "passed": true
+    },
+    {
+      "detail": "self-test calls build_payload only and leaves results/external_backend_contract_audit.json unchanged",
+      "name": "real_backend_contract_report_not_overwritten",
+      "passed": true
+    }
+  ],
+  "complete_backend_actual_ready": true,
+  "not_external_evidence": true,
+  "passed": true,
+  "version": "external_backend_contract_self_test_v1"
+}

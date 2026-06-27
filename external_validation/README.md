@@ -216,6 +216,7 @@ python scripts\build_external_local_dry_run.py
 python scripts\audit_external_fidelity_acceptance.py
 python scripts\build_external_blind_eval_plan.py
 python scripts\audit_external_runner_harness.py
+python scripts\audit_external_backend_contract.py
 python scripts\audit_external_collection_readiness.py
 python scripts\audit_external_release_package.py
 python scripts\audit_external_evidence_preflight.py
@@ -223,6 +224,7 @@ python scripts\audit_external_pairing_integrity.py
 python scripts\validate_external_adapters.py
 python scripts\validate_external_configs.py --strict
 python scripts\validate_external_adapters.py --strict
+python scripts\self_test_external_backend_contract.py
 python scripts\self_test_external_rollout_validator.py
 python scripts\self_test_external_evidence_pipeline.py
 python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict
@@ -234,6 +236,8 @@ python scripts\audit_external_evidence.py --strict
 The self-test uses temporary synthetic records only. It verifies the validator's metric recomputation and schema failure path, but it is not external evidence and must not be cited as validation.
 
 The full-pipeline self-test also uses a temporary synthetic package only. It verifies that a complete manifest/config/log/video/checkpoint/implementation package can drive the strict audit to READY, then deletes the fixture and confirms the real repository evidence state is untouched. It is tooling coverage, not validation evidence.
+
+The backend contract self-test uses temporary backend modules only. It verifies that strict backend qualification accepts a complete synthetic backend, rejects incomplete/template backends, and leaves the real backend audit report untouched. It is tooling coverage, not validation evidence.
 
 The rollout validator recomputes the external success margin, utility margin, paired win rate, fixed-risk coverage, fixed-risk breach, and positive task-family count from raw JSONL records. The manifest metrics are therefore not accepted as evidence unless they are backed by episode logs with the seam prediction, diagnosis, decision, outcome, utility, video, and config/checkpoint hashes required by `log_schema_v1.json`. The evidence audit also blocks if manifest metrics disagree with the recomputed rollout metrics.
 

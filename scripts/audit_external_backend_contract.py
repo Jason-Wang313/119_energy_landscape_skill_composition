@@ -17,6 +17,8 @@ RESULTS = ROOT / "results"
 OUT_JSON = RESULTS / "external_backend_contract_audit.json"
 OUT_MD = RESULTS / "external_backend_contract_audit.md"
 
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 if str(RUNNER) not in sys.path:
     sys.path.insert(0, str(RUNNER))
 

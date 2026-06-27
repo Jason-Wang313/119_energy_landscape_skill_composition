@@ -125,6 +125,7 @@ def main():
         "scripts\\build_external_acquisition_packet.py",
         "scripts\\build_external_operator_packet.py",
         "scripts\\self_test_external_adapter_scaffold_guard.py",
+        "scripts\\self_test_external_backend_contract.py",
         "scripts\\self_test_external_collection_preflight.py",
         "scripts\\self_test_external_runner_backend.py",
         "scripts\\self_test_external_rollout_validator.py",
@@ -160,6 +161,7 @@ def main():
         "python -m compileall",
         "python scripts/audit_external_runner_harness.py",
         "python scripts/audit_external_backend_contract.py",
+        "python scripts/self_test_external_backend_contract.py",
         "python scripts/self_test_external_runner_backend.py",
         "python scripts/self_test_external_collection_preflight.py",
         "python scripts/audit_external_collection_readiness.py",
@@ -446,6 +448,33 @@ def main():
         fail("external backend contract audit should expose the missing real backend module in default mode")
     if not (RESULTS / "external_backend_contract_audit.md").exists():
         fail("missing results/external_backend_contract_audit.md")
+
+    backend_contract_self_test_path = RESULTS / "external_backend_contract_self_test.json"
+    if not backend_contract_self_test_path.exists():
+        fail("missing results/external_backend_contract_self_test.json; run scripts/self_test_external_backend_contract.py")
+    if not (ROOT / "scripts" / "self_test_external_backend_contract.py").exists():
+        fail("missing scripts/self_test_external_backend_contract.py")
+    backend_contract_self_test = json.loads(backend_contract_self_test_path.read_text(encoding="utf-8"))
+    if backend_contract_self_test.get("version") != "external_backend_contract_self_test_v1":
+        fail("external backend contract self-test version mismatch")
+    if backend_contract_self_test.get("passed") is not True:
+        fail("external backend contract self-test did not pass")
+    if backend_contract_self_test.get("not_external_evidence") is not True:
+        fail("external backend contract self-test must declare that it is not evidence")
+    if backend_contract_self_test.get("complete_backend_actual_ready") is not True:
+        fail("external backend contract self-test should make a temporary complete backend actual-ready")
+    backend_contract_self_checks = {check.get("name"): check.get("passed") for check in backend_contract_self_test.get("checks", [])}
+    for required_check in (
+        "strict_complete_backend_passes",
+        "strict_incomplete_backend_fails",
+        "strict_template_backend_fails",
+        "default_missing_backend_remains_nonready",
+        "real_backend_contract_report_not_overwritten",
+    ):
+        if backend_contract_self_checks.get(required_check) is not True:
+            fail(f"external backend contract self-test missing passing check: {required_check}")
+    if not (RESULTS / "external_backend_contract_self_test.md").exists():
+        fail("missing results/external_backend_contract_self_test.md")
 
     collection_readiness_path = RESULTS / "external_collection_readiness_audit.json"
     if not collection_readiness_path.exists():

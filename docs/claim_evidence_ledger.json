@@ -47,8 +47,8 @@
     },
     {
       "name": "external_evidence_pipeline_self_test_claim",
-      "claim": "The repository includes tooling-only self-tests showing that the strict external validation path, collection preflight gate, and actual runner backend path can accept temporary synthetic fixtures, while leaving the real repository evidence state untouched.",
-      "evidence": ["scripts/self_test_external_evidence_pipeline.py", "scripts/self_test_external_collection_preflight.py", "results/external_collection_preflight_self_test.json", "results/external_collection_preflight_self_test.md", "scripts/self_test_external_runner_backend.py", "results/external_runner_backend_self_test.json", "results/external_runner_backend_self_test.md", "scripts/audit_external_evidence.py", "scripts/validate_external_rollouts.py", "scripts/validate_external_configs.py", "external_validation/README.md"]
+      "claim": "The repository includes tooling-only self-tests showing that the strict external validation path, backend qualification gate, collection preflight gate, and actual runner backend path can accept temporary synthetic fixtures, while leaving the real repository evidence state untouched.",
+      "evidence": ["scripts/self_test_external_evidence_pipeline.py", "scripts/self_test_external_backend_contract.py", "results/external_backend_contract_self_test.json", "results/external_backend_contract_self_test.md", "scripts/self_test_external_collection_preflight.py", "results/external_collection_preflight_self_test.json", "results/external_collection_preflight_self_test.md", "scripts/self_test_external_runner_backend.py", "results/external_runner_backend_self_test.json", "results/external_runner_backend_self_test.md", "scripts/audit_external_evidence.py", "scripts/validate_external_rollouts.py", "scripts/validate_external_configs.py", "external_validation/README.md"]
     },
     {
       "name": "submission_readiness_gap_claim",
@@ -78,7 +78,7 @@
     {
       "name": "external_backend_contract_claim",
       "claim": "The repository provides a non-evidence backend contract qualification audit that rejects incomplete runner backends and records that no real backend module is ready until an independent operator supplies one.",
-      "evidence": ["scripts/audit_external_backend_contract.py", "external_validation/runner/backend_contract.py", "external_validation/runner/README.md", "results/external_backend_contract_audit.json", "results/external_backend_contract_audit.md"]
+      "evidence": ["scripts/audit_external_backend_contract.py", "scripts/self_test_external_backend_contract.py", "external_validation/runner/backend_contract.py", "external_validation/runner/README.md", "results/external_backend_contract_audit.json", "results/external_backend_contract_audit.md", "results/external_backend_contract_self_test.json", "results/external_backend_contract_self_test.md"]
     },
     {
       "name": "external_acquisition_packet_claim",

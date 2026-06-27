@@ -80,6 +80,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External collection runner harness: `external_validation/runner/README.md`
 - External runner harness audit: `results/external_runner_harness_audit.md`
 - External backend contract audit: `results/external_backend_contract_audit.md`
+- External backend contract self-test: `results/external_backend_contract_self_test.md`
 - External collection readiness audit: `results/external_collection_readiness_audit.md`
 - External collection preflight self-test: `scripts/self_test_external_collection_preflight.py` checks a temporary complete preflight fixture only; it is not evidence.
 - External task config schema: `external_validation/config_schema_v1.json`
