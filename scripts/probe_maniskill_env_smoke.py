@@ -73,13 +73,35 @@ records = []
 try:
     import gymnasium as gym
     import mani_skill  # noqa: F401
+    from mani_skill.utils import assets
+    from mani_skill.utils.registration import REGISTERED_ENVS
     import_error = ""
 except Exception as exc:  # noqa: BLE001
     gym = None
+    assets = None
+    REGISTERED_ENVS = {}
     import_error = f"{type(exc).__name__}: {exc}"
 
 for env_id in env_ids:
     started = time.time()
+    required_asset_ids = []
+    missing_asset_ids = []
+    try:
+        env_spec = REGISTERED_ENVS.get(env_id) if isinstance(REGISTERED_ENVS, dict) else None
+        for asset_id in list(getattr(env_spec, "asset_download_ids", []) or []):
+            required_asset_ids.append(str(asset_id))
+            if assets is None:
+                missing_asset_ids.append(str(asset_id))
+                continue
+            if asset_id in assets.DATA_GROUPS:
+                for data_source_id in assets.expand_data_group_into_individual_data_source_ids(asset_id):
+                    if not assets.is_data_source_downloaded(data_source_id):
+                        missing_asset_ids.append(str(asset_id))
+                        break
+            elif asset_id in assets.DATA_SOURCES and not assets.is_data_source_downloaded(asset_id):
+                missing_asset_ids.append(str(asset_id))
+    except Exception:
+        pass
     payload = {
         "env_id": env_id,
         "made_env": False,
@@ -90,6 +112,8 @@ for env_id in env_ids:
         "observation_type": "",
         "observation_shape": "",
         "info_keys": [],
+        "required_asset_ids": sorted(set(required_asset_ids)),
+        "missing_asset_ids": sorted(set(missing_asset_ids)),
         "error_type": "",
         "error": "",
         "traceback_tail": "",
@@ -291,17 +315,25 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         record["env_id"] for record in env_records if record["env_id"] not in primary_envs and record.get("reset_ok") is not True
     )
     asset_related_failures = []
+    missing_asset_ids_by_env: dict[str, list[str]] = {}
     for record in env_records:
         env_id = str(record["env_id"])
         record_text = " ".join(
             str(record.get(key, ""))
             for key in ("error_type", "error", "traceback_tail", "stdout_tail", "stderr_tail")
         ).lower()
+        missing_asset_ids = sorted(str(asset_id) for asset_id in record.get("missing_asset_ids", []) or [])
+        if missing_asset_ids:
+            missing_asset_ids_by_env[env_id] = missing_asset_ids
         explicit_asset_failure = any(term in record_text for term in ("asset", "dataset", "partnet"))
         cabinet_prompt_failure = env_id.startswith("OpenCabinet") and "eof when reading a line" in record_text
-        if explicit_asset_failure or cabinet_prompt_failure:
+        if missing_asset_ids or explicit_asset_failure or cabinet_prompt_failure:
             asset_related_failures.append(env_id)
     asset_related_failures = sorted(asset_related_failures)
+    missing_asset_ids_all = sorted({asset_id for ids in missing_asset_ids_by_env.values() for asset_id in ids})
+    asset_install_hints = [f"python -m mani_skill.utils.download_asset {asset_id} -y" for asset_id in missing_asset_ids_all]
+    if not asset_install_hints:
+        asset_install_hints = ["python -m mani_skill.utils.download_asset partnet_mobility_cabinet -y"]
 
     checks: list[dict[str, Any]] = []
     add_check(checks, "probe_is_non_evidence", True, "not_external_evidence=True")
@@ -329,7 +361,7 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         checks,
         "asset_failures_reported",
         isinstance(asset_related_failures, list),
-        f"asset_related_failures={asset_related_failures}",
+        f"asset_related_failures={asset_related_failures}, missing_asset_ids={missing_asset_ids_all}",
     )
     add_check(
         checks,
@@ -357,7 +389,10 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         "primary_reset_missing": primary_reset_missing,
         "support_reset_missing": support_reset_missing,
         "asset_related_failures": asset_related_failures,
-        "asset_install_hint": "python -m mani_skill.utils.download_asset partnet_mobility_cabinet",
+        "missing_asset_ids": missing_asset_ids_all,
+        "missing_asset_ids_by_env": missing_asset_ids_by_env,
+        "asset_install_hints": asset_install_hints,
+        "asset_install_hint": "; ".join(asset_install_hints),
         "env_records": env_records,
         "checks": checks,
     }
@@ -377,19 +412,21 @@ def write_md(payload: dict[str, Any]) -> None:
         "This probe attempts construction and reset for the ManiSkill/SAPIEN environment candidates bound to Paper 119 task families. It is not rollout evidence and does not replace backend qualification, operator fidelity acceptance, videos, logs, manifests, or strict evidence audits.",
         "",
         f"Asset install hint: `{payload['asset_install_hint']}`",
+        f"Missing asset IDs: `{payload.get('missing_asset_ids', [])}`",
         "",
         "## Environment Records",
         "",
-        "| Env ID | Primary for | Support for | Made | Reset | Error |",
-        "|---|---|---|---|---|---|",
+        "| Env ID | Primary for | Support for | Missing assets | Made | Reset | Error |",
+        "|---|---|---|---|---|---|---|",
     ]
     for record in payload["env_records"]:
         primary = ", ".join(record.get("is_primary_for", [])) or "none"
         support = ", ".join(record.get("is_support_for", [])) or "none"
+        missing_assets = ", ".join(record.get("missing_asset_ids", []) or []) or "none"
         error = str(record.get("error") or record.get("error_type") or "")
         error = error.replace("\n", " ")[:120]
         lines.append(
-            f"| `{record['env_id']}` | `{primary}` | `{support}` | `{record.get('made_env')}` | `{record.get('reset_ok')}` | {error} |"
+            f"| `{record['env_id']}` | `{primary}` | `{support}` | `{missing_assets}` | `{record.get('made_env')}` | `{record.get('reset_ok')}` | {error} |"
         )
     lines.extend(["", "## Checks", ""])
     for check in payload["checks"]:

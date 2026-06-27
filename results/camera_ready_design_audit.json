@@ -92,8 +92,8 @@
     }
   ],
   "density_summary": {
-    "maximum": 0.17368110880715923,
-    "mean": 0.09806540798137434,
+    "maximum": 0.17395394521444943,
+    "mean": 0.09809392848048308,
     "minimum": 0.018057404780093857,
     "sparse_pages": [
       16,
@@ -113,9 +113,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.14699770817417876,
+      "foreground_fraction": 0.1455003819709702,
       "height": 770,
-      "luminance_std": 0.169105218289915,
+      "luminance_std": 0.16822893560604055,
       "page": 1,
       "width": 595
     },
@@ -127,9 +127,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.17183236931136092,
+      "foreground_fraction": 0.17395394521444943,
       "height": 770,
-      "luminance_std": 0.17711636769946473,
+      "luminance_std": 0.17810791938956416,
       "page": 2,
       "width": 595
     },
@@ -141,9 +141,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.16967805303939756,
+      "foreground_fraction": 0.16849285168612899,
       "height": 770,
-      "luminance_std": 0.15207674597483792,
+      "luminance_std": 0.1512278643516495,
       "page": 3,
       "width": 595
     },
@@ -155,9 +155,9 @@
         "right": 105,
         "top": 27
       },
-      "foreground_fraction": 0.1094576012223071,
+      "foreground_fraction": 0.10938338971952417,
       "height": 770,
-      "luminance_std": 0.16944560759338603,
+      "luminance_std": 0.16945092431289818,
       "page": 4,
       "width": 595
     },
@@ -169,9 +169,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.12496343992142311,
+      "foreground_fraction": 0.1216435665175161,
       "height": 770,
-      "luminance_std": 0.14673712160365365,
+      "luminance_std": 0.14476002863011622,
       "page": 5,
       "width": 595
     },
@@ -253,9 +253,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.17368110880715923,
+      "foreground_fraction": 0.1674582560296846,
       "height": 770,
-      "luminance_std": 0.17901698881472558,
+      "luminance_std": 0.17629898160760663,
       "page": 11,
       "width": 595
     },
@@ -267,9 +267,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.050431081523518495,
+      "foreground_fraction": 0.061464585834333736,
       "height": 770,
-      "luminance_std": 0.09877958875421061,
+      "luminance_std": 0.1095401410617236,
       "page": 12,
       "width": 595
     },

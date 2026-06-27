@@ -87,7 +87,7 @@
     },
     {
       "name": "maniskill_env_smoke_probe_claim",
-      "claim": "The repository provides a non-evidence ManiSkill environment smoke probe that isolates bound public-simulator candidates, reports construction/reset readiness, and records remaining support-asset blockers while accepted fidelity and strict external evidence remain false.",
+      "claim": "The repository provides a non-evidence ManiSkill environment smoke probe that isolates bound public-simulator candidates, reports construction/reset readiness, and records remaining support-asset blockers including oakink-v2 and ycb while accepted fidelity and strict external evidence remain false.",
       "evidence": ["scripts/probe_maniskill_env_smoke.py", "results/maniskill_env_smoke_probe.json", "results/maniskill_env_smoke_probe.md", "external_validation/platform_onboarding_packet.json"]
     },
     {

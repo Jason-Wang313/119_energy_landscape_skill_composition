@@ -505,6 +505,19 @@ def main():
         fail("ManiSkill env smoke probe must cover the four primary task envs")
     if not isinstance(env_smoke.get("primary_reset_missing"), list):
         fail("ManiSkill env smoke probe must report primary_reset_missing as a list")
+    if not isinstance(env_smoke.get("support_reset_missing"), list):
+        fail("ManiSkill env smoke probe must report support_reset_missing as a list")
+    if not isinstance(env_smoke.get("missing_asset_ids"), list):
+        fail("ManiSkill env smoke probe must report missing_asset_ids as a list")
+    if env_smoke.get("asset_related_failures") and not env_smoke.get("missing_asset_ids"):
+        fail("ManiSkill env smoke probe must identify missing asset IDs for asset-related failures")
+    if env_smoke.get("missing_asset_ids") and not isinstance(env_smoke.get("asset_install_hints"), list):
+        fail("ManiSkill env smoke probe must provide structured asset_install_hints for missing assets")
+    for record in env_smoke.get("env_records", []):
+        if not isinstance(record, dict):
+            fail("ManiSkill env smoke records must be objects")
+        if "required_asset_ids" not in record or "missing_asset_ids" not in record:
+            fail(f"ManiSkill env smoke record must include asset provenance fields: {record.get('env_id')}")
     env_smoke_checks = {check.get("name"): check.get("passed") for check in env_smoke.get("checks", [])}
     for required_check in (
         "probe_is_non_evidence",

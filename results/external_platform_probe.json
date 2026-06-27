@@ -21,7 +21,7 @@
       "passed": true
     },
     {
-      "detail": "commit='1cad1f41209a41fef64d9af672dfa46d1f5a051e'",
+      "detail": "commit='4687f0ca0d5fbae107004bc77caa0bb00fd1e4e5'",
       "name": "repo_commit_reported",
       "passed": true
     },
@@ -143,7 +143,7 @@
   "primary_route_missing_packages": [],
   "repo": {
     "branch": "codex/paper119-submission-hardening",
-    "commit": "1cad1f41209a41fef64d9af672dfa46d1f5a051e",
+    "commit": "4687f0ca0d5fbae107004bc77caa0bb00fd1e4e5",
     "dirty_status_lines": [
       " M README.md",
       " M docs/claim_evidence_ledger.json",
@@ -153,13 +153,10 @@
       " M docs/submission_version_log.md",
       " M external_validation/platform_onboarding_packet.json",
       " M external_validation/platform_onboarding_packet.md",
-      " M outreach/paper119_four_page_preview.pdf",
-      " M outreach/paper119_one_page_memo.pdf",
       " M paper/main.pdf",
-      " M results/external_acquisition_packet.json",
-      " M results/external_acquisition_packet.md",
-      " M results/external_execution_readiness_audit.json",
-      " M results/external_execution_readiness_audit.md",
+      " M paper/main.tex",
+      " M results/camera_ready_design_audit.json",
+      " M results/camera_ready_design_audit.md",
       " M results/external_operator_handoff_bundle.json",
       " M results/external_operator_handoff_bundle.md",
       " M results/external_platform_onboarding_audit.json",
@@ -168,9 +165,14 @@
       " M results/external_platform_probe.md",
       " M results/maniskill_env_smoke_probe.json",
       " M results/maniskill_env_smoke_probe.md",
-      " M results/visible_contribution_audit.json",
-      " M results/visible_contribution_audit.md",
-      " M scripts/probe_maniskill_env_smoke.py"
+      " M results/manuscript_readability_audit.json",
+      " M results/manuscript_readability_audit.md",
+      " M results/presentation_quality_audit.json",
+      " M results/presentation_quality_audit.md",
+      " M scripts/build_external_platform_onboarding.py",
+      " M scripts/generate_manuscript.py",
+      " M scripts/probe_maniskill_env_smoke.py",
+      " M scripts/validate_submission_artifacts.py"
     ],
     "git_commands": {
       "rev_parse_branch": {
@@ -194,7 +196,7 @@
         ],
         "returncode": 0,
         "stderr": "",
-        "stdout": "1cad1f41209a41fef64d9af672dfa46d1f5a051e\n"
+        "stdout": "4687f0ca0d5fbae107004bc77caa0bb00fd1e4e5\n"
       },
       "status_short": {
         "available": true,
@@ -205,7 +207,7 @@
         ],
         "returncode": 0,
         "stderr": "",
-        "stdout": " M README.md\n M docs/claim_evidence_ledger.json\n M docs/final_audit.md\n M docs/submission_readiness_audit_v5.md\n M docs/submission_readiness_decision.md\n M docs/submission_version_log.md\n M external_validation/platform_onboarding_packet.json\n M external_validation/platform_onboarding_packet.md\n M outreach/paper119_four_page_preview.pdf\n M outreach/paper119_one_page_memo.pdf\n M paper/main.pdf\n M results/external_acquisition_packet.json\n M results/external_acquisition_packet.md\n M results/external_execution_readiness_audit.json\n M results/external_execution_readiness_audit.md\n M results/external_operator_handoff_bundle.json\n M results/external_operator_handoff_bundle.md\n M results/external_platform_onboarding_audit.json\n M results/external_platform_onboarding_audit.md\n M results/external_platform_probe.json\n M results/external_platform_probe.md\n M results/maniskill_env_smoke_probe.json\n M results/maniskill_env_smoke_probe.md\n M results/visible_contribution_audit.json\n M results/visible_contribution_audit.md\n M scripts/probe_maniskill_env_smoke.py\n"
+        "stdout": " M README.md\n M docs/claim_evidence_ledger.json\n M docs/final_audit.md\n M docs/submission_readiness_audit_v5.md\n M docs/submission_readiness_decision.md\n M docs/submission_version_log.md\n M external_validation/platform_onboarding_packet.json\n M external_validation/platform_onboarding_packet.md\n M paper/main.pdf\n M paper/main.tex\n M results/camera_ready_design_audit.json\n M results/camera_ready_design_audit.md\n M results/external_operator_handoff_bundle.json\n M results/external_operator_handoff_bundle.md\n M results/external_platform_onboarding_audit.json\n M results/external_platform_onboarding_audit.md\n M results/external_platform_probe.json\n M results/external_platform_probe.md\n M results/maniskill_env_smoke_probe.json\n M results/maniskill_env_smoke_probe.md\n M results/manuscript_readability_audit.json\n M results/manuscript_readability_audit.md\n M results/presentation_quality_audit.json\n M results/presentation_quality_audit.md\n M scripts/build_external_platform_onboarding.py\n M scripts/generate_manuscript.py\n M scripts/probe_maniskill_env_smoke.py\n M scripts/validate_submission_artifacts.py\n"
       }
     }
   },

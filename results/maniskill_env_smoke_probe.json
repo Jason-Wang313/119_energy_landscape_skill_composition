@@ -1,6 +1,10 @@
 {
   "accepted_fidelity_ready": false,
-  "asset_install_hint": "python -m mani_skill.utils.download_asset partnet_mobility_cabinet",
+  "asset_install_hint": "python -m mani_skill.utils.download_asset oakink-v2 -y; python -m mani_skill.utils.download_asset ycb -y",
+  "asset_install_hints": [
+    "python -m mani_skill.utils.download_asset oakink-v2 -y",
+    "python -m mani_skill.utils.download_asset ycb -y"
+  ],
   "asset_related_failures": [
     "InsertFlower-v1",
     "PickSingleYCB-v1"
@@ -28,7 +32,7 @@
       "passed": true
     },
     {
-      "detail": "asset_related_failures=['InsertFlower-v1', 'PickSingleYCB-v1']",
+      "detail": "asset_related_failures=['InsertFlower-v1', 'PickSingleYCB-v1'], missing_asset_ids=['oakink-v2', 'ycb']",
       "name": "asset_failures_reported",
       "passed": true
     },
@@ -42,7 +46,7 @@
   "env_records": [
     {
       "closed": false,
-      "elapsed_seconds": 0.006285,
+      "elapsed_seconds": 0.005063,
       "env_id": "InsertFlower-v1",
       "error": "EOF when reading a line",
       "error_type": "EOFError",
@@ -52,9 +56,15 @@
         "cable_route_insert"
       ],
       "made_env": false,
+      "missing_asset_ids": [
+        "oakink-v2"
+      ],
       "observation_shape": "",
       "observation_space": "",
       "observation_type": "",
+      "required_asset_ids": [
+        "oakink-v2"
+      ],
       "reset_ok": false,
       "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n",
       "stdout_tail": "",
@@ -63,11 +73,11 @@
       "task_families": [
         "cable_route_insert"
       ],
-      "traceback_tail": "Traceback (most recent call last):\n  File \"<string>\", line 38, in <module>\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\gymnasium\\envs\\registration.py\", line 734, in make\n    env = env_creator(**env_spec_kwargs)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\registration.py\", line 182, in make\n    env = env_spec.make(**kwargs)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\registration.py\", line 70, in make\n    response = download_asset.prompt_yes_no(\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\download_asset.py\", line 28, in prompt_yes_no\n    answer = input(\"(y|n): \")\nEOFError: EOF when reading a line\n"
+      "traceback_tail": "Traceback (most recent call last):\n  File \"<string>\", line 62, in <module>\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\gymnasium\\envs\\registration.py\", line 734, in make\n    env = env_creator(**env_spec_kwargs)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\registration.py\", line 182, in make\n    env = env_spec.make(**kwargs)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\registration.py\", line 70, in make\n    response = download_asset.prompt_yes_no(\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\download_asset.py\", line 28, in prompt_yes_no\n    answer = input(\"(y|n): \")\nEOFError: EOF when reading a line\n"
     },
     {
       "closed": true,
-      "elapsed_seconds": 5.33734,
+      "elapsed_seconds": 6.715251,
       "env_id": "OpenCabinetDoor-v1",
       "error": "",
       "error_type": "",
@@ -83,11 +93,13 @@
       ],
       "is_support_for": [],
       "made_env": true,
+      "missing_asset_ids": [],
       "observation_shape": "torch.Size([1, 44])",
       "observation_space": "Box(-inf, inf, (1, 44), float32)",
       "observation_type": "Tensor",
+      "required_asset_ids": [],
       "reset_ok": true,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 02:42:19,620 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 03:31:07,139 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
       "stdout_tail": "",
       "subprocess_returncode": 0,
       "subprocess_timeout": false,
@@ -98,7 +110,7 @@
     },
     {
       "closed": true,
-      "elapsed_seconds": 6.405528,
+      "elapsed_seconds": 7.169631,
       "env_id": "OpenCabinetDrawer-v1",
       "error": "",
       "error_type": "",
@@ -114,11 +126,15 @@
       ],
       "is_support_for": [],
       "made_env": true,
+      "missing_asset_ids": [],
       "observation_shape": "torch.Size([1, 44])",
       "observation_space": "Box(-inf, inf, (1, 44), float32)",
       "observation_type": "Tensor",
+      "required_asset_ids": [
+        "partnet_mobility_cabinet"
+      ],
       "reset_ok": true,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 02:42:53,206 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 03:31:42,424 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
       "stdout_tail": "",
       "subprocess_returncode": 0,
       "subprocess_timeout": false,
@@ -129,7 +145,7 @@
     },
     {
       "closed": true,
-      "elapsed_seconds": 6.633357,
+      "elapsed_seconds": 6.284097,
       "env_id": "PegInsertionSide-v1",
       "error": "",
       "error_type": "",
@@ -144,11 +160,13 @@
       ],
       "is_support_for": [],
       "made_env": true,
+      "missing_asset_ids": [],
       "observation_shape": "torch.Size([1, 43])",
       "observation_space": "Box(-inf, inf, (1, 43), float32)",
       "observation_type": "Tensor",
+      "required_asset_ids": [],
       "reset_ok": true,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 02:43:33,816 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 03:32:17,969 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
       "stdout_tail": "",
       "subprocess_returncode": 0,
       "subprocess_timeout": false,
@@ -159,7 +177,7 @@
     },
     {
       "closed": true,
-      "elapsed_seconds": 2.992028,
+      "elapsed_seconds": 3.504284,
       "env_id": "PickCube-v1",
       "error": "",
       "error_type": "",
@@ -176,11 +194,13 @@
         "drawer_to_pick_transfer"
       ],
       "made_env": true,
+      "missing_asset_ids": [],
       "observation_shape": "torch.Size([1, 42])",
       "observation_space": "Box(-inf, inf, (1, 42), float32)",
       "observation_type": "Tensor",
+      "required_asset_ids": [],
       "reset_ok": true,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 02:44:10,830 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 03:32:48,586 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
       "stdout_tail": "",
       "subprocess_returncode": 0,
       "subprocess_timeout": false,
@@ -191,7 +211,7 @@
     },
     {
       "closed": false,
-      "elapsed_seconds": 0.004645,
+      "elapsed_seconds": 0.006916,
       "env_id": "PickSingleYCB-v1",
       "error": "EOF when reading a line",
       "error_type": "EOFError",
@@ -201,9 +221,15 @@
         "drawer_to_pick_transfer"
       ],
       "made_env": false,
+      "missing_asset_ids": [
+        "ycb"
+      ],
       "observation_shape": "",
       "observation_space": "",
       "observation_type": "",
+      "required_asset_ids": [
+        "ycb"
+      ],
       "reset_ok": false,
       "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n",
       "stdout_tail": "",
@@ -212,11 +238,11 @@
       "task_families": [
         "drawer_to_pick_transfer"
       ],
-      "traceback_tail": "Traceback (most recent call last):\n  File \"<string>\", line 38, in <module>\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\gymnasium\\envs\\registration.py\", line 734, in make\n    env = env_creator(**env_spec_kwargs)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\registration.py\", line 182, in make\n    env = env_spec.make(**kwargs)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\registration.py\", line 70, in make\n    response = download_asset.prompt_yes_no(\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\download_asset.py\", line 28, in prompt_yes_no\n    answer = input(\"(y|n): \")\nEOFError: EOF when reading a line\n"
+      "traceback_tail": "Traceback (most recent call last):\n  File \"<string>\", line 62, in <module>\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\gymnasium\\envs\\registration.py\", line 734, in make\n    env = env_creator(**env_spec_kwargs)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\registration.py\", line 182, in make\n    env = env_spec.make(**kwargs)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\registration.py\", line 70, in make\n    response = download_asset.prompt_yes_no(\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\download_asset.py\", line 28, in prompt_yes_no\n    answer = input(\"(y|n): \")\nEOFError: EOF when reading a line\n"
     },
     {
       "closed": true,
-      "elapsed_seconds": 3.007134,
+      "elapsed_seconds": 5.900867,
       "env_id": "PullCubeTool-v1",
       "error": "",
       "error_type": "",
@@ -235,11 +261,13 @@
       ],
       "is_support_for": [],
       "made_env": true,
+      "missing_asset_ids": [],
       "observation_shape": "torch.Size([1, 39])",
       "observation_space": "Box(-inf, inf, (1, 39), float32)",
       "observation_type": "Tensor",
+      "required_asset_ids": [],
       "reset_ok": true,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 02:45:15,335 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 02:45:16,149 - mani_skill  - WARNING - No initial pose set for articulation builder of panda, setting to default pose q=[1,0,0,0], p=[0,0,0]. There may be simulation issues/bugs if this articulation at it's initial pose collides with other objects at their initial poses.\u001b[0m\n\u001b[33;1m2026-06-28 02:45:16,400 - mani_skill  - WARNING - No initial pose set for actor builder of cube, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n\u001b[33;1m2026-06-28 02:45:16,403 - mani_skill  - WARNING - No initial pose set for actor builder of l_shape_tool, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 03:34:05,181 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 03:34:06,632 - mani_skill  - WARNING - No initial pose set for articulation builder of panda, setting to default pose q=[1,0,0,0], p=[0,0,0]. There may be simulation issues/bugs if this articulation at it's initial pose collides with other objects at their initial poses.\u001b[0m\n\u001b[33;1m2026-06-28 03:34:06,889 - mani_skill  - WARNING - No initial pose set for actor builder of cube, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n\u001b[33;1m2026-06-28 03:34:06,893 - mani_skill  - WARNING - No initial pose set for actor builder of l_shape_tool, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n",
       "stdout_tail": "",
       "subprocess_returncode": 0,
       "subprocess_timeout": false,
@@ -250,6 +278,18 @@
     }
   ],
   "env_smoke_probe_ready": true,
+  "missing_asset_ids": [
+    "oakink-v2",
+    "ycb"
+  ],
+  "missing_asset_ids_by_env": {
+    "InsertFlower-v1": [
+      "oakink-v2"
+    ],
+    "PickSingleYCB-v1": [
+      "ycb"
+    ]
+  },
   "not_external_evidence": true,
   "passed": true,
   "primary_env_count": 4,
