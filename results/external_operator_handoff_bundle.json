@@ -126,11 +126,11 @@
   "included_file_count": 235,
   "included_files": [
     {
-      "bytes": 14914,
+      "bytes": 14974,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "5B2D28A9C2266948973DB0453AF5027B3F029D8E5E7D936F2BA6792E7D87694C"
+      "sha256": "095CAD1F722763DF80DE224953480E69660388DD1F50CE13C48B61044B5364C2"
     },
     {
       "bytes": 10521,
@@ -154,11 +154,11 @@
       "sha256": "624713DD0B7A6569740FBE7E901A2641CDC28193FAEFB2AAE7784B5EBF650358"
     },
     {
-      "bytes": 6284,
+      "bytes": 6332,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "4ABD2A1FB14861921BB4068925B76CD88489E36BB03ADC8E6EEF9956651B1C5C"
+      "sha256": "A9C74DB98E9577E1892111D58EDBDC50CF639E364E174C12F033E66730F7AD23"
     },
     {
       "bytes": 28622,
@@ -945,18 +945,18 @@
       "sha256": "5F18D7641041AD7B7F9AD394AFE8A4CB7ADE880E2A0B6ECBA4A7F568DD821F3E"
     },
     {
-      "bytes": 12009,
+      "bytes": 11887,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/platform_onboarding_packet.json",
-      "sha256": "1629B6F445E8C5A38F50E496E5458D2E5EF8BFCD77B336855F6D36911F57E2FD"
+      "sha256": "370FB794B7925AE8D3126070E0CB223428C9BBEA0CBFD3D1785EF765E5821165"
     },
     {
-      "bytes": 9387,
+      "bytes": 9300,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/platform_onboarding_packet.md",
-      "sha256": "9F7872D734692779DDDFBC3AE19A48C276A48A99913155432F235FF7A1A22B71"
+      "sha256": "E43FC990A949CF90D9DAE90A6A8116AF6F22131C26771E77B508BC4F66D5AF91"
     },
     {
       "bytes": 3275,
@@ -1099,18 +1099,18 @@
       "sha256": "357F6A44637AD1D55E6E98775B60640FE0E7C0A32FE0C1707FC5863C00D3CDB9"
     },
     {
-      "bytes": 29604,
+      "bytes": 29517,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.json",
-      "sha256": "C93752B54ED75EAE051E8AE854013CE5D5E990119FDE3EB676DC25DC13C26508"
+      "sha256": "9A537CED46B47B620331E981C9E69DA0F37694A87E45F00E18B4A3D7F31BE2A2"
     },
     {
-      "bytes": 19614,
+      "bytes": 19527,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.md",
-      "sha256": "3485579B4D90C4A27E7782B596A695C4C1693EEC297F7F36BD854D6885191994"
+      "sha256": "8524170F25E8669BCE78B65E876AA0EA80AC53B4504B33D898DA9140EA9A08D1"
     },
     {
       "bytes": 3130,
@@ -1295,18 +1295,18 @@
       "sha256": "B68911C22003E7E03E48D7486AB58F53AD10457F0C25ABCD47A134E37A247892"
     },
     {
-      "bytes": 29267,
+      "bytes": 29222,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.json",
-      "sha256": "ACBEB0AC90578F621DE3E171F75BF1AFA31311FC373EB58761F95481ECF2150A"
+      "sha256": "3813A5BC98526AECF4130D30597E2CE59D8B5CD27024091940298ABCBA1AF1A7"
     },
     {
-      "bytes": 22383,
+      "bytes": 22338,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.md",
-      "sha256": "7D5A7DDE139D302F9895B10499FC29B068A87376DC97C8C76C0ED7DD4019AFD2"
+      "sha256": "46959D056EAA5CE6C89F32041E64B7B791FD702B6B2AC07098736EE417CA0704"
     },
     {
       "bytes": 7157,
@@ -1407,32 +1407,32 @@
       "sha256": "684869BB5A12AB93D254C35B90856DEAD3BC8CA512ACC68DEF4D78F2CAFE39DA"
     },
     {
-      "bytes": 7705,
+      "bytes": 7531,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_platform_onboarding_audit.json",
-      "sha256": "48DFC582F6D7379399333E3265B97DBCB0C744317EBCB20409A1D04316FFEB8F"
+      "sha256": "E900865916002854D47713B860F2E05040599216589AEC14844FFCDCD011FD7D"
     },
     {
-      "bytes": 5954,
+      "bytes": 5780,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_platform_onboarding_audit.md",
-      "sha256": "79F4FA0E629215C45E80559771C78A3C613E68DEC582977BB47F72EEBFD38BC0"
+      "sha256": "737F185BEA41D8DAC1AEF01B5E6B184C579FC40EE08D5F501C08805163813AF7"
     },
     {
-      "bytes": 13756,
+      "bytes": 11698,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_platform_probe.json",
-      "sha256": "686C62085F2413C32DD6F22D48B435FA543C3FCEB3ED0D4F5E6401F71D5C21C1"
+      "sha256": "9CD0A7F716D52AEE6B83588087AC52F02B7E9C52CE94C519D6344563DB0B964D"
     },
     {
       "bytes": 2287,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_platform_probe.md",
-      "sha256": "BC6B0980FC60B23386DEBCB7717ECBC4989A73DBD67CD3E5817B985560510619"
+      "sha256": "792CDBB27A7950FA348756E865774A052A62F6E09FF40A812D5475FB4AC78587"
     },
     {
       "bytes": 7221,
@@ -1533,18 +1533,18 @@
       "sha256": "A1EF93BA23A41BD7011C3289F80C58AF4D8BC815EC14B27B14987BE94EC31323"
     },
     {
-      "bytes": 50739,
+      "bytes": 12601,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_env_smoke_probe.json",
-      "sha256": "73A233992BFA1C8FA41097481B210911F30FB16A8D534012FA1DEB8C198E422E"
+      "sha256": "1FA6007E58388FC99D805AAFE6ED0878CD5275C21792055901406D1A7EB282FF"
     },
     {
-      "bytes": 1982,
+      "bytes": 1835,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_env_smoke_probe.md",
-      "sha256": "A2A04EF26BF69FBFD931850D1B85EA5278EF0404D1E40828656B0531FE9483A1"
+      "sha256": "1CF89D3373685C11B71F4A8DD4B7E5DFCE7C6DB3A90B21CB77675B7B5C869E23"
     },
     {
       "bytes": 4062,
@@ -1736,11 +1736,11 @@
       "sha256": "67456EAE975E43F2D87B7233670D57D5E353C7034E2636E500BB3B38806C05DC"
     },
     {
-      "bytes": 14124,
+      "bytes": 16037,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/probe_maniskill_env_smoke.py",
-      "sha256": "34022B0ECCCA21BFC03E8596AF5B78D118DF0F4DF7D768694F671C530B1C8CAB"
+      "sha256": "94AC6219AA764261FFC6314982C42B7738799653F9A93F51EA95FEDED54E07AA"
     },
     {
       "bytes": 12426,

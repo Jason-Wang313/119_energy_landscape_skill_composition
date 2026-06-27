@@ -1,7 +1,10 @@
 {
   "accepted_fidelity_ready": false,
   "asset_install_hint": "python -m mani_skill.utils.download_asset partnet_mobility_cabinet",
-  "asset_related_failures": [],
+  "asset_related_failures": [
+    "InsertFlower-v1",
+    "PickSingleYCB-v1"
+  ],
   "binding_file": "external_validation/maniskill_task_bindings.json",
   "checks": [
     {
@@ -20,12 +23,12 @@
       "passed": true
     },
     {
-      "detail": "primary_reset_missing=['OpenCabinetDoor-v1', 'OpenCabinetDrawer-v1', 'PegInsertionSide-v1', 'PullCubeTool-v1']",
+      "detail": "primary_reset_missing=[]",
       "name": "primary_reset_readiness_reported",
       "passed": true
     },
     {
-      "detail": "asset_related_failures=[]",
+      "detail": "asset_related_failures=['InsertFlower-v1', 'PickSingleYCB-v1']",
       "name": "asset_failures_reported",
       "passed": true
     },
@@ -39,157 +42,226 @@
   "env_records": [
     {
       "closed": false,
+      "elapsed_seconds": 0.006285,
       "env_id": "InsertFlower-v1",
-      "error": "timed out after 45s",
-      "error_type": "TimeoutExpired",
+      "error": "EOF when reading a line",
+      "error_type": "EOFError",
+      "info_keys": [],
       "is_primary_for": [],
       "is_support_for": [
         "cable_route_insert"
       ],
       "made_env": false,
+      "observation_shape": "",
+      "observation_space": "",
+      "observation_type": "",
       "reset_ok": false,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 01:33:11,621 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:13,880 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:20,298 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:21,984 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,354 - mani_skill  - WARNING - No initial pose set for articulation builder of panda, setting to default pose q=[1,0,0,0], p=[0,0,0]. There may be simulation issues/bugs if this articulation at it's initial pose collides with other objects at their initial poses.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,545 - mani_skill  - WARNING - No initial pose set for actor builder of cube, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,549 - mani_skill  - WARNING - No initial pose set for actor builder of l_shape_tool, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n",
-      "stdout_tail": " line 50, in get_partnet_mobility_builder\\n    _load_partnet_mobility_dataset()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\building\\\\articulations\\\\partnet_mobility.py\\\", line 37, in _load_partnet_mobility_dataset\\n    raise RuntimeError(\\nRuntimeError: Partnet Mobility dataset not found. Download it by running python -m mani_skill.utils.download_asset partnet_mobility_cabinet\\n\"}, {\"closed\": false, \"elapsed_seconds\": 0.011739, \"env_id\": \"OpenCabinetDrawer-v1\", \"error\": \"EOF when reading a line\", \"error_type\": \"EOFError\", \"info_keys\": [], \"made_env\": false, \"observation_shape\": \"\", \"observation_space\": \"\", \"observation_type\": \"\", \"reset_ok\": false, \"traceback_tail\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 38, in <module>\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\gymnasium\\\\envs\\\\registration.py\\\", line 734, in make\\n    env = env_creator(**env_spec_kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 182, in make\\n    env = env_spec.make(**kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 70, in make\\n    response = download_asset.prompt_yes_no(\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\download_asset.py\\\", line 28, in prompt_yes_no\\n    answer = input(\\\"(y|n): \\\")\\nEOFError: EOF when reading a line\\n\"}, {\"closed\": true, \"elapsed_seconds\": 6.418367, \"env_id\": \"PegInsertionSide-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"elapsed_steps\", \"peg_head_pos_at_hole\", \"reconfigure\", \"success\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 43])\", \"observation_space\": \"Box(-inf, inf, (1, 43), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}, {\"closed\": true, \"elapsed_seconds\": 1.679052, \"env_id\": \"PickCube-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"elapsed_steps\", \"is_grasped\", \"is_obj_placed\", \"is_robot_static\", \"reconfigure\", \"success\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 42])\", \"observation_space\": \"Box(-inf, inf, (1, 42), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}, {\"closed\": false, \"elapsed_seconds\": 0.007279, \"env_id\": \"PickSingleYCB-v1\", \"error\": \"EOF when reading a line\", \"error_type\": \"EOFError\", \"info_keys\": [], \"made_env\": false, \"observation_shape\": \"\", \"observation_space\": \"\", \"observation_type\": \"\", \"reset_ok\": false, \"traceback_tail\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 38, in <module>\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\gymnasium\\\\envs\\\\registration.py\\\", line 734, in make\\n    env = env_creator(**env_spec_kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 182, in make\\n    env = env_spec.make(**kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 70, in make\\n    response = download_asset.prompt_yes_no(\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\download_asset.py\\\", line 28, in prompt_yes_no\\n    answer = input(\\\"(y|n): \\\")\\nEOFError: EOF when reading a line\\n\"}, {\"closed\": true, \"elapsed_seconds\": 1.95184, \"env_id\": \"PullCubeTool-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"cube_distance\", \"cube_progress\", \"elapsed_steps\", \"reconfigure\", \"reward\", \"success\", \"success_at_end\", \"success_once\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 39])\", \"observation_space\": \"Box(-inf, inf, (1, 39), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}]}\n",
-      "subprocess_returncode": null,
-      "subprocess_timeout": true,
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n",
+      "stdout_tail": "",
+      "subprocess_returncode": 0,
+      "subprocess_timeout": false,
       "task_families": [
         "cable_route_insert"
-      ]
+      ],
+      "traceback_tail": "Traceback (most recent call last):\n  File \"<string>\", line 38, in <module>\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\gymnasium\\envs\\registration.py\", line 734, in make\n    env = env_creator(**env_spec_kwargs)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\registration.py\", line 182, in make\n    env = env_spec.make(**kwargs)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\registration.py\", line 70, in make\n    response = download_asset.prompt_yes_no(\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\download_asset.py\", line 28, in prompt_yes_no\n    answer = input(\"(y|n): \")\nEOFError: EOF when reading a line\n"
     },
     {
-      "closed": false,
+      "closed": true,
+      "elapsed_seconds": 5.33734,
       "env_id": "OpenCabinetDoor-v1",
-      "error": "timed out after 45s",
-      "error_type": "TimeoutExpired",
+      "error": "",
+      "error_type": "",
+      "info_keys": [
+        "elapsed_steps",
+        "handle_link_pos",
+        "open_enough",
+        "reconfigure",
+        "success"
+      ],
       "is_primary_for": [
         "door_open_navigation"
       ],
       "is_support_for": [],
-      "made_env": false,
-      "reset_ok": false,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 01:33:11,621 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:13,880 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:20,298 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:21,984 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,354 - mani_skill  - WARNING - No initial pose set for articulation builder of panda, setting to default pose q=[1,0,0,0], p=[0,0,0]. There may be simulation issues/bugs if this articulation at it's initial pose collides with other objects at their initial poses.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,545 - mani_skill  - WARNING - No initial pose set for actor builder of cube, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,549 - mani_skill  - WARNING - No initial pose set for actor builder of l_shape_tool, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n",
-      "stdout_tail": " line 50, in get_partnet_mobility_builder\\n    _load_partnet_mobility_dataset()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\building\\\\articulations\\\\partnet_mobility.py\\\", line 37, in _load_partnet_mobility_dataset\\n    raise RuntimeError(\\nRuntimeError: Partnet Mobility dataset not found. Download it by running python -m mani_skill.utils.download_asset partnet_mobility_cabinet\\n\"}, {\"closed\": false, \"elapsed_seconds\": 0.011739, \"env_id\": \"OpenCabinetDrawer-v1\", \"error\": \"EOF when reading a line\", \"error_type\": \"EOFError\", \"info_keys\": [], \"made_env\": false, \"observation_shape\": \"\", \"observation_space\": \"\", \"observation_type\": \"\", \"reset_ok\": false, \"traceback_tail\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 38, in <module>\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\gymnasium\\\\envs\\\\registration.py\\\", line 734, in make\\n    env = env_creator(**env_spec_kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 182, in make\\n    env = env_spec.make(**kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 70, in make\\n    response = download_asset.prompt_yes_no(\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\download_asset.py\\\", line 28, in prompt_yes_no\\n    answer = input(\\\"(y|n): \\\")\\nEOFError: EOF when reading a line\\n\"}, {\"closed\": true, \"elapsed_seconds\": 6.418367, \"env_id\": \"PegInsertionSide-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"elapsed_steps\", \"peg_head_pos_at_hole\", \"reconfigure\", \"success\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 43])\", \"observation_space\": \"Box(-inf, inf, (1, 43), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}, {\"closed\": true, \"elapsed_seconds\": 1.679052, \"env_id\": \"PickCube-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"elapsed_steps\", \"is_grasped\", \"is_obj_placed\", \"is_robot_static\", \"reconfigure\", \"success\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 42])\", \"observation_space\": \"Box(-inf, inf, (1, 42), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}, {\"closed\": false, \"elapsed_seconds\": 0.007279, \"env_id\": \"PickSingleYCB-v1\", \"error\": \"EOF when reading a line\", \"error_type\": \"EOFError\", \"info_keys\": [], \"made_env\": false, \"observation_shape\": \"\", \"observation_space\": \"\", \"observation_type\": \"\", \"reset_ok\": false, \"traceback_tail\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 38, in <module>\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\gymnasium\\\\envs\\\\registration.py\\\", line 734, in make\\n    env = env_creator(**env_spec_kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 182, in make\\n    env = env_spec.make(**kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 70, in make\\n    response = download_asset.prompt_yes_no(\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\download_asset.py\\\", line 28, in prompt_yes_no\\n    answer = input(\\\"(y|n): \\\")\\nEOFError: EOF when reading a line\\n\"}, {\"closed\": true, \"elapsed_seconds\": 1.95184, \"env_id\": \"PullCubeTool-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"cube_distance\", \"cube_progress\", \"elapsed_steps\", \"reconfigure\", \"reward\", \"success\", \"success_at_end\", \"success_once\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 39])\", \"observation_space\": \"Box(-inf, inf, (1, 39), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}]}\n",
-      "subprocess_returncode": null,
-      "subprocess_timeout": true,
+      "made_env": true,
+      "observation_shape": "torch.Size([1, 44])",
+      "observation_space": "Box(-inf, inf, (1, 44), float32)",
+      "observation_type": "Tensor",
+      "reset_ok": true,
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 02:42:19,620 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stdout_tail": "",
+      "subprocess_returncode": 0,
+      "subprocess_timeout": false,
       "task_families": [
         "door_open_navigation"
-      ]
+      ],
+      "traceback_tail": ""
     },
     {
-      "closed": false,
+      "closed": true,
+      "elapsed_seconds": 6.405528,
       "env_id": "OpenCabinetDrawer-v1",
-      "error": "timed out after 45s",
-      "error_type": "TimeoutExpired",
+      "error": "",
+      "error_type": "",
+      "info_keys": [
+        "elapsed_steps",
+        "handle_link_pos",
+        "open_enough",
+        "reconfigure",
+        "success"
+      ],
       "is_primary_for": [
         "drawer_to_pick_transfer"
       ],
       "is_support_for": [],
-      "made_env": false,
-      "reset_ok": false,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 01:33:11,621 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:13,880 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:20,298 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:21,984 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,354 - mani_skill  - WARNING - No initial pose set for articulation builder of panda, setting to default pose q=[1,0,0,0], p=[0,0,0]. There may be simulation issues/bugs if this articulation at it's initial pose collides with other objects at their initial poses.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,545 - mani_skill  - WARNING - No initial pose set for actor builder of cube, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,549 - mani_skill  - WARNING - No initial pose set for actor builder of l_shape_tool, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n",
-      "stdout_tail": " line 50, in get_partnet_mobility_builder\\n    _load_partnet_mobility_dataset()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\building\\\\articulations\\\\partnet_mobility.py\\\", line 37, in _load_partnet_mobility_dataset\\n    raise RuntimeError(\\nRuntimeError: Partnet Mobility dataset not found. Download it by running python -m mani_skill.utils.download_asset partnet_mobility_cabinet\\n\"}, {\"closed\": false, \"elapsed_seconds\": 0.011739, \"env_id\": \"OpenCabinetDrawer-v1\", \"error\": \"EOF when reading a line\", \"error_type\": \"EOFError\", \"info_keys\": [], \"made_env\": false, \"observation_shape\": \"\", \"observation_space\": \"\", \"observation_type\": \"\", \"reset_ok\": false, \"traceback_tail\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 38, in <module>\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\gymnasium\\\\envs\\\\registration.py\\\", line 734, in make\\n    env = env_creator(**env_spec_kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 182, in make\\n    env = env_spec.make(**kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 70, in make\\n    response = download_asset.prompt_yes_no(\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\download_asset.py\\\", line 28, in prompt_yes_no\\n    answer = input(\\\"(y|n): \\\")\\nEOFError: EOF when reading a line\\n\"}, {\"closed\": true, \"elapsed_seconds\": 6.418367, \"env_id\": \"PegInsertionSide-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"elapsed_steps\", \"peg_head_pos_at_hole\", \"reconfigure\", \"success\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 43])\", \"observation_space\": \"Box(-inf, inf, (1, 43), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}, {\"closed\": true, \"elapsed_seconds\": 1.679052, \"env_id\": \"PickCube-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"elapsed_steps\", \"is_grasped\", \"is_obj_placed\", \"is_robot_static\", \"reconfigure\", \"success\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 42])\", \"observation_space\": \"Box(-inf, inf, (1, 42), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}, {\"closed\": false, \"elapsed_seconds\": 0.007279, \"env_id\": \"PickSingleYCB-v1\", \"error\": \"EOF when reading a line\", \"error_type\": \"EOFError\", \"info_keys\": [], \"made_env\": false, \"observation_shape\": \"\", \"observation_space\": \"\", \"observation_type\": \"\", \"reset_ok\": false, \"traceback_tail\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 38, in <module>\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\gymnasium\\\\envs\\\\registration.py\\\", line 734, in make\\n    env = env_creator(**env_spec_kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 182, in make\\n    env = env_spec.make(**kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 70, in make\\n    response = download_asset.prompt_yes_no(\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\download_asset.py\\\", line 28, in prompt_yes_no\\n    answer = input(\\\"(y|n): \\\")\\nEOFError: EOF when reading a line\\n\"}, {\"closed\": true, \"elapsed_seconds\": 1.95184, \"env_id\": \"PullCubeTool-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"cube_distance\", \"cube_progress\", \"elapsed_steps\", \"reconfigure\", \"reward\", \"success\", \"success_at_end\", \"success_once\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 39])\", \"observation_space\": \"Box(-inf, inf, (1, 39), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}]}\n",
-      "subprocess_returncode": null,
-      "subprocess_timeout": true,
+      "made_env": true,
+      "observation_shape": "torch.Size([1, 44])",
+      "observation_space": "Box(-inf, inf, (1, 44), float32)",
+      "observation_type": "Tensor",
+      "reset_ok": true,
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 02:42:53,206 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stdout_tail": "",
+      "subprocess_returncode": 0,
+      "subprocess_timeout": false,
       "task_families": [
         "drawer_to_pick_transfer"
-      ]
+      ],
+      "traceback_tail": ""
     },
     {
-      "closed": false,
+      "closed": true,
+      "elapsed_seconds": 6.633357,
       "env_id": "PegInsertionSide-v1",
-      "error": "timed out after 45s",
-      "error_type": "TimeoutExpired",
+      "error": "",
+      "error_type": "",
+      "info_keys": [
+        "elapsed_steps",
+        "peg_head_pos_at_hole",
+        "reconfigure",
+        "success"
+      ],
       "is_primary_for": [
         "peg_place_regrasp"
       ],
       "is_support_for": [],
-      "made_env": false,
-      "reset_ok": false,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 01:33:11,621 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:13,880 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:20,298 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:21,984 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,354 - mani_skill  - WARNING - No initial pose set for articulation builder of panda, setting to default pose q=[1,0,0,0], p=[0,0,0]. There may be simulation issues/bugs if this articulation at it's initial pose collides with other objects at their initial poses.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,545 - mani_skill  - WARNING - No initial pose set for actor builder of cube, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,549 - mani_skill  - WARNING - No initial pose set for actor builder of l_shape_tool, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n",
-      "stdout_tail": " line 50, in get_partnet_mobility_builder\\n    _load_partnet_mobility_dataset()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\building\\\\articulations\\\\partnet_mobility.py\\\", line 37, in _load_partnet_mobility_dataset\\n    raise RuntimeError(\\nRuntimeError: Partnet Mobility dataset not found. Download it by running python -m mani_skill.utils.download_asset partnet_mobility_cabinet\\n\"}, {\"closed\": false, \"elapsed_seconds\": 0.011739, \"env_id\": \"OpenCabinetDrawer-v1\", \"error\": \"EOF when reading a line\", \"error_type\": \"EOFError\", \"info_keys\": [], \"made_env\": false, \"observation_shape\": \"\", \"observation_space\": \"\", \"observation_type\": \"\", \"reset_ok\": false, \"traceback_tail\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 38, in <module>\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\gymnasium\\\\envs\\\\registration.py\\\", line 734, in make\\n    env = env_creator(**env_spec_kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 182, in make\\n    env = env_spec.make(**kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 70, in make\\n    response = download_asset.prompt_yes_no(\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\download_asset.py\\\", line 28, in prompt_yes_no\\n    answer = input(\\\"(y|n): \\\")\\nEOFError: EOF when reading a line\\n\"}, {\"closed\": true, \"elapsed_seconds\": 6.418367, \"env_id\": \"PegInsertionSide-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"elapsed_steps\", \"peg_head_pos_at_hole\", \"reconfigure\", \"success\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 43])\", \"observation_space\": \"Box(-inf, inf, (1, 43), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}, {\"closed\": true, \"elapsed_seconds\": 1.679052, \"env_id\": \"PickCube-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"elapsed_steps\", \"is_grasped\", \"is_obj_placed\", \"is_robot_static\", \"reconfigure\", \"success\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 42])\", \"observation_space\": \"Box(-inf, inf, (1, 42), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}, {\"closed\": false, \"elapsed_seconds\": 0.007279, \"env_id\": \"PickSingleYCB-v1\", \"error\": \"EOF when reading a line\", \"error_type\": \"EOFError\", \"info_keys\": [], \"made_env\": false, \"observation_shape\": \"\", \"observation_space\": \"\", \"observation_type\": \"\", \"reset_ok\": false, \"traceback_tail\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 38, in <module>\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\gymnasium\\\\envs\\\\registration.py\\\", line 734, in make\\n    env = env_creator(**env_spec_kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 182, in make\\n    env = env_spec.make(**kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 70, in make\\n    response = download_asset.prompt_yes_no(\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\download_asset.py\\\", line 28, in prompt_yes_no\\n    answer = input(\\\"(y|n): \\\")\\nEOFError: EOF when reading a line\\n\"}, {\"closed\": true, \"elapsed_seconds\": 1.95184, \"env_id\": \"PullCubeTool-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"cube_distance\", \"cube_progress\", \"elapsed_steps\", \"reconfigure\", \"reward\", \"success\", \"success_at_end\", \"success_once\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 39])\", \"observation_space\": \"Box(-inf, inf, (1, 39), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}]}\n",
-      "subprocess_returncode": null,
-      "subprocess_timeout": true,
+      "made_env": true,
+      "observation_shape": "torch.Size([1, 43])",
+      "observation_space": "Box(-inf, inf, (1, 43), float32)",
+      "observation_type": "Tensor",
+      "reset_ok": true,
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 02:43:33,816 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stdout_tail": "",
+      "subprocess_returncode": 0,
+      "subprocess_timeout": false,
       "task_families": [
         "peg_place_regrasp"
-      ]
+      ],
+      "traceback_tail": ""
     },
     {
-      "closed": false,
+      "closed": true,
+      "elapsed_seconds": 2.992028,
       "env_id": "PickCube-v1",
-      "error": "timed out after 45s",
-      "error_type": "TimeoutExpired",
+      "error": "",
+      "error_type": "",
+      "info_keys": [
+        "elapsed_steps",
+        "is_grasped",
+        "is_obj_placed",
+        "is_robot_static",
+        "reconfigure",
+        "success"
+      ],
       "is_primary_for": [],
       "is_support_for": [
         "drawer_to_pick_transfer"
       ],
-      "made_env": false,
-      "reset_ok": false,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 01:33:11,621 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:13,880 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:20,298 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:21,984 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,354 - mani_skill  - WARNING - No initial pose set for articulation builder of panda, setting to default pose q=[1,0,0,0], p=[0,0,0]. There may be simulation issues/bugs if this articulation at it's initial pose collides with other objects at their initial poses.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,545 - mani_skill  - WARNING - No initial pose set for actor builder of cube, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,549 - mani_skill  - WARNING - No initial pose set for actor builder of l_shape_tool, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n",
-      "stdout_tail": " line 50, in get_partnet_mobility_builder\\n    _load_partnet_mobility_dataset()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\building\\\\articulations\\\\partnet_mobility.py\\\", line 37, in _load_partnet_mobility_dataset\\n    raise RuntimeError(\\nRuntimeError: Partnet Mobility dataset not found. Download it by running python -m mani_skill.utils.download_asset partnet_mobility_cabinet\\n\"}, {\"closed\": false, \"elapsed_seconds\": 0.011739, \"env_id\": \"OpenCabinetDrawer-v1\", \"error\": \"EOF when reading a line\", \"error_type\": \"EOFError\", \"info_keys\": [], \"made_env\": false, \"observation_shape\": \"\", \"observation_space\": \"\", \"observation_type\": \"\", \"reset_ok\": false, \"traceback_tail\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 38, in <module>\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\gymnasium\\\\envs\\\\registration.py\\\", line 734, in make\\n    env = env_creator(**env_spec_kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 182, in make\\n    env = env_spec.make(**kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 70, in make\\n    response = download_asset.prompt_yes_no(\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\download_asset.py\\\", line 28, in prompt_yes_no\\n    answer = input(\\\"(y|n): \\\")\\nEOFError: EOF when reading a line\\n\"}, {\"closed\": true, \"elapsed_seconds\": 6.418367, \"env_id\": \"PegInsertionSide-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"elapsed_steps\", \"peg_head_pos_at_hole\", \"reconfigure\", \"success\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 43])\", \"observation_space\": \"Box(-inf, inf, (1, 43), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}, {\"closed\": true, \"elapsed_seconds\": 1.679052, \"env_id\": \"PickCube-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"elapsed_steps\", \"is_grasped\", \"is_obj_placed\", \"is_robot_static\", \"reconfigure\", \"success\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 42])\", \"observation_space\": \"Box(-inf, inf, (1, 42), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}, {\"closed\": false, \"elapsed_seconds\": 0.007279, \"env_id\": \"PickSingleYCB-v1\", \"error\": \"EOF when reading a line\", \"error_type\": \"EOFError\", \"info_keys\": [], \"made_env\": false, \"observation_shape\": \"\", \"observation_space\": \"\", \"observation_type\": \"\", \"reset_ok\": false, \"traceback_tail\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 38, in <module>\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\gymnasium\\\\envs\\\\registration.py\\\", line 734, in make\\n    env = env_creator(**env_spec_kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 182, in make\\n    env = env_spec.make(**kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 70, in make\\n    response = download_asset.prompt_yes_no(\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\download_asset.py\\\", line 28, in prompt_yes_no\\n    answer = input(\\\"(y|n): \\\")\\nEOFError: EOF when reading a line\\n\"}, {\"closed\": true, \"elapsed_seconds\": 1.95184, \"env_id\": \"PullCubeTool-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"cube_distance\", \"cube_progress\", \"elapsed_steps\", \"reconfigure\", \"reward\", \"success\", \"success_at_end\", \"success_once\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 39])\", \"observation_space\": \"Box(-inf, inf, (1, 39), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}]}\n",
-      "subprocess_returncode": null,
-      "subprocess_timeout": true,
+      "made_env": true,
+      "observation_shape": "torch.Size([1, 42])",
+      "observation_space": "Box(-inf, inf, (1, 42), float32)",
+      "observation_type": "Tensor",
+      "reset_ok": true,
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 02:44:10,830 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stdout_tail": "",
+      "subprocess_returncode": 0,
+      "subprocess_timeout": false,
       "task_families": [
         "drawer_to_pick_transfer"
-      ]
+      ],
+      "traceback_tail": ""
     },
     {
       "closed": false,
+      "elapsed_seconds": 0.004645,
       "env_id": "PickSingleYCB-v1",
-      "error": "timed out after 45s",
-      "error_type": "TimeoutExpired",
+      "error": "EOF when reading a line",
+      "error_type": "EOFError",
+      "info_keys": [],
       "is_primary_for": [],
       "is_support_for": [
         "drawer_to_pick_transfer"
       ],
       "made_env": false,
+      "observation_shape": "",
+      "observation_space": "",
+      "observation_type": "",
       "reset_ok": false,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 01:33:11,621 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:13,880 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:20,298 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:21,984 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,354 - mani_skill  - WARNING - No initial pose set for articulation builder of panda, setting to default pose q=[1,0,0,0], p=[0,0,0]. There may be simulation issues/bugs if this articulation at it's initial pose collides with other objects at their initial poses.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,545 - mani_skill  - WARNING - No initial pose set for actor builder of cube, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,549 - mani_skill  - WARNING - No initial pose set for actor builder of l_shape_tool, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n",
-      "stdout_tail": " line 50, in get_partnet_mobility_builder\\n    _load_partnet_mobility_dataset()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\building\\\\articulations\\\\partnet_mobility.py\\\", line 37, in _load_partnet_mobility_dataset\\n    raise RuntimeError(\\nRuntimeError: Partnet Mobility dataset not found. Download it by running python -m mani_skill.utils.download_asset partnet_mobility_cabinet\\n\"}, {\"closed\": false, \"elapsed_seconds\": 0.011739, \"env_id\": \"OpenCabinetDrawer-v1\", \"error\": \"EOF when reading a line\", \"error_type\": \"EOFError\", \"info_keys\": [], \"made_env\": false, \"observation_shape\": \"\", \"observation_space\": \"\", \"observation_type\": \"\", \"reset_ok\": false, \"traceback_tail\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 38, in <module>\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\gymnasium\\\\envs\\\\registration.py\\\", line 734, in make\\n    env = env_creator(**env_spec_kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 182, in make\\n    env = env_spec.make(**kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 70, in make\\n    response = download_asset.prompt_yes_no(\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\download_asset.py\\\", line 28, in prompt_yes_no\\n    answer = input(\\\"(y|n): \\\")\\nEOFError: EOF when reading a line\\n\"}, {\"closed\": true, \"elapsed_seconds\": 6.418367, \"env_id\": \"PegInsertionSide-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"elapsed_steps\", \"peg_head_pos_at_hole\", \"reconfigure\", \"success\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 43])\", \"observation_space\": \"Box(-inf, inf, (1, 43), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}, {\"closed\": true, \"elapsed_seconds\": 1.679052, \"env_id\": \"PickCube-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"elapsed_steps\", \"is_grasped\", \"is_obj_placed\", \"is_robot_static\", \"reconfigure\", \"success\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 42])\", \"observation_space\": \"Box(-inf, inf, (1, 42), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}, {\"closed\": false, \"elapsed_seconds\": 0.007279, \"env_id\": \"PickSingleYCB-v1\", \"error\": \"EOF when reading a line\", \"error_type\": \"EOFError\", \"info_keys\": [], \"made_env\": false, \"observation_shape\": \"\", \"observation_space\": \"\", \"observation_type\": \"\", \"reset_ok\": false, \"traceback_tail\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 38, in <module>\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\gymnasium\\\\envs\\\\registration.py\\\", line 734, in make\\n    env = env_creator(**env_spec_kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 182, in make\\n    env = env_spec.make(**kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 70, in make\\n    response = download_asset.prompt_yes_no(\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\download_asset.py\\\", line 28, in prompt_yes_no\\n    answer = input(\\\"(y|n): \\\")\\nEOFError: EOF when reading a line\\n\"}, {\"closed\": true, \"elapsed_seconds\": 1.95184, \"env_id\": \"PullCubeTool-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"cube_distance\", \"cube_progress\", \"elapsed_steps\", \"reconfigure\", \"reward\", \"success\", \"success_at_end\", \"success_once\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 39])\", \"observation_space\": \"Box(-inf, inf, (1, 39), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}]}\n",
-      "subprocess_returncode": null,
-      "subprocess_timeout": true,
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n",
+      "stdout_tail": "",
+      "subprocess_returncode": 0,
+      "subprocess_timeout": false,
       "task_families": [
         "drawer_to_pick_transfer"
-      ]
+      ],
+      "traceback_tail": "Traceback (most recent call last):\n  File \"<string>\", line 38, in <module>\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\gymnasium\\envs\\registration.py\", line 734, in make\n    env = env_creator(**env_spec_kwargs)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\registration.py\", line 182, in make\n    env = env_spec.make(**kwargs)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\registration.py\", line 70, in make\n    response = download_asset.prompt_yes_no(\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\download_asset.py\", line 28, in prompt_yes_no\n    answer = input(\"(y|n): \")\nEOFError: EOF when reading a line\n"
     },
     {
-      "closed": false,
+      "closed": true,
+      "elapsed_seconds": 3.007134,
       "env_id": "PullCubeTool-v1",
-      "error": "timed out after 45s",
-      "error_type": "TimeoutExpired",
+      "error": "",
+      "error_type": "",
+      "info_keys": [
+        "cube_distance",
+        "cube_progress",
+        "elapsed_steps",
+        "reconfigure",
+        "reward",
+        "success",
+        "success_at_end",
+        "success_once"
+      ],
       "is_primary_for": [
         "cable_route_insert"
       ],
       "is_support_for": [],
-      "made_env": false,
-      "reset_ok": false,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 01:33:11,621 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:13,880 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:20,298 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:21,984 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,354 - mani_skill  - WARNING - No initial pose set for articulation builder of panda, setting to default pose q=[1,0,0,0], p=[0,0,0]. There may be simulation issues/bugs if this articulation at it's initial pose collides with other objects at their initial poses.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,545 - mani_skill  - WARNING - No initial pose set for actor builder of cube, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n\u001b[33;1m2026-06-28 01:33:23,549 - mani_skill  - WARNING - No initial pose set for actor builder of l_shape_tool, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n",
-      "stdout_tail": " line 50, in get_partnet_mobility_builder\\n    _load_partnet_mobility_dataset()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\building\\\\articulations\\\\partnet_mobility.py\\\", line 37, in _load_partnet_mobility_dataset\\n    raise RuntimeError(\\nRuntimeError: Partnet Mobility dataset not found. Download it by running python -m mani_skill.utils.download_asset partnet_mobility_cabinet\\n\"}, {\"closed\": false, \"elapsed_seconds\": 0.011739, \"env_id\": \"OpenCabinetDrawer-v1\", \"error\": \"EOF when reading a line\", \"error_type\": \"EOFError\", \"info_keys\": [], \"made_env\": false, \"observation_shape\": \"\", \"observation_space\": \"\", \"observation_type\": \"\", \"reset_ok\": false, \"traceback_tail\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 38, in <module>\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\gymnasium\\\\envs\\\\registration.py\\\", line 734, in make\\n    env = env_creator(**env_spec_kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 182, in make\\n    env = env_spec.make(**kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 70, in make\\n    response = download_asset.prompt_yes_no(\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\download_asset.py\\\", line 28, in prompt_yes_no\\n    answer = input(\\\"(y|n): \\\")\\nEOFError: EOF when reading a line\\n\"}, {\"closed\": true, \"elapsed_seconds\": 6.418367, \"env_id\": \"PegInsertionSide-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"elapsed_steps\", \"peg_head_pos_at_hole\", \"reconfigure\", \"success\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 43])\", \"observation_space\": \"Box(-inf, inf, (1, 43), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}, {\"closed\": true, \"elapsed_seconds\": 1.679052, \"env_id\": \"PickCube-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"elapsed_steps\", \"is_grasped\", \"is_obj_placed\", \"is_robot_static\", \"reconfigure\", \"success\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 42])\", \"observation_space\": \"Box(-inf, inf, (1, 42), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}, {\"closed\": false, \"elapsed_seconds\": 0.007279, \"env_id\": \"PickSingleYCB-v1\", \"error\": \"EOF when reading a line\", \"error_type\": \"EOFError\", \"info_keys\": [], \"made_env\": false, \"observation_shape\": \"\", \"observation_space\": \"\", \"observation_type\": \"\", \"reset_ok\": false, \"traceback_tail\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 38, in <module>\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\gymnasium\\\\envs\\\\registration.py\\\", line 734, in make\\n    env = env_creator(**env_spec_kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 182, in make\\n    env = env_spec.make(**kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 70, in make\\n    response = download_asset.prompt_yes_no(\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\download_asset.py\\\", line 28, in prompt_yes_no\\n    answer = input(\\\"(y|n): \\\")\\nEOFError: EOF when reading a line\\n\"}, {\"closed\": true, \"elapsed_seconds\": 1.95184, \"env_id\": \"PullCubeTool-v1\", \"error\": \"\", \"error_type\": \"\", \"info_keys\": [\"cube_distance\", \"cube_progress\", \"elapsed_steps\", \"reconfigure\", \"reward\", \"success\", \"success_at_end\", \"success_once\"], \"made_env\": true, \"observation_shape\": \"torch.Size([1, 39])\", \"observation_space\": \"Box(-inf, inf, (1, 39), float32)\", \"observation_type\": \"Tensor\", \"reset_ok\": true, \"traceback_tail\": \"\"}]}\n",
-      "subprocess_returncode": null,
-      "subprocess_timeout": true,
+      "made_env": true,
+      "observation_shape": "torch.Size([1, 39])",
+      "observation_space": "Box(-inf, inf, (1, 39), float32)",
+      "observation_type": "Tensor",
+      "reset_ok": true,
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 02:45:15,335 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 02:45:16,149 - mani_skill  - WARNING - No initial pose set for articulation builder of panda, setting to default pose q=[1,0,0,0], p=[0,0,0]. There may be simulation issues/bugs if this articulation at it's initial pose collides with other objects at their initial poses.\u001b[0m\n\u001b[33;1m2026-06-28 02:45:16,400 - mani_skill  - WARNING - No initial pose set for actor builder of cube, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n\u001b[33;1m2026-06-28 02:45:16,403 - mani_skill  - WARNING - No initial pose set for actor builder of l_shape_tool, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n",
+      "stdout_tail": "",
+      "subprocess_returncode": 0,
+      "subprocess_timeout": false,
       "task_families": [
         "cable_route_insert"
-      ]
+      ],
+      "traceback_tail": ""
     }
   ],
   "env_smoke_probe_ready": true,
   "not_external_evidence": true,
   "passed": true,
   "primary_env_count": 4,
-  "primary_reset_missing": [
-    "OpenCabinetDoor-v1",
-    "OpenCabinetDrawer-v1",
-    "PegInsertionSide-v1",
-    "PullCubeTool-v1"
-  ],
+  "primary_reset_missing": [],
   "strict": false,
-  "strict_env_smoke_ready": false,
+  "strict_env_smoke_ready": true,
   "strict_external_evidence_ready": false,
   "strict_fidelity_evidence_ready": false,
   "support_reset_missing": [
     "InsertFlower-v1",
-    "PickCube-v1",
     "PickSingleYCB-v1"
   ],
-  "timeout_seconds": 45,
+  "timeout_seconds": 90,
   "version": "maniskill_env_smoke_probe_v1"
 }

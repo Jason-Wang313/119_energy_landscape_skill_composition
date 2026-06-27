@@ -88,7 +88,7 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 - `pass` `route_independent_of_haonan`: primary_route='maniskill_sapien_primary'
 - `pass` `platform_probe_ready`: primary_route_install_ready=True, missing=[]
 - `pass` `task_binding_probe_ready`: strict_task_binding_install_ready=True, missing=[]
-- `pass` `env_smoke_probe_ready`: strict_env_smoke_ready=False, primary_reset_missing=['OpenCabinetDoor-v1', 'OpenCabinetDrawer-v1', 'PegInsertionSide-v1', 'PullCubeTool-v1']
+- `pass` `env_smoke_probe_ready`: strict_env_smoke_ready=True, primary_reset_missing=[]
 - `pass` `platform_onboarding_ready`: platform_onboarding_ready=True, strict_evidence_ready=False
 - `pass` `fidelity_provenance_packet_ready`: fidelity_provenance_packet_ready=True, strict_fidelity_evidence_ready=False, strict_external_evidence_ready=False
 - `pass` `post_collection_strict_commands_cover_all_gates`: missing_command_fragments=[]

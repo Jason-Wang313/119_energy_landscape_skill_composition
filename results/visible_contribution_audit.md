@@ -13,7 +13,7 @@ This audit checks that the public-facing contribution docs describe the current 
 - `pass` `analysis_plan_visible`: analysis_plan_ready=True, strict_evidence_ready=False
 - `pass` `platform_probe_visible`: primary_route_install_ready=True, missing=[]
 - `pass` `maniskill_task_binding_probe_visible`: strict_task_binding_install_ready=True, missing=[]
-- `pass` `maniskill_env_smoke_probe_visible`: strict_env_smoke_ready=False, primary_reset_missing=['OpenCabinetDoor-v1', 'OpenCabinetDrawer-v1', 'PegInsertionSide-v1', 'PullCubeTool-v1']
+- `pass` `maniskill_env_smoke_probe_visible`: strict_env_smoke_ready=True, primary_reset_missing=[]
 - `pass` `platform_onboarding_visible`: platform_onboarding_ready=True, strict_evidence_ready=False
 - `pass` `fidelity_provenance_packet_visible`: fidelity_provenance_packet_ready=True, strict_fidelity_evidence_ready=False, strict_external_evidence_ready=False
 - `pass` `backend_integration_packet_visible`: backend_integration_packet_ready=True, strict_backend_ready=False

@@ -125,7 +125,62 @@ print(sentinel + json.dumps({"records": records}, sort_keys=True))
 '''
 
 
-def run_env_smokes(env_ids: list[str], *, timeout: int) -> list[dict[str, Any]]:
+def text_tail(value: Any, limit: int = 4000) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")[-limit:]
+    return str(value)[-limit:]
+
+
+def parse_probe_payload(stdout: Any) -> dict[str, Any] | None:
+    stdout_text = text_tail(stdout, limit=20000)
+    for line in reversed(stdout_text.splitlines()):
+        if SENTINEL in line:
+            try:
+                return json.loads(line.split(SENTINEL, 1)[1])
+            except json.JSONDecodeError:
+                return None
+    return None
+
+
+def normalize_probe_records(
+    env_ids: list[str],
+    records: Any,
+    *,
+    returncode: int | None,
+    subprocess_timeout: bool,
+    stdout_tail: str = "",
+    stderr_tail: str = "",
+    timed_out_after_result: bool = False,
+) -> list[dict[str, Any]]:
+    records = records if isinstance(records, list) else []
+    by_id = {str(record.get("env_id", "")): record for record in records if isinstance(record, dict)}
+    normalized = []
+    for env_id in env_ids:
+        record = by_id.get(env_id) or {
+            "env_id": env_id,
+            "made_env": False,
+            "reset_ok": False,
+            "closed": False,
+            "error_type": "MissingEnvResult",
+            "error": "subprocess did not emit a record for this env",
+        }
+        record.update(
+            {
+                "subprocess_returncode": returncode,
+                "subprocess_timeout": subprocess_timeout,
+                "stdout_tail": stdout_tail,
+                "stderr_tail": stderr_tail,
+            }
+        )
+        if timed_out_after_result:
+            record["timed_out_after_result"] = True
+        normalized.append(record)
+    return normalized
+
+
+def run_env_smoke_batch(env_ids: list[str], *, timeout: int) -> list[dict[str, Any]]:
     try:
         proc = subprocess.run(
             [sys.executable, "-c", smoke_code(), SENTINEL, *env_ids],
@@ -136,26 +191,32 @@ def run_env_smokes(env_ids: list[str], *, timeout: int) -> list[dict[str, Any]]:
             check=False,
         )
     except subprocess.TimeoutExpired as exc:
+        stdout_tail = text_tail(exc.stdout)
+        stderr_tail = text_tail(exc.stderr)
+        payload = parse_probe_payload(exc.stdout)
+        if payload is not None:
+            return normalize_probe_records(
+                env_ids,
+                payload.get("records", []),
+                returncode=None,
+                subprocess_timeout=True,
+                stdout_tail=stdout_tail,
+                stderr_tail=stderr_tail,
+                timed_out_after_result=True,
+            )
         return [{
             "env_id": env_id,
             "subprocess_returncode": None,
             "subprocess_timeout": True,
-            "stdout_tail": (exc.stdout or "")[-4000:],
-            "stderr_tail": (exc.stderr or "")[-4000:],
+            "stdout_tail": stdout_tail,
+            "stderr_tail": stderr_tail,
             "made_env": False,
             "reset_ok": False,
             "closed": False,
             "error_type": "TimeoutExpired",
             "error": f"timed out after {timeout}s",
         } for env_id in env_ids]
-    payload: dict[str, Any] | None = None
-    for line in reversed(proc.stdout.splitlines()):
-        if SENTINEL in line:
-            try:
-                payload = json.loads(line.split(SENTINEL, 1)[1])
-            except json.JSONDecodeError:
-                payload = None
-            break
+    payload = parse_probe_payload(proc.stdout)
     if payload is None:
         return [{
             "env_id": env_id,
@@ -166,32 +227,29 @@ def run_env_smokes(env_ids: list[str], *, timeout: int) -> list[dict[str, Any]]:
             "error": "subprocess did not emit the expected probe result",
             "subprocess_returncode": proc.returncode,
             "subprocess_timeout": False,
-            "stdout_tail": proc.stdout[-4000:],
-            "stderr_tail": proc.stderr[-4000:],
+            "stdout_tail": text_tail(proc.stdout),
+            "stderr_tail": text_tail(proc.stderr),
         } for env_id in env_ids]
-    records = payload.get("records", [])
-    if not isinstance(records, list):
-        records = []
-    by_id = {str(record.get("env_id", "")): record for record in records if isinstance(record, dict)}
-    normalized = []
+    return normalize_probe_records(
+        env_ids,
+        payload.get("records", []),
+        returncode=proc.returncode,
+        subprocess_timeout=False,
+        stderr_tail=text_tail(proc.stderr),
+    )
+
+
+def run_env_smokes(env_ids: list[str], *, timeout: int) -> list[dict[str, Any]]:
+    """Run each environment in its own subprocess.
+
+    A missing asset or slow constructor for one ManiSkill environment should not
+    make every other bound environment look broken. Per-env isolation also keeps
+    stdout/stderr tails attributable to the actual failing candidate.
+    """
+    records: list[dict[str, Any]] = []
     for env_id in env_ids:
-        record = by_id.get(env_id) or {
-            "env_id": env_id,
-            "made_env": False,
-            "reset_ok": False,
-            "closed": False,
-            "error_type": "MissingEnvResult",
-            "error": "batch subprocess did not emit a record for this env",
-        }
-        record.update(
-            {
-                "subprocess_returncode": proc.returncode,
-                "subprocess_timeout": False,
-                "stderr_tail": proc.stderr[-4000:],
-            }
-        )
-        normalized.append(record)
-    return normalized
+        records.extend(run_env_smoke_batch([env_id], timeout=timeout))
+    return records
 
 
 def add_check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str) -> None:
@@ -237,7 +295,7 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         env_id = str(record["env_id"])
         record_text = " ".join(
             str(record.get(key, ""))
-            for key in ("error_type", "error", "traceback_tail", "stderr_tail")
+            for key in ("error_type", "error", "traceback_tail", "stdout_tail", "stderr_tail")
         ).lower()
         explicit_asset_failure = any(term in record_text for term in ("asset", "dataset", "partnet"))
         cabinet_prompt_failure = env_id.startswith("OpenCabinet") and "eof when reading a line" in record_text
@@ -343,7 +401,7 @@ def write_md(payload: dict[str, Any]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Non-evidence ManiSkill environment construction/reset smoke probe.")
     parser.add_argument("--binding-file", type=Path, default=DEFAULT_BINDINGS)
-    parser.add_argument("--timeout-seconds", type=int, default=45)
+    parser.add_argument("--timeout-seconds", type=int, default=90)
     parser.add_argument("--strict", action="store_true", help="Return non-zero unless every primary bound environment constructs and resets.")
     args = parser.parse_args()
 

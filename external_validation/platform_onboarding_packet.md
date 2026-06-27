@@ -30,8 +30,8 @@ This packet turns the non-Haonan public-simulator route into an operator onboard
 - Latest task binding install ready: `true`
 - Latest task binding missing env IDs: `[]`
 - Latest env smoke probe report: `results/maniskill_env_smoke_probe.json`
-- Latest env smoke ready: `false`
-- Latest env smoke primary reset missing: `['OpenCabinetDoor-v1', 'OpenCabinetDrawer-v1', 'PegInsertionSide-v1', 'PullCubeTool-v1']`
+- Latest env smoke ready: `true`
+- Latest env smoke primary reset missing: `[]`
 - Latest env smoke asset install hint: `python -m mani_skill.utils.download_asset partnet_mobility_cabinet`
 - Latest probe report: `results/external_platform_probe.json`
 - Latest probe install ready: `true`

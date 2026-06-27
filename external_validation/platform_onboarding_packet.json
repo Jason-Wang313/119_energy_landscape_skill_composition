@@ -66,14 +66,9 @@
     "env_smoke_probe_command": "python scripts\\probe_maniskill_env_smoke.py",
     "install_command_from_official_docs": "python -m pip install --upgrade mani_skill; python -m pip install torch torchvision torchaudio",
     "latest_env_smoke_asset_install_hint": "python -m mani_skill.utils.download_asset partnet_mobility_cabinet",
-    "latest_env_smoke_primary_reset_missing": [
-      "OpenCabinetDoor-v1",
-      "OpenCabinetDrawer-v1",
-      "PegInsertionSide-v1",
-      "PullCubeTool-v1"
-    ],
+    "latest_env_smoke_primary_reset_missing": [],
     "latest_env_smoke_probe_report": "results/maniskill_env_smoke_probe.json",
-    "latest_env_smoke_ready": false,
+    "latest_env_smoke_ready": true,
     "latest_probe_install_ready": true,
     "latest_probe_missing_packages": [],
     "latest_probe_report": "results/external_platform_probe.json",

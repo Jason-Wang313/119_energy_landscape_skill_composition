@@ -40,7 +40,7 @@
       "passed": true
     },
     {
-      "detail": "strict_env_smoke_ready=False, primary_reset_missing=['OpenCabinetDoor-v1', 'OpenCabinetDrawer-v1', 'PegInsertionSide-v1', 'PullCubeTool-v1']",
+      "detail": "strict_env_smoke_ready=True, primary_reset_missing=[]",
       "name": "maniskill_env_smoke_probe_visible",
       "passed": true
     },
