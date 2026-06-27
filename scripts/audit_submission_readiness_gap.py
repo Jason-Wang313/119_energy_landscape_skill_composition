@@ -412,6 +412,7 @@ def main() -> int:
     )
 
     collection_checks = {check.get("name"): check.get("passed") for check in collection_readiness.get("checks", [])}
+    configs_audited = collection_checks.get("real_task_configs_ready") in {True, False}
     collection_readiness_ok = (
         collection_readiness.get("passed") is True
         and collection_readiness.get("version") == "external_collection_readiness_audit_v1"
@@ -421,7 +422,10 @@ def main() -> int:
         and collection_checks.get("operator_sheet_row_budget") is True
         and collection_checks.get("alias_map_complete") is True
         and collection_checks.get("backend_module_ready") is False
-        and collection_checks.get("real_task_configs_ready") is False
+        and configs_audited
+        and collection_checks.get("fidelity_acceptance_ready") is False
+        and collection_checks.get("alias_unsealing_explicit") is False
+        and collection_checks.get("run_id_specific") is False
         and exists_all(
             [
                 ROOT / "scripts" / "audit_external_collection_readiness.py",

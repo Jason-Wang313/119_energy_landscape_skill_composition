@@ -111,12 +111,12 @@
       "passed": true
     },
     {
-      "detail": "collection_ready=False, readiness_state='PREPARE_BACKEND_CONFIGS_AND_FIDELITY', blocking_missing_count=5",
+      "detail": "collection_ready=False, readiness_state='PREPARE_BACKEND_CONFIGS_AND_FIDELITY', blocking_missing_count=4",
       "name": "external_collection_readiness_fail_closed",
       "passed": true
     },
     {
-      "detail": "readiness_checks={'runner_exists': True, 'schema_exists': True, 'operator_sheet_exists': True, 'operator_sheet_columns': True, 'operator_sheet_row_budget': True, 'alias_map_exists': True, 'alias_map_complete': True, 'backend_module_ready': False, 'task_config_dir_exists': True, 'real_task_configs_ready': False, 'fidelity_acceptance_ready': False, 'alias_unsealing_explicit': False, 'run_id_specific': False, 'output_logs_empty_or_force': True, 'video_dir_parent_exists': True}",
+      "detail": "readiness_checks={'runner_exists': True, 'schema_exists': True, 'operator_sheet_exists': True, 'operator_sheet_columns': True, 'operator_sheet_row_budget': True, 'alias_map_exists': True, 'alias_map_complete': True, 'backend_module_ready': False, 'task_config_dir_exists': True, 'real_task_configs_ready': True, 'fidelity_acceptance_ready': False, 'alias_unsealing_explicit': False, 'run_id_specific': False, 'output_logs_empty_or_force': True, 'video_dir_parent_exists': True}",
       "name": "external_collection_readiness_packet_shape",
       "passed": true
     },
@@ -266,7 +266,7 @@
       "passed": true
     },
     {
-      "detail": "go_to_collect=False, start_state='DO_NOT_COLLECT_YET', blocking_missing_count=5",
+      "detail": "go_to_collect=False, start_state='DO_NOT_COLLECT_YET', blocking_missing_count=4",
       "name": "external_operator_packet_go_no_go",
       "passed": true
     },

@@ -263,17 +263,21 @@ def main() -> int:
     collection_checks = {check.get("name"): check.get("passed") for check in collection.get("checks", []) or []}
     required_collection_blockers = {
         "backend_module_ready",
-        "real_task_configs_ready",
         "fidelity_acceptance_ready",
         "alias_unsealing_explicit",
         "run_id_specific",
     }
+    configs_accounted_for = (
+        "real_task_configs_ready" in collection_blocker_names
+        or collection_checks.get("real_task_configs_ready") is True
+    )
     add_check(
         checks,
         "collection_preflight_fail_closed",
         collection.get("collection_ready") is False
         and collection.get("not_external_evidence") is True
-        and required_collection_blockers.issubset(collection_blocker_names),
+        and required_collection_blockers.issubset(collection_blocker_names)
+        and configs_accounted_for,
         f"collection_ready={collection.get('collection_ready')!r}, blockers={sorted(collection_blocker_names)}",
     )
     add_check(

@@ -1,5 +1,5 @@
 {
-  "blocking_missing_count": 5,
+  "blocking_missing_count": 4,
   "checks": [
     {
       "detail": "passed=True, strict_evidence_ready=False",
@@ -7,7 +7,7 @@
       "passed": true
     },
     {
-      "detail": "collection_ready=False, blocking_missing_count=5",
+      "detail": "collection_ready=False, blocking_missing_count=4",
       "name": "collection_preflight_fail_closed",
       "passed": true
     },
@@ -242,7 +242,6 @@
   ],
   "pre_collection_blockers": [
     "backend_module_ready: --backend-module is required before actual collection",
-    "real_task_configs_ready: missing config: external_validation/configs/cable_route_insert.json; missing config: external_validation/configs/door_open_navigation.json; missing config: external_validation/configs/drawer_to_pick_transfer.json; missing config: external_validation/configs/peg_place_regrasp.json",
     "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'",
     "alias_unsealing_explicit: unsealed_alias_map=False",
     "run_id_specific: run_id='paper119_external_validation_run'"

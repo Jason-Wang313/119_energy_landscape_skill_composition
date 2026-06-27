@@ -14,7 +14,6 @@ This packet is the independent operator entry point for turning the current non-
 ## Pre-Collection Blockers
 
 - backend_module_ready: --backend-module is required before actual collection
-- real_task_configs_ready: missing config: external_validation/configs/cable_route_insert.json; missing config: external_validation/configs/door_open_navigation.json; missing config: external_validation/configs/drawer_to_pick_transfer.json; missing config: external_validation/configs/peg_place_regrasp.json
 - fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'
 - alias_unsealing_explicit: unsealed_alias_map=False
 - run_id_specific: run_id='paper119_external_validation_run'
@@ -67,7 +66,7 @@ Post-collection strict gates:
 ## Checks
 
 - `pass` `acquisition_packet_ready`: passed=True, strict_evidence_ready=False
-- `pass` `collection_preflight_fail_closed`: collection_ready=False, blocking_missing_count=5
+- `pass` `collection_preflight_fail_closed`: collection_ready=False, blocking_missing_count=4
 - `pass` `operator_actions_cover_start_to_finish`: missing=[]
 - `pass` `operator_action_titles_present`: missing_titles=[]
 - `pass` `config_materializer_is_guarded`: write_enabled=False, task_count=4

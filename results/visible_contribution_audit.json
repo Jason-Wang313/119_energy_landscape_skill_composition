@@ -15,7 +15,7 @@
       "passed": true
     },
     {
-      "detail": "start_state='DO_NOT_COLLECT_YET', blocking_missing_count=5",
+      "detail": "start_state='DO_NOT_COLLECT_YET', blocking_missing_count=4",
       "name": "operator_packet_no_go_visible",
       "passed": true
     },

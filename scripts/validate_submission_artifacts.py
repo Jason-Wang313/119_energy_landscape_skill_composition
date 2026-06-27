@@ -433,9 +433,11 @@ def main():
     ):
         if collection_readiness_checks.get(required_check) is not True:
             fail(f"external collection readiness audit missing passing check: {required_check}")
-    for required_blocker in ("backend_module_ready", "real_task_configs_ready", "fidelity_acceptance_ready", "alias_unsealing_explicit"):
+    for required_blocker in ("backend_module_ready", "fidelity_acceptance_ready", "alias_unsealing_explicit", "run_id_specific"):
         if collection_readiness_checks.get(required_blocker) is not False:
             fail(f"external collection readiness should currently fail closed on {required_blocker}")
+    if collection_readiness_checks.get("real_task_configs_ready") is not True and collection_readiness_checks.get("real_task_configs_ready") is not False:
+        fail("external collection readiness must explicitly audit real_task_configs_ready")
     if not (RESULTS / "external_collection_readiness_audit.md").exists():
         fail("missing results/external_collection_readiness_audit.md")
 

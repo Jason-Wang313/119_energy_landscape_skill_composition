@@ -92,8 +92,8 @@
     },
     {
       "name": "external_config_materialization_claim",
-      "claim": "The repository provides a guarded, non-evidence config materialization tool that can write real task configs only after an operator supplies concrete platform and compute values.",
-      "evidence": ["scripts/materialize_external_configs.py", "results/external_config_materialization_plan.json", "results/external_config_materialization_plan.md", "external_validation/configs/README.md"]
+      "claim": "The repository provides a guarded config materialization tool and prepared high-fidelity route configs for the independent simulator path, while strict config evidence remains missing until a real manifest declares them with rollout artifacts.",
+      "evidence": ["scripts/materialize_external_configs.py", "results/external_config_materialization_plan.json", "results/external_config_materialization_plan.md", "external_validation/configs/README.md", "external_validation/configs/peg_place_regrasp.json", "external_validation/configs/drawer_to_pick_transfer.json", "external_validation/configs/door_open_navigation.json", "external_validation/configs/cable_route_insert.json"]
     },
     {
       "name": "external_baseline_contract_claim",

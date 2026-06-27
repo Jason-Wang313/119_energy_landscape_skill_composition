@@ -18,7 +18,6 @@ This packet maps the remaining main-conference blockers to concrete operator inp
 ## Collection Preflight Blockers
 
 - `backend_module_ready`: --backend-module is required before actual collection
-- `real_task_configs_ready`: missing config: external_validation/configs/cable_route_insert.json; missing config: external_validation/configs/door_open_navigation.json; missing config: external_validation/configs/drawer_to_pick_transfer.json; missing config: external_validation/configs/peg_place_regrasp.json
 - `fidelity_acceptance_ready`: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'
 - `alias_unsealing_explicit`: unsealed_alias_map=False
 - `run_id_specific`: run_id='paper119_external_validation_run'
@@ -62,7 +61,7 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 - `pass` `gap_audit_has_four_external_blockers`: missing=['Independent real-robot or accepted high-fidelity external validation evidence', 'External rollout metrics recomputed from raw JSONL logs', 'Manifest-declared real task configs replace non-evidence templates', 'Manifest-declared independent non-oracle baseline evidence and fairness contract']
 - `pass` `all_missing_requirements_mapped`: unmapped=[]
 - `pass` `all_action_ids_exist`: missing_action_ids=[]
-- `pass` `collection_preflight_fail_closed`: collection_ready=False, blockers=['alias_unsealing_explicit', 'backend_module_ready', 'fidelity_acceptance_ready', 'real_task_configs_ready', 'run_id_specific']
+- `pass` `collection_preflight_fail_closed`: collection_ready=False, blockers=['alias_unsealing_explicit', 'backend_module_ready', 'fidelity_acceptance_ready', 'run_id_specific']
 - `pass` `config_intake_directory_tracked`: task_config_dir_exists=True
 - `pass` `config_materializer_ready`: passed=True, write_enabled=False, task_count=4
 - `pass` `preflight_operator_actions_present`: operator_next_actions=5, evidence_ready=False

@@ -48,8 +48,8 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_runner_harness_fail_closed`: actual_execution_ready=False
 - `pass` `external_collection_readiness_audit_ready`: passed
 - `pass` `external_collection_readiness_not_evidence`: not_external_evidence=True
-- `pass` `external_collection_readiness_fail_closed`: collection_ready=False, readiness_state='PREPARE_BACKEND_CONFIGS_AND_FIDELITY', blocking_missing_count=5
-- `pass` `external_collection_readiness_packet_shape`: readiness_checks={'runner_exists': True, 'schema_exists': True, 'operator_sheet_exists': True, 'operator_sheet_columns': True, 'operator_sheet_row_budget': True, 'alias_map_exists': True, 'alias_map_complete': True, 'backend_module_ready': False, 'task_config_dir_exists': True, 'real_task_configs_ready': False, 'fidelity_acceptance_ready': False, 'alias_unsealing_explicit': False, 'run_id_specific': False, 'output_logs_empty_or_force': True, 'video_dir_parent_exists': True}
+- `pass` `external_collection_readiness_fail_closed`: collection_ready=False, readiness_state='PREPARE_BACKEND_CONFIGS_AND_FIDELITY', blocking_missing_count=4
+- `pass` `external_collection_readiness_packet_shape`: readiness_checks={'runner_exists': True, 'schema_exists': True, 'operator_sheet_exists': True, 'operator_sheet_columns': True, 'operator_sheet_row_budget': True, 'alias_map_exists': True, 'alias_map_complete': True, 'backend_module_ready': False, 'task_config_dir_exists': True, 'real_task_configs_ready': True, 'fidelity_acceptance_ready': False, 'alias_unsealing_explicit': False, 'run_id_specific': False, 'output_logs_empty_or_force': True, 'video_dir_parent_exists': True}
 - `pass` `external_pairing_integrity_audit_ready`: passed
 - `pass` `external_pairing_integrity_not_evidence`: not_external_evidence=True, pairing_ready=False
 - `pass` `external_release_package_audit_ready`: passed
@@ -79,7 +79,7 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_acquisition_packet_maps_all_blockers`: missing_requirements=4, operator_actions=11
 - `pass` `external_operator_packet_ready`: passed
 - `pass` `external_operator_packet_not_evidence`: not_external_evidence=True, strict_evidence_ready=False, operator_packet_ready=True
-- `pass` `external_operator_packet_go_no_go`: go_to_collect=False, start_state='DO_NOT_COLLECT_YET', blocking_missing_count=5
+- `pass` `external_operator_packet_go_no_go`: go_to_collect=False, start_state='DO_NOT_COLLECT_YET', blocking_missing_count=4
 - `pass` `strict_evidence_gates_remain_not_ready`: external_submission_ready=False, rollout_passed=False, config_passed=False, adapter_passed=False
 - `pass` `operator_packet_paths_exist`: missing=[]
 - `pass` `task_cards_ge_4`: task_cards=4
