@@ -94,6 +94,8 @@ def main() -> int:
     blind_eval = read_json(blind_eval_path) if blind_eval_path.exists() else {}
     runner_harness_path = RESULTS / "external_runner_harness_audit.json"
     runner_harness = read_json(runner_harness_path) if runner_harness_path.exists() else {}
+    runner_probe_path = RESULTS / "external_runner_backend_self_test.json"
+    runner_probe = read_json(runner_probe_path) if runner_probe_path.exists() else {}
     backend_contract_path = RESULTS / "external_backend_contract_audit.json"
     backend_contract = read_json(backend_contract_path) if backend_contract_path.exists() else {}
     backend_integration_path = RESULTS / "external_backend_integration_audit.json"
@@ -352,6 +354,10 @@ def main() -> int:
         and runner_harness.get("passed") is True
         and runner_harness.get("not_external_evidence") is True
         and runner_harness.get("actual_execution_ready") is False
+        and runner_probe.get("passed") is True
+        and runner_probe.get("not_external_evidence") is True
+        and int(runner_probe.get("records_written", 0) or 0) >= 2
+        and not runner_probe.get("schema_errors")
         and backend_contract.get("passed") is True
         and backend_contract.get("not_external_evidence") is True
         and backend_contract.get("backend_contract_harness_ready") is True
@@ -400,6 +406,7 @@ def main() -> int:
             "results/independent_validation_route_audit.json",
             "results/external_blind_eval_audit.json",
             "results/external_runner_harness_audit.json",
+            "results/external_runner_backend_self_test.json",
             "results/external_backend_contract_audit.json",
             "results/external_backend_integration_audit.json",
             "results/external_config_manifest_audit.json",
@@ -481,6 +488,10 @@ def main() -> int:
         runner_harness.get("passed") is True
         and runner_harness.get("runner_harness_ready") is True
         and runner_harness.get("actual_execution_ready") is False
+        and runner_probe.get("passed") is True
+        and runner_probe.get("not_external_evidence") is True
+        and int(runner_probe.get("records_written", 0) or 0) >= 2
+        and not runner_probe.get("schema_errors")
         and backend_contract.get("passed") is True
         and backend_contract.get("backend_contract_harness_ready") is True
         and backend_contract.get("actual_backend_ready") is False
@@ -495,7 +506,9 @@ def main() -> int:
                 EXTERNAL / "runner" / "backend_templates" / "robot_lab_backend.py",
                 ROOT / "scripts" / "audit_external_backend_contract.py",
                 RESULTS / "external_backend_contract_audit.json",
+                RESULTS / "external_runner_backend_self_test.json",
                 RESULTS / "external_backend_contract_audit.md",
+                RESULTS / "external_runner_backend_self_test.md",
             ]
         )
     )
@@ -508,6 +521,8 @@ def main() -> int:
             "results/external_runner_harness_audit.md",
             "results/external_backend_contract_audit.json",
             "results/external_backend_contract_audit.md",
+            "results/external_runner_backend_self_test.json",
+            "results/external_runner_backend_self_test.md",
             "external_validation/runner/README.md",
             "external_validation/runner/backend_contract.py",
             "external_validation/runner/real_collection_runner.py",

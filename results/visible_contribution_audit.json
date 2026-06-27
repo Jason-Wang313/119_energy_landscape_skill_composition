@@ -40,6 +40,11 @@
       "passed": true
     },
     {
+      "detail": "records_written=2, schema_errors=[]",
+      "name": "runner_backend_probe_visible",
+      "passed": true
+    },
+    {
       "detail": "config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False",
       "name": "config_manifest_packet_visible",
       "passed": true

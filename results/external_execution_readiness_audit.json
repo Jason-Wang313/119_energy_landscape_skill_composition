@@ -162,6 +162,21 @@
     },
     {
       "detail": "passed",
+      "name": "external_runner_backend_probe_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True, records_written=2, schema_errors=[]",
+      "name": "external_runner_backend_probe_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "checks={'runner_actual_path_exits_zero': True, 'temporary_records_written': True, 'temporary_records_schema_valid': True, 'temporary_videos_written': True, 'real_manifest_untouched': True}",
+      "name": "external_runner_backend_probe_exercises_actual_runner_path",
+      "passed": true
+    },
+    {
+      "detail": "passed",
       "name": "external_backend_contract_ready",
       "passed": true
     },

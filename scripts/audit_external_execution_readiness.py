@@ -293,6 +293,34 @@ def main() -> int:
         f"actual_execution_ready={runner.get('actual_execution_ready')!r}",
     )
 
+    runner_probe_ok, runner_probe, runner_probe_detail = passed_json(
+        RESULTS / "external_runner_backend_self_test.json",
+        version="external_runner_backend_self_test_v1",
+    )
+    add_check(checks, "external_runner_backend_probe_ready", runner_probe_ok, runner_probe_detail)
+    runner_probe_checks = {check.get("name"): check.get("passed") for check in runner_probe.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_runner_backend_probe_not_evidence",
+        runner_probe.get("not_external_evidence") is True
+        and int(runner_probe.get("records_written", 0) or 0) >= 2
+        and not runner_probe.get("schema_errors"),
+        (
+            f"not_external_evidence={runner_probe.get('not_external_evidence')!r}, "
+            f"records_written={runner_probe.get('records_written')!r}, "
+            f"schema_errors={runner_probe.get('schema_errors')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "external_runner_backend_probe_exercises_actual_runner_path",
+        runner_probe_checks.get("runner_actual_path_exits_zero") is True
+        and runner_probe_checks.get("temporary_records_schema_valid") is True
+        and runner_probe_checks.get("temporary_videos_written") is True
+        and runner_probe_checks.get("real_manifest_untouched") is True,
+        f"checks={runner_probe_checks}",
+    )
+
     backend_contract_ok, backend_contract, backend_contract_detail = passed_json(
         RESULTS / "external_backend_contract_audit.json",
         version="external_backend_contract_audit_v1",
@@ -789,6 +817,7 @@ def main() -> int:
         EXTERNAL / "runner" / "README.md",
         EXTERNAL / "runner" / "backend_contract.py",
         EXTERNAL / "runner" / "real_collection_runner.py",
+        RESULTS / "external_runner_backend_self_test.md",
         RESULTS / "external_backend_contract_audit.md",
         RESULTS / "external_collection_readiness_audit.md",
         RESULTS / "external_operator_packet.md",
@@ -871,6 +900,9 @@ def main() -> int:
         "external_runner_harness_ready",
         "external_runner_harness_not_evidence",
         "external_runner_harness_fail_closed",
+        "external_runner_backend_probe_ready",
+        "external_runner_backend_probe_not_evidence",
+        "external_runner_backend_probe_exercises_actual_runner_path",
         "external_backend_contract_ready",
         "external_backend_contract_not_evidence",
         "external_backend_contract_fail_closed",
