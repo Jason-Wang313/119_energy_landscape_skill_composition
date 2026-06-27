@@ -85,6 +85,8 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "platform_qualification_checklist.md",
         EXTERNAL / "fidelity_acceptance_template.json",
         EXTERNAL / "log_schema_v1.json",
+        EXTERNAL / "statistical_analysis_plan.json",
+        EXTERNAL / "statistical_analysis_plan.md",
         EXTERNAL / "config_schema_v1.json",
         EXTERNAL / "configs" / "README.md",
         EXTERNAL / "independent_validation_route.md",
@@ -104,6 +106,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_operator_handoff_bundle.py",
         SCRIPTS / "build_external_operator_packet.py",
         SCRIPTS / "build_external_acquisition_packet.py",
+        SCRIPTS / "build_external_analysis_plan.py",
         SCRIPTS / "materialize_external_configs.py",
         SCRIPTS / "audit_external_backend_contract.py",
         SCRIPTS / "audit_external_collection_readiness.py",
@@ -125,6 +128,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_acquisition_packet.md",
         RESULTS / "external_collection_plan.json",
         RESULTS / "external_collection_plan.md",
+        RESULTS / "external_analysis_plan_audit.json",
+        RESULTS / "external_analysis_plan_audit.md",
         RESULTS / "independent_validation_route_audit.json",
         RESULTS / "independent_validation_route_audit.md",
         RESULTS / "external_blind_eval_audit.json",
@@ -209,6 +214,7 @@ def build_payload() -> dict[str, Any]:
     preflight = require_payload(RESULTS / "external_evidence_preflight.json", "external_evidence_preflight_v1")
     release = require_payload(RESULTS / "external_release_package_audit.json", "external_release_package_audit_v1")
     pairing = require_payload(RESULTS / "external_pairing_integrity_audit.json", "external_pairing_integrity_audit_v1")
+    analysis = require_payload(RESULTS / "external_analysis_plan_audit.json", "external_analysis_plan_audit_v1")
 
     files = build_file_manifest()
     records = file_records(files)
@@ -248,10 +254,12 @@ def build_payload() -> dict[str, Any]:
     add_check(
         checks,
         "strict_evidence_gates_remain_fail_closed",
-        preflight.get("evidence_ready") is False
+        analysis.get("strict_evidence_ready") is False
+        and preflight.get("evidence_ready") is False
         and release.get("release_package_ready") is False
         and pairing.get("pairing_ready") is False,
         (
+            f"analysis={analysis.get('strict_evidence_ready')!r}, "
             f"preflight={preflight.get('evidence_ready')!r}, "
             f"release={release.get('release_package_ready')!r}, "
             f"pairing={pairing.get('pairing_ready')!r}"
@@ -284,6 +292,22 @@ def build_payload() -> dict[str, Any]:
         and category_counts.get("baseline_spec", 0) >= 12
         and category_counts.get("reference_adapter", 0) >= 40,
         f"category_counts={category_counts}",
+    )
+    add_check(
+        checks,
+        "analysis_plan_included",
+        analysis.get("passed") is True
+        and analysis.get("not_external_evidence") is True
+        and analysis.get("analysis_plan_ready") is True
+        and analysis.get("strict_evidence_ready") is False
+        and "external_validation/statistical_analysis_plan.json" in paths
+        and "external_validation/statistical_analysis_plan.md" in paths
+        and "results/external_analysis_plan_audit.json" in paths
+        and "scripts/build_external_analysis_plan.py" in paths,
+        (
+            f"analysis_plan_ready={analysis.get('analysis_plan_ready')!r}, "
+            f"strict_evidence_ready={analysis.get('strict_evidence_ready')!r}"
+        ),
     )
     add_check(
         checks,
@@ -340,6 +364,7 @@ def build_payload() -> dict[str, Any]:
         "source_reports": [
             "results/external_operator_packet.json",
             "results/external_acquisition_packet.json",
+            "results/external_analysis_plan_audit.json",
             "results/external_evidence_preflight.json",
             "results/external_release_package_audit.json",
             "results/external_pairing_integrity_audit.json",

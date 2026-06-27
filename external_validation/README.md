@@ -60,6 +60,14 @@ python scripts\build_external_collection_plan.py
 
 This writes `results/external_collection_plan.{json,md}`. It enumerates the paired reset slots, task families, methods, expected JSONL record count, required log fields, and strict validation commands. It is a plan only; it is not evidence and cannot satisfy the external gate.
 
+Before collecting rollouts, lock the non-evidence statistical analysis plan:
+
+```powershell
+python scripts\build_external_analysis_plan.py
+```
+
+This writes `external_validation/statistical_analysis_plan.{json,md}` and `results/external_analysis_plan_audit.{json,md}`. The plan pre-registers the external primary hypotheses, rollout-schema thresholds, paired-comparison key, exclusion and unblinding policy, strict gates, and required reporting before independent collection starts. It is not evidence and cannot satisfy the external gate.
+
 Generate the non-Haonan independent validation route:
 
 ```powershell
@@ -172,6 +180,7 @@ Use the manifest builder before strict validation. It does not fabricate evidenc
 
 ```powershell
 python scripts\build_external_collection_plan.py
+python scripts\build_external_analysis_plan.py
 python scripts\build_independent_validation_route.py
 python scripts\audit_external_fidelity_acceptance.py
 python scripts\build_external_blind_eval_plan.py
@@ -244,6 +253,8 @@ The builder fills hashes for `config_path`, `checkpoint_or_config_path`, and sca
 Required validation commands:
 
 ```powershell
+python scripts\build_external_collection_plan.py
+python scripts\build_external_analysis_plan.py
 python scripts\build_external_manifest.py --allow-missing
 python scripts\build_independent_validation_route.py
 python scripts\build_external_baseline_contract.py

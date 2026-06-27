@@ -8,7 +8,7 @@ This rebuild expands the paper into a 29-page, CPU-only, RAM-light submission pa
 
 ## Visible Contribution
 
-Paper 119's contribution is an adaptive physical world/action model for skill seams: it scores whether two embodied skills can compose, explains likely failure modes, selects accept/repair/probe/abstain/transition actions at the seam, and records planner-facing memory for future attempts. The repository now makes that contribution visible through the generated manuscript, bounded claim ledger, mechanism/calibration/holdout/falsification audits, reproducible local experiments, a non-Haonan external validation packet, a guarded config materializer, a no-go external operator packet, an audited External operator handoff bundle, a fail-closed real-collection runner harness, and a separate Haonan/Yilun outreach package. The machine readiness audit currently reports `17/21` requirements satisfied; the remaining blockers are external-evidence blockers, not prose or packaging blockers.
+Paper 119's contribution is an adaptive physical world/action model for skill seams: it scores whether two embodied skills can compose, explains likely failure modes, selects accept/repair/probe/abstain/transition actions at the seam, and records planner-facing memory for future attempts. The repository now makes that contribution visible through the generated manuscript, bounded claim ledger, mechanism/calibration/holdout/falsification audits, reproducible local experiments, a non-Haonan external validation packet, a guarded config materializer, an External analysis plan that locks hypotheses and exclusion policy before collection, a no-go external operator packet, an audited External operator handoff bundle, a fail-closed real-collection runner harness, and a separate Haonan/Yilun outreach package. The machine readiness audit currently reports `17/21` requirements satisfied; the remaining blockers are external-evidence blockers, not prose or packaging blockers.
 
 ## Evidence Snapshot
 
@@ -37,9 +37,9 @@ Use `-InstallDependencies` on the first run if the Python packages are not insta
 
 Canonical local PDF: `C:/Users/wangz/Downloads/119.pdf`
 
-PDF SHA256: `011DFFB0BAA6A5CA4824D16455690BDBEA5EF268A615F3538A403F05EFBF8BD0`
+PDF SHA256: `F9812C7BA823CF564B5AA165A3457E410811AC36335ABB4A9888E2743707BEA2`
 
-PDF size: `465103` bytes.
+PDF size: `465342` bytes.
 
 PDF pages: `29`.
 
@@ -67,6 +67,8 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - Full local build script: `scripts/build_submission_artifacts.ps1`
 - GitHub validation workflow: `.github/workflows/paper119-validation.yml`
 - External collection plan: `results/external_collection_plan.md`
+- External analysis plan: `external_validation/statistical_analysis_plan.md`
+- External analysis plan audit: `results/external_analysis_plan_audit.md`
 - Independent validation route: `external_validation/independent_validation_route.md`
 - Independent validation route audit: `results/independent_validation_route_audit.md`
 - External fidelity acceptance template: `external_validation/fidelity_acceptance_template.json`

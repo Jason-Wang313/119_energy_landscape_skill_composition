@@ -20,8 +20,13 @@
       "passed": true
     },
     {
-      "detail": "files=169, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=174, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
+      "passed": true
+    },
+    {
+      "detail": "analysis_plan_ready=True, strict_evidence_ready=False",
+      "name": "analysis_plan_visible",
       "passed": true
     },
     {

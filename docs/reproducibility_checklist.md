@@ -21,6 +21,7 @@
 - Visible contribution validator: `scripts/audit_visible_contribution.py`
 - Submission readiness gap validator: `scripts/audit_submission_readiness_gap.py`
 - External collection planner: `scripts/build_external_collection_plan.py`
+- External analysis plan builder: `scripts/build_external_analysis_plan.py`
 - External collection runbook builder: `scripts/build_external_runbook.py`
 - External backend contract validator: `scripts/audit_external_backend_contract.py`
 - External collection readiness validator: `scripts/audit_external_collection_readiness.py`
@@ -104,6 +105,10 @@
   - `results/submission_readiness_gap_audit.md`
   - `results/external_collection_plan.json`
   - `results/external_collection_plan.md`
+  - `external_validation/statistical_analysis_plan.json`
+  - `external_validation/statistical_analysis_plan.md`
+  - `results/external_analysis_plan_audit.json`
+  - `results/external_analysis_plan_audit.md`
   - `results/external_runbook_audit.json`
   - `results/external_runbook_audit.md`
   - `results/external_collection_readiness_audit.json`

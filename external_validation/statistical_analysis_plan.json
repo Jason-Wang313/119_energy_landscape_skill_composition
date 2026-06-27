@@ -1,0 +1,172 @@
+{
+  "analysis_locked_before_collection": true,
+  "decision_rule": {
+    "external_mechanism_claim_passes": "all_primary_hypotheses_pass_and_all_strict_evidence_gates_pass",
+    "strict_gates": [
+      "python scripts\\audit_external_release_package.py --strict",
+      "python scripts\\audit_external_fidelity_acceptance.py --strict",
+      "python scripts\\validate_external_configs.py --strict",
+      "python scripts\\validate_external_adapters.py --strict",
+      "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "python scripts\\audit_external_pairing_integrity.py --strict",
+      "python scripts\\audit_external_evidence.py --strict"
+    ]
+  },
+  "exclusion_policy": {
+    "allowed_before_unblinding": [
+      "platform qualification failure before collection",
+      "operator safety stop documented before outcome inspection",
+      "corrupt JSONL line that fails schema validation",
+      "missing or hash-mismatched video/config/checkpoint artifact",
+      "incomplete paired method panel detected by strict pairing audit"
+    ],
+    "forbidden": [
+      "dropping only the proposed method or only a weak baseline from a paired panel",
+      "dropping failures after viewing method identity or outcome",
+      "changing task families, methods, thresholds, or risk budget after collection starts",
+      "using local dry-run records, template configs, scaffold adapters, placeholder videos, or hand-entered metrics as evidence"
+    ],
+    "unit": "paired_reset_method_panel"
+  },
+  "method_count": 12,
+  "not_external_evidence": true,
+  "oracle_method": "oracle_basin_composer",
+  "oracle_role": "post_hoc_upper_bound_only_not_a_deployable_baseline",
+  "paired_comparison_key": [
+    "task_family",
+    "platform_type",
+    "scene_id",
+    "seed",
+    "skill_i",
+    "skill_j",
+    "initial_state_hash"
+  ],
+  "planned_records": 1440,
+  "primary_hypotheses": [
+    {
+      "claim_supported_if_passed": "The seam model improves external task success over the strongest non-oracle baseline.",
+      "direction": "greater_or_equal",
+      "id": "H1_success_margin",
+      "metric": "external_success_margin",
+      "threshold": 0.05
+    },
+    {
+      "claim_supported_if_passed": "The seam model improves external composition utility over the strongest non-oracle baseline.",
+      "direction": "greater_or_equal",
+      "id": "H2_utility_margin",
+      "metric": "external_utility_margin",
+      "threshold": 0.08
+    },
+    {
+      "claim_supported_if_passed": "The gain is visible across paired resets rather than only in aggregate means.",
+      "direction": "greater_or_equal",
+      "id": "H3_paired_win_rate",
+      "metric": "paired_win_rate",
+      "threshold": 0.7
+    },
+    {
+      "claim_supported_if_passed": "The fixed-risk gate preserves enough usable coverage to be operationally meaningful.",
+      "direction": "greater_or_equal",
+      "id": "H4_fixed_risk_coverage",
+      "metric": "fixed_risk_coverage",
+      "threshold": 0.55
+    },
+    {
+      "claim_supported_if_passed": "Accepted seams remain below the predeclared realized-breach budget.",
+      "direction": "less_or_equal",
+      "id": "H5_fixed_risk_breach",
+      "metric": "fixed_risk_breach",
+      "threshold": 0.02
+    },
+    {
+      "claim_supported_if_passed": "The external improvement is not confined to one task family.",
+      "direction": "greater_or_equal",
+      "id": "H6_task_family_coverage",
+      "metric": "positive_task_families",
+      "threshold": 3
+    }
+  ],
+  "primary_method": "barrier_certified_energy_composer_v5",
+  "primary_thresholds": {
+    "external_success_margin": 0.05,
+    "external_utility_margin": 0.08,
+    "fixed_risk_breach": 0.02,
+    "fixed_risk_coverage": 0.55,
+    "paired_win_rate": 0.7,
+    "positive_task_families": 3
+  },
+  "purpose": "Pre-register external validation hypotheses, metrics, thresholds, exclusions, and reporting before any independent rollouts are collected.",
+  "required_log_fields": [
+    "barrier_score",
+    "barrier_violation",
+    "basin_estimate",
+    "composition_cost",
+    "damage_or_intervention",
+    "decision",
+    "descent_continuity_score",
+    "episode_index",
+    "failure_diagnosis",
+    "fixed_risk_budget",
+    "initial_state_hash",
+    "method",
+    "platform_name",
+    "platform_type",
+    "policy_or_config_hash",
+    "predicted_seam_risk",
+    "realized_seam_breach",
+    "repair_action",
+    "run_id",
+    "scene_id",
+    "seam_failure",
+    "seed",
+    "skill_i",
+    "skill_j",
+    "success",
+    "task_family",
+    "terminal_sample_set_hash",
+    "utility",
+    "video_path"
+  ],
+  "required_reporting": [
+    "external_success_margin",
+    "external_utility_margin",
+    "paired_win_rate",
+    "fixed_risk_coverage",
+    "fixed_risk_breach",
+    "positive_task_families",
+    "strongest_external_baseline",
+    "per-task success margins",
+    "strict gate outputs",
+    "all exclusions with reasons and timestamps",
+    "oracle gap as post hoc upper bound"
+  ],
+  "secondary_descriptive_outputs": [
+    "seam failure rate",
+    "barrier violation rate",
+    "damage or intervention rate",
+    "decision distribution",
+    "failure diagnosis distribution",
+    "calibration plots",
+    "representative success, repair, abstain, and failure videos"
+  ],
+  "source_collection_plan": "results/external_collection_plan.json",
+  "source_schema": "external_validation/log_schema_v1.json",
+  "strongest_external_baseline_rule": "Among non-oracle methods present in the external logs, choose the baseline with highest mean success, breaking ties by mean utility.",
+  "task_families": [
+    "peg_place_regrasp",
+    "drawer_to_pick_transfer",
+    "door_open_navigation",
+    "cable_route_insert"
+  ],
+  "unblinding_policy": {
+    "analysis_after_unblinding": "run only the predeclared scripts and thresholds above; secondary plots are descriptive unless added to a new preregistered plan before collection.",
+    "method_aliases_remain_sealed_until": [
+      "backend module is qualified",
+      "task configs are materialized and hash-locked",
+      "fidelity acceptance is complete",
+      "run id is specific and immutable",
+      "operator sheet is frozen"
+    ]
+  },
+  "version": "external_statistical_analysis_plan_v1"
+}

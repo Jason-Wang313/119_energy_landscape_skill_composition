@@ -105,6 +105,7 @@ def main():
         "scripts\\audit_reference_integrity.py",
         "scripts\\audit_manuscript_readability.py",
         "scripts\\build_external_collection_plan.py",
+        "scripts\\build_external_analysis_plan.py",
         "scripts\\build_independent_validation_route.py",
         "scripts\\audit_external_fidelity_acceptance.py",
         "scripts\\self_test_external_fidelity_acceptance.py",
@@ -177,6 +178,7 @@ def main():
         "python scripts/self_test_external_config_evidence.py",
         "python scripts/self_test_external_adapter_evidence.py",
         "python scripts/materialize_external_configs.py",
+        "python scripts/build_external_analysis_plan.py",
         "python scripts/build_external_acquisition_packet.py",
         "python scripts/build_external_operator_packet.py",
         "python scripts/build_external_operator_handoff_bundle.py",
@@ -241,6 +243,83 @@ def main():
         fail("external collection plan must include the collection readiness audit command")
     if "python scripts\\audit_external_collection_readiness.py --strict" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the strict collection readiness audit command")
+    if "python scripts\\build_external_analysis_plan.py" not in collection_plan.get("validation_commands", []):
+        fail("external collection plan must include the external statistical analysis plan command")
+
+    analysis_plan_path = EXTERNAL / "statistical_analysis_plan.json"
+    analysis_plan_md_path = EXTERNAL / "statistical_analysis_plan.md"
+    analysis_audit_path = RESULTS / "external_analysis_plan_audit.json"
+    analysis_audit_md_path = RESULTS / "external_analysis_plan_audit.md"
+    for path in (analysis_plan_path, analysis_plan_md_path, analysis_audit_path, analysis_audit_md_path):
+        if not path.exists():
+            fail(f"missing external analysis plan artifact: {path}")
+    analysis_plan = json.loads(analysis_plan_path.read_text(encoding="utf-8"))
+    analysis_audit = json.loads(analysis_audit_path.read_text(encoding="utf-8"))
+    log_schema = json.loads((EXTERNAL / "log_schema_v1.json").read_text(encoding="utf-8"))
+    if analysis_plan.get("version") != "external_statistical_analysis_plan_v1":
+        fail("external statistical analysis plan version mismatch")
+    if analysis_plan.get("not_external_evidence") is not True or analysis_plan.get("analysis_locked_before_collection") is not True:
+        fail("external statistical analysis plan must be locked and marked non-evidence")
+    if analysis_plan.get("primary_method") != log_schema.get("primary_method"):
+        fail("external statistical analysis plan primary method must match the log schema")
+    if analysis_plan.get("primary_thresholds") != log_schema.get("primary_thresholds"):
+        fail("external statistical analysis plan thresholds must match the log schema")
+    if analysis_plan.get("paired_comparison_key") != log_schema.get("paired_comparison_key"):
+        fail("external statistical analysis plan paired key must match the log schema")
+    if int(analysis_plan.get("planned_records", 0) or 0) != int(collection_plan.get("total_required_records", 0) or 0):
+        fail("external statistical analysis plan must lock the collection-plan record budget")
+    hypothesis_metrics = {entry.get("metric") for entry in analysis_plan.get("primary_hypotheses", []) if isinstance(entry, dict)}
+    required_metrics = {
+        "external_success_margin",
+        "external_utility_margin",
+        "paired_win_rate",
+        "fixed_risk_coverage",
+        "fixed_risk_breach",
+        "positive_task_families",
+    }
+    if not required_metrics.issubset(hypothesis_metrics):
+        fail(f"external statistical analysis plan missing primary hypotheses: {sorted(required_metrics - hypothesis_metrics)}")
+    strict_gates = "\n".join(analysis_plan.get("decision_rule", {}).get("strict_gates", []) or [])
+    for fragment in (
+        "audit_external_release_package.py --strict",
+        "audit_external_fidelity_acceptance.py --strict",
+        "validate_external_configs.py --strict",
+        "validate_external_adapters.py --strict",
+        "validate_external_rollouts.py",
+        "audit_external_pairing_integrity.py --strict",
+        "audit_external_evidence.py --strict",
+    ):
+        if fragment not in strict_gates:
+            fail(f"external statistical analysis plan missing strict gate: {fragment}")
+    exclusions = analysis_plan.get("exclusion_policy", {}) or {}
+    if exclusions.get("unit") != "paired_reset_method_panel":
+        fail("external statistical analysis plan must use paired_reset_method_panel as exclusion unit")
+    forbidden_exclusions = "\n".join(exclusions.get("forbidden", []) or [])
+    if "dropping only the proposed method" not in forbidden_exclusions or "after viewing method identity" not in forbidden_exclusions:
+        fail("external statistical analysis plan exclusion policy does not block cherry-picking")
+    if analysis_audit.get("version") != "external_analysis_plan_audit_v1":
+        fail("external analysis plan audit version mismatch")
+    if analysis_audit.get("passed") is not True:
+        fail("external analysis plan audit did not pass")
+    if analysis_audit.get("not_external_evidence") is not True:
+        fail("external analysis plan audit must declare that it is not evidence")
+    if analysis_audit.get("analysis_plan_ready") is not True or analysis_audit.get("strict_evidence_ready") is not False:
+        fail("external analysis plan audit must be ready while strict external evidence remains false")
+    analysis_checks = {entry.get("name"): entry.get("passed") for entry in analysis_audit.get("checks", [])}
+    for required_check in (
+        "plan_is_non_evidence_and_locked",
+        "primary_method_matches_schema",
+        "thresholds_match_log_schema",
+        "primary_hypotheses_cover_all_strict_thresholds",
+        "paired_key_matches_schema",
+        "collection_plan_record_budget_referenced",
+        "decision_rule_requires_strict_external_gates",
+        "exclusion_policy_blocks_cherry_picking",
+        "unblinding_policy_preserves_blind_eval",
+        "required_reporting_covers_primary_and_audit_outputs",
+    ):
+        if analysis_checks.get(required_check) is not True:
+            fail(f"external analysis plan audit missing passing check: {required_check}")
 
     route_audit_path = RESULTS / "independent_validation_route_audit.json"
     if not route_audit_path.exists():
@@ -1322,6 +1401,10 @@ def main():
         "external_operator_handoff_bundle_not_evidence",
         "external_operator_handoff_bundle_excludes_evidence_paths",
         "external_operator_handoff_bundle_hash_manifest",
+        "external_analysis_plan_ready",
+        "external_analysis_plan_not_evidence",
+        "external_analysis_plan_threshold_lock",
+        "external_analysis_plan_exclusion_policy",
         "config_templates_ready",
         "config_materialization_plan_ready",
         "config_materialization_plan_not_evidence",
@@ -1354,6 +1437,9 @@ def main():
         RESULTS / "external_acquisition_packet.md",
         RESULTS / "external_operator_packet.md",
         RESULTS / "external_operator_handoff_bundle.md",
+        RESULTS / "external_analysis_plan_audit.md",
+        EXTERNAL / "statistical_analysis_plan.json",
+        EXTERNAL / "statistical_analysis_plan.md",
         RESULTS / "external_config_materialization_plan.md",
         RESULTS / "external_execution_readiness_audit.md",
         RESULTS / "external_fidelity_acceptance_audit.md",
@@ -1473,6 +1559,7 @@ def main():
         "bundle_excludes_rollout_evidence_artifacts",
         "no_real_manifest_written",
         "handoff_has_task_config_and_baseline_assets",
+        "analysis_plan_included",
         "operator_actions_cover_evidence_collection",
         "post_collection_commands_cover_strict_gates",
         "file_hashes_are_recorded",
@@ -1698,6 +1785,7 @@ def main():
     for required_check in (
         "readiness_gap_state_visible",
         "operator_packet_no_go_visible",
+        "analysis_plan_visible",
         "materializer_guard_visible",
         "ledger_tracks_new_visible_claims",
         "README_current_visible_contribution_terms",

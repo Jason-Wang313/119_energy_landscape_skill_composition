@@ -78,6 +78,8 @@ def main() -> int:
     adapter_contract_evidence = read_json(adapter_contract_evidence_path) if adapter_contract_evidence_path.exists() else {}
     execution_readiness_path = RESULTS / "external_execution_readiness_audit.json"
     execution_readiness = read_json(execution_readiness_path) if execution_readiness_path.exists() else {}
+    analysis_plan_path = RESULTS / "external_analysis_plan_audit.json"
+    analysis_plan = read_json(analysis_plan_path) if analysis_plan_path.exists() else {}
     fidelity_acceptance_path = RESULTS / "external_fidelity_acceptance_audit.json"
     fidelity_acceptance = read_json(fidelity_acceptance_path) if fidelity_acceptance_path.exists() else {}
     route_audit_path = RESULTS / "independent_validation_route_audit.json"
@@ -281,8 +283,14 @@ def main() -> int:
         execution_readiness.get("passed") is True
         and execution_readiness.get("execution_packet_ready") is True
         and execution_readiness.get("strict_evidence_ready") is False
+        and analysis_plan.get("passed") is True
+        and analysis_plan.get("not_external_evidence") is True
+        and analysis_plan.get("analysis_plan_ready") is True
+        and analysis_plan.get("strict_evidence_ready") is False
         and exists_all(
             [
+                EXTERNAL / "statistical_analysis_plan.json",
+                EXTERNAL / "statistical_analysis_plan.md",
                 EXTERNAL / "platform_qualification_checklist.md",
                 EXTERNAL / "fidelity_acceptance_template.json",
                 EXTERNAL / "independent_validation_route.md",
@@ -323,6 +331,9 @@ def main() -> int:
         status="satisfied" if execution_packet_ok else "missing",
         evidence=[
             "results/external_execution_readiness_audit.json",
+            "results/external_analysis_plan_audit.json",
+            "external_validation/statistical_analysis_plan.json",
+            "external_validation/statistical_analysis_plan.md",
             "results/external_fidelity_acceptance_audit.json",
             "results/independent_validation_route_audit.json",
             "results/external_blind_eval_audit.json",

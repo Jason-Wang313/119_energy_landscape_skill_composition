@@ -117,6 +117,7 @@ The prose protocol is implemented as an external-evidence audit:
 
 ```powershell
 python scripts\validate_external_rollouts.py --write-results
+python scripts\build_external_analysis_plan.py
 python scripts\audit_external_collection_readiness.py
 python scripts\audit_external_release_package.py
 python scripts\audit_external_pairing_integrity.py
@@ -140,14 +141,19 @@ Collection plan:
 
 - `results/external_collection_plan.json`
 - `results/external_collection_plan.md`
+- `external_validation/statistical_analysis_plan.json`
+- `external_validation/statistical_analysis_plan.md`
+- `results/external_analysis_plan_audit.json`
+- `results/external_analysis_plan_audit.md`
 
 Generate it with:
 
 ```powershell
 python scripts\build_external_collection_plan.py
+python scripts\build_external_analysis_plan.py
 ```
 
-The plan currently expands the high-fidelity route into 4 task families x 30 paired resets x 12 methods = 1,440 required JSONL records. It is not evidence; it is a deterministic collection schedule for producing the real evidence package.
+The collection plan currently expands the high-fidelity route into 4 task families x 30 paired resets x 12 methods = 1,440 required JSONL records. The analysis plan pre-registers the external primary hypotheses, rollout-schema thresholds, paired-comparison key, exclusion/unblinding policy, strict gates, and required reporting before rollout collection. These files are not evidence; they are a deterministic collection schedule and locked analysis contract for producing the real evidence package.
 
 Independent route matrix:
 

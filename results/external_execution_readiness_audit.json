@@ -17,6 +17,26 @@
     },
     {
       "detail": "passed",
+      "name": "external_analysis_plan_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True, analysis_plan_ready=True, strict_evidence_ready=False",
+      "name": "external_analysis_plan_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "analysis_checks={'plan_is_non_evidence_and_locked': True, 'primary_method_matches_schema': True, 'thresholds_match_log_schema': True, 'primary_hypotheses_cover_all_strict_thresholds': True, 'paired_key_matches_schema': True, 'collection_plan_record_budget_referenced': True, 'decision_rule_requires_strict_external_gates': True, 'exclusion_policy_blocks_cherry_picking': True, 'unblinding_policy_preserves_blind_eval': True, 'required_reporting_covers_primary_and_audit_outputs': True}",
+      "name": "external_analysis_plan_threshold_lock",
+      "passed": true
+    },
+    {
+      "detail": "analysis_checks={'plan_is_non_evidence_and_locked': True, 'primary_method_matches_schema': True, 'thresholds_match_log_schema': True, 'primary_hypotheses_cover_all_strict_thresholds': True, 'paired_key_matches_schema': True, 'collection_plan_record_budget_referenced': True, 'decision_rule_requires_strict_external_gates': True, 'exclusion_policy_blocks_cherry_picking': True, 'unblinding_policy_preserves_blind_eval': True, 'required_reporting_covers_primary_and_audit_outputs': True}",
+      "name": "external_analysis_plan_exclusion_policy",
+      "passed": true
+    },
+    {
+      "detail": "passed",
       "name": "independent_validation_route_ready",
       "passed": true
     },
@@ -311,7 +331,7 @@
       "passed": true
     },
     {
-      "detail": "included_file_count=169, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 40, 'operator_command_source': 14, 'operator_facing_input': 26, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "included_file_count=174, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 42, 'operator_command_source': 15, 'operator_facing_input': 28, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "external_operator_handoff_bundle_hash_manifest",
       "passed": true
     },

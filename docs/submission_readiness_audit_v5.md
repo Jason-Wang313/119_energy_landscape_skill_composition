@@ -39,14 +39,14 @@ ICLR-main ready: no
 ## Artifact Checks
 
 - PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `011DFFB0BAA6A5CA4824D16455690BDBEA5EF268A615F3538A403F05EFBF8BD0`.
-- PDF size: `465103` bytes.
+- PDF SHA256: `F9812C7BA823CF564B5AA165A3457E410811AC36335ABB4A9888E2743707BEA2`.
+- PDF size: `465342` bytes.
 - PDF pages: `29`.
 - Numbered PDF placement: Downloads only.
 - Desktop numbered PDF: absent.
 - Validator: passed.
 - Claim boundary audit: `results/claim_boundary_audit.md` passed and confirms the current package keeps the claim bounded.
-- Visible contribution audit: `results/visible_contribution_audit.md` passed and checks that public-facing docs mention the current materializer, external operator packet, outreach stance, and 17/21 objective requirements satisfied boundary.
+- Visible contribution audit: `results/visible_contribution_audit.md` passed and checks that public-facing docs mention the current materializer, External analysis plan, external operator packet, outreach stance, and 17/21 objective requirements satisfied boundary.
 - Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 17/21 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
 - Local falsification audit: `results/local_falsification_audit.md` passed and is included in the generated manuscript.
 - Holdout robustness audit: `results/holdout_robustness_audit.md` passed and is included in the generated manuscript.
@@ -63,6 +63,7 @@ ICLR-main ready: no
 - Full local build script: `scripts/build_submission_artifacts.ps1` regenerates the current local artifacts and validations.
 - GitHub validation workflow: `.github/workflows/paper119-validation.yml` runs the core runner/readiness/submission/outreach validators on pushed branches and pull requests, with `PAPER119_CANONICAL_PDF=paper/main.pdf` for CI artifact parity.
 - External collection plan: `results/external_collection_plan.md` exists, passes, and expands the current high-fidelity route into 1,440 required JSONL records while explicitly remaining non-evidence.
+- External analysis plan: `external_validation/statistical_analysis_plan.md` and `results/external_analysis_plan_audit.md` exist, pass, and pre-register external hypotheses, rollout-schema thresholds, paired-reset comparisons, exclusion/unblinding policy, strict gates, and reporting while explicitly remaining non-evidence.
 - Independent validation route: `external_validation/independent_validation_route.md`, `external_validation/independent_validation_route_matrix.csv`, and `results/independent_validation_route_audit.md` exist, pass, and define a non-Haonan route through public simulators and an independent robot-lab option while explicitly remaining non-evidence.
 - External fidelity acceptance audit: `external_validation/fidelity_acceptance_template.json` and `results/external_fidelity_acceptance_audit.md` exist, pass as a contract audit, and currently report `acceptance_ready=false` until a real robot or simulator provenance file is filled and declared by the manifest.
 - External fidelity acceptance self-test: `results/external_fidelity_acceptance_self_test.md` passes on a temporary complete high-fidelity fixture, verifies the strict gate can turn `acceptance_ready=true` when all provenance is supplied, leaves the real fidelity audit report unchanged, and remains non-evidence.

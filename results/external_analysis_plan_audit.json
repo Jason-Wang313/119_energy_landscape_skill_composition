@@ -1,0 +1,61 @@
+{
+  "analysis_plan_ready": true,
+  "checks": [
+    {
+      "detail": "not_external_evidence=True, locked=True",
+      "name": "plan_is_non_evidence_and_locked",
+      "passed": true
+    },
+    {
+      "detail": "plan='barrier_certified_energy_composer_v5', schema='barrier_certified_energy_composer_v5'",
+      "name": "primary_method_matches_schema",
+      "passed": true
+    },
+    {
+      "detail": "plan={'external_success_margin': 0.05, 'external_utility_margin': 0.08, 'paired_win_rate': 0.7, 'fixed_risk_breach': 0.02, 'fixed_risk_coverage': 0.55, 'positive_task_families': 3}, schema={'external_success_margin': 0.05, 'external_utility_margin': 0.08, 'paired_win_rate': 0.7, 'fixed_risk_breach': 0.02, 'fixed_risk_coverage': 0.55, 'positive_task_families': 3}",
+      "name": "thresholds_match_log_schema",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "primary_hypotheses_cover_all_strict_thresholds",
+      "passed": true
+    },
+    {
+      "detail": "plan=['task_family', 'platform_type', 'scene_id', 'seed', 'skill_i', 'skill_j', 'initial_state_hash'], schema=['task_family', 'platform_type', 'scene_id', 'seed', 'skill_i', 'skill_j', 'initial_state_hash']",
+      "name": "paired_key_matches_schema",
+      "passed": true
+    },
+    {
+      "detail": "planned=1440, collection=1440",
+      "name": "collection_plan_record_budget_referenced",
+      "passed": true
+    },
+    {
+      "detail": "strict_gates=['python scripts\\\\audit_external_release_package.py --strict', 'python scripts\\\\audit_external_fidelity_acceptance.py --strict', 'python scripts\\\\validate_external_configs.py --strict', 'python scripts\\\\validate_external_adapters.py --strict', 'python scripts\\\\validate_external_rollouts.py --write-results --check-video-paths --strict', 'python scripts\\\\audit_external_pairing_integrity.py --strict', 'python scripts\\\\audit_external_evidence.py --strict']",
+      "name": "decision_rule_requires_strict_external_gates",
+      "passed": true
+    },
+    {
+      "detail": "unit='paired_reset_method_panel'",
+      "name": "exclusion_policy_blocks_cherry_picking",
+      "passed": true
+    },
+    {
+      "detail": "unblinding={'method_aliases_remain_sealed_until': ['backend module is qualified', 'task configs are materialized and hash-locked', 'fidelity acceptance is complete', 'run id is specific and immutable', 'operator sheet is frozen'], 'analysis_after_unblinding': 'run only the predeclared scripts and thresholds above; secondary plots are descriptive unless added to a new preregistered plan before collection.'}",
+      "name": "unblinding_policy_preserves_blind_eval",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "required_reporting_covers_primary_and_audit_outputs",
+      "passed": true
+    }
+  ],
+  "failed_checks": [],
+  "not_external_evidence": true,
+  "passed": true,
+  "source_plan": "external_validation/statistical_analysis_plan.json",
+  "strict_evidence_ready": false,
+  "version": "external_analysis_plan_audit_v1"
+}

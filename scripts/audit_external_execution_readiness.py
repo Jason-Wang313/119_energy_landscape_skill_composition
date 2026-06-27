@@ -63,6 +63,42 @@ def main() -> int:
         f"route={collection.get('route')!r}",
     )
 
+    analysis_ok, analysis, analysis_detail = passed_json(
+        RESULTS / "external_analysis_plan_audit.json",
+        version="external_analysis_plan_audit_v1",
+    )
+    add_check(checks, "external_analysis_plan_ready", analysis_ok, analysis_detail)
+    add_check(
+        checks,
+        "external_analysis_plan_not_evidence",
+        analysis.get("not_external_evidence") is True
+        and analysis.get("analysis_plan_ready") is True
+        and analysis.get("strict_evidence_ready") is False,
+        (
+            f"not_external_evidence={analysis.get('not_external_evidence')!r}, "
+            f"analysis_plan_ready={analysis.get('analysis_plan_ready')!r}, "
+            f"strict_evidence_ready={analysis.get('strict_evidence_ready')!r}"
+        ),
+    )
+    analysis_checks = {check.get("name"): check.get("passed") for check in analysis.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_analysis_plan_threshold_lock",
+        analysis_checks.get("plan_is_non_evidence_and_locked") is True
+        and analysis_checks.get("thresholds_match_log_schema") is True
+        and analysis_checks.get("primary_hypotheses_cover_all_strict_thresholds") is True
+        and analysis_checks.get("paired_key_matches_schema") is True,
+        f"analysis_checks={analysis_checks}",
+    )
+    add_check(
+        checks,
+        "external_analysis_plan_exclusion_policy",
+        analysis_checks.get("exclusion_policy_blocks_cherry_picking") is True
+        and analysis_checks.get("unblinding_policy_preserves_blind_eval") is True
+        and analysis_checks.get("required_reporting_covers_primary_and_audit_outputs") is True,
+        f"analysis_checks={analysis_checks}",
+    )
+
     route_ok, route, route_detail = passed_json(
         RESULTS / "independent_validation_route_audit.json",
         version="independent_validation_route_v1",
@@ -546,6 +582,8 @@ def main() -> int:
         EXTERNAL / "operator_record_sheet.csv",
         EXTERNAL / "manifest_template.json",
         EXTERNAL / "log_schema_v1.json",
+        EXTERNAL / "statistical_analysis_plan.json",
+        EXTERNAL / "statistical_analysis_plan.md",
         EXTERNAL / "platform_qualification_checklist.md",
         EXTERNAL / "independent_validation_route.md",
         EXTERNAL / "independent_validation_route_matrix.csv",
@@ -559,6 +597,7 @@ def main() -> int:
         RESULTS / "external_collection_readiness_audit.md",
         RESULTS / "external_operator_packet.md",
         RESULTS / "external_operator_handoff_bundle.md",
+        RESULTS / "external_analysis_plan_audit.md",
         DOCS / "independent_validation_protocol.md",
     ]
     missing_packet_paths = [rel(path) for path in required_packet_paths if not path.exists()]
@@ -602,6 +641,10 @@ def main() -> int:
         "collection_plan_ready",
         "collection_scale_ge_1440_records",
         "collection_route_high_fidelity",
+        "external_analysis_plan_ready",
+        "external_analysis_plan_not_evidence",
+        "external_analysis_plan_threshold_lock",
+        "external_analysis_plan_exclusion_policy",
         "fidelity_acceptance_contract_ready",
         "fidelity_acceptance_not_evidence",
         "fidelity_acceptance_fail_closed",

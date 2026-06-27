@@ -29,6 +29,10 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `collection_plan_ready`: passed
 - `pass` `collection_scale_ge_1440_records`: total_required_records=1440
 - `pass` `collection_route_high_fidelity`: route='high_fidelity_sim'
+- `pass` `external_analysis_plan_ready`: passed
+- `pass` `external_analysis_plan_not_evidence`: not_external_evidence=True, analysis_plan_ready=True, strict_evidence_ready=False
+- `pass` `external_analysis_plan_threshold_lock`: analysis_checks={'plan_is_non_evidence_and_locked': True, 'primary_method_matches_schema': True, 'thresholds_match_log_schema': True, 'primary_hypotheses_cover_all_strict_thresholds': True, 'paired_key_matches_schema': True, 'collection_plan_record_budget_referenced': True, 'decision_rule_requires_strict_external_gates': True, 'exclusion_policy_blocks_cherry_picking': True, 'unblinding_policy_preserves_blind_eval': True, 'required_reporting_covers_primary_and_audit_outputs': True}
+- `pass` `external_analysis_plan_exclusion_policy`: analysis_checks={'plan_is_non_evidence_and_locked': True, 'primary_method_matches_schema': True, 'thresholds_match_log_schema': True, 'primary_hypotheses_cover_all_strict_thresholds': True, 'paired_key_matches_schema': True, 'collection_plan_record_budget_referenced': True, 'decision_rule_requires_strict_external_gates': True, 'exclusion_policy_blocks_cherry_picking': True, 'unblinding_policy_preserves_blind_eval': True, 'required_reporting_covers_primary_and_audit_outputs': True}
 - `pass` `independent_validation_route_ready`: passed
 - `pass` `independent_route_not_evidence`: not_external_evidence=True
 - `pass` `independent_route_primary_covers_tasks`: primary_route='maniskill_sapien_primary', planned_tasks=['peg_place_regrasp', 'drawer_to_pick_transfer', 'door_open_navigation', 'cable_route_insert']
@@ -88,7 +92,7 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_operator_handoff_bundle_ready`: passed
 - `pass` `external_operator_handoff_bundle_not_evidence`: not_external_evidence=True, strict_evidence_ready=False, handoff_bundle_ready=True, start_state='DO_NOT_COLLECT_YET'
 - `pass` `external_operator_handoff_bundle_excludes_evidence_paths`: forbidden_included_paths=[]
-- `pass` `external_operator_handoff_bundle_hash_manifest`: included_file_count=169, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 40, 'operator_command_source': 14, 'operator_facing_input': 26, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}
+- `pass` `external_operator_handoff_bundle_hash_manifest`: included_file_count=174, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 42, 'operator_command_source': 15, 'operator_facing_input': 28, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}
 - `pass` `strict_evidence_gates_remain_not_ready`: external_submission_ready=False, rollout_passed=False, config_passed=False, adapter_passed=False
 - `pass` `operator_packet_paths_exist`: missing=[]
 - `pass` `task_cards_ge_4`: task_cards=4

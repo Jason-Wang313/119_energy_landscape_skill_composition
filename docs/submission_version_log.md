@@ -26,6 +26,7 @@
 - Added `scripts/build_outreach_artifacts.ps1` and `scripts/validate_outreach_artifacts.py` for page-count and framing checks.
 - Added `external_validation/manifest_template.json`, `external_validation/README.md`, and `scripts/audit_external_evidence.py` so the missing real/high-fidelity validation layer is a machine-checkable submission gate rather than prose.
 - Added `scripts/build_external_collection_plan.py` so the independent high-fidelity validation route has a concrete non-evidence schedule before real rollouts are collected.
+- Added `scripts/build_external_analysis_plan.py` so the external validation route has a non-evidence preregistered statistical analysis plan that locks hypotheses, schema thresholds, paired-comparison keys, exclusion/unblinding policy, strict gates, and reporting before real rollouts are collected.
 - Added `scripts/build_external_runbook.py` so the collection schedule becomes a non-evidence operator packet with a runbook, 1,440-row record sheet, task cards, config templates, and audit.
 - Added `external_validation/platform_qualification_checklist.md` and `scripts/audit_external_execution_readiness.py` so the independent external-validation packet is checked as executable while still remaining explicitly non-evidence.
 - Added `scripts/audit_external_backend_contract.py` so the independent backend module must pass a standalone contract qualification gate before collection readiness can be trusted.
