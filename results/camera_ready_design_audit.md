@@ -4,7 +4,7 @@ Passed: `true`.
 Not evidence: `true`.
 Pages: `29`.
 Render DPI: `70`.
-Foreground density range: `0.0179` to `0.1749`.
+Foreground density range: `0.0179` to `0.1756`.
 Minimum edge margin: `27` px.
 
 This audit renders every PDF page and checks for nonblank pages, reasonable density, page margins, contrast, and selected text anchors. It is a camera-ready presentation check only; it does not substitute for external validation.

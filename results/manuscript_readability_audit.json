@@ -1,23 +1,23 @@
 {
-  "abstract_words": 226,
+  "abstract_words": 238,
   "checks": [
     {
-      "detail": "words=226",
+      "detail": "words=238",
       "name": "abstract_exists",
       "passed": true
     },
     {
-      "detail": "words=226",
+      "detail": "words=238",
       "name": "abstract_length_conference_reasonable",
       "passed": true
     },
     {
-      "detail": "positions=[2147, 5504, 8692, 10466, 11340, 12858, 20606, 24439]",
+      "detail": "positions=[2229, 5716, 8904, 10681, 11555, 13073, 20821, 24654]",
       "name": "required_sections_present",
       "passed": true
     },
     {
-      "detail": "positions=[2147, 5504, 8692, 10466, 11340, 12858, 20606, 24439]",
+      "detail": "positions=[2229, 5716, 8904, 10681, 11555, 13073, 20821, 24654]",
       "name": "required_sections_in_order",
       "passed": true
     },

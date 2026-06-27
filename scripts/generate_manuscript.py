@@ -19,6 +19,13 @@ def esc(text):
     )
 
 
+def seam_framed_description(text):
+    return str(text).replace(
+        "Boundary case for energy-landscape skill composition",
+        "Boundary case for skill-seam world/action modeling",
+    )
+
+
 def fmt(value, digits=5):
     return f"{float(value):.{digits}f}"
 
@@ -369,7 +376,7 @@ def make_manuscript(summary):
     a(r"\begin{abstract}")
     a(
         "Robot skills that work individually can fail when chained: the terminal state of one skill may fall outside the next skill's attraction basin, cross a high-energy barrier, or enter a contact mode where descent is no longer smooth. "
-        "We frame that handoff as a local world/action-modeling problem: a compact predictive interface between a skill library and a planner. Given terminal-state evidence, next-skill basin/descent estimates, and a candidate transition, the interface estimates whether an action/skill composition will fail, diagnoses the likely reason, chooses accept, repair, probe, abstain, or alternate transition, and stores the result as planner-edge evidence for future planning. "
+        "We frame that handoff as a local world/action-modeling problem: a compact predictive interface between a skill library and a planner. Given terminal-state evidence, next-skill basin/descent estimates, and a candidate transition, the interface estimates whether an action/skill composition will fail, diagnoses the likely reason, chooses accept, repair, probe, abstain, or alternate transition, and turns the observed result into planner-edge evidence so later plans can prefer reliable seams, repair uncertain ones, or avoid repeated failures. "
         "A barrier-certified energy composer implements that interface, acting on a skill edge only when basin overlap, barrier height, descent continuity, repair cost, and fixed-risk calibration are jointly favorable. "
         f"In a frozen local rollout suite with 12 methods, 6 task families, 8 seam regimes, and 10 paired seeds, the composer reaches hard-slice success {fmt(metrics['hard_success_proposed'])} and utility {fmt(metrics['hard_utility_proposed'])}, compared with {fmt(metrics['hard_success_strongest'])} and {fmt(metrics['hard_utility_strongest'])} for the strongest non-oracle predecessor. "
         "It reduces seam failure, barrier violation, damage, calibration error, and realized seam breach while improving basin alignment and descent continuity. "
@@ -384,16 +391,16 @@ def make_manuscript(summary):
     a(
         "Potential fields, navigation functions, energy-based learning, trajectory optimization, DMPs, and stable dynamical systems have long used scalar landscapes to encode motion and control structure \\citep{khatib1986potential,koditschek1989navigation,lecun2006energy,ratliff2009chomp,ijspeert2013dmp,khansari2011stable}. "
         "Options, skill chaining, and TAMP make composition a first-class robotics problem \\citep{sutton1999options,konidaris2009skillchaining,kaelbling2011tamp,garrett2021integrated}. "
-        "Modern robot-learning systems add broad skill libraries and large robot datasets \\citep{florence2022implicit,brohan2023rt1,openx2023}. The gap targeted here is not low-level skill learning or a new manipulation controller; it is the missing action-conditioned physical interface between a skill library and a planner. Before execution, the robot should estimate whether a proposed edge will land inside the next skill's feasible start set or whether it should repair, probe, abstain, or choose a different transition. After execution, it should keep the outcome as planning evidence: which handoff was reliable, which needed repair, which called for abstention, and which should be avoided later."
+        "Modern robot-learning systems add broad skill libraries and large robot datasets \\citep{florence2022implicit,brohan2023rt1,openx2023}. The gap targeted here is not low-level skill learning or a new manipulation controller; it is the missing action-conditioned physical interface between a skill library and a planner. Before execution, the robot should estimate whether a proposed edge will land inside the next skill's feasible start set or whether it should repair, probe, abstain, or choose a different transition. After execution, it should keep the outcome as planning evidence: which handoff was reliable, which needed repair, which called for abstention, which should be avoided later, and which missing bridge skill would make future plans less brittle."
     )
     a(
-        "The core failure mode is simple: skill one ends successfully, but its terminal distribution lies near a ridge or outside the basin of skill two. A module graph may mark the edge legal, while execution requires a high-energy repair, crosses a barrier, or enters a contact mode where the next controller no longer descends. The paper asks whether an explicit seam model can make composition more reliable by predicting whether a proposed transition will fail before the handoff, diagnosing the likely reason, deciding when to accept, repair, probe, abstain, or choose a different transition, and turning the outcome into planner memory for later compositions. Contact-rich examples matter here because they expose action consequences that a motion-only edge label misses; they are a testbed for the seam model, not the identity of the paper."
+        "The core failure mode is simple: skill one ends successfully, but its terminal distribution lies near a ridge or outside the basin of skill two. A module graph may mark the edge legal, while execution requires a high-energy repair, crosses a barrier, or enters a contact mode where the next controller no longer descends. The paper asks whether an explicit seam model can make composition more reliable by predicting whether a proposed transition will fail before the handoff, diagnosing the likely reason, deciding when to accept, repair, probe, abstain, or choose a different transition, and using the outcome to improve later composition choices. Contact-rich examples matter here because they expose action consequences that a motion-only edge label misses; they are a testbed for the seam model, not the identity of the paper."
     )
     a(
         "The broader question is how a robot represents the physical consequences of a skill transition, notices when that representation is incomplete, and adapts future planning from the outcome. We use the world/action-model view at a deliberately local scale: the model is not a whole robot simulator, and the prediction-action-update loop is limited to the handoff. That restraint is intentional; the paper studies the small interface where a planner asks, before committing to the next skill, what this transition is likely to do and what should be remembered afterward."
     )
     a(
-        "Concretely, the contribution is a seam-level predictive interface: estimate terminal/basin/barrier/descent/risk quantities, diagnose the likely failure mode, choose accept, repair, probe, abstain, or transition, and write the outcome back to planner-edge memory. The energy composer is the paper's implementation of that interface, not the identity of the contribution."
+        "Concretely, the contribution is a seam-level predictive interface: estimate terminal/basin/barrier/descent/risk quantities, diagnose the likely failure mode, choose accept, repair, probe, abstain, or transition, and write the outcome back to planner-edge memory so future planning queries do not treat every graph edge as equally safe. The energy composer is the paper's implementation of that interface, not the identity of the contribution."
     )
 
     a(r"\section{Problem Setup}")
@@ -429,7 +436,7 @@ def make_manuscript(summary):
         "A sequence can be graph-valid while physically unsafe at the seam. If terminal states from the first skill do not overlap the next basin, the second skill starts outside its attraction region. If a high barrier separates the terminal set from the basin, a repair may be possible but costly or unsafe. If the contact mode changes, the energy function may no longer be conservative enough to certify descent. These are not merely controller details; they are action-conditioned predictions about what a skill transition will do to the physical state available to the next skill."
     )
     a(
-        "The model output is therefore not just a compatibility number. It is a compact answer to four planning questions: will this handoff fail, why might it fail, should the system repair, probe, abstain, or route through another transition, and how should that outcome change later plans?"
+        "The model output is therefore not just a compatibility number. It is a compact answer to four planning questions: will this handoff fail, why might it fail, should the system repair, probe, abstain, or route through another transition, and what should the planner learn for later plans?"
     )
     a(
         "This gives a bounded claim. When basin overlap, barrier height, and descent continuity are identifiable enough to reject bad seams and preserve useful ones, a barrier-certified implementation can make skill composition more reliable. Its value is not only higher success, but more structured failure information: the planner can learn which transitions are reliable, which require repair or a diagnostic probe, and which should be avoided. What makes this a seam action model rather than only a score threshold is the full loop: predict the local consequence before execution, choose a transition-level response, observe the outcome, and update the edge memory that future plans query. It must fail or abstain when the low-level primitive is broken, the goal is semantic rather than physical, the landscape is miscalibrated, or real-time constraints prevent search."
@@ -584,7 +591,7 @@ def make_manuscript(summary):
     a(r"\clearpage")
     a(r"\section{Failure Case Audit}")
     for row in failures:
-        a(rf"\paragraph{{Case {esc(row['case_id'])}: {esc(row['failure_case'])}.}} {esc(row['description'])} Reviewer attack: {esc(row['reviewer_attack'])} V5 response: {esc(row['v5_response'])}. Remaining blocker: {esc(row['remaining_blocker'])}.")
+        a(rf"\paragraph{{Case {esc(row['case_id'])}: {esc(row['failure_case'])}.}} {esc(seam_framed_description(row['description']))} Reviewer attack: {esc(row['reviewer_attack'])} V5 response: {esc(row['v5_response'])}. Remaining blocker: {esc(row['remaining_blocker'])}.")
 
     a(r"\clearpage")
     a(r"\section{Metric Definitions}")
