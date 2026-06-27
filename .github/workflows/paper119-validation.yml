@@ -91,6 +91,12 @@ jobs:
       - name: Self-test external pairing integrity
         run: python scripts/self_test_external_pairing_integrity.py
 
+      - name: Self-test external rollout validator
+        run: python scripts/self_test_external_rollout_validator.py
+
+      - name: Self-test external evidence pipeline
+        run: python scripts/self_test_external_evidence_pipeline.py
+
       - name: Audit external execution readiness
         run: python scripts/audit_external_execution_readiness.py
 

@@ -183,6 +183,8 @@ def main():
         "python scripts/audit_external_execution_readiness.py",
         "python scripts/audit_external_pairing_integrity.py",
         "python scripts/self_test_external_pairing_integrity.py",
+        "python scripts/self_test_external_rollout_validator.py",
+        "python scripts/self_test_external_evidence_pipeline.py",
         "python scripts/audit_submission_readiness_gap.py",
         "python scripts/audit_visible_contribution.py",
         "python scripts/audit_claim_boundary.py",

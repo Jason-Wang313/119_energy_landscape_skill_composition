@@ -96,6 +96,7 @@ ICLR-main ready: no
 - External rollout validator self-test: passed on temporary synthetic records, verifying metric recomputation and missing-field failure behavior only.
 - External collection preflight self-test: passed on a temporary complete preflight fixture, verifying collection-readiness gate behavior only.
 - External full-pipeline evidence self-test: passed on a temporary synthetic package with manifest-declared configs, logs, video paths, checkpoints, implementations, recomputed rollout metrics, and release artifacts; it verifies tooling only and is not evidence.
+- GitHub validation workflow: directly runs the rollout-validator and full-pipeline evidence self-tests in addition to the backend, fidelity, config, adapter, release-package, pairing-integrity, collection-preflight, and runner-backend self-tests.
 - Visual QA: final title page, overview page, main result figures, fixed-risk figures, and outreach preview figure page inspected after the reframing/figure pass.
 - Independent validation protocol: `docs/independent_validation_protocol.md`.
 - Haonan/Yilun outreach package: `docs/haonan_yilun_outreach_package.md`.

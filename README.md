@@ -114,6 +114,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External rollout validator self-test: `scripts/self_test_external_rollout_validator.py`
 - External collection preflight self-test report: `results/external_collection_preflight_self_test.md`
 - External full-pipeline evidence self-test: `scripts/self_test_external_evidence_pipeline.py` checks a temporary synthetic package only; it is not evidence.
+- GitHub CI directly runs the backend, fidelity, config, adapter, release-package, pairing-integrity, rollout-validator, collection-preflight, runner-backend, and full-pipeline evidence self-tests.
 - External evidence audit: `results/external_evidence_audit.md`
 - External rollout metrics audit: `results/external_rollout_metrics.md`
 - External execution readiness audit: `results/external_execution_readiness_audit.md`
