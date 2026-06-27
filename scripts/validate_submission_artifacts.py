@@ -114,6 +114,7 @@ def main():
         "scripts\\audit_external_backend_contract.py",
         "scripts\\audit_external_collection_readiness.py",
         "scripts\\validate_external_configs.py",
+        "scripts\\self_test_external_config_evidence.py",
         "scripts\\materialize_external_configs.py",
         "scripts\\build_external_baseline_contract.py",
         "scripts\\build_external_adapter_scaffolds.py",
@@ -169,6 +170,7 @@ def main():
         "python scripts/self_test_external_collection_preflight.py",
         "python scripts/audit_external_collection_readiness.py",
         "python scripts/audit_external_evidence_preflight.py",
+        "python scripts/self_test_external_config_evidence.py",
         "python scripts/materialize_external_configs.py",
         "python scripts/build_external_acquisition_packet.py",
         "python scripts/build_external_operator_packet.py",
@@ -559,6 +561,37 @@ def main():
         fail("external config template audit has too few templates")
     if not (EXTERNAL / "config_schema_v1.json").exists():
         fail("missing external_validation/config_schema_v1.json")
+
+    config_evidence_self_test_path = RESULTS / "external_config_evidence_self_test.json"
+    if not config_evidence_self_test_path.exists():
+        fail("missing results/external_config_evidence_self_test.json; run scripts/self_test_external_config_evidence.py")
+    if not (ROOT / "scripts" / "self_test_external_config_evidence.py").exists():
+        fail("missing scripts/self_test_external_config_evidence.py")
+    config_evidence_self_test = json.loads(config_evidence_self_test_path.read_text(encoding="utf-8"))
+    if config_evidence_self_test.get("version") != "external_config_evidence_self_test_v1":
+        fail("external config evidence self-test version mismatch")
+    if config_evidence_self_test.get("passed") is not True:
+        fail("external config evidence self-test did not pass")
+    if config_evidence_self_test.get("not_external_evidence") is not True:
+        fail("external config evidence self-test must declare that it is not evidence")
+    if config_evidence_self_test.get("synthetic_config_evidence_ready") is not True:
+        fail("external config evidence self-test should make temporary manifest-declared configs ready")
+    if config_evidence_self_test.get("template_config_evidence_ready") is not False:
+        fail("external config evidence self-test should reject templates as strict evidence")
+    if config_evidence_self_test.get("missing_manifest_ready") is not False:
+        fail("external config evidence self-test should reject a missing manifest")
+    config_evidence_self_checks = {check.get("name"): check.get("passed") for check in config_evidence_self_test.get("checks", [])}
+    for required_check in (
+        "synthetic_strict_configs_pass",
+        "synthetic_manifest_entries_cover_tasks",
+        "missing_manifest_fails_strict",
+        "template_configs_rejected_as_strict_evidence",
+        "real_config_evidence_report_not_overwritten",
+    ):
+        if config_evidence_self_checks.get(required_check) is not True:
+            fail(f"external config evidence self-test missing passing check: {required_check}")
+    if not (RESULTS / "external_config_evidence_self_test.md").exists():
+        fail("missing results/external_config_evidence_self_test.md")
 
     baseline_contract_path = RESULTS / "external_baseline_contract_audit.json"
     if not baseline_contract_path.exists():

@@ -88,6 +88,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External real-config intake directory: `external_validation/configs/README.md`
 - External config materialization plan: `results/external_config_materialization_plan.md`
 - External config template audit: `results/external_config_template_audit.md`
+- External config evidence self-test: `results/external_config_evidence_self_test.md`
 - External baseline implementation contract: `external_validation/baseline_implementation_contract.md`
 - External baseline implementation audit: `results/external_baseline_contract_audit.md`
 - External baseline adapter scaffolds: `external_validation/baseline_adapter_scaffold.md`

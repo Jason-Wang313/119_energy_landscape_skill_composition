@@ -163,6 +163,7 @@ python scripts\build_external_runbook.py
 python scripts\audit_external_runner_harness.py
 python scripts\audit_external_collection_readiness.py
 python scripts\validate_external_configs.py
+python scripts\self_test_external_config_evidence.py
 python scripts\build_external_baseline_contract.py
 python scripts\build_external_adapter_scaffolds.py
 python scripts\build_external_reference_adapters.py
@@ -228,6 +229,7 @@ python scripts\validate_external_adapters.py
 python scripts\validate_external_configs.py --strict
 python scripts\validate_external_adapters.py --strict
 python scripts\self_test_external_backend_contract.py
+python scripts\self_test_external_config_evidence.py
 python scripts\self_test_external_fidelity_acceptance.py
 python scripts\self_test_external_rollout_validator.py
 python scripts\self_test_external_evidence_pipeline.py
@@ -242,6 +244,8 @@ The self-test uses temporary synthetic records only. It verifies the validator's
 The full-pipeline self-test also uses a temporary synthetic package only. It verifies that a complete manifest/config/log/video/checkpoint/implementation package can drive the strict audit to READY, then deletes the fixture and confirms the real repository evidence state is untouched. It is tooling coverage, not validation evidence.
 
 The backend contract self-test uses temporary backend modules only. It verifies that strict backend qualification accepts a complete synthetic backend, rejects incomplete/template backends, and leaves the real backend audit report untouched. It is tooling coverage, not validation evidence.
+
+The config evidence self-test uses temporary manifest-declared task configs only. It verifies that strict config evidence can become ready when all real-style config fields are supplied, rejects missing manifests and template configs, and leaves the real config evidence audit report untouched. It is tooling coverage, not validation evidence.
 
 The fidelity acceptance self-test uses a temporary acceptance file and synthetic manifest data only. It verifies that strict platform/fidelity acceptance can become ready when all provenance fields are supplied, rejects the template/default path, and leaves the real fidelity audit report untouched. It is tooling coverage, not validation evidence.
 
