@@ -27,6 +27,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "strict_rollout_recompute",
     ],
     "Manifest-declared real task configs replace non-evidence templates": [
+        "config_manifest_packet",
         "real_task_configs",
         "manifest_and_release",
     ],
@@ -91,6 +92,21 @@ ACTION_CATALOG = {
         ],
         "commands": [
             "python scripts\\materialize_external_configs.py --platform-type <real_robot|high_fidelity_sim> --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
+            "python scripts\\validate_external_configs.py --strict",
+        ],
+        "closes": ["Manifest-declared real task configs replace non-evidence templates"],
+    },
+    "config_manifest_packet": {
+        "title": "Use the config manifest packet as the task-config evidence checklist",
+        "operator_input": "manifest-declare prepared configs with hashes only after real platform, log, and video artifacts exist",
+        "artifacts": [
+            "external_validation/config_manifest_packet.md",
+            "external_validation/config_manifest_work_orders.csv",
+            "results/external_config_manifest_audit.json",
+        ],
+        "commands": [
+            "python scripts\\build_external_config_manifest_packet.py",
+            "python scripts\\build_external_manifest.py --write --check-video-paths",
             "python scripts\\validate_external_configs.py --strict",
         ],
         "closes": ["Manifest-declared real task configs replace non-evidence templates"],
@@ -267,6 +283,7 @@ def main() -> int:
     config_materialization_path = RESULTS / "external_config_materialization_plan.json"
     backend_contract_path = RESULTS / "external_backend_contract_audit.json"
     backend_integration_path = RESULTS / "external_backend_integration_audit.json"
+    config_manifest_path = RESULTS / "external_config_manifest_audit.json"
     method_packet_path = RESULTS / "external_method_implementation_audit.json"
 
     gap = require_json(gap_path)
@@ -277,6 +294,7 @@ def main() -> int:
     config_materialization = require_json(config_materialization_path)
     backend_contract = require_json(backend_contract_path)
     backend_integration = require_json(backend_integration_path)
+    config_manifest = require_json(config_manifest_path)
     method_packet = require_json(method_packet_path)
 
     missing_requirements = missing_requirements_from_gap(gap)
@@ -301,6 +319,7 @@ def main() -> int:
                 config_materialization_path,
                 backend_contract_path,
                 backend_integration_path,
+                config_manifest_path,
                 method_packet_path,
             ]
         ),
@@ -314,6 +333,7 @@ def main() -> int:
                 config_materialization_path,
                 backend_contract_path,
                 backend_integration_path,
+                config_manifest_path,
                 method_packet_path,
             ]
         ),
@@ -411,6 +431,24 @@ def main() -> int:
         ),
     )
     method_packet_checks = {check.get("name"): check.get("passed") for check in method_packet.get("checks", []) or []}
+    config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", []) or []}
+    add_check(
+        checks,
+        "config_manifest_packet_ready",
+        config_manifest.get("passed") is True
+        and config_manifest.get("not_external_evidence") is True
+        and config_manifest.get("config_manifest_packet_ready") is True
+        and config_manifest.get("strict_config_evidence_ready") is False
+        and config_manifest.get("manifest_declared_config_ready") is False
+        and config_manifest_checks.get("work_orders_cover_config_to_manifest_path") is True
+        and (EXTERNAL / "config_manifest_packet.md").exists()
+        and (EXTERNAL / "config_manifest_work_orders.csv").exists(),
+        (
+            f"config_manifest_packet_ready={config_manifest.get('config_manifest_packet_ready')!r}, "
+            f"strict_config_evidence_ready={config_manifest.get('strict_config_evidence_ready')!r}, "
+            f"manifest_declared_config_ready={config_manifest.get('manifest_declared_config_ready')!r}"
+        ),
+    )
     add_check(
         checks,
         "method_implementation_packet_ready",
@@ -471,6 +509,7 @@ def main() -> int:
         "audit_external_evidence.py --strict",
         "audit_external_backend_contract.py --strict",
         "build_external_backend_integration_packet.py",
+        "build_external_config_manifest_packet.py",
         "build_external_platform_onboarding.py",
         "build_external_method_implementation_packet.py",
     ]
@@ -522,6 +561,7 @@ def main() -> int:
                 config_materialization_path,
                 backend_contract_path,
                 backend_integration_path,
+                config_manifest_path,
                 method_packet_path,
             ]
             if path.exists()

@@ -34,6 +34,14 @@ python scripts\materialize_external_configs.py
 
 This writes `results/external_config_materialization_plan.{json,md}` only. It does not write real configs by default. After an operator has selected a real platform and compute budget, use the guarded write form shown in that report; the command requires `--confirm-real-platform --write` and rejects dry-run/template placeholders.
 
+Build the external config manifest packet:
+
+```powershell
+python scripts\build_external_config_manifest_packet.py
+```
+
+This writes `external_validation/config_manifest_packet.{json,md}`, `external_validation/config_manifest_work_orders.csv`, and `results/external_config_manifest_audit.{json,md}`. It turns prepared task configs into manifest-declaration and hash-lock work orders. It is not evidence and still reports strict config evidence as missing until a real manifest, rollout logs, videos, and artifact hashes exist.
+
 Build the independent operator packet:
 
 ```powershell
@@ -208,6 +216,7 @@ python scripts\build_external_analysis_plan.py
 python scripts\build_independent_validation_route.py
 python scripts\build_external_platform_onboarding.py
 python scripts\build_external_backend_integration_packet.py
+python scripts\build_external_config_manifest_packet.py
 python scripts\audit_external_fidelity_acceptance.py
 python scripts\build_external_blind_eval_plan.py
 python scripts\build_external_runbook.py
@@ -294,6 +303,7 @@ python scripts\build_external_blind_eval_plan.py
 python scripts\audit_external_runner_harness.py
 python scripts\audit_external_backend_contract.py
 python scripts\build_external_backend_integration_packet.py
+python scripts\build_external_config_manifest_packet.py
 python scripts\audit_external_collection_readiness.py
 python scripts\audit_external_release_package.py
 python scripts\self_test_external_release_package.py

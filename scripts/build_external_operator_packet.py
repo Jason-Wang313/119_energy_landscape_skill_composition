@@ -73,6 +73,7 @@ def build_payload() -> dict[str, Any]:
         "platform_onboarding",
         "backend_integration_packet",
         "backend_module",
+        "config_manifest_packet",
         "real_task_configs",
         "platform_fidelity",
         "alias_unseal",

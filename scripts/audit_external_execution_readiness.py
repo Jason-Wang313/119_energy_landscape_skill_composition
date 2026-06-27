@@ -448,6 +448,42 @@ def main() -> int:
         int(config_materialization.get("task_count", 0) or 0) >= 4,
         f"task_count={config_materialization.get('task_count')!r}",
     )
+    config_manifest_ok, config_manifest, config_manifest_detail = passed_json(
+        RESULTS / "external_config_manifest_audit.json",
+        version="external_config_manifest_audit_v1",
+    )
+    add_check(checks, "external_config_manifest_packet_ready", config_manifest_ok, config_manifest_detail)
+    config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_config_manifest_not_evidence",
+        config_manifest.get("not_external_evidence") is True
+        and config_manifest.get("config_manifest_packet_ready") is True
+        and config_manifest.get("strict_config_evidence_ready") is False
+        and config_manifest.get("manifest_declared_config_ready") is False,
+        (
+            f"not_external_evidence={config_manifest.get('not_external_evidence')!r}, "
+            f"config_manifest_packet_ready={config_manifest.get('config_manifest_packet_ready')!r}, "
+            f"strict_config_evidence_ready={config_manifest.get('strict_config_evidence_ready')!r}, "
+            f"manifest_declared_config_ready={config_manifest.get('manifest_declared_config_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "external_config_manifest_covers_manifest_config_blocker",
+        config_manifest_checks.get("work_orders_cover_config_to_manifest_path") is True
+        and (EXTERNAL / "config_manifest_packet.json").exists()
+        and (EXTERNAL / "config_manifest_packet.md").exists()
+        and (EXTERNAL / "config_manifest_work_orders.csv").exists(),
+        f"checks={config_manifest_checks}",
+    )
+    add_check(
+        checks,
+        "external_config_manifest_gate_order",
+        config_manifest_checks.get("strict_commands_cover_config_manifest_release_and_evidence") is True
+        and config_manifest_checks.get("strict_config_evidence_still_fails_without_manifest") is True,
+        f"checks={config_manifest_checks}",
+    )
 
     baseline_ok, baseline, baseline_detail = passed_json(
         RESULTS / "external_baseline_contract_audit.json",
@@ -697,6 +733,9 @@ def main() -> int:
         EXTERNAL / "backend_integration_packet.json",
         EXTERNAL / "backend_integration_packet.md",
         EXTERNAL / "backend_integration_work_orders.csv",
+        EXTERNAL / "config_manifest_packet.json",
+        EXTERNAL / "config_manifest_packet.md",
+        EXTERNAL / "config_manifest_work_orders.csv",
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
@@ -716,6 +755,7 @@ def main() -> int:
         RESULTS / "external_analysis_plan_audit.md",
         RESULTS / "external_platform_onboarding_audit.md",
         RESULTS / "external_backend_integration_audit.md",
+        RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_method_implementation_audit.md",
         DOCS / "independent_validation_protocol.md",
     ]
@@ -806,6 +846,10 @@ def main() -> int:
         "external_release_package_not_evidence",
         "config_templates_ready",
         "config_schema_exists",
+        "external_config_manifest_packet_ready",
+        "external_config_manifest_not_evidence",
+        "external_config_manifest_covers_manifest_config_blocker",
+        "external_config_manifest_gate_order",
         "baseline_contract_ready",
         "baseline_contract_reports_missing_implementations",
         "adapter_scaffolds_ready",
@@ -859,6 +903,7 @@ def main() -> int:
             "manifest-declared release artifact hashes with no local dry-run/template placeholders",
             "actual collection preflight cleared with backend, real configs, fidelity acceptance, alias unsealing, and specific run id",
             "manifest-declared task configs with hashes",
+            "completed config manifest packet work orders with manifest-declared config hashes",
             "manifest-declared videos",
             "manifest-declared independent non-oracle adapter implementations",
             "completed method implementation packet work orders with source/config/checkpoint hashes",

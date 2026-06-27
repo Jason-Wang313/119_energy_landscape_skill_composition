@@ -72,6 +72,8 @@ def main() -> int:
     rollout_metrics = read_json(rollout_metrics_path) if rollout_metrics_path.exists() else {}
     config_evidence_path = RESULTS / "external_config_evidence_audit.json"
     config_evidence = read_json(config_evidence_path) if config_evidence_path.exists() else {}
+    config_manifest_path = RESULTS / "external_config_manifest_audit.json"
+    config_manifest = read_json(config_manifest_path) if config_manifest_path.exists() else {}
     baseline_contract_path = RESULTS / "external_baseline_contract_audit.json"
     baseline_contract = read_json(baseline_contract_path) if baseline_contract_path.exists() else {}
     adapter_contract_evidence_path = RESULTS / "external_adapter_contract_evidence_audit.json"
@@ -190,7 +192,13 @@ def main() -> int:
         requirements,
         requirement="Manifest-declared real task configs replace non-evidence templates",
         status="satisfied" if config_ready else "missing",
-        evidence=["results/external_config_evidence_audit.json", "external_validation/config_schema_v1.json"],
+        evidence=[
+            "results/external_config_evidence_audit.json",
+            "external_validation/config_schema_v1.json",
+            "external_validation/config_manifest_packet.md",
+            "external_validation/config_manifest_work_orders.csv",
+            "results/external_config_manifest_audit.json",
+        ],
         blocker="" if config_ready else "strict config evidence audit has no real manifest-declared configs",
         submission_blocking=True,
     )
@@ -306,6 +314,9 @@ def main() -> int:
                 EXTERNAL / "backend_integration_packet.json",
                 EXTERNAL / "backend_integration_packet.md",
                 EXTERNAL / "backend_integration_work_orders.csv",
+                EXTERNAL / "config_manifest_packet.json",
+                EXTERNAL / "config_manifest_packet.md",
+                EXTERNAL / "config_manifest_work_orders.csv",
                 EXTERNAL / "platform_qualification_checklist.md",
                 EXTERNAL / "fidelity_acceptance_template.json",
                 EXTERNAL / "independent_validation_route.md",
@@ -338,6 +349,11 @@ def main() -> int:
         and backend_integration.get("backend_integration_packet_ready") is True
         and backend_integration.get("strict_backend_ready") is False
         and backend_integration.get("strict_evidence_ready") is False
+        and config_manifest.get("passed") is True
+        and config_manifest.get("not_external_evidence") is True
+        and config_manifest.get("config_manifest_packet_ready") is True
+        and config_manifest.get("strict_config_evidence_ready") is False
+        and config_manifest.get("manifest_declared_config_ready") is False
         and collection_readiness.get("passed") is True
         and collection_readiness.get("collection_ready") is False
         and pairing_integrity.get("passed") is True
@@ -359,12 +375,15 @@ def main() -> int:
             "external_validation/platform_onboarding_packet.md",
             "external_validation/backend_integration_packet.md",
             "external_validation/backend_integration_work_orders.csv",
+            "external_validation/config_manifest_packet.md",
+            "external_validation/config_manifest_work_orders.csv",
             "results/external_fidelity_acceptance_audit.json",
             "results/independent_validation_route_audit.json",
             "results/external_blind_eval_audit.json",
             "results/external_runner_harness_audit.json",
             "results/external_backend_contract_audit.json",
             "results/external_backend_integration_audit.json",
+            "results/external_config_manifest_audit.json",
             "results/external_collection_readiness_audit.json",
             "results/external_pairing_integrity_audit.json",
             "results/external_release_package_audit.json",
@@ -521,6 +540,7 @@ def main() -> int:
     acquisition_checks = {check.get("name"): check.get("passed") for check in acquisition_packet.get("checks", [])}
     handoff_checks = {check.get("name"): check.get("passed") for check in handoff_bundle.get("checks", [])}
     backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration.get("checks", [])}
+    config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", [])}
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", [])}
     acquisition_packet_ok = (
         acquisition_packet.get("passed") is True
@@ -531,6 +551,7 @@ def main() -> int:
         and len(acquisition_packet.get("operator_actions", []) or []) >= 10
         and acquisition_checks.get("all_missing_requirements_mapped") is True
         and acquisition_checks.get("backend_integration_packet_ready") is True
+        and acquisition_checks.get("config_manifest_packet_ready") is True
         and acquisition_checks.get("method_implementation_packet_ready") is True
         and acquisition_checks.get("post_collection_strict_commands_cover_all_gates") is True
         and acquisition_checks.get("no_real_manifest_written") is True
@@ -539,6 +560,12 @@ def main() -> int:
         and backend_integration.get("backend_integration_packet_ready") is True
         and backend_integration.get("strict_backend_ready") is False
         and backend_integration_checks.get("work_orders_cover_backend_to_manifest_path") is True
+        and config_manifest.get("passed") is True
+        and config_manifest.get("not_external_evidence") is True
+        and config_manifest.get("config_manifest_packet_ready") is True
+        and config_manifest.get("strict_config_evidence_ready") is False
+        and config_manifest.get("manifest_declared_config_ready") is False
+        and config_manifest_checks.get("work_orders_cover_config_to_manifest_path") is True
         and method_implementation.get("passed") is True
         and method_implementation.get("not_external_evidence") is True
         and method_implementation.get("strict_adapter_evidence_ready") is False
@@ -550,6 +577,7 @@ def main() -> int:
         and handoff_bundle.get("start_state") == "DO_NOT_COLLECT_YET"
         and handoff_checks.get("bundle_excludes_rollout_evidence_artifacts") is True
         and handoff_checks.get("backend_integration_packet_included") is True
+        and handoff_checks.get("config_manifest_packet_included") is True
         and handoff_checks.get("method_implementation_packet_included") is True
         and handoff_checks.get("file_hashes_are_recorded") is True
         and exists_all(
@@ -557,15 +585,20 @@ def main() -> int:
                 ROOT / "scripts" / "build_external_acquisition_packet.py",
                 ROOT / "scripts" / "build_external_operator_handoff_bundle.py",
                 ROOT / "scripts" / "build_external_backend_integration_packet.py",
+                ROOT / "scripts" / "build_external_config_manifest_packet.py",
                 ROOT / "scripts" / "build_external_method_implementation_packet.py",
                 EXTERNAL / "backend_integration_packet.md",
                 EXTERNAL / "backend_integration_work_orders.csv",
+                EXTERNAL / "config_manifest_packet.md",
+                EXTERNAL / "config_manifest_work_orders.csv",
                 EXTERNAL / "method_implementation_packet.md",
                 EXTERNAL / "method_implementation_work_orders.csv",
                 RESULTS / "external_acquisition_packet.json",
                 RESULTS / "external_acquisition_packet.md",
                 RESULTS / "external_backend_integration_audit.json",
                 RESULTS / "external_backend_integration_audit.md",
+                RESULTS / "external_config_manifest_audit.json",
+                RESULTS / "external_config_manifest_audit.md",
                 RESULTS / "external_method_implementation_audit.json",
                 RESULTS / "external_method_implementation_audit.md",
                 RESULTS / "external_operator_handoff_bundle.json",
@@ -581,15 +614,20 @@ def main() -> int:
             "scripts/build_external_acquisition_packet.py",
             "scripts/build_external_operator_handoff_bundle.py",
             "scripts/build_external_backend_integration_packet.py",
+            "scripts/build_external_config_manifest_packet.py",
             "scripts/build_external_method_implementation_packet.py",
             "external_validation/backend_integration_packet.md",
             "external_validation/backend_integration_work_orders.csv",
+            "external_validation/config_manifest_packet.md",
+            "external_validation/config_manifest_work_orders.csv",
             "external_validation/method_implementation_packet.md",
             "external_validation/method_implementation_work_orders.csv",
             "results/external_acquisition_packet.json",
             "results/external_acquisition_packet.md",
             "results/external_backend_integration_audit.json",
             "results/external_backend_integration_audit.md",
+            "results/external_config_manifest_audit.json",
+            "results/external_config_manifest_audit.md",
             "results/external_method_implementation_audit.json",
             "results/external_method_implementation_audit.md",
             "results/external_operator_handoff_bundle.json",

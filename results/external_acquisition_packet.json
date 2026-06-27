@@ -2,7 +2,7 @@
   "acquisition_packet_ready": true,
   "checks": [
     {
-      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_onboarding_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/external_method_implementation_audit.json",
+      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_onboarding_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/external_config_manifest_audit.json, results/external_method_implementation_audit.json",
       "name": "source_audits_exist",
       "passed": true
     },
@@ -47,6 +47,11 @@
       "passed": true
     },
     {
+      "detail": "config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False",
+      "name": "config_manifest_packet_ready",
+      "passed": true
+    },
+    {
       "detail": "method_implementation_packet_ready=True, strict_adapter_evidence_ready=False",
       "name": "method_implementation_packet_ready",
       "passed": true
@@ -77,7 +82,7 @@
       "passed": true
     },
     {
-      "detail": "Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Create real manifest-declared task configs Fill platform fidelity acceptance with real provenance Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
+      "detail": "Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Fill platform fidelity acceptance with real provenance Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
       "name": "operator_actions_cover_collection_blockers",
       "passed": true
     },
@@ -117,6 +122,7 @@
     {
       "blocker": "strict config evidence audit has no real manifest-declared configs",
       "mapped_actions": [
+        "config_manifest_packet",
         "real_task_configs",
         "manifest_and_release"
       ],
@@ -201,6 +207,24 @@
       "id": "real_task_configs",
       "operator_input": "external_validation/configs/<task_family>.json for each task family",
       "title": "Create real manifest-declared task configs"
+    },
+    {
+      "artifacts": [
+        "external_validation/config_manifest_packet.md",
+        "external_validation/config_manifest_work_orders.csv",
+        "results/external_config_manifest_audit.json"
+      ],
+      "closes": [
+        "Manifest-declared real task configs replace non-evidence templates"
+      ],
+      "commands": [
+        "python scripts\\build_external_config_manifest_packet.py",
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\validate_external_configs.py --strict"
+      ],
+      "id": "config_manifest_packet",
+      "operator_input": "manifest-declare prepared configs with hashes only after real platform, log, and video artifacts exist",
+      "title": "Use the config manifest packet as the task-config evidence checklist"
     },
     {
       "artifacts": [
@@ -383,6 +407,7 @@
     "results/external_config_materialization_plan.json",
     "results/external_backend_contract_audit.json",
     "results/external_backend_integration_audit.json",
+    "results/external_config_manifest_audit.json",
     "results/external_method_implementation_audit.json"
   ],
   "strict_collection_command": "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",

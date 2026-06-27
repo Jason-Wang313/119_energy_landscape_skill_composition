@@ -79,6 +79,9 @@ jobs:
       - name: Plan external config materialization
         run: python scripts/materialize_external_configs.py
 
+      - name: Build external config manifest packet
+        run: python scripts/build_external_config_manifest_packet.py
+
       - name: Build external analysis plan
         run: python scripts/build_external_analysis_plan.py
 

@@ -262,6 +262,26 @@
     },
     {
       "detail": "passed",
+      "name": "external_config_manifest_packet_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True, config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False",
+      "name": "external_config_manifest_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "checks={'packet_is_non_evidence_and_fail_closed': True, 'materialization_plan_ready_but_not_evidence': True, 'template_audit_passes': True, 'strict_config_evidence_still_fails_without_manifest': True, 'manifest_template_declares_all_collection_tasks': True, 'prepared_config_files_have_hashes': True, 'work_orders_cover_config_to_manifest_path': True, 'strict_commands_cover_config_manifest_release_and_evidence': True, 'collection_readiness_preserves_config_boundary': True, 'manifest_template_paths_match_prepared_configs': True, 'packet_files_written': True}",
+      "name": "external_config_manifest_covers_manifest_config_blocker",
+      "passed": true
+    },
+    {
+      "detail": "checks={'packet_is_non_evidence_and_fail_closed': True, 'materialization_plan_ready_but_not_evidence': True, 'template_audit_passes': True, 'strict_config_evidence_still_fails_without_manifest': True, 'manifest_template_declares_all_collection_tasks': True, 'prepared_config_files_have_hashes': True, 'work_orders_cover_config_to_manifest_path': True, 'strict_commands_cover_config_manifest_release_and_evidence': True, 'collection_readiness_preserves_config_boundary': True, 'manifest_template_paths_match_prepared_configs': True, 'packet_files_written': True}",
+      "name": "external_config_manifest_gate_order",
+      "passed": true
+    },
+    {
+      "detail": "passed",
       "name": "baseline_contract_ready",
       "passed": true
     },
@@ -346,12 +366,12 @@
       "passed": true
     },
     {
-      "detail": "missing_requirements=4, operator_actions=14",
+      "detail": "missing_requirements=4, operator_actions=15",
       "name": "external_acquisition_packet_maps_all_blockers",
       "passed": true
     },
     {
-      "detail": "checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'backend_integration_packet_ready': True, 'method_implementation_packet_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'platform_onboarding_ready': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}",
+      "detail": "checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'backend_integration_packet_ready': True, 'config_manifest_packet_ready': True, 'method_implementation_packet_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'platform_onboarding_ready': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}",
       "name": "external_acquisition_packet_backend_gate",
       "passed": true
     },
@@ -391,7 +411,7 @@
       "passed": true
     },
     {
-      "detail": "included_file_count=191, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 48, 'operator_command_source': 18, 'operator_facing_input': 36, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "included_file_count=197, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 50, 'operator_command_source': 19, 'operator_facing_input': 39, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "external_operator_handoff_bundle_hash_manifest",
       "passed": true
     },
@@ -439,6 +459,7 @@
     "manifest-declared release artifact hashes with no local dry-run/template placeholders",
     "actual collection preflight cleared with backend, real configs, fidelity acceptance, alias unsealing, and specific run id",
     "manifest-declared task configs with hashes",
+    "completed config manifest packet work orders with manifest-declared config hashes",
     "manifest-declared videos",
     "manifest-declared independent non-oracle adapter implementations",
     "completed method implementation packet work orders with source/config/checkpoint hashes",

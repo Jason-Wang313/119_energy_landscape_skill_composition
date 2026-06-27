@@ -61,6 +61,7 @@ Post-collection strict gates:
 - `backend_module`: Select a non-template backend module
 - `backend_integration_packet`: Use the backend integration packet as the public-simulator backend checklist
 - `real_task_configs`: Create real manifest-declared task configs
+- `config_manifest_packet`: Use the config manifest packet as the task-config evidence checklist
 - `platform_fidelity`: Fill platform fidelity acceptance with real provenance
 - `alias_unseal`: Unseal method aliases only after configs, implementations, and run plan are frozen
 - `specific_run_id`: Use a specific immutable external run id

@@ -3,9 +3,9 @@
   "category_counts": {
     "baseline_spec": 12,
     "config_template": 4,
-    "generated_non_evidence_report": 48,
-    "operator_command_source": 18,
-    "operator_facing_input": 36,
+    "generated_non_evidence_report": 50,
+    "operator_command_source": 19,
+    "operator_facing_input": 39,
     "prepared_config_input": 4,
     "reference_adapter": 60,
     "runner_backend_template": 5,
@@ -43,7 +43,7 @@
       "passed": true
     },
     {
-      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 48, 'operator_command_source': 18, 'operator_facing_input': 36, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 50, 'operator_command_source': 19, 'operator_facing_input': 39, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "handoff_has_task_config_and_baseline_assets",
       "passed": true
     },
@@ -63,6 +63,11 @@
       "passed": true
     },
     {
+      "detail": "config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False",
+      "name": "config_manifest_packet_included",
+      "passed": true
+    },
+    {
       "detail": "method_implementation_packet_ready=True, strict_adapter_evidence_ready=False",
       "name": "method_implementation_packet_included",
       "passed": true
@@ -78,7 +83,7 @@
       "passed": true
     },
     {
-      "detail": "hashed_files=191",
+      "detail": "hashed_files=197",
       "name": "file_hashes_are_recorded",
       "passed": true
     }
@@ -93,49 +98,49 @@
     "placeholder_not_external_evidence"
   ],
   "handoff_bundle_ready": true,
-  "included_file_count": 191,
+  "included_file_count": 197,
   "included_files": [
     {
-      "bytes": 12146,
+      "bytes": 12467,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "F08F732418172B6B30ECC93CD72A30CD9E2124BE7386DDB8CF94289DCD9FFF7B"
+      "sha256": "57A06FB239481B38DF6232A9C61E21B3E0AAA69B2AC4A5703D08205AAB91A9AF"
     },
     {
-      "bytes": 10511,
+      "bytes": 10500,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/haonan_yilun_outreach_package.md",
-      "sha256": "F3288EA1AEFF38BA77FF9AAB0591A3AF4CE01B59B6227E94E38FAF0C61C60F20"
+      "sha256": "F6F46A389ACE8C9FF527034AA12CCB88CCCE98763CEACDCE15C2FBE4A3730FBF"
     },
     {
-      "bytes": 19129,
+      "bytes": 19959,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/independent_validation_protocol.md",
-      "sha256": "8C5605BAA4716C06B1126A2E11E4E928436EFC1C74E1F7EB3593026F616CA964"
+      "sha256": "AB03E37424E149F019F5147A1A8994D1BE2BD9CFD6FC1EF82571D64E166522ED"
     },
     {
-      "bytes": 13078,
+      "bytes": 13598,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/reproducibility_checklist.md",
-      "sha256": "D4B2738C976BDACAF0FE7E315ECAD7216DE2A67519F4748B06AC72E48152D4BC"
+      "sha256": "F4826A033BB8CDDC63F9E8F1696D57071112777B8B47BDE6C0831DF28327B7F2"
     },
     {
-      "bytes": 3597,
+      "bytes": 3759,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "903F1FAAEA063CE407E1BDDB43CA78A7DF9EC8EEA540CF0E481FE6F208998BA6"
+      "sha256": "96542816F04945642E0D354DF276CE6E474C409F717DA7BB22BCBDAA65C2DF6A"
     },
     {
-      "bytes": 23393,
+      "bytes": 24031,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/README.md",
-      "sha256": "03A6920BA9AEE92CC5865F77C05936803A4A8266B68A4DC1527E9CB0386F2778"
+      "sha256": "83268A6456FAA80BA59F99CA946B94D4A003C23A78152BC23746B14051359FD7"
     },
     {
       "bytes": 8780,
@@ -712,6 +717,27 @@
       "sha256": "0285B7A3EF5786964DC95F5516C9A30BAFBF602549A347DD1349F80EE24BC6AF"
     },
     {
+      "bytes": 9996,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "external_validation/config_manifest_packet.json",
+      "sha256": "4BBC0D288C9642336249A57C94F8B00691525C6D0E707CBD2748B145938A12F0"
+    },
+    {
+      "bytes": 5369,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "external_validation/config_manifest_packet.md",
+      "sha256": "1A2733FBA14EC0FD157C29AC6381DF6186165FEE610B1D934084B40CDC19DBF6"
+    },
+    {
+      "bytes": 3406,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "external_validation/config_manifest_work_orders.csv",
+      "sha256": "A49F99D98E2CC167A0880B9BD86DB5857B5FC99B74E6F1FECEC401B81DE3FCF7"
+    },
+    {
       "bytes": 1823,
       "category": "operator_facing_input",
       "exists": true,
@@ -971,18 +997,18 @@
       "sha256": "357F6A44637AD1D55E6E98775B60640FE0E7C0A32FE0C1707FC5863C00D3CDB9"
     },
     {
-      "bytes": 18388,
+      "bytes": 19637,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.json",
-      "sha256": "A6339222BE83159845A8D136EAF6AA08B41967A1F0E9AC89919D74464F4B69F0"
+      "sha256": "93BE11DF5B547B791CA33D790D54EAD18066618826031EBB107348000A203549"
     },
     {
-      "bytes": 12306,
+      "bytes": 13153,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.md",
-      "sha256": "A92CC353A1108CFE5AC6CAA1DB3D94B9971A5C25B9B20C4762D05B7CD3612BC1"
+      "sha256": "6E22A2D875CF15E2E148E10448ECE693ADED6DC44F4AA3224C2AA74B669526FE"
     },
     {
       "bytes": 3130,
@@ -1083,18 +1109,18 @@
       "sha256": "9EC804D278A6BEBB749B193C799210EEC6894349742C2D4363E877BF8D4A5B96"
     },
     {
-      "bytes": 145505,
+      "bytes": 145570,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_collection_plan.json",
-      "sha256": "F81FACD9E5F8A076A43AE16DC2D3B486887C73577E932A8F0360947A0C6F472C"
+      "sha256": "0E19AB50108BAF5B8F6D62FEA9CEFCF5CABC29E95AF4BD407EC6CFF7DC7CCCA8"
     },
     {
-      "bytes": 3993,
+      "bytes": 4054,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_collection_plan.md",
-      "sha256": "C6BC379C6BA276FA0CA97171EFAFD7E75C2279A7B253964F8C93F99D213BEE02"
+      "sha256": "97746D7329659AA17FA262E33AA93E91D09FDBD2D213B7646691960223067454"
     },
     {
       "bytes": 4152,
@@ -1109,6 +1135,20 @@
       "exists": true,
       "path": "results/external_collection_readiness_audit.md",
       "sha256": "2D035F57BDC9565C73537ACB55A001DBCFDA4D7635A5118FA4CFC7C5D4F34CCC"
+    },
+    {
+      "bytes": 3329,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_config_manifest_audit.json",
+      "sha256": "FADE1CF1343AA5DD13AE8E849FC6EF64F7402784A3AA1EE7E80AA9E696904DAF"
+    },
+    {
+      "bytes": 2692,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_config_manifest_audit.md",
+      "sha256": "8983B4D5E441C849E10537F87A4006FB8805E862D0EAFD66824E6BFD492CA68C"
     },
     {
       "bytes": 2945,
@@ -1153,18 +1193,18 @@
       "sha256": "B68911C22003E7E03E48D7486AB58F53AD10457F0C25ABCD47A134E37A247892"
     },
     {
-      "bytes": 18719,
+      "bytes": 20019,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.json",
-      "sha256": "A0CA3040EC51BE1A3D55E697E025505E44345AC05596B8B74986EF01CEA1D574"
+      "sha256": "EFAAE82608C176718A2DB7A0EA9FD039ACA0B69807510A358FE3FEFFCCC3F960"
     },
     {
-      "bytes": 13771,
+      "bytes": 14820,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.md",
-      "sha256": "7A94CF33655AE9018181BC0DF3B6797536CCFD9CBAE64D79A6FE2F3550E4D915"
+      "sha256": "B1716515D8AD3777F0187CD604E6DF531F0ACB404A45637C7F313DA501A1B8E9"
     },
     {
       "bytes": 7157,
@@ -1195,18 +1235,18 @@
       "sha256": "428B997AE9D07EF6B24950444186AAC256634822B715B632D2BC4F2451C2C2E1"
     },
     {
-      "bytes": 15338,
+      "bytes": 16174,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.json",
-      "sha256": "F414DFC009DA8D020F207DD71A62F038087042A58C9E4006375E0B830E14BD46"
+      "sha256": "E5EB4E1CED6EA9E4D139115D0B9CC5AC3A1A9D0EBDBEADC3889ADEF1B7C67530"
     },
     {
-      "bytes": 5404,
+      "bytes": 5502,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.md",
-      "sha256": "67BFFE39044087144172D9753E5A28836D061C1CC9E462691778A45C342726E5"
+      "sha256": "C7743AE9AC9838DE87B6292834872756E7A8971DCD8B8FAF752BA761DF4E4B83"
     },
     {
       "bytes": 525,
@@ -1349,11 +1389,11 @@
       "sha256": "C7AAE093CBACD927A3803C328DDCD5316F5A624842FDCF8C9E30F878AD5D6804"
     },
     {
-      "bytes": 28126,
+      "bytes": 30372,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_acquisition_packet.py",
-      "sha256": "2A9176B1CE669AD6467DE1488A78EA8CB42546D9F067F05FC0B8CC360CD415B2"
+      "sha256": "F892649F0E528B11BDA8124FB9E95ACCBF781ED5615FC58918EDE4D22D0B7ECA"
     },
     {
       "bytes": 16556,
@@ -1370,6 +1410,13 @@
       "sha256": "9BB1413B2D478C383C0F77FB32D83F645B6B506EF65B8F6DB6A6FA760D22DAAA"
     },
     {
+      "bytes": 19489,
+      "category": "operator_command_source",
+      "exists": true,
+      "path": "scripts/build_external_config_manifest_packet.py",
+      "sha256": "11DE0FBAE1BBC0F9071EE775964F554C945CE62FF9E049212EA3674110514C94"
+    },
+    {
       "bytes": 19782,
       "category": "operator_command_source",
       "exists": true,
@@ -1384,18 +1431,18 @@
       "sha256": "2BBE4A63230A15DC53D69B3D5798765D61EA7F07944B6FBD533AD1F9788FE101"
     },
     {
-      "bytes": 24782,
+      "bytes": 26774,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "5BFE944A418B1DD928583AFF14E97C966A647E45B89D5EAD6E6C0AA16B97A49B"
+      "sha256": "4ACBB1E6AD2FEEFF1F1E671A6045A1133C7185FABE8ED849C3B392E8D404D989"
     },
     {
-      "bytes": 12046,
+      "bytes": 12080,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_packet.py",
-      "sha256": "23E7B5156ED0D7FCE09A6670F01B5E5543258D4D646B284DDDA077C9FB1DB531"
+      "sha256": "146FD8DB97A9CB213A730D69AA3E3A914E016BA206FA2F2C66262382A84AC49E"
     },
     {
       "bytes": 19708,
@@ -1503,6 +1550,24 @@
       "id": "real_task_configs",
       "operator_input": "external_validation/configs/<task_family>.json for each task family",
       "title": "Create real manifest-declared task configs"
+    },
+    {
+      "artifacts": [
+        "external_validation/config_manifest_packet.md",
+        "external_validation/config_manifest_work_orders.csv",
+        "results/external_config_manifest_audit.json"
+      ],
+      "closes": [
+        "Manifest-declared real task configs replace non-evidence templates"
+      ],
+      "commands": [
+        "python scripts\\build_external_config_manifest_packet.py",
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\validate_external_configs.py --strict"
+      ],
+      "id": "config_manifest_packet",
+      "operator_input": "manifest-declare prepared configs with hashes only after real platform, log, and video artifacts exist",
+      "title": "Use the config manifest packet as the task-config evidence checklist"
     },
     {
       "artifacts": [
@@ -1683,6 +1748,7 @@
     "results/external_analysis_plan_audit.json",
     "results/external_platform_onboarding_audit.json",
     "results/external_backend_integration_audit.json",
+    "results/external_config_manifest_audit.json",
     "results/external_method_implementation_audit.json",
     "results/external_evidence_preflight.json",
     "results/external_release_package_audit.json",

@@ -1,0 +1,204 @@
+{
+  "collection_ready": false,
+  "config_manifest_packet_ready": true,
+  "evidence_config_version": "paper119_external_config_v1",
+  "forbidden_evidence_shortcuts": [
+    "treating prepared configs as evidence before external_validation/manifest.json declares them",
+    "changing configs after alias unsealing or after rollout collection starts",
+    "using config_templates directly as manifest-declared configs",
+    "omitting config_hash or letting logs/videos point to a different task definition"
+  ],
+  "manifest_declared_config_ready": false,
+  "manifest_task_count": 4,
+  "manifest_written": false,
+  "materialization_plan_ready": true,
+  "not_external_evidence": true,
+  "prepared_config_count": 4,
+  "purpose": "Convert prepared task configs into manifest-declared, hash-locked config evidence once real external artifacts exist.",
+  "schema_version": "external_config_schema_v1",
+  "source_reports": [
+    "results/external_config_materialization_plan.json",
+    "results/external_config_template_audit.json",
+    "results/external_config_evidence_audit.json",
+    "results/external_collection_readiness_audit.json",
+    "external_validation/manifest_template.json"
+  ],
+  "strict_acceptance_commands": [
+    "python scripts\\build_external_config_manifest_packet.py",
+    "python scripts\\materialize_external_configs.py --platform-type <real_robot|high_fidelity_sim> --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "strict_config_audit_blockers": [
+    {
+      "detail": "external_validation/manifest.json missing",
+      "name": "manifest_exists",
+      "passed": false
+    },
+    {
+      "detail": "entries=0",
+      "name": "manifest_config_entries_present",
+      "passed": false
+    },
+    {
+      "detail": "failed=0",
+      "name": "configs_pass_validation",
+      "passed": false
+    }
+  ],
+  "strict_config_audit_passed": false,
+  "strict_config_evidence_ready": false,
+  "task_config_records": [
+    {
+      "allowed_by_schema": true,
+      "config_exists": true,
+      "config_path": "external_validation/configs/peg_place_regrasp.json",
+      "log_jsonl": "external_validation/logs/peg_place_regrasp.jsonl",
+      "manifest_config_path": "external_validation/configs/peg_place_regrasp.json",
+      "platform_name_in_manifest_template": "",
+      "platform_type": "high_fidelity_sim",
+      "sha256": "8D041F5E869F4D81E2352D77A01C85EE585DF2040E45987750DF84B86EA94086",
+      "task_family": "peg_place_regrasp",
+      "video_dir": "external_validation/videos/peg_place_regrasp"
+    },
+    {
+      "allowed_by_schema": true,
+      "config_exists": true,
+      "config_path": "external_validation/configs/drawer_to_pick_transfer.json",
+      "log_jsonl": "external_validation/logs/drawer_to_pick_transfer.jsonl",
+      "manifest_config_path": "external_validation/configs/drawer_to_pick_transfer.json",
+      "platform_name_in_manifest_template": "",
+      "platform_type": "high_fidelity_sim",
+      "sha256": "EABEA38D21F936A46C69E566D0324F7C42A8693CAA1D441B81C7E87B595FCA0D",
+      "task_family": "drawer_to_pick_transfer",
+      "video_dir": "external_validation/videos/drawer_to_pick_transfer"
+    },
+    {
+      "allowed_by_schema": true,
+      "config_exists": true,
+      "config_path": "external_validation/configs/door_open_navigation.json",
+      "log_jsonl": "external_validation/logs/door_open_navigation.jsonl",
+      "manifest_config_path": "external_validation/configs/door_open_navigation.json",
+      "platform_name_in_manifest_template": "",
+      "platform_type": "high_fidelity_sim",
+      "sha256": "39697F0BA1ECBE013C1790455F26B68C927EEF97415A2BB49C6FD1440DEBEA9C",
+      "task_family": "door_open_navigation",
+      "video_dir": "external_validation/videos/door_open_navigation"
+    },
+    {
+      "allowed_by_schema": true,
+      "config_exists": true,
+      "config_path": "external_validation/configs/cable_route_insert.json",
+      "log_jsonl": "external_validation/logs/cable_route_insert.jsonl",
+      "manifest_config_path": "external_validation/configs/cable_route_insert.json",
+      "platform_name_in_manifest_template": "",
+      "platform_type": "high_fidelity_sim",
+      "sha256": "15D687A12F9213E1EB410876203CE93F73E667C30E039685E151438017B3D7AD",
+      "task_family": "cable_route_insert",
+      "video_dir": "external_validation/videos/cable_route_insert"
+    }
+  ],
+  "template_config_version": "paper119_external_config_template_v1",
+  "version": "external_config_manifest_packet_v1",
+  "work_orders": [
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_config_manifest_packet.py",
+        "python scripts\\materialize_external_configs.py --platform-type <real_robot|high_fidelity_sim> --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write"
+      ],
+      "id": "lock_real_platform_identity",
+      "operator_input": "choose the accepted real robot or high-fidelity simulator and freeze platform_name, platform_type, and compute budget before config write",
+      "required_artifacts": [
+        "external_validation/fidelity_acceptance.json",
+        "external_validation/configs/*.json"
+      ],
+      "scope": "all_tasks"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\validate_external_configs.py --strict"
+      ],
+      "id": "hash_manifest_config_entries",
+      "operator_input": "write config_hash for every manifest task entry from the exact config file consumed by the backend",
+      "required_artifacts": [
+        "external_validation/manifest.json",
+        "external_validation/configs/*.json"
+      ],
+      "scope": "all_tasks"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+        "python scripts\\audit_external_release_package.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "id": "bind_configs_to_rollout_logs",
+      "operator_input": "ensure each task's JSONL records were generated with the manifest-declared config and contain matching platform/run identifiers",
+      "required_artifacts": [
+        "external_validation/logs/*.jsonl",
+        "external_validation/videos/<task_family>/"
+      ],
+      "scope": "all_tasks"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\validate_external_configs.py --strict"
+      ],
+      "id": "declare_peg_place_regrasp_config",
+      "operator_input": "manifest-declare external_validation/configs/peg_place_regrasp.json with sha256 8D041F5E869F4D81E2352D77A01C85EE585DF2040E45987750DF84B86EA94086",
+      "required_artifacts": [
+        "external_validation/configs/peg_place_regrasp.json",
+        "external_validation/logs/peg_place_regrasp.jsonl",
+        "external_validation/videos/peg_place_regrasp"
+      ],
+      "scope": "peg_place_regrasp"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\validate_external_configs.py --strict"
+      ],
+      "id": "declare_drawer_to_pick_transfer_config",
+      "operator_input": "manifest-declare external_validation/configs/drawer_to_pick_transfer.json with sha256 EABEA38D21F936A46C69E566D0324F7C42A8693CAA1D441B81C7E87B595FCA0D",
+      "required_artifacts": [
+        "external_validation/configs/drawer_to_pick_transfer.json",
+        "external_validation/logs/drawer_to_pick_transfer.jsonl",
+        "external_validation/videos/drawer_to_pick_transfer"
+      ],
+      "scope": "drawer_to_pick_transfer"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\validate_external_configs.py --strict"
+      ],
+      "id": "declare_door_open_navigation_config",
+      "operator_input": "manifest-declare external_validation/configs/door_open_navigation.json with sha256 39697F0BA1ECBE013C1790455F26B68C927EEF97415A2BB49C6FD1440DEBEA9C",
+      "required_artifacts": [
+        "external_validation/configs/door_open_navigation.json",
+        "external_validation/logs/door_open_navigation.jsonl",
+        "external_validation/videos/door_open_navigation"
+      ],
+      "scope": "door_open_navigation"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\validate_external_configs.py --strict"
+      ],
+      "id": "declare_cable_route_insert_config",
+      "operator_input": "manifest-declare external_validation/configs/cable_route_insert.json with sha256 15D687A12F9213E1EB410876203CE93F73E667C30E039685E151438017B3D7AD",
+      "required_artifacts": [
+        "external_validation/configs/cable_route_insert.json",
+        "external_validation/logs/cable_route_insert.jsonl",
+        "external_validation/videos/cable_route_insert"
+      ],
+      "scope": "cable_route_insert"
+    }
+  ]
+}

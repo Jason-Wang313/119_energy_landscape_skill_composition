@@ -153,9 +153,10 @@ python scripts\build_external_collection_plan.py
 python scripts\build_external_analysis_plan.py
 python scripts\build_external_platform_onboarding.py
 python scripts\build_external_backend_integration_packet.py
+python scripts\build_external_config_manifest_packet.py
 ```
 
-The collection plan currently expands the high-fidelity route into 4 task families x 30 paired resets x 12 methods = 1,440 required JSONL records. The analysis plan pre-registers the external primary hypotheses, rollout-schema thresholds, paired-comparison key, exclusion/unblinding policy, strict gates, and required reporting before rollout collection. The external platform onboarding packet records official source anchors, required simulator provenance, task onboarding files, backend requirements, and strict gate order for the primary ManiSkill/SAPIEN route. The external backend integration packet turns the missing non-template public-simulator backend module into backend-to-manifest work orders. These files are not evidence; they are a deterministic collection schedule and locked analysis/onboarding/backend contract for producing the real evidence package.
+The collection plan currently expands the high-fidelity route into 4 task families x 30 paired resets x 12 methods = 1,440 required JSONL records. The analysis plan pre-registers the external primary hypotheses, rollout-schema thresholds, paired-comparison key, exclusion/unblinding policy, strict gates, and required reporting before rollout collection. The external platform onboarding packet records official source anchors, required simulator provenance, task onboarding files, backend requirements, and strict gate order for the primary ManiSkill/SAPIEN route. The external backend integration packet turns the missing non-template public-simulator backend module into backend-to-manifest work orders. The external config manifest packet turns prepared task configs into manifest-declaration and hash-lock work orders. These files are not evidence; they are a deterministic collection schedule and locked analysis/onboarding/backend/config contract for producing the real evidence package.
 
 Independent route matrix:
 
@@ -187,6 +188,22 @@ python scripts\build_external_backend_integration_packet.py
 ```
 
 This packet is not evidence. It converts the missing non-template public-simulator backend module into concrete work orders for platform provenance, task configs, paired-reset execution, method adapter hashes, logs, videos, and manifest inputs. Strict backend readiness and strict external evidence must still fail until an independent operator supplies the real backend and artifacts.
+
+External config manifest packet:
+
+- `external_validation/config_manifest_packet.json`
+- `external_validation/config_manifest_packet.md`
+- `external_validation/config_manifest_work_orders.csv`
+- `results/external_config_manifest_audit.json`
+- `results/external_config_manifest_audit.md`
+
+Generate it with:
+
+```powershell
+python scripts\build_external_config_manifest_packet.py
+```
+
+This packet is not evidence. It turns prepared task configs into manifest-declaration and hash-lock work orders, then keeps `strict_config_evidence_ready=false` and `manifest_declared_config_ready=false` until a real manifest, logs, videos, and artifact hashes exist.
 
 Operator runbook:
 

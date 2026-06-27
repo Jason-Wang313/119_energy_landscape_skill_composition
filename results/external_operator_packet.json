@@ -133,6 +133,24 @@
     },
     {
       "artifacts": [
+        "external_validation/config_manifest_packet.md",
+        "external_validation/config_manifest_work_orders.csv",
+        "results/external_config_manifest_audit.json"
+      ],
+      "closes": [
+        "Manifest-declared real task configs replace non-evidence templates"
+      ],
+      "commands": [
+        "python scripts\\build_external_config_manifest_packet.py",
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\validate_external_configs.py --strict"
+      ],
+      "id": "config_manifest_packet",
+      "operator_input": "manifest-declare prepared configs with hashes only after real platform, log, and video artifacts exist",
+      "title": "Use the config manifest packet as the task-config evidence checklist"
+    },
+    {
+      "artifacts": [
         "external_validation/fidelity_acceptance.json"
       ],
       "closes": [
