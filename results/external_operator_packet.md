@@ -26,6 +26,12 @@ Materialize real configs after platform selection:
 python scripts\materialize_external_configs.py --platform-type <real_robot|high_fidelity_sim> --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write
 ```
 
+Strict backend qualification gate:
+
+```powershell
+python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --alias-map external_validation\method_alias_map.json
+```
+
 Strict pre-collection gate:
 
 ```powershell
@@ -70,6 +76,9 @@ Post-collection strict gates:
 - `pass` `operator_actions_cover_start_to_finish`: missing=[]
 - `pass` `operator_action_titles_present`: missing_titles=[]
 - `pass` `config_materializer_is_guarded`: write_enabled=False, task_count=4
+- `pass` `backend_contract_gate_is_explicit`: python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --alias-map external_validation\method_alias_map.json
+- `pass` `backend_action_runs_contract_before_readiness`: python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --alias-map external_validation\method_alias_map.json
+python scripts\audit_external_collection_readiness.py --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map
 - `pass` `strict_collection_command_is_explicit`: python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id <specific_run_id> --unsealed-alias-map
 - `pass` `post_collection_gates_cover_evidence`: commands=8
 - `pass` `no_real_manifest_written`: external_validation/manifest.json absent before real evidence

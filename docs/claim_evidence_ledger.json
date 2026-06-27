@@ -82,13 +82,13 @@
     },
     {
       "name": "external_acquisition_packet_claim",
-      "claim": "The repository provides a non-evidence acquisition packet that maps each remaining external-evidence blocker to concrete operator inputs, artifacts, and strict validation commands.",
-      "evidence": ["scripts/build_external_acquisition_packet.py", "results/external_acquisition_packet.json", "results/external_acquisition_packet.md", "results/submission_readiness_gap_audit.json"]
+      "claim": "The repository provides a non-evidence acquisition packet that maps each remaining external-evidence blocker to concrete operator inputs, artifacts, backend qualification, and strict validation commands.",
+      "evidence": ["scripts/build_external_acquisition_packet.py", "results/external_acquisition_packet.json", "results/external_acquisition_packet.md", "results/submission_readiness_gap_audit.json", "results/external_backend_contract_audit.json"]
     },
     {
       "name": "external_operator_packet_claim",
-      "claim": "The repository provides a generated non-evidence operator packet with a go/no-go state, pre-collection blockers, exact collection commands, and post-collection strict gates for an independent validation operator.",
-      "evidence": ["scripts/build_external_operator_packet.py", "results/external_operator_packet.json", "results/external_operator_packet.md", "results/external_collection_readiness_audit.json", "results/external_acquisition_packet.json"]
+      "claim": "The repository provides a generated non-evidence operator packet with a go/no-go state, backend qualification gate, pre-collection blockers, exact collection commands, and post-collection strict gates for an independent validation operator.",
+      "evidence": ["scripts/build_external_operator_packet.py", "results/external_operator_packet.json", "results/external_operator_packet.md", "results/external_backend_contract_audit.json", "results/external_collection_readiness_audit.json", "results/external_acquisition_packet.json"]
     },
     {
       "name": "external_config_template_claim",

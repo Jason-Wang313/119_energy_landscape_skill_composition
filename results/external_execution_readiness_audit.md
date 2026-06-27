@@ -46,6 +46,9 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_runner_harness_ready`: passed
 - `pass` `external_runner_harness_not_evidence`: not_external_evidence=True
 - `pass` `external_runner_harness_fail_closed`: actual_execution_ready=False
+- `pass` `external_backend_contract_ready`: passed
+- `pass` `external_backend_contract_not_evidence`: not_external_evidence=True
+- `pass` `external_backend_contract_fail_closed`: backend_contract_harness_ready=True, actual_backend_ready=False
 - `pass` `external_collection_readiness_audit_ready`: passed
 - `pass` `external_collection_readiness_not_evidence`: not_external_evidence=True
 - `pass` `external_collection_readiness_fail_closed`: collection_ready=False, readiness_state='PREPARE_BACKEND_CONFIGS_AND_FIDELITY', blocking_missing_count=4
@@ -77,8 +80,10 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_acquisition_packet_ready`: passed
 - `pass` `external_acquisition_packet_not_evidence`: not_external_evidence=True, strict_evidence_ready=False, acquisition_packet_ready=True
 - `pass` `external_acquisition_packet_maps_all_blockers`: missing_requirements=4, operator_actions=11
+- `pass` `external_acquisition_packet_backend_gate`: checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}
 - `pass` `external_operator_packet_ready`: passed
 - `pass` `external_operator_packet_not_evidence`: not_external_evidence=True, strict_evidence_ready=False, operator_packet_ready=True
+- `pass` `external_operator_packet_backend_gate`: backend_contract_gate_command='python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json'
 - `pass` `external_operator_packet_go_no_go`: go_to_collect=False, start_state='DO_NOT_COLLECT_YET', blocking_missing_count=4
 - `pass` `strict_evidence_gates_remain_not_ready`: external_submission_ready=False, rollout_passed=False, config_passed=False, adapter_passed=False
 - `pass` `operator_packet_paths_exist`: missing=[]

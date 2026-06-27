@@ -1101,6 +1101,9 @@ def main():
         "external_runner_harness_ready",
         "external_runner_harness_not_evidence",
         "external_runner_harness_fail_closed",
+        "external_backend_contract_ready",
+        "external_backend_contract_not_evidence",
+        "external_backend_contract_fail_closed",
         "external_collection_readiness_audit_ready",
         "external_collection_readiness_not_evidence",
         "external_collection_readiness_fail_closed",
@@ -1112,9 +1115,11 @@ def main():
         "external_acquisition_packet_ready",
         "external_acquisition_packet_not_evidence",
         "external_acquisition_packet_maps_all_blockers",
+        "external_acquisition_packet_backend_gate",
         "external_operator_packet_ready",
         "external_operator_packet_not_evidence",
         "external_operator_packet_go_no_go",
+        "external_operator_packet_backend_gate",
         "config_templates_ready",
         "config_materialization_plan_ready",
         "config_materialization_plan_not_evidence",
@@ -1140,6 +1145,7 @@ def main():
         EXTERNAL / "runner" / "README.md",
         EXTERNAL / "runner" / "backend_contract.py",
         EXTERNAL / "runner" / "real_collection_runner.py",
+        RESULTS / "external_backend_contract_audit.md",
         RESULTS / "external_pairing_integrity_audit.md",
         RESULTS / "external_release_package_audit.md",
         RESULTS / "external_collection_readiness_audit.md",
@@ -1175,11 +1181,13 @@ def main():
         "collection_preflight_fail_closed",
         "config_intake_directory_tracked",
         "config_materializer_ready",
+        "backend_contract_gate_ready",
         "preflight_operator_actions_present",
         "route_independent_of_haonan",
         "post_collection_strict_commands_cover_all_gates",
         "no_real_manifest_written",
         "operator_actions_cover_collection_blockers",
+        "backend_action_runs_contract_before_readiness",
     ):
         if acquisition_checks.get(required_check) is not True:
             fail(f"external acquisition packet missing passing check: {required_check}")
@@ -1207,6 +1215,14 @@ def main():
         fail("external operator packet has too few operator actions")
     if "audit_external_collection_readiness.py --strict" not in operator_packet.get("pre_collection_gate_command", ""):
         fail("external operator packet missing strict pre-collection gate command")
+    if "audit_external_backend_contract.py --strict" not in operator_packet.get("backend_contract_gate_command", ""):
+        fail("external operator packet missing strict backend contract gate command")
+    backend_actions = [action for action in operator_actions if action.get("id") == "backend_module"]
+    if not backend_actions:
+        fail("external operator packet missing backend_module action")
+    backend_commands = "\n".join(backend_actions[0].get("commands", []) or [])
+    if "audit_external_backend_contract.py --strict" not in backend_commands or "audit_external_collection_readiness.py" not in backend_commands:
+        fail("external operator packet backend action must run backend contract before collection readiness")
     if "real_collection_runner.py" not in operator_packet.get("strict_collection_command", ""):
         fail("external operator packet missing actual collection command")
     post_commands = operator_packet.get("post_collection_strict_commands", []) or []

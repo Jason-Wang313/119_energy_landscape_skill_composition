@@ -2,7 +2,7 @@
   "acquisition_packet_ready": true,
   "checks": [
     {
-      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_config_materialization_plan.json",
+      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json",
       "name": "source_audits_exist",
       "passed": true
     },
@@ -37,6 +37,11 @@
       "passed": true
     },
     {
+      "detail": "harness_ready=True, actual_backend_ready=False",
+      "name": "backend_contract_gate_ready",
+      "passed": true
+    },
+    {
       "detail": "operator_next_actions=5, evidence_ready=False",
       "name": "preflight_operator_actions_present",
       "passed": true
@@ -60,6 +65,11 @@
       "detail": "Select a non-template backend module Create real manifest-declared task configs Fill platform fidelity acceptance with real provenance Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
       "name": "operator_actions_cover_collection_blockers",
       "passed": true
+    },
+    {
+      "detail": "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json; python scripts\\audit_external_collection_readiness.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+      "name": "backend_action_runs_contract_before_readiness",
+      "passed": true
     }
   ],
   "collection_blockers": [
@@ -72,6 +82,7 @@
     {
       "blocker": "strict external evidence audit is NOT_READY; real manifest/log/video/checkpoint evidence and accepted robot/simulator fidelity provenance are missing",
       "mapped_actions": [
+        "backend_module",
         "platform_fidelity",
         "run_collection",
         "manifest_and_release"
@@ -113,6 +124,7 @@
         "actual collection backend readiness"
       ],
       "commands": [
+        "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
         "python scripts\\audit_external_collection_readiness.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map"
       ],
       "id": "backend_module",
@@ -297,7 +309,8 @@
     "results/external_collection_readiness_audit.json",
     "results/external_evidence_preflight.json",
     "results/independent_validation_route_audit.json",
-    "results/external_config_materialization_plan.json"
+    "results/external_config_materialization_plan.json",
+    "results/external_backend_contract_audit.json"
   ],
   "strict_collection_command": "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
   "strict_evidence_ready": false,

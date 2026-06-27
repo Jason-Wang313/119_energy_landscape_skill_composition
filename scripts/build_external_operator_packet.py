@@ -54,6 +54,10 @@ def build_payload() -> dict[str, Any]:
         RESULTS / "external_acquisition_packet.json",
         "external_acquisition_packet_v1",
     )
+    backend_contract = require_payload(
+        RESULTS / "external_backend_contract_audit.json",
+        "external_backend_contract_audit_v1",
+    )
     materialization = require_payload(
         RESULTS / "external_config_materialization_plan.json",
         "external_config_materialization_plan_v1",
@@ -130,6 +134,25 @@ def build_payload() -> dict[str, Any]:
     )
     add_check(
         checks,
+        "backend_contract_gate_is_explicit",
+        backend_contract.get("passed") is True
+        and backend_contract.get("not_external_evidence") is True
+        and backend_contract.get("backend_contract_harness_ready") is True
+        and backend_contract.get("actual_backend_ready") is False
+        and "audit_external_backend_contract.py --strict" in str(backend_contract.get("strict_command", "")),
+        str(backend_contract.get("strict_command", "")),
+    )
+    backend_action = actions.get("backend_module", {})
+    backend_action_commands = "\n".join(backend_action.get("commands", []) or [])
+    add_check(
+        checks,
+        "backend_action_runs_contract_before_readiness",
+        "audit_external_backend_contract.py --strict" in backend_action_commands
+        and "audit_external_collection_readiness.py" in backend_action_commands,
+        backend_action_commands,
+    )
+    add_check(
+        checks,
         "strict_collection_command_is_explicit",
         "--backend-module <module_or_path>" in str(collection.get("strict_collection_command", ""))
         and "--unsealed-alias-map" in str(collection.get("strict_collection_command", "")),
@@ -184,6 +207,7 @@ def build_payload() -> dict[str, Any]:
             "--backend-module <module_or_path> --task-config-dir external_validation\\configs "
             "--run-id <specific_run_id> --unsealed-alias-map"
         ),
+        "backend_contract_gate_command": backend_contract.get("strict_command", ""),
         "config_materialization_command": materialization.get("operator_write_command", ""),
         "strict_collection_command": collection.get("strict_collection_command", ""),
         "post_collection_strict_commands": post_collection_commands,
@@ -191,6 +215,7 @@ def build_payload() -> dict[str, Any]:
         "source_reports": [
             "results/external_collection_readiness_audit.json",
             "results/external_acquisition_packet.json",
+            "results/external_backend_contract_audit.json",
             "results/external_config_materialization_plan.json",
         ],
         "checks": checks,
@@ -228,6 +253,12 @@ def write_md(payload: dict[str, Any]) -> None:
             "",
             "```powershell",
             payload["config_materialization_command"],
+            "```",
+            "",
+            "Strict backend qualification gate:",
+            "",
+            "```powershell",
+            payload["backend_contract_gate_command"],
             "```",
             "",
             "Strict pre-collection gate:",

@@ -102,6 +102,21 @@
     },
     {
       "detail": "passed",
+      "name": "external_backend_contract_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True",
+      "name": "external_backend_contract_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "backend_contract_harness_ready=True, actual_backend_ready=False",
+      "name": "external_backend_contract_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "passed",
       "name": "external_collection_readiness_audit_ready",
       "passed": true
     },
@@ -256,6 +271,11 @@
       "passed": true
     },
     {
+      "detail": "checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}",
+      "name": "external_acquisition_packet_backend_gate",
+      "passed": true
+    },
+    {
       "detail": "passed",
       "name": "external_operator_packet_ready",
       "passed": true
@@ -263,6 +283,11 @@
     {
       "detail": "not_external_evidence=True, strict_evidence_ready=False, operator_packet_ready=True",
       "name": "external_operator_packet_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "backend_contract_gate_command='python scripts\\\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\\\configs --alias-map external_validation\\\\method_alias_map.json'",
+      "name": "external_operator_packet_backend_gate",
       "passed": true
     },
     {

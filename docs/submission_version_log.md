@@ -30,6 +30,7 @@
 - Added `scripts/audit_external_backend_contract.py` so the independent backend module must pass a standalone contract qualification gate before collection readiness can be trusted.
 - Added `scripts/materialize_external_configs.py` so real task configs can be generated only through a guarded operator command after concrete platform and compute values are supplied.
 - Added `scripts/build_external_operator_packet.py` so the independent validation path has a generated go/no-go packet with pre-collection blockers, collection commands, and post-collection strict gates.
+- Updated the acquisition and operator packets so backend selection first runs the strict backend qualification audit before collection readiness or actual collection commands.
 - Updated the outreach memo, four-page preview, and Haonan/Yilun package to reflect the operator-packet/no-go stance while keeping Haonan's role framed as scientific fit and falsification advice.
 - Added `external_validation/config_schema_v1.json` and `scripts/validate_external_configs.py` so task config templates and future strict evidence configs are machine-checked separately.
 - Added `scripts/build_external_baseline_contract.py` so the external package has a non-evidence baseline implementation contract, method matrix, per-method adapter specs, and an audit that still marks independent non-oracle implementations as missing.

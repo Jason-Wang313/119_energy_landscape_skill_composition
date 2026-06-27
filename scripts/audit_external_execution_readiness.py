@@ -184,6 +184,29 @@ def main() -> int:
         f"actual_execution_ready={runner.get('actual_execution_ready')!r}",
     )
 
+    backend_contract_ok, backend_contract, backend_contract_detail = passed_json(
+        RESULTS / "external_backend_contract_audit.json",
+        version="external_backend_contract_audit_v1",
+    )
+    add_check(checks, "external_backend_contract_ready", backend_contract_ok, backend_contract_detail)
+    add_check(
+        checks,
+        "external_backend_contract_not_evidence",
+        backend_contract.get("not_external_evidence") is True,
+        f"not_external_evidence={backend_contract.get('not_external_evidence')!r}",
+    )
+    add_check(
+        checks,
+        "external_backend_contract_fail_closed",
+        backend_contract.get("backend_contract_harness_ready") is True
+        and backend_contract.get("actual_backend_ready") is False
+        and "audit_external_backend_contract.py --strict" in str(backend_contract.get("strict_command", "")),
+        (
+            f"backend_contract_harness_ready={backend_contract.get('backend_contract_harness_ready')!r}, "
+            f"actual_backend_ready={backend_contract.get('actual_backend_ready')!r}"
+        ),
+    )
+
     collection_readiness_ok, collection_readiness, collection_readiness_detail = passed_json(
         RESULTS / "external_collection_readiness_audit.json",
         version="external_collection_readiness_audit_v1",
@@ -410,6 +433,14 @@ def main() -> int:
         len(acquisition_missing) == 4 and len(acquisition_actions) >= 10,
         f"missing_requirements={len(acquisition_missing)}, operator_actions={len(acquisition_actions)}",
     )
+    acquisition_check_map = {check.get("name"): check.get("passed") for check in acquisition.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_acquisition_packet_backend_gate",
+        acquisition_check_map.get("backend_contract_gate_ready") is True
+        and acquisition_check_map.get("backend_action_runs_contract_before_readiness") is True,
+        f"checks={acquisition_check_map}",
+    )
     operator_packet_ok, operator_packet, operator_packet_detail = passed_json(
         RESULTS / "external_operator_packet.json",
         version="external_operator_packet_v1",
@@ -426,6 +457,15 @@ def main() -> int:
             f"strict_evidence_ready={operator_packet.get('strict_evidence_ready')!r}, "
             f"operator_packet_ready={operator_packet.get('operator_packet_ready')!r}"
         ),
+    )
+    operator_check_map = {check.get("name"): check.get("passed") for check in operator_packet.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_operator_packet_backend_gate",
+        "audit_external_backend_contract.py --strict" in str(operator_packet.get("backend_contract_gate_command", ""))
+        and operator_check_map.get("backend_contract_gate_is_explicit") is True
+        and operator_check_map.get("backend_action_runs_contract_before_readiness") is True,
+        f"backend_contract_gate_command={operator_packet.get('backend_contract_gate_command')!r}",
     )
     add_check(
         checks,
@@ -476,6 +516,7 @@ def main() -> int:
         EXTERNAL / "runner" / "README.md",
         EXTERNAL / "runner" / "backend_contract.py",
         EXTERNAL / "runner" / "real_collection_runner.py",
+        RESULTS / "external_backend_contract_audit.md",
         RESULTS / "external_collection_readiness_audit.md",
         RESULTS / "external_operator_packet.md",
         DOCS / "independent_validation_protocol.md",
@@ -538,6 +579,9 @@ def main() -> int:
         "external_runner_harness_ready",
         "external_runner_harness_not_evidence",
         "external_runner_harness_fail_closed",
+        "external_backend_contract_ready",
+        "external_backend_contract_not_evidence",
+        "external_backend_contract_fail_closed",
         "external_collection_readiness_audit_ready",
         "external_collection_readiness_not_evidence",
         "external_collection_readiness_fail_closed",
@@ -566,9 +610,11 @@ def main() -> int:
         "external_acquisition_packet_ready",
         "external_acquisition_packet_not_evidence",
         "external_acquisition_packet_maps_all_blockers",
+        "external_acquisition_packet_backend_gate",
         "external_operator_packet_ready",
         "external_operator_packet_not_evidence",
         "external_operator_packet_go_no_go",
+        "external_operator_packet_backend_gate",
         "operator_packet_paths_exist",
         "task_cards_ge_4",
         "config_templates_ge_4",

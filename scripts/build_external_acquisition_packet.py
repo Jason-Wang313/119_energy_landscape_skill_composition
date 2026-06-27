@@ -15,6 +15,7 @@ OUT_MD = RESULTS / "external_acquisition_packet.md"
 
 MISSING_REQUIREMENT_ACTIONS = {
     "Independent real-robot or accepted high-fidelity external validation evidence": [
+        "backend_module",
         "platform_fidelity",
         "run_collection",
         "manifest_and_release",
@@ -42,6 +43,7 @@ ACTION_CATALOG = {
         "operator_input": "--backend-module <module_or_path>",
         "artifacts": ["external_validation/runner/backends/<real_backend>.py"],
         "commands": [
+            "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
             "python scripts\\audit_external_collection_readiness.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
         ],
         "closes": ["actual collection backend readiness"],
@@ -216,12 +218,14 @@ def main() -> int:
     preflight_path = RESULTS / "external_evidence_preflight.json"
     route_path = RESULTS / "independent_validation_route_audit.json"
     config_materialization_path = RESULTS / "external_config_materialization_plan.json"
+    backend_contract_path = RESULTS / "external_backend_contract_audit.json"
 
     gap = require_json(gap_path)
     collection = require_json(collection_path)
     preflight = require_json(preflight_path)
     route = require_json(route_path)
     config_materialization = require_json(config_materialization_path)
+    backend_contract = require_json(backend_contract_path)
 
     missing_requirements = missing_requirements_from_gap(gap)
     missing_names = [row.get("requirement", "") for row in missing_requirements]
@@ -235,8 +239,8 @@ def main() -> int:
     add_check(
         checks,
         "source_audits_exist",
-        all(path.exists() for path in [collection_path, preflight_path, route_path, config_materialization_path]),
-        ", ".join(rel(path) for path in [collection_path, preflight_path, route_path, config_materialization_path]),
+        all(path.exists() for path in [collection_path, preflight_path, route_path, config_materialization_path, backend_contract_path]),
+        ", ".join(rel(path) for path in [collection_path, preflight_path, route_path, config_materialization_path, backend_contract_path]),
     )
     add_check(
         checks,
@@ -299,6 +303,19 @@ def main() -> int:
             f"task_count={config_materialization.get('task_count')!r}"
         ),
     )
+    add_check(
+        checks,
+        "backend_contract_gate_ready",
+        backend_contract.get("passed") is True
+        and backend_contract.get("not_external_evidence") is True
+        and backend_contract.get("backend_contract_harness_ready") is True
+        and backend_contract.get("actual_backend_ready") is False
+        and "audit_external_backend_contract.py --strict" in str(backend_contract.get("strict_command", "")),
+        (
+            f"harness_ready={backend_contract.get('backend_contract_harness_ready')!r}, "
+            f"actual_backend_ready={backend_contract.get('actual_backend_ready')!r}"
+        ),
+    )
     preflight_actions = preflight.get("operator_next_actions", []) or []
     add_check(
         checks,
@@ -325,6 +342,7 @@ def main() -> int:
         "validate_external_rollouts.py --write-results --check-video-paths --strict",
         "audit_external_pairing_integrity.py --strict",
         "audit_external_evidence.py --strict",
+        "audit_external_backend_contract.py --strict",
     ]
     command_text = "\n".join(post_collection_commands + [cmd for action in actions for cmd in action["commands"]])
     missing_command_fragments = [fragment for fragment in required_command_fragments if fragment not in command_text]
@@ -348,6 +366,13 @@ def main() -> int:
         ),
         action_titles,
     )
+    add_check(
+        checks,
+        "backend_action_runs_contract_before_readiness",
+        "audit_external_backend_contract.py --strict" in "\n".join(ACTION_CATALOG["backend_module"]["commands"])
+        and ACTION_CATALOG["backend_module"]["commands"][0].startswith("python scripts\\audit_external_backend_contract.py"),
+        "; ".join(ACTION_CATALOG["backend_module"]["commands"]),
+    )
 
     passed = all(check["passed"] for check in checks)
     payload = {
@@ -356,7 +381,7 @@ def main() -> int:
         "not_external_evidence": True,
         "acquisition_packet_ready": passed,
         "strict_evidence_ready": False,
-        "source_reports": [rel(path) for path in [gap_path, collection_path, preflight_path, route_path, config_materialization_path] if path.exists()],
+        "source_reports": [rel(path) for path in [gap_path, collection_path, preflight_path, route_path, config_materialization_path, backend_contract_path] if path.exists()],
         "missing_requirements": [
             {
                 "requirement": row.get("requirement"),

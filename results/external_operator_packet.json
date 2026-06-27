@@ -1,4 +1,5 @@
 {
+  "backend_contract_gate_command": "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
   "blocking_missing_count": 4,
   "checks": [
     {
@@ -24,6 +25,16 @@
     {
       "detail": "write_enabled=False, task_count=4",
       "name": "config_materializer_is_guarded",
+      "passed": true
+    },
+    {
+      "detail": "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
+      "name": "backend_contract_gate_is_explicit",
+      "passed": true
+    },
+    {
+      "detail": "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json\npython scripts\\audit_external_collection_readiness.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+      "name": "backend_action_runs_contract_before_readiness",
       "passed": true
     },
     {
@@ -60,6 +71,7 @@
         "actual collection backend readiness"
       ],
       "commands": [
+        "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
         "python scripts\\audit_external_collection_readiness.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map"
       ],
       "id": "backend_module",
@@ -250,6 +262,7 @@
   "source_reports": [
     "results/external_collection_readiness_audit.json",
     "results/external_acquisition_packet.json",
+    "results/external_backend_contract_audit.json",
     "results/external_config_materialization_plan.json"
   ],
   "start_state": "DO_NOT_COLLECT_YET",
