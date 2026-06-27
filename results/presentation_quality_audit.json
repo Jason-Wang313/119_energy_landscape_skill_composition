@@ -2,7 +2,7 @@
   "canonical_pdf": "C:\\Users\\wangz\\Downloads\\119.pdf",
   "checks": [
     {
-      "detail": "pages=29",
+      "detail": "pages=30",
       "name": "pdf_page_count",
       "passed": true
     },
@@ -12,7 +12,7 @@
       "passed": true
     },
     {
-      "detail": "bytes=467903",
+      "detail": "bytes=471098",
       "name": "pdf_size_reasonable",
       "passed": true
     },
@@ -22,7 +22,7 @@
       "passed": true
     },
     {
-      "detail": "text_chars=78846",
+      "detail": "text_chars=80810",
       "name": "pdf_text_extractable",
       "passed": true
     },
@@ -248,9 +248,9 @@
     }
   ],
   "failed_checks": [],
-  "pages": 29,
+  "pages": 30,
   "passed": true,
   "pdf": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\paper\\main.pdf",
-  "pdf_bytes": 467903,
+  "pdf_bytes": 471098,
   "version": "presentation_quality_audit_v1"
 }

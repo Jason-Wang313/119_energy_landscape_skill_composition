@@ -99,6 +99,7 @@ def main():
         "scripts\\audit_diagnostic_mechanism.py",
         "scripts\\audit_decision_quality.py",
         "scripts\\audit_seam_prediction_calibration.py",
+        "scripts\\audit_planner_edge_policy.py",
         "scripts\\generate_manuscript.py",
         "scripts\\audit_manuscript_numbers.py",
         "scripts\\audit_related_work.py",
@@ -178,6 +179,7 @@ def main():
         "PAPER119_CANONICAL_PDF",
         "poppler-utils",
         "python -m compileall",
+        "python scripts/audit_planner_edge_policy.py",
         "python scripts/audit_external_runner_harness.py",
         "python scripts/audit_external_backend_contract.py",
         "python scripts/audit_maniskill_backend_readiness.py",
@@ -1484,6 +1486,42 @@ def main():
     if not (PAPER / "generated_decision_quality_table.tex").exists():
         fail("missing paper/generated_decision_quality_table.tex")
 
+    planner_path = RESULTS / "planner_edge_policy_audit.json"
+    if not planner_path.exists():
+        fail("missing results/planner_edge_policy_audit.json; run scripts/audit_planner_edge_policy.py")
+    planner = json.loads(planner_path.read_text(encoding="utf-8"))
+    if planner.get("version") != "planner_edge_policy_audit_v1":
+        fail("planner-edge policy audit version mismatch")
+    if planner.get("passed") is not True:
+        fail("planner-edge policy audit did not pass")
+    if planner.get("not_external_evidence") is not True:
+        fail("planner-edge policy audit must declare that it is not external evidence")
+    planner_metrics = planner.get("metrics", {})
+    if int(planner_metrics.get("frontier_count", 0)) < 1500:
+        fail("planner-edge policy audit has too few planning frontiers")
+    if float(planner_metrics.get("proposed_executable_edge_coverage", 0.0)) < 0.60:
+        fail("planner-edge policy audit proposed executable-edge coverage is too low")
+    if float(planner_metrics.get("executable_edge_coverage_delta", 0.0)) < 0.45:
+        fail("planner-edge policy audit executable-edge coverage delta is too weak")
+    if float(planner_metrics.get("selected_utility_delta", 0.0)) < 0.18:
+        fail("planner-edge policy audit selected-edge utility delta is too weak")
+    if float(planner_metrics.get("selected_success_delta", 0.0)) < 0.05:
+        fail("planner-edge policy audit selected-edge success delta is too weak")
+    if float(planner_metrics.get("selected_realized_breach_delta", 1.0)) > -0.05:
+        fail("planner-edge policy audit selected-edge breach reduction is too weak")
+    if float(planner_metrics.get("proposed_selected_breach_over_budget_rate", 1.0)) > 0.005:
+        fail("planner-edge policy audit selected-edge breach-over-budget rate is too high")
+    if float(planner_metrics.get("frontier_lexicographic_win_rate", 0.0)) < 0.80:
+        fail("planner-edge policy audit frontier win rate is too weak")
+    if int(planner_metrics.get("positive_task_groups", 0)) < 6:
+        fail("planner-edge policy audit does not have positive margins across all task families")
+    if int(planner_metrics.get("positive_regime_groups", 0)) < 7:
+        fail("planner-edge policy audit does not have positive margins across all seam regimes")
+    if int(planner_metrics.get("positive_split_groups", 0)) < 4:
+        fail("planner-edge policy audit does not have positive margins across all deployment splits")
+    if not (PAPER / "generated_planner_edge_policy_table.tex").exists():
+        fail("missing paper/generated_planner_edge_policy_table.tex")
+
     calibration_path = RESULTS / "seam_prediction_calibration_audit.json"
     if not calibration_path.exists():
         fail("missing results/seam_prediction_calibration_audit.json; run scripts/audit_seam_prediction_calibration.py")
@@ -1562,9 +1600,9 @@ def main():
         fail("camera-ready design audit did not pass")
     if camera_ready.get("not_external_evidence") is not True:
         fail("camera-ready design audit must declare that it is not external evidence")
-    if int(camera_ready.get("pages", 0)) != 29:
+    if int(camera_ready.get("pages", 0)) != 30:
         fail("camera-ready design audit page count mismatch")
-    if len(camera_ready.get("page_metrics", [])) != 29:
+    if len(camera_ready.get("page_metrics", [])) != 30:
         fail("camera-ready design audit did not render every page")
     if len(camera_ready.get("checks", [])) < 18:
         fail("camera-ready design audit has too few checks")
@@ -2511,6 +2549,12 @@ def main():
         fail("manuscript missing comparative decision-quality audit table")
     if "accepted by v5 and abstained from by the predecessor" not in tex:
         fail("manuscript missing recovered-accept decision-quality interpretation")
+    if "\\subsection{Planner-Edge Policy Audit}" not in tex:
+        fail("manuscript missing planner-edge policy audit subsection")
+    if "generated_planner_edge_policy_table.tex" not in tex:
+        fail("manuscript missing planner-edge policy audit table")
+    if "local planning frontier" not in tex or "does not use realized utility to choose the edge" not in tex:
+        fail("manuscript missing planner-edge policy interpretation")
     if "\\subsection{Predictive Calibration Audit}" not in tex:
         fail("manuscript missing predictive calibration audit subsection")
     if "generated_seam_prediction_calibration_table.tex" not in tex:
@@ -2641,6 +2685,7 @@ def main():
         "rollout_evidence_packet_visible",
         "method_implementation_packet_visible",
         "materializer_guard_visible",
+        "planner_edge_policy_visible",
         "ledger_tracks_new_visible_claims",
         "README_current_visible_contribution_terms",
         "final_audit_current_visible_contribution_terms",

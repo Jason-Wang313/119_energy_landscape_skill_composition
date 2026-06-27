@@ -36,6 +36,11 @@
       "evidence": ["results/decision_quality_audit.json", "results/decision_quality_audit.md", "paper/generated_decision_quality_table.tex", "paper/main.tex"]
     },
     {
+      "name": "local_planner_edge_policy_claim",
+      "claim": "On local hard-slice planning frontiers, the exported planner-edge updates select higher-utility, higher-success, lower-breach transition candidates than the strongest predecessor without using realized utility to choose the edge.",
+      "evidence": ["results/planner_edge_policy_audit.json", "results/planner_edge_policy_audit.md", "paper/generated_planner_edge_policy_table.tex", "paper/main.tex"]
+    },
+    {
       "name": "local_predictive_calibration_claim",
       "claim": "On the local hard slice, predicted seam risk tracks realized seam breach with low ten-bin calibration error, monotone risk deciles, and decision-relevant utility separation while preserving the external-validation boundary.",
       "evidence": ["results/seam_prediction_calibration_audit.json", "results/seam_prediction_calibration_audit.md", "paper/generated_seam_prediction_calibration_table.tex", "paper/main.tex"]

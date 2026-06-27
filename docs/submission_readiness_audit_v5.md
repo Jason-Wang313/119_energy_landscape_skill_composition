@@ -31,6 +31,7 @@ ICLR-main ready: no
 - Holdout robustness audit: withheld task-family, seam-regime, deployment-split, task-regime, and hash-fold checks remain positive locally, with worst task-regime success margin `0.021875` and utility margin `0.172559`; this is still non-external evidence.
 - Diagnostic mechanism audit: exported labels, seam decisions, and planner-edge updates have zero rule mismatches over 230,400 local rows, with all five failure labels and all five seam decisions observed in the proposed hard slice; this is still non-external evidence.
 - Comparative decision-quality audit: the proposed seam model accepts `0.404` of hard seams versus `0.000` for the predecessor, keeps accepted-seam breach above the `0.15` budget at `0.000`, and recovers 3,850 predecessor-abstained accepts with utility `+0.243`, success `+0.091`, and realized breach `-0.077`; this is still non-external evidence.
+- Planner-edge policy audit: selected future transition candidates over 1,680 local hard-slice planning frontiers improve utility by `+0.231`, success by `+0.080`, realized breach by `-0.075`, and executable-edge coverage by `+0.502` versus the strongest predecessor; this is still non-external evidence.
 - Predictive calibration audit: proposed hard-slice ECE10 is `0.007207` versus `0.014790` for the strongest predecessor, max bin gap is `0.012758`, risk-breach correlation is `0.970670`, and realized breach is monotone across 10 risk deciles; this is still non-external evidence.
 - Framing pass: manuscript now presents the method as a skill-seam world/action interface for prediction, diagnosis, repair/probe/abstain/transition decisions, planner edge-belief updates, and future planning.
 - Related-work pass: added CoStream, OAT, SIMPACT, PoCo, CEP, Diffusion Policy, runtime skill composition, EzSkiROS, latent robot skills, language/action compositionality, Yilun energy-based modeling, and the 2026 robot world-model survey to the generated bibliography and positioning.
@@ -39,27 +40,28 @@ ICLR-main ready: no
 ## Artifact Checks
 
 - PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `92B00B24D439B892D5567ACA2E1D42D13AA15F754A20442D36892A6590D98C80`.
-- PDF size: `467903` bytes.
-- PDF pages: `29`.
+- PDF SHA256: `329EC8975904AE6593CF3CEC6DDBA62EF1F470859EE24DB6C973B91FC4088C2B`.
+- PDF size: `471098` bytes.
+- PDF pages: `30`.
 - Numbered PDF placement: Downloads only.
 - Desktop numbered PDF: absent.
 - Validator: passed.
 - Claim boundary audit: `results/claim_boundary_audit.md` passed and confirms the current package keeps the claim bounded.
-- Visible contribution audit: `results/visible_contribution_audit.md` passed and checks that public-facing docs mention the current materializer, External config manifest packet, External rollout evidence packet, External analysis plan, External platform probe, ManiSkill task binding probe, ManiSkill env smoke probe, External platform onboarding packet, External fidelity provenance packet, External backend integration packet, ManiSkill reference backend readiness audit, External runner backend probe self-test, External pilot smoke packet, External method implementation packet, external operator packet, outreach stance, and 17/21 objective requirements satisfied boundary.
+- Visible contribution audit: `results/visible_contribution_audit.md` passed and checks that public-facing docs mention the current Planner-edge policy audit, materializer, External config manifest packet, External rollout evidence packet, External analysis plan, External platform probe, ManiSkill task binding probe, ManiSkill env smoke probe, External platform onboarding packet, External fidelity provenance packet, External backend integration packet, ManiSkill reference backend readiness audit, External runner backend probe self-test, External pilot smoke packet, External method implementation packet, external operator packet, outreach stance, and 17/21 objective requirements satisfied boundary.
 - Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 17/21 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
 - Local falsification audit: `results/local_falsification_audit.md` passed and is included in the generated manuscript.
 - Holdout robustness audit: `results/holdout_robustness_audit.md` passed and is included in the generated manuscript.
 - Diagnostic mechanism audit: `results/diagnostic_mechanism_audit.md` passed and is included in the generated manuscript.
 - Comparative decision-quality audit: `results/decision_quality_audit.md` passed and is included in the generated manuscript.
+- Planner-edge policy audit: `results/planner_edge_policy_audit.md` passed and is included in the generated manuscript.
 - Predictive calibration audit: `results/seam_prediction_calibration_audit.md` passed and is included in the generated manuscript.
-- Manuscript number audit: `results/manuscript_number_audit.md` passed and checks that reported margins, row counts, table values, local falsification numbers, diagnostic mechanism numbers, decision-quality numbers, predictive-calibration numbers, and holdout robustness numbers match generated result files.
+- Manuscript number audit: `results/manuscript_number_audit.md` passed and checks that reported margins, row counts, table values, local falsification numbers, diagnostic mechanism numbers, decision-quality numbers, planner-edge policy numbers, predictive-calibration numbers, and holdout robustness numbers match generated result files.
 - Related-work audit: `results/related_work_audit.md` passed and checks citation coverage, novelty-boundary rows, and outreach/validation boundary wording across 12 required areas.
 - Reference integrity audit: `results/reference_integrity_audit.md` passed and checks required BibTeX fields, DOI/arXiv identifiers, and recent Haonan/Yilun-adjacent primary-source metadata.
 - Manuscript readability audit: `results/manuscript_readability_audit.md` passed and checks agenda framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and stale manual-polish blocker removal.
 - Presentation quality audit: `results/presentation_quality_audit.md` passed and checks PDF structure, source/log hygiene, hidden links, vector figures, canonical artifact parity, and internal-status leak prevention.
 - Figure readability audit: `results/figure_readability_audit.md` passed and checks render resolution, foreground density, contrast, edge margins, color detail, and manuscript references for all seven main figures.
-- Camera-ready design audit: `results/camera_ready_design_audit.md` passed and checks all 29 rendered PDF pages for density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
+- Camera-ready design audit: `results/camera_ready_design_audit.md` passed and checks all 30 rendered PDF pages for density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
 - Full local build script: `scripts/build_submission_artifacts.ps1` regenerates the current local artifacts and validations.
 - GitHub validation workflow: `.github/workflows/paper119-validation.yml` runs the core runner/readiness/submission/outreach validators on pushed branches and pull requests, with `PAPER119_CANONICAL_PDF=paper/main.pdf` for CI artifact parity.
 - External collection plan: `results/external_collection_plan.md` exists, passes, and expands the current high-fidelity route into 1,440 required JSONL records while explicitly remaining non-evidence.

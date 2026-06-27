@@ -117,7 +117,7 @@ def main() -> int:
 
     pages = int(info.get("Pages", "0"))
     size = PAPER_PDF.stat().st_size
-    add_check(checks, "pdf_page_count", pages == 29, f"pages={pages}")
+    add_check(checks, "pdf_page_count", pages == 30, f"pages={pages}")
     add_check(checks, "pdf_letter_size", info.get("Page size", "").startswith("612 x 792 pts"), f"page_size={info.get('Page size')!r}")
     add_check(checks, "pdf_size_reasonable", 350_000 <= size <= 900_000, f"bytes={size}")
     add_check(checks, "canonical_matches_paper_pdf", sha256(PAPER_PDF) == sha256(CANONICAL_PDF), "paper/main.pdf vs Downloads/119.pdf")

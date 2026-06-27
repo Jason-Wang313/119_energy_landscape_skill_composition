@@ -18,6 +18,7 @@ Continuation audit additions:
 - Holdout robustness audit: `results/holdout_robustness_audit.md` checks that task-family, seam-regime, split, task-regime, and hash-fold holdouts keep positive local utility margins while remaining non-external evidence.
 - Diagnostic mechanism audit: `results/diagnostic_mechanism_audit.md` checks exported diagnostic labels, seam decisions, and planner-edge updates for rule consistency over local rows while remaining non-external evidence.
 - Comparative decision-quality audit: `results/decision_quality_audit.md` checks that the seam decision layer locally recovers useful accepted transitions that the strongest predecessor abstains from while preserving the external-evidence boundary.
+- Planner-edge policy audit: `results/planner_edge_policy_audit.md` checks 1,680 local hard-slice planning frontiers and shows selected-edge utility `+0.231`, success `+0.080`, realized breach `-0.075`, and executable-edge coverage `+0.502` versus the strongest predecessor while remaining non-external evidence.
 - Predictive calibration audit: `results/seam_prediction_calibration_audit.md` checks local predicted seam risk against realized seam breach with ECE10 `0.007207`, risk-breach correlation `0.970670`, monotone risk deciles, and decision relevance while remaining non-external evidence.
 - Manuscript number audit: `results/manuscript_number_audit.md` checks that reported margins, row counts, table values, falsification numbers, diagnostic numbers, decision-quality numbers, predictive-calibration numbers, and holdout numbers are traceable to generated result files.
 - Related-work audit: `results/related_work_audit.md` checks citation coverage, novelty-boundary rows, and outreach/validation boundary wording across 12 required areas.
@@ -25,17 +26,17 @@ Continuation audit additions:
 - Manuscript readability audit: `results/manuscript_readability_audit.md` checks agenda framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and stale manual-polish blocker removal.
 - Presentation quality audit: `results/presentation_quality_audit.md` checks PDF structure, source/log hygiene, hidden links, vector figures, canonical artifact parity, and internal-status leak prevention.
 - Figure readability audit: `results/figure_readability_audit.md` checks all seven main figure PNG companions for render resolution, foreground density, contrast, edge margins, color detail, and manuscript references.
-- Camera-ready design audit: `results/camera_ready_design_audit.md` renders all 29 PDF pages and checks page density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
+- Camera-ready design audit: `results/camera_ready_design_audit.md` renders all 30 PDF pages and checks page density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
 - Numeric integrity: validator passed with no missing required outputs, invalid numeric values, or artifact-placement violations.
 - Claim boundary audit: `results/claim_boundary_audit.md` passes and blocks premature deployment, hardware, or ICLR-main readiness claims.
 - Submission readiness gap audit: `results/submission_readiness_gap_audit.md` maps the active objective to 21 concrete requirements; it currently reports 17 satisfied, 4 blocking external gaps, and 0 human-polish items, so the objective is not complete.
-- Visible contribution audit: `results/visible_contribution_audit.md` checks that README, final audit, readiness docs, version log, child status, and outreach package all describe the current materializer/config-manifest/rollout-evidence/analysis-plan/platform-probe/task-binding/env-smoke/platform-onboarding/backend-integration/method-implementation/operator-packet/outreach state while preserving the 17 satisfied, 4 blocking external gaps boundary.
+- Visible contribution audit: `results/visible_contribution_audit.md` checks that README, final audit, readiness docs, version log, child status, and outreach package all describe the current planner-edge policy audit/materializer/config-manifest/rollout-evidence/analysis-plan/platform-probe/task-binding/env-smoke/platform-onboarding/backend-integration/method-implementation/operator-packet/outreach state while preserving the 17 satisfied, 4 blocking external gaps boundary.
 - Full local build script: `scripts/build_submission_artifacts.ps1`.
 - GitHub validation workflow: `.github/workflows/paper119-validation.yml` runs the core runner/readiness/submission/outreach validators on pushed branches and pull requests, with the repository PDF used as the CI canonical artifact.
 - Canonical PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `92B00B24D439B892D5567ACA2E1D42D13AA15F754A20442D36892A6590D98C80`.
-- PDF size: `467903` bytes.
-- PDF pages: `29`.
+- PDF SHA256: `329EC8975904AE6593CF3CEC6DDBA62EF1F470859EE24DB6C973B91FC4088C2B`.
+- PDF size: `471098` bytes.
+- PDF pages: `30`.
 - Desktop PDF copy: absent.
 - Visual QA: final title page, overview page, main result figures, fixed-risk figures, and outreach preview figure page inspected after the reframing/figure pass.
 - Independent validation protocol: `docs/independent_validation_protocol.md`.

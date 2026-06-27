@@ -1,0 +1,169 @@
+{
+  "baseline": "proposed_energy_landscape_composer_v4_1",
+  "checks": [
+    {
+      "detail": "local hard-slice planning-frontier audit only",
+      "name": "not_external_evidence_declared",
+      "passed": true
+    },
+    {
+      "detail": "frontiers=1680",
+      "name": "planning_frontiers_ge_1500",
+      "passed": true
+    },
+    {
+      "detail": "rows_per_method=8",
+      "name": "frontier_rows_per_method_ge_8",
+      "passed": true
+    },
+    {
+      "detail": "coverage=0.666667",
+      "name": "proposed_executable_edge_coverage_ge_0_60",
+      "passed": true
+    },
+    {
+      "detail": "delta=0.501786",
+      "name": "executable_edge_coverage_delta_ge_0_45",
+      "passed": true
+    },
+    {
+      "detail": "delta=0.231317",
+      "name": "selected_utility_delta_ge_0_18",
+      "passed": true
+    },
+    {
+      "detail": "delta=0.080357",
+      "name": "selected_success_delta_ge_0_05",
+      "passed": true
+    },
+    {
+      "detail": "delta=-0.075182",
+      "name": "selected_realized_breach_delta_le_minus_0_05",
+      "passed": true
+    },
+    {
+      "detail": "rate=0.000595",
+      "name": "proposed_selected_breach_over_budget_rate_le_0_005",
+      "passed": true
+    },
+    {
+      "detail": "win_rate=0.845833",
+      "name": "frontier_lexicographic_win_rate_ge_0_80",
+      "passed": true
+    },
+    {
+      "detail": "positive=6/6, worst=0.168204",
+      "name": "all_task_groups_positive_utility_margin",
+      "passed": true
+    },
+    {
+      "detail": "positive=7/7, worst=0.181877",
+      "name": "all_regime_groups_positive_utility_margin",
+      "passed": true
+    },
+    {
+      "detail": "positive=4/4, worst=0.218606",
+      "name": "all_split_groups_positive_utility_margin",
+      "passed": true
+    }
+  ],
+  "edge_policy": {
+    "description": "select the frontier edge by planner-edge update priority, then predicted risk, basin alignment, descent continuity, and cost",
+    "executable_updates": [
+      "increase_edge_confidence",
+      "mark_bridge_required",
+      "prefer_alternate_edge"
+    ],
+    "priority": {
+      "increase_edge_confidence": 0,
+      "mark_bridge_required": 1,
+      "prefer_alternate_edge": 1,
+      "request_diagnostic_sample": 2,
+      "suppress_edge": 3
+    }
+  },
+  "failed_checks": [],
+  "fixed_risk_budget": 0.15,
+  "metrics": {
+    "baseline_executable_edge_coverage": 0.16488095238095238,
+    "baseline_selected_breach_over_budget_rate": 0.7422619047619048,
+    "baseline_selected_decision_counts": {
+      "abstain": 1398,
+      "probe": 5,
+      "repair": 210,
+      "transition": 67
+    },
+    "baseline_selected_predicted_risk": 0.1756863113095238,
+    "baseline_selected_realized_breach": 0.1643227761904762,
+    "baseline_selected_success": 0.7148809523809524,
+    "baseline_selected_update_counts": {
+      "mark_bridge_required": 210,
+      "prefer_alternate_edge": 67,
+      "request_diagnostic_sample": 5,
+      "suppress_edge": 1398
+    },
+    "baseline_selected_utility": 0.6575434267857143,
+    "executable_edge_coverage_delta": 0.5017857142857143,
+    "frontier_count": 1680,
+    "frontier_lexicographic_win_rate": 0.8458333333333333,
+    "frontier_rows_per_method": 8,
+    "positive_regime_groups": 7,
+    "positive_split_groups": 4,
+    "positive_task_groups": 6,
+    "proposed_executable_edge_coverage": 0.6666666666666666,
+    "proposed_selected_breach_over_budget_rate": 0.0005952380952380953,
+    "proposed_selected_decision_counts": {
+      "abstain": 455,
+      "accept": 1072,
+      "probe": 105,
+      "repair": 36,
+      "transition": 12
+    },
+    "proposed_selected_predicted_risk": 0.09284120178571428,
+    "proposed_selected_realized_breach": 0.08914082857142858,
+    "proposed_selected_success": 0.7952380952380952,
+    "proposed_selected_update_counts": {
+      "increase_edge_confidence": 1072,
+      "mark_bridge_required": 36,
+      "prefer_alternate_edge": 12,
+      "request_diagnostic_sample": 105,
+      "suppress_edge": 455
+    },
+    "proposed_selected_utility": 0.8888605958333333,
+    "regime_utility_margins": {
+      "combined_seam_stress": 0.25722357916666666,
+      "contact_mode_transition": 0.2714449,
+      "dynamics_mismatch": 0.22488129166666668,
+      "high_barrier": 0.23172798333333333,
+      "narrow_basin": 0.18187664166666667,
+      "nonconvex_energy": 0.19959435833333333,
+      "partial_observability": 0.25247142916666665
+    },
+    "selected_predicted_risk_delta": -0.08284510952380952,
+    "selected_realized_breach_delta": -0.07518194761904762,
+    "selected_success_delta": 0.0803571428571428,
+    "selected_utility_delta": 0.231317169047619,
+    "split_utility_margins": {
+      "combined_stress": 0.21860573095238095,
+      "long_horizon_chain": 0.23671668095238096,
+      "new_skill_pair": 0.22252730952380953,
+      "shifted_objects": 0.24741895476190476
+    },
+    "task_utility_margins": {
+      "cable_route_insert": 0.24777086785714286,
+      "door_open_navigation": 0.20524305714285715,
+      "drawer_to_pick_transfer": 0.1682037857142857,
+      "mobile_push_then_grasp": 0.2623669357142857,
+      "peg_place_regrasp": 0.23963083571428573,
+      "tool_use_handover": 0.2646875321428571
+    },
+    "worst_regime_utility_margin": 0.18187664166666667,
+    "worst_split_utility_margin": 0.21860573095238095,
+    "worst_task_utility_margin": 0.1682037857142857
+  },
+  "not_external_evidence": true,
+  "passed": true,
+  "proposed": "barrier_certified_energy_composer_v5",
+  "scope": "local_synthetic_hard_slice_planning_frontiers_only",
+  "version": "planner_edge_policy_audit_v1"
+}

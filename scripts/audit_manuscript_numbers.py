@@ -46,6 +46,7 @@ def main() -> int:
     holdout = read_json(RESULTS / "holdout_robustness_audit.json")
     diagnostic = read_json(RESULTS / "diagnostic_mechanism_audit.json")
     decision_quality = read_json(RESULTS / "decision_quality_audit.json")
+    planner_policy = read_json(RESULTS / "planner_edge_policy_audit.json")
     calibration = read_json(RESULTS / "seam_prediction_calibration_audit.json")
     tex_path = PAPER / "main.tex"
     if not tex_path.exists():
@@ -56,6 +57,7 @@ def main() -> int:
     holdout_table = (PAPER / "generated_holdout_robustness_table.tex").read_text(encoding="utf-8")
     diagnostic_table = (PAPER / "generated_diagnostic_mechanism_table.tex").read_text(encoding="utf-8")
     decision_table = (PAPER / "generated_decision_quality_table.tex").read_text(encoding="utf-8")
+    planner_table = (PAPER / "generated_planner_edge_policy_table.tex").read_text(encoding="utf-8")
     calibration_table = (PAPER / "generated_seam_prediction_calibration_table.tex").read_text(encoding="utf-8")
 
     metrics = summary.get("metrics", {})
@@ -66,6 +68,7 @@ def main() -> int:
     holdout_stats = holdout.get("partition_stats", {})
     diagnostic_metrics = diagnostic.get("metrics", {})
     decision_metrics = decision_quality.get("metrics", {})
+    planner_metrics = planner_policy.get("metrics", {})
     calibration_metrics = calibration.get("proposed_metrics", {})
     calibration_baseline = calibration.get("strongest_baseline_metrics", {})
     calibration_derived = calibration.get("derived", {})
@@ -227,6 +230,52 @@ def main() -> int:
     )
     add_check(
         checks,
+        "planner_edge_frontier_sentence",
+        (
+            f"This produces {int(planner_metrics['frontier_count']):,} paired planning-frontier decisions and "
+            "does not use realized utility to choose the edge"
+        ),
+        tex,
+        "results/planner_edge_policy_audit.json frontier_count",
+    )
+    add_check(
+        checks,
+        "planner_edge_coverage_sentence",
+        (
+            f"The proposed seam model selects executable accept/repair/transition edges on "
+            f"{fmt(planner_metrics['proposed_executable_edge_coverage'], 3)} of frontiers versus "
+            f"{fmt(planner_metrics['baseline_executable_edge_coverage'], 3)} for the strongest predecessor"
+        ),
+        tex,
+        "results/planner_edge_policy_audit.json executable coverage",
+    )
+    add_check(
+        checks,
+        "planner_edge_selected_outcome_sentence",
+        (
+            f"Selected-edge utility is {fmt(planner_metrics['proposed_selected_utility'], 3)} versus "
+            f"{fmt(planner_metrics['baseline_selected_utility'], 3)}, success is "
+            f"{fmt(planner_metrics['proposed_selected_success'], 3)} versus "
+            f"{fmt(planner_metrics['baseline_selected_success'], 3)}, and realized breach is "
+            f"{fmt(planner_metrics['proposed_selected_realized_breach'], 3)} versus "
+            f"{fmt(planner_metrics['baseline_selected_realized_breach'], 3)}"
+        ),
+        tex,
+        "results/planner_edge_policy_audit.json selected-edge outcomes",
+    )
+    add_check(
+        checks,
+        "planner_edge_positive_groups_sentence",
+        (
+            f"The selected-edge utility margin is positive in {int(planner_metrics['positive_task_groups'])}/6 task families, "
+            f"{int(planner_metrics['positive_regime_groups'])}/7 seam regimes, and "
+            f"{int(planner_metrics['positive_split_groups'])}/4 deployment splits"
+        ),
+        tex,
+        "results/planner_edge_policy_audit.json positive group counts",
+    )
+    add_check(
+        checks,
         "calibration_ece_sentence",
         (
             f"ten-bin local calibration error between predicted seam risk and realized seam breach is "
@@ -360,6 +409,10 @@ def main() -> int:
         ("decision_table_accept_coverage", f"accept coverage {fmt(decision_metrics['proposed_accept_coverage'], 3)} vs {fmt(decision_metrics['baseline_accept_coverage'], 3)}", decision_table),
         ("decision_table_non_abstain_quality", f"non-abstain utility {fmt(decision_metrics['proposed_non_abstain_utility'], 3)} vs {fmt(decision_metrics['baseline_non_abstain_utility'], 3)}", decision_table),
         ("decision_table_recovered_accepts", f"{int(decision_metrics['recovered_accept_pairs']):,} pairs where v5 accepts and predecessor abstains", decision_table),
+        ("planner_table_frontier_coverage", f"{int(planner_metrics['frontier_count']):,} local hard-slice planning frontiers", planner_table),
+        ("planner_table_executable_coverage", f"executable-edge coverage {fmt(planner_metrics['proposed_executable_edge_coverage'], 3)} vs {fmt(planner_metrics['baseline_executable_edge_coverage'], 3)}", planner_table),
+        ("planner_table_selected_utility", f"selected-edge utility {fmt(planner_metrics['proposed_selected_utility'], 3)} vs {fmt(planner_metrics['baseline_selected_utility'], 3)}", planner_table),
+        ("planner_table_safety", f"success delta {float(planner_metrics['selected_success_delta']):+.3f}", planner_table),
         ("calibration_table_ece", f"ECE10 {fmt(calibration_metrics['expected_calibration_error_10'], 3)} vs strongest baseline {fmt(calibration_baseline['expected_calibration_error_10'], 3)}", calibration_table),
         ("calibration_table_correlation", f"risk-breach correlation {fmt(calibration_metrics['risk_breach_correlation'], 3)}, Spearman {fmt(calibration_metrics['risk_breach_spearman'], 3)}", calibration_table),
         ("calibration_table_decision_relevance", f"utility is lower by {fmt(-calibration_derived['highest_lowest_decile_utility_delta'], 3)}", calibration_table),
@@ -382,6 +435,7 @@ def main() -> int:
             "results/holdout_robustness_audit.json",
             "results/diagnostic_mechanism_audit.json",
             "results/decision_quality_audit.json",
+            "results/planner_edge_policy_audit.json",
             "results/seam_prediction_calibration_audit.json",
             "paper/main.tex",
             "paper/generated_main_table.tex",
@@ -389,6 +443,7 @@ def main() -> int:
             "paper/generated_holdout_robustness_table.tex",
             "paper/generated_diagnostic_mechanism_table.tex",
             "paper/generated_decision_quality_table.tex",
+            "paper/generated_planner_edge_policy_table.tex",
             "paper/generated_seam_prediction_calibration_table.tex",
         ],
     }

@@ -103,6 +103,30 @@
       "source": "results/decision_quality_audit.json recovered accept deltas"
     },
     {
+      "expected": "This produces 1,680 paired planning-frontier decisions and does not use realized utility to choose the edge",
+      "name": "planner_edge_frontier_sentence",
+      "passed": true,
+      "source": "results/planner_edge_policy_audit.json frontier_count"
+    },
+    {
+      "expected": "The proposed seam model selects executable accept/repair/transition edges on 0.667 of frontiers versus 0.165 for the strongest predecessor",
+      "name": "planner_edge_coverage_sentence",
+      "passed": true,
+      "source": "results/planner_edge_policy_audit.json executable coverage"
+    },
+    {
+      "expected": "Selected-edge utility is 0.889 versus 0.658, success is 0.795 versus 0.715, and realized breach is 0.089 versus 0.164",
+      "name": "planner_edge_selected_outcome_sentence",
+      "passed": true,
+      "source": "results/planner_edge_policy_audit.json selected-edge outcomes"
+    },
+    {
+      "expected": "The selected-edge utility margin is positive in 6/6 task families, 7/7 seam regimes, and 4/4 deployment splits",
+      "name": "planner_edge_positive_groups_sentence",
+      "passed": true,
+      "source": "results/planner_edge_policy_audit.json positive group counts"
+    },
+    {
       "expected": "ten-bin local calibration error between predicted seam risk and realized seam breach is 0.007, compared with 0.015 for the strongest predecessor; the maximum bin gap is 0.013",
       "name": "calibration_ece_sentence",
       "passed": true,
@@ -277,6 +301,30 @@
       "source": "generated table derived from result JSON/CSV"
     },
     {
+      "expected": "1,680 local hard-slice planning frontiers",
+      "name": "planner_table_frontier_coverage",
+      "passed": true,
+      "source": "generated table derived from result JSON/CSV"
+    },
+    {
+      "expected": "executable-edge coverage 0.667 vs 0.165",
+      "name": "planner_table_executable_coverage",
+      "passed": true,
+      "source": "generated table derived from result JSON/CSV"
+    },
+    {
+      "expected": "selected-edge utility 0.889 vs 0.658",
+      "name": "planner_table_selected_utility",
+      "passed": true,
+      "source": "generated table derived from result JSON/CSV"
+    },
+    {
+      "expected": "success delta +0.080",
+      "name": "planner_table_safety",
+      "passed": true,
+      "source": "generated table derived from result JSON/CSV"
+    },
+    {
       "expected": "ECE10 0.007 vs strongest baseline 0.015",
       "name": "calibration_table_ece",
       "passed": true,
@@ -321,6 +369,7 @@
     "results/holdout_robustness_audit.json",
     "results/diagnostic_mechanism_audit.json",
     "results/decision_quality_audit.json",
+    "results/planner_edge_policy_audit.json",
     "results/seam_prediction_calibration_audit.json",
     "paper/main.tex",
     "paper/generated_main_table.tex",
@@ -328,6 +377,7 @@
     "paper/generated_holdout_robustness_table.tex",
     "paper/generated_diagnostic_mechanism_table.tex",
     "paper/generated_decision_quality_table.tex",
+    "paper/generated_planner_edge_policy_table.tex",
     "paper/generated_seam_prediction_calibration_table.tex"
   ],
   "version": "manuscript_number_audit_v1"

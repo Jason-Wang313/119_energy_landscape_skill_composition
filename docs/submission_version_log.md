@@ -13,7 +13,7 @@
 - Expanded to 12 methods, 10 paired seeds, 230,400 main cells, 38,400 ablation cells, 161,280 stress cells, 107,520 fixed-risk cells, and 24 failure cases.
 - Selected the strongest non-oracle baseline from the hard aggregate; it is `proposed_energy_landscape_composer_v4_1`.
 - Reported hard success, hard utility, mechanism diagnostics, ablations, stress endpoints, fixed-risk coverage/breach/gated success, and scope blockers.
-- Generated a 29-page ICLR-style PDF with hidden link borders and conference-style citations.
+- Generated a 30-page ICLR-style PDF with hidden link borders and conference-style citations.
 - Retitled the main paper to `Predictive Skill-Seam Action Models for Robot Skill Composition` so the world/action agenda is explicit in the abstract and mechanism, but not over-forced in the title.
 - Updated the manuscript generator to emit a natural skill-seam world/action-interface framing instead of an internal audit abstract.
 - Reframed the core claim around predicting handoff failure, diagnosing the failure reason, choosing repair/probe/abstain/transition decisions, updating planner edge beliefs, and feeding those outcomes back into future planning.
@@ -75,14 +75,15 @@
 - Added `scripts/audit_holdout_robustness.py` and manuscript integration for task-family, seam-regime, split, task-regime, and hash-fold withheld-slice local robustness checks.
 - Added `scripts/audit_diagnostic_mechanism.py` and manuscript integration for exported diagnostic labels, seam decisions, and planner-edge updates over local rows.
 - Added `scripts/audit_decision_quality.py` and manuscript integration for comparative decision quality: accepted-seam coverage, non-abstain quality, recovered predecessor-abstained accepts, and shared-abstention breach changes over local hard rows.
+- Added `scripts/audit_planner_edge_policy.py` and manuscript integration for planner-edge policy quality: local hard-slice planning frontiers, executable-edge coverage, selected-edge utility/success/breach, and positive task/regime/split margins while preserving the external-evidence boundary.
 - Added `scripts/audit_seam_prediction_calibration.py` and manuscript integration for local predicted seam-risk calibration against realized breach, including ECE10, max bin gap, monotone risk deciles, and decision relevance.
-- Added `scripts/audit_manuscript_numbers.py` so manuscript margins, row counts, generated table values, local falsification numbers, diagnostic mechanism numbers, decision-quality numbers, predictive-calibration numbers, and holdout robustness numbers must match generated result files.
+- Added `scripts/audit_manuscript_numbers.py` so manuscript margins, row counts, generated table values, local falsification numbers, diagnostic mechanism numbers, decision-quality numbers, planner-edge policy numbers, predictive-calibration numbers, and holdout robustness numbers must match generated result files.
 - Added `scripts/audit_related_work.py` so citation coverage, novelty-boundary rows, and outreach/validation boundary wording are machine-checked across 12 required areas.
 - Added `scripts/audit_reference_integrity.py` so required BibTeX fields, DOI/arXiv identifiers, recent primary-source metadata, and Haonan/Yilun-adjacent author coverage are machine-checked.
 - Added `scripts/audit_manuscript_readability.py` so the agenda framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and stale manual-polish blocker are machine-checked.
 - Added `scripts/audit_presentation_quality.py` so the compiled PDF/source/log/figure surface is checked for top-conference presentation hygiene.
 - Added `scripts/audit_figure_readability.py` so all seven main figure companions are checked for render resolution, foreground density, contrast, edge margins, color detail, and manuscript references.
-- Added `scripts/audit_camera_ready_design.py` so all 29 rendered PDF pages are checked for nonblank content, density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
+- Added `scripts/audit_camera_ready_design.py` so all 30 rendered PDF pages are checked for nonblank content, density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
 - Added `scripts/build_submission_artifacts.ps1` as the single local rebuild command for experiments, manuscript, PDF, audits, and outreach artifacts.
 - Terminal decision remains STRONG_REVISE.
 - ICLR main readiness remains no pending real robot or accepted high-fidelity validation, released checkpoints/logs, hardware videos, and manifest-declared independent baseline evidence.

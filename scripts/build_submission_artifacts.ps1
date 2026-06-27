@@ -67,6 +67,10 @@ try {
         Invoke-Native python scripts\audit_seam_prediction_calibration.py
     }
 
+    Invoke-Step "Audit planner-edge policy quality" {
+        Invoke-Native python scripts\audit_planner_edge_policy.py
+    }
+
     Invoke-Step "Generate manuscript sources" {
         Invoke-Native python scripts\generate_manuscript.py
     }

@@ -23,6 +23,10 @@ This audit checks that manuscript and table numbers are traceable to generated r
 - `pass` `decision_quality_paired_rows_and_accept_coverage` from results/decision_quality_audit.json paired rows and accept coverage: `On the same 13,440 paired hard rows, the proposed model accepts 0.404 of hard seams versus 0.000 for the predecessor, while the rate of accepted seams above the 0.15 breach budget is 0.000`
 - `pass` `decision_quality_non_abstain_sentence` from results/decision_quality_audit.json non-abstain utility and breach: `Among non-abstained seams, utility is 0.935 versus 0.776 and realized breach is 0.082 versus 0.133`
 - `pass` `decision_quality_recovered_accepts_sentence` from results/decision_quality_audit.json recovered accept deltas: `3,850 paired seams are accepted by v5 and abstained from by the predecessor; those recovered accepts improve utility by 0.243, success by 0.091, and realized breach by -0.077`
+- `pass` `planner_edge_frontier_sentence` from results/planner_edge_policy_audit.json frontier_count: `This produces 1,680 paired planning-frontier decisions and does not use realized utility to choose the edge`
+- `pass` `planner_edge_coverage_sentence` from results/planner_edge_policy_audit.json executable coverage: `The proposed seam model selects executable accept/repair/transition edges on 0.667 of frontiers versus 0.165 for the strongest predecessor`
+- `pass` `planner_edge_selected_outcome_sentence` from results/planner_edge_policy_audit.json selected-edge outcomes: `Selected-edge utility is 0.889 versus 0.658, success is 0.795 versus 0.715, and realized breach is 0.089 versus 0.164`
+- `pass` `planner_edge_positive_groups_sentence` from results/planner_edge_policy_audit.json positive group counts: `The selected-edge utility margin is positive in 6/6 task families, 7/7 seam regimes, and 4/4 deployment splits`
 - `pass` `calibration_ece_sentence` from results/seam_prediction_calibration_audit.json ECE and max gap: `ten-bin local calibration error between predicted seam risk and realized seam breach is 0.007, compared with 0.015 for the strongest predecessor; the maximum bin gap is 0.013`
 - `pass` `calibration_mean_correlation_sentence` from results/seam_prediction_calibration_audit.json mean and correlation metrics: `Mean predicted risk is 0.102 versus realized breach 0.095, with risk-breach correlation 0.971 and Spearman 0.950`
 - `pass` `calibration_decile_sentence` from results/seam_prediction_calibration_audit.json decile deltas: `highest-risk decile has realized breach 0.080 higher and utility 0.251 lower than the lowest-risk decile`
@@ -52,6 +56,10 @@ This audit checks that manuscript and table numbers are traceable to generated r
 - `pass` `decision_table_accept_coverage` from generated table derived from result JSON/CSV: `accept coverage 0.404 vs 0.000`
 - `pass` `decision_table_non_abstain_quality` from generated table derived from result JSON/CSV: `non-abstain utility 0.935 vs 0.776`
 - `pass` `decision_table_recovered_accepts` from generated table derived from result JSON/CSV: `3,850 pairs where v5 accepts and predecessor abstains`
+- `pass` `planner_table_frontier_coverage` from generated table derived from result JSON/CSV: `1,680 local hard-slice planning frontiers`
+- `pass` `planner_table_executable_coverage` from generated table derived from result JSON/CSV: `executable-edge coverage 0.667 vs 0.165`
+- `pass` `planner_table_selected_utility` from generated table derived from result JSON/CSV: `selected-edge utility 0.889 vs 0.658`
+- `pass` `planner_table_safety` from generated table derived from result JSON/CSV: `success delta +0.080`
 - `pass` `calibration_table_ece` from generated table derived from result JSON/CSV: `ECE10 0.007 vs strongest baseline 0.015`
 - `pass` `calibration_table_correlation` from generated table derived from result JSON/CSV: `risk-breach correlation 0.971, Spearman 0.950`
 - `pass` `calibration_table_decision_relevance` from generated table derived from result JSON/CSV: `utility is lower by 0.251`

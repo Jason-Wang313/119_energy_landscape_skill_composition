@@ -346,6 +346,8 @@ def make_manuscript(summary):
     diagnostic_metrics = diagnostic["metrics"]
     decision_quality = load_json("decision_quality_audit.json")
     decision_metrics = decision_quality["metrics"]
+    planner_policy = load_json("planner_edge_policy_audit.json")
+    planner_metrics = planner_policy["metrics"]
     calibration = load_json("seam_prediction_calibration_audit.json")
     calibration_metrics = calibration["proposed_metrics"]
     calibration_baseline = calibration["strongest_baseline_metrics"]
@@ -495,6 +497,18 @@ def make_manuscript(summary):
     )
     a(r"\begin{center}\small\resizebox{\linewidth}{!}{\input{generated_decision_quality_table.tex}}\end{center}")
     a(r"\noindent{\small\textbf{Decision-quality table.} Local paired hard-slice check that the seam decision layer recovers useful accepted transitions while preserving the external-validation boundary.}")
+
+    a(r"\subsection{Planner-Edge Policy Audit}")
+    a(
+        "The agenda claim also requires that seam predictions affect future planning, not only one-step classification. "
+        f"We therefore treat each task/regime/split/seed hard slice as a local planning frontier and select the candidate edge using only the exported planner-edge update, predicted seam risk, basin alignment, descent continuity, and composition cost. This produces {int(planner_metrics['frontier_count']):,} paired planning-frontier decisions and does not use realized utility to choose the edge. "
+        f"The proposed seam model selects executable accept/repair/transition edges on {fmt(planner_metrics['proposed_executable_edge_coverage'], 3)} of frontiers versus {fmt(planner_metrics['baseline_executable_edge_coverage'], 3)} for the strongest predecessor. "
+        f"Selected-edge utility is {fmt(planner_metrics['proposed_selected_utility'], 3)} versus {fmt(planner_metrics['baseline_selected_utility'], 3)}, success is {fmt(planner_metrics['proposed_selected_success'], 3)} versus {fmt(planner_metrics['baseline_selected_success'], 3)}, and realized breach is {fmt(planner_metrics['proposed_selected_realized_breach'], 3)} versus {fmt(planner_metrics['baseline_selected_realized_breach'], 3)}. "
+        f"The selected-edge utility margin is positive in {int(planner_metrics['positive_task_groups'])}/6 task families, {int(planner_metrics['positive_regime_groups'])}/7 seam regimes, and {int(planner_metrics['positive_split_groups'])}/4 deployment splits. "
+        "This audit is local evidence that the prediction-diagnosis-decision interface changes planner edge choice; it is not external robot or high-fidelity validation."
+    )
+    a(r"\begin{center}\small\resizebox{\linewidth}{!}{\input{generated_planner_edge_policy_table.tex}}\end{center}")
+    a(r"\noindent{\small\textbf{Planner-edge policy table.} Local hard-slice check that planner-edge updates select better future transition candidates while preserving the external-validation boundary.}")
 
     a(r"\subsection{Predictive Calibration Audit}")
     a(

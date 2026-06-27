@@ -160,13 +160,14 @@ def main() -> int:
         RESULTS / "holdout_robustness_audit.json",
         RESULTS / "diagnostic_mechanism_audit.json",
         RESULTS / "decision_quality_audit.json",
+        RESULTS / "planner_edge_policy_audit.json",
         RESULTS / "seam_prediction_calibration_audit.json",
         RESULTS / "manuscript_number_audit.json",
     ]
     local_audits_ok = all(passed_json(path) for path in mechanism_audits)
     add_requirement(
         requirements,
-        requirement="Local falsification, holdout, diagnostic, decision-quality, predictive-calibration, and number provenance audits",
+        requirement="Local falsification, holdout, diagnostic, decision-quality, planner-edge policy, predictive-calibration, and number provenance audits",
         status="satisfied" if local_audits_ok else "missing",
         evidence=[str(path.relative_to(ROOT)).replace("/", "\\") for path in mechanism_audits],
         blocker="" if local_audits_ok else "one or more local mechanism/provenance audits is missing or failing",

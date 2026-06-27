@@ -9,6 +9,7 @@
 - Holdout robustness validator: `scripts/audit_holdout_robustness.py`
 - Diagnostic mechanism validator: `scripts/audit_diagnostic_mechanism.py`
 - Comparative decision-quality validator: `scripts/audit_decision_quality.py`
+- Planner-edge policy validator: `scripts/audit_planner_edge_policy.py`
 - Seam prediction calibration validator: `scripts/audit_seam_prediction_calibration.py`
 - Manuscript number validator: `scripts/audit_manuscript_numbers.py`
 - Related-work validator: `scripts/audit_related_work.py`
@@ -89,6 +90,8 @@
   - `results/diagnostic_mechanism_audit.md`
   - `results/decision_quality_audit.json`
   - `results/decision_quality_audit.md`
+  - `results/planner_edge_policy_audit.json`
+  - `results/planner_edge_policy_audit.md`
   - `results/seam_prediction_calibration_audit.json`
   - `results/seam_prediction_calibration_audit.md`
   - `results/manuscript_number_audit.json`

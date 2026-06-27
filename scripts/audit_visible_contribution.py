@@ -57,6 +57,7 @@ def main() -> int:
     rollout_evidence = read_json(RESULTS / "external_rollout_evidence_audit.json")
     method_implementation = read_json(RESULTS / "external_method_implementation_audit.json")
     materialization = read_json(RESULTS / "external_config_materialization_plan.json")
+    planner_policy = read_json(RESULTS / "planner_edge_policy_audit.json")
     ledger = read_json(DOCS / "claim_evidence_ledger.json")
 
     files = {
@@ -316,11 +317,28 @@ def main() -> int:
             f"not_external_evidence={materialization.get('not_external_evidence')!r}"
         ),
     )
+    planner_metrics = planner_policy.get("metrics", {})
+    add_check(
+        checks,
+        "planner_edge_policy_visible",
+        planner_policy.get("version") == "planner_edge_policy_audit_v1"
+        and planner_policy.get("passed") is True
+        and planner_policy.get("not_external_evidence") is True
+        and int(planner_metrics.get("frontier_count", 0) or 0) >= 1500
+        and float(planner_metrics.get("selected_utility_delta", 0.0) or 0.0) >= 0.18
+        and float(planner_metrics.get("selected_realized_breach_delta", 1.0) or 1.0) <= -0.05,
+        (
+            f"frontiers={planner_metrics.get('frontier_count')!r}, "
+            f"utility_delta={planner_metrics.get('selected_utility_delta')!r}, "
+            f"breach_delta={planner_metrics.get('selected_realized_breach_delta')!r}"
+        ),
+    )
     claim_names = {str(claim.get("name", "")) for claim in ledger.get("permitted_claims", []) if isinstance(claim, dict)}
     add_check(
         checks,
         "ledger_tracks_new_visible_claims",
         {
+            "local_planner_edge_policy_claim",
             "external_platform_probe_claim",
             "maniskill_task_binding_probe_claim",
             "maniskill_env_smoke_probe_claim",
@@ -338,12 +356,13 @@ def main() -> int:
             "external_method_implementation_packet_claim",
             "external_config_materialization_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_config_materialization_claim'} - claim_names)}",
+        f"missing={sorted({'local_planner_edge_policy_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_config_materialization_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
         "README": [
             "adaptive physical world/action model for skill seams",
+            "Planner-edge policy audit",
             "External config materialization plan",
             "External analysis plan",
             "External platform probe",
@@ -364,6 +383,7 @@ def main() -> int:
         ],
         "final_audit": [
             "External config materialization plan",
+            "Planner-edge policy audit",
             "External analysis plan",
             "External platform probe",
             "ManiSkill task binding probe",
@@ -384,6 +404,7 @@ def main() -> int:
         ],
         "readiness_decision": [
             "guarded config materialization plan",
+            "planner-edge policy audit",
             "external analysis plan",
             "external platform probe",
             "ManiSkill task binding probe",
@@ -404,6 +425,7 @@ def main() -> int:
         ],
         "readiness_audit": [
             "External config materialization plan",
+            "Planner-edge policy audit",
             "External analysis plan",
             "External platform probe",
             "ManiSkill task binding probe",
@@ -424,6 +446,7 @@ def main() -> int:
         ],
         "version_log": [
             "scripts/materialize_external_configs.py",
+            "scripts/audit_planner_edge_policy.py",
             "scripts/build_external_analysis_plan.py",
             "scripts/probe_external_platform.py",
             "scripts/probe_maniskill_task_bindings.py",
@@ -444,6 +467,7 @@ def main() -> int:
         ],
         "child_status": [
             "external config materialization plan",
+            "planner-edge policy audit",
             "external analysis plan",
             "external platform probe",
             "ManiSkill task binding probe",
@@ -488,7 +512,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external backend integration packet, the ManiSkill reference backend readiness audit, the external runner backend probe self-test, the external pilot smoke packet, the external method implementation packet, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external backend integration packet, the ManiSkill reference backend readiness audit, the external runner backend probe self-test, the external pilot smoke packet, the external method implementation packet, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

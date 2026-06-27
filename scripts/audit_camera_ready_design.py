@@ -27,7 +27,7 @@ def configured_path(env_name: str, default: str) -> Path:
 
 CANONICAL_PDF = configured_path("PAPER119_CANONICAL_PDF", "C:/Users/wangz/Downloads/119.pdf")
 
-EXPECTED_PAGES = 29
+EXPECTED_PAGES = 30
 RENDER_DPI = 70
 MIN_PAGE_WIDTH = 500
 MIN_PAGE_HEIGHT = 700
@@ -177,7 +177,7 @@ def main() -> int:
     add_check(checks, "sparse_appendix_pages_bounded", len(sparse_pages) <= MAX_SPARSE_PAGES, f"sparse_pages={sparse_pages}")
 
     full_text = compact(pdf_text(PAPER_PDF))
-    page_texts = {page: compact(pdf_text(PAPER_PDF, page=page)) for page in (1, 5, 6, 7, 8)}
+    page_texts = {page: compact(pdf_text(PAPER_PDF, page=page)) for page in range(1, pages + 1)}
     scope_boundary_ok = (
         "externalrobotor" in full_text
         and "highfidelityvalidationremains" in full_text
@@ -193,8 +193,8 @@ def main() -> int:
         and "robotskillcomposition" in page_texts[1]
         and "abstract" in page_texts[1],
         "decision_quality_page": any("comparativedecisionqualityaudit" in page_texts[page] for page in (5, 6)),
-        "predictive_calibration_page": "predictivecalibrationtable" in page_texts[7],
-        "stress_and_fixed_risk_page": "stresssweep" in page_texts[8] and "fixedrisk" in page_texts[8],
+        "predictive_calibration_page": any("predictivecalibrationtable" in text for text in page_texts.values()),
+        "stress_and_fixed_risk_page": any("stresssweep" in text and "fixedrisk" in text for text in page_texts.values()),
         "scope_boundary_full_text": scope_boundary_ok,
     }
     for name, ok in text_anchors.items():

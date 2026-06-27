@@ -8,7 +8,7 @@ This rebuild expands the paper into a 29-page, CPU-only, RAM-light submission pa
 
 ## Visible Contribution
 
-Paper 119 is a local bridge toward an adaptive physical world/action model for skill seams: it scores whether two embodied skills can compose, explains likely failure modes, selects accept/repair/probe/abstain/transition actions at the seam, and records planner-facing memory for future attempts. Energy landscapes are the implementation vocabulary; the identity of the paper is the bounded skill-seam action model, not a full robot simulator or a low-level controller. The repository now makes that contribution visible through the generated manuscript, bounded claim ledger, mechanism/calibration/holdout/falsification audits, reproducible local experiments, a non-Haonan external validation packet, a guarded config materializer, an External config manifest packet for manifest-declared task-config evidence work orders, an External rollout evidence packet for raw JSONL/video/recompute work orders, an External analysis plan that locks hypotheses and exclusion policy before collection, an External platform probe that records machine/package/GPU/renderer/code/config provenance without counting as evidence, a ManiSkill task binding probe that maps the four task families to concrete public-simulator environment candidates, a ManiSkill env smoke probe that records construction/reset readiness and missing assets, an External platform onboarding packet for the primary public-simulator route, an External fidelity provenance packet for platform/contact/replay provenance work orders, an External backend integration packet for the public-simulator backend blocker, a ManiSkill reference backend readiness audit that contract-qualifies an adapter-backed backend candidate while official collection remains fail-closed, an External runner backend probe self-test for the real runner path, an External pilot smoke packet for quarantined first-panel backend testing, an External method implementation packet for non-oracle baseline work orders, a no-go external operator packet, an audited External operator handoff bundle, a fail-closed real-collection runner harness, and a separate Haonan/Yilun outreach package. The machine readiness audit currently reports `17/21` requirements satisfied; the remaining blockers are external-evidence blockers, not prose or packaging blockers.
+Paper 119 is a local bridge toward an adaptive physical world/action model for skill seams: it scores whether two embodied skills can compose, explains likely failure modes, selects accept/repair/probe/abstain/transition actions at the seam, and records planner-facing memory for future attempts. Energy landscapes are the implementation vocabulary; the identity of the paper is the bounded skill-seam action model, not a full robot simulator or a low-level controller. The repository now makes that contribution visible through the generated manuscript, bounded claim ledger, mechanism/calibration/holdout/falsification audits, a Planner-edge policy audit for future transition selection, reproducible local experiments, a non-Haonan external validation packet, a guarded config materializer, an External config manifest packet for manifest-declared task-config evidence work orders, an External rollout evidence packet for raw JSONL/video/recompute work orders, an External analysis plan that locks hypotheses and exclusion policy before collection, an External platform probe that records machine/package/GPU/renderer/code/config provenance without counting as evidence, a ManiSkill task binding probe that maps the four task families to concrete public-simulator environment candidates, a ManiSkill env smoke probe that records construction/reset readiness and missing assets, an External platform onboarding packet for the primary public-simulator route, an External fidelity provenance packet for platform/contact/replay provenance work orders, an External backend integration packet for the public-simulator backend blocker, a ManiSkill reference backend readiness audit that contract-qualifies an adapter-backed backend candidate while official collection remains fail-closed, an External runner backend probe self-test for the real runner path, an External pilot smoke packet for quarantined first-panel backend testing, an External method implementation packet for non-oracle baseline work orders, a no-go external operator packet, an audited External operator handoff bundle, a fail-closed real-collection runner harness, and a separate Haonan/Yilun outreach package. The machine readiness audit currently reports `17/21` requirements satisfied; the remaining blockers are external-evidence blockers, not prose or packaging blockers.
 
 ## Evidence Snapshot
 
@@ -23,6 +23,7 @@ Paper 119 is a local bridge toward an adaptive physical world/action model for s
 - Fixed-risk audit at risk budget `0.15`: coverage `0.863021`, breach `0.000302`, gated success `0.760108`, utility margin `1.787443`.
 - Diagnostic mechanism audit: zero label, decision, and planner-update mismatches over 230,400 local rows; all five failure labels and all five seam decisions appear in 13,440 proposed hard rows.
 - Decision-quality audit: accept coverage `0.404` vs `0.000`; accepted-seam breach above the `0.15` budget rate `0.000`; 3,850 recovered accepts improve utility by `0.243`, success by `0.091`, and realized breach by `-0.077` locally.
+- Planner-edge policy audit: across 1,680 local hard-slice planning frontiers, selected-edge utility improves by `+0.231`, success by `+0.080`, realized breach by `-0.075`, and executable-edge coverage by `+0.502` versus the strongest predecessor; this is still non-external evidence.
 - Predictive calibration audit: proposed hard-slice ECE10 `0.007207` vs strongest predecessor `0.014790`, max bin gap `0.012758`, risk-breach correlation `0.970670`, and monotone realized breach across 10 risk deciles locally.
 - Holdout robustness audit: task-family `6/6`, seam-regime `7/7`, split `4/4`, task-regime `42/42`, and hash-fold `5/5` holdouts have positive local utility margins; worst task-regime success margin `0.021875`, utility margin `0.172559`.
 - Evidence coverage: 230,400 main cells, 38,400 ablation cells, 161,280 stress cells, 107,520 fixed-risk cells, and 24 documented failure cases.
@@ -37,11 +38,11 @@ Use `-InstallDependencies` on the first run if the Python packages are not insta
 
 Canonical local PDF: `C:/Users/wangz/Downloads/119.pdf`
 
-PDF SHA256: `92B00B24D439B892D5567ACA2E1D42D13AA15F754A20442D36892A6590D98C80`
+PDF SHA256: `329EC8975904AE6593CF3CEC6DDBA62EF1F470859EE24DB6C973B91FC4088C2B`
 
-PDF size: `467903` bytes.
+PDF size: `471098` bytes.
 
-PDF pages: `29`.
+PDF pages: `30`.
 
 Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the visible Desktop.
 
@@ -56,6 +57,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - Holdout robustness audit: `results/holdout_robustness_audit.md`
 - Diagnostic mechanism audit: `results/diagnostic_mechanism_audit.md`
 - Decision-quality audit: `results/decision_quality_audit.md`
+- Planner-edge policy audit: `results/planner_edge_policy_audit.md`
 - Predictive calibration audit: `results/seam_prediction_calibration_audit.md`
 - Manuscript number audit: `results/manuscript_number_audit.md`
 - Related-work audit: `results/related_work_audit.md`

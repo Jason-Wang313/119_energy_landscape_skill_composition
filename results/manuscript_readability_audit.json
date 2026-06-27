@@ -12,12 +12,12 @@
       "passed": true
     },
     {
-      "detail": "positions=[2352, 6282, 9725, 11612, 12486, 14020, 21768, 26416]",
+      "detail": "positions=[2352, 6282, 9725, 11612, 12486, 14020, 23104, 27752]",
       "name": "required_sections_present",
       "passed": true
     },
     {
-      "detail": "positions=[2352, 6282, 9725, 11612, 12486, 14020, 21768, 26416]",
+      "detail": "positions=[2352, 6282, 9725, 11612, 12486, 14020, 23104, 27752]",
       "name": "required_sections_in_order",
       "passed": true
     },
@@ -194,7 +194,7 @@
   ],
   "contact_rich_count": 1,
   "failed_checks": [],
-  "main_body_paragraphs": 33,
+  "main_body_paragraphs": 35,
   "not_external_evidence": true,
   "passed": true,
   "version": "manuscript_readability_audit_v1",

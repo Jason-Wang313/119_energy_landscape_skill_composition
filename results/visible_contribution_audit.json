@@ -95,6 +95,11 @@
       "passed": true
     },
     {
+      "detail": "frontiers=1680, utility_delta=0.231317169047619, breach_delta=-0.07518194761904762",
+      "name": "planner_edge_policy_visible",
+      "passed": true
+    },
+    {
       "detail": "missing=[]",
       "name": "ledger_tracks_new_visible_claims",
       "passed": true
