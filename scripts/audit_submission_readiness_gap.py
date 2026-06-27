@@ -112,8 +112,9 @@ def main() -> int:
     outreach_package = DOCS / "haonan_yilun_outreach_package.md"
 
     core_terms = [
-        "compact world/action model at the skill seam",
-        "world/action model lens at a deliberately local scale",
+        "local world/action-modeling problem",
+        "compact predictive interface between a skill library and a planner",
+        "world/action-model view at a deliberately local scale",
         "prediction-action-update loop",
         "planner-edge updates for future planning",
     ]

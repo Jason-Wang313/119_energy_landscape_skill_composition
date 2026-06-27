@@ -2,21 +2,22 @@
 
 Passed: `true`.
 Not evidence: `true`.
-Abstract words: `228`.
-World/action phrase count: `7`.
+Abstract words: `226`.
+World/action phrase count: `5`.
 Contact-rich phrase count: `1`.
 
 This audit checks that the generated manuscript is naturally framed around a bounded skill-seam world/action model, keeps contact-rich manipulation as a testbed rather than the identity, and has machine-audited related-work/reference coverage. It is not external robot evidence.
 
 ## Checks
 
-- `pass` `abstract_exists`: words=228
-- `pass` `abstract_length_conference_reasonable`: words=228
-- `pass` `required_sections_present`: positions=[2145, 5194, 8382, 10160, 11034, 12552, 20312, 24145]
-- `pass` `required_sections_in_order`: positions=[2145, 5194, 8382, 10160, 11034, 12552, 20312, 24145]
-- `pass` `core_frame_term_compact world/action model at th`: compact world/action model at the skill seam
+- `pass` `abstract_exists`: words=226
+- `pass` `abstract_length_conference_reasonable`: words=226
+- `pass` `required_sections_present`: positions=[2147, 5195, 8383, 10157, 11031, 12549, 20297, 24130]
+- `pass` `required_sections_in_order`: positions=[2147, 5195, 8383, 10157, 11031, 12549, 20297, 24130]
+- `pass` `core_frame_term_local world/action-modeling prob`: local world/action-modeling problem
+- `pass` `core_frame_term_compact predictive interface bet`: compact predictive interface between a skill library and a planner
 - `pass` `core_frame_term_action-conditioned physical inte`: action-conditioned physical interface between a skill library and a planner
-- `pass` `core_frame_term_world/action model lens at a del`: world/action model lens at a deliberately local scale
+- `pass` `core_frame_term_world/action-model view at a del`: world/action-model view at a deliberately local scale
 - `pass` `core_frame_term_prediction-action-update loop`: prediction-action-update loop
 - `pass` `core_frame_term_accept, repair, probe, abstain`: accept, repair, probe, abstain
 - `pass` `core_frame_term_choose a different transition`: choose a different transition
@@ -34,7 +35,7 @@ This audit checks that the generated manuscript is naturally framed around a bou
 - `pass` `matrix_term_Closest outreach works`: Closest outreach works
 - `pass` `matrix_term_External Validation Boundary`: External Validation Boundary
 - `pass` `identity_phrase_not_forced`: count=0
-- `pass` `world_action_framing_not_overdone`: count=7
+- `pass` `world_action_framing_not_overdone`: count=5
 - `pass` `contact_rich_is_not_the_identity`: contact-rich count=1
 - `pass` `contact_positioning_is_testbed`: contact-rich examples are positioned as a testbed
 - `pass` `no_stale_internal_or_manual_polish_terms`: hits=[]

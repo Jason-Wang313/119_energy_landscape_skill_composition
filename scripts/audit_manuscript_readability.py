@@ -18,7 +18,7 @@ OUT_MD = RESULTS / "manuscript_readability_audit.md"
 REQUIRED_SECTIONS = [
     "Motivation",
     "Problem Setup",
-    "Skill Seams As Local World/Action Models",
+    "Skill Seams As Predictive Interfaces",
     "Evaluation Protocol",
     "Main Results",
     "Diagnostics, Ablations, And Fixed Risk",
@@ -27,9 +27,10 @@ REQUIRED_SECTIONS = [
 ]
 
 CORE_FRAME_TERMS = [
-    "compact world/action model at the skill seam",
+    "local world/action-modeling problem",
+    "compact predictive interface between a skill library and a planner",
     "action-conditioned physical interface between a skill library and a planner",
-    "world/action model lens at a deliberately local scale",
+    "world/action-model view at a deliberately local scale",
     "prediction-action-update loop",
     "accept, repair, probe, abstain",
     "choose a different transition",
@@ -144,7 +145,11 @@ def main() -> int:
         add_check(checks, f"matrix_term_{term[:32]}", term in matrix, term)
 
     exact_identity_count = body.count("adaptive physical world/action models for embodied agents")
-    wam_phrase_count = body.count("world/action model") + body.count("world/action interface")
+    wam_phrase_count = (
+        body.count("world/action model")
+        + body.count("world/action-model")
+        + body.count("world/action interface")
+    )
     contact_rich_count = body.lower().count("contact-rich")
     add_check(checks, "identity_phrase_not_forced", exact_identity_count <= 1, f"count={exact_identity_count}")
     add_check(checks, "world_action_framing_not_overdone", 4 <= wam_phrase_count <= 12, f"count={wam_phrase_count}")

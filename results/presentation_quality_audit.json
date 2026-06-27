@@ -12,7 +12,7 @@
       "passed": true
     },
     {
-      "detail": "bytes=464931",
+      "detail": "bytes=464829",
       "name": "pdf_size_reasonable",
       "passed": true
     },
@@ -22,7 +22,7 @@
       "passed": true
     },
     {
-      "detail": "text_chars=76394",
+      "detail": "text_chars=76376",
       "name": "pdf_text_extractable",
       "passed": true
     },
@@ -37,8 +37,8 @@
       "passed": true
     },
     {
-      "detail": "Skill Seams As Local World/Action Models",
-      "name": "section_present_Skill Seams As Local World/Action Models",
+      "detail": "Skill Seams As Predictive Interfaces",
+      "name": "section_present_Skill Seams As Predictive Interfaces",
       "passed": true
     },
     {
@@ -251,6 +251,6 @@
   "pages": 29,
   "passed": true,
   "pdf": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\paper\\main.pdf",
-  "pdf_bytes": 464931,
+  "pdf_bytes": 464829,
   "version": "presentation_quality_audit_v1"
 }
