@@ -256,6 +256,21 @@
       "passed": true
     },
     {
+      "detail": "passed",
+      "name": "external_operator_packet_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True, strict_evidence_ready=False, operator_packet_ready=True",
+      "name": "external_operator_packet_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "go_to_collect=False, start_state='DO_NOT_COLLECT_YET', blocking_missing_count=5",
+      "name": "external_operator_packet_go_no_go",
+      "passed": true
+    },
+    {
       "detail": "external_submission_ready=False, rollout_passed=False, config_passed=False, adapter_passed=False",
       "name": "strict_evidence_gates_remain_not_ready",
       "passed": true

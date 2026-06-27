@@ -77,6 +77,9 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_acquisition_packet_ready`: passed
 - `pass` `external_acquisition_packet_not_evidence`: not_external_evidence=True, strict_evidence_ready=False, acquisition_packet_ready=True
 - `pass` `external_acquisition_packet_maps_all_blockers`: missing_requirements=4, operator_actions=11
+- `pass` `external_operator_packet_ready`: passed
+- `pass` `external_operator_packet_not_evidence`: not_external_evidence=True, strict_evidence_ready=False, operator_packet_ready=True
+- `pass` `external_operator_packet_go_no_go`: go_to_collect=False, start_state='DO_NOT_COLLECT_YET', blocking_missing_count=5
 - `pass` `strict_evidence_gates_remain_not_ready`: external_submission_ready=False, rollout_passed=False, config_passed=False, adapter_passed=False
 - `pass` `operator_packet_paths_exist`: missing=[]
 - `pass` `task_cards_ge_4`: task_cards=4

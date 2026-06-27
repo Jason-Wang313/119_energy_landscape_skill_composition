@@ -52,6 +52,9 @@ jobs:
       - name: Build external acquisition packet
         run: python scripts/build_external_acquisition_packet.py
 
+      - name: Build external operator packet
+        run: python scripts/build_external_operator_packet.py
+
       - name: Audit external release package
         run: python scripts/audit_external_release_package.py
 

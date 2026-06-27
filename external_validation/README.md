@@ -34,6 +34,14 @@ python scripts\materialize_external_configs.py
 
 This writes `results/external_config_materialization_plan.{json,md}` only. It does not write real configs by default. After an operator has selected a real platform and compute budget, use the guarded write form shown in that report; the command requires `--confirm-real-platform --write` and rejects dry-run/template placeholders.
 
+Build the independent operator packet:
+
+```powershell
+python scripts\build_external_operator_packet.py
+```
+
+This writes `results/external_operator_packet.{json,md}` with the current go/no-go state, remaining pre-collection blockers, exact collection command, and post-collection strict gates. It is not external evidence; it currently says `DO_NOT_COLLECT_YET` until the strict collection preflight passes with real backend, configs, fidelity acceptance, alias unsealing, and a specific run id.
+
 ## Manifest Builder Workflow
 
 Before collecting rollouts, generate the non-evidence collection schedule:

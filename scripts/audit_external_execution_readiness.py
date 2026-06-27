@@ -410,6 +410,35 @@ def main() -> int:
         len(acquisition_missing) == 4 and len(acquisition_actions) >= 10,
         f"missing_requirements={len(acquisition_missing)}, operator_actions={len(acquisition_actions)}",
     )
+    operator_packet_ok, operator_packet, operator_packet_detail = passed_json(
+        RESULTS / "external_operator_packet.json",
+        version="external_operator_packet_v1",
+    )
+    add_check(checks, "external_operator_packet_ready", operator_packet_ok, operator_packet_detail)
+    add_check(
+        checks,
+        "external_operator_packet_not_evidence",
+        operator_packet.get("not_external_evidence") is True
+        and operator_packet.get("strict_evidence_ready") is False
+        and operator_packet.get("operator_packet_ready") is True,
+        (
+            f"not_external_evidence={operator_packet.get('not_external_evidence')!r}, "
+            f"strict_evidence_ready={operator_packet.get('strict_evidence_ready')!r}, "
+            f"operator_packet_ready={operator_packet.get('operator_packet_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "external_operator_packet_go_no_go",
+        operator_packet.get("go_to_collect") is False
+        and operator_packet.get("start_state") == "DO_NOT_COLLECT_YET"
+        and int(operator_packet.get("blocking_missing_count", 0) or 0) >= 4,
+        (
+            f"go_to_collect={operator_packet.get('go_to_collect')!r}, "
+            f"start_state={operator_packet.get('start_state')!r}, "
+            f"blocking_missing_count={operator_packet.get('blocking_missing_count')!r}"
+        ),
+    )
 
     external_audit = read_json(RESULTS / "external_evidence_audit.json") if (RESULTS / "external_evidence_audit.json").exists() else {}
     rollout_metrics = read_json(RESULTS / "external_rollout_metrics.json") if (RESULTS / "external_rollout_metrics.json").exists() else {}
@@ -448,6 +477,7 @@ def main() -> int:
         EXTERNAL / "runner" / "backend_contract.py",
         EXTERNAL / "runner" / "real_collection_runner.py",
         RESULTS / "external_collection_readiness_audit.md",
+        RESULTS / "external_operator_packet.md",
         DOCS / "independent_validation_protocol.md",
     ]
     missing_packet_paths = [rel(path) for path in required_packet_paths if not path.exists()]
@@ -533,6 +563,12 @@ def main() -> int:
         "external_evidence_preflight_fail_closed",
         "external_evidence_preflight_record_budget",
         "external_evidence_preflight_operator_actions",
+        "external_acquisition_packet_ready",
+        "external_acquisition_packet_not_evidence",
+        "external_acquisition_packet_maps_all_blockers",
+        "external_operator_packet_ready",
+        "external_operator_packet_not_evidence",
+        "external_operator_packet_go_no_go",
         "operator_packet_paths_exist",
         "task_cards_ge_4",
         "config_templates_ge_4",

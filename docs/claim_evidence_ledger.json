@@ -76,6 +76,11 @@
       "evidence": ["scripts/build_external_acquisition_packet.py", "results/external_acquisition_packet.json", "results/external_acquisition_packet.md", "results/submission_readiness_gap_audit.json"]
     },
     {
+      "name": "external_operator_packet_claim",
+      "claim": "The repository provides a generated non-evidence operator packet with a go/no-go state, pre-collection blockers, exact collection commands, and post-collection strict gates for an independent validation operator.",
+      "evidence": ["scripts/build_external_operator_packet.py", "results/external_operator_packet.json", "results/external_operator_packet.md", "results/external_collection_readiness_audit.json", "results/external_acquisition_packet.json"]
+    },
+    {
       "name": "external_config_template_claim",
       "claim": "The repository provides a non-evidence task config schema, template validator, and tracked real-config intake directory, while strict config evidence remains missing until real manifest-declared configs replace templates.",
       "evidence": ["external_validation/config_schema_v1.json", "external_validation/config_templates/peg_place_regrasp.json", "external_validation/configs/README.md", "scripts/validate_external_configs.py", "results/external_config_template_audit.json", "results/external_config_template_audit.md"]
@@ -189,6 +194,7 @@
     "docs/submission_version_log.md",
     "external_validation/platform_qualification_checklist.md",
     "external_validation/README.md",
+    "results/external_operator_packet.md",
     "results/submission_readiness_gap_audit.md"
   ]
 }

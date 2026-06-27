@@ -30,6 +30,9 @@
 - External adapter contract validator: `scripts/validate_external_adapters.py`
 - External manifest builder: `scripts/build_external_manifest.py`
 - External release package validator: `scripts/audit_external_release_package.py`
+- External evidence preflight validator: `scripts/audit_external_evidence_preflight.py`
+- External evidence acquisition packet builder: `scripts/build_external_acquisition_packet.py`
+- External operator packet builder: `scripts/build_external_operator_packet.py`
 - External adapter scaffold guard self-test: `scripts/self_test_external_adapter_scaffold_guard.py`
 - External evidence validator: `scripts/audit_external_evidence.py`
 - External execution readiness validator: `scripts/audit_external_execution_readiness.py`
@@ -112,6 +115,12 @@
   - `results/external_manifest_builder_report.md`
   - `results/external_release_package_audit.json`
   - `results/external_release_package_audit.md`
+  - `results/external_evidence_preflight.json`
+  - `results/external_evidence_preflight.md`
+  - `results/external_acquisition_packet.json`
+  - `results/external_acquisition_packet.md`
+  - `results/external_operator_packet.json`
+  - `results/external_operator_packet.md`
   - `results/external_pairing_integrity_audit.json`
   - `results/external_pairing_integrity_audit.md`
   - `results/external_execution_readiness_audit.json`

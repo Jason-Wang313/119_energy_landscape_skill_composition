@@ -122,6 +122,7 @@ def main():
         "scripts\\audit_external_release_package.py",
         "scripts\\audit_external_evidence_preflight.py",
         "scripts\\build_external_acquisition_packet.py",
+        "scripts\\build_external_operator_packet.py",
         "scripts\\self_test_external_adapter_scaffold_guard.py",
         "scripts\\self_test_external_rollout_validator.py",
         "scripts\\self_test_external_evidence_pipeline.py",
@@ -158,6 +159,7 @@ def main():
         "python scripts/audit_external_evidence_preflight.py",
         "python scripts/materialize_external_configs.py",
         "python scripts/build_external_acquisition_packet.py",
+        "python scripts/build_external_operator_packet.py",
         "python scripts/audit_external_release_package.py",
         "python scripts/audit_external_execution_readiness.py",
         "python scripts/audit_external_pairing_integrity.py",
@@ -1002,6 +1004,9 @@ def main():
         "external_acquisition_packet_ready",
         "external_acquisition_packet_not_evidence",
         "external_acquisition_packet_maps_all_blockers",
+        "external_operator_packet_ready",
+        "external_operator_packet_not_evidence",
+        "external_operator_packet_go_no_go",
         "config_templates_ready",
         "config_materialization_plan_ready",
         "config_materialization_plan_not_evidence",
@@ -1031,6 +1036,7 @@ def main():
         RESULTS / "external_release_package_audit.md",
         RESULTS / "external_collection_readiness_audit.md",
         RESULTS / "external_acquisition_packet.md",
+        RESULTS / "external_operator_packet.md",
         RESULTS / "external_config_materialization_plan.md",
         RESULTS / "external_execution_readiness_audit.md",
         RESULTS / "external_fidelity_acceptance_audit.md",
@@ -1069,6 +1075,36 @@ def main():
     ):
         if acquisition_checks.get(required_check) is not True:
             fail(f"external acquisition packet missing passing check: {required_check}")
+
+    operator_packet_path = RESULTS / "external_operator_packet.json"
+    if not operator_packet_path.exists():
+        fail("missing results/external_operator_packet.json; run scripts/build_external_operator_packet.py")
+    operator_packet = json.loads(operator_packet_path.read_text(encoding="utf-8"))
+    if operator_packet.get("version") != "external_operator_packet_v1":
+        fail("external operator packet version mismatch")
+    if operator_packet.get("passed") is not True:
+        fail("external operator packet did not pass")
+    if operator_packet.get("not_external_evidence") is not True:
+        fail("external operator packet must declare that it is not evidence")
+    if operator_packet.get("operator_packet_ready") is not True:
+        fail("external operator packet must report operator_packet_ready=true")
+    if operator_packet.get("strict_evidence_ready") is not False:
+        fail("external operator packet must not claim strict evidence readiness")
+    if operator_packet.get("go_to_collect") is not False or operator_packet.get("start_state") != "DO_NOT_COLLECT_YET":
+        fail("external operator packet must remain a no-go until strict collection preflight passes")
+    if int(operator_packet.get("blocking_missing_count", 0) or 0) < 4:
+        fail("external operator packet should expose the current pre-collection blockers")
+    operator_actions = operator_packet.get("operator_actions", []) or []
+    if len(operator_actions) < 10:
+        fail("external operator packet has too few operator actions")
+    if "audit_external_collection_readiness.py --strict" not in operator_packet.get("pre_collection_gate_command", ""):
+        fail("external operator packet missing strict pre-collection gate command")
+    if "real_collection_runner.py" not in operator_packet.get("strict_collection_command", ""):
+        fail("external operator packet missing actual collection command")
+    post_commands = operator_packet.get("post_collection_strict_commands", []) or []
+    for command_fragment in ("validate_external_rollouts.py", "audit_external_pairing_integrity.py", "audit_external_evidence.py"):
+        if not any(command_fragment in command for command in post_commands):
+            fail(f"external operator packet missing post-collection gate: {command_fragment}")
 
     config_materialization_path = RESULTS / "external_config_materialization_plan.json"
     if not config_materialization_path.exists():

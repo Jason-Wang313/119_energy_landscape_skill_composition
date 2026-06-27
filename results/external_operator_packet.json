@@ -1,0 +1,260 @@
+{
+  "blocking_missing_count": 5,
+  "checks": [
+    {
+      "detail": "passed=True, strict_evidence_ready=False",
+      "name": "acquisition_packet_ready",
+      "passed": true
+    },
+    {
+      "detail": "collection_ready=False, blocking_missing_count=5",
+      "name": "collection_preflight_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "operator_actions_cover_start_to_finish",
+      "passed": true
+    },
+    {
+      "detail": "missing_titles=[]",
+      "name": "operator_action_titles_present",
+      "passed": true
+    },
+    {
+      "detail": "write_enabled=False, task_count=4",
+      "name": "config_materializer_is_guarded",
+      "passed": true
+    },
+    {
+      "detail": "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+      "name": "strict_collection_command_is_explicit",
+      "passed": true
+    },
+    {
+      "detail": "commands=8",
+      "name": "post_collection_gates_cover_evidence",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json absent before real evidence",
+      "name": "no_real_manifest_written",
+      "passed": true
+    },
+    {
+      "detail": "runbook, runner, blinded sheet, alias map, platform checklist, and config schema",
+      "name": "packet_artifacts_exist",
+      "passed": true
+    }
+  ],
+  "collection_ready": false,
+  "config_materialization_command": "python scripts\\materialize_external_configs.py --platform-type <real_robot|high_fidelity_sim> --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
+  "go_to_collect": false,
+  "not_external_evidence": true,
+  "operator_actions": [
+    {
+      "artifacts": [
+        "external_validation/runner/backends/<real_backend>.py"
+      ],
+      "closes": [
+        "actual collection backend readiness"
+      ],
+      "commands": [
+        "python scripts\\audit_external_collection_readiness.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map"
+      ],
+      "id": "backend_module",
+      "operator_input": "--backend-module <module_or_path>",
+      "title": "Select a non-template backend module"
+    },
+    {
+      "artifacts": [
+        "external_validation/configs/peg_place_regrasp.json",
+        "external_validation/configs/drawer_to_pick_transfer.json",
+        "external_validation/configs/door_open_navigation.json",
+        "external_validation/configs/cable_route_insert.json"
+      ],
+      "closes": [
+        "Manifest-declared real task configs replace non-evidence templates"
+      ],
+      "commands": [
+        "python scripts\\materialize_external_configs.py --platform-type <real_robot|high_fidelity_sim> --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
+        "python scripts\\validate_external_configs.py --strict"
+      ],
+      "id": "real_task_configs",
+      "operator_input": "external_validation/configs/<task_family>.json for each task family",
+      "title": "Create real manifest-declared task configs"
+    },
+    {
+      "artifacts": [
+        "external_validation/fidelity_acceptance.json"
+      ],
+      "closes": [
+        "Independent real-robot or accepted high-fidelity external validation evidence"
+      ],
+      "commands": [
+        "python scripts\\audit_external_fidelity_acceptance.py --strict"
+      ],
+      "id": "platform_fidelity",
+      "operator_input": "accepted simulator or robot evidence, contact/dynamics/camera/state provenance, and task coverage",
+      "title": "Fill platform fidelity acceptance with real provenance"
+    },
+    {
+      "artifacts": [
+        "external_validation/method_alias_map.json"
+      ],
+      "closes": [
+        "paired-reset method-panel integrity before collection"
+      ],
+      "commands": [
+        "python scripts\\audit_external_collection_readiness.py --strict --unsealed-alias-map"
+      ],
+      "id": "alias_unseal",
+      "operator_input": "--unsealed-alias-map",
+      "title": "Unseal method aliases only after configs, implementations, and run plan are frozen"
+    },
+    {
+      "artifacts": [
+        "external_validation/logs/*.jsonl"
+      ],
+      "closes": [
+        "run identity provenance"
+      ],
+      "commands": [
+        "python scripts\\audit_external_collection_readiness.py --strict --run-id <specific_run_id>"
+      ],
+      "id": "specific_run_id",
+      "operator_input": "--run-id <platform>_<date>_<protocol_version>",
+      "title": "Use a specific immutable external run id"
+    },
+    {
+      "artifacts": [
+        "external_validation/adapters/<method>/implementation.py",
+        "external_validation/baselines/<method>/implementation.py",
+        "external_validation/checkpoints_or_configs/<method>.*"
+      ],
+      "closes": [
+        "Manifest-declared independent non-oracle baseline evidence and fairness contract"
+      ],
+      "commands": [
+        "python scripts\\build_external_baseline_contract.py",
+        "python scripts\\validate_external_adapters.py --strict"
+      ],
+      "id": "real_method_implementations",
+      "operator_input": "implementation_path and checkpoint_or_config_path/hash for every non-oracle method",
+      "title": "Replace scaffold-only methods with real non-oracle implementations or wrappers"
+    },
+    {
+      "artifacts": [
+        "external_validation/logs/peg_place_regrasp.jsonl",
+        "external_validation/logs/drawer_to_pick_transfer.jsonl",
+        "external_validation/logs/door_open_navigation.jsonl",
+        "external_validation/logs/cable_route_insert.jsonl",
+        "external_validation/videos/<task_family>/*"
+      ],
+      "closes": [
+        "Independent real-robot or accepted high-fidelity external validation evidence",
+        "External rollout metrics recomputed from raw JSONL logs"
+      ],
+      "commands": [
+        "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map"
+      ],
+      "id": "run_collection",
+      "operator_input": "1,440 JSONL records over 4 tasks x 12 methods x 120 paired resets",
+      "title": "Collect paired-reset external rollouts"
+    },
+    {
+      "artifacts": [
+        "external_validation/manifest.json",
+        "results/external_manifest_builder_report.json"
+      ],
+      "closes": [
+        "Independent real-robot or accepted high-fidelity external validation evidence",
+        "Manifest-declared real task configs replace non-evidence templates"
+      ],
+      "commands": [
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\audit_external_release_package.py --strict"
+      ],
+      "id": "manifest_and_release",
+      "operator_input": "manifest paths, code commit, skill-library hash, config/log/video/checkpoint hashes",
+      "title": "Build the real manifest and hash-lock release artifacts"
+    },
+    {
+      "artifacts": [
+        "results/external_rollout_metrics.json",
+        "results/external_rollout_metrics.md"
+      ],
+      "closes": [
+        "External rollout metrics recomputed from raw JSONL logs"
+      ],
+      "commands": [
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+      ],
+      "id": "strict_rollout_recompute",
+      "operator_input": "strict rollout validator over manifest-declared logs and videos",
+      "title": "Recompute external metrics from raw JSONL logs"
+    },
+    {
+      "artifacts": [
+        "results/external_baseline_contract_audit.json",
+        "results/external_adapter_contract_evidence_audit.json"
+      ],
+      "closes": [
+        "Manifest-declared independent non-oracle baseline evidence and fairness contract"
+      ],
+      "commands": [
+        "python scripts\\build_external_baseline_contract.py",
+        "python scripts\\validate_external_adapters.py --strict"
+      ],
+      "id": "strict_adapter_evidence",
+      "operator_input": "manifest-declared non-oracle implementation paths and hashes",
+      "title": "Audit independent method evidence after the manifest is real"
+    },
+    {
+      "artifacts": [
+        "results/external_evidence_audit.json",
+        "results/submission_readiness_gap_audit.json"
+      ],
+      "closes": [
+        "objective completion audit after real evidence exists"
+      ],
+      "commands": [
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_evidence.py --strict",
+        "python scripts\\audit_submission_readiness_gap.py"
+      ],
+      "id": "final_strict_gate",
+      "operator_input": "completed manifest, logs, videos, configs, checkpoints/hashes, adapters, and fidelity acceptance",
+      "title": "Run the final strict external-evidence gate"
+    }
+  ],
+  "operator_packet_ready": true,
+  "passed": true,
+  "post_collection_strict_commands": [
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_fidelity_acceptance.py --strict",
+    "python scripts\\validate_external_adapters.py --strict",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "pre_collection_blockers": [
+    "backend_module_ready: --backend-module is required before actual collection",
+    "real_task_configs_ready: missing config: external_validation/configs/cable_route_insert.json; missing config: external_validation/configs/door_open_navigation.json; missing config: external_validation/configs/drawer_to_pick_transfer.json; missing config: external_validation/configs/peg_place_regrasp.json",
+    "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'",
+    "alias_unsealing_explicit: unsealed_alias_map=False",
+    "run_id_specific: run_id='paper119_external_validation_run'"
+  ],
+  "pre_collection_gate_command": "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+  "source_reports": [
+    "results/external_collection_readiness_audit.json",
+    "results/external_acquisition_packet.json",
+    "results/external_config_materialization_plan.json"
+  ],
+  "start_state": "DO_NOT_COLLECT_YET",
+  "strict_collection_command": "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+  "strict_evidence_ready": false,
+  "version": "external_operator_packet_v1"
+}
