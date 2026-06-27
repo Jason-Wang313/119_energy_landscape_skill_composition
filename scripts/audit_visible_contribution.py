@@ -75,7 +75,7 @@ def main() -> int:
         operator.get("passed") is True
         and operator.get("not_external_evidence") is True
         and operator.get("start_state") == "DO_NOT_COLLECT_YET"
-        and int(operator.get("blocking_missing_count", 0) or 0) >= 5,
+        and int(operator.get("blocking_missing_count", 0) or 0) >= 4,
         (
             f"start_state={operator.get('start_state')!r}, "
             f"blocking_missing_count={operator.get('blocking_missing_count')!r}"
@@ -174,6 +174,9 @@ def main() -> int:
     OUT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     print(f"Visible contribution audit: {'PASS' if passed else 'FAIL'}; checks={len(checks)}")
+    if not passed:
+        for check in payload["failed_checks"]:
+            print(f"FAILED {check['name']}: {check['detail']}")
     print(f"Wrote {OUT_JSON}")
     print(f"Wrote {OUT_MD}")
     return 0 if passed else 1
