@@ -1,0 +1,35 @@
+{
+  "checks": [
+    {
+      "detail": "External collection runner wrote 2 JSONL records. Not validated until manifest and strict audits pass.\n",
+      "name": "runner_actual_path_exits_zero",
+      "passed": true
+    },
+    {
+      "detail": "records=2",
+      "name": "temporary_records_written",
+      "passed": true
+    },
+    {
+      "detail": "errors=[]",
+      "name": "temporary_records_schema_valid",
+      "passed": true
+    },
+    {
+      "detail": "videos=2",
+      "name": "temporary_videos_written",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json unchanged or absent",
+      "name": "real_manifest_untouched",
+      "passed": true
+    }
+  ],
+  "not_external_evidence": true,
+  "passed": true,
+  "records_written": 2,
+  "runner_returncode": 0,
+  "schema_errors": [],
+  "version": "external_runner_backend_self_test_v1"
+}

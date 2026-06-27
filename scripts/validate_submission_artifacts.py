@@ -124,6 +124,7 @@ def main():
         "scripts\\build_external_acquisition_packet.py",
         "scripts\\build_external_operator_packet.py",
         "scripts\\self_test_external_adapter_scaffold_guard.py",
+        "scripts\\self_test_external_runner_backend.py",
         "scripts\\self_test_external_rollout_validator.py",
         "scripts\\self_test_external_evidence_pipeline.py",
         "scripts\\validate_external_rollouts.py --write-results",
@@ -156,6 +157,7 @@ def main():
         "poppler-utils",
         "python -m compileall",
         "python scripts/audit_external_runner_harness.py",
+        "python scripts/self_test_external_runner_backend.py",
         "python scripts/audit_external_collection_readiness.py",
         "python scripts/audit_external_evidence_preflight.py",
         "python scripts/materialize_external_configs.py",
@@ -949,6 +951,34 @@ def main():
     rollout_metrics_path = RESULTS / "external_rollout_metrics.json"
     if not rollout_metrics_path.exists():
         fail("missing results/external_rollout_metrics.json; run scripts/validate_external_rollouts.py --write-results")
+    runner_backend_self_test_path = RESULTS / "external_runner_backend_self_test.json"
+    if not runner_backend_self_test_path.exists():
+        fail("missing results/external_runner_backend_self_test.json; run scripts/self_test_external_runner_backend.py")
+    if not (ROOT / "scripts" / "self_test_external_runner_backend.py").exists():
+        fail("missing scripts/self_test_external_runner_backend.py")
+    runner_backend_self_test = json.loads(runner_backend_self_test_path.read_text(encoding="utf-8"))
+    if runner_backend_self_test.get("version") != "external_runner_backend_self_test_v1":
+        fail("external runner backend self-test version mismatch")
+    if runner_backend_self_test.get("passed") is not True:
+        fail("external runner backend self-test did not pass")
+    if runner_backend_self_test.get("not_external_evidence") is not True:
+        fail("external runner backend self-test must declare that it is not evidence")
+    if int(runner_backend_self_test.get("records_written", 0) or 0) < 2:
+        fail("external runner backend self-test wrote too few temporary records")
+    if runner_backend_self_test.get("schema_errors"):
+        fail(f"external runner backend self-test reported schema errors: {runner_backend_self_test.get('schema_errors')[:3]}")
+    runner_backend_checks = {check.get("name"): check.get("passed") for check in runner_backend_self_test.get("checks", [])}
+    for required_check in (
+        "runner_actual_path_exits_zero",
+        "temporary_records_written",
+        "temporary_records_schema_valid",
+        "temporary_videos_written",
+        "real_manifest_untouched",
+    ):
+        if runner_backend_checks.get(required_check) is not True:
+            fail(f"external runner backend self-test missing passing check: {required_check}")
+    if not (RESULTS / "external_runner_backend_self_test.md").exists():
+        fail("missing results/external_runner_backend_self_test.md")
     if not (ROOT / "scripts" / "self_test_external_rollout_validator.py").exists():
         fail("missing scripts/self_test_external_rollout_validator.py")
     rollout_metrics = json.loads(rollout_metrics_path.read_text(encoding="utf-8"))

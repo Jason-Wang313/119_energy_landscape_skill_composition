@@ -108,6 +108,7 @@ try {
         Invoke-Native python scripts\build_external_acquisition_packet.py
         Invoke-Native python scripts\build_external_operator_packet.py
         Invoke-Native python scripts\self_test_external_adapter_scaffold_guard.py
+        Invoke-Native python scripts\self_test_external_runner_backend.py
         Invoke-Native python scripts\self_test_external_rollout_validator.py
         Invoke-Native python scripts\self_test_external_evidence_pipeline.py
         Invoke-Native python scripts\validate_external_rollouts.py --write-results
