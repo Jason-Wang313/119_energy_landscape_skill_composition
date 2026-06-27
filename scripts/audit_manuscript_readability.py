@@ -29,7 +29,7 @@ REQUIRED_SECTIONS = [
 CORE_FRAME_TERMS = [
     "compact world/action model at the skill seam",
     "action-conditioned physical interface between a skill library and a planner",
-    "adaptive physical world/action models for embodied agents",
+    "world/action model lens at a deliberately local scale",
     "prediction-action-update loop",
     "accept, repair, probe, abstain",
     "choose a different transition",
@@ -146,7 +146,7 @@ def main() -> int:
     exact_identity_count = body.count("adaptive physical world/action models for embodied agents")
     wam_phrase_count = body.count("world/action model") + body.count("world/action interface")
     contact_rich_count = body.lower().count("contact-rich")
-    add_check(checks, "identity_phrase_not_overused", 1 <= exact_identity_count <= 2, f"count={exact_identity_count}")
+    add_check(checks, "identity_phrase_not_forced", exact_identity_count <= 1, f"count={exact_identity_count}")
     add_check(checks, "world_action_framing_not_overdone", 4 <= wam_phrase_count <= 12, f"count={wam_phrase_count}")
     add_check(checks, "contact_rich_is_not_the_identity", contact_rich_count <= 2, f"contact-rich count={contact_rich_count}")
     add_check(

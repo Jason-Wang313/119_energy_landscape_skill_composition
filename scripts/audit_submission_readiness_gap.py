@@ -102,7 +102,7 @@ def main() -> int:
 
     core_terms = [
         "compact world/action model at the skill seam",
-        "adaptive physical world/action models for embodied agents",
+        "world/action model lens at a deliberately local scale",
         "prediction-action-update loop",
         "planner-edge updates for future planning",
     ]

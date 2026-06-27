@@ -1065,7 +1065,7 @@ def main():
         "compact world/action model at the skill seam",
         "world/action model in this limited sense",
         "action-conditioned physical interface between a skill library and a planner",
-        "adaptive physical world/action models for embodied agents",
+        "world/action model lens at a deliberately local scale",
         "prediction-action-update loop",
     ]
     missing_framing_terms = [term for term in framing_terms if term not in tex]

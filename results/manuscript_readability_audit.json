@@ -12,12 +12,12 @@
       "passed": true
     },
     {
-      "detail": "positions=[2145, 5222, 8410, 10188, 11062, 12580, 20340, 24173]",
+      "detail": "positions=[2145, 5169, 8357, 10135, 11009, 12527, 20287, 24120]",
       "name": "required_sections_present",
       "passed": true
     },
     {
-      "detail": "positions=[2145, 5222, 8410, 10188, 11062, 12580, 20340, 24173]",
+      "detail": "positions=[2145, 5169, 8357, 10135, 11009, 12527, 20287, 24120]",
       "name": "required_sections_in_order",
       "passed": true
     },
@@ -32,8 +32,8 @@
       "passed": true
     },
     {
-      "detail": "adaptive physical world/action models for embodied agents",
-      "name": "core_frame_term_adaptive physical world/action m",
+      "detail": "world/action model lens at a deliberately local scale",
+      "name": "core_frame_term_world/action model lens at a del",
       "passed": true
     },
     {
@@ -117,8 +117,8 @@
       "passed": true
     },
     {
-      "detail": "count=1",
-      "name": "identity_phrase_not_overused",
+      "detail": "count=0",
+      "name": "identity_phrase_not_forced",
       "passed": true
     },
     {
