@@ -66,6 +66,10 @@ def build_payload() -> dict[str, Any]:
         RESULTS / "external_fidelity_acceptance_draft_audit.json",
         "external_fidelity_acceptance_draft_audit_v1",
     )
+    fidelity_metadata = require_payload(
+        RESULTS / "maniskill_fidelity_metadata_probe.json",
+        "maniskill_fidelity_metadata_probe_v1",
+    )
     materialization = require_payload(
         RESULTS / "external_config_materialization_plan.json",
         "external_config_materialization_plan_v1",
@@ -81,6 +85,7 @@ def build_payload() -> dict[str, Any]:
         "platform_probe",
         "task_binding_probe",
         "env_smoke_probe",
+        "fidelity_metadata_probe",
         "platform_onboarding",
         "fidelity_provenance_packet",
         "fidelity_acceptance_draft",
@@ -158,6 +163,23 @@ def build_payload() -> dict[str, Any]:
         (
             f"draft_ready={fidelity_draft.get('draft_ready')!r}, "
             f"remaining_operator_inputs={fidelity_draft.get('remaining_operator_input_count')!r}"
+        ),
+    )
+    metadata_action = actions.get("fidelity_metadata_probe", {})
+    metadata_commands = "\n".join(metadata_action.get("commands", []) or [])
+    add_check(
+        checks,
+        "fidelity_metadata_probe_ready_but_not_evidence",
+        fidelity_metadata.get("passed") is True
+        and fidelity_metadata.get("not_external_evidence") is True
+        and fidelity_metadata.get("metadata_probe_ready") is True
+        and fidelity_metadata.get("accepted_fidelity_ready") is False
+        and fidelity_metadata.get("strict_fidelity_evidence_ready") is False
+        and fidelity_metadata.get("strict_external_evidence_ready") is False
+        and "probe_maniskill_fidelity_metadata.py" in metadata_commands,
+        (
+            f"strict_metadata_ready={fidelity_metadata.get('strict_metadata_ready')!r}, "
+            f"primary_metadata_missing={fidelity_metadata.get('primary_metadata_missing')!r}"
         ),
     )
     add_check(
@@ -292,6 +314,17 @@ def build_payload() -> dict[str, Any]:
             "build_command": "python scripts\\build_external_fidelity_acceptance_draft.py",
             "strict_audit_command_after_promotion": "python scripts\\audit_external_fidelity_acceptance.py --strict",
         },
+        "fidelity_metadata_probe": {
+            "not_external_evidence": True,
+            "metadata_probe_ready": fidelity_metadata.get("metadata_probe_ready") is True,
+            "strict_metadata_ready": fidelity_metadata.get("strict_metadata_ready") is True,
+            "accepted_fidelity_ready": fidelity_metadata.get("accepted_fidelity_ready") is True,
+            "probe_path": "results/maniskill_fidelity_metadata_probe.json",
+            "probe_md_path": "results/maniskill_fidelity_metadata_probe.md",
+            "primary_metadata_missing": list(fidelity_metadata.get("primary_metadata_missing", []) or []),
+            "primary_timing_summary": fidelity_metadata.get("primary_timing_summary", {}),
+            "build_command": "python scripts\\probe_maniskill_fidelity_metadata.py",
+        },
         "pre_collection_gate_command": (
             "python scripts\\audit_external_collection_readiness.py --strict "
             "--backend-module <module_or_path> --task-config-dir external_validation\\configs "
@@ -308,6 +341,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_platform_probe.json",
             "results/maniskill_task_binding_probe.json",
             "results/maniskill_env_smoke_probe.json",
+            "results/maniskill_fidelity_metadata_probe.json",
             "results/external_backend_contract_audit.json",
             "results/maniskill_backend_readiness_audit.json",
             "results/maniskill_reference_collection_preflight_audit.json",
@@ -397,6 +431,30 @@ def write_md(payload: dict[str, Any]) -> None:
             "",
             "```powershell",
             draft["build_command"],
+            "```",
+        ]
+    )
+
+    metadata = payload["fidelity_metadata_probe"]
+    lines.extend(
+        [
+            "",
+            "## ManiSkill Fidelity Metadata Probe",
+            "",
+            "This probe is not evidence and does not satisfy fidelity acceptance. It records timing, backend, controller, observation, and asset metadata that the independent operator should verify or replace before promoting the fidelity acceptance file.",
+            "",
+            f"- Probe JSON: `{metadata['probe_path']}`",
+            f"- Probe notes: `{metadata['probe_md_path']}`",
+            f"- Metadata probe ready: `{str(metadata['metadata_probe_ready']).lower()}`",
+            f"- Strict metadata ready: `{str(metadata['strict_metadata_ready']).lower()}`",
+            f"- Accepted fidelity ready: `{str(metadata['accepted_fidelity_ready']).lower()}`",
+            f"- Primary metadata missing: `{metadata['primary_metadata_missing']}`",
+            f"- Primary timing summary: `{metadata['primary_timing_summary']}`",
+            "",
+            "Probe rebuild command:",
+            "",
+            "```powershell",
+            metadata["build_command"],
             "```",
         ]
     )

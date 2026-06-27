@@ -135,6 +135,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "probe_external_platform.py",
         SCRIPTS / "probe_maniskill_task_bindings.py",
         SCRIPTS / "probe_maniskill_env_smoke.py",
+        SCRIPTS / "probe_maniskill_fidelity_metadata.py",
         SCRIPTS / "build_external_fidelity_provenance_packet.py",
         SCRIPTS / "build_external_fidelity_acceptance_draft.py",
         SCRIPTS / "build_external_backend_integration_packet.py",
@@ -174,6 +175,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "maniskill_task_binding_probe.md",
         RESULTS / "maniskill_env_smoke_probe.json",
         RESULTS / "maniskill_env_smoke_probe.md",
+        RESULTS / "maniskill_fidelity_metadata_probe.json",
+        RESULTS / "maniskill_fidelity_metadata_probe.md",
         RESULTS / "external_platform_onboarding_audit.json",
         RESULTS / "external_platform_onboarding_audit.md",
         RESULTS / "external_fidelity_provenance_audit.json",
@@ -284,6 +287,10 @@ def build_payload() -> dict[str, Any]:
     platform_probe = require_payload(RESULTS / "external_platform_probe.json", "external_platform_probe_v1")
     task_binding_probe = require_payload(RESULTS / "maniskill_task_binding_probe.json", "maniskill_task_binding_probe_v1")
     env_smoke_probe = require_payload(RESULTS / "maniskill_env_smoke_probe.json", "maniskill_env_smoke_probe_v1")
+    fidelity_metadata_probe = require_payload(
+        RESULTS / "maniskill_fidelity_metadata_probe.json",
+        "maniskill_fidelity_metadata_probe_v1",
+    )
     onboarding = require_payload(RESULTS / "external_platform_onboarding_audit.json", "external_platform_onboarding_audit_v1")
     fidelity_provenance = require_payload(RESULTS / "external_fidelity_provenance_audit.json", "external_fidelity_provenance_audit_v1")
     fidelity_draft = require_payload(RESULTS / "external_fidelity_acceptance_draft_audit.json", "external_fidelity_acceptance_draft_audit_v1")
@@ -415,6 +422,11 @@ def build_payload() -> dict[str, Any]:
         and env_smoke_probe.get("env_smoke_probe_ready") is True
         and env_smoke_probe.get("accepted_fidelity_ready") is False
         and env_smoke_probe.get("strict_external_evidence_ready") is False
+        and fidelity_metadata_probe.get("passed") is True
+        and fidelity_metadata_probe.get("not_external_evidence") is True
+        and fidelity_metadata_probe.get("metadata_probe_ready") is True
+        and fidelity_metadata_probe.get("accepted_fidelity_ready") is False
+        and fidelity_metadata_probe.get("strict_external_evidence_ready") is False
         and onboarding_checks.get("primary_route_matches_independent_plan") is True
         and onboarding_checks.get("platform_provenance_fields_cover_fidelity_hashes_and_observations") is True
         and onboarding_checks.get("platform_probe_report_ready") is True
@@ -427,9 +439,12 @@ def build_payload() -> dict[str, Any]:
         and "results/maniskill_task_binding_probe.md" in paths
         and "results/maniskill_env_smoke_probe.json" in paths
         and "results/maniskill_env_smoke_probe.md" in paths
+        and "results/maniskill_fidelity_metadata_probe.json" in paths
+        and "results/maniskill_fidelity_metadata_probe.md" in paths
         and "scripts/probe_external_platform.py" in paths
         and "scripts/probe_maniskill_task_bindings.py" in paths
         and "scripts/probe_maniskill_env_smoke.py" in paths
+        and "scripts/probe_maniskill_fidelity_metadata.py" in paths
         and "external_validation/platform_onboarding_packet.json" in paths
         and "external_validation/platform_onboarding_packet.md" in paths
         and "results/external_platform_onboarding_audit.json" in paths
@@ -437,6 +452,23 @@ def build_payload() -> dict[str, Any]:
         (
             f"platform_onboarding_ready={onboarding.get('platform_onboarding_ready')!r}, "
             f"strict_evidence_ready={onboarding.get('strict_evidence_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "fidelity_metadata_probe_included",
+        fidelity_metadata_probe.get("passed") is True
+        and fidelity_metadata_probe.get("not_external_evidence") is True
+        and fidelity_metadata_probe.get("metadata_probe_ready") is True
+        and fidelity_metadata_probe.get("accepted_fidelity_ready") is False
+        and fidelity_metadata_probe.get("strict_fidelity_evidence_ready") is False
+        and fidelity_metadata_probe.get("strict_external_evidence_ready") is False
+        and "results/maniskill_fidelity_metadata_probe.json" in paths
+        and "results/maniskill_fidelity_metadata_probe.md" in paths
+        and "scripts/probe_maniskill_fidelity_metadata.py" in paths,
+        (
+            f"strict_metadata_ready={fidelity_metadata_probe.get('strict_metadata_ready')!r}, "
+            f"primary_metadata_missing={fidelity_metadata_probe.get('primary_metadata_missing')!r}"
         ),
     )
     fidelity_provenance_checks = {check.get("name"): check.get("passed") for check in fidelity_provenance.get("checks", []) or []}
@@ -637,6 +669,7 @@ def build_payload() -> dict[str, Any]:
         "operator_actions_cover_evidence_collection",
         {
             "platform_onboarding",
+            "fidelity_metadata_probe",
             "fidelity_provenance_packet",
             "fidelity_acceptance_draft",
             "backend_integration_packet",
@@ -655,7 +688,7 @@ def build_payload() -> dict[str, Any]:
             "strict_rollout_recompute",
             "final_strict_gate",
         }.issubset(action_ids),
-        f"missing={sorted({'platform_onboarding', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
+        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
     )
     add_check(
         checks,
@@ -699,6 +732,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_acquisition_packet.json",
             "results/external_analysis_plan_audit.json",
             "results/external_platform_onboarding_audit.json",
+            "results/maniskill_fidelity_metadata_probe.json",
             "results/external_fidelity_provenance_audit.json",
             "results/external_fidelity_acceptance_draft_audit.json",
             "results/external_backend_integration_audit.json",

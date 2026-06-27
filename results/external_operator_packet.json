@@ -23,6 +23,11 @@
       "passed": true
     },
     {
+      "detail": "strict_metadata_ready=True, primary_metadata_missing=[]",
+      "name": "fidelity_metadata_probe_ready_but_not_evidence",
+      "passed": true
+    },
+    {
       "detail": "missing=[]",
       "name": "operator_actions_cover_start_to_finish",
       "passed": true
@@ -82,6 +87,48 @@
     "strict_audit_command_after_promotion": "python scripts\\audit_external_fidelity_acceptance.py --strict",
     "strict_fidelity_evidence_ready": false
   },
+  "fidelity_metadata_probe": {
+    "accepted_fidelity_ready": false,
+    "build_command": "python scripts\\probe_maniskill_fidelity_metadata.py",
+    "metadata_probe_ready": true,
+    "not_external_evidence": true,
+    "primary_metadata_missing": [],
+    "primary_timing_summary": {
+      "agent_uids": [
+        "fetch",
+        "panda",
+        "panda_wristcam"
+      ],
+      "control_freq_hz_values": [
+        20.0
+      ],
+      "control_timestep_seconds_values": [
+        0.05
+      ],
+      "controller_types": [
+        "CombinedController"
+      ],
+      "derived_substeps_per_control_step_values": [
+        5.0
+      ],
+      "primary_metadata_env_count": 4,
+      "scene_backend_types": [
+        "PhysxCpuSystem"
+      ],
+      "scene_timestep_seconds_values": [
+        0.01
+      ],
+      "sim_freq_hz_values": [
+        100.0
+      ],
+      "sim_timestep_seconds_values": [
+        0.01
+      ]
+    },
+    "probe_md_path": "results/maniskill_fidelity_metadata_probe.md",
+    "probe_path": "results/maniskill_fidelity_metadata_probe.json",
+    "strict_metadata_ready": true
+  },
   "go_to_collect": false,
   "not_external_evidence": true,
   "operator_actions": [
@@ -136,11 +183,28 @@
     },
     {
       "artifacts": [
+        "results/maniskill_fidelity_metadata_probe.json",
+        "results/maniskill_fidelity_metadata_probe.md"
+      ],
+      "closes": [
+        "platform timing/backend/controller metadata intake before operator fidelity acceptance"
+      ],
+      "commands": [
+        "python scripts\\probe_maniskill_fidelity_metadata.py",
+        "python scripts\\probe_maniskill_fidelity_metadata.py --strict"
+      ],
+      "id": "fidelity_metadata_probe",
+      "operator_input": "record non-evidence timing, scene/backend, controller, observation, and asset metadata for every bound environment candidate",
+      "title": "Probe ManiSkill/SAPIEN fidelity metadata"
+    },
+    {
+      "artifacts": [
         "external_validation/platform_onboarding_packet.md",
         "external_validation/platform_onboarding_packet.json",
         "results/external_platform_probe.json",
         "results/maniskill_task_binding_probe.json",
         "results/maniskill_env_smoke_probe.json",
+        "results/maniskill_fidelity_metadata_probe.json",
         "results/external_platform_onboarding_audit.json"
       ],
       "closes": [
@@ -150,6 +214,7 @@
         "python scripts\\probe_external_platform.py",
         "python scripts\\probe_maniskill_task_bindings.py",
         "python scripts\\probe_maniskill_env_smoke.py",
+        "python scripts\\probe_maniskill_fidelity_metadata.py",
         "python scripts\\build_external_platform_onboarding.py",
         "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
         "python scripts\\audit_external_fidelity_acceptance.py --strict"
@@ -517,6 +582,7 @@
     "results/external_platform_probe.json",
     "results/maniskill_task_binding_probe.json",
     "results/maniskill_env_smoke_probe.json",
+    "results/maniskill_fidelity_metadata_probe.json",
     "results/external_backend_contract_audit.json",
     "results/maniskill_backend_readiness_audit.json",
     "results/maniskill_reference_collection_preflight_audit.json",

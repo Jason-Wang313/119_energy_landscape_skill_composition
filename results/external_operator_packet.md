@@ -57,6 +57,24 @@ Draft rebuild command:
 python scripts\build_external_fidelity_acceptance_draft.py
 ```
 
+## ManiSkill Fidelity Metadata Probe
+
+This probe is not evidence and does not satisfy fidelity acceptance. It records timing, backend, controller, observation, and asset metadata that the independent operator should verify or replace before promoting the fidelity acceptance file.
+
+- Probe JSON: `results/maniskill_fidelity_metadata_probe.json`
+- Probe notes: `results/maniskill_fidelity_metadata_probe.md`
+- Metadata probe ready: `true`
+- Strict metadata ready: `true`
+- Accepted fidelity ready: `false`
+- Primary metadata missing: `[]`
+- Primary timing summary: `{'agent_uids': ['fetch', 'panda', 'panda_wristcam'], 'control_freq_hz_values': [20.0], 'control_timestep_seconds_values': [0.05], 'controller_types': ['CombinedController'], 'derived_substeps_per_control_step_values': [5.0], 'primary_metadata_env_count': 4, 'scene_backend_types': ['PhysxCpuSystem'], 'scene_timestep_seconds_values': [0.01], 'sim_freq_hz_values': [100.0], 'sim_timestep_seconds_values': [0.01]}`
+
+Probe rebuild command:
+
+```powershell
+python scripts\probe_maniskill_fidelity_metadata.py
+```
+
 ## Commands
 
 Materialize real configs after platform selection:
@@ -99,6 +117,7 @@ Post-collection strict gates:
 - `platform_probe`: Probe the selected external platform machine
 - `task_binding_probe`: Probe ManiSkill task-family bindings
 - `env_smoke_probe`: Smoke-test bound ManiSkill environments
+- `fidelity_metadata_probe`: Probe ManiSkill/SAPIEN fidelity metadata
 - `platform_onboarding`: Onboard the public simulator platform
 - `backend_module`: Select a non-template backend module
 - `backend_integration_packet`: Use the backend integration packet as the public-simulator backend checklist
@@ -127,6 +146,7 @@ Post-collection strict gates:
 - `pass` `collection_preflight_fail_closed`: collection_ready=False, blocking_missing_count=4
 - `pass` `maniskill_reference_preflight_reaches_only_fidelity_gate`: blocking=["fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
 - `pass` `fidelity_acceptance_draft_ready_but_fail_closed`: draft_ready=True, remaining_operator_inputs=10
+- `pass` `fidelity_metadata_probe_ready_but_not_evidence`: strict_metadata_ready=True, primary_metadata_missing=[]
 - `pass` `operator_actions_cover_start_to_finish`: missing=[]
 - `pass` `operator_action_titles_present`: missing_titles=[]
 - `pass` `config_materializer_is_guarded`: write_enabled=False, task_count=4

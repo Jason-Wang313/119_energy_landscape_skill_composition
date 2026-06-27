@@ -125,6 +125,14 @@ python scripts\probe_maniskill_env_smoke.py
 
 This writes `results/maniskill_env_smoke_probe.{json,md}`. It attempts construction and reset for the bound public-simulator candidates without writing official rollout logs or videos. It is not evidence; use the report to install missing assets, replace weak bindings, and fill fidelity acceptance before backend qualification.
 
+Probe ManiSkill fidelity metadata:
+
+```powershell
+python scripts\probe_maniskill_fidelity_metadata.py
+```
+
+This writes `results/maniskill_fidelity_metadata_probe.{json,md}`. It records sim/control timestep, SAPIEN backend, controller, observation/info-key, agent, and asset metadata for the bound public-simulator candidates. It is not evidence; use the report to verify or replace fidelity-review fields before promoting `external_validation/fidelity_acceptance.json`.
+
 Build the external platform onboarding packet for the primary public-simulator route:
 
 ```powershell

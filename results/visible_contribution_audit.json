@@ -25,7 +25,7 @@
       "passed": true
     },
     {
-      "detail": "files=240, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=243, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -47,6 +47,11 @@
     {
       "detail": "strict_env_smoke_ready=True, primary_reset_missing=[]",
       "name": "maniskill_env_smoke_probe_visible",
+      "passed": true
+    },
+    {
+      "detail": "strict_metadata_ready=True, primary_metadata_missing=[]",
+      "name": "maniskill_fidelity_metadata_probe_visible",
       "passed": true
     },
     {

@@ -47,6 +47,7 @@ def main() -> int:
     platform_probe = read_json(RESULTS / "external_platform_probe.json")
     task_binding = read_json(RESULTS / "maniskill_task_binding_probe.json")
     env_smoke = read_json(RESULTS / "maniskill_env_smoke_probe.json")
+    fidelity_metadata = read_json(RESULTS / "maniskill_fidelity_metadata_probe.json")
     onboarding = read_json(RESULTS / "external_platform_onboarding_audit.json")
     fidelity_provenance = read_json(RESULTS / "external_fidelity_provenance_audit.json")
     fidelity_draft = read_json(RESULTS / "external_fidelity_acceptance_draft_audit.json")
@@ -186,6 +187,20 @@ def main() -> int:
         (
             f"strict_env_smoke_ready={env_smoke.get('strict_env_smoke_ready')!r}, "
             f"primary_reset_missing={env_smoke.get('primary_reset_missing')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "maniskill_fidelity_metadata_probe_visible",
+        fidelity_metadata.get("version") == "maniskill_fidelity_metadata_probe_v1"
+        and fidelity_metadata.get("passed") is True
+        and fidelity_metadata.get("not_external_evidence") is True
+        and fidelity_metadata.get("metadata_probe_ready") is True
+        and fidelity_metadata.get("accepted_fidelity_ready") is False
+        and fidelity_metadata.get("strict_external_evidence_ready") is False,
+        (
+            f"strict_metadata_ready={fidelity_metadata.get('strict_metadata_ready')!r}, "
+            f"primary_metadata_missing={fidelity_metadata.get('primary_metadata_missing')!r}"
         ),
     )
     add_check(
@@ -404,6 +419,7 @@ def main() -> int:
             "external_platform_probe_claim",
             "maniskill_task_binding_probe_claim",
             "maniskill_env_smoke_probe_claim",
+            "maniskill_fidelity_metadata_probe_claim",
             "external_operator_packet_claim",
             "external_operator_handoff_bundle_claim",
             "external_analysis_plan_claim",
@@ -420,7 +436,7 @@ def main() -> int:
             "external_method_implementation_packet_claim",
             "external_config_materialization_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'local_planner_edge_policy_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_config_materialization_claim'} - claim_names)}",
+        f"missing={sorted({'local_planner_edge_policy_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_config_materialization_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -432,6 +448,7 @@ def main() -> int:
             "External platform probe",
             "ManiSkill task binding probe",
             "ManiSkill env smoke probe",
+            "ManiSkill fidelity metadata probe",
             "External platform onboarding packet",
             "External fidelity provenance packet",
             "External fidelity acceptance draft",
@@ -455,6 +472,7 @@ def main() -> int:
             "External platform probe",
             "ManiSkill task binding probe",
             "ManiSkill env smoke probe",
+            "ManiSkill fidelity metadata probe",
             "External platform onboarding packet",
             "External fidelity provenance packet",
             "External fidelity acceptance draft",
@@ -479,6 +497,7 @@ def main() -> int:
             "external platform probe",
             "ManiSkill task binding probe",
             "ManiSkill env smoke probe",
+            "ManiSkill fidelity metadata probe",
             "external platform onboarding packet",
             "external fidelity provenance packet",
             "external fidelity acceptance draft",
@@ -503,6 +522,7 @@ def main() -> int:
             "External platform probe",
             "ManiSkill task binding probe",
             "ManiSkill env smoke probe",
+            "ManiSkill fidelity metadata probe",
             "External platform onboarding packet",
             "External fidelity provenance packet",
             "External fidelity acceptance draft",
@@ -527,6 +547,7 @@ def main() -> int:
             "scripts/probe_external_platform.py",
             "scripts/probe_maniskill_task_bindings.py",
             "scripts/probe_maniskill_env_smoke.py",
+            "scripts/probe_maniskill_fidelity_metadata.py",
             "scripts/build_external_platform_onboarding.py",
             "scripts/build_external_fidelity_provenance_packet.py",
             "scripts/build_external_fidelity_acceptance_draft.py",
@@ -551,6 +572,7 @@ def main() -> int:
             "external platform probe",
             "ManiSkill task binding probe",
             "ManiSkill env smoke probe",
+            "ManiSkill fidelity metadata probe",
             "external platform onboarding packet",
             "external fidelity provenance packet",
             "external fidelity acceptance draft",
@@ -569,6 +591,7 @@ def main() -> int:
         ],
         "outreach": [
             "results/external_operator_packet.md",
+            "ManiSkill fidelity metadata probe",
             "do not frame Haonan as responsible for supplying the missing proof",
             "independent validation protocol/operator packet",
         ],

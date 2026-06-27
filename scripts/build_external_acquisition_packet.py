@@ -18,6 +18,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "platform_probe",
         "task_binding_probe",
         "env_smoke_probe",
+        "fidelity_metadata_probe",
         "platform_onboarding",
         "fidelity_provenance_packet",
         "backend_integration_packet",
@@ -92,6 +93,19 @@ ACTION_CATALOG = {
         ],
         "closes": ["environment construction/reset and missing-asset readiness before backend qualification"],
     },
+    "fidelity_metadata_probe": {
+        "title": "Probe ManiSkill/SAPIEN fidelity metadata",
+        "operator_input": "record non-evidence timing, scene/backend, controller, observation, and asset metadata for every bound environment candidate",
+        "artifacts": [
+            "results/maniskill_fidelity_metadata_probe.json",
+            "results/maniskill_fidelity_metadata_probe.md",
+        ],
+        "commands": [
+            "python scripts\\probe_maniskill_fidelity_metadata.py",
+            "python scripts\\probe_maniskill_fidelity_metadata.py --strict",
+        ],
+        "closes": ["platform timing/backend/controller metadata intake before operator fidelity acceptance"],
+    },
     "platform_onboarding": {
         "title": "Onboard the public simulator platform",
         "operator_input": "GPU workstation or accepted robot/simulator platform plus recorded version/provenance fields",
@@ -101,12 +115,14 @@ ACTION_CATALOG = {
             "results/external_platform_probe.json",
             "results/maniskill_task_binding_probe.json",
             "results/maniskill_env_smoke_probe.json",
+            "results/maniskill_fidelity_metadata_probe.json",
             "results/external_platform_onboarding_audit.json",
         ],
         "commands": [
             "python scripts\\probe_external_platform.py",
             "python scripts\\probe_maniskill_task_bindings.py",
             "python scripts\\probe_maniskill_env_smoke.py",
+            "python scripts\\probe_maniskill_fidelity_metadata.py",
             "python scripts\\build_external_platform_onboarding.py",
             "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
             "python scripts\\audit_external_fidelity_acceptance.py --strict",
@@ -427,6 +443,7 @@ def main() -> int:
     platform_probe_path = RESULTS / "external_platform_probe.json"
     task_binding_probe_path = RESULTS / "maniskill_task_binding_probe.json"
     env_smoke_probe_path = RESULTS / "maniskill_env_smoke_probe.json"
+    fidelity_metadata_probe_path = RESULTS / "maniskill_fidelity_metadata_probe.json"
     onboarding_path = RESULTS / "external_platform_onboarding_audit.json"
     fidelity_provenance_path = RESULTS / "external_fidelity_provenance_audit.json"
     fidelity_draft_path = RESULTS / "external_fidelity_acceptance_draft_audit.json"
@@ -447,6 +464,7 @@ def main() -> int:
     platform_probe = require_json(platform_probe_path)
     task_binding_probe = require_json(task_binding_probe_path)
     env_smoke_probe = require_json(env_smoke_probe_path)
+    fidelity_metadata_probe = require_json(fidelity_metadata_probe_path)
     onboarding = require_json(onboarding_path)
     fidelity_provenance = require_json(fidelity_provenance_path)
     fidelity_draft = require_json(fidelity_draft_path)
@@ -776,6 +794,20 @@ def main() -> int:
             f"primary_reset_missing={env_smoke_probe.get('primary_reset_missing')!r}"
         ),
     )
+    add_check(
+        checks,
+        "fidelity_metadata_probe_ready",
+        fidelity_metadata_probe.get("version") == "maniskill_fidelity_metadata_probe_v1"
+        and fidelity_metadata_probe.get("passed") is True
+        and fidelity_metadata_probe.get("not_external_evidence") is True
+        and fidelity_metadata_probe.get("metadata_probe_ready") is True
+        and fidelity_metadata_probe.get("accepted_fidelity_ready") is False
+        and fidelity_metadata_probe.get("strict_external_evidence_ready") is False,
+        (
+            f"strict_metadata_ready={fidelity_metadata_probe.get('strict_metadata_ready')!r}, "
+            f"primary_metadata_missing={fidelity_metadata_probe.get('primary_metadata_missing')!r}"
+        ),
+    )
     onboarding_checks = {check.get("name"): check.get("passed") for check in onboarding.get("checks", []) or []}
     add_check(
         checks,
@@ -853,6 +885,7 @@ def main() -> int:
         "probe_external_platform.py",
         "probe_maniskill_task_bindings.py",
         "probe_maniskill_env_smoke.py",
+        "probe_maniskill_fidelity_metadata.py",
         "build_external_method_implementation_packet.py",
         "build_external_pilot_smoke_packet.py",
         "audit_external_pilot_smoke.py",
@@ -904,6 +937,7 @@ def main() -> int:
                 platform_probe_path,
                 task_binding_probe_path,
                 env_smoke_probe_path,
+                fidelity_metadata_probe_path,
                 onboarding_path,
                 fidelity_provenance_path,
                 fidelity_draft_path,

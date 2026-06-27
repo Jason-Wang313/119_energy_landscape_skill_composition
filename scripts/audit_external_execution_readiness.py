@@ -180,6 +180,25 @@ def main() -> int:
         ),
     )
 
+    fidelity_metadata_ok, fidelity_metadata, fidelity_metadata_detail = passed_json(
+        RESULTS / "maniskill_fidelity_metadata_probe.json",
+        version="maniskill_fidelity_metadata_probe_v1",
+    )
+    add_check(checks, "maniskill_fidelity_metadata_probe_ready", fidelity_metadata_ok, fidelity_metadata_detail)
+    add_check(
+        checks,
+        "maniskill_fidelity_metadata_probe_not_evidence",
+        fidelity_metadata.get("not_external_evidence") is True
+        and fidelity_metadata.get("metadata_probe_ready") is True
+        and fidelity_metadata.get("accepted_fidelity_ready") is False
+        and fidelity_metadata.get("strict_fidelity_evidence_ready") is False
+        and fidelity_metadata.get("strict_external_evidence_ready") is False,
+        (
+            f"strict_metadata_ready={fidelity_metadata.get('strict_metadata_ready')!r}, "
+            f"primary_metadata_missing={fidelity_metadata.get('primary_metadata_missing')!r}"
+        ),
+    )
+
     onboarding_ok, onboarding, onboarding_detail = passed_json(
         RESULTS / "external_platform_onboarding_audit.json",
         version="external_platform_onboarding_audit_v1",

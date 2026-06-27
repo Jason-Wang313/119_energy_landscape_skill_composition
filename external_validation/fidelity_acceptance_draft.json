@@ -39,11 +39,50 @@
       "contact_events_or_task_contact_proxy",
       "normal_force_or_proxy_to_be_verified_by_operator"
     ],
-    "contact_solver": "OPERATOR_VERIFY_CONTACT_SOLVER_AND_FRICTION_BEFORE_ACCEPTANCE",
+    "contact_solver": "Probe-observed SAPIEN backend(s): PhysxCpuSystem; OPERATOR_VERIFY_CONTACT_SOLVER_AND_FRICTION_BEFORE_ACCEPTANCE",
     "physics_engine": "SAPIEN 3.0.3 via ManiSkill",
     "platform_name": "ManiSkill-SAPIEN-reference-backend",
     "platform_type": "high_fidelity_sim",
     "platform_version": "ManiSkill 3.0.1; SAPIEN 3.0.3",
+    "probe_observed_fidelity_metadata": {
+      "metadata_probe_path": "results/maniskill_fidelity_metadata_probe.json",
+      "metadata_probe_ready": true,
+      "not_external_evidence": true,
+      "primary_metadata_missing": [],
+      "primary_timing_summary": {
+        "agent_uids": [
+          "fetch",
+          "panda",
+          "panda_wristcam"
+        ],
+        "control_freq_hz_values": [
+          20.0
+        ],
+        "control_timestep_seconds_values": [
+          0.05
+        ],
+        "controller_types": [
+          "CombinedController"
+        ],
+        "derived_substeps_per_control_step_values": [
+          5.0
+        ],
+        "primary_metadata_env_count": 4,
+        "scene_backend_types": [
+          "PhysxCpuSystem"
+        ],
+        "scene_timestep_seconds_values": [
+          0.01
+        ],
+        "sim_freq_hz_values": [
+          100.0
+        ],
+        "sim_timestep_seconds_values": [
+          0.01
+        ]
+      },
+      "strict_metadata_ready": true
+    },
     "robot_model_source": "ManiSkill/SAPIEN task assets and Panda robot definitions; operator must record exact selected-task asset provenance before acceptance",
     "sensor_modalities": [
       "state",
@@ -56,8 +95,8 @@
       "robot_pose",
       "task_info_success_or_contact_keys"
     ],
-    "substeps_per_control_step": "OPERATOR_VERIFY_SUBSTEPS_BEFORE_ACCEPTANCE",
-    "timestep_seconds": "OPERATOR_VERIFY_TIMESTEP_SECONDS_BEFORE_ACCEPTANCE"
+    "substeps_per_control_step": "Probe-derived 5.0; OPERATOR_VERIFY_SUBSTEPS_BEFORE_ACCEPTANCE",
+    "timestep_seconds": "Probe-observed sim_timestep=0.01, control_timestep=0.05; OPERATOR_VERIFY_TIMESTEP_SECONDS_BEFORE_ACCEPTANCE"
   },
   "prefilled_hashes": {
     "backend_module_sha256": "E30E5A3292B6ACB7B9819914A6FDA6BD068B5B469031EEF1FF4E7AA852D140B2",
@@ -134,15 +173,50 @@
     "artifact_hash_policy": "sha256",
     "backend_module": "external_validation/runner/maniskill_reference_backend.py",
     "backend_module_hash": "E30E5A3292B6ACB7B9819914A6FDA6BD068B5B469031EEF1FF4E7AA852D140B2",
-    "code_commit": "5cfd85dd14a26b1e6c51974d4459aca4d42fe2df",
+    "code_commit": "01de91b46e7502a81b73c036244b5bf9d2a7800f",
     "date_locked": "DRAFT_NOT_LOCKED",
+    "fidelity_metadata_probe_path": "results/maniskill_fidelity_metadata_probe.json",
+    "fidelity_metadata_probe_ready": true,
     "manifest_path": "external_validation/manifest.json",
     "operator_name_or_lab": "DRAFT_OPERATOR_TO_FILL",
     "operator_not_target_collaborator": false,
     "primary_env_smoke_ready": true,
     "primary_env_smoke_recorded": true,
+    "primary_fidelity_metadata_missing": [],
     "primary_reset_missing": [],
     "primary_route_install_ready": true,
+    "probe_observed_timing_summary": {
+      "agent_uids": [
+        "fetch",
+        "panda",
+        "panda_wristcam"
+      ],
+      "control_freq_hz_values": [
+        20.0
+      ],
+      "control_timestep_seconds_values": [
+        0.05
+      ],
+      "controller_types": [
+        "CombinedController"
+      ],
+      "derived_substeps_per_control_step_values": [
+        5.0
+      ],
+      "primary_metadata_env_count": 4,
+      "scene_backend_types": [
+        "PhysxCpuSystem"
+      ],
+      "scene_timestep_seconds_values": [
+        0.01
+      ],
+      "sim_freq_hz_values": [
+        100.0
+      ],
+      "sim_timestep_seconds_values": [
+        0.01
+      ]
+    },
     "reference_collection_preflight_blocking": [
       "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"
     ],
@@ -153,22 +227,24 @@
       " M docs/claim_evidence_ledger.json",
       " M docs/final_audit.md",
       " M docs/haonan_yilun_outreach_package.md",
-      " M docs/independent_validation_protocol.md",
-      " M docs/reproducibility_checklist.md",
       " M docs/submission_readiness_audit_v5.md",
       " M docs/submission_readiness_decision.md",
       " M docs/submission_version_log.md",
       " M external_validation/README.md",
+      " M external_validation/fidelity_acceptance_draft.json",
+      " M external_validation/fidelity_acceptance_draft.md",
       " M outreach/paper119_four_page_preview.pdf",
-      " M outreach/paper119_four_page_preview.tex",
       " M outreach/paper119_one_page_memo.pdf",
-      " M outreach/paper119_one_page_memo.tex",
       " M paper/main.pdf",
       " M paper/main.tex",
+      " M results/camera_ready_design_audit.json",
+      " M results/camera_ready_design_audit.md",
       " M results/external_acquisition_packet.json",
       " M results/external_acquisition_packet.md",
       " M results/external_execution_readiness_audit.json",
       " M results/external_execution_readiness_audit.md",
+      " M results/external_fidelity_acceptance_draft_audit.json",
+      " M results/external_fidelity_acceptance_draft_audit.md",
       " M results/external_operator_handoff_bundle.json",
       " M results/external_operator_handoff_bundle.md",
       " M results/external_operator_packet.json",
@@ -178,29 +254,29 @@
       " M results/maniskill_env_smoke_probe.json",
       " M results/manuscript_readability_audit.json",
       " M results/manuscript_readability_audit.md",
+      " M results/presentation_quality_audit.json",
+      " M results/presentation_quality_audit.md",
       " M results/visible_contribution_audit.json",
       " M results/visible_contribution_audit.md",
-      " M scripts/audit_camera_ready_design.py",
-      " M scripts/audit_manuscript_readability.py",
-      " M scripts/audit_presentation_quality.py",
+      " M scripts/audit_external_execution_readiness.py",
       " M scripts/audit_visible_contribution.py",
       " M scripts/build_external_acquisition_packet.py",
+      " M scripts/build_external_fidelity_acceptance_draft.py",
       " M scripts/build_external_operator_handoff_bundle.py",
       " M scripts/build_external_operator_packet.py",
       " M scripts/build_submission_artifacts.ps1",
       " M scripts/generate_manuscript.py",
       " M scripts/validate_submission_artifacts.py",
-      "?? external_validation/fidelity_acceptance_draft.json",
-      "?? external_validation/fidelity_acceptance_draft.md",
-      "?? results/external_fidelity_acceptance_draft_audit.json",
-      "?? results/external_fidelity_acceptance_draft_audit.md",
-      "?? scripts/build_external_fidelity_acceptance_draft.py"
+      "?? results/maniskill_fidelity_metadata_probe.json",
+      "?? results/maniskill_fidelity_metadata_probe.md",
+      "?? scripts/probe_maniskill_fidelity_metadata.py"
     ],
-    "skill_library_hash": "62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1"
+    "skill_library_hash": "62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1",
+    "strict_fidelity_metadata_ready": true
   },
   "purpose": "Operator-editable draft for the tracked ManiSkill/SAPIEN route. This file pre-fills reproducible provenance anchors but cannot satisfy fidelity acceptance until independently completed, renamed, manifest-declared, and strict-audited.",
   "qualification": {
-    "contact_dynamics_justification": "DRAFT ONLY: primary ManiSkill/SAPIEN task bindings reset locally, but accepted contact/friction/substep details must be written by the operator before rollouts count.",
+    "contact_dynamics_justification": "DRAFT ONLY: metadata probe records ManiSkill/SAPIEN timing and backend fields, but accepted contact/friction/substep details must be written by the operator before rollouts count.",
     "deterministic_paired_resets": true,
     "failed_and_abstained_runs_logged": true,
     "known_limitations": "DRAFT ONLY: current local probe uses CPU fallback rendering; support assets oakink-v2/ycb are not needed for the primary route but remain explicit support-environment blockers.",
@@ -236,6 +312,7 @@
     "results/maniskill_backend_readiness_audit.json",
     "results/maniskill_reference_collection_preflight_audit.json",
     "results/maniskill_env_smoke_probe.json",
+    "results/maniskill_fidelity_metadata_probe.json",
     "external_validation/maniskill_task_bindings.json"
   ],
   "strict_external_evidence_ready": false,
@@ -249,9 +326,21 @@
       "contact_or_dynamics_property": "insertion contact and regrasp basin transition",
       "failure_modes_visible_on_video": true,
       "minimum_required_signal": "peg/object pose plus contact or force proxy",
+      "primary_agent_uid": "panda_wristcam",
+      "primary_control_timestep_seconds": 0.05,
+      "primary_controller_type": "CombinedController",
+      "primary_derived_substeps_per_control_step": 5.0,
       "primary_env_id": "PegInsertionSide-v1",
       "primary_env_reset_ok": true,
       "primary_env_smoke_recorded": true,
+      "primary_fidelity_info_keys": [
+        "elapsed_steps",
+        "peg_head_pos_at_hole",
+        "reconfigure",
+        "success"
+      ],
+      "primary_fidelity_metadata_recorded": true,
+      "primary_fidelity_metadata_reset_ok": true,
       "primary_info_keys": [
         "elapsed_steps",
         "peg_head_pos_at_hole",
@@ -259,6 +348,8 @@
         "success"
       ],
       "primary_observation_shape": "torch.Size([1, 43])",
+      "primary_scene_backend_type": "PhysxCpuSystem",
+      "primary_sim_timestep_seconds": 0.01,
       "requires_operator_fidelity_acceptance": true,
       "seam_observable": true,
       "support_env_ids": [],
@@ -273,9 +364,22 @@
       "contact_or_dynamics_property": "drawer joint/contact and reachable grasp basin",
       "failure_modes_visible_on_video": true,
       "minimum_required_signal": "drawer joint state, object pose, and contact or force proxy",
+      "primary_agent_uid": "fetch",
+      "primary_control_timestep_seconds": 0.05,
+      "primary_controller_type": "CombinedController",
+      "primary_derived_substeps_per_control_step": 5.0,
       "primary_env_id": "OpenCabinetDrawer-v1",
       "primary_env_reset_ok": true,
       "primary_env_smoke_recorded": true,
+      "primary_fidelity_info_keys": [
+        "elapsed_steps",
+        "handle_link_pos",
+        "open_enough",
+        "reconfigure",
+        "success"
+      ],
+      "primary_fidelity_metadata_recorded": true,
+      "primary_fidelity_metadata_reset_ok": true,
       "primary_info_keys": [
         "elapsed_steps",
         "handle_link_pos",
@@ -284,6 +388,8 @@
         "success"
       ],
       "primary_observation_shape": "torch.Size([1, 44])",
+      "primary_scene_backend_type": "PhysxCpuSystem",
+      "primary_sim_timestep_seconds": 0.01,
       "requires_operator_fidelity_acceptance": true,
       "seam_observable": true,
       "support_env_ids": [
@@ -312,9 +418,22 @@
       "contact_or_dynamics_property": "door hinge/contact transition into navigation start set",
       "failure_modes_visible_on_video": true,
       "minimum_required_signal": "door state, base pose, clearance, and contact or force proxy",
+      "primary_agent_uid": "fetch",
+      "primary_control_timestep_seconds": 0.05,
+      "primary_controller_type": "CombinedController",
+      "primary_derived_substeps_per_control_step": 5.0,
       "primary_env_id": "OpenCabinetDoor-v1",
       "primary_env_reset_ok": true,
       "primary_env_smoke_recorded": true,
+      "primary_fidelity_info_keys": [
+        "elapsed_steps",
+        "handle_link_pos",
+        "open_enough",
+        "reconfigure",
+        "success"
+      ],
+      "primary_fidelity_metadata_recorded": true,
+      "primary_fidelity_metadata_reset_ok": true,
       "primary_info_keys": [
         "elapsed_steps",
         "handle_link_pos",
@@ -323,6 +442,8 @@
         "success"
       ],
       "primary_observation_shape": "torch.Size([1, 44])",
+      "primary_scene_backend_type": "PhysxCpuSystem",
+      "primary_sim_timestep_seconds": 0.01,
       "requires_operator_fidelity_acceptance": true,
       "seam_observable": true,
       "support_env_ids": [],
@@ -337,9 +458,25 @@
       "contact_or_dynamics_property": "deformable/contact-rich cable state before insertion",
       "failure_modes_visible_on_video": true,
       "minimum_required_signal": "endpoint pose, cable state proxy, and contact or force proxy",
+      "primary_agent_uid": "panda",
+      "primary_control_timestep_seconds": 0.05,
+      "primary_controller_type": "CombinedController",
+      "primary_derived_substeps_per_control_step": 5.0,
       "primary_env_id": "PullCubeTool-v1",
       "primary_env_reset_ok": true,
       "primary_env_smoke_recorded": true,
+      "primary_fidelity_info_keys": [
+        "cube_distance",
+        "cube_progress",
+        "elapsed_steps",
+        "reconfigure",
+        "reward",
+        "success",
+        "success_at_end",
+        "success_once"
+      ],
+      "primary_fidelity_metadata_recorded": true,
+      "primary_fidelity_metadata_reset_ok": true,
       "primary_info_keys": [
         "cube_distance",
         "cube_progress",
@@ -351,6 +488,8 @@
         "success_once"
       ],
       "primary_observation_shape": "torch.Size([1, 39])",
+      "primary_scene_backend_type": "PhysxCpuSystem",
+      "primary_sim_timestep_seconds": 0.01,
       "requires_operator_fidelity_acceptance": true,
       "seam_observable": true,
       "support_env_ids": [

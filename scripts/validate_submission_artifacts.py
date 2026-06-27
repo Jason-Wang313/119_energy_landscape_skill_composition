@@ -111,6 +111,7 @@ def main():
         "scripts\\probe_external_platform.py",
         "scripts\\probe_maniskill_task_bindings.py",
         "scripts\\probe_maniskill_env_smoke.py",
+        "scripts\\probe_maniskill_fidelity_metadata.py",
         "scripts\\build_external_platform_onboarding.py",
         "scripts\\build_external_fidelity_provenance_packet.py",
         "scripts\\build_external_fidelity_acceptance_draft.py",
@@ -204,6 +205,7 @@ def main():
         "python scripts/probe_external_platform.py",
         "python scripts/probe_maniskill_task_bindings.py",
         "python scripts/probe_maniskill_env_smoke.py",
+        "python scripts/probe_maniskill_fidelity_metadata.py",
         "python scripts/build_external_platform_onboarding.py",
         "python scripts/build_external_fidelity_provenance_packet.py",
         "python scripts/build_external_fidelity_acceptance_draft.py",
@@ -531,6 +533,59 @@ def main():
     ):
         if env_smoke_checks.get(required_check) is not True:
             fail(f"ManiSkill env smoke probe missing passing check: {required_check}")
+
+    fidelity_metadata_path = RESULTS / "maniskill_fidelity_metadata_probe.json"
+    fidelity_metadata_md_path = RESULTS / "maniskill_fidelity_metadata_probe.md"
+    for path in (fidelity_metadata_path, fidelity_metadata_md_path, ROOT / "scripts" / "probe_maniskill_fidelity_metadata.py"):
+        if not path.exists():
+            fail(f"missing ManiSkill fidelity metadata probe artifact: {path}")
+    fidelity_metadata = json.loads(fidelity_metadata_path.read_text(encoding="utf-8"))
+    if fidelity_metadata.get("version") != "maniskill_fidelity_metadata_probe_v1":
+        fail("ManiSkill fidelity metadata probe version mismatch")
+    if fidelity_metadata.get("passed") is not True:
+        fail("ManiSkill fidelity metadata probe did not pass")
+    if fidelity_metadata.get("not_external_evidence") is not True:
+        fail("ManiSkill fidelity metadata probe must declare that it is not evidence")
+    if fidelity_metadata.get("metadata_probe_ready") is not True:
+        fail("ManiSkill fidelity metadata probe must report metadata_probe_ready=true")
+    if fidelity_metadata.get("accepted_fidelity_ready") is not False:
+        fail("ManiSkill fidelity metadata probe must leave accepted_fidelity_ready=false")
+    if fidelity_metadata.get("strict_fidelity_evidence_ready") is not False or fidelity_metadata.get("strict_external_evidence_ready") is not False:
+        fail("ManiSkill fidelity metadata probe must not claim strict fidelity or external evidence readiness")
+    timing_summary = fidelity_metadata.get("primary_timing_summary", {}) or {}
+    for field in (
+        "sim_freq_hz_values",
+        "control_freq_hz_values",
+        "sim_timestep_seconds_values",
+        "control_timestep_seconds_values",
+        "derived_substeps_per_control_step_values",
+        "scene_backend_types",
+    ):
+        if not isinstance(timing_summary.get(field), list):
+            fail(f"ManiSkill fidelity metadata probe must report timing summary list field: {field}")
+    if len(fidelity_metadata.get("env_records", []) or []) < 4:
+        fail("ManiSkill fidelity metadata probe must attempt the bound primary task envs")
+    if not isinstance(fidelity_metadata.get("primary_metadata_missing"), list):
+        fail("ManiSkill fidelity metadata probe must report primary_metadata_missing as a list")
+    if not isinstance(fidelity_metadata.get("missing_asset_ids"), list):
+        fail("ManiSkill fidelity metadata probe must report missing_asset_ids as a list")
+    for record in fidelity_metadata.get("env_records", []):
+        if not isinstance(record, dict):
+            fail("ManiSkill fidelity metadata probe records must be objects")
+        if "required_asset_ids" not in record or "missing_asset_ids" not in record or "metadata" not in record:
+            fail(f"ManiSkill fidelity metadata record must include asset and metadata fields: {record.get('env_id')}")
+    fidelity_metadata_checks = {check.get("name"): check.get("passed") for check in fidelity_metadata.get("checks", [])}
+    for required_check in (
+        "probe_is_non_evidence",
+        "binding_file_ready",
+        "metadata_attempted_all_bound_envs",
+        "primary_metadata_readiness_reported",
+        "timing_summary_reported",
+        "asset_requirements_reported",
+        "strict_evidence_remains_false",
+    ):
+        if fidelity_metadata_checks.get(required_check) is not True:
+            fail(f"ManiSkill fidelity metadata probe missing passing check: {required_check}")
 
     onboarding_packet_path = EXTERNAL / "platform_onboarding_packet.json"
     onboarding_packet_md_path = EXTERNAL / "platform_onboarding_packet.md"
@@ -1955,6 +2010,8 @@ def main():
         "maniskill_task_binding_probe_not_evidence",
         "maniskill_env_smoke_probe_ready",
         "maniskill_env_smoke_probe_not_evidence",
+        "maniskill_fidelity_metadata_probe_ready",
+        "maniskill_fidelity_metadata_probe_not_evidence",
         "external_platform_onboarding_ready",
         "external_platform_onboarding_not_evidence",
         "external_platform_onboarding_sources_and_provenance",
@@ -2126,6 +2183,7 @@ def main():
         "platform_probe_ready",
         "task_binding_probe_ready",
         "env_smoke_probe_ready",
+        "fidelity_metadata_probe_ready",
         "platform_onboarding_ready",
         "fidelity_provenance_packet_ready",
         "fidelity_acceptance_draft_ready",
@@ -2207,6 +2265,23 @@ def main():
     env_smoke_commands = "\n".join(env_smoke_actions[0].get("commands", []) or [])
     if "probe_maniskill_env_smoke.py" not in env_smoke_commands or "probe_maniskill_env_smoke.py --strict" not in env_smoke_commands:
         fail("external operator packet env smoke action must include non-strict and strict probe commands")
+    metadata_probe = operator_packet.get("fidelity_metadata_probe", {}) or {}
+    if metadata_probe.get("not_external_evidence") is not True:
+        fail("external operator packet fidelity metadata probe must be marked non-evidence")
+    if metadata_probe.get("metadata_probe_ready") is not True:
+        fail("external operator packet fidelity metadata probe must report metadata_probe_ready=true")
+    if metadata_probe.get("accepted_fidelity_ready") is not False:
+        fail("external operator packet fidelity metadata probe must leave accepted_fidelity_ready=false")
+    if metadata_probe.get("probe_path") != "results/maniskill_fidelity_metadata_probe.json":
+        fail("external operator packet fidelity metadata probe must point to the probe JSON")
+    if "probe_maniskill_fidelity_metadata.py" not in str(metadata_probe.get("build_command", "")):
+        fail("external operator packet fidelity metadata probe must include rebuild command")
+    metadata_actions = [action for action in operator_actions if action.get("id") == "fidelity_metadata_probe"]
+    if not metadata_actions:
+        fail("external operator packet missing fidelity_metadata_probe action")
+    metadata_commands = "\n".join(metadata_actions[0].get("commands", []) or [])
+    if "probe_maniskill_fidelity_metadata.py" not in metadata_commands or "probe_maniskill_fidelity_metadata.py --strict" not in metadata_commands:
+        fail("external operator packet fidelity metadata action must include non-strict and strict probe commands")
     backend_integration_actions = [action for action in operator_actions if action.get("id") == "backend_integration_packet"]
     if not backend_integration_actions:
         fail("external operator packet missing backend_integration_packet action")
@@ -2312,6 +2387,7 @@ def main():
         "handoff_has_task_config_and_baseline_assets",
         "analysis_plan_included",
         "platform_onboarding_included",
+        "fidelity_metadata_probe_included",
         "fidelity_provenance_packet_included",
         "fidelity_acceptance_draft_included",
         "backend_integration_packet_included",
@@ -2547,6 +2623,7 @@ def main():
         "candidate_platform_prefilled_from_reference_route",
         "all_core_tasks_have_primary_env_status_and_config_hash",
         "support_asset_blockers_remain_visible",
+        "fidelity_metadata_probe_prefills_timing_and_task_records",
         "candidate_hashes_prefilled",
         "remaining_operator_inputs_cover_fidelity_gate",
         "acceptance_gates_remain_unaccepted",
@@ -2844,6 +2921,7 @@ def main():
         "fidelity_provenance_packet_visible",
         "backend_integration_packet_visible",
         "maniskill_reference_collection_preflight_visible",
+        "maniskill_fidelity_metadata_probe_visible",
         "runner_backend_probe_visible",
         "config_manifest_packet_visible",
         "rollout_evidence_packet_visible",

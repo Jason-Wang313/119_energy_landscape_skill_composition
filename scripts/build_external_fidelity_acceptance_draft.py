@@ -20,6 +20,7 @@ DRAFT_VERSION = "paper119_fidelity_acceptance_draft_v1"
 AUDIT_VERSION = "external_fidelity_acceptance_draft_audit_v1"
 REAL_ACCEPTANCE_PATH = "external_validation/fidelity_acceptance.json"
 REAL_MANIFEST_PATH = "external_validation/manifest.json"
+FIDELITY_METADATA_PROBE_PATH = "results/maniskill_fidelity_metadata_probe.json"
 
 REQUIRED_TASKS = {
     "peg_place_regrasp",
@@ -118,6 +119,26 @@ def env_status_by_id(env_smoke: dict[str, Any]) -> dict[str, dict[str, Any]]:
     }
 
 
+def env_metadata_by_id(metadata_probe: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    records = metadata_probe.get("env_records", [])
+    records = records if isinstance(records, list) else []
+    return {
+        str(record.get("env_id", "")): record
+        for record in records
+        if isinstance(record, dict) and str(record.get("env_id", ""))
+    }
+
+
+def format_singleton(values: Any, fallback: str) -> str:
+    values = values if isinstance(values, list) else []
+    filtered = [value for value in values if value not in ("", None)]
+    if len(filtered) == 1:
+        return str(filtered[0])
+    if len(filtered) > 1:
+        return ", ".join(str(value) for value in filtered)
+    return fallback
+
+
 def task_bindings(binding_payload: dict[str, Any]) -> dict[str, dict[str, Any]]:
     bindings = binding_payload.get("bindings", [])
     bindings = bindings if isinstance(bindings, list) else []
@@ -144,12 +165,14 @@ def build_task_fidelity(
     template: dict[str, Any],
     binding_payload: dict[str, Any],
     env_smoke: dict[str, Any],
+    metadata_probe: dict[str, Any],
     config_hash_by_task: dict[str, str],
 ) -> list[dict[str, Any]]:
     template_tasks = template.get("task_fidelity", [])
     template_tasks = template_tasks if isinstance(template_tasks, list) else []
     bindings = task_bindings(binding_payload)
     envs = env_status_by_id(env_smoke)
+    metadata_records = env_metadata_by_id(metadata_probe)
     result: list[dict[str, Any]] = []
     for item in template_tasks:
         if not isinstance(item, dict):
@@ -158,6 +181,8 @@ def build_task_fidelity(
         binding = bindings.get(task, {})
         primary_env_id = str(binding.get("primary_env_id", ""))
         env_record = envs.get(primary_env_id, {})
+        metadata_record = metadata_records.get(primary_env_id, {})
+        metadata = metadata_record.get("metadata", {}) if isinstance(metadata_record.get("metadata"), dict) else {}
         support_env_ids = list(binding.get("support_env_ids", []) or [])
         support_status = {
             env_id: {
@@ -178,6 +203,15 @@ def build_task_fidelity(
                 "primary_env_reset_ok": bool(env_record.get("reset_ok")),
                 "primary_observation_shape": env_record.get("observation_shape", ""),
                 "primary_info_keys": list(env_record.get("info_keys", []) or []),
+                "primary_fidelity_metadata_recorded": bool(metadata_record),
+                "primary_fidelity_metadata_reset_ok": bool(metadata_record.get("reset_ok")),
+                "primary_sim_timestep_seconds": metadata.get("sim_timestep_seconds", ""),
+                "primary_control_timestep_seconds": metadata.get("control_timestep_seconds", ""),
+                "primary_derived_substeps_per_control_step": metadata.get("derived_substeps_per_control_step", ""),
+                "primary_scene_backend_type": metadata.get("scene_backend_type", ""),
+                "primary_agent_uid": metadata.get("agent_uid", ""),
+                "primary_controller_type": metadata.get("controller_type", ""),
+                "primary_fidelity_info_keys": list(metadata.get("info_keys", []) or []),
                 "support_env_status": support_status,
                 "config_path": f"external_validation/configs/{task}.json",
                 "config_sha256": config_hash_by_task.get(task, ""),
@@ -193,6 +227,7 @@ def build_draft() -> dict[str, Any]:
     backend = read_json(RESULTS / "maniskill_backend_readiness_audit.json")
     reference_preflight = read_json(RESULTS / "maniskill_reference_collection_preflight_audit.json")
     env_smoke = read_json(RESULTS / "maniskill_env_smoke_probe.json")
+    metadata_probe = read_json(RESULTS / "maniskill_fidelity_metadata_probe.json")
     bindings = read_json(EXTERNAL / "maniskill_task_bindings.json")
 
     backend_platform = backend.get("platform_provenance", {})
@@ -209,7 +244,16 @@ def build_draft() -> dict[str, Any]:
     backend_hash = str(backend_platform.get("backend_module_sha256", "")).upper()
     skill_library_hash = sha256_tree(EXTERNAL / "baselines")
     detected_missing_asset_ids = sorted(set(env_smoke.get("missing_asset_ids", []) or []))
+    metadata_missing_asset_ids = sorted(set(metadata_probe.get("missing_asset_ids", []) or []))
     support_asset_ids = sorted(set(detected_missing_asset_ids).union(DECLARED_SUPPORT_ASSET_IDS))
+    timing = metadata_probe.get("primary_timing_summary", {})
+    timing = timing if isinstance(timing, dict) else {}
+    sim_timestep = format_singleton(timing.get("sim_timestep_seconds_values"), "OPERATOR_VERIFY_SIM_TIMESTEP_SECONDS_BEFORE_ACCEPTANCE")
+    control_timestep = format_singleton(timing.get("control_timestep_seconds_values"), "OPERATOR_VERIFY_CONTROL_TIMESTEP_SECONDS_BEFORE_ACCEPTANCE")
+    substeps = format_singleton(timing.get("derived_substeps_per_control_step_values"), "OPERATOR_VERIFY_SUBSTEPS_BEFORE_ACCEPTANCE")
+    scene_backends = timing.get("scene_backend_types", [])
+    scene_backends = scene_backends if isinstance(scene_backends, list) else []
+    backend_summary = ", ".join(str(item) for item in scene_backends if item) or "OPERATOR_VERIFY_PHYSX_BACKEND_BEFORE_ACCEPTANCE"
 
     platform = {
         "platform_type": "high_fidelity_sim",
@@ -219,15 +263,23 @@ def build_draft() -> dict[str, Any]:
             f"SAPIEN {packages.get('sapien', {}).get('distribution_version') or backend_platform.get('sapien_version', 'unknown')}"
         ),
         "physics_engine": f"SAPIEN {packages.get('sapien', {}).get('distribution_version') or backend_platform.get('sapien_version', 'unknown')} via ManiSkill",
-        "contact_solver": "OPERATOR_VERIFY_CONTACT_SOLVER_AND_FRICTION_BEFORE_ACCEPTANCE",
-        "timestep_seconds": "OPERATOR_VERIFY_TIMESTEP_SECONDS_BEFORE_ACCEPTANCE",
-        "substeps_per_control_step": "OPERATOR_VERIFY_SUBSTEPS_BEFORE_ACCEPTANCE",
+        "contact_solver": f"Probe-observed SAPIEN backend(s): {backend_summary}; OPERATOR_VERIFY_CONTACT_SOLVER_AND_FRICTION_BEFORE_ACCEPTANCE",
+        "timestep_seconds": f"Probe-observed sim_timestep={sim_timestep}, control_timestep={control_timestep}; OPERATOR_VERIFY_TIMESTEP_SECONDS_BEFORE_ACCEPTANCE",
+        "substeps_per_control_step": f"Probe-derived {substeps}; OPERATOR_VERIFY_SUBSTEPS_BEFORE_ACCEPTANCE",
         "robot_model_source": "ManiSkill/SAPIEN task assets and Panda robot definitions; operator must record exact selected-task asset provenance before acceptance",
         "asset_sources": [
             "ManiSkill primary task assets for PegInsertionSide-v1, OpenCabinetDrawer-v1, OpenCabinetDoor-v1, and PullCubeTool-v1",
             "PartNet Mobility cabinet asset for OpenCabinetDrawer-v1/OpenCabinetDoor-v1 when required",
-            f"Support assets not yet accepted for evidence: {', '.join(support_asset_ids)}",
+            f"Support assets not yet accepted for evidence: {', '.join(sorted(set(support_asset_ids).union(metadata_missing_asset_ids)))}",
         ],
+        "probe_observed_fidelity_metadata": {
+            "not_external_evidence": True,
+            "metadata_probe_path": FIDELITY_METADATA_PROBE_PATH,
+            "metadata_probe_ready": metadata_probe.get("metadata_probe_ready") is True,
+            "strict_metadata_ready": metadata_probe.get("strict_metadata_ready") is True,
+            "primary_metadata_missing": list(metadata_probe.get("primary_metadata_missing", []) or []),
+            "primary_timing_summary": timing,
+        },
         "sensor_modalities": ["state", "camera", "contact_or_force"],
         "state_observation_channels": [
             "terminal_state",
@@ -245,7 +297,7 @@ def build_draft() -> dict[str, Any]:
     qualification.update(
         {
             "operator_independence_statement": "DRAFT ONLY: independent operator/lab must fill this after confirming they are not Jason, Haonan Chen, Yilun Du, or another target collaborator.",
-            "contact_dynamics_justification": "DRAFT ONLY: primary ManiSkill/SAPIEN task bindings reset locally, but accepted contact/friction/substep details must be written by the operator before rollouts count.",
+            "contact_dynamics_justification": "DRAFT ONLY: metadata probe records ManiSkill/SAPIEN timing and backend fields, but accepted contact/friction/substep details must be written by the operator before rollouts count.",
             "paired_reset_replay_test": "DRAFT ONLY: strict collection requires replaying the same scene, seed, skill pair, initial_state_hash, and terminal sample set across every method panel.",
             "real_or_benchmark_calibration_basis": "DRAFT ONLY: operator must name the real robot benchmark, simulator benchmark, calibration suite, or published environment standard used to justify high-fidelity status.",
             "known_limitations": "DRAFT ONLY: current local probe uses CPU fallback rendering; support assets oakink-v2/ycb are not needed for the primary route but remain explicit support-environment blockers.",
@@ -275,7 +327,7 @@ def build_draft() -> dict[str, Any]:
         "purpose": "Operator-editable draft for the tracked ManiSkill/SAPIEN route. This file pre-fills reproducible provenance anchors but cannot satisfy fidelity acceptance until independently completed, renamed, manifest-declared, and strict-audited.",
         "platform": platform,
         "qualification": qualification,
-        "task_fidelity": build_task_fidelity(template, bindings, env_smoke, config_hash_by_task),
+        "task_fidelity": build_task_fidelity(template, bindings, env_smoke, metadata_probe, config_hash_by_task),
         "provenance": {
             "operator_name_or_lab": "DRAFT_OPERATOR_TO_FILL",
             "operator_not_target_collaborator": False,
@@ -291,6 +343,11 @@ def build_draft() -> dict[str, Any]:
             "primary_env_smoke_recorded": env_smoke.get("env_smoke_probe_ready") is True,
             "primary_env_smoke_ready": env_smoke.get("strict_env_smoke_ready") is True,
             "primary_reset_missing": list(env_smoke.get("primary_reset_missing", []) or []),
+            "fidelity_metadata_probe_path": FIDELITY_METADATA_PROBE_PATH,
+            "fidelity_metadata_probe_ready": metadata_probe.get("metadata_probe_ready") is True,
+            "strict_fidelity_metadata_ready": metadata_probe.get("strict_metadata_ready") is True,
+            "primary_fidelity_metadata_missing": list(metadata_probe.get("primary_metadata_missing", []) or []),
+            "probe_observed_timing_summary": timing,
             "reference_collection_preflight_blocking": list(reference_preflight.get("collection_blocking_missing", []) or []),
         },
         "prefilled_hashes": {
@@ -308,6 +365,7 @@ def build_draft() -> dict[str, Any]:
             "results/maniskill_backend_readiness_audit.json",
             "results/maniskill_reference_collection_preflight_audit.json",
             "results/maniskill_env_smoke_probe.json",
+            FIDELITY_METADATA_PROBE_PATH,
             "external_validation/maniskill_task_bindings.json",
         ],
     }
@@ -369,6 +427,30 @@ def audit_draft(draft: dict[str, Any]) -> dict[str, Any]:
         )
         and all(has_sha(config_hashes.get(task)) for task in REQUIRED_TASKS),
         f"tasks={sorted(task_names)}, hashes={config_hashes}",
+    )
+    platform_metadata = draft.get("platform", {}).get("probe_observed_fidelity_metadata", {})
+    platform_metadata = platform_metadata if isinstance(platform_metadata, dict) else {}
+    timing_summary = platform_metadata.get("primary_timing_summary", {})
+    timing_summary = timing_summary if isinstance(timing_summary, dict) else {}
+    add_check(
+        checks,
+        "fidelity_metadata_probe_prefills_timing_and_task_records",
+        provenance.get("fidelity_metadata_probe_ready") is True
+        and platform_metadata.get("metadata_probe_ready") is True
+        and platform_metadata.get("not_external_evidence") is True
+        and isinstance(timing_summary.get("sim_timestep_seconds_values", []), list)
+        and isinstance(timing_summary.get("derived_substeps_per_control_step_values", []), list)
+        and all(
+            isinstance(task, dict) and "primary_fidelity_metadata_recorded" in task
+            for task in task_fidelity
+            if task.get("task_family") in REQUIRED_TASKS
+        )
+        and FIDELITY_METADATA_PROBE_PATH in (draft.get("source_reports", []) or []),
+        (
+            f"metadata_probe_ready={provenance.get('fidelity_metadata_probe_ready')!r}, "
+            f"strict_metadata_ready={provenance.get('strict_fidelity_metadata_ready')!r}, "
+            f"timing={timing_summary}"
+        ),
     )
     add_check(
         checks,
@@ -474,6 +556,9 @@ def write_draft_md(draft: dict[str, Any]) -> None:
         f"- Primary env smoke recorded: `{str(provenance['primary_env_smoke_recorded']).lower()}`",
         f"- Primary env smoke ready: `{str(provenance['primary_env_smoke_ready']).lower()}`",
         f"- Primary reset missing: `{provenance['primary_reset_missing']}`",
+        f"- Fidelity metadata probe ready: `{str(provenance['fidelity_metadata_probe_ready']).lower()}`",
+        f"- Strict fidelity metadata ready: `{str(provenance['strict_fidelity_metadata_ready']).lower()}`",
+        f"- Probe-observed timing summary: `{provenance['probe_observed_timing_summary']}`",
         "",
         "## Remaining Operator Inputs",
         "",
@@ -484,7 +569,13 @@ def write_draft_md(draft: dict[str, Any]) -> None:
     for task in draft["task_fidelity"]:
         lines.append(
             f"- `{task['task_family']}`: primary `{task['primary_env_id']}`, "
-            f"reset_ok=`{str(task['primary_env_reset_ok']).lower()}`, config_sha256=`{task['config_sha256']}`"
+            f"reset_ok=`{str(task['primary_env_reset_ok']).lower()}`, "
+            f"metadata_reset_ok=`{str(task.get('primary_fidelity_metadata_reset_ok')).lower()}`, "
+            f"sim_dt=`{task.get('primary_sim_timestep_seconds')}`, "
+            f"control_dt=`{task.get('primary_control_timestep_seconds')}`, "
+            f"substeps=`{task.get('primary_derived_substeps_per_control_step')}`, "
+            f"backend=`{task.get('primary_scene_backend_type')}`, "
+            f"config_sha256=`{task['config_sha256']}`"
         )
     lines.extend(["", "## Acceptance Gates", ""])
     for gate in draft["acceptance_gates"]:

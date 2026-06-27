@@ -21,7 +21,7 @@
       "passed": true
     },
     {
-      "detail": "commit='5cfd85dd14a26b1e6c51974d4459aca4d42fe2df'",
+      "detail": "commit='01de91b46e7502a81b73c036244b5bf9d2a7800f'",
       "name": "repo_commit_reported",
       "passed": true
     },
@@ -143,7 +143,7 @@
   "primary_route_missing_packages": [],
   "repo": {
     "branch": "codex/paper119-submission-hardening",
-    "commit": "5cfd85dd14a26b1e6c51974d4459aca4d42fe2df",
+    "commit": "01de91b46e7502a81b73c036244b5bf9d2a7800f",
     "dirty_status_lines": [
       " M .github/workflows/paper119-validation.yml",
       " M README.md",
@@ -151,22 +151,24 @@
       " M docs/claim_evidence_ledger.json",
       " M docs/final_audit.md",
       " M docs/haonan_yilun_outreach_package.md",
-      " M docs/independent_validation_protocol.md",
-      " M docs/reproducibility_checklist.md",
       " M docs/submission_readiness_audit_v5.md",
       " M docs/submission_readiness_decision.md",
       " M docs/submission_version_log.md",
       " M external_validation/README.md",
+      " M external_validation/fidelity_acceptance_draft.json",
+      " M external_validation/fidelity_acceptance_draft.md",
       " M outreach/paper119_four_page_preview.pdf",
-      " M outreach/paper119_four_page_preview.tex",
       " M outreach/paper119_one_page_memo.pdf",
-      " M outreach/paper119_one_page_memo.tex",
       " M paper/main.pdf",
       " M paper/main.tex",
+      " M results/camera_ready_design_audit.json",
+      " M results/camera_ready_design_audit.md",
       " M results/external_acquisition_packet.json",
       " M results/external_acquisition_packet.md",
       " M results/external_execution_readiness_audit.json",
       " M results/external_execution_readiness_audit.md",
+      " M results/external_fidelity_acceptance_draft_audit.json",
+      " M results/external_fidelity_acceptance_draft_audit.md",
       " M results/external_operator_handoff_bundle.json",
       " M results/external_operator_handoff_bundle.md",
       " M results/external_operator_packet.json",
@@ -176,23 +178,22 @@
       " M results/maniskill_env_smoke_probe.json",
       " M results/manuscript_readability_audit.json",
       " M results/manuscript_readability_audit.md",
+      " M results/presentation_quality_audit.json",
+      " M results/presentation_quality_audit.md",
       " M results/visible_contribution_audit.json",
       " M results/visible_contribution_audit.md",
-      " M scripts/audit_camera_ready_design.py",
-      " M scripts/audit_manuscript_readability.py",
-      " M scripts/audit_presentation_quality.py",
+      " M scripts/audit_external_execution_readiness.py",
       " M scripts/audit_visible_contribution.py",
       " M scripts/build_external_acquisition_packet.py",
+      " M scripts/build_external_fidelity_acceptance_draft.py",
       " M scripts/build_external_operator_handoff_bundle.py",
       " M scripts/build_external_operator_packet.py",
       " M scripts/build_submission_artifacts.ps1",
       " M scripts/generate_manuscript.py",
       " M scripts/validate_submission_artifacts.py",
-      "?? external_validation/fidelity_acceptance_draft.json",
-      "?? external_validation/fidelity_acceptance_draft.md",
-      "?? results/external_fidelity_acceptance_draft_audit.json",
-      "?? results/external_fidelity_acceptance_draft_audit.md",
-      "?? scripts/build_external_fidelity_acceptance_draft.py"
+      "?? results/maniskill_fidelity_metadata_probe.json",
+      "?? results/maniskill_fidelity_metadata_probe.md",
+      "?? scripts"
     ],
     "git_commands": {
       "rev_parse_branch": {
@@ -216,7 +217,7 @@
         ],
         "returncode": 0,
         "stderr": "",
-        "stdout": "5cfd85dd14a26b1e6c51974d4459aca4d42fe2df\n"
+        "stdout": "01de91b46e7502a81b73c036244b5bf9d2a7800f\n"
       },
       "status_short": {
         "available": true,
@@ -227,7 +228,7 @@
         ],
         "returncode": 0,
         "stderr": "",
-        "stdout": " M .github/workflows/paper119-validation.yml\n M README.md\n M child_status.md\n M docs/claim_evidence_ledger.json\n M docs/final_audit.md\n M docs/haonan_yilun_outreach_package.md\n M docs/independent_validation_protocol.md\n M docs/reproducibility_checklist.md\n M docs/submission_readiness_audit_v5.md\n M docs/submission_readiness_decision.md\n M docs/submission_version_log.md\n M external_validation/README.md\n M outreach/paper119_four_page_preview.pdf\n M outreach/paper119_four_page_preview.tex\n M outreach/paper119_one_page_memo.pdf\n M outreach/paper119_one_page_memo.tex\n M paper/main.pdf\n M paper/main.tex\n M results/external_acquisition_packet.json\n M results/external_acquisition_packet.md\n M results/external_execution_readiness_audit.json\n M results/external_execution_readiness_audit.md\n M results/external_operator_handoff_bundle.json\n M results/external_operator_handoff_bundle.md\n M results/external_operator_packet.json\n M results/external_operator_packet.md\n M results/external_platform_probe.json\n M results/external_platform_probe.md\n M results/maniskill_env_smoke_probe.json\n M results/manuscript_readability_audit.json\n M results/manuscript_readability_audit.md\n M results/visible_contribution_audit.json\n M results/visible_contribution_audit.md\n M scripts/audit_camera_ready_design.py\n M scripts/audit_manuscript_readability.py\n M scripts/audit_presentation_quality.py\n M scripts/audit_visible_contribution.py\n M scripts/build_external_acquisition_packet.py\n M scripts/build_external_operator_handoff_bundle.py\n M scripts/build_external_operator_packet.py\n M scripts/build_submission_artifacts.ps1\n M scripts/generate_manuscript.py\n M scripts/validate_submission_artifacts.py\n?? external_validation/fidelity_acceptance_draft.json\n?? external_validation/fidelity_acceptance_draft.md\n?? results/external_fidelity_acceptance_draft_audit.json\n?? results/external_fidelity_acceptance_draft_audit.md\n?? scripts/build_external_fidelity_acceptance_draft.py\n"
+        "stdout": " M .github/workflows/paper119-validation.yml\n M README.md\n M child_status.md\n M docs/claim_evidence_ledger.json\n M docs/final_audit.md\n M docs/haonan_yilun_outreach_package.md\n M docs/submission_readiness_audit_v5.md\n M docs/submission_readiness_decision.md\n M docs/submission_version_log.md\n M external_validation/README.md\n M external_validation/fidelity_acceptance_draft.json\n M external_validation/fidelity_acceptance_draft.md\n M outreach/paper119_four_page_preview.pdf\n M outreach/paper119_one_page_memo.pdf\n M paper/main.pdf\n M paper/main.tex\n M results/camera_ready_design_audit.json\n M results/camera_ready_design_audit.md\n M results/external_acquisition_packet.json\n M results/external_acquisition_packet.md\n M results/external_execution_readiness_audit.json\n M results/external_execution_readiness_audit.md\n M results/external_fidelity_acceptance_draft_audit.json\n M results/external_fidelity_acceptance_draft_audit.md\n M results/external_operator_handoff_bundle.json\n M results/external_operator_handoff_bundle.md\n M results/external_operator_packet.json\n M results/external_operator_packet.md\n M results/external_platform_probe.json\n M results/external_platform_probe.md\n M results/maniskill_env_smoke_probe.json\n M results/manuscript_readability_audit.json\n M results/manuscript_readability_audit.md\n M results/presentation_quality_audit.json\n M results/presentation_quality_audit.md\n M results/visible_contribution_audit.json\n M results/visible_contribution_audit.md\n M scripts/audit_external_execution_readiness.py\n M scripts/audit_visible_contribution.py\n M scripts/build_external_acquisition_packet.py\n M scripts/build_external_fidelity_acceptance_draft.py\n M scripts/build_external_operator_handoff_bundle.py\n M scripts/build_external_operator_packet.py\n M scripts/build_submission_artifacts.ps1\n M scripts/generate_manuscript.py\n M scripts/validate_submission_artifacts.py\n?? results/maniskill_fidelity_metadata_probe.json\n?? results/maniskill_fidelity_metadata_probe.md\n?? scripts"
       }
     }
   },
