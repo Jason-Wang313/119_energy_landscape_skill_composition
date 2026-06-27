@@ -43,6 +43,9 @@ jobs:
       - name: Self-test external runner backend path
         run: python scripts/self_test_external_runner_backend.py
 
+      - name: Self-test external collection preflight
+        run: python scripts/self_test_external_collection_preflight.py
+
       - name: Audit external collection readiness
         run: python scripts/audit_external_collection_readiness.py
 

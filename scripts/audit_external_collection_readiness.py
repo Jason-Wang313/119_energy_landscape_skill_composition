@@ -180,7 +180,7 @@ def inspect_backend(module_value: str) -> list[str]:
     missing = [
         field
         for field in ("platform_type", "platform_name", "platform_version", "sensor_modalities")
-        if provenance.get(field) in {None, "", []}
+        if provenance.get(field) is None or provenance.get(field) == "" or provenance.get(field) == []
     ]
     return [f"backend provenance missing {missing}"] if missing else []
 

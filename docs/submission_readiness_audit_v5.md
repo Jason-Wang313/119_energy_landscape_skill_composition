@@ -39,8 +39,8 @@ ICLR-main ready: no
 ## Artifact Checks
 
 - PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `EAF61A43738D8672E2CAD6EB0E2A8D2F12166A7B9A22B9C124DB64BEBEC80356`.
-- PDF size: `464920` bytes.
+- PDF SHA256: `8DF2AACC95483E9E093E98E5D9FD9C12A45EC3CFE1F723781346C42EDE33EC95`.
+- PDF size: `464931` bytes.
 - PDF pages: `29`.
 - Numbered PDF placement: Downloads only.
 - Desktop numbered PDF: absent.
@@ -68,6 +68,7 @@ ICLR-main ready: no
 - External collection runbook: `external_validation/collection_runbook.md`, `external_validation/operator_record_sheet.csv`, task cards, config templates, and `results/external_runbook_audit.md` exist, pass, and remain non-evidence collection scaffolding.
 - External collection runner harness: `external_validation/runner/README.md`, `external_validation/runner/backend_contract.py`, `external_validation/runner/real_collection_runner.py`, backend templates, and `results/external_runner_harness_audit.md` exist, pass, dry-run without writing logs, reject template backends/configs for actual collection, and remain non-evidence execution scaffolding.
 - External collection readiness audit: `results/external_collection_readiness_audit.md` exists, passes as a fail-closed pre-collection gate, verifies 1,440 blinded rows and 12 aliases, and reports `collection_ready=false` until a real backend, real task configs, fidelity acceptance, explicit alias unsealing, and a specific run id are supplied.
+- External collection preflight self-test: `results/external_collection_preflight_self_test.md` passes on a temporary complete preflight fixture, verifies the strict gate can turn `collection_ready=true` when all prerequisites are supplied, leaves the real readiness report unchanged, and remains non-evidence.
 - External config materialization plan: `results/external_config_materialization_plan.md` exists, passes as a guarded non-evidence plan, writes no real configs by default, and requires `--confirm-real-platform --write` with concrete platform and compute values before task configs can be materialized.
 - External operator packet: `results/external_operator_packet.md` exists, passes, reports `DO_NOT_COLLECT_YET`, lists the four current pre-collection blockers after high-fidelity route config materialization, and provides the guarded config materialization, strict preflight, actual collection, and post-collection strict-gate commands.
 - External blind evaluation packet: `external_validation/blind_evaluation_protocol.md`, `external_validation/blinded_operator_sheet.csv`, `external_validation/method_alias_map.json`, and `results/external_blind_eval_audit.md` exist, pass, and provide deterministic per-reset randomization plus sealed method aliases while remaining non-evidence collection control.
@@ -86,6 +87,7 @@ ICLR-main ready: no
 - External rollout metric audit: `results/external_rollout_metrics.md` exists and reports `passed=false` because no external manifest/log package has been supplied.
 - External pairing integrity audit: `results/external_pairing_integrity_audit.md` exists and reports `pairing_ready=false` until real manifest-declared logs contain complete, duplicate-free paired reset panels over all methods.
 - External rollout validator self-test: passed on temporary synthetic records, verifying metric recomputation and missing-field failure behavior only.
+- External collection preflight self-test: passed on a temporary complete preflight fixture, verifying collection-readiness gate behavior only.
 - External full-pipeline evidence self-test: passed on a temporary synthetic package with manifest-declared configs, logs, video paths, checkpoints, implementations, recomputed rollout metrics, and release artifacts; it verifies tooling only and is not evidence.
 - Visual QA: final title page, overview page, main result figures, fixed-risk figures, and outreach preview figure page inspected after the reframing/figure pass.
 - Independent validation protocol: `docs/independent_validation_protocol.md`.

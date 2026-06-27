@@ -124,6 +124,7 @@ def main():
         "scripts\\build_external_acquisition_packet.py",
         "scripts\\build_external_operator_packet.py",
         "scripts\\self_test_external_adapter_scaffold_guard.py",
+        "scripts\\self_test_external_collection_preflight.py",
         "scripts\\self_test_external_runner_backend.py",
         "scripts\\self_test_external_rollout_validator.py",
         "scripts\\self_test_external_evidence_pipeline.py",
@@ -158,6 +159,7 @@ def main():
         "python -m compileall",
         "python scripts/audit_external_runner_harness.py",
         "python scripts/self_test_external_runner_backend.py",
+        "python scripts/self_test_external_collection_preflight.py",
         "python scripts/audit_external_collection_readiness.py",
         "python scripts/audit_external_evidence_preflight.py",
         "python scripts/materialize_external_configs.py",
@@ -954,6 +956,38 @@ def main():
     runner_backend_self_test_path = RESULTS / "external_runner_backend_self_test.json"
     if not runner_backend_self_test_path.exists():
         fail("missing results/external_runner_backend_self_test.json; run scripts/self_test_external_runner_backend.py")
+    collection_preflight_self_test_path = RESULTS / "external_collection_preflight_self_test.json"
+    if not collection_preflight_self_test_path.exists():
+        fail("missing results/external_collection_preflight_self_test.json; run scripts/self_test_external_collection_preflight.py")
+    if not (ROOT / "scripts" / "self_test_external_collection_preflight.py").exists():
+        fail("missing scripts/self_test_external_collection_preflight.py")
+    collection_preflight_self_test = json.loads(collection_preflight_self_test_path.read_text(encoding="utf-8"))
+    if collection_preflight_self_test.get("version") != "external_collection_preflight_self_test_v1":
+        fail("external collection preflight self-test version mismatch")
+    if collection_preflight_self_test.get("passed") is not True:
+        fail("external collection preflight self-test did not pass")
+    if collection_preflight_self_test.get("not_external_evidence") is not True:
+        fail("external collection preflight self-test must declare that it is not evidence")
+    if collection_preflight_self_test.get("synthetic_collection_ready") is not True:
+        fail("external collection preflight self-test should reach collection_ready=true on the temporary fixture")
+    if int(collection_preflight_self_test.get("row_count", 0) or 0) < 1440:
+        fail("external collection preflight self-test has too few synthetic rows")
+    collection_preflight_checks = {check.get("name"): check.get("passed") for check in collection_preflight_self_test.get("checks", [])}
+    for required_check in (
+        "synthetic_preflight_collection_ready",
+        "synthetic_row_budget",
+        "synthetic_backend_module_ready",
+        "synthetic_real_task_configs_ready",
+        "synthetic_fidelity_acceptance_ready",
+        "synthetic_alias_unsealing_explicit",
+        "synthetic_run_id_specific",
+        "synthetic_output_logs_empty_or_force",
+        "real_readiness_report_not_overwritten",
+    ):
+        if collection_preflight_checks.get(required_check) is not True:
+            fail(f"external collection preflight self-test missing passing check: {required_check}")
+    if not (RESULTS / "external_collection_preflight_self_test.md").exists():
+        fail("missing results/external_collection_preflight_self_test.md")
     if not (ROOT / "scripts" / "self_test_external_runner_backend.py").exists():
         fail("missing scripts/self_test_external_runner_backend.py")
     runner_backend_self_test = json.loads(runner_backend_self_test_path.read_text(encoding="utf-8"))

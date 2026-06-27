@@ -40,6 +40,7 @@
 - External rollout metric validator: `scripts/validate_external_rollouts.py`
 - External pairing integrity validator: `scripts/audit_external_pairing_integrity.py`
 - External rollout validator self-test: `scripts/self_test_external_rollout_validator.py`
+- External collection preflight self-test: `scripts/self_test_external_collection_preflight.py`
 - External runner backend-path self-test: `scripts/self_test_external_runner_backend.py`
 - External full-pipeline evidence self-test: `scripts/self_test_external_evidence_pipeline.py`
 - External rollout schema: `external_validation/log_schema_v1.json`

@@ -41,6 +41,7 @@
 - Added `external_validation/log_schema_v1.json` and `scripts/validate_external_rollouts.py` so external success/utility margins, paired win rate, fixed-risk coverage, fixed-risk breach, and positive task-family count must be recomputed from raw episode logs.
 - Tightened `scripts/audit_external_evidence.py` so a future evidence package is blocked unless manifest metrics agree with recomputed rollout metrics.
 - Added `scripts/self_test_external_rollout_validator.py` to test the external rollout validator on temporary synthetic records without treating them as evidence.
+- Added `scripts/self_test_external_collection_preflight.py` to test the external collection-readiness preflight on a temporary complete fixture without overwriting the real readiness report or treating the fixture as evidence.
 - Added `scripts/self_test_external_evidence_pipeline.py` to test the full strict external-evidence path on a temporary synthetic manifest/config/log/video/checkpoint package without creating real repository evidence.
 - Fixed strict evidence-audit metric parsing so legitimate zero-valued fixed-risk breach is accepted as a number rather than treated as missing.
 - Added `docs/claim_evidence_ledger.json` and `scripts/audit_claim_boundary.py` so the package fails validation if it overclaims beyond the bounded local evidence.

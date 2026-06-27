@@ -1,0 +1,61 @@
+{
+  "alias_count": 12,
+  "checks": [
+    {
+      "detail": "collection_ready=True, blockers=[]",
+      "name": "synthetic_preflight_collection_ready",
+      "passed": true
+    },
+    {
+      "detail": "row_count=1440",
+      "name": "synthetic_row_budget",
+      "passed": true
+    },
+    {
+      "detail": "backend_module_ready=True",
+      "name": "synthetic_backend_module_ready",
+      "passed": true
+    },
+    {
+      "detail": "real_task_configs_ready=True",
+      "name": "synthetic_real_task_configs_ready",
+      "passed": true
+    },
+    {
+      "detail": "fidelity_acceptance_ready=True",
+      "name": "synthetic_fidelity_acceptance_ready",
+      "passed": true
+    },
+    {
+      "detail": "alias_unsealing_explicit=True",
+      "name": "synthetic_alias_unsealing_explicit",
+      "passed": true
+    },
+    {
+      "detail": "run_id_specific=True",
+      "name": "synthetic_run_id_specific",
+      "passed": true
+    },
+    {
+      "detail": "output_logs_empty_or_force=True",
+      "name": "synthetic_output_logs_empty_or_force",
+      "passed": true
+    },
+    {
+      "detail": "self-test uses build_payload only and leaves results/external_collection_readiness_audit.json unchanged",
+      "name": "real_readiness_report_not_overwritten",
+      "passed": true
+    }
+  ],
+  "not_external_evidence": true,
+  "passed": true,
+  "row_count": 1440,
+  "synthetic_collection_ready": true,
+  "task_families": [
+    "cable_route_insert",
+    "door_open_navigation",
+    "drawer_to_pick_transfer",
+    "peg_place_regrasp"
+  ],
+  "version": "external_collection_preflight_self_test_v1"
+}

@@ -37,9 +37,9 @@ Use `-InstallDependencies` on the first run if the Python packages are not insta
 
 Canonical local PDF: `C:/Users/wangz/Downloads/119.pdf`
 
-PDF SHA256: `EAF61A43738D8672E2CAD6EB0E2A8D2F12166A7B9A22B9C124DB64BEBEC80356`
+PDF SHA256: `8DF2AACC95483E9E093E98E5D9FD9C12A45EC3CFE1F723781346C42EDE33EC95`
 
-PDF size: `464920` bytes.
+PDF size: `464931` bytes.
 
 PDF pages: `29`.
 
@@ -80,6 +80,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External collection runner harness: `external_validation/runner/README.md`
 - External runner harness audit: `results/external_runner_harness_audit.md`
 - External collection readiness audit: `results/external_collection_readiness_audit.md`
+- External collection preflight self-test: `scripts/self_test_external_collection_preflight.py` checks a temporary complete preflight fixture only; it is not evidence.
 - External task config schema: `external_validation/config_schema_v1.json`
 - External real-config intake directory: `external_validation/configs/README.md`
 - External config materialization plan: `results/external_config_materialization_plan.md`
@@ -104,6 +105,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External rollout log schema: `external_validation/log_schema_v1.json`
 - External pairing integrity audit: `results/external_pairing_integrity_audit.md`
 - External rollout validator self-test: `scripts/self_test_external_rollout_validator.py`
+- External collection preflight self-test report: `results/external_collection_preflight_self_test.md`
 - External full-pipeline evidence self-test: `scripts/self_test_external_evidence_pipeline.py` checks a temporary synthetic package only; it is not evidence.
 - External evidence audit: `results/external_evidence_audit.md`
 - External rollout metrics audit: `results/external_rollout_metrics.md`
