@@ -108,7 +108,7 @@ Jason
 
 Title:
 
-> Predictive Skill-Seam Action Models for Robot Composition
+> Local World/Action Models for Robot Skill Seams
 
 Problem:
 

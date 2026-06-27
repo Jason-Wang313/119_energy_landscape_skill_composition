@@ -23,6 +23,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "backend_integration_packet",
         "maniskill_reference_backend_audit",
         "maniskill_reference_collection_preflight",
+        "fidelity_acceptance_draft",
         "rollout_evidence_packet",
         "backend_module",
         "platform_fidelity",
@@ -217,6 +218,20 @@ ACTION_CATALOG = {
         "artifacts": ["external_validation/fidelity_acceptance.json"],
         "commands": ["python scripts\\audit_external_fidelity_acceptance.py --strict"],
         "closes": ["Independent real-robot or accepted high-fidelity external validation evidence"],
+    },
+    "fidelity_acceptance_draft": {
+        "title": "Generate the tracked ManiSkill fidelity acceptance draft",
+        "operator_input": "review the prefilled draft, replace draft-only fields with accepted independent provenance, then promote it only after real platform evidence exists",
+        "artifacts": [
+            "external_validation/fidelity_acceptance_draft.json",
+            "external_validation/fidelity_acceptance_draft.md",
+            "results/external_fidelity_acceptance_draft_audit.json",
+        ],
+        "commands": [
+            "python scripts\\build_external_fidelity_acceptance_draft.py",
+            "python scripts\\audit_external_fidelity_acceptance.py --strict",
+        ],
+        "closes": ["platform fidelity acceptance intake; still not evidence until promoted, manifest-declared, and strict-audited"],
     },
     "pilot_smoke_packet": {
         "title": "Run a quarantined first-panel backend smoke test",
@@ -414,6 +429,7 @@ def main() -> int:
     env_smoke_probe_path = RESULTS / "maniskill_env_smoke_probe.json"
     onboarding_path = RESULTS / "external_platform_onboarding_audit.json"
     fidelity_provenance_path = RESULTS / "external_fidelity_provenance_audit.json"
+    fidelity_draft_path = RESULTS / "external_fidelity_acceptance_draft_audit.json"
     config_materialization_path = RESULTS / "external_config_materialization_plan.json"
     backend_contract_path = RESULTS / "external_backend_contract_audit.json"
     backend_integration_path = RESULTS / "external_backend_integration_audit.json"
@@ -433,6 +449,7 @@ def main() -> int:
     env_smoke_probe = require_json(env_smoke_probe_path)
     onboarding = require_json(onboarding_path)
     fidelity_provenance = require_json(fidelity_provenance_path)
+    fidelity_draft = require_json(fidelity_draft_path)
     config_materialization = require_json(config_materialization_path)
     backend_contract = require_json(backend_contract_path)
     backend_integration = require_json(backend_integration_path)
@@ -466,6 +483,7 @@ def main() -> int:
                 env_smoke_probe_path,
                 onboarding_path,
                 fidelity_provenance_path,
+                fidelity_draft_path,
                 config_materialization_path,
                 backend_contract_path,
                 backend_integration_path,
@@ -488,6 +506,7 @@ def main() -> int:
                 env_smoke_probe_path,
                 onboarding_path,
                 fidelity_provenance_path,
+                fidelity_draft_path,
                 config_materialization_path,
                 backend_contract_path,
                 backend_integration_path,
@@ -792,6 +811,27 @@ def main() -> int:
             f"strict_external_evidence_ready={fidelity_provenance.get('strict_external_evidence_ready')!r}"
         ),
     )
+    fidelity_draft_checks = {check.get("name"): check.get("passed") for check in fidelity_draft.get("checks", []) or []}
+    add_check(
+        checks,
+        "fidelity_acceptance_draft_ready",
+        fidelity_draft.get("passed") is True
+        and fidelity_draft.get("not_external_evidence") is True
+        and fidelity_draft.get("draft_ready") is True
+        and fidelity_draft.get("acceptance_ready") is False
+        and fidelity_draft.get("strict_fidelity_evidence_ready") is False
+        and fidelity_draft.get("strict_external_evidence_ready") is False
+        and fidelity_draft_checks.get("draft_is_non_evidence_and_fail_closed") is True
+        and fidelity_draft_checks.get("candidate_platform_prefilled_from_reference_route") is True
+        and fidelity_draft_checks.get("acceptance_gates_remain_unaccepted") is True
+        and (EXTERNAL / "fidelity_acceptance_draft.json").exists()
+        and (EXTERNAL / "fidelity_acceptance_draft.md").exists(),
+        (
+            f"draft_ready={fidelity_draft.get('draft_ready')!r}, "
+            f"remaining_operator_inputs={fidelity_draft.get('remaining_operator_input_count')!r}, "
+            f"acceptance_ready={fidelity_draft.get('acceptance_ready')!r}"
+        ),
+    )
 
     post_collection_commands = collection.get("post_collection_strict_commands", []) or []
     required_command_fragments = [
@@ -808,6 +848,7 @@ def main() -> int:
         "build_external_config_manifest_packet.py",
         "build_external_rollout_evidence_packet.py",
         "build_external_fidelity_provenance_packet.py",
+        "build_external_fidelity_acceptance_draft.py",
         "build_external_platform_onboarding.py",
         "probe_external_platform.py",
         "probe_maniskill_task_bindings.py",
@@ -865,6 +906,7 @@ def main() -> int:
                 env_smoke_probe_path,
                 onboarding_path,
                 fidelity_provenance_path,
+                fidelity_draft_path,
                 config_materialization_path,
                 backend_contract_path,
                 backend_integration_path,

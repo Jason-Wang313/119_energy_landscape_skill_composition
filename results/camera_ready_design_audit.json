@@ -92,8 +92,8 @@
     }
   ],
   "density_summary": {
-    "maximum": 0.17395394521444943,
-    "mean": 0.09809392848048308,
+    "maximum": 0.17431845465458912,
+    "mean": 0.09814936883844445,
     "minimum": 0.018057404780093857,
     "sparse_pages": [
       16,
@@ -113,9 +113,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.1455003819709702,
+      "foreground_fraction": 0.14584088180726837,
       "height": 770,
-      "luminance_std": 0.16822893560604055,
+      "luminance_std": 0.16763760781224213,
       "page": 1,
       "width": 595
     },
@@ -127,9 +127,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.17395394521444943,
+      "foreground_fraction": 0.17431845465458912,
       "height": 770,
-      "luminance_std": 0.17810791938956416,
+      "luminance_std": 0.17831492355828282,
       "page": 2,
       "width": 595
     },
@@ -141,9 +141,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.16849285168612899,
+      "foreground_fraction": 0.16924151478773328,
       "height": 770,
-      "luminance_std": 0.1512278643516495,
+      "luminance_std": 0.15215600809297095,
       "page": 3,
       "width": 595
     },
@@ -253,9 +253,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.1674582560296846,
+      "foreground_fraction": 0.16766779439048346,
       "height": 770,
-      "luminance_std": 0.17629898160760663,
+      "luminance_std": 0.1763530872224662,
       "page": 11,
       "width": 595
     },

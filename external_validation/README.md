@@ -141,6 +141,14 @@ python scripts\build_external_fidelity_provenance_packet.py
 
 This writes `external_validation/fidelity_provenance_packet.{json,md}`, `external_validation/fidelity_provenance_work_orders.csv`, and `results/external_fidelity_provenance_audit.{json,md}`. It turns platform physics/contact details, paired-reset replay, operator independence, calibration basis, code/skill hashes, manifest declaration, and strict fidelity gating into work orders. It is not evidence and still reports strict fidelity and external evidence as missing until a real acceptance file and manifest-declared artifacts exist.
 
+Build the external fidelity acceptance draft:
+
+```powershell
+python scripts\build_external_fidelity_acceptance_draft.py
+```
+
+This writes `external_validation/fidelity_acceptance_draft.{json,md}` and `results/external_fidelity_acceptance_draft_audit.{json,md}`. The draft pre-fills the tracked ManiSkill/SAPIEN route with platform/package/backend/config hashes, task bindings, and primary environment smoke status, but it remains draft-only non-evidence: `external_validation/fidelity_acceptance.json` and `external_validation/manifest.json` must still be independently filled, promoted, and strict-audited before any collection can count.
+
 Build the external backend integration packet:
 
 ```powershell

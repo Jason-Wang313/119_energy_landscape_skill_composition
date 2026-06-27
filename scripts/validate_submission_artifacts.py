@@ -113,6 +113,7 @@ def main():
         "scripts\\probe_maniskill_env_smoke.py",
         "scripts\\build_external_platform_onboarding.py",
         "scripts\\build_external_fidelity_provenance_packet.py",
+        "scripts\\build_external_fidelity_acceptance_draft.py",
         "scripts\\audit_external_fidelity_acceptance.py",
         "scripts\\self_test_external_fidelity_acceptance.py",
         "scripts\\build_external_blind_eval_plan.py",
@@ -205,6 +206,7 @@ def main():
         "python scripts/probe_maniskill_env_smoke.py",
         "python scripts/build_external_platform_onboarding.py",
         "python scripts/build_external_fidelity_provenance_packet.py",
+        "python scripts/build_external_fidelity_acceptance_draft.py",
         "python scripts/build_external_backend_integration_packet.py",
         "python scripts/build_external_method_implementation_packet.py",
         "python scripts/build_external_acquisition_packet.py",
@@ -2126,6 +2128,7 @@ def main():
         "env_smoke_probe_ready",
         "platform_onboarding_ready",
         "fidelity_provenance_packet_ready",
+        "fidelity_acceptance_draft_ready",
         "post_collection_strict_commands_cover_all_gates",
         "no_real_manifest_written",
         "operator_actions_cover_collection_blockers",
@@ -2170,6 +2173,19 @@ def main():
         fail("external operator packet tracked ManiSkill route must include the strict pre-collection gate command")
     if "real_collection_runner.py" not in str(reference_route.get("collection_command_after_fidelity_acceptance", "")) or "maniskill_reference_backend.py" not in str(reference_route.get("collection_command_after_fidelity_acceptance", "")):
         fail("external operator packet tracked ManiSkill route must include the reference collection command")
+    operator_draft = operator_packet.get("fidelity_acceptance_draft", {}) or {}
+    if operator_draft.get("not_external_evidence") is not True:
+        fail("external operator packet fidelity draft must be marked non-evidence")
+    if operator_draft.get("draft_ready") is not True:
+        fail("external operator packet fidelity draft must report draft_ready=true")
+    if operator_draft.get("acceptance_ready") is not False or operator_draft.get("strict_fidelity_evidence_ready") is not False:
+        fail("external operator packet fidelity draft must preserve acceptance_ready=false")
+    if operator_draft.get("draft_path") != "external_validation/fidelity_acceptance_draft.json":
+        fail("external operator packet fidelity draft must point to the draft JSON")
+    if int(operator_draft.get("remaining_operator_input_count", 0) or 0) < 8:
+        fail("external operator packet fidelity draft must expose remaining operator input count")
+    if "build_external_fidelity_acceptance_draft.py" not in str(operator_draft.get("build_command", "")):
+        fail("external operator packet fidelity draft must include rebuild command")
     operator_actions = operator_packet.get("operator_actions", []) or []
     if len(operator_actions) < 10:
         fail("external operator packet has too few operator actions")
@@ -2221,6 +2237,11 @@ def main():
         fail("external operator packet missing fidelity_provenance_packet action")
     if "build_external_fidelity_provenance_packet.py" not in "\n".join(fidelity_provenance_actions[0].get("commands", []) or []):
         fail("external operator packet fidelity provenance action must rebuild the fidelity provenance packet")
+    fidelity_draft_actions = [action for action in operator_actions if action.get("id") == "fidelity_acceptance_draft"]
+    if not fidelity_draft_actions:
+        fail("external operator packet missing fidelity_acceptance_draft action")
+    if "build_external_fidelity_acceptance_draft.py" not in "\n".join(fidelity_draft_actions[0].get("commands", []) or []):
+        fail("external operator packet fidelity draft action must rebuild the fidelity acceptance draft")
     method_actions = [action for action in operator_actions if action.get("id") == "method_implementation_packet"]
     if not method_actions:
         fail("external operator packet missing method_implementation_packet action")
@@ -2292,6 +2313,7 @@ def main():
         "analysis_plan_included",
         "platform_onboarding_included",
         "fidelity_provenance_packet_included",
+        "fidelity_acceptance_draft_included",
         "backend_integration_packet_included",
         "maniskill_reference_backend_included",
         "maniskill_reference_collection_preflight_included",
@@ -2474,6 +2496,66 @@ def main():
     ):
         if fidelity_checks.get(required_check) is not True:
             fail(f"external fidelity provenance audit missing passing check: {required_check}")
+
+    fidelity_draft_path = EXTERNAL / "fidelity_acceptance_draft.json"
+    fidelity_draft_md_path = EXTERNAL / "fidelity_acceptance_draft.md"
+    fidelity_draft_audit_path = RESULTS / "external_fidelity_acceptance_draft_audit.json"
+    fidelity_draft_audit_md_path = RESULTS / "external_fidelity_acceptance_draft_audit.md"
+    for path in (
+        ROOT / "scripts" / "build_external_fidelity_acceptance_draft.py",
+        fidelity_draft_path,
+        fidelity_draft_md_path,
+        fidelity_draft_audit_path,
+        fidelity_draft_audit_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external fidelity acceptance draft artifact: {path}")
+    fidelity_draft = json.loads(fidelity_draft_path.read_text(encoding="utf-8"))
+    fidelity_draft_audit = json.loads(fidelity_draft_audit_path.read_text(encoding="utf-8"))
+    if fidelity_draft.get("version") != "paper119_fidelity_acceptance_draft_v1":
+        fail("external fidelity acceptance draft version mismatch")
+    if fidelity_draft.get("not_external_evidence") is not True or fidelity_draft.get("draft_only") is not True:
+        fail("external fidelity acceptance draft must be marked draft-only non-evidence")
+    if fidelity_draft.get("acceptance_ready") is not False:
+        fail("external fidelity acceptance draft must not claim acceptance readiness")
+    if fidelity_draft.get("strict_fidelity_evidence_ready") is not False or fidelity_draft.get("strict_external_evidence_ready") is not False:
+        fail("external fidelity acceptance draft must keep strict evidence readiness false")
+    if fidelity_draft.get("real_acceptance_path") != "external_validation/fidelity_acceptance.json":
+        fail("external fidelity acceptance draft must point to the real acceptance target path")
+    if len(fidelity_draft.get("remaining_operator_inputs", []) or []) < 8:
+        fail("external fidelity acceptance draft must expose remaining operator inputs")
+    if not all(gate.get("status") == "draft_unaccepted" for gate in fidelity_draft.get("acceptance_gates", []) or []):
+        fail("external fidelity acceptance draft gates must remain unaccepted")
+    draft_hashes = fidelity_draft.get("prefilled_hashes", {}) or {}
+    if len(draft_hashes.get("task_config_hashes", {}) or {}) < 4:
+        fail("external fidelity acceptance draft must prefill task config hashes")
+    if not draft_hashes.get("backend_module_sha256") or not draft_hashes.get("skill_library_hash"):
+        fail("external fidelity acceptance draft must prefill backend and candidate skill-library hashes")
+    if fidelity_draft_audit.get("version") != "external_fidelity_acceptance_draft_audit_v1":
+        fail("external fidelity acceptance draft audit version mismatch")
+    if fidelity_draft_audit.get("passed") is not True:
+        fail("external fidelity acceptance draft audit did not pass")
+    if fidelity_draft_audit.get("not_external_evidence") is not True:
+        fail("external fidelity acceptance draft audit must declare non-evidence")
+    if fidelity_draft_audit.get("draft_ready") is not True:
+        fail("external fidelity acceptance draft audit must report draft_ready=true")
+    if fidelity_draft_audit.get("acceptance_ready") is not False:
+        fail("external fidelity acceptance draft audit must keep acceptance_ready=false")
+    draft_checks = {check.get("name"): check.get("passed") for check in fidelity_draft_audit.get("checks", [])}
+    for required_check in (
+        "draft_is_non_evidence_and_fail_closed",
+        "candidate_platform_prefilled_from_reference_route",
+        "all_core_tasks_have_primary_env_status_and_config_hash",
+        "support_asset_blockers_remain_visible",
+        "candidate_hashes_prefilled",
+        "remaining_operator_inputs_cover_fidelity_gate",
+        "acceptance_gates_remain_unaccepted",
+        "promotion_commands_require_real_file_manifest_and_strict_audits",
+        "no_real_acceptance_or_manifest_written",
+        "draft_files_written",
+    ):
+        if draft_checks.get(required_check) is not True:
+            fail(f"external fidelity acceptance draft audit missing passing check: {required_check}")
 
     rollout_packet_path = EXTERNAL / "rollout_evidence_packet.json"
     rollout_packet_md_path = EXTERNAL / "rollout_evidence_packet.md"

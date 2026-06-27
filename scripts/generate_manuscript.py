@@ -371,7 +371,7 @@ def make_manuscript(summary):
     a(r"\hypersetup{hidelinks}")
     a(r"\setlist[itemize]{leftmargin=1.2em,itemsep=0.15em,topsep=0.2em}")
     a(r"\raggedbottom")
-    a(r"\title{Predictive Skill-Seam Action Models for\\Robot Skill Composition}")
+    a(r"\title{Local World/Action Models for\\Robot Skill Seams}")
     a(r"\author{Anonymous Authors}")
     a(r"\begin{document}")
     a(r"\maketitle")
@@ -379,17 +379,17 @@ def make_manuscript(summary):
     a(
         "Robot skills that work individually can still fail when chained because the end of one skill changes what the next skill can safely do. "
         "A terminal state may fall outside the next skill's attraction basin, cross a high-energy barrier, or enter a contact mode where descent is no longer smooth. "
-        "We frame that handoff as a local world/action-modeling problem: a compact predictive interface between a skill library and a planner. Given terminal-state evidence, next-skill basin/descent estimates, and a candidate transition, the interface predicts whether composition will fail, diagnoses the likely reason, chooses accept, repair, probe, abstain, or an alternate transition, and records the outcome as planner-edge evidence for later plans. "
-        "A barrier-certified energy composer implements that interface, acting on a skill edge only when basin overlap, barrier height, descent continuity, repair cost, and fixed-risk calibration are jointly favorable. "
+        "We study that handoff as a local world/action-modeling problem: a compact predictive interface between a skill library and a planner. The local world is the seam state; the action is a transition, repair, probe, abstention, or alternate edge. Given terminal evidence, next-skill basin/descent estimates, and a candidate transition, the interface predicts failure, diagnoses why, chooses accept, repair, probe, abstain, or another transition, and records planner-edge evidence for later plans. "
+        "A barrier-certified energy composer implements this interface, acting on a skill edge only when basin overlap, barrier height, descent continuity, repair cost, and fixed-risk calibration are jointly favorable. "
         f"In a frozen local rollout suite with 12 methods, 6 task families, 8 seam regimes, and 10 paired seeds, the composer reaches hard-slice success {fmt(metrics['hard_success_proposed'])} and utility {fmt(metrics['hard_utility_proposed'])}, compared with {fmt(metrics['hard_success_strongest'])} and {fmt(metrics['hard_utility_strongest'])} for the strongest non-oracle predecessor. "
         "It reduces seam failure, barrier violation, damage, calibration error, and realized seam breach while improving basin alignment and descent continuity. "
-        "The current evidence supports a bounded claim: a local predictive model at skill seams improves composition when the relevant basin, barrier, and descent quantities are estimable and their outcomes update future planning. This is a small step toward adaptive physical world/action models, while external robot or high-fidelity validation remains necessary before deployment-level claims."
+        "The current evidence supports a bounded claim: a local predictive world/action model at skill seams improves composition when the relevant basin, barrier, and descent quantities are estimable and their outcomes update future planning. This is a small step toward adaptive physical world/action models, while external robot or high-fidelity validation remains necessary before deployment-level claims."
     )
     a(r"\end{abstract}")
 
     a(r"\section{Motivation}")
     a(
-        "A reusable robot skill library still leaves a planning problem: the robot must know what the end of one skill makes possible for the next. This paper focuses on that seam, where a small action-consequence model can be more useful than either a bare graph edge or a full simulator. The model predicts what a completed skill makes feasible, risky, repairable, or impossible for the next skill. Its job is not to operate either primitive or replace the planner; it is to make the transition legible enough that planning can choose the next action, request a repair or probe, or abstain. At this scale, the useful prediction is not a full future video, but a decision-relevant statement about the next skill's feasible start state."
+        "A reusable robot skill library still leaves a planning problem: the robot must know what the end of one skill makes possible for the next. This paper focuses on that seam, where a small world/action model can be more useful than either a bare graph edge or a full simulator. The model predicts what a completed skill makes feasible, risky, repairable, or impossible for the next skill. Its job is not to operate either primitive or replace the planner; it is to make the transition legible enough that planning can choose the next action, request a repair or probe, abstain, or route through another edge. At this scale, the useful prediction is not a full future video, but a decision-relevant statement about how a transition changes the next skill's feasible start state."
     )
     a(
         "Potential fields, navigation functions, energy-based learning, trajectory optimization, DMPs, and stable dynamical systems have long used scalar landscapes to encode motion and control structure \\citep{khatib1986potential,koditschek1989navigation,lecun2006energy,ratliff2009chomp,ijspeert2013dmp,khansari2011stable}. "
@@ -403,7 +403,7 @@ def make_manuscript(summary):
         "The broader agenda is to understand how a robot represents the physical consequences of action, notices when that representation is incomplete, and adapts future planning from the outcome. We use the world/action-model view at a deliberately local scale: the model is not a whole robot simulator, and the prediction-action-update loop is limited to the handoff. That restraint is intentional. The paper studies the small interface where a planner asks, before committing to the next skill, what this transition is likely to do, why it might fail, which response is warranted, and what should be remembered afterward."
     )
     a(
-        "Concretely, the contribution is a seam-level predictive interface: estimate terminal/basin/barrier/descent/risk quantities, diagnose the likely failure mode, choose accept, repair, probe, abstain, or an alternate transition, and write the outcome back to planner-edge memory so future planning queries do not treat every graph edge as equally safe. The energy composer is one implementation of that interface; the paper's claim is the smaller and testable one that skill seams need a predictive action interface, and that energy landscapes are one way to implement and falsify it."
+        "Concretely, the contribution is a seam-level world/action interface: predict whether a transition will fail, diagnose the likely failure mode, choose accept, repair, probe, abstain, or an alternate transition, and write the observed outcome back to planner-edge memory so future planning queries do not treat every graph edge as equally safe. The energy composer is one implementation of that interface; the paper's claim is the smaller and testable one that skill seams need a predictive action model, and that energy landscapes are one way to implement and falsify it."
     )
 
     a(r"\section{Problem Setup}")
@@ -434,7 +434,7 @@ def make_manuscript(summary):
     )
     a(r"\begin{figure}[t]\centering\includegraphics[width=\linewidth]{../figures/skill_seam_action_model_overview_v5.pdf}\caption{Skill-seam action interface. The method predicts local handoff consequences, diagnoses likely failure modes, and converts that evidence into accept, repair, probe, abstain, or transition decisions plus planner-edge updates for future planning.}\label{fig:overview}\end{figure}")
 
-    a(r"\section{Skill Seams As Predictive Interfaces}")
+    a(r"\section{Skill Seams As Local World/Action Models}")
     a(
         "A sequence can be graph-valid while physically unsafe at the seam. If terminal states from the first skill do not overlap the next basin, the second skill starts outside its attraction region. If a high barrier separates the terminal set from the basin, a repair may be possible but costly or unsafe. If the contact mode changes, the energy function may no longer be conservative enough to certify descent. These are not merely controller details; they are action-conditioned predictions about what a skill transition will do to the physical state available to the next skill."
     )
@@ -442,13 +442,13 @@ def make_manuscript(summary):
         "The model output is therefore not just a compatibility number. It is a compact answer to four planning questions: will this handoff fail, why might it fail, should the system repair, probe, abstain, or route through another transition, and what should the planner learn for later plans? The important prediction is the one that changes the next action choice, including the choice not to execute. That is the action-model point: prediction matters because it changes action selection and future planning memory."
     )
     a(
-        "This gives a bounded claim. When basin overlap, barrier height, and descent continuity are identifiable enough to reject bad seams and preserve useful ones, a barrier-certified implementation can make skill composition more reliable. Its value is not only higher success, but more structured failure information: the planner can learn which transitions are reliable, which require repair or a diagnostic probe, and which should be avoided. What makes this a seam action model rather than only a score threshold is the full loop: predict the local consequence before execution, choose a transition-level response, observe the outcome, and update the edge memory that future plans query. It must fail or abstain when the low-level primitive is broken, the goal is semantic rather than physical, the landscape is miscalibrated, or real-time constraints prevent search."
+        "This gives a bounded claim. When basin overlap, barrier height, and descent continuity are identifiable enough to reject bad seams and preserve useful ones, a barrier-certified implementation can make skill composition more reliable. Its value is not only higher success, but more structured failure information: the planner can learn which transitions are reliable, which require repair or a diagnostic probe, and which should be avoided. What makes this a local world/action model rather than only a score threshold is the full loop: predict the local consequence before execution, choose a transition-level response, observe the outcome, and update the edge memory that future plans query. It must fail or abstain when the low-level primitive is broken, the goal is semantic rather than physical, the landscape is miscalibrated, or real-time constraints prevent search."
     )
 
     a(r"\section{Evaluation Protocol}")
     a(
         f"The evaluation protocol is fixed before interpreting final results. The main matrix contains 12 methods, 6 task families, 8 seam regimes, 5 deployment splits, 10 paired seeds, 8 rollout episodes per cell, and {counts['main_cell']:,} main cell rows. "
-        f"Ablations add {counts['ablation_cell']:,} cells, stress sweeps add {counts['stress_cell']:,} cells, fixed-risk tests add {counts['fixed_risk_cell']:,} cells, and the failure audit contains {counts['failure_cases']} cases. The previous proposed method remains a named baseline. The protocol measures both composition outcomes and seam-interface behavior: predicted risk, diagnostic label, decision, realized breach, and planner-edge update."
+        f"Ablations add {counts['ablation_cell']:,} cells, stress sweeps add {counts['stress_cell']:,} cells, fixed-risk tests add {counts['fixed_risk_cell']:,} cells, and the failure audit contains {counts['failure_cases']} cases. The previous proposed method remains a named baseline. The protocol measures both composition outcomes and world/action-model behavior at the seam: predicted risk, diagnostic label, decision, realized breach, and planner-edge update."
     )
     a(r"\begin{table}[t]\centering\small\resizebox{\linewidth}{!}{\input{generated_gate_table.tex}}\caption{Local evidence gates used for the seam-composition audit. External robot or high-fidelity validation is evaluated separately.}\label{tab:gates}\end{table}")
 
@@ -576,7 +576,7 @@ def make_manuscript(summary):
 
     a(r"\section{Discussion}")
     a(
-        "The interpretation is intentionally modest. A skill seam is a small place where a robot action representation has to become predictive: the same transition can be safe, repairable, uncertain, or impossible depending on terminal state, basin geometry, contact mode, and accumulated seam evidence. This paper makes that representation explicit enough for planning without claiming to solve full robot world modeling. Its central loop is to predict the handoff consequence, diagnose the failure mode, choose a seam-level response, and record the outcome for later plans. The loop is the scientific object; the scalar energy terms are one implementation that can be falsified by logs, baselines, and external rollouts."
+        "The interpretation is intentionally modest. A skill seam is a small place where a robot world/action representation has to become predictive: the same transition can be safe, repairable, uncertain, or impossible depending on terminal state, basin geometry, contact mode, and accumulated seam evidence. This paper makes that representation explicit enough for planning without claiming to solve full robot world modeling. Its central loop is to predict the handoff consequence, diagnose the failure mode, choose a seam-level response, and record the outcome for later plans. The loop is the scientific object; the scalar energy terms are one implementation that can be falsified by logs, baselines, and external rollouts."
     )
 
     a(r"\section{Scope And Validation}")

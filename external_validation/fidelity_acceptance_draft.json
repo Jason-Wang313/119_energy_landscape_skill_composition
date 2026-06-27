@@ -1,0 +1,371 @@
+{
+  "acceptance_gates": [
+    {
+      "evidence": "DRAFT ONLY: platform name, version, physics/contact details, robot/assets, sensors, and timestep are filled before rollouts",
+      "name": "platform_provenance_complete",
+      "status": "draft_unaccepted"
+    },
+    {
+      "evidence": "DRAFT ONLY: the same scene, seed, skill pair, and initial-state hash can be replayed for every method",
+      "name": "paired_reset_replay_verified",
+      "status": "draft_unaccepted"
+    },
+    {
+      "evidence": "DRAFT ONLY: each task logs state plus contact/force proxy and records videos for successes, failures, repairs, and abstentions",
+      "name": "contact_failure_observable",
+      "status": "draft_unaccepted"
+    },
+    {
+      "evidence": "DRAFT ONLY: all non-oracle methods share skills, observations, reset IDs, and compute budget, with no hidden future state",
+      "name": "non_oracle_methods_fair",
+      "status": "draft_unaccepted"
+    },
+    {
+      "evidence": "DRAFT ONLY: manifest metrics are recomputed from JSONL logs by validate_external_rollouts.py",
+      "name": "raw_logs_drive_metrics",
+      "status": "draft_unaccepted"
+    }
+  ],
+  "acceptance_ready": false,
+  "draft_only": true,
+  "not_external_evidence": true,
+  "platform": {
+    "asset_sources": [
+      "ManiSkill primary task assets for PegInsertionSide-v1, OpenCabinetDrawer-v1, OpenCabinetDoor-v1, and PullCubeTool-v1",
+      "PartNet Mobility cabinet asset for OpenCabinetDrawer-v1/OpenCabinetDoor-v1 when required",
+      "Support assets not yet accepted for evidence: oakink-v2, ycb"
+    ],
+    "contact_or_force_channels": [
+      "contact_events_or_task_contact_proxy",
+      "normal_force_or_proxy_to_be_verified_by_operator"
+    ],
+    "contact_solver": "OPERATOR_VERIFY_CONTACT_SOLVER_AND_FRICTION_BEFORE_ACCEPTANCE",
+    "physics_engine": "SAPIEN 3.0.3 via ManiSkill",
+    "platform_name": "ManiSkill-SAPIEN-reference-backend",
+    "platform_type": "high_fidelity_sim",
+    "platform_version": "ManiSkill 3.0.1; SAPIEN 3.0.3",
+    "robot_model_source": "ManiSkill/SAPIEN task assets and Panda robot definitions; operator must record exact selected-task asset provenance before acceptance",
+    "sensor_modalities": [
+      "state",
+      "camera",
+      "contact_or_force"
+    ],
+    "state_observation_channels": [
+      "terminal_state",
+      "object_pose",
+      "robot_pose",
+      "task_info_success_or_contact_keys"
+    ],
+    "substeps_per_control_step": "OPERATOR_VERIFY_SUBSTEPS_BEFORE_ACCEPTANCE",
+    "timestep_seconds": "OPERATOR_VERIFY_TIMESTEP_SECONDS_BEFORE_ACCEPTANCE"
+  },
+  "prefilled_hashes": {
+    "backend_module_sha256": "E30E5A3292B6ACB7B9819914A6FDA6BD068B5B469031EEF1FF4E7AA852D140B2",
+    "skill_library_hash": "62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1",
+    "task_config_hashes": {
+      "cable_route_insert": "8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E",
+      "door_open_navigation": "13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61",
+      "drawer_to_pick_transfer": "1288223014CB9D9285E4249B2FA607FFC16EBEE20B6F44E0241B63E88233E471",
+      "peg_place_regrasp": "021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9"
+    },
+    "tracked_probe_hashes": {
+      "external_validation/config_schema_v1.json": {
+        "bytes": 1823,
+        "exists": true,
+        "sha256": "6936B85F4D47F87CC509E272E37F577BD3FF2EC0B505EEAEE0C3180207189573"
+      },
+      "external_validation/configs/cable_route_insert.json": {
+        "bytes": 2034,
+        "exists": true,
+        "sha256": "8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E"
+      },
+      "external_validation/configs/door_open_navigation.json": {
+        "bytes": 2005,
+        "exists": true,
+        "sha256": "13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61"
+      },
+      "external_validation/configs/drawer_to_pick_transfer.json": {
+        "bytes": 2046,
+        "exists": true,
+        "sha256": "1288223014CB9D9285E4249B2FA607FFC16EBEE20B6F44E0241B63E88233E471"
+      },
+      "external_validation/configs/peg_place_regrasp.json": {
+        "bytes": 1989,
+        "exists": true,
+        "sha256": "021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9"
+      },
+      "external_validation/fidelity_acceptance_template.json": {
+        "bytes": 4582,
+        "exists": true,
+        "sha256": "0BED23F5E73145C7D3283605C0EFDCCF0970CBC989CAAC6DF4E45445D30496E0"
+      },
+      "external_validation/maniskill_task_bindings.json": {
+        "bytes": 2159,
+        "exists": true,
+        "sha256": "448A0430B88097618D463319DBD599334D28D533F81BA2FE783C3B80DE4EFBC5"
+      },
+      "external_validation/runner/backend_contract.py": {
+        "bytes": 3269,
+        "exists": true,
+        "sha256": "724802B452269859B9F9686942CC9788A078B907EDD32EC9C857CF5A1427801A"
+      },
+      "external_validation/runner/backend_templates/maniskill_backend.py": {
+        "bytes": 299,
+        "exists": true,
+        "sha256": "57C8C99918AF4480A1ABF1118B5FF38F738E0CAFF23B36D8376F40B18A4FC9FD"
+      },
+      "external_validation/runner/real_collection_runner.py": {
+        "bytes": 15097,
+        "exists": true,
+        "sha256": "E18DDE573F0269B387FADD3E3BC6BCCC4620A685000281D15FD50E8E184FB071"
+      }
+    }
+  },
+  "promotion_commands": [
+    "copy external_validation\\fidelity_acceptance_draft.json external_validation\\fidelity_acceptance.json",
+    "edit external_validation\\fidelity_acceptance.json: change version to paper119_fidelity_acceptance_v1, remove draft_only, fill every remaining operator input, and set gates only after evidence exists",
+    "ensure external_validation/manifest.json declares fidelity_acceptance_path=external_validation/fidelity_acceptance.json together with real logs, videos, configs, checkpoints, and method hashes",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\audit_external_fidelity_acceptance.py --strict",
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map"
+  ],
+  "promotion_ready": false,
+  "provenance": {
+    "artifact_hash_policy": "sha256",
+    "backend_module": "external_validation/runner/maniskill_reference_backend.py",
+    "backend_module_hash": "E30E5A3292B6ACB7B9819914A6FDA6BD068B5B469031EEF1FF4E7AA852D140B2",
+    "code_commit": "5cfd85dd14a26b1e6c51974d4459aca4d42fe2df",
+    "date_locked": "DRAFT_NOT_LOCKED",
+    "manifest_path": "external_validation/manifest.json",
+    "operator_name_or_lab": "DRAFT_OPERATOR_TO_FILL",
+    "operator_not_target_collaborator": false,
+    "primary_env_smoke_ready": true,
+    "primary_env_smoke_recorded": true,
+    "primary_reset_missing": [],
+    "primary_route_install_ready": true,
+    "reference_collection_preflight_blocking": [
+      "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"
+    ],
+    "repo_dirty_status_lines": [
+      "M .github/workflows/paper119-validation.yml",
+      " M README.md",
+      " M child_status.md",
+      " M docs/claim_evidence_ledger.json",
+      " M docs/final_audit.md",
+      " M docs/haonan_yilun_outreach_package.md",
+      " M docs/independent_validation_protocol.md",
+      " M docs/reproducibility_checklist.md",
+      " M docs/submission_readiness_audit_v5.md",
+      " M docs/submission_readiness_decision.md",
+      " M docs/submission_version_log.md",
+      " M external_validation/README.md",
+      " M outreach/paper119_four_page_preview.pdf",
+      " M outreach/paper119_four_page_preview.tex",
+      " M outreach/paper119_one_page_memo.pdf",
+      " M outreach/paper119_one_page_memo.tex",
+      " M paper/main.pdf",
+      " M paper/main.tex",
+      " M results/external_acquisition_packet.json",
+      " M results/external_acquisition_packet.md",
+      " M results/external_execution_readiness_audit.json",
+      " M results/external_execution_readiness_audit.md",
+      " M results/external_operator_handoff_bundle.json",
+      " M results/external_operator_handoff_bundle.md",
+      " M results/external_operator_packet.json",
+      " M results/external_operator_packet.md",
+      " M results/external_platform_probe.json",
+      " M results/external_platform_probe.md",
+      " M results/maniskill_env_smoke_probe.json",
+      " M results/manuscript_readability_audit.json",
+      " M results/manuscript_readability_audit.md",
+      " M results/visible_contribution_audit.json",
+      " M results/visible_contribution_audit.md",
+      " M scripts/audit_camera_ready_design.py",
+      " M scripts/audit_manuscript_readability.py",
+      " M scripts/audit_presentation_quality.py",
+      " M scripts/audit_visible_contribution.py",
+      " M scripts/build_external_acquisition_packet.py",
+      " M scripts/build_external_operator_handoff_bundle.py",
+      " M scripts/build_external_operator_packet.py",
+      " M scripts/build_submission_artifacts.ps1",
+      " M scripts/generate_manuscript.py",
+      " M scripts/validate_submission_artifacts.py",
+      "?? external_validation/fidelity_acceptance_draft.json",
+      "?? external_validation/fidelity_acceptance_draft.md",
+      "?? results/external_fidelity_acceptance_draft_audit.json",
+      "?? results/external_fidelity_acceptance_draft_audit.md",
+      "?? scripts/build_external_fidelity_acceptance_draft.py"
+    ],
+    "skill_library_hash": "62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1"
+  },
+  "purpose": "Operator-editable draft for the tracked ManiSkill/SAPIEN route. This file pre-fills reproducible provenance anchors but cannot satisfy fidelity acceptance until independently completed, renamed, manifest-declared, and strict-audited.",
+  "qualification": {
+    "contact_dynamics_justification": "DRAFT ONLY: primary ManiSkill/SAPIEN task bindings reset locally, but accepted contact/friction/substep details must be written by the operator before rollouts count.",
+    "deterministic_paired_resets": true,
+    "failed_and_abstained_runs_logged": true,
+    "known_limitations": "DRAFT ONLY: current local probe uses CPU fallback rendering; support assets oakink-v2/ycb are not needed for the primary route but remain explicit support-environment blockers.",
+    "no_privileged_state_for_non_oracle": true,
+    "operator_independence_statement": "DRAFT ONLY: independent operator/lab must fill this after confirming they are not Jason, Haonan Chen, Yilun Du, or another target collaborator.",
+    "paired_reset_replay_test": "DRAFT ONLY: strict collection requires replaying the same scene, seed, skill pair, initial_state_hash, and terminal sample set across every method panel.",
+    "pre_registered_before_rollouts": true,
+    "raw_jsonl_is_source_of_truth": true,
+    "real_or_benchmark_calibration_basis": "DRAFT ONLY: operator must name the real robot benchmark, simulator benchmark, calibration suite, or published environment standard used to justify high-fidelity status.",
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "shared_skill_library": true,
+    "videos_tied_to_run_ids": true
+  },
+  "real_acceptance_path": "external_validation/fidelity_acceptance.json",
+  "real_manifest_path": "external_validation/manifest.json",
+  "remaining_operator_inputs": [
+    "independent_operator_identity",
+    "accepted_external_collection_machine",
+    "contact_solver_and_friction_model",
+    "timestep_and_substeps_per_control_step",
+    "paired_reset_replay_verification",
+    "real_or_benchmark_calibration_basis",
+    "task_binding_accept_or_replace_decision",
+    "acceptance_gate_signoff",
+    "manifest_declares_fidelity_acceptance_path",
+    "real_rollout_logs_videos_and_release_hashes"
+  ],
+  "route": "high_fidelity_sim",
+  "source_reports": [
+    "external_validation/fidelity_acceptance_template.json",
+    "results/external_platform_probe.json",
+    "results/maniskill_backend_readiness_audit.json",
+    "results/maniskill_reference_collection_preflight_audit.json",
+    "results/maniskill_env_smoke_probe.json",
+    "external_validation/maniskill_task_bindings.json"
+  ],
+  "strict_external_evidence_ready": false,
+  "strict_fidelity_evidence_ready": false,
+  "task_fidelity": [
+    {
+      "binding_rationale": "PegInsertionSide exposes contact-rich peg insertion geometry and resettable peg pose for the proposed skill-seam handoff.",
+      "binding_strength": "direct_contact_candidate",
+      "config_path": "external_validation/configs/peg_place_regrasp.json",
+      "config_sha256": "021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9",
+      "contact_or_dynamics_property": "insertion contact and regrasp basin transition",
+      "failure_modes_visible_on_video": true,
+      "minimum_required_signal": "peg/object pose plus contact or force proxy",
+      "primary_env_id": "PegInsertionSide-v1",
+      "primary_env_reset_ok": true,
+      "primary_env_smoke_recorded": true,
+      "primary_info_keys": [
+        "elapsed_steps",
+        "peg_head_pos_at_hole",
+        "reconfigure",
+        "success"
+      ],
+      "primary_observation_shape": "torch.Size([1, 43])",
+      "requires_operator_fidelity_acceptance": true,
+      "seam_observable": true,
+      "support_env_ids": [],
+      "support_env_status": {},
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "binding_rationale": "OpenCabinetDrawer supplies the articulated drawer/contact mode; a pick environment is listed as the downstream grasp proxy that the backend must bind under shared reset provenance.",
+      "binding_strength": "composite_contact_candidate",
+      "config_path": "external_validation/configs/drawer_to_pick_transfer.json",
+      "config_sha256": "1288223014CB9D9285E4249B2FA607FFC16EBEE20B6F44E0241B63E88233E471",
+      "contact_or_dynamics_property": "drawer joint/contact and reachable grasp basin",
+      "failure_modes_visible_on_video": true,
+      "minimum_required_signal": "drawer joint state, object pose, and contact or force proxy",
+      "primary_env_id": "OpenCabinetDrawer-v1",
+      "primary_env_reset_ok": true,
+      "primary_env_smoke_recorded": true,
+      "primary_info_keys": [
+        "elapsed_steps",
+        "handle_link_pos",
+        "open_enough",
+        "reconfigure",
+        "success"
+      ],
+      "primary_observation_shape": "torch.Size([1, 44])",
+      "requires_operator_fidelity_acceptance": true,
+      "seam_observable": true,
+      "support_env_ids": [
+        "PickCube-v1",
+        "PickSingleYCB-v1"
+      ],
+      "support_env_status": {
+        "PickCube-v1": {
+          "missing_asset_ids": [],
+          "reset_ok": true
+        },
+        "PickSingleYCB-v1": {
+          "missing_asset_ids": [
+            "ycb"
+          ],
+          "reset_ok": false
+        }
+      },
+      "task_family": "drawer_to_pick_transfer"
+    },
+    {
+      "binding_rationale": "OpenCabinetDoor supplies hinge/contact dynamics for the first skill; the backend must document the downstream transition/navigability proxy before evidence can count.",
+      "binding_strength": "partial_contact_candidate",
+      "config_path": "external_validation/configs/door_open_navigation.json",
+      "config_sha256": "13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61",
+      "contact_or_dynamics_property": "door hinge/contact transition into navigation start set",
+      "failure_modes_visible_on_video": true,
+      "minimum_required_signal": "door state, base pose, clearance, and contact or force proxy",
+      "primary_env_id": "OpenCabinetDoor-v1",
+      "primary_env_reset_ok": true,
+      "primary_env_smoke_recorded": true,
+      "primary_info_keys": [
+        "elapsed_steps",
+        "handle_link_pos",
+        "open_enough",
+        "reconfigure",
+        "success"
+      ],
+      "primary_observation_shape": "torch.Size([1, 44])",
+      "requires_operator_fidelity_acceptance": true,
+      "seam_observable": true,
+      "support_env_ids": [],
+      "support_env_status": {},
+      "task_family": "door_open_navigation"
+    },
+    {
+      "binding_rationale": "ManiSkill does not expose a literal cable-routing task in the installed registry; PullCubeTool/InsertFlower are explicit contact-rich surrogates that require operator acceptance or replacement by a real cable environment.",
+      "binding_strength": "surrogate_contact_candidate",
+      "config_path": "external_validation/configs/cable_route_insert.json",
+      "config_sha256": "8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E",
+      "contact_or_dynamics_property": "deformable/contact-rich cable state before insertion",
+      "failure_modes_visible_on_video": true,
+      "minimum_required_signal": "endpoint pose, cable state proxy, and contact or force proxy",
+      "primary_env_id": "PullCubeTool-v1",
+      "primary_env_reset_ok": true,
+      "primary_env_smoke_recorded": true,
+      "primary_info_keys": [
+        "cube_distance",
+        "cube_progress",
+        "elapsed_steps",
+        "reconfigure",
+        "reward",
+        "success",
+        "success_at_end",
+        "success_once"
+      ],
+      "primary_observation_shape": "torch.Size([1, 39])",
+      "requires_operator_fidelity_acceptance": true,
+      "seam_observable": true,
+      "support_env_ids": [
+        "InsertFlower-v1"
+      ],
+      "support_env_status": {
+        "InsertFlower-v1": {
+          "missing_asset_ids": [
+            "oakink-v2"
+          ],
+          "reset_ok": false
+        }
+      },
+      "task_family": "cable_route_insert"
+    }
+  ],
+  "version": "paper119_fidelity_acceptance_draft_v1"
+}

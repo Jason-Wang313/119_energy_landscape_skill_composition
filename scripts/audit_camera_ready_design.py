@@ -189,8 +189,8 @@ def main() -> int:
         and "boundedclaim" in full_text
     )
     text_anchors = {
-        "title_and_abstract": "predictiveskillseamactionmodels" in page_texts[1]
-        and "robotskillcomposition" in page_texts[1]
+        "title_and_abstract": "localworldactionmodels" in page_texts[1]
+        and "robotskillseams" in page_texts[1]
         and "abstract" in page_texts[1],
         "decision_quality_page": any("comparativedecisionqualityaudit" in page_texts[page] for page in (5, 6)),
         "predictive_calibration_page": any("predictivecalibrationtable" in text for text in page_texts.values()),

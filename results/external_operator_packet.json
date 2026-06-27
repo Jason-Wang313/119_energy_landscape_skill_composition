@@ -18,6 +18,11 @@
       "passed": true
     },
     {
+      "detail": "draft_ready=True, remaining_operator_inputs=10",
+      "name": "fidelity_acceptance_draft_ready_but_fail_closed",
+      "passed": true
+    },
+    {
       "detail": "missing=[]",
       "name": "operator_actions_cover_start_to_finish",
       "passed": true
@@ -65,6 +70,18 @@
   ],
   "collection_ready": false,
   "config_materialization_command": "python scripts\\materialize_external_configs.py --platform-type <real_robot|high_fidelity_sim> --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
+  "fidelity_acceptance_draft": {
+    "acceptance_ready": false,
+    "build_command": "python scripts\\build_external_fidelity_acceptance_draft.py",
+    "draft_md_path": "external_validation/fidelity_acceptance_draft.md",
+    "draft_path": "external_validation/fidelity_acceptance_draft.json",
+    "draft_ready": true,
+    "not_external_evidence": true,
+    "real_acceptance_path": "external_validation/fidelity_acceptance.json",
+    "remaining_operator_input_count": 10,
+    "strict_audit_command_after_promotion": "python scripts\\audit_external_fidelity_acceptance.py --strict",
+    "strict_fidelity_evidence_ready": false
+  },
   "go_to_collect": false,
   "not_external_evidence": true,
   "operator_actions": [
@@ -277,6 +294,23 @@
     },
     {
       "artifacts": [
+        "external_validation/fidelity_acceptance_draft.json",
+        "external_validation/fidelity_acceptance_draft.md",
+        "results/external_fidelity_acceptance_draft_audit.json"
+      ],
+      "closes": [
+        "platform fidelity acceptance intake; still not evidence until promoted, manifest-declared, and strict-audited"
+      ],
+      "commands": [
+        "python scripts\\build_external_fidelity_acceptance_draft.py",
+        "python scripts\\audit_external_fidelity_acceptance.py --strict"
+      ],
+      "id": "fidelity_acceptance_draft",
+      "operator_input": "review the prefilled draft, replace draft-only fields with accepted independent provenance, then promote it only after real platform evidence exists",
+      "title": "Generate the tracked ManiSkill fidelity acceptance draft"
+    },
+    {
+      "artifacts": [
         "external_validation/pilot_smoke_packet.md",
         "external_validation/pilot_smoke_work_orders.csv",
         "results/external_pilot_smoke_packet_audit.json",
@@ -486,6 +520,9 @@
     "results/external_backend_contract_audit.json",
     "results/maniskill_backend_readiness_audit.json",
     "results/maniskill_reference_collection_preflight_audit.json",
+    "results/external_fidelity_acceptance_draft_audit.json",
+    "external_validation/fidelity_acceptance_draft.json",
+    "external_validation/fidelity_acceptance_draft.md",
     "results/external_config_materialization_plan.json",
     "results/external_rollout_evidence_audit.json",
     "results/external_fidelity_provenance_audit.json",

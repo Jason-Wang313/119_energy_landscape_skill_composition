@@ -115,6 +115,9 @@ jobs:
       - name: Build external fidelity provenance packet
         run: python scripts/build_external_fidelity_provenance_packet.py
 
+      - name: Build external fidelity acceptance draft
+        run: python scripts/build_external_fidelity_acceptance_draft.py
+
       - name: Audit external release package
         run: python scripts/audit_external_release_package.py
 

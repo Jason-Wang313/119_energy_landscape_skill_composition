@@ -62,7 +62,7 @@
     },
     {
       "name": "visible_contribution_claim",
-      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, and outreach package synchronized with the current materializer, operator packet, tracked reference route, outreach stance, and readiness boundary.",
+      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, and outreach package synchronized with the current materializer, operator packet, fidelity acceptance draft, tracked reference route, outreach stance, and readiness boundary.",
       "evidence": ["scripts/audit_visible_contribution.py", "README.md", "docs/final_audit.md", "docs/submission_readiness_decision.md", "docs/submission_readiness_audit_v5.md", "docs/submission_version_log.md", "child_status.md", "docs/haonan_yilun_outreach_package.md"]
     },
     {
@@ -99,6 +99,11 @@
       "name": "external_fidelity_provenance_packet_claim",
       "claim": "The repository provides a non-evidence fidelity provenance packet that turns the missing platform physics/contact, paired-reset replay, operator independence, calibration basis, code/skill hashes, manifest declaration, and strict fidelity gate into concrete operator work orders while strict fidelity and external evidence remain false.",
       "evidence": ["scripts/build_external_fidelity_provenance_packet.py", "external_validation/fidelity_provenance_packet.json", "external_validation/fidelity_provenance_packet.md", "external_validation/fidelity_provenance_work_orders.csv", "results/external_fidelity_provenance_audit.json", "results/external_fidelity_provenance_audit.md", "results/external_fidelity_acceptance_audit.json", "external_validation/fidelity_acceptance_template.json"]
+    },
+    {
+      "name": "external_fidelity_acceptance_draft_claim",
+      "claim": "The repository provides a non-evidence fidelity acceptance draft for the tracked ManiSkill/SAPIEN route that pre-fills platform, backend, task-config, task-binding, and environment-smoke anchors while keeping acceptance_ready=false and all real fidelity gates unaccepted.",
+      "evidence": ["scripts/build_external_fidelity_acceptance_draft.py", "external_validation/fidelity_acceptance_draft.json", "external_validation/fidelity_acceptance_draft.md", "results/external_fidelity_acceptance_draft_audit.json", "results/external_fidelity_acceptance_draft_audit.md", "results/maniskill_backend_readiness_audit.json", "results/maniskill_env_smoke_probe.json"]
     },
     {
       "name": "external_backend_integration_packet_claim",
@@ -297,6 +302,7 @@
     "external_validation/statistical_analysis_plan.md",
     "external_validation/platform_onboarding_packet.md",
     "external_validation/fidelity_provenance_packet.md",
+    "external_validation/fidelity_acceptance_draft.md",
     "external_validation/backend_integration_packet.md",
     "external_validation/config_manifest_packet.md",
     "external_validation/rollout_evidence_packet.md",
@@ -305,6 +311,7 @@
     "results/external_analysis_plan_audit.md",
     "results/external_platform_onboarding_audit.md",
     "results/external_fidelity_provenance_audit.md",
+    "results/external_fidelity_acceptance_draft_audit.md",
     "results/external_backend_integration_audit.md",
     "results/external_runner_backend_self_test.md",
     "results/external_config_manifest_audit.md",

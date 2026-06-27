@@ -18,7 +18,7 @@ OUT_MD = RESULTS / "manuscript_readability_audit.md"
 REQUIRED_SECTIONS = [
     "Motivation",
     "Problem Setup",
-    "Skill Seams As Predictive Interfaces",
+    "Skill Seams As Local World/Action Models",
     "Evaluation Protocol",
     "Main Results",
     "Diagnostics, Ablations, And Fixed Risk",

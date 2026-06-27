@@ -93,6 +93,8 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "fidelity_provenance_packet.json",
         EXTERNAL / "fidelity_provenance_packet.md",
         EXTERNAL / "fidelity_provenance_work_orders.csv",
+        EXTERNAL / "fidelity_acceptance_draft.json",
+        EXTERNAL / "fidelity_acceptance_draft.md",
         EXTERNAL / "backend_integration_packet.json",
         EXTERNAL / "backend_integration_packet.md",
         EXTERNAL / "backend_integration_work_orders.csv",
@@ -134,6 +136,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "probe_maniskill_task_bindings.py",
         SCRIPTS / "probe_maniskill_env_smoke.py",
         SCRIPTS / "build_external_fidelity_provenance_packet.py",
+        SCRIPTS / "build_external_fidelity_acceptance_draft.py",
         SCRIPTS / "build_external_backend_integration_packet.py",
         SCRIPTS / "build_external_config_manifest_packet.py",
         SCRIPTS / "build_external_rollout_evidence_packet.py",
@@ -175,6 +178,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_platform_onboarding_audit.md",
         RESULTS / "external_fidelity_provenance_audit.json",
         RESULTS / "external_fidelity_provenance_audit.md",
+        RESULTS / "external_fidelity_acceptance_draft_audit.json",
+        RESULTS / "external_fidelity_acceptance_draft_audit.md",
         RESULTS / "external_backend_integration_audit.json",
         RESULTS / "external_backend_integration_audit.md",
         RESULTS / "external_config_manifest_audit.json",
@@ -281,6 +286,7 @@ def build_payload() -> dict[str, Any]:
     env_smoke_probe = require_payload(RESULTS / "maniskill_env_smoke_probe.json", "maniskill_env_smoke_probe_v1")
     onboarding = require_payload(RESULTS / "external_platform_onboarding_audit.json", "external_platform_onboarding_audit_v1")
     fidelity_provenance = require_payload(RESULTS / "external_fidelity_provenance_audit.json", "external_fidelity_provenance_audit_v1")
+    fidelity_draft = require_payload(RESULTS / "external_fidelity_acceptance_draft_audit.json", "external_fidelity_acceptance_draft_audit_v1")
     backend_integration = require_payload(RESULTS / "external_backend_integration_audit.json", "external_backend_integration_audit_v1")
     maniskill_backend = require_payload(RESULTS / "maniskill_backend_readiness_audit.json", "maniskill_reference_backend_audit_v1")
     maniskill_preflight = require_payload(RESULTS / "maniskill_reference_collection_preflight_audit.json", "maniskill_reference_collection_preflight_audit_v1")
@@ -455,6 +461,29 @@ def build_payload() -> dict[str, Any]:
             f"strict_external_evidence_ready={fidelity_provenance.get('strict_external_evidence_ready')!r}"
         ),
     )
+    fidelity_draft_checks = {check.get("name"): check.get("passed") for check in fidelity_draft.get("checks", []) or []}
+    add_check(
+        checks,
+        "fidelity_acceptance_draft_included",
+        fidelity_draft.get("passed") is True
+        and fidelity_draft.get("not_external_evidence") is True
+        and fidelity_draft.get("draft_ready") is True
+        and fidelity_draft.get("acceptance_ready") is False
+        and fidelity_draft.get("strict_fidelity_evidence_ready") is False
+        and fidelity_draft.get("strict_external_evidence_ready") is False
+        and fidelity_draft_checks.get("draft_is_non_evidence_and_fail_closed") is True
+        and fidelity_draft_checks.get("candidate_hashes_prefilled") is True
+        and fidelity_draft_checks.get("acceptance_gates_remain_unaccepted") is True
+        and "external_validation/fidelity_acceptance_draft.json" in paths
+        and "external_validation/fidelity_acceptance_draft.md" in paths
+        and "results/external_fidelity_acceptance_draft_audit.json" in paths
+        and "scripts/build_external_fidelity_acceptance_draft.py" in paths,
+        (
+            f"draft_ready={fidelity_draft.get('draft_ready')!r}, "
+            f"remaining_operator_inputs={fidelity_draft.get('remaining_operator_input_count')!r}, "
+            f"acceptance_ready={fidelity_draft.get('acceptance_ready')!r}"
+        ),
+    )
     backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration.get("checks", []) or []}
     add_check(
         checks,
@@ -609,6 +638,7 @@ def build_payload() -> dict[str, Any]:
         {
             "platform_onboarding",
             "fidelity_provenance_packet",
+            "fidelity_acceptance_draft",
             "backend_integration_packet",
             "maniskill_reference_backend_audit",
             "maniskill_reference_collection_preflight",
@@ -625,7 +655,7 @@ def build_payload() -> dict[str, Any]:
             "strict_rollout_recompute",
             "final_strict_gate",
         }.issubset(action_ids),
-        f"missing={sorted({'platform_onboarding', 'fidelity_provenance_packet', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
+        f"missing={sorted({'platform_onboarding', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
     )
     add_check(
         checks,
@@ -670,6 +700,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_analysis_plan_audit.json",
             "results/external_platform_onboarding_audit.json",
             "results/external_fidelity_provenance_audit.json",
+            "results/external_fidelity_acceptance_draft_audit.json",
             "results/external_backend_integration_audit.json",
             "results/maniskill_backend_readiness_audit.json",
             "results/external_config_manifest_audit.json",

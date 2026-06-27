@@ -62,6 +62,10 @@ def build_payload() -> dict[str, Any]:
         RESULTS / "maniskill_reference_collection_preflight_audit.json",
         "maniskill_reference_collection_preflight_audit_v1",
     )
+    fidelity_draft = require_payload(
+        RESULTS / "external_fidelity_acceptance_draft_audit.json",
+        "external_fidelity_acceptance_draft_audit_v1",
+    )
     materialization = require_payload(
         RESULTS / "external_config_materialization_plan.json",
         "external_config_materialization_plan_v1",
@@ -79,6 +83,7 @@ def build_payload() -> dict[str, Any]:
         "env_smoke_probe",
         "platform_onboarding",
         "fidelity_provenance_packet",
+        "fidelity_acceptance_draft",
         "backend_integration_packet",
         "maniskill_reference_backend_audit",
         "maniskill_reference_collection_preflight",
@@ -135,6 +140,25 @@ def build_payload() -> dict[str, Any]:
         and len(reference_blockers) == 1
         and "fidelity_acceptance_ready" in reference_blockers[0],
         f"blocking={reference_blockers}",
+    )
+    draft_checks = {check.get("name"): check.get("passed") for check in fidelity_draft.get("checks", []) or []}
+    add_check(
+        checks,
+        "fidelity_acceptance_draft_ready_but_fail_closed",
+        fidelity_draft.get("passed") is True
+        and fidelity_draft.get("not_external_evidence") is True
+        and fidelity_draft.get("draft_ready") is True
+        and fidelity_draft.get("acceptance_ready") is False
+        and fidelity_draft.get("strict_fidelity_evidence_ready") is False
+        and fidelity_draft.get("strict_external_evidence_ready") is False
+        and draft_checks.get("draft_is_non_evidence_and_fail_closed") is True
+        and draft_checks.get("candidate_platform_prefilled_from_reference_route") is True
+        and draft_checks.get("acceptance_gates_remain_unaccepted") is True
+        and draft_checks.get("no_real_acceptance_or_manifest_written") is True,
+        (
+            f"draft_ready={fidelity_draft.get('draft_ready')!r}, "
+            f"remaining_operator_inputs={fidelity_draft.get('remaining_operator_input_count')!r}"
+        ),
     )
     add_check(
         checks,
@@ -256,6 +280,18 @@ def build_payload() -> dict[str, Any]:
             "collection_command_after_fidelity_acceptance": reference_collection_command,
             "audit_command": "python scripts\\audit_maniskill_reference_collection_preflight.py",
         },
+        "fidelity_acceptance_draft": {
+            "not_external_evidence": True,
+            "draft_ready": fidelity_draft.get("draft_ready") is True,
+            "acceptance_ready": fidelity_draft.get("acceptance_ready") is True,
+            "strict_fidelity_evidence_ready": fidelity_draft.get("strict_fidelity_evidence_ready") is True,
+            "draft_path": fidelity_draft.get("draft_path", "external_validation/fidelity_acceptance_draft.json"),
+            "draft_md_path": fidelity_draft.get("draft_md_path", "external_validation/fidelity_acceptance_draft.md"),
+            "real_acceptance_path": fidelity_draft.get("real_acceptance_path", "external_validation/fidelity_acceptance.json"),
+            "remaining_operator_input_count": int(fidelity_draft.get("remaining_operator_input_count", 0) or 0),
+            "build_command": "python scripts\\build_external_fidelity_acceptance_draft.py",
+            "strict_audit_command_after_promotion": "python scripts\\audit_external_fidelity_acceptance.py --strict",
+        },
         "pre_collection_gate_command": (
             "python scripts\\audit_external_collection_readiness.py --strict "
             "--backend-module <module_or_path> --task-config-dir external_validation\\configs "
@@ -275,6 +311,9 @@ def build_payload() -> dict[str, Any]:
             "results/external_backend_contract_audit.json",
             "results/maniskill_backend_readiness_audit.json",
             "results/maniskill_reference_collection_preflight_audit.json",
+            "results/external_fidelity_acceptance_draft_audit.json",
+            "external_validation/fidelity_acceptance_draft.json",
+            "external_validation/fidelity_acceptance_draft.md",
             "results/external_config_materialization_plan.json",
             "results/external_rollout_evidence_audit.json",
             "results/external_fidelity_provenance_audit.json",
@@ -336,6 +375,28 @@ def write_md(payload: dict[str, Any]) -> None:
             "",
             "```powershell",
             reference["collection_command_after_fidelity_acceptance"],
+            "```",
+        ]
+    )
+
+    draft = payload["fidelity_acceptance_draft"]
+    lines.extend(
+        [
+            "",
+            "## Fidelity Acceptance Draft",
+            "",
+            "The draft is not evidence and does not satisfy fidelity acceptance. It pre-fills the tracked ManiSkill route's platform, backend, config, and smoke-probe anchors so the independent operator can replace draft fields with accepted provenance before collection.",
+            "",
+            f"- Draft JSON: `{draft['draft_path']}`",
+            f"- Draft notes: `{draft['draft_md_path']}`",
+            f"- Draft ready: `{str(draft['draft_ready']).lower()}`",
+            f"- Acceptance ready: `{str(draft['acceptance_ready']).lower()}`",
+            f"- Remaining operator inputs: `{draft['remaining_operator_input_count']}`",
+            "",
+            "Draft rebuild command:",
+            "",
+            "```powershell",
+            draft["build_command"],
             "```",
         ]
     )

@@ -41,6 +41,22 @@ Reference-route collection command after fidelity acceptance passes:
 python external_validation\runner\real_collection_runner.py --backend-module external_validation\runner\maniskill_reference_backend.py --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id maniskill_sapien_reference_preflight_protocol_v1 --unsealed-alias-map
 ```
 
+## Fidelity Acceptance Draft
+
+The draft is not evidence and does not satisfy fidelity acceptance. It pre-fills the tracked ManiSkill route's platform, backend, config, and smoke-probe anchors so the independent operator can replace draft fields with accepted provenance before collection.
+
+- Draft JSON: `external_validation/fidelity_acceptance_draft.json`
+- Draft notes: `external_validation/fidelity_acceptance_draft.md`
+- Draft ready: `true`
+- Acceptance ready: `false`
+- Remaining operator inputs: `10`
+
+Draft rebuild command:
+
+```powershell
+python scripts\build_external_fidelity_acceptance_draft.py
+```
+
 ## Commands
 
 Materialize real configs after platform selection:
@@ -92,6 +108,7 @@ Post-collection strict gates:
 - `config_manifest_packet`: Use the config manifest packet as the task-config evidence checklist
 - `rollout_evidence_packet`: Use the rollout evidence packet as the raw-log evidence checklist
 - `platform_fidelity`: Fill platform fidelity acceptance with real provenance
+- `fidelity_acceptance_draft`: Generate the tracked ManiSkill fidelity acceptance draft
 - `pilot_smoke_packet`: Run a quarantined first-panel backend smoke test
 - `fidelity_provenance_packet`: Use the fidelity provenance packet as the platform acceptance checklist
 - `alias_unseal`: Unseal method aliases only after configs, implementations, and run plan are frozen
@@ -109,6 +126,7 @@ Post-collection strict gates:
 - `pass` `acquisition_packet_ready`: passed=True, strict_evidence_ready=False
 - `pass` `collection_preflight_fail_closed`: collection_ready=False, blocking_missing_count=4
 - `pass` `maniskill_reference_preflight_reaches_only_fidelity_gate`: blocking=["fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
+- `pass` `fidelity_acceptance_draft_ready_but_fail_closed`: draft_ready=True, remaining_operator_inputs=10
 - `pass` `operator_actions_cover_start_to_finish`: missing=[]
 - `pass` `operator_action_titles_present`: missing_titles=[]
 - `pass` `config_materializer_is_guarded`: write_enabled=False, task_count=4

@@ -180,11 +180,16 @@ External fidelity provenance packet:
 - `external_validation/fidelity_provenance_work_orders.csv`
 - `results/external_fidelity_provenance_audit.json`
 - `results/external_fidelity_provenance_audit.md`
+- `external_validation/fidelity_acceptance_draft.json`
+- `external_validation/fidelity_acceptance_draft.md`
+- `results/external_fidelity_acceptance_draft_audit.json`
+- `results/external_fidelity_acceptance_draft_audit.md`
 
 Generate it with:
 
 ```powershell
 python scripts\build_external_fidelity_provenance_packet.py
+python scripts\build_external_fidelity_acceptance_draft.py
 ```
 
 This packet is not evidence. It turns the missing platform physics/contact details, paired-reset replay, operator independence, calibration basis, code/skill hashes, manifest declaration, and strict fidelity gate into concrete work orders while strict fidelity and external evidence remain false.
