@@ -16,6 +16,7 @@ OUT_MD = RESULTS / "external_acquisition_packet.md"
 MISSING_REQUIREMENT_ACTIONS = {
     "Independent real-robot or accepted high-fidelity external validation evidence": [
         "platform_onboarding",
+        "backend_integration_packet",
         "backend_module",
         "platform_fidelity",
         "run_collection",
@@ -62,6 +63,20 @@ ACTION_CATALOG = {
         "commands": [
             "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
             "python scripts\\audit_external_collection_readiness.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+        ],
+        "closes": ["actual collection backend readiness"],
+    },
+    "backend_integration_packet": {
+        "title": "Use the backend integration packet as the public-simulator backend checklist",
+        "operator_input": "complete the non-template backend work orders with real module, provenance, task binding, hashes, logs, and videos",
+        "artifacts": [
+            "external_validation/backend_integration_packet.md",
+            "external_validation/backend_integration_work_orders.csv",
+            "results/external_backend_integration_audit.json",
+        ],
+        "commands": [
+            "python scripts\\build_external_backend_integration_packet.py",
+            "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
         ],
         "closes": ["actual collection backend readiness"],
     },
@@ -251,6 +266,7 @@ def main() -> int:
     onboarding_path = RESULTS / "external_platform_onboarding_audit.json"
     config_materialization_path = RESULTS / "external_config_materialization_plan.json"
     backend_contract_path = RESULTS / "external_backend_contract_audit.json"
+    backend_integration_path = RESULTS / "external_backend_integration_audit.json"
     method_packet_path = RESULTS / "external_method_implementation_audit.json"
 
     gap = require_json(gap_path)
@@ -260,6 +276,7 @@ def main() -> int:
     onboarding = require_json(onboarding_path)
     config_materialization = require_json(config_materialization_path)
     backend_contract = require_json(backend_contract_path)
+    backend_integration = require_json(backend_integration_path)
     method_packet = require_json(method_packet_path)
 
     missing_requirements = missing_requirements_from_gap(gap)
@@ -274,8 +291,32 @@ def main() -> int:
     add_check(
         checks,
         "source_audits_exist",
-        all(path.exists() for path in [collection_path, preflight_path, route_path, onboarding_path, config_materialization_path, backend_contract_path, method_packet_path]),
-        ", ".join(rel(path) for path in [collection_path, preflight_path, route_path, onboarding_path, config_materialization_path, backend_contract_path, method_packet_path]),
+        all(
+            path.exists()
+            for path in [
+                collection_path,
+                preflight_path,
+                route_path,
+                onboarding_path,
+                config_materialization_path,
+                backend_contract_path,
+                backend_integration_path,
+                method_packet_path,
+            ]
+        ),
+        ", ".join(
+            rel(path)
+            for path in [
+                collection_path,
+                preflight_path,
+                route_path,
+                onboarding_path,
+                config_materialization_path,
+                backend_contract_path,
+                backend_integration_path,
+                method_packet_path,
+            ]
+        ),
     )
     add_check(
         checks,
@@ -351,6 +392,24 @@ def main() -> int:
             f"actual_backend_ready={backend_contract.get('actual_backend_ready')!r}"
         ),
     )
+    backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration.get("checks", []) or []}
+    add_check(
+        checks,
+        "backend_integration_packet_ready",
+        backend_integration.get("passed") is True
+        and backend_integration.get("not_external_evidence") is True
+        and backend_integration.get("backend_integration_packet_ready") is True
+        and backend_integration.get("strict_backend_ready") is False
+        and backend_integration.get("strict_evidence_ready") is False
+        and backend_integration_checks.get("work_orders_cover_backend_to_manifest_path") is True
+        and backend_integration_checks.get("collection_readiness_still_blocks_backend") is True
+        and (EXTERNAL / "backend_integration_packet.md").exists()
+        and (EXTERNAL / "backend_integration_work_orders.csv").exists(),
+        (
+            f"backend_integration_packet_ready={backend_integration.get('backend_integration_packet_ready')!r}, "
+            f"strict_backend_ready={backend_integration.get('strict_backend_ready')!r}"
+        ),
+    )
     method_packet_checks = {check.get("name"): check.get("passed") for check in method_packet.get("checks", []) or []}
     add_check(
         checks,
@@ -411,6 +470,7 @@ def main() -> int:
         "audit_external_pairing_integrity.py --strict",
         "audit_external_evidence.py --strict",
         "audit_external_backend_contract.py --strict",
+        "build_external_backend_integration_packet.py",
         "build_external_platform_onboarding.py",
         "build_external_method_implementation_packet.py",
     ]
@@ -451,7 +511,21 @@ def main() -> int:
         "not_external_evidence": True,
         "acquisition_packet_ready": passed,
         "strict_evidence_ready": False,
-        "source_reports": [rel(path) for path in [gap_path, collection_path, preflight_path, route_path, onboarding_path, config_materialization_path, backend_contract_path, method_packet_path] if path.exists()],
+        "source_reports": [
+            rel(path)
+            for path in [
+                gap_path,
+                collection_path,
+                preflight_path,
+                route_path,
+                onboarding_path,
+                config_materialization_path,
+                backend_contract_path,
+                backend_integration_path,
+                method_packet_path,
+            ]
+            if path.exists()
+        ],
         "missing_requirements": [
             {
                 "requirement": row.get("requirement"),

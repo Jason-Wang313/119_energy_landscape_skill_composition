@@ -152,9 +152,10 @@ Generate it with:
 python scripts\build_external_collection_plan.py
 python scripts\build_external_analysis_plan.py
 python scripts\build_external_platform_onboarding.py
+python scripts\build_external_backend_integration_packet.py
 ```
 
-The collection plan currently expands the high-fidelity route into 4 task families x 30 paired resets x 12 methods = 1,440 required JSONL records. The analysis plan pre-registers the external primary hypotheses, rollout-schema thresholds, paired-comparison key, exclusion/unblinding policy, strict gates, and required reporting before rollout collection. The external platform onboarding packet records official source anchors, required simulator provenance, task onboarding files, backend requirements, and strict gate order for the primary ManiSkill/SAPIEN route. These files are not evidence; they are a deterministic collection schedule and locked analysis/onboarding contract for producing the real evidence package.
+The collection plan currently expands the high-fidelity route into 4 task families x 30 paired resets x 12 methods = 1,440 required JSONL records. The analysis plan pre-registers the external primary hypotheses, rollout-schema thresholds, paired-comparison key, exclusion/unblinding policy, strict gates, and required reporting before rollout collection. The external platform onboarding packet records official source anchors, required simulator provenance, task onboarding files, backend requirements, and strict gate order for the primary ManiSkill/SAPIEN route. The external backend integration packet turns the missing non-template public-simulator backend module into backend-to-manifest work orders. These files are not evidence; they are a deterministic collection schedule and locked analysis/onboarding/backend contract for producing the real evidence package.
 
 Independent route matrix:
 
@@ -170,6 +171,22 @@ python scripts\build_independent_validation_route.py
 ```
 
 This route is also not evidence. It makes the non-Haonan path explicit: a primary ManiSkill/SAPIEN public-simulator route, MuJoCo/robosuite and Isaac Sim/Isaac Lab secondary routes, and a third-party robot-lab route. Any route still has to produce manifest-backed JSONL logs, videos, real configs, platform provenance, and independent baseline implementations before it can satisfy the external gate.
+
+External backend integration packet:
+
+- `external_validation/backend_integration_packet.json`
+- `external_validation/backend_integration_packet.md`
+- `external_validation/backend_integration_work_orders.csv`
+- `results/external_backend_integration_audit.json`
+- `results/external_backend_integration_audit.md`
+
+Generate it with:
+
+```powershell
+python scripts\build_external_backend_integration_packet.py
+```
+
+This packet is not evidence. It converts the missing non-template public-simulator backend module into concrete work orders for platform provenance, task configs, paired-reset execution, method adapter hashes, logs, videos, and manifest inputs. Strict backend readiness and strict external evidence must still fail until an independent operator supplies the real backend and artifacts.
 
 Operator runbook:
 

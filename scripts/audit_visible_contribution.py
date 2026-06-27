@@ -45,6 +45,7 @@ def main() -> int:
     handoff = read_json(RESULTS / "external_operator_handoff_bundle.json")
     analysis = read_json(RESULTS / "external_analysis_plan_audit.json")
     onboarding = read_json(RESULTS / "external_platform_onboarding_audit.json")
+    backend_integration = read_json(RESULTS / "external_backend_integration_audit.json")
     method_implementation = read_json(RESULTS / "external_method_implementation_audit.json")
     materialization = read_json(RESULTS / "external_config_materialization_plan.json")
     ledger = read_json(DOCS / "claim_evidence_ledger.json")
@@ -124,6 +125,21 @@ def main() -> int:
             f"strict_evidence_ready={onboarding.get('strict_evidence_ready')!r}"
         ),
     )
+    backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration.get("checks", []) or []}
+    add_check(
+        checks,
+        "backend_integration_packet_visible",
+        backend_integration.get("passed") is True
+        and backend_integration.get("not_external_evidence") is True
+        and backend_integration.get("backend_integration_packet_ready") is True
+        and backend_integration.get("strict_backend_ready") is False
+        and backend_integration.get("strict_evidence_ready") is False
+        and backend_integration_checks.get("work_orders_cover_backend_to_manifest_path") is True,
+        (
+            f"backend_integration_packet_ready={backend_integration.get('backend_integration_packet_ready')!r}, "
+            f"strict_backend_ready={backend_integration.get('strict_backend_ready')!r}"
+        ),
+    )
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", []) or []}
     add_check(
         checks,
@@ -159,10 +175,11 @@ def main() -> int:
             "external_operator_handoff_bundle_claim",
             "external_analysis_plan_claim",
             "external_platform_onboarding_claim",
+            "external_backend_integration_packet_claim",
             "external_method_implementation_packet_claim",
             "external_config_materialization_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_method_implementation_packet_claim', 'external_config_materialization_claim'} - claim_names)}",
+        f"missing={sorted({'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_backend_integration_packet_claim', 'external_method_implementation_packet_claim', 'external_config_materialization_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -171,6 +188,7 @@ def main() -> int:
             "External config materialization plan",
             "External analysis plan",
             "External platform onboarding packet",
+            "External backend integration packet",
             "External method implementation packet",
             "External operator packet",
             "External operator handoff bundle",
@@ -180,6 +198,7 @@ def main() -> int:
             "External config materialization plan",
             "External analysis plan",
             "External platform onboarding packet",
+            "External backend integration packet",
             "External method implementation packet",
             "External operator packet",
             "External operator handoff bundle",
@@ -190,6 +209,7 @@ def main() -> int:
             "guarded config materialization plan",
             "external analysis plan",
             "external platform onboarding packet",
+            "external backend integration packet",
             "external method implementation packet",
             "generated external operator packet",
             "external operator handoff bundle",
@@ -200,6 +220,7 @@ def main() -> int:
             "External config materialization plan",
             "External analysis plan",
             "External platform onboarding packet",
+            "External backend integration packet",
             "External method implementation packet",
             "External operator packet",
             "External operator handoff bundle",
@@ -210,6 +231,7 @@ def main() -> int:
             "scripts/materialize_external_configs.py",
             "scripts/build_external_analysis_plan.py",
             "scripts/build_external_platform_onboarding.py",
+            "scripts/build_external_backend_integration_packet.py",
             "scripts/build_external_method_implementation_packet.py",
             "scripts/build_external_operator_packet.py",
             "scripts/build_external_operator_handoff_bundle.py",
@@ -219,6 +241,7 @@ def main() -> int:
             "external config materialization plan",
             "external analysis plan",
             "external platform onboarding packet",
+            "external backend integration packet",
             "external method implementation packet",
             "external operator packet",
             "external operator handoff bundle",
@@ -251,7 +274,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, guarded external config materialization, the locked external analysis plan, the external platform onboarding packet, the external method implementation packet, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, guarded external config materialization, the locked external analysis plan, the external platform onboarding packet, the external backend integration packet, the external method implementation packet, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

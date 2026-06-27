@@ -98,6 +98,23 @@
     },
     {
       "artifacts": [
+        "external_validation/backend_integration_packet.md",
+        "external_validation/backend_integration_work_orders.csv",
+        "results/external_backend_integration_audit.json"
+      ],
+      "closes": [
+        "actual collection backend readiness"
+      ],
+      "commands": [
+        "python scripts\\build_external_backend_integration_packet.py",
+        "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json"
+      ],
+      "id": "backend_integration_packet",
+      "operator_input": "complete the non-template backend work orders with real module, provenance, task binding, hashes, logs, and videos",
+      "title": "Use the backend integration packet as the public-simulator backend checklist"
+    },
+    {
+      "artifacts": [
         "external_validation/configs/peg_place_regrasp.json",
         "external_validation/configs/drawer_to_pick_transfer.json",
         "external_validation/configs/door_open_navigation.json",

@@ -59,6 +59,7 @@ Post-collection strict gates:
 
 - `platform_onboarding`: Onboard the public simulator platform
 - `backend_module`: Select a non-template backend module
+- `backend_integration_packet`: Use the backend integration packet as the public-simulator backend checklist
 - `real_task_configs`: Create real manifest-declared task configs
 - `platform_fidelity`: Fill platform fidelity acceptance with real provenance
 - `alias_unseal`: Unseal method aliases only after configs, implementations, and run plan are frozen

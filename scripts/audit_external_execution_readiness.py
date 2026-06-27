@@ -315,6 +315,41 @@ def main() -> int:
             f"actual_backend_ready={backend_contract.get('actual_backend_ready')!r}"
         ),
     )
+    backend_integration_ok, backend_integration, backend_integration_detail = passed_json(
+        RESULTS / "external_backend_integration_audit.json",
+        version="external_backend_integration_audit_v1",
+    )
+    add_check(checks, "external_backend_integration_packet_ready", backend_integration_ok, backend_integration_detail)
+    backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_backend_integration_not_evidence",
+        backend_integration.get("not_external_evidence") is True
+        and backend_integration.get("backend_integration_packet_ready") is True
+        and backend_integration.get("strict_backend_ready") is False
+        and backend_integration.get("strict_evidence_ready") is False,
+        (
+            f"not_external_evidence={backend_integration.get('not_external_evidence')!r}, "
+            f"strict_backend_ready={backend_integration.get('strict_backend_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "external_backend_integration_covers_backend_blocker",
+        backend_integration_checks.get("work_orders_cover_backend_to_manifest_path") is True
+        and backend_integration_checks.get("required_hooks_declared") is True
+        and backend_integration_checks.get("collection_readiness_still_blocks_backend") is True,
+        f"backend_integration_checks={backend_integration_checks}",
+    )
+    add_check(
+        checks,
+        "external_backend_integration_gate_order",
+        backend_integration_checks.get("strict_commands_cover_backend_config_fidelity_collection_and_evidence") is True
+        and (EXTERNAL / "backend_integration_packet.md").exists()
+        and (EXTERNAL / "backend_integration_work_orders.csv").exists()
+        and (ROOT / "scripts" / "build_external_backend_integration_packet.py").exists(),
+        "backend packet, work orders, builder, and strict command order are present",
+    )
 
     collection_readiness_ok, collection_readiness, collection_readiness_detail = passed_json(
         RESULTS / "external_collection_readiness_audit.json",
@@ -659,6 +694,9 @@ def main() -> int:
         EXTERNAL / "statistical_analysis_plan.md",
         EXTERNAL / "platform_onboarding_packet.json",
         EXTERNAL / "platform_onboarding_packet.md",
+        EXTERNAL / "backend_integration_packet.json",
+        EXTERNAL / "backend_integration_packet.md",
+        EXTERNAL / "backend_integration_work_orders.csv",
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
@@ -677,6 +715,7 @@ def main() -> int:
         RESULTS / "external_operator_handoff_bundle.md",
         RESULTS / "external_analysis_plan_audit.md",
         RESULTS / "external_platform_onboarding_audit.md",
+        RESULTS / "external_backend_integration_audit.md",
         RESULTS / "external_method_implementation_audit.md",
         DOCS / "independent_validation_protocol.md",
     ]
@@ -753,6 +792,10 @@ def main() -> int:
         "external_backend_contract_ready",
         "external_backend_contract_not_evidence",
         "external_backend_contract_fail_closed",
+        "external_backend_integration_packet_ready",
+        "external_backend_integration_not_evidence",
+        "external_backend_integration_covers_backend_blocker",
+        "external_backend_integration_gate_order",
         "external_collection_readiness_audit_ready",
         "external_collection_readiness_not_evidence",
         "external_collection_readiness_fail_closed",
@@ -820,6 +863,7 @@ def main() -> int:
             "manifest-declared independent non-oracle adapter implementations",
             "completed method implementation packet work orders with source/config/checkpoint hashes",
             "non-template backend module for external_validation/runner/real_collection_runner.py",
+            "completed backend integration packet work orders with module/provenance/config/log/video hashes",
             "accepted robot/simulator fidelity acceptance file",
             "preflight-cleared external evidence package",
             "released or hash-declared skill/checkpoint artifacts",

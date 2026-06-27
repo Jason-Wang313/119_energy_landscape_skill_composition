@@ -114,6 +114,7 @@ def main():
         "scripts\\build_external_runbook.py",
         "scripts\\audit_external_runner_harness.py",
         "scripts\\audit_external_backend_contract.py",
+        "scripts\\build_external_backend_integration_packet.py",
         "scripts\\audit_external_collection_readiness.py",
         "scripts\\validate_external_configs.py",
         "scripts\\self_test_external_config_evidence.py",
@@ -182,6 +183,7 @@ def main():
         "python scripts/materialize_external_configs.py",
         "python scripts/build_external_analysis_plan.py",
         "python scripts/build_external_platform_onboarding.py",
+        "python scripts/build_external_backend_integration_packet.py",
         "python scripts/build_external_method_implementation_packet.py",
         "python scripts/build_external_acquisition_packet.py",
         "python scripts/build_external_operator_packet.py",
@@ -227,6 +229,8 @@ def main():
         fail("external collection plan must include the adapter scaffold command")
     if "python scripts\\validate_external_adapters.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the adapter contract validation command")
+    if "python scripts\\build_external_backend_integration_packet.py" not in collection_plan.get("validation_commands", []):
+        fail("external collection plan must include the backend integration packet command")
     if "python scripts\\build_external_method_implementation_packet.py" not in collection_plan.get("validation_commands", []):
         fail("external collection plan must include the method implementation packet command")
     if "python scripts\\validate_external_adapters.py --strict" not in collection_plan.get("validation_commands", []):
@@ -722,6 +726,77 @@ def main():
         fail("external backend contract audit should expose the missing real backend module in default mode")
     if not (RESULTS / "external_backend_contract_audit.md").exists():
         fail("missing results/external_backend_contract_audit.md")
+
+    backend_integration_paths = [
+        EXTERNAL / "backend_integration_packet.json",
+        EXTERNAL / "backend_integration_packet.md",
+        EXTERNAL / "backend_integration_work_orders.csv",
+        RESULTS / "external_backend_integration_audit.json",
+        RESULTS / "external_backend_integration_audit.md",
+        ROOT / "scripts" / "build_external_backend_integration_packet.py",
+    ]
+    for path in backend_integration_paths:
+        if not path.exists():
+            fail(f"missing external backend integration packet artifact: {path}")
+    backend_integration_packet = json.loads((EXTERNAL / "backend_integration_packet.json").read_text(encoding="utf-8"))
+    if backend_integration_packet.get("version") != "external_backend_integration_packet_v1":
+        fail("external backend integration packet version mismatch")
+    if backend_integration_packet.get("not_external_evidence") is not True:
+        fail("external backend integration packet must declare that it is not evidence")
+    if backend_integration_packet.get("backend_integration_packet_ready") is not True:
+        fail("external backend integration packet should be ready as a work-order packet")
+    if backend_integration_packet.get("strict_backend_ready") is not False:
+        fail("external backend integration packet must not claim strict backend readiness")
+    if backend_integration_packet.get("strict_evidence_ready") is not False:
+        fail("external backend integration packet must not claim strict external evidence")
+    if backend_integration_packet.get("primary_route") != "maniskill_sapien_primary":
+        fail("external backend integration packet should target the primary public-simulator route")
+    if int(backend_integration_packet.get("planned_records", 0) or 0) < 1440:
+        fail("external backend integration packet has too few planned records")
+    required_hooks = set(backend_integration_packet.get("required_backend_hooks", []) or [])
+    for hook in ("platform_provenance", "load_task_config", "reset_scene", "run_method", "execute_skill_pair", "record_video", "policy_or_config_hash"):
+        if hook not in required_hooks:
+            fail(f"external backend integration packet missing backend hook: {hook}")
+    backend_command_text = "\n".join(backend_integration_packet.get("strict_acceptance_commands", []) or [])
+    for fragment in (
+        "build_external_backend_integration_packet.py",
+        "audit_external_backend_contract.py --strict",
+        "materialize_external_configs.py",
+        "audit_external_collection_readiness.py --strict",
+        "real_collection_runner.py",
+        "build_external_manifest.py --write",
+        "validate_external_rollouts.py",
+        "audit_external_evidence.py --strict",
+    ):
+        if fragment not in backend_command_text:
+            fail(f"external backend integration packet missing strict command fragment: {fragment}")
+    backend_integration_audit = json.loads((RESULTS / "external_backend_integration_audit.json").read_text(encoding="utf-8"))
+    if backend_integration_audit.get("version") != "external_backend_integration_audit_v1":
+        fail("external backend integration audit version mismatch")
+    if backend_integration_audit.get("passed") is not True:
+        fail("external backend integration audit did not pass")
+    if backend_integration_audit.get("not_external_evidence") is not True:
+        fail("external backend integration audit must declare that it is not evidence")
+    if backend_integration_audit.get("backend_integration_packet_ready") is not True:
+        fail("external backend integration audit should report packet ready")
+    if backend_integration_audit.get("strict_backend_ready") is not False:
+        fail("external backend integration audit must keep strict backend readiness false")
+    backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration_audit.get("checks", [])}
+    for required_check in (
+        "packet_is_non_evidence_and_fail_closed",
+        "primary_route_matches_onboarding",
+        "backend_contract_harness_ready_but_backend_missing",
+        "work_orders_cover_backend_to_manifest_path",
+        "required_hooks_declared",
+        "provenance_fields_declared",
+        "tasks_and_record_budget_preserved",
+        "strict_commands_cover_backend_config_fidelity_collection_and_evidence",
+        "collection_readiness_still_blocks_backend",
+        "no_real_backend_files_created",
+        "packet_files_written",
+    ):
+        if backend_integration_checks.get(required_check) is not True:
+            fail(f"external backend integration audit missing passing check: {required_check}")
 
     backend_contract_self_test_path = RESULTS / "external_backend_contract_self_test.json"
     if not backend_contract_self_test_path.exists():
@@ -1540,6 +1615,10 @@ def main():
         "external_backend_contract_ready",
         "external_backend_contract_not_evidence",
         "external_backend_contract_fail_closed",
+        "external_backend_integration_packet_ready",
+        "external_backend_integration_not_evidence",
+        "external_backend_integration_covers_backend_blocker",
+        "external_backend_integration_gate_order",
         "external_collection_readiness_audit_ready",
         "external_collection_readiness_not_evidence",
         "external_collection_readiness_fail_closed",
@@ -1602,6 +1681,9 @@ def main():
         EXTERNAL / "statistical_analysis_plan.md",
         EXTERNAL / "platform_onboarding_packet.json",
         EXTERNAL / "platform_onboarding_packet.md",
+        EXTERNAL / "backend_integration_packet.json",
+        EXTERNAL / "backend_integration_packet.md",
+        EXTERNAL / "backend_integration_work_orders.csv",
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
@@ -1609,6 +1691,7 @@ def main():
         RESULTS / "external_config_materialization_plan.md",
         RESULTS / "external_execution_readiness_audit.md",
         RESULTS / "external_fidelity_acceptance_audit.md",
+        RESULTS / "external_backend_integration_audit.md",
         RESULTS / "external_blind_eval_audit.md",
     ):
         if not path.exists():
@@ -1637,6 +1720,7 @@ def main():
         "config_intake_directory_tracked",
         "config_materializer_ready",
         "backend_contract_gate_ready",
+        "backend_integration_packet_ready",
         "method_implementation_packet_ready",
         "preflight_operator_actions_present",
         "route_independent_of_haonan",
@@ -1670,6 +1754,11 @@ def main():
     operator_actions = operator_packet.get("operator_actions", []) or []
     if len(operator_actions) < 10:
         fail("external operator packet has too few operator actions")
+    backend_integration_actions = [action for action in operator_actions if action.get("id") == "backend_integration_packet"]
+    if not backend_integration_actions:
+        fail("external operator packet missing backend_integration_packet action")
+    if "build_external_backend_integration_packet.py" not in "\n".join(backend_integration_actions[0].get("commands", []) or []):
+        fail("external operator packet backend integration action must rebuild the backend integration packet")
     method_actions = [action for action in operator_actions if action.get("id") == "method_implementation_packet"]
     if not method_actions:
         fail("external operator packet missing method_implementation_packet action")
@@ -1734,6 +1823,7 @@ def main():
         "handoff_has_task_config_and_baseline_assets",
         "analysis_plan_included",
         "platform_onboarding_included",
+        "backend_integration_packet_included",
         "method_implementation_packet_included",
         "operator_actions_cover_evidence_collection",
         "post_collection_commands_cover_strict_gates",
@@ -1962,6 +2052,7 @@ def main():
         "operator_packet_no_go_visible",
         "analysis_plan_visible",
         "platform_onboarding_visible",
+        "backend_integration_packet_visible",
         "method_implementation_packet_visible",
         "materializer_guard_visible",
         "ledger_tracks_new_visible_claims",

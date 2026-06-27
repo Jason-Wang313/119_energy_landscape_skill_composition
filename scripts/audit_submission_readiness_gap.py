@@ -92,6 +92,8 @@ def main() -> int:
     runner_harness = read_json(runner_harness_path) if runner_harness_path.exists() else {}
     backend_contract_path = RESULTS / "external_backend_contract_audit.json"
     backend_contract = read_json(backend_contract_path) if backend_contract_path.exists() else {}
+    backend_integration_path = RESULTS / "external_backend_integration_audit.json"
+    backend_integration = read_json(backend_integration_path) if backend_integration_path.exists() else {}
     collection_readiness_path = RESULTS / "external_collection_readiness_audit.json"
     collection_readiness = read_json(collection_readiness_path) if collection_readiness_path.exists() else {}
     pairing_integrity_path = RESULTS / "external_pairing_integrity_audit.json"
@@ -301,6 +303,9 @@ def main() -> int:
                 EXTERNAL / "statistical_analysis_plan.md",
                 EXTERNAL / "platform_onboarding_packet.json",
                 EXTERNAL / "platform_onboarding_packet.md",
+                EXTERNAL / "backend_integration_packet.json",
+                EXTERNAL / "backend_integration_packet.md",
+                EXTERNAL / "backend_integration_work_orders.csv",
                 EXTERNAL / "platform_qualification_checklist.md",
                 EXTERNAL / "fidelity_acceptance_template.json",
                 EXTERNAL / "independent_validation_route.md",
@@ -328,6 +333,11 @@ def main() -> int:
         and backend_contract.get("not_external_evidence") is True
         and backend_contract.get("backend_contract_harness_ready") is True
         and backend_contract.get("actual_backend_ready") is False
+        and backend_integration.get("passed") is True
+        and backend_integration.get("not_external_evidence") is True
+        and backend_integration.get("backend_integration_packet_ready") is True
+        and backend_integration.get("strict_backend_ready") is False
+        and backend_integration.get("strict_evidence_ready") is False
         and collection_readiness.get("passed") is True
         and collection_readiness.get("collection_ready") is False
         and pairing_integrity.get("passed") is True
@@ -347,11 +357,14 @@ def main() -> int:
             "external_validation/statistical_analysis_plan.md",
             "external_validation/platform_onboarding_packet.json",
             "external_validation/platform_onboarding_packet.md",
+            "external_validation/backend_integration_packet.md",
+            "external_validation/backend_integration_work_orders.csv",
             "results/external_fidelity_acceptance_audit.json",
             "results/independent_validation_route_audit.json",
             "results/external_blind_eval_audit.json",
             "results/external_runner_harness_audit.json",
             "results/external_backend_contract_audit.json",
+            "results/external_backend_integration_audit.json",
             "results/external_collection_readiness_audit.json",
             "results/external_pairing_integrity_audit.json",
             "results/external_release_package_audit.json",
@@ -507,6 +520,7 @@ def main() -> int:
 
     acquisition_checks = {check.get("name"): check.get("passed") for check in acquisition_packet.get("checks", [])}
     handoff_checks = {check.get("name"): check.get("passed") for check in handoff_bundle.get("checks", [])}
+    backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration.get("checks", [])}
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", [])}
     acquisition_packet_ok = (
         acquisition_packet.get("passed") is True
@@ -516,9 +530,15 @@ def main() -> int:
         and len(acquisition_packet.get("missing_requirements", []) or []) == 4
         and len(acquisition_packet.get("operator_actions", []) or []) >= 10
         and acquisition_checks.get("all_missing_requirements_mapped") is True
+        and acquisition_checks.get("backend_integration_packet_ready") is True
         and acquisition_checks.get("method_implementation_packet_ready") is True
         and acquisition_checks.get("post_collection_strict_commands_cover_all_gates") is True
         and acquisition_checks.get("no_real_manifest_written") is True
+        and backend_integration.get("passed") is True
+        and backend_integration.get("not_external_evidence") is True
+        and backend_integration.get("backend_integration_packet_ready") is True
+        and backend_integration.get("strict_backend_ready") is False
+        and backend_integration_checks.get("work_orders_cover_backend_to_manifest_path") is True
         and method_implementation.get("passed") is True
         and method_implementation.get("not_external_evidence") is True
         and method_implementation.get("strict_adapter_evidence_ready") is False
@@ -529,17 +549,23 @@ def main() -> int:
         and handoff_bundle.get("strict_evidence_ready") is False
         and handoff_bundle.get("start_state") == "DO_NOT_COLLECT_YET"
         and handoff_checks.get("bundle_excludes_rollout_evidence_artifacts") is True
+        and handoff_checks.get("backend_integration_packet_included") is True
         and handoff_checks.get("method_implementation_packet_included") is True
         and handoff_checks.get("file_hashes_are_recorded") is True
         and exists_all(
             [
                 ROOT / "scripts" / "build_external_acquisition_packet.py",
                 ROOT / "scripts" / "build_external_operator_handoff_bundle.py",
+                ROOT / "scripts" / "build_external_backend_integration_packet.py",
                 ROOT / "scripts" / "build_external_method_implementation_packet.py",
+                EXTERNAL / "backend_integration_packet.md",
+                EXTERNAL / "backend_integration_work_orders.csv",
                 EXTERNAL / "method_implementation_packet.md",
                 EXTERNAL / "method_implementation_work_orders.csv",
                 RESULTS / "external_acquisition_packet.json",
                 RESULTS / "external_acquisition_packet.md",
+                RESULTS / "external_backend_integration_audit.json",
+                RESULTS / "external_backend_integration_audit.md",
                 RESULTS / "external_method_implementation_audit.json",
                 RESULTS / "external_method_implementation_audit.md",
                 RESULTS / "external_operator_handoff_bundle.json",
@@ -554,11 +580,16 @@ def main() -> int:
         evidence=[
             "scripts/build_external_acquisition_packet.py",
             "scripts/build_external_operator_handoff_bundle.py",
+            "scripts/build_external_backend_integration_packet.py",
             "scripts/build_external_method_implementation_packet.py",
+            "external_validation/backend_integration_packet.md",
+            "external_validation/backend_integration_work_orders.csv",
             "external_validation/method_implementation_packet.md",
             "external_validation/method_implementation_work_orders.csv",
             "results/external_acquisition_packet.json",
             "results/external_acquisition_packet.md",
+            "results/external_backend_integration_audit.json",
+            "results/external_backend_integration_audit.md",
             "results/external_method_implementation_audit.json",
             "results/external_method_implementation_audit.md",
             "results/external_operator_handoff_bundle.json",

@@ -25,6 +25,7 @@
 - External platform onboarding builder: `scripts/build_external_platform_onboarding.py`
 - External collection runbook builder: `scripts/build_external_runbook.py`
 - External backend contract validator: `scripts/audit_external_backend_contract.py`
+- External backend integration packet builder: `scripts/build_external_backend_integration_packet.py`
 - External collection readiness validator: `scripts/audit_external_collection_readiness.py`
 - External config validator: `scripts/validate_external_configs.py`
 - External baseline contract builder: `scripts/build_external_baseline_contract.py`
@@ -115,6 +116,11 @@
   - `external_validation/platform_onboarding_packet.md`
   - `results/external_platform_onboarding_audit.json`
   - `results/external_platform_onboarding_audit.md`
+  - `external_validation/backend_integration_packet.json`
+  - `external_validation/backend_integration_packet.md`
+  - `external_validation/backend_integration_work_orders.csv`
+  - `results/external_backend_integration_audit.json`
+  - `results/external_backend_integration_audit.md`
   - `results/external_runbook_audit.json`
   - `results/external_runbook_audit.md`
   - `results/external_collection_readiness_audit.json`
@@ -172,6 +178,9 @@
   - `external_validation/config_templates/cable_route_insert.json`
   - `external_validation/config_schema_v1.json`
   - `external_validation/platform_qualification_checklist.md`
+  - `external_validation/backend_integration_packet.json`
+  - `external_validation/backend_integration_packet.md`
+  - `external_validation/backend_integration_work_orders.csv`
 - External baseline implementation scaffolding:
   - `external_validation/baseline_implementation_contract.md`
   - `external_validation/baseline_implementation_matrix.csv`

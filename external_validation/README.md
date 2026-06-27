@@ -84,6 +84,14 @@ python scripts\build_external_platform_onboarding.py
 
 This writes `external_validation/platform_onboarding_packet.{json,md}` and `results/external_platform_onboarding_audit.{json,md}`. It records the official source anchors, install/version-probe command, required simulator provenance, task onboarding files, backend requirements, and strict gate order for the ManiSkill/SAPIEN route. It is not evidence; the operator must still supply real platform versions, accepted fidelity provenance, real configs, backend implementations, logs, videos, manifests, and hashes.
 
+Build the external backend integration packet:
+
+```powershell
+python scripts\build_external_backend_integration_packet.py
+```
+
+This writes `external_validation/backend_integration_packet.{json,md}`, `external_validation/backend_integration_work_orders.csv`, and `results/external_backend_integration_audit.{json,md}`. It turns the missing non-template public-simulator backend module into concrete backend-to-manifest work orders. It is not evidence and still reports strict backend readiness as missing until a real independent backend module, real task configs, provenance, logs, videos, manifests, and hashes exist.
+
 Then audit the platform-fidelity acceptance contract:
 
 ```powershell
@@ -199,6 +207,7 @@ python scripts\build_external_collection_plan.py
 python scripts\build_external_analysis_plan.py
 python scripts\build_independent_validation_route.py
 python scripts\build_external_platform_onboarding.py
+python scripts\build_external_backend_integration_packet.py
 python scripts\audit_external_fidelity_acceptance.py
 python scripts\build_external_blind_eval_plan.py
 python scripts\build_external_runbook.py
@@ -284,6 +293,7 @@ python scripts\audit_external_fidelity_acceptance.py
 python scripts\build_external_blind_eval_plan.py
 python scripts\audit_external_runner_harness.py
 python scripts\audit_external_backend_contract.py
+python scripts\build_external_backend_integration_packet.py
 python scripts\audit_external_collection_readiness.py
 python scripts\audit_external_release_package.py
 python scripts\self_test_external_release_package.py

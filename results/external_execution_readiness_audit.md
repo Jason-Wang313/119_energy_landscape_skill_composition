@@ -21,6 +21,7 @@ This audit checks whether the package is ready for an independent external valid
 - `manifest-declared independent non-oracle adapter implementations`
 - `completed method implementation packet work orders with source/config/checkpoint hashes`
 - `non-template backend module for external_validation/runner/real_collection_runner.py`
+- `completed backend integration packet work orders with module/provenance/config/log/video hashes`
 - `accepted robot/simulator fidelity acceptance file`
 - `preflight-cleared external evidence package`
 - `released or hash-declared skill/checkpoint artifacts`
@@ -62,6 +63,10 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_backend_contract_ready`: passed
 - `pass` `external_backend_contract_not_evidence`: not_external_evidence=True
 - `pass` `external_backend_contract_fail_closed`: backend_contract_harness_ready=True, actual_backend_ready=False
+- `pass` `external_backend_integration_packet_ready`: passed
+- `pass` `external_backend_integration_not_evidence`: not_external_evidence=True, strict_backend_ready=False
+- `pass` `external_backend_integration_covers_backend_blocker`: backend_integration_checks={'packet_is_non_evidence_and_fail_closed': True, 'primary_route_matches_onboarding': True, 'backend_contract_harness_ready_but_backend_missing': True, 'work_orders_cover_backend_to_manifest_path': True, 'required_hooks_declared': True, 'provenance_fields_declared': True, 'tasks_and_record_budget_preserved': True, 'strict_commands_cover_backend_config_fidelity_collection_and_evidence': True, 'collection_readiness_still_blocks_backend': True, 'no_real_backend_files_created': True, 'packet_files_written': True}
+- `pass` `external_backend_integration_gate_order`: backend packet, work orders, builder, and strict command order are present
 - `pass` `external_collection_readiness_audit_ready`: passed
 - `pass` `external_collection_readiness_not_evidence`: not_external_evidence=True
 - `pass` `external_collection_readiness_fail_closed`: collection_ready=False, readiness_state='PREPARE_BACKEND_CONFIGS_AND_FIDELITY', blocking_missing_count=4
@@ -92,8 +97,8 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_evidence_preflight_operator_actions`: operator_next_actions=5
 - `pass` `external_acquisition_packet_ready`: passed
 - `pass` `external_acquisition_packet_not_evidence`: not_external_evidence=True, strict_evidence_ready=False, acquisition_packet_ready=True
-- `pass` `external_acquisition_packet_maps_all_blockers`: missing_requirements=4, operator_actions=13
-- `pass` `external_acquisition_packet_backend_gate`: checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'method_implementation_packet_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'platform_onboarding_ready': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}
+- `pass` `external_acquisition_packet_maps_all_blockers`: missing_requirements=4, operator_actions=14
+- `pass` `external_acquisition_packet_backend_gate`: checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'backend_integration_packet_ready': True, 'method_implementation_packet_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'platform_onboarding_ready': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}
 - `pass` `external_operator_packet_ready`: passed
 - `pass` `external_operator_packet_not_evidence`: not_external_evidence=True, strict_evidence_ready=False, operator_packet_ready=True
 - `pass` `external_operator_packet_backend_gate`: backend_contract_gate_command='python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json'
@@ -101,7 +106,7 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_operator_handoff_bundle_ready`: passed
 - `pass` `external_operator_handoff_bundle_not_evidence`: not_external_evidence=True, strict_evidence_ready=False, handoff_bundle_ready=True, start_state='DO_NOT_COLLECT_YET'
 - `pass` `external_operator_handoff_bundle_excludes_evidence_paths`: forbidden_included_paths=[]
-- `pass` `external_operator_handoff_bundle_hash_manifest`: included_file_count=185, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 46, 'operator_command_source': 17, 'operator_facing_input': 33, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}
+- `pass` `external_operator_handoff_bundle_hash_manifest`: included_file_count=191, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 48, 'operator_command_source': 18, 'operator_facing_input': 36, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}
 - `pass` `strict_evidence_gates_remain_not_ready`: external_submission_ready=False, rollout_passed=False, config_passed=False, adapter_passed=False
 - `pass` `operator_packet_paths_exist`: missing=[]
 - `pass` `task_cards_ge_4`: task_cards=4

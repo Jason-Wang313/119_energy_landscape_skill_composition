@@ -71,6 +71,7 @@ def build_payload() -> dict[str, Any]:
 
     required_action_ids = {
         "platform_onboarding",
+        "backend_integration_packet",
         "backend_module",
         "real_task_configs",
         "platform_fidelity",
