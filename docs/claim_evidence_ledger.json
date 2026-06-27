@@ -138,7 +138,7 @@
     {
       "name": "presentation_quality_claim",
       "claim": "The compiled local PDF has a machine-checked presentation surface with hidden links, vector figures, clean log hygiene, canonical artifact parity, and no internal status leaks.",
-      "evidence": ["paper/main.pdf", "paper/main.tex", "paper/main.log", "results/presentation_quality_audit.json"]
+      "evidence": ["paper/main.pdf", "paper/main.tex", "results/presentation_quality_audit.json", "results/presentation_quality_audit.md"]
     },
     {
       "name": "figure_readability_claim",
