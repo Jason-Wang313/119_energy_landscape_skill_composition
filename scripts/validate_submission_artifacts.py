@@ -128,6 +128,7 @@ def main():
         "scripts\\audit_external_evidence_preflight.py",
         "scripts\\build_external_acquisition_packet.py",
         "scripts\\build_external_operator_packet.py",
+        "scripts\\build_external_operator_handoff_bundle.py",
         "scripts\\self_test_external_adapter_scaffold_guard.py",
         "scripts\\self_test_external_backend_contract.py",
         "scripts\\self_test_external_collection_preflight.py",
@@ -178,6 +179,7 @@ def main():
         "python scripts/materialize_external_configs.py",
         "python scripts/build_external_acquisition_packet.py",
         "python scripts/build_external_operator_packet.py",
+        "python scripts/build_external_operator_handoff_bundle.py",
         "python scripts/audit_external_release_package.py",
         "python scripts/self_test_external_release_package.py",
         "python scripts/audit_external_execution_readiness.py",
@@ -1316,6 +1318,10 @@ def main():
         "external_operator_packet_not_evidence",
         "external_operator_packet_go_no_go",
         "external_operator_packet_backend_gate",
+        "external_operator_handoff_bundle_ready",
+        "external_operator_handoff_bundle_not_evidence",
+        "external_operator_handoff_bundle_excludes_evidence_paths",
+        "external_operator_handoff_bundle_hash_manifest",
         "config_templates_ready",
         "config_materialization_plan_ready",
         "config_materialization_plan_not_evidence",
@@ -1347,6 +1353,7 @@ def main():
         RESULTS / "external_collection_readiness_audit.md",
         RESULTS / "external_acquisition_packet.md",
         RESULTS / "external_operator_packet.md",
+        RESULTS / "external_operator_handoff_bundle.md",
         RESULTS / "external_config_materialization_plan.md",
         RESULTS / "external_execution_readiness_audit.md",
         RESULTS / "external_fidelity_acceptance_audit.md",
@@ -1425,6 +1432,53 @@ def main():
     for command_fragment in ("validate_external_rollouts.py", "audit_external_pairing_integrity.py", "audit_external_evidence.py"):
         if not any(command_fragment in command for command in post_commands):
             fail(f"external operator packet missing post-collection gate: {command_fragment}")
+
+    handoff_bundle_path = RESULTS / "external_operator_handoff_bundle.json"
+    if not handoff_bundle_path.exists():
+        fail("missing results/external_operator_handoff_bundle.json; run scripts/build_external_operator_handoff_bundle.py")
+    handoff_bundle = json.loads(handoff_bundle_path.read_text(encoding="utf-8"))
+    if handoff_bundle.get("version") != "external_operator_handoff_bundle_v1":
+        fail("external operator handoff bundle version mismatch")
+    if handoff_bundle.get("passed") is not True:
+        fail("external operator handoff bundle did not pass")
+    if handoff_bundle.get("not_external_evidence") is not True:
+        fail("external operator handoff bundle must declare that it is not evidence")
+    if handoff_bundle.get("handoff_bundle_ready") is not True:
+        fail("external operator handoff bundle must report handoff_bundle_ready=true")
+    if handoff_bundle.get("strict_evidence_ready") is not False:
+        fail("external operator handoff bundle must not claim strict evidence readiness")
+    if handoff_bundle.get("start_state") != "DO_NOT_COLLECT_YET":
+        fail("external operator handoff bundle must preserve the no-go start state")
+    if int(handoff_bundle.get("included_file_count", 0) or 0) < 120:
+        fail("external operator handoff bundle includes too few operator-facing files")
+    if handoff_bundle.get("forbidden_included_paths"):
+        fail(f"external operator handoff bundle includes forbidden evidence paths: {handoff_bundle.get('forbidden_included_paths')}")
+    if handoff_bundle.get("missing_files"):
+        fail(f"external operator handoff bundle has missing files: {handoff_bundle.get('missing_files')}")
+    category_counts = handoff_bundle.get("category_counts", {}) or {}
+    if int(category_counts.get("task_card", 0) or 0) < 4:
+        fail("external operator handoff bundle must include all task cards")
+    if int(category_counts.get("config_template", 0) or 0) < 4:
+        fail("external operator handoff bundle must include all config templates")
+    if int(category_counts.get("prepared_config_input", 0) or 0) < 4:
+        fail("external operator handoff bundle must include prepared config inputs")
+    if int(category_counts.get("baseline_spec", 0) or 0) < 12:
+        fail("external operator handoff bundle must include baseline specs")
+    handoff_checks = {entry.get("name"): entry.get("passed") for entry in handoff_bundle.get("checks", [])}
+    for required_check in (
+        "operator_packet_is_no_go_non_evidence",
+        "acquisition_maps_all_remaining_blockers",
+        "strict_evidence_gates_remain_fail_closed",
+        "bundle_files_exist",
+        "bundle_excludes_rollout_evidence_artifacts",
+        "no_real_manifest_written",
+        "handoff_has_task_config_and_baseline_assets",
+        "operator_actions_cover_evidence_collection",
+        "post_collection_commands_cover_strict_gates",
+        "file_hashes_are_recorded",
+    ):
+        if handoff_checks.get(required_check) is not True:
+            fail(f"external operator handoff bundle missing passing check: {required_check}")
 
     config_materialization_path = RESULTS / "external_config_materialization_plan.json"
     if not config_materialization_path.exists():

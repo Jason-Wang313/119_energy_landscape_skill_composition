@@ -42,6 +42,7 @@ def main() -> int:
     RESULTS.mkdir(exist_ok=True)
     summary = read_json(RESULTS / "submission_readiness_gap_audit.json")
     operator = read_json(RESULTS / "external_operator_packet.json")
+    handoff = read_json(RESULTS / "external_operator_handoff_bundle.json")
     materialization = read_json(RESULTS / "external_config_materialization_plan.json")
     ledger = read_json(DOCS / "claim_evidence_ledger.json")
 
@@ -83,6 +84,21 @@ def main() -> int:
     )
     add_check(
         checks,
+        "operator_handoff_bundle_visible",
+        handoff.get("passed") is True
+        and handoff.get("not_external_evidence") is True
+        and handoff.get("handoff_bundle_ready") is True
+        and handoff.get("strict_evidence_ready") is False
+        and handoff.get("start_state") == "DO_NOT_COLLECT_YET"
+        and not handoff.get("forbidden_included_paths"),
+        (
+            f"files={handoff.get('included_file_count')!r}, "
+            f"forbidden={handoff.get('forbidden_included_paths')!r}, "
+            f"start_state={handoff.get('start_state')!r}"
+        ),
+    )
+    add_check(
+        checks,
         "materializer_guard_visible",
         materialization.get("passed") is True
         and materialization.get("write_enabled") is False
@@ -97,8 +113,12 @@ def main() -> int:
     add_check(
         checks,
         "ledger_tracks_new_visible_claims",
-        {"external_operator_packet_claim", "external_config_materialization_claim"}.issubset(claim_names),
-        f"missing={sorted({'external_operator_packet_claim', 'external_config_materialization_claim'} - claim_names)}",
+        {
+            "external_operator_packet_claim",
+            "external_operator_handoff_bundle_claim",
+            "external_config_materialization_claim",
+        }.issubset(claim_names),
+        f"missing={sorted({'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_config_materialization_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -106,34 +126,40 @@ def main() -> int:
             "adaptive physical world/action model for skill seams",
             "External config materialization plan",
             "External operator packet",
+            "External operator handoff bundle",
             "17/21",
         ],
         "final_audit": [
             "External config materialization plan",
             "External operator packet",
+            "External operator handoff bundle",
             "Haonan/Yilun outreach package",
             "17 satisfied, 4 blocking external gaps",
         ],
         "readiness_decision": [
             "guarded config materialization plan",
             "generated external operator packet",
+            "external operator handoff bundle",
             "outreach package now frames Haonan's role as fit/falsification advice",
             "ICLR main ready: no",
         ],
         "readiness_audit": [
             "External config materialization plan",
             "External operator packet",
+            "External operator handoff bundle",
             "outreach PDFs now reflect the operator-packet/no-go stance",
             "17/21 objective requirements satisfied",
         ],
         "version_log": [
             "scripts/materialize_external_configs.py",
             "scripts/build_external_operator_packet.py",
+            "scripts/build_external_operator_handoff_bundle.py",
             "operator-packet/no-go stance",
         ],
         "child_status": [
             "external config materialization plan",
             "external operator packet",
+            "external operator handoff bundle",
             "operator-packet-aligned Haonan/Yilun outreach package",
         ],
         "outreach": [
@@ -163,7 +189,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, guarded external config materialization, the no-go operator packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, guarded external config materialization, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

@@ -35,6 +35,7 @@
 - External evidence preflight validator: `scripts/audit_external_evidence_preflight.py`
 - External evidence acquisition packet builder: `scripts/build_external_acquisition_packet.py`
 - External operator packet builder: `scripts/build_external_operator_packet.py`
+- External operator handoff bundle builder: `scripts/build_external_operator_handoff_bundle.py`
 - External adapter scaffold guard self-test: `scripts/self_test_external_adapter_scaffold_guard.py`
 - External evidence validator: `scripts/audit_external_evidence.py`
 - External execution readiness validator: `scripts/audit_external_execution_readiness.py`
@@ -137,6 +138,8 @@
   - `results/external_acquisition_packet.md`
   - `results/external_operator_packet.json`
   - `results/external_operator_packet.md`
+  - `results/external_operator_handoff_bundle.json`
+  - `results/external_operator_handoff_bundle.md`
   - `results/external_pairing_integrity_audit.json`
   - `results/external_pairing_integrity_audit.md`
   - `results/external_pairing_integrity_self_test.json`

@@ -91,6 +91,11 @@
       "evidence": ["scripts/build_external_operator_packet.py", "results/external_operator_packet.json", "results/external_operator_packet.md", "results/external_backend_contract_audit.json", "results/external_collection_readiness_audit.json", "results/external_acquisition_packet.json"]
     },
     {
+      "name": "external_operator_handoff_bundle_claim",
+      "claim": "The repository provides a generated non-evidence operator handoff bundle manifest that hash-lists the operator-facing validation files while excluding rollout logs, videos, checkpoints, local dry-run artifacts, placeholder media, and real evidence manifests.",
+      "evidence": ["scripts/build_external_operator_handoff_bundle.py", "results/external_operator_handoff_bundle.json", "results/external_operator_handoff_bundle.md", "results/external_operator_packet.json", "results/external_acquisition_packet.json", "results/external_evidence_preflight.json"]
+    },
+    {
       "name": "external_config_template_claim",
       "claim": "The repository provides a non-evidence task config schema, template validator, and tracked real-config intake directory, while strict config evidence remains missing until real manifest-declared configs replace templates.",
       "evidence": ["external_validation/config_schema_v1.json", "external_validation/config_templates/peg_place_regrasp.json", "external_validation/configs/README.md", "scripts/validate_external_configs.py", "results/external_config_template_audit.json", "results/external_config_template_audit.md"]
@@ -216,6 +221,7 @@
     "external_validation/platform_qualification_checklist.md",
     "external_validation/README.md",
     "results/external_operator_packet.md",
+    "results/external_operator_handoff_bundle.md",
     "results/submission_readiness_gap_audit.md"
   ]
 }

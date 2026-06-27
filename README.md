@@ -8,7 +8,7 @@ This rebuild expands the paper into a 29-page, CPU-only, RAM-light submission pa
 
 ## Visible Contribution
 
-Paper 119's contribution is an adaptive physical world/action model for skill seams: it scores whether two embodied skills can compose, explains likely failure modes, selects accept/repair/probe/abstain/transition actions at the seam, and records planner-facing memory for future attempts. The repository now makes that contribution visible through the generated manuscript, bounded claim ledger, mechanism/calibration/holdout/falsification audits, reproducible local experiments, a non-Haonan external validation packet, a guarded config materializer, a no-go external operator packet, a fail-closed real-collection runner harness, and a separate Haonan/Yilun outreach package. The machine readiness audit currently reports `17/21` requirements satisfied; the remaining blockers are external-evidence blockers, not prose or packaging blockers.
+Paper 119's contribution is an adaptive physical world/action model for skill seams: it scores whether two embodied skills can compose, explains likely failure modes, selects accept/repair/probe/abstain/transition actions at the seam, and records planner-facing memory for future attempts. The repository now makes that contribution visible through the generated manuscript, bounded claim ledger, mechanism/calibration/holdout/falsification audits, reproducible local experiments, a non-Haonan external validation packet, a guarded config materializer, a no-go external operator packet, an audited External operator handoff bundle, a fail-closed real-collection runner harness, and a separate Haonan/Yilun outreach package. The machine readiness audit currently reports `17/21` requirements satisfied; the remaining blockers are external-evidence blockers, not prose or packaging blockers.
 
 ## Evidence Snapshot
 
@@ -107,6 +107,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External evidence preflight matrix: `results/external_evidence_preflight.md`
 - External evidence acquisition packet: `results/external_acquisition_packet.md`
 - External operator packet: `results/external_operator_packet.md`
+- External operator handoff bundle: `results/external_operator_handoff_bundle.md`
 - External evidence contract: `external_validation/manifest_template.json`
 - External rollout log schema: `external_validation/log_schema_v1.json`
 - External pairing integrity audit: `results/external_pairing_integrity_audit.md`

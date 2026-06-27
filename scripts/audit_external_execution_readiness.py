@@ -479,6 +479,45 @@ def main() -> int:
             f"blocking_missing_count={operator_packet.get('blocking_missing_count')!r}"
         ),
     )
+    handoff_bundle_ok, handoff_bundle, handoff_bundle_detail = passed_json(
+        RESULTS / "external_operator_handoff_bundle.json",
+        version="external_operator_handoff_bundle_v1",
+    )
+    add_check(checks, "external_operator_handoff_bundle_ready", handoff_bundle_ok, handoff_bundle_detail)
+    add_check(
+        checks,
+        "external_operator_handoff_bundle_not_evidence",
+        handoff_bundle.get("not_external_evidence") is True
+        and handoff_bundle.get("strict_evidence_ready") is False
+        and handoff_bundle.get("handoff_bundle_ready") is True
+        and handoff_bundle.get("start_state") == "DO_NOT_COLLECT_YET",
+        (
+            f"not_external_evidence={handoff_bundle.get('not_external_evidence')!r}, "
+            f"strict_evidence_ready={handoff_bundle.get('strict_evidence_ready')!r}, "
+            f"handoff_bundle_ready={handoff_bundle.get('handoff_bundle_ready')!r}, "
+            f"start_state={handoff_bundle.get('start_state')!r}"
+        ),
+    )
+    handoff_check_map = {check.get("name"): check.get("passed") for check in handoff_bundle.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_operator_handoff_bundle_excludes_evidence_paths",
+        not handoff_bundle.get("forbidden_included_paths")
+        and handoff_check_map.get("bundle_excludes_rollout_evidence_artifacts") is True
+        and handoff_check_map.get("no_real_manifest_written") is True,
+        f"forbidden_included_paths={handoff_bundle.get('forbidden_included_paths')!r}",
+    )
+    add_check(
+        checks,
+        "external_operator_handoff_bundle_hash_manifest",
+        int(handoff_bundle.get("included_file_count", 0) or 0) >= 120
+        and handoff_check_map.get("file_hashes_are_recorded") is True
+        and handoff_check_map.get("handoff_has_task_config_and_baseline_assets") is True,
+        (
+            f"included_file_count={handoff_bundle.get('included_file_count')!r}, "
+            f"category_counts={handoff_bundle.get('category_counts')!r}"
+        ),
+    )
 
     external_audit = read_json(RESULTS / "external_evidence_audit.json") if (RESULTS / "external_evidence_audit.json").exists() else {}
     rollout_metrics = read_json(RESULTS / "external_rollout_metrics.json") if (RESULTS / "external_rollout_metrics.json").exists() else {}
@@ -519,6 +558,7 @@ def main() -> int:
         RESULTS / "external_backend_contract_audit.md",
         RESULTS / "external_collection_readiness_audit.md",
         RESULTS / "external_operator_packet.md",
+        RESULTS / "external_operator_handoff_bundle.md",
         DOCS / "independent_validation_protocol.md",
     ]
     missing_packet_paths = [rel(path) for path in required_packet_paths if not path.exists()]

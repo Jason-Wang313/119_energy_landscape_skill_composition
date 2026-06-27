@@ -1,0 +1,430 @@
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DOCS = ROOT / "docs"
+EXTERNAL = ROOT / "external_validation"
+RESULTS = ROOT / "results"
+SCRIPTS = ROOT / "scripts"
+
+OUT_JSON = RESULTS / "external_operator_handoff_bundle.json"
+OUT_MD = RESULTS / "external_operator_handoff_bundle.md"
+
+FORBIDDEN_PATH_PARTS = {
+    "external_validation/local_dry_run/",
+    "external_validation/logs/",
+    "external_validation/videos/",
+    "external_validation/checkpoints/",
+    "external_validation/manifest.json",
+    "placeholder_not_external_evidence",
+}
+
+
+def read_json(path: Path) -> dict[str, Any]:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise SystemExit(f"invalid JSON in {path}: {exc}") from exc
+
+
+def rel(path: Path) -> str:
+    return path.relative_to(ROOT).as_posix()
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest().upper()
+
+
+def add_check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str) -> None:
+    checks.append({"name": name, "passed": bool(passed), "detail": detail})
+
+
+def require_payload(path: Path, version: str) -> dict[str, Any]:
+    if not path.exists():
+        raise SystemExit(f"missing {rel(path)}")
+    payload = read_json(path)
+    if payload.get("version") != version:
+        raise SystemExit(f"{rel(path)} version={payload.get('version')!r}, expected={version!r}")
+    return payload
+
+
+def add_file(files: dict[str, str], category: str, path: Path) -> None:
+    files[rel(path)] = category
+
+
+def add_glob(files: dict[str, str], category: str, folder: Path, pattern: str) -> None:
+    for path in sorted(folder.glob(pattern)):
+        if path.is_file():
+            add_file(files, category, path)
+
+
+def build_file_manifest() -> dict[str, str]:
+    files: dict[str, str] = {}
+
+    for path in (
+        ROOT / "README.md",
+        DOCS / "independent_validation_protocol.md",
+        DOCS / "submission_readiness_decision.md",
+        DOCS / "reproducibility_checklist.md",
+        DOCS / "haonan_yilun_outreach_package.md",
+        EXTERNAL / "README.md",
+        EXTERNAL / "collection_runbook.md",
+        EXTERNAL / "operator_record_sheet.csv",
+        EXTERNAL / "blind_evaluation_protocol.md",
+        EXTERNAL / "blinded_operator_sheet.csv",
+        EXTERNAL / "method_alias_map.json",
+        EXTERNAL / "platform_qualification_checklist.md",
+        EXTERNAL / "fidelity_acceptance_template.json",
+        EXTERNAL / "log_schema_v1.json",
+        EXTERNAL / "config_schema_v1.json",
+        EXTERNAL / "configs" / "README.md",
+        EXTERNAL / "independent_validation_route.md",
+        EXTERNAL / "independent_validation_route_matrix.csv",
+        EXTERNAL / "baseline_implementation_contract.md",
+        EXTERNAL / "baseline_implementation_matrix.csv",
+        EXTERNAL / "baseline_adapter_scaffold.md",
+        EXTERNAL / "baselines" / "README.md",
+        EXTERNAL / "reference_adapter_report.md",
+        EXTERNAL / "runner" / "README.md",
+        EXTERNAL / "runner" / "backend_contract.py",
+        EXTERNAL / "runner" / "real_collection_runner.py",
+    ):
+        add_file(files, "operator_facing_input", path)
+
+    for path in (
+        SCRIPTS / "build_external_operator_handoff_bundle.py",
+        SCRIPTS / "build_external_operator_packet.py",
+        SCRIPTS / "build_external_acquisition_packet.py",
+        SCRIPTS / "materialize_external_configs.py",
+        SCRIPTS / "audit_external_backend_contract.py",
+        SCRIPTS / "audit_external_collection_readiness.py",
+        SCRIPTS / "audit_external_fidelity_acceptance.py",
+        SCRIPTS / "build_external_manifest.py",
+        SCRIPTS / "audit_external_release_package.py",
+        SCRIPTS / "validate_external_configs.py",
+        SCRIPTS / "validate_external_adapters.py",
+        SCRIPTS / "validate_external_rollouts.py",
+        SCRIPTS / "audit_external_pairing_integrity.py",
+        SCRIPTS / "audit_external_evidence.py",
+    ):
+        add_file(files, "operator_command_source", path)
+
+    for path in (
+        RESULTS / "external_operator_packet.json",
+        RESULTS / "external_operator_packet.md",
+        RESULTS / "external_acquisition_packet.json",
+        RESULTS / "external_acquisition_packet.md",
+        RESULTS / "external_collection_plan.json",
+        RESULTS / "external_collection_plan.md",
+        RESULTS / "independent_validation_route_audit.json",
+        RESULTS / "independent_validation_route_audit.md",
+        RESULTS / "external_blind_eval_audit.json",
+        RESULTS / "external_blind_eval_audit.md",
+        RESULTS / "external_runbook_audit.json",
+        RESULTS / "external_runbook_audit.md",
+        RESULTS / "external_runner_harness_audit.json",
+        RESULTS / "external_runner_harness_audit.md",
+        RESULTS / "external_backend_contract_audit.json",
+        RESULTS / "external_backend_contract_audit.md",
+        RESULTS / "external_collection_readiness_audit.json",
+        RESULTS / "external_collection_readiness_audit.md",
+        RESULTS / "external_config_template_audit.json",
+        RESULTS / "external_config_template_audit.md",
+        RESULTS / "external_config_materialization_plan.json",
+        RESULTS / "external_config_materialization_plan.md",
+        RESULTS / "external_fidelity_acceptance_audit.json",
+        RESULTS / "external_fidelity_acceptance_audit.md",
+        RESULTS / "external_baseline_contract_audit.json",
+        RESULTS / "external_baseline_contract_audit.md",
+        RESULTS / "external_adapter_scaffold_audit.json",
+        RESULTS / "external_adapter_scaffold_audit.md",
+        RESULTS / "external_reference_adapter_audit.json",
+        RESULTS / "external_reference_adapter_audit.md",
+        RESULTS / "external_adapter_contract_audit.json",
+        RESULTS / "external_adapter_contract_audit.md",
+        RESULTS / "external_evidence_preflight.json",
+        RESULTS / "external_evidence_preflight.md",
+        RESULTS / "external_release_package_audit.json",
+        RESULTS / "external_release_package_audit.md",
+        RESULTS / "external_pairing_integrity_audit.json",
+        RESULTS / "external_pairing_integrity_audit.md",
+        RESULTS / "external_execution_readiness_audit.json",
+        RESULTS / "external_execution_readiness_audit.md",
+    ):
+        add_file(files, "generated_non_evidence_report", path)
+
+    add_glob(files, "task_card", EXTERNAL / "task_cards", "*.md")
+    add_glob(files, "config_template", EXTERNAL / "config_templates", "*.json")
+    add_glob(files, "prepared_config_input", EXTERNAL / "configs", "*.json")
+    add_glob(files, "baseline_spec", EXTERNAL / "baseline_specs", "*.json")
+    add_glob(files, "runner_backend_template", EXTERNAL / "runner" / "backend_templates", "*.py")
+    add_glob(files, "reference_adapter", EXTERNAL / "baselines", "*/README.md")
+    add_glob(files, "reference_adapter", EXTERNAL / "baselines", "*/adapter.py")
+    add_glob(files, "reference_adapter", EXTERNAL / "baselines", "*/adapter_template.py")
+    add_glob(files, "reference_adapter", EXTERNAL / "baselines", "*/adapter_metadata.json")
+    add_glob(files, "reference_adapter", EXTERNAL / "baselines", "*/reference_adapter_metadata.json")
+
+    return dict(sorted(files.items()))
+
+
+def file_records(files: dict[str, str]) -> list[dict[str, Any]]:
+    records: list[dict[str, Any]] = []
+    for path_text, category in files.items():
+        path = ROOT / path_text
+        records.append(
+            {
+                "path": path_text,
+                "category": category,
+                "bytes": path.stat().st_size if path.exists() else None,
+                "sha256": sha256(path) if path.exists() else None,
+                "exists": path.exists(),
+            }
+        )
+    return records
+
+
+def forbidden_hits(paths: list[str]) -> list[str]:
+    hits: list[str] = []
+    for path in paths:
+        lowered = path.lower()
+        for forbidden in FORBIDDEN_PATH_PARTS:
+            if forbidden.lower() in lowered:
+                hits.append(path)
+                break
+    return sorted(set(hits))
+
+
+def build_payload() -> dict[str, Any]:
+    operator = require_payload(RESULTS / "external_operator_packet.json", "external_operator_packet_v1")
+    acquisition = require_payload(RESULTS / "external_acquisition_packet.json", "external_acquisition_packet_v1")
+    preflight = require_payload(RESULTS / "external_evidence_preflight.json", "external_evidence_preflight_v1")
+    release = require_payload(RESULTS / "external_release_package_audit.json", "external_release_package_audit_v1")
+    pairing = require_payload(RESULTS / "external_pairing_integrity_audit.json", "external_pairing_integrity_audit_v1")
+
+    files = build_file_manifest()
+    records = file_records(files)
+    paths = [record["path"] for record in records]
+    missing_files = sorted(record["path"] for record in records if not record["exists"])
+    forbidden = forbidden_hits(paths)
+    categories = sorted(set(files.values()))
+    category_counts = {
+        category: sum(1 for record in records if record["category"] == category)
+        for category in categories
+    }
+    post_commands = operator.get("post_collection_strict_commands", []) or []
+    operator_actions = operator.get("operator_actions", []) or []
+    action_ids = {str(action.get("id", "")) for action in operator_actions}
+
+    checks: list[dict[str, Any]] = []
+    add_check(
+        checks,
+        "operator_packet_is_no_go_non_evidence",
+        operator.get("passed") is True
+        and operator.get("not_external_evidence") is True
+        and operator.get("start_state") == "DO_NOT_COLLECT_YET"
+        and operator.get("strict_evidence_ready") is False,
+        (
+            f"start_state={operator.get('start_state')!r}, "
+            f"strict_evidence_ready={operator.get('strict_evidence_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "acquisition_maps_all_remaining_blockers",
+        acquisition.get("passed") is True
+        and acquisition.get("not_external_evidence") is True
+        and len(acquisition.get("missing_requirements", []) or []) == 4,
+        f"missing_requirements={len(acquisition.get('missing_requirements', []) or [])}",
+    )
+    add_check(
+        checks,
+        "strict_evidence_gates_remain_fail_closed",
+        preflight.get("evidence_ready") is False
+        and release.get("release_package_ready") is False
+        and pairing.get("pairing_ready") is False,
+        (
+            f"preflight={preflight.get('evidence_ready')!r}, "
+            f"release={release.get('release_package_ready')!r}, "
+            f"pairing={pairing.get('pairing_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "bundle_files_exist",
+        not missing_files,
+        f"missing={missing_files[:10]}, total_missing={len(missing_files)}",
+    )
+    add_check(
+        checks,
+        "bundle_excludes_rollout_evidence_artifacts",
+        not forbidden,
+        f"forbidden_included={forbidden}",
+    )
+    add_check(
+        checks,
+        "no_real_manifest_written",
+        not (EXTERNAL / "manifest.json").exists(),
+        "external_validation/manifest.json absent before real evidence",
+    )
+    add_check(
+        checks,
+        "handoff_has_task_config_and_baseline_assets",
+        category_counts.get("task_card", 0) >= 4
+        and category_counts.get("config_template", 0) >= 4
+        and category_counts.get("prepared_config_input", 0) >= 4
+        and category_counts.get("baseline_spec", 0) >= 12
+        and category_counts.get("reference_adapter", 0) >= 40,
+        f"category_counts={category_counts}",
+    )
+    add_check(
+        checks,
+        "operator_actions_cover_evidence_collection",
+        {
+            "backend_module",
+            "real_task_configs",
+            "platform_fidelity",
+            "real_method_implementations",
+            "run_collection",
+            "manifest_and_release",
+            "strict_rollout_recompute",
+            "final_strict_gate",
+        }.issubset(action_ids),
+        f"missing={sorted({'backend_module', 'real_task_configs', 'platform_fidelity', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
+    )
+    add_check(
+        checks,
+        "post_collection_commands_cover_strict_gates",
+        any("audit_external_release_package.py --strict" in command for command in post_commands)
+        and any("audit_external_fidelity_acceptance.py --strict" in command for command in post_commands)
+        and any("validate_external_adapters.py --strict" in command for command in post_commands)
+        and any("validate_external_configs.py --strict" in command for command in post_commands)
+        and any("validate_external_rollouts.py" in command and "--strict" in command for command in post_commands)
+        and any("audit_external_pairing_integrity.py --strict" in command for command in post_commands)
+        and any("audit_external_evidence.py --strict" in command for command in post_commands),
+        f"commands={len(post_commands)}",
+    )
+    add_check(
+        checks,
+        "file_hashes_are_recorded",
+        all(isinstance(record["sha256"], str) and len(record["sha256"]) == 64 for record in records if record["exists"]),
+        f"hashed_files={sum(1 for record in records if record['sha256'])}",
+    )
+
+    passed = all(check["passed"] for check in checks)
+    return {
+        "version": "external_operator_handoff_bundle_v1",
+        "passed": passed,
+        "not_external_evidence": True,
+        "handoff_bundle_ready": passed,
+        "strict_evidence_ready": False,
+        "start_state": operator.get("start_state"),
+        "included_file_count": len(records),
+        "category_counts": category_counts,
+        "forbidden_path_parts": sorted(FORBIDDEN_PATH_PARTS),
+        "forbidden_included_paths": forbidden,
+        "missing_files": missing_files,
+        "operator_next_actions": operator_actions,
+        "pre_collection_gate_command": operator.get("pre_collection_gate_command", ""),
+        "backend_contract_gate_command": operator.get("backend_contract_gate_command", ""),
+        "strict_collection_command": operator.get("strict_collection_command", ""),
+        "post_collection_strict_commands": post_commands,
+        "source_reports": [
+            "results/external_operator_packet.json",
+            "results/external_acquisition_packet.json",
+            "results/external_evidence_preflight.json",
+            "results/external_release_package_audit.json",
+            "results/external_pairing_integrity_audit.json",
+        ],
+        "included_files": records,
+        "checks": checks,
+    }
+
+
+def write_md(payload: dict[str, Any]) -> None:
+    lines = [
+        "# External Operator Handoff Bundle",
+        "",
+        f"Passed: `{str(payload['passed']).lower()}`.",
+        "Not evidence: `true`.",
+        f"Strict evidence ready: `{str(payload['strict_evidence_ready']).lower()}`.",
+        f"Start state: `{payload['start_state']}`.",
+        f"Included files: `{payload['included_file_count']}`.",
+        "",
+        "This is a hash-listed handoff manifest for an independent validation operator. It intentionally does not package rollout logs, videos, checkpoints, local dry-run artifacts, placeholder media, or `external_validation/manifest.json`. It is a non-evidence checklist for what to send before a real robot or accepted high-fidelity simulator run.",
+        "",
+        "## Commands",
+        "",
+        "Strict backend qualification:",
+        "",
+        "```powershell",
+        payload["backend_contract_gate_command"],
+        "```",
+        "",
+        "Strict pre-collection gate:",
+        "",
+        "```powershell",
+        payload["pre_collection_gate_command"],
+        "```",
+        "",
+        "Actual collection command after the strict gate passes:",
+        "",
+        "```powershell",
+        payload["strict_collection_command"],
+        "```",
+        "",
+        "Post-collection strict gates:",
+        "",
+    ]
+    for command in payload["post_collection_strict_commands"]:
+        lines.append(f"- `{command}`")
+
+    lines.extend(["", "## Category Counts", ""])
+    for category, count in sorted(payload["category_counts"].items()):
+        lines.append(f"- `{category}`: `{count}`")
+
+    lines.extend(["", "## Excluded Evidence Paths", ""])
+    for part in payload["forbidden_path_parts"]:
+        lines.append(f"- `{part}`")
+
+    lines.extend(["", "## Included Files", ""])
+    for record in payload["included_files"]:
+        lines.append(
+            f"- `{record['path']}` "
+            f"({record['category']}, {record['bytes']} bytes, sha256 `{record['sha256']}`)"
+        )
+
+    lines.extend(["", "## Checks", ""])
+    for check in payload["checks"]:
+        status = "pass" if check["passed"] else "fail"
+        lines.append(f"- `{status}` `{check['name']}`: {check['detail']}")
+
+    OUT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def main() -> int:
+    RESULTS.mkdir(exist_ok=True)
+    payload = build_payload()
+    OUT_JSON.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_md(payload)
+    print(
+        "External operator handoff bundle: "
+        f"{'PASS' if payload['passed'] else 'FAIL'}; "
+        f"files={payload['included_file_count']}; "
+        f"start_state={payload['start_state']}"
+    )
+    print(f"Wrote {OUT_JSON}")
+    print(f"Wrote {OUT_MD}")
+    return 0 if payload["passed"] else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

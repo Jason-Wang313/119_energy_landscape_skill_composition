@@ -20,6 +20,11 @@
       "passed": true
     },
     {
+      "detail": "files=169, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "name": "operator_handoff_bundle_visible",
+      "passed": true
+    },
+    {
       "detail": "write_enabled=False, not_external_evidence=True",
       "name": "materializer_guard_visible",
       "passed": true

@@ -224,8 +224,11 @@
       "blocker": "",
       "evidence": [
         "scripts/build_external_acquisition_packet.py",
+        "scripts/build_external_operator_handoff_bundle.py",
         "results/external_acquisition_packet.json",
-        "results/external_acquisition_packet.md"
+        "results/external_acquisition_packet.md",
+        "results/external_operator_handoff_bundle.json",
+        "results/external_operator_handoff_bundle.md"
       ],
       "requirement": "Machine-audited external evidence acquisition packet for remaining blockers",
       "status": "satisfied",

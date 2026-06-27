@@ -42,6 +42,14 @@ python scripts\build_external_operator_packet.py
 
 This writes `results/external_operator_packet.{json,md}` with the current go/no-go state, remaining pre-collection blockers, exact collection command, and post-collection strict gates. It is not external evidence; it currently says `DO_NOT_COLLECT_YET` until the strict collection preflight passes with real backend, configs, fidelity acceptance, alias unsealing, and a specific run id.
 
+Build the hash-listed operator handoff bundle:
+
+```powershell
+python scripts\build_external_operator_handoff_bundle.py
+```
+
+This writes `results/external_operator_handoff_bundle.{json,md}`. The bundle is a non-evidence manifest for the files to hand to an independent validation operator. It hash-lists the operator-facing docs, configs, task cards, runner contracts, baseline specs, adapter references, and strict command sources while excluding rollout logs, videos, checkpoints, local dry-run artifacts, placeholder media, and `external_validation/manifest.json`.
+
 ## Manifest Builder Workflow
 
 Before collecting rollouts, generate the non-evidence collection schedule:

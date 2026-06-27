@@ -19,6 +19,7 @@ Why strong-revise:
 - The pairing-integrity self-test proves complete 1,440-record paired-reset panels can pass while duplicate method rows, incomplete panels, terminal-sample mismatches, and missing manifests fail.
 - The guarded config materialization plan is ready to write real task configs only after a platform and compute budget are supplied with `--confirm-real-platform --write`.
 - The generated external operator packet is a no-go handoff for independent validation: after materializing the high-fidelity route configs, it lists four remaining pre-collection blockers, the exact collection command, and post-collection strict gates without claiming evidence.
+- The external operator handoff bundle hash-lists the operator-facing validation files and excludes rollout logs, videos, checkpoints, local dry-run artifacts, placeholder media, and real evidence manifests.
 - The outreach package now frames Haonan's role as fit/falsification advice around CoStream-style behavior composition, not as responsibility for supplying the missing proof.
 - Numeric integrity, PDF placement, page-count, and visual QA checks pass.
 

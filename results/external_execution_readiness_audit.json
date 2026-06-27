@@ -296,6 +296,26 @@
       "passed": true
     },
     {
+      "detail": "passed",
+      "name": "external_operator_handoff_bundle_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True, strict_evidence_ready=False, handoff_bundle_ready=True, start_state='DO_NOT_COLLECT_YET'",
+      "name": "external_operator_handoff_bundle_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "forbidden_included_paths=[]",
+      "name": "external_operator_handoff_bundle_excludes_evidence_paths",
+      "passed": true
+    },
+    {
+      "detail": "included_file_count=169, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 40, 'operator_command_source': 14, 'operator_facing_input': 26, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "name": "external_operator_handoff_bundle_hash_manifest",
+      "passed": true
+    },
+    {
       "detail": "external_submission_ready=False, rollout_passed=False, config_passed=False, adapter_passed=False",
       "name": "strict_evidence_gates_remain_not_ready",
       "passed": true

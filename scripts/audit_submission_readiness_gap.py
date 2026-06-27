@@ -96,6 +96,8 @@ def main() -> int:
     release_package = read_json(release_package_path) if release_package_path.exists() else {}
     acquisition_packet_path = RESULTS / "external_acquisition_packet.json"
     acquisition_packet = read_json(acquisition_packet_path) if acquisition_packet_path.exists() else {}
+    handoff_bundle_path = RESULTS / "external_operator_handoff_bundle.json"
+    handoff_bundle = read_json(handoff_bundle_path) if handoff_bundle_path.exists() else {}
     presentation_path = RESULTS / "presentation_quality_audit.json"
     presentation = read_json(presentation_path) if presentation_path.exists() else {}
     figure_readability_path = RESULTS / "figure_readability_audit.json"
@@ -480,6 +482,7 @@ def main() -> int:
     )
 
     acquisition_checks = {check.get("name"): check.get("passed") for check in acquisition_packet.get("checks", [])}
+    handoff_checks = {check.get("name"): check.get("passed") for check in handoff_bundle.get("checks", [])}
     acquisition_packet_ok = (
         acquisition_packet.get("passed") is True
         and acquisition_packet.get("version") == "external_acquisition_packet_v1"
@@ -490,11 +493,21 @@ def main() -> int:
         and acquisition_checks.get("all_missing_requirements_mapped") is True
         and acquisition_checks.get("post_collection_strict_commands_cover_all_gates") is True
         and acquisition_checks.get("no_real_manifest_written") is True
+        and handoff_bundle.get("passed") is True
+        and handoff_bundle.get("version") == "external_operator_handoff_bundle_v1"
+        and handoff_bundle.get("not_external_evidence") is True
+        and handoff_bundle.get("strict_evidence_ready") is False
+        and handoff_bundle.get("start_state") == "DO_NOT_COLLECT_YET"
+        and handoff_checks.get("bundle_excludes_rollout_evidence_artifacts") is True
+        and handoff_checks.get("file_hashes_are_recorded") is True
         and exists_all(
             [
                 ROOT / "scripts" / "build_external_acquisition_packet.py",
+                ROOT / "scripts" / "build_external_operator_handoff_bundle.py",
                 RESULTS / "external_acquisition_packet.json",
                 RESULTS / "external_acquisition_packet.md",
+                RESULTS / "external_operator_handoff_bundle.json",
+                RESULTS / "external_operator_handoff_bundle.md",
             ]
         )
     )
@@ -504,10 +517,13 @@ def main() -> int:
         status="satisfied" if acquisition_packet_ok else "missing",
         evidence=[
             "scripts/build_external_acquisition_packet.py",
+            "scripts/build_external_operator_handoff_bundle.py",
             "results/external_acquisition_packet.json",
             "results/external_acquisition_packet.md",
+            "results/external_operator_handoff_bundle.json",
+            "results/external_operator_handoff_bundle.md",
         ],
-        blocker="" if acquisition_packet_ok else "external acquisition packet is missing/failing or incorrectly claims evidence readiness",
+        blocker="" if acquisition_packet_ok else "external acquisition/handoff packet is missing/failing, includes forbidden evidence paths, or incorrectly claims evidence readiness",
         submission_blocking=True,
     )
 
