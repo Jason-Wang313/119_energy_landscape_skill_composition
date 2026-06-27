@@ -2,7 +2,7 @@
 
 This directory is reserved for evidence that can make Paper 119 independently submission-ready.
 
-The current paper is not main-conference ready until `scripts/audit_external_evidence.py --strict` and `scripts/validate_external_rollouts.py --strict --write-results` pass against a real `external_validation/manifest.json` and the referenced logs, videos, configs, checkpoints, and baseline implementations.
+The current paper is not main-conference ready until `scripts/audit_external_evidence.py --strict`, `scripts\validate_external_rollouts.py --strict --write-results`, and `scripts\audit_external_pairing_integrity.py --strict` pass against a real `external_validation/manifest.json` and the referenced logs, videos, configs, checkpoints, and baseline implementations.
 
 Use `manifest_template.json` as the required manifest structure and `log_schema_v1.json` as the required episode-level JSONL schema. A valid evidence package must prove one of:
 
@@ -141,10 +141,19 @@ python scripts\build_external_local_dry_run.py
 python scripts\validate_external_adapters.py
 python scripts\build_external_manifest.py --allow-missing
 python scripts\audit_external_evidence_preflight.py
+python scripts\audit_external_pairing_integrity.py
 python scripts\build_external_blind_eval_plan.py
 ```
 
 The preflight audit writes `results/external_evidence_preflight.{json,md}`. It is an operator-facing missing-evidence matrix over task logs, videos, configs, method implementations, checkpoint/config hashes, and expected JSONL record counts. It deliberately remains `not_external_evidence: true` and currently reports `evidence_ready: false` until a real `external_validation/manifest.json` and manifest-declared artifacts exist.
+
+Audit paired-reset and method-panel integrity:
+
+```powershell
+python scripts\audit_external_pairing_integrity.py
+```
+
+This writes `results/external_pairing_integrity_audit.{json,md}`. Before real evidence exists, it reports `pairing_ready: false` and is not evidence. With a real manifest, the strict form requires every paired reset to have a complete, duplicate-free panel over all declared methods, equal per-method counts, and consistent terminal samples, platform, and fixed-risk budget within each panel.
 
 After real or accepted high-fidelity artifacts exist, run:
 
@@ -153,6 +162,7 @@ python scripts\build_external_manifest.py --write --check-video-paths
 python scripts\audit_external_fidelity_acceptance.py --strict
 python scripts\validate_external_adapters.py --strict
 python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict
+python scripts\audit_external_pairing_integrity.py --strict
 python scripts\audit_external_evidence.py --strict
 ```
 
@@ -171,12 +181,14 @@ python scripts\audit_external_fidelity_acceptance.py
 python scripts\build_external_blind_eval_plan.py
 python scripts\audit_external_runner_harness.py
 python scripts\audit_external_evidence_preflight.py
+python scripts\audit_external_pairing_integrity.py
 python scripts\validate_external_adapters.py
 python scripts\validate_external_configs.py --strict
 python scripts\validate_external_adapters.py --strict
 python scripts\self_test_external_rollout_validator.py
 python scripts\self_test_external_evidence_pipeline.py
 python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict
+python scripts\audit_external_pairing_integrity.py --strict
 python scripts\audit_external_evidence.py --strict
 ```
 
@@ -185,3 +197,5 @@ The self-test uses temporary synthetic records only. It verifies the validator's
 The full-pipeline self-test also uses a temporary synthetic package only. It verifies that a complete manifest/config/log/video/checkpoint/implementation package can drive the strict audit to READY, then deletes the fixture and confirms the real repository evidence state is untouched. It is tooling coverage, not validation evidence.
 
 The rollout validator recomputes the external success margin, utility margin, paired win rate, fixed-risk coverage, fixed-risk breach, and positive task-family count from raw JSONL records. The manifest metrics are therefore not accepted as evidence unless they are backed by episode logs with the seam prediction, diagnosis, decision, outcome, utility, video, and config/checkpoint hashes required by `log_schema_v1.json`. The evidence audit also blocks if manifest metrics disagree with the recomputed rollout metrics.
+
+The pairing integrity audit is a separate fairness gate over the same raw logs. It blocks incomplete paired reset panels, duplicate method records, undeclared methods, unequal method counts, and within-reset mismatches in terminal samples, platform, or fixed-risk budget.

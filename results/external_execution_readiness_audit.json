@@ -102,6 +102,16 @@
     },
     {
       "detail": "passed",
+      "name": "external_pairing_integrity_audit_ready",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True, pairing_ready=False",
+      "name": "external_pairing_integrity_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "passed",
       "name": "config_templates_ready",
       "passed": true
     },
@@ -225,6 +235,7 @@
   "missing_evidence_to_collect": [
     "external_validation/manifest.json",
     "manifest-declared JSONL rollout logs",
+    "complete paired-reset method panels with no duplicates",
     "manifest-declared task configs with hashes",
     "manifest-declared videos",
     "manifest-declared independent non-oracle adapter implementations",

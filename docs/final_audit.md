@@ -28,7 +28,7 @@ Continuation audit additions:
 - Camera-ready design audit: `results/camera_ready_design_audit.md` renders all 29 PDF pages and checks page density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
 - Numeric integrity: validator passed with no missing required outputs, invalid numeric values, or artifact-placement violations.
 - Claim boundary audit: `results/claim_boundary_audit.md` passes and blocks premature deployment, hardware, or ICLR-main readiness claims.
-- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` maps the active objective to 17 concrete requirements; it currently reports 13 satisfied, 4 blocking external gaps, and 0 human-polish items, so the objective is not complete.
+- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` maps the active objective to 18 concrete requirements; it currently reports 14 satisfied, 4 blocking external gaps, and 0 human-polish items, so the objective is not complete.
 - Full local build script: `scripts/build_submission_artifacts.ps1`.
 - GitHub validation workflow: `.github/workflows/paper119-validation.yml` runs the core runner/readiness/submission/outreach validators on pushed branches and pull requests, with the repository PDF used as the CI canonical artifact.
 - Canonical PDF: `C:/Users/wangz/Downloads/119.pdf`.
@@ -56,6 +56,7 @@ Continuation audit additions:
 - External evidence preflight: `results/external_evidence_preflight.md` is a fail-closed operator checklist over task logs/videos/configs, method implementations/checkpoints, and expected JSONL records; it expects 1,440 records, observes 0 real external records, reports `evidence_ready=false`, and is explicitly not evidence.
 - External evidence audit: `results/external_evidence_audit.md` reports `submission_ready=false` with no external manifest/log/video/checkpoint evidence or manifest-vs-rollout metric agreement yet.
 - External rollout metric audit: `results/external_rollout_metrics.md` reports `passed=false` because no manifest/log evidence exists yet.
+- External pairing integrity audit: `results/external_pairing_integrity_audit.md` reports `pairing_ready=false` until real manifest-declared logs contain complete, duplicate-free paired reset panels over all methods.
 - External rollout validator self-test: `scripts/self_test_external_rollout_validator.py` passes on temporary synthetic records; this verifies tooling only and is not evidence.
 - External full-pipeline evidence self-test: `scripts/self_test_external_evidence_pipeline.py` passes on a temporary synthetic manifest/config/log/video/checkpoint package and leaves the real `external_validation/manifest.json` absent; this verifies tooling only and is not evidence.
 - Related-work coverage matrix: `docs/related_work_coverage_matrix.md`.

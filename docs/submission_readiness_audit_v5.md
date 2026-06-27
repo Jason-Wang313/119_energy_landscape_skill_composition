@@ -46,7 +46,7 @@ ICLR-main ready: no
 - Desktop numbered PDF: absent.
 - Validator: passed.
 - Claim boundary audit: `results/claim_boundary_audit.md` passed and confirms the current package keeps the claim bounded.
-- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 13/17 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
+- Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 14/18 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
 - Local falsification audit: `results/local_falsification_audit.md` passed and is included in the generated manuscript.
 - Holdout robustness audit: `results/holdout_robustness_audit.md` passed and is included in the generated manuscript.
 - Diagnostic mechanism audit: `results/diagnostic_mechanism_audit.md` passed and is included in the generated manuscript.
@@ -79,6 +79,7 @@ ICLR-main ready: no
 - External evidence preflight matrix: `results/external_evidence_preflight.md` exists, passes as a fail-closed operator checklist, expects 1,440 external records, observes 0 real external records, reports `evidence_ready=false`, and is explicitly marked as non-evidence.
 - External evidence audit: `results/external_evidence_audit.md` exists and reports `submission_ready=false` because no real/high-fidelity manifest, logs, videos, checkpoints, manifest-declared independent baseline evidence, or manifest-vs-rollout metric agreement have been supplied.
 - External rollout metric audit: `results/external_rollout_metrics.md` exists and reports `passed=false` because no external manifest/log package has been supplied.
+- External pairing integrity audit: `results/external_pairing_integrity_audit.md` exists and reports `pairing_ready=false` until real manifest-declared logs contain complete, duplicate-free paired reset panels over all methods.
 - External rollout validator self-test: passed on temporary synthetic records, verifying metric recomputation and missing-field failure behavior only.
 - External full-pipeline evidence self-test: passed on a temporary synthetic package with manifest-declared configs, logs, video paths, checkpoints, implementations, recomputed rollout metrics, and release artifacts; it verifies tooling only and is not evidence.
 - Visual QA: final title page, overview page, main result figures, fixed-risk figures, and outreach preview figure page inspected after the reframing/figure pass.
@@ -98,6 +99,7 @@ ICLR-main ready: no
 - Strict adapter-contract evidence validation over manifest-declared real implementations and logs does not pass yet.
 - External evidence strict audit does not pass yet.
 - External rollout-log strict validation does not pass yet.
+- External pairing-integrity strict validation does not pass yet.
 - Related-work/reference/readability coverage is now machine-audited across the target novelty boundary; human taste review can still improve prose, but it is no longer a tracked readiness gap.
 - Camera-ready design is now machine-audited, but final human taste review can still improve polish without changing the evidence state.
 

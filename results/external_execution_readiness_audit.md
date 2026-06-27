@@ -13,6 +13,7 @@ This audit checks whether the package is ready for an independent external valid
 
 - `external_validation/manifest.json`
 - `manifest-declared JSONL rollout logs`
+- `complete paired-reset method panels with no duplicates`
 - `manifest-declared task configs with hashes`
 - `manifest-declared videos`
 - `manifest-declared independent non-oracle adapter implementations`
@@ -43,6 +44,8 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_runner_harness_ready`: passed
 - `pass` `external_runner_harness_not_evidence`: not_external_evidence=True
 - `pass` `external_runner_harness_fail_closed`: actual_execution_ready=False
+- `pass` `external_pairing_integrity_audit_ready`: passed
+- `pass` `external_pairing_integrity_not_evidence`: not_external_evidence=True, pairing_ready=False
 - `pass` `config_templates_ready`: passed
 - `pass` `config_schema_exists`: external_validation/config_schema_v1.json
 - `pass` `baseline_contract_ready`: passed

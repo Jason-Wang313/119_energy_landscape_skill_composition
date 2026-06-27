@@ -24,6 +24,7 @@ This file is a collection schedule only. It does not count as external validatio
 - `python scripts\validate_external_adapters.py --strict`
 - `python scripts\build_external_manifest.py --write --check-video-paths`
 - `python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict`
+- `python scripts\audit_external_pairing_integrity.py --strict`
 - `python scripts\audit_external_evidence.py --strict`
 
 ## Invariants

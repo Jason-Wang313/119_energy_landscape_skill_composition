@@ -32,6 +32,7 @@
 - External evidence validator: `scripts/audit_external_evidence.py`
 - External execution readiness validator: `scripts/audit_external_execution_readiness.py`
 - External rollout metric validator: `scripts/validate_external_rollouts.py`
+- External pairing integrity validator: `scripts/audit_external_pairing_integrity.py`
 - External rollout validator self-test: `scripts/self_test_external_rollout_validator.py`
 - External full-pipeline evidence self-test: `scripts/self_test_external_evidence_pipeline.py`
 - External rollout schema: `external_validation/log_schema_v1.json`
@@ -105,6 +106,8 @@
   - `results/external_adapter_contract_evidence_audit.md`
   - `results/external_manifest_builder_report.json`
   - `results/external_manifest_builder_report.md`
+  - `results/external_pairing_integrity_audit.json`
+  - `results/external_pairing_integrity_audit.md`
   - `results/external_execution_readiness_audit.json`
   - `results/external_execution_readiness_audit.md`
   - `results/summary.json`

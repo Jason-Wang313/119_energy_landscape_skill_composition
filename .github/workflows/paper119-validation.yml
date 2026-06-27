@@ -40,6 +40,9 @@ jobs:
       - name: Audit external runner harness
         run: python scripts/audit_external_runner_harness.py
 
+      - name: Audit external pairing integrity
+        run: python scripts/audit_external_pairing_integrity.py
+
       - name: Audit external execution readiness
         run: python scripts/audit_external_execution_readiness.py
 

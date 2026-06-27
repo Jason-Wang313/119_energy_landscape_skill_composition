@@ -79,6 +79,8 @@ def main() -> int:
     blind_eval = read_json(blind_eval_path) if blind_eval_path.exists() else {}
     runner_harness_path = RESULTS / "external_runner_harness_audit.json"
     runner_harness = read_json(runner_harness_path) if runner_harness_path.exists() else {}
+    pairing_integrity_path = RESULTS / "external_pairing_integrity_audit.json"
+    pairing_integrity = read_json(pairing_integrity_path) if pairing_integrity_path.exists() else {}
     presentation_path = RESULTS / "presentation_quality_audit.json"
     presentation = read_json(presentation_path) if presentation_path.exists() else {}
     figure_readability_path = RESULTS / "figure_readability_audit.json"
@@ -274,6 +276,8 @@ def main() -> int:
         and runner_harness.get("passed") is True
         and runner_harness.get("not_external_evidence") is True
         and runner_harness.get("actual_execution_ready") is False
+        and pairing_integrity.get("passed") is True
+        and pairing_integrity.get("pairing_ready") is False
     )
     add_requirement(
         requirements,
@@ -285,6 +289,7 @@ def main() -> int:
             "results/independent_validation_route_audit.json",
             "results/external_blind_eval_audit.json",
             "results/external_runner_harness_audit.json",
+            "results/external_pairing_integrity_audit.json",
             "external_validation/platform_qualification_checklist.md",
             "external_validation/fidelity_acceptance_template.json",
             "external_validation/independent_validation_route.md",
@@ -296,6 +301,34 @@ def main() -> int:
             "external_validation/runner/real_collection_runner.py",
         ],
         blocker="" if execution_packet_ok else "external execution packet audit is missing/failing or strict evidence readiness is incorrectly claimed",
+        submission_blocking=True,
+    )
+
+    pairing_ok = (
+        pairing_integrity.get("passed") is True
+        and pairing_integrity.get("version") == "external_pairing_integrity_audit_v1"
+        and pairing_integrity.get("pairing_ready") is False
+        and pairing_integrity.get("not_external_evidence") is True
+        and exists_all(
+            [
+                ROOT / "scripts" / "audit_external_pairing_integrity.py",
+                RESULTS / "external_pairing_integrity_audit.json",
+                RESULTS / "external_pairing_integrity_audit.md",
+                EXTERNAL / "log_schema_v1.json",
+            ]
+        )
+    )
+    add_requirement(
+        requirements,
+        requirement="External paired-reset fairness and method-panel integrity gate",
+        status="satisfied" if pairing_ok else "missing",
+        evidence=[
+            "scripts/audit_external_pairing_integrity.py",
+            "results/external_pairing_integrity_audit.json",
+            "results/external_pairing_integrity_audit.md",
+            "external_validation/log_schema_v1.json",
+        ],
+        blocker="" if pairing_ok else "external pairing-integrity audit is missing/failing or incorrectly claims current evidence readiness",
         submission_blocking=True,
     )
 

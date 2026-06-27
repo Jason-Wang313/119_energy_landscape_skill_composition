@@ -152,6 +152,12 @@
     },
     {
       "blocking": true,
+      "detail": "pairing_ready=False, blocking_missing_count=1",
+      "name": "external_pairing_integrity_ready",
+      "passed": false
+    },
+    {
+      "blocking": true,
       "detail": "external_success_margin: manifest=None, rollout=None; external_utility_margin: manifest=None, rollout=None; paired_win_rate: manifest=None, rollout=None; fixed_risk_breach: manifest=None, rollout=None",
       "name": "manifest_metrics_match_rollout",
       "passed": false
@@ -528,6 +534,18 @@
       "blocking": true,
       "detail": "passed=False, episodes=0",
       "name": "external_rollout_metrics_passed",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\results\\external_pairing_integrity_audit.json",
+      "name": "external_pairing_integrity_audit_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "pairing_ready=False, blocking_missing_count=1",
+      "name": "external_pairing_integrity_ready",
       "passed": false
     },
     {

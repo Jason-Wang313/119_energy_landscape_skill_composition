@@ -17,6 +17,7 @@ AUDIT_MD = RESULTS / "external_evidence_audit.md"
 LOG_SCHEMA = CONTRACT_DIR / "log_schema_v1.json"
 ROLLOUT_VALIDATOR = ROOT / "scripts" / "validate_external_rollouts.py"
 ROLLOUT_METRICS_JSON = RESULTS / "external_rollout_metrics.json"
+PAIRING_INTEGRITY_JSON = RESULTS / "external_pairing_integrity_audit.json"
 BASELINE_CONTRACT_JSON = RESULTS / "external_baseline_contract_audit.json"
 ADAPTER_SCAFFOLD_JSON = RESULTS / "external_adapter_scaffold_audit.json"
 ADAPTER_CONTRACT_JSON = RESULTS / "external_adapter_contract_audit.json"
@@ -454,6 +455,18 @@ def audit_manifest(manifest: dict[str, Any], manifest_exists: bool) -> dict[str,
         "external_rollout_metrics_passed",
         rollout_passed,
         f"passed={rollout_payload.get('passed') if isinstance(rollout_payload, dict) else None!r}, episodes={rollout_summary.get('episodes')!r}",
+    )
+    pairing_integrity_exists = PAIRING_INTEGRITY_JSON.exists()
+    pairing_integrity = read_json(PAIRING_INTEGRITY_JSON) if pairing_integrity_exists else {}
+    add_check(checks, "external_pairing_integrity_audit_exists", pairing_integrity_exists, str(PAIRING_INTEGRITY_JSON))
+    add_check(
+        checks,
+        "external_pairing_integrity_ready",
+        pairing_integrity.get("pairing_ready") is True,
+        (
+            f"pairing_ready={pairing_integrity.get('pairing_ready')!r}, "
+            f"blocking_missing_count={pairing_integrity.get('blocking_missing_count')!r}"
+        ),
     )
     metric_mismatches = []
     for name in (

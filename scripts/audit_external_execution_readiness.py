@@ -184,6 +184,21 @@ def main() -> int:
         f"actual_execution_ready={runner.get('actual_execution_ready')!r}",
     )
 
+    pairing_ok, pairing, pairing_detail = passed_json(
+        RESULTS / "external_pairing_integrity_audit.json",
+        version="external_pairing_integrity_audit_v1",
+    )
+    add_check(checks, "external_pairing_integrity_audit_ready", pairing_ok, pairing_detail)
+    add_check(
+        checks,
+        "external_pairing_integrity_not_evidence",
+        pairing.get("not_external_evidence") is True and pairing.get("pairing_ready") is False,
+        (
+            f"not_external_evidence={pairing.get('not_external_evidence')!r}, "
+            f"pairing_ready={pairing.get('pairing_ready')!r}"
+        ),
+    )
+
     config_template_ok, config_template, config_template_detail = passed_json(
         RESULTS / "external_config_template_audit.json",
         version="external_config_template_audit_v1",
@@ -395,6 +410,8 @@ def main() -> int:
         "external_runner_harness_ready",
         "external_runner_harness_not_evidence",
         "external_runner_harness_fail_closed",
+        "external_pairing_integrity_audit_ready",
+        "external_pairing_integrity_not_evidence",
         "config_templates_ready",
         "config_schema_exists",
         "baseline_contract_ready",
@@ -438,6 +455,7 @@ def main() -> int:
         "missing_evidence_to_collect": [
             "external_validation/manifest.json",
             "manifest-declared JSONL rollout logs",
+            "complete paired-reset method panels with no duplicates",
             "manifest-declared task configs with hashes",
             "manifest-declared videos",
             "manifest-declared independent non-oracle adapter implementations",
