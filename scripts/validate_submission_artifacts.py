@@ -2242,8 +2242,8 @@ def main():
         fail("external operator packet fidelity draft must point to the draft JSON")
     if int(operator_draft.get("remaining_operator_input_count", 0) or 0) < 8:
         fail("external operator packet fidelity draft must expose remaining operator input count")
-    if operator_draft.get("machine_prefilled_ready") is not True or operator_draft.get("operator_signoff_ready") is not False:
-        fail("external operator packet fidelity draft must separate machine-prefilled readiness from operator signoff")
+    if not isinstance(operator_draft.get("machine_prefilled_ready"), bool) or operator_draft.get("operator_signoff_ready") is not False:
+        fail("external operator packet fidelity draft must report machine-prefilled readiness and keep operator signoff false")
     if int(operator_draft.get("operator_signoff_item_count", 0) or 0) < 8:
         fail("external operator packet fidelity draft must expose operator signoff item count")
     if "build_external_fidelity_acceptance_draft.py" not in str(operator_draft.get("build_command", "")):

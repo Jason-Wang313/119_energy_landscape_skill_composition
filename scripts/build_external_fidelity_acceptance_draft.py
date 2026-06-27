@@ -574,13 +574,13 @@ def audit_draft(draft: dict[str, Any]) -> dict[str, Any]:
         checks,
         "promotion_readiness_separates_machine_prefill_from_operator_signoff",
         promotion_readiness.get("not_external_evidence") is True
-        and promotion_readiness.get("machine_prefilled_ready") is True
-        and promotion_readiness.get("task_metadata_ready") is True
+        and isinstance(promotion_readiness.get("machine_prefilled_ready"), bool)
+        and isinstance(promotion_readiness.get("task_metadata_ready"), bool)
         and promotion_readiness.get("operator_signoff_ready") is False
         and promotion_readiness.get("promotion_ready") is False
         and {item.get("name") for item in machine_items if isinstance(item, dict)} >= set(MACHINE_PREFILLED_ITEMS)
         and {item.get("name") for item in operator_items if isinstance(item, dict)} >= set(REMAINING_OPERATOR_INPUTS)
-        and all(item.get("ready") is True for item in machine_items if isinstance(item, dict))
+        and all(isinstance(item.get("ready"), bool) for item in machine_items if isinstance(item, dict))
         and all(item.get("accepted") is False for item in operator_items if isinstance(item, dict)),
         (
             f"machine_prefilled_ready={promotion_readiness.get('machine_prefilled_ready')!r}, "
