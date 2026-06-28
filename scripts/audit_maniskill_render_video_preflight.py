@@ -255,6 +255,66 @@ def summarize_blocker(records: list[dict[str, Any]]) -> str:
     return "render-backed MP4 preflight is not ready on this machine; " + "; ".join(fragments)
 
 
+def classify_render_failure(record: dict[str, Any]) -> str:
+    text = " ".join(
+        str(record.get(key, ""))
+        for key in ("error", "error_type", "traceback_tail", "stderr_tail", "stdout_tail")
+    )
+    if "allocateDescriptorSetsUnique" in text or "ErrorOutOfPoolMemory" in text:
+        return "vulkan_descriptor_pool_exhaustion"
+    if "TimeoutExpired" in text or record.get("timed_out"):
+        return "render_timeout"
+    if "render did not return an RGB-like frame" in text:
+        return "non_rgb_render_output"
+    if record.get("made_env") is not True:
+        return "environment_construction_failure"
+    if record.get("reset_ok") is not True:
+        return "environment_reset_failure"
+    if record.get("mp4_ok") is not True:
+        return "mp4_writer_or_render_capture_failure"
+    return "unknown_render_failure"
+
+
+def remediation_for_failure_classes(failure_classes: list[str]) -> list[str]:
+    if not failure_classes:
+        return []
+    commands = [
+        "Do not use diagnostic fallback videos as external evidence; rerun this preflight on the exact accepted collection machine.",
+        "Record Python, ManiSkill, SAPIEN, GPU/Vulkan, render backend, shader pack, and driver provenance with scripts\\probe_external_platform.py before fidelity acceptance.",
+    ]
+    if "vulkan_descriptor_pool_exhaustion" in failure_classes:
+        commands.extend(
+            [
+                "Treat vk::Device::allocateDescriptorSetsUnique/ErrorOutOfPoolMemory as a renderer-resource blocker for this machine, not as rollout evidence failure.",
+                "Retest one primary environment at a time with explicit renderer profiles before official collection: cpu/minimal, gpu/minimal, and sapien_cuda/minimal.",
+                "Use a machine whose SAPIEN/Vulkan renderer can capture RGB frames for all four primary task families before promoting fidelity acceptance.",
+            ]
+        )
+    if "render_timeout" in failure_classes:
+        commands.append("Increase --timeout-seconds only after confirming the renderer is making progress and output directories remain quarantined.")
+    if "non_rgb_render_output" in failure_classes:
+        commands.append("Inspect camera and human_render_camera_configs; strict videos require RGB-like frames, not state-shaped arrays.")
+    return commands
+
+
+def profile_retest_commands(args: argparse.Namespace) -> list[str]:
+    commands = []
+    for backend in ("cpu", "gpu", "sapien_cuda"):
+        commands.append(
+            "python scripts\\audit_maniskill_render_video_preflight.py "
+            f"--timeout-seconds {args.timeout_seconds} --max-envs 1 "
+            f"--width {args.width} --height {args.height} "
+            f"--render-backend {backend} --shader-pack {args.shader_pack}"
+        )
+    commands.append(
+        "python scripts\\audit_maniskill_render_video_preflight.py "
+        f"--timeout-seconds {args.timeout_seconds} --max-envs 4 "
+        f"--width {args.width} --height {args.height} "
+        f"--render-backend {args.render_backend} --shader-pack {args.shader_pack}"
+    )
+    return commands
+
+
 def write_md(payload: dict[str, Any]) -> None:
     lines = [
         "# ManiSkill Render-Video Preflight Audit",
@@ -272,6 +332,21 @@ def write_md(payload: dict[str, Any]) -> None:
     ]
     for blocker in payload["blocking_missing"] or ["none"]:
         lines.append(f"- {blocker}")
+    lines.extend(
+        [
+            "",
+            "## Renderer Failure Classifier",
+            "",
+            f"- Failure classes: `{payload['renderer_failure_classes']}`",
+            f"- Operator remediation items: `{len(payload['operator_remediation'])}`",
+            "",
+        ]
+    )
+    for item in payload["operator_remediation"] or ["none"]:
+        lines.append(f"- {item}")
+    lines.extend(["", "## Renderer Profile Retest Commands", ""])
+    for command in payload["renderer_profile_retest_commands"]:
+        lines.extend(["```powershell", command, "```"])
     lines.extend(["", "## Environment Results", ""])
     for record in payload["env_records"]:
         status = "ready" if record.get("render_video_ready") else "not_ready"
@@ -304,8 +379,13 @@ def main() -> int:
     clear_preflight_outputs()
     env_rows = primary_envs()[: max(1, args.max_envs)]
     records = [run_probe(row, args) for row in env_rows]
+    for record in records:
+        record["renderer_failure_class"] = "" if record.get("render_video_ready") else classify_render_failure(record)
     render_ready = bool(records) and all(record.get("render_video_ready") for record in records)
     blocking = [] if render_ready else [summarize_blocker(records) or "no ManiSkill primary environments were render-probed"]
+    failure_classes = sorted({str(record.get("renderer_failure_class")) for record in records if record.get("renderer_failure_class")})
+    operator_remediation = remediation_for_failure_classes(failure_classes)
+    retest_commands = profile_retest_commands(args)
 
     checks: list[dict[str, Any]] = []
     add_check(checks, "render_preflight_is_non_evidence", True, "preflight writes only quarantine outputs and audit files")
@@ -338,6 +418,24 @@ def main() -> int:
     )
     add_check(
         checks,
+        "renderer_failure_class_recorded_when_not_ready",
+        render_ready or bool(failure_classes),
+        f"classes={failure_classes}",
+    )
+    add_check(
+        checks,
+        "operator_remediation_present_when_not_ready",
+        render_ready or len(operator_remediation) >= 2,
+        f"items={len(operator_remediation)}",
+    )
+    add_check(
+        checks,
+        "profile_retest_commands_cover_renderer_backends",
+        all(fragment in "\n".join(retest_commands) for fragment in ("--render-backend cpu", "--render-backend gpu", "--render-backend sapien_cuda")),
+        "\n".join(retest_commands),
+    )
+    add_check(
+        checks,
         "no_real_manifest_written",
         not (EXTERNAL / "manifest.json").exists(),
         "external_validation/manifest.json remains absent",
@@ -360,6 +458,9 @@ def main() -> int:
         "output_dir": rel(PREFLIGHT_ROOT),
         "video_dir": rel(VIDEO_DIR),
         "blocking_missing": blocking,
+        "renderer_failure_classes": failure_classes,
+        "operator_remediation": operator_remediation,
+        "renderer_profile_retest_commands": retest_commands,
         "env_records": records,
         "checks": checks,
         "failed_checks": [check for check in checks if not check["passed"]],

@@ -54,6 +54,28 @@ This packet maps the remaining main-conference blockers to concrete operator inp
 | `strict_adapter_evidence` | Audit independent method evidence after the manifest is real | `manifest-declared non-oracle implementation paths and hashes` | `results/external_baseline_contract_audit.json`<br>`results/external_adapter_contract_evidence_audit.json` | `python scripts\build_external_baseline_contract.py`<br>`python scripts\validate_external_adapters.py --strict` |
 | `final_strict_gate` | Run the final strict external-evidence gate | `completed manifest, logs, videos, configs, checkpoints/hashes, adapters, and fidelity acceptance` | `results/external_evidence_audit.json`<br>`results/submission_readiness_gap_audit.json` | `python scripts\audit_external_pairing_integrity.py --strict`<br>`python scripts\audit_external_evidence.py --strict`<br>`python scripts\audit_submission_readiness_gap.py` |
 
+## ManiSkill Render-Video Preflight
+
+- Render video ready: `false`
+- Renderer failure classes: `['vulkan_descriptor_pool_exhaustion']`
+- Operator remediation items: `5`
+- Blocking missing: `['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory']`
+
+Renderer profile retest commands:
+
+```powershell
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend cpu --shader-pack minimal
+```
+```powershell
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend gpu --shader-pack minimal
+```
+```powershell
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend sapien_cuda --shader-pack minimal
+```
+```powershell
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4 --width 64 --height 64 --render-backend cpu --shader-pack minimal
+```
+
 ## Strict Collection Command
 
 ```powershell
@@ -87,7 +109,7 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 - `pass` `config_manifest_packet_ready`: config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False
 - `pass` `rollout_evidence_packet_ready`: rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False
 - `pass` `pilot_smoke_packet_ready`: pilot_smoke_packet_ready=True, strict_evidence_ready=False
-- `pass` `maniskill_render_video_preflight_recorded`: render_video_ready=False, envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory']
+- `pass` `maniskill_render_video_preflight_recorded`: render_video_ready=False, envs=4, failure_classes=['vulkan_descriptor_pool_exhaustion']
 - `pass` `maniskill_pilot_runtime_liveness_ready`: pilot_runtime_ready=False, runner_io_ready=True, render_video_ready=False, timed_out=False, records=1, videos=1, diagnostic_fallbacks=1, failure_summary='runner wrote quarantined schema-valid row/video using diagnostic non-evidence video fallback; render-backed video remains unavailable'
 - `pass` `method_implementation_packet_ready`: method_implementation_packet_ready=True, strict_adapter_evidence_ready=False
 - `pass` `preflight_operator_actions_present`: operator_next_actions=5, evidence_ready=False

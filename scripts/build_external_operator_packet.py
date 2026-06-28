@@ -198,11 +198,13 @@ def build_payload() -> dict[str, Any]:
         and render_preflight.get("strict_external_evidence_ready") is False
         and int(render_preflight.get("env_count", 0) or 0) >= 1
         and isinstance(render_preflight.get("render_video_ready"), bool)
+        and (render_preflight.get("render_video_ready") is True or bool(render_preflight.get("renderer_failure_classes")))
+        and (render_preflight.get("render_video_ready") is True or bool(render_preflight.get("operator_remediation")))
         and "audit_maniskill_render_video_preflight.py" in render_commands,
         (
             f"render_video_ready={render_preflight.get('render_video_ready')!r}, "
             f"envs={render_preflight.get('env_count')!r}, "
-            f"blocking={render_preflight.get('blocking_missing')!r}"
+            f"failure_classes={render_preflight.get('renderer_failure_classes')!r}"
         ),
     )
     add_check(
@@ -358,6 +360,9 @@ def build_payload() -> dict[str, Any]:
             "env_count": int(render_preflight.get("env_count", 0) or 0),
             "render_ready_env_count": int(render_preflight.get("render_ready_env_count", 0) or 0),
             "blocking_missing": list(render_preflight.get("blocking_missing", []) or []),
+            "renderer_failure_classes": list(render_preflight.get("renderer_failure_classes", []) or []),
+            "operator_remediation": list(render_preflight.get("operator_remediation", []) or []),
+            "renderer_profile_retest_commands": list(render_preflight.get("renderer_profile_retest_commands", []) or []),
             "audit_path": "results/maniskill_render_video_preflight_audit.json",
             "audit_md_path": "results/maniskill_render_video_preflight_audit.md",
             "build_command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4",
@@ -516,14 +521,21 @@ def write_md(payload: dict[str, Any]) -> None:
             f"- Environments probed: `{render['env_count']}`",
             f"- Render-ready environments: `{render['render_ready_env_count']}`",
             f"- Blocking missing: `{render['blocking_missing']}`",
+            f"- Renderer failure classes: `{render['renderer_failure_classes']}`",
+            f"- Operator remediation items: `{len(render['operator_remediation'])}`",
             "",
             "Render preflight command:",
             "",
             "```powershell",
             render["build_command"],
             "```",
+            "",
+            "Renderer profile retest commands:",
+            "",
         ]
     )
+    for command in render["renderer_profile_retest_commands"] or ["none"]:
+        lines.extend(["```powershell", command, "```"])
 
     lines.extend(
         [

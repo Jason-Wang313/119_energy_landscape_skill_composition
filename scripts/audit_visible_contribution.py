@@ -434,6 +434,23 @@ def main() -> int:
             f"blocking={render_preflight.get('blocking_missing')!r}"
         ),
     )
+    add_check(
+        checks,
+        "renderer_failure_classifier_visible",
+        render_preflight.get("render_video_ready") is True
+        or (
+            "vulkan_descriptor_pool_exhaustion" in (render_preflight.get("renderer_failure_classes", []) or [])
+            and len(render_preflight.get("operator_remediation", []) or []) >= 3
+            and all(
+                fragment in "\n".join(render_preflight.get("renderer_profile_retest_commands", []) or [])
+                for fragment in ("--render-backend cpu", "--render-backend gpu", "--render-backend sapien_cuda")
+            )
+        ),
+        (
+            f"classes={render_preflight.get('renderer_failure_classes')!r}, "
+            f"remediation={len(render_preflight.get('operator_remediation', []) or [])}"
+        ),
+    )
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", []) or []}
     config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", []) or []}
     rollout_evidence_checks = {check.get("name"): check.get("passed") for check in rollout_evidence.get("checks", []) or []}
@@ -602,6 +619,7 @@ def main() -> int:
             "External runner backend probe self-test",
             "External pilot smoke packet",
             "ManiSkill render-video preflight",
+            "renderer-failure classifier",
             "ManiSkill pilot runtime liveness audit",
             "External config manifest packet",
             "External rollout evidence packet",
@@ -636,6 +654,7 @@ def main() -> int:
             "External runner backend probe self-test",
             "External pilot smoke packet",
             "ManiSkill render-video preflight",
+            "renderer-failure classifier",
             "ManiSkill pilot runtime liveness audit",
             "External config manifest packet",
             "External rollout evidence packet",
@@ -671,6 +690,7 @@ def main() -> int:
             "external runner backend probe self-test",
             "external pilot smoke packet",
             "ManiSkill render-video preflight",
+            "renderer-failure classifier",
             "ManiSkill pilot runtime liveness audit",
             "external config manifest packet",
             "external rollout evidence packet",
@@ -706,6 +726,7 @@ def main() -> int:
             "External runner backend probe self-test",
             "External pilot smoke packet",
             "ManiSkill render-video preflight",
+            "renderer-failure classifier",
             "ManiSkill pilot runtime liveness audit",
             "External config manifest packet",
             "External rollout evidence packet",
@@ -742,6 +763,7 @@ def main() -> int:
             "scripts/build_external_pilot_smoke_packet.py",
             "scripts/audit_external_pilot_smoke.py",
             "scripts/audit_maniskill_render_video_preflight.py",
+            "renderer-failure classifier",
             "scripts/audit_maniskill_pilot_runtime_liveness.py",
             "scripts/build_external_config_manifest_packet.py",
             "scripts/build_external_rollout_evidence_packet.py",
@@ -779,6 +801,7 @@ def main() -> int:
             "external runner backend probe self-test",
             "external pilot smoke packet",
             "ManiSkill render-video preflight",
+            "renderer-failure classifier",
             "ManiSkill pilot runtime liveness audit",
             "external config manifest packet",
             "external rollout evidence packet",
@@ -802,6 +825,7 @@ def main() -> int:
             "independent validation protocol/operator packet",
             "reviewer response packet",
             "ManiSkill render-video preflight",
+            "renderer-failure classifier",
         ],
         "reviewer": [
             "Not evidence: `true`.",
@@ -833,7 +857,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill render-video preflight, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the manifest assembly checklist, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill render-video preflight and renderer-failure classifier, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the manifest assembly checklist, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

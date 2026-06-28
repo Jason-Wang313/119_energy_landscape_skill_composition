@@ -776,12 +776,14 @@ def main() -> int:
         and isinstance(render_preflight.get("render_video_ready"), bool)
         and render_preflight_checks.get("render_preflight_is_non_evidence") is True
         and render_preflight_checks.get("quarantine_paths_are_not_official_evidence") is True
+        and (render_preflight.get("render_video_ready") is True or bool(render_preflight.get("renderer_failure_classes")))
+        and (render_preflight.get("render_video_ready") is True or bool(render_preflight.get("operator_remediation")))
         and (ROOT / "scripts" / "audit_maniskill_render_video_preflight.py").exists()
         and (RESULTS / "maniskill_render_video_preflight_audit.md").exists(),
         (
             f"render_video_ready={render_preflight.get('render_video_ready')!r}, "
             f"envs={render_preflight.get('env_count')!r}, "
-            f"blocking={render_preflight.get('blocking_missing')!r}"
+            f"failure_classes={render_preflight.get('renderer_failure_classes')!r}"
         ),
     )
     pilot_runtime_checks = {check.get("name"): check.get("passed") for check in pilot_runtime.get("checks", []) or []}
@@ -1085,6 +1087,9 @@ def main() -> int:
             "env_count": int(render_preflight.get("env_count", 0) or 0),
             "render_ready_env_count": int(render_preflight.get("render_ready_env_count", 0) or 0),
             "blocking_missing": list(render_preflight.get("blocking_missing", []) or []),
+            "renderer_failure_classes": list(render_preflight.get("renderer_failure_classes", []) or []),
+            "operator_remediation": list(render_preflight.get("operator_remediation", []) or []),
+            "renderer_profile_retest_commands": list(render_preflight.get("renderer_profile_retest_commands", []) or []),
             "audit_command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4",
             "audit_path": "results/maniskill_render_video_preflight_audit.json",
             "audit_md_path": "results/maniskill_render_video_preflight_audit.md",
@@ -1139,6 +1144,24 @@ def main() -> int:
         lines.append(
             f"| `{action['id']}` | {action['title']} | `{action['operator_input']}` | {artifacts} | {commands} |"
         )
+
+    render_summary = payload["render_video_preflight"]
+    lines.extend(
+        [
+            "",
+            "## ManiSkill Render-Video Preflight",
+            "",
+            f"- Render video ready: `{str(render_summary['render_video_ready']).lower()}`",
+            f"- Renderer failure classes: `{render_summary['renderer_failure_classes']}`",
+            f"- Operator remediation items: `{len(render_summary['operator_remediation'])}`",
+            f"- Blocking missing: `{render_summary['blocking_missing']}`",
+            "",
+            "Renderer profile retest commands:",
+            "",
+        ]
+    )
+    for command in render_summary["renderer_profile_retest_commands"] or ["none"]:
+        lines.extend(["```powershell", command, "```"])
 
     lines.extend(
         [

@@ -89,11 +89,28 @@ This preflight is not evidence and does not satisfy fidelity acceptance. It chec
 - Environments probed: `4`
 - Render-ready environments: `0`
 - Blocking missing: `['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory']`
+- Renderer failure classes: `['vulkan_descriptor_pool_exhaustion']`
+- Operator remediation items: `5`
 
 Render preflight command:
 
 ```powershell
 python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4
+```
+
+Renderer profile retest commands:
+
+```powershell
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend cpu --shader-pack minimal
+```
+```powershell
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend gpu --shader-pack minimal
+```
+```powershell
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend sapien_cuda --shader-pack minimal
+```
+```powershell
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4 --width 64 --height 64 --render-backend cpu --shader-pack minimal
 ```
 
 ## Commands
@@ -170,7 +187,7 @@ Post-collection strict gates:
 - `pass` `maniskill_reference_preflight_reaches_only_fidelity_gate`: blocking=["fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
 - `pass` `fidelity_acceptance_draft_ready_but_fail_closed`: draft_ready=True, remaining_operator_inputs=10
 - `pass` `fidelity_metadata_probe_ready_but_not_evidence`: strict_metadata_ready=True, primary_metadata_missing=[]
-- `pass` `render_video_preflight_recorded_but_not_evidence`: render_video_ready=False, envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory']
+- `pass` `render_video_preflight_recorded_but_not_evidence`: render_video_ready=False, envs=4, failure_classes=['vulkan_descriptor_pool_exhaustion']
 - `pass` `operator_actions_cover_start_to_finish`: missing=[]
 - `pass` `operator_action_titles_present`: missing_titles=[]
 - `pass` `config_materializer_is_guarded`: write_enabled=False, task_count=4

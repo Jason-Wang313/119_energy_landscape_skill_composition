@@ -16,4 +16,4 @@ Reason: the local evidence gates pass with a stronger barrier-certified composer
 
 Reviewer packet: the reviewer response packet now records the natural skill-seam world/action defense, the current evidence boundary, and the one-paper Haonan/Yilun outreach rule without changing the STRONG_REVISE decision.
 
-External video gate: the ManiSkill render-video preflight now records render-backed RGB MP4 readiness and explicit render-backend/shader controls separately from the ManiSkill pilot runtime liveness audit, so diagnostic fallback videos remain quarantined non-evidence until a real renderer-backed path is accepted.
+External video gate: the ManiSkill render-video preflight now records render-backed RGB MP4 readiness, explicit render-backend/shader controls, and a renderer-failure classifier separately from the ManiSkill pilot runtime liveness audit, so diagnostic fallback videos remain quarantined non-evidence until a real renderer-backed path is accepted.

@@ -34,6 +34,21 @@
       "passed": true
     },
     {
+      "detail": "classes=['vulkan_descriptor_pool_exhaustion']",
+      "name": "renderer_failure_class_recorded_when_not_ready",
+      "passed": true
+    },
+    {
+      "detail": "items=5",
+      "name": "operator_remediation_present_when_not_ready",
+      "passed": true
+    },
+    {
+      "detail": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend cpu --shader-pack minimal\npython scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend gpu --shader-pack minimal\npython scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend sapien_cuda --shader-pack minimal\npython scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4 --width 64 --height 64 --render-backend cpu --shader-pack minimal",
+      "name": "profile_retest_commands_cover_renderer_backends",
+      "passed": true
+    },
+    {
       "detail": "external_validation/manifest.json remains absent",
       "name": "no_real_manifest_written",
       "passed": true
@@ -55,6 +70,7 @@
       "render_backend": "cpu",
       "render_ok": false,
       "render_video_ready": false,
+      "renderer_failure_class": "vulkan_descriptor_pool_exhaustion",
       "reset_ok": true,
       "returncode": 0,
       "seed": 0,
@@ -83,6 +99,7 @@
       "render_backend": "cpu",
       "render_ok": false,
       "render_video_ready": false,
+      "renderer_failure_class": "vulkan_descriptor_pool_exhaustion",
       "reset_ok": true,
       "returncode": 0,
       "seed": 0,
@@ -111,6 +128,7 @@
       "render_backend": "cpu",
       "render_ok": false,
       "render_video_ready": false,
+      "renderer_failure_class": "vulkan_descriptor_pool_exhaustion",
       "reset_ok": true,
       "returncode": 0,
       "seed": 0,
@@ -139,11 +157,12 @@
       "render_backend": "cpu",
       "render_ok": false,
       "render_video_ready": false,
+      "renderer_failure_class": "vulkan_descriptor_pool_exhaustion",
       "reset_ok": true,
       "returncode": 0,
       "seed": 0,
       "shader_pack": "minimal",
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 15:04:17,541 - mani_skill  - WARNING - No initial pose set for articulation builder of panda, setting to default pose q=[1,0,0,0], p=[0,0,0]. There may be simulation issues/bugs if this articulation at it's initial pose collides with other objects at their initial poses.\u001b[0m\n\u001b[33;1m2026-06-28 15:04:17,907 - mani_skill  - WARNING - No initial pose set for actor builder of cube, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n\u001b[33;1m2026-06-28 15:04:17,911 - mani_skill  - WARNING - No initial pose set for actor builder of l_shape_tool, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 15:57:50,435 - mani_skill  - WARNING - No initial pose set for articulation builder of panda, setting to default pose q=[1,0,0,0], p=[0,0,0]. There may be simulation issues/bugs if this articulation at it's initial pose collides with other objects at their initial poses.\u001b[0m\n\u001b[33;1m2026-06-28 15:57:50,578 - mani_skill  - WARNING - No initial pose set for actor builder of cube, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n\u001b[33;1m2026-06-28 15:57:50,580 - mani_skill  - WARNING - No initial pose set for actor builder of l_shape_tool, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n",
       "stdout_tail": "PAPER119_RENDER_PREFLIGHT {\"env_id\": \"PullCubeTool-v1\", \"error\": \"vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory\", \"error_type\": \"RuntimeError\", \"height\": 64, \"made_env\": true, \"mp4_ok\": false, \"render_backend\": \"cpu\", \"render_ok\": false, \"reset_ok\": true, \"seed\": 0, \"shader_pack\": \"minimal\", \"step_ok\": false, \"traceback_tail\": \"    return self.env.render()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\envs\\\\sapien_env.py\\\", line 1431, in render\\n    res = self.render_rgb_array()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\envs\\\\sapien_env.py\\\", line 1377, in render_rgb_array\\n    render_images = self.scene.get_human_render_camera_images(camera_name)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\envs\\\\scene.py\\\", line 1167, in get_human_render_camera_images\\n    camera.capture()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\sensors\\\\camera.py\\\", line 188, in capture\\n    self.camera.take_picture()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\structs\\\\render_camera.py\\\", line 273, in take_picture\\n    self._render_cameras[0].take_picture()\\nRuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory\", \"video_path\": \"\", \"video_size_bytes\": 0, \"width\": 64}\n",
       "step_ok": false,
       "task_family": "cable_route_insert",
@@ -157,15 +176,31 @@
   "failed_checks": [],
   "height": 64,
   "not_external_evidence": true,
+  "operator_remediation": [
+    "Do not use diagnostic fallback videos as external evidence; rerun this preflight on the exact accepted collection machine.",
+    "Record Python, ManiSkill, SAPIEN, GPU/Vulkan, render backend, shader pack, and driver provenance with scripts\\probe_external_platform.py before fidelity acceptance.",
+    "Treat vk::Device::allocateDescriptorSetsUnique/ErrorOutOfPoolMemory as a renderer-resource blocker for this machine, not as rollout evidence failure.",
+    "Retest one primary environment at a time with explicit renderer profiles before official collection: cpu/minimal, gpu/minimal, and sapien_cuda/minimal.",
+    "Use a machine whose SAPIEN/Vulkan renderer can capture RGB frames for all four primary task families before promoting fidelity acceptance."
+  ],
   "output_dir": "external_validation/render_video_preflight",
   "passed": true,
   "render_backend": "cpu",
   "render_ready_env_count": 0,
   "render_video_ready": false,
   "renderer_device": "cpu",
+  "renderer_failure_classes": [
+    "vulkan_descriptor_pool_exhaustion"
+  ],
+  "renderer_profile_retest_commands": [
+    "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend cpu --shader-pack minimal",
+    "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend gpu --shader-pack minimal",
+    "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend sapien_cuda --shader-pack minimal",
+    "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4 --width 64 --height 64 --render-backend cpu --shader-pack minimal"
+  ],
   "shader_pack": "minimal",
   "strict_external_evidence_ready": false,
-  "timeout_seconds": 90,
+  "timeout_seconds": 45,
   "version": "maniskill_render_video_preflight_audit_v1",
   "video_dir": "external_validation/render_video_preflight/videos",
   "width": 64
