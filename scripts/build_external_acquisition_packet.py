@@ -327,6 +327,7 @@ ACTION_CATALOG = {
         "artifacts": [
             "external_validation/method_implementation_packet.md",
             "external_validation/method_implementation_work_orders.csv",
+            "external_validation/method_reference_provenance.csv",
             "results/external_method_implementation_audit.json",
         ],
         "commands": [
@@ -796,9 +797,14 @@ def main() -> int:
         and method_packet_checks.get("manifest_entry_templates_cover_required_hash_fields") is True
         and method_packet_checks.get("work_orders_forbid_scaffolds_and_reference_adapters") is True
         and method_packet_checks.get("policy_or_config_hash_in_logs_required") is True
+        and method_packet_checks.get("reference_adapter_provenance_covers_non_oracle_methods") is True
+        and method_packet_checks.get("reference_adapter_hashes_recorded") is True
+        and method_packet_checks.get("reference_adapters_marked_non_evidence") is True
+        and method_packet_checks.get("reference_manifest_stubs_not_strict_ready") is True
         and method_packet_checks.get("adapter_evidence_still_missing") is True
         and (EXTERNAL / "method_implementation_packet.md").exists()
-        and (EXTERNAL / "method_implementation_work_orders.csv").exists(),
+        and (EXTERNAL / "method_implementation_work_orders.csv").exists()
+        and (EXTERNAL / "method_reference_provenance.csv").exists(),
         (
             f"method_implementation_packet_ready={method_packet.get('method_implementation_packet_ready')!r}, "
             f"strict_adapter_evidence_ready={method_packet.get('strict_adapter_evidence_ready')!r}"

@@ -146,6 +146,11 @@
       "evidence": ["scripts/build_external_method_implementation_packet.py", "external_validation/method_implementation_packet.json", "external_validation/method_implementation_packet.md", "external_validation/method_implementation_work_orders.csv", "results/external_method_implementation_audit.json", "results/external_method_implementation_audit.md", "results/external_baseline_contract_audit.json", "results/external_adapter_contract_evidence_audit.json"]
     },
     {
+      "name": "external_method_reference_provenance_claim",
+      "claim": "The repository provides a non-evidence reference-adapter provenance catalog that hash-lists every non-oracle interface adapter, metadata file, shared adapter source, and reference policy hash while keeping strict adapter evidence false.",
+      "evidence": ["scripts/build_external_method_implementation_packet.py", "external_validation/method_reference_provenance.csv", "external_validation/method_implementation_packet.json", "external_validation/method_implementation_packet.md", "results/external_method_implementation_audit.json", "results/external_method_implementation_audit.md", "external_validation/baselines/common_reference_adapter.py"]
+    },
+    {
       "name": "external_runbook_claim",
       "claim": "The repository provides a non-evidence operator packet for collecting the external validation layer, including task cards, config templates, and a 1,440-row record sheet.",
       "evidence": ["scripts/build_external_runbook.py", "external_validation/collection_runbook.md", "external_validation/operator_record_sheet.csv", "external_validation/task_cards/peg_place_regrasp.md", "external_validation/config_templates/peg_place_regrasp.json", "results/external_runbook_audit.json", "results/external_runbook_audit.md"]

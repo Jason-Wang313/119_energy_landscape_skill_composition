@@ -550,6 +550,7 @@
       "artifacts": [
         "external_validation/method_implementation_packet.md",
         "external_validation/method_implementation_work_orders.csv",
+        "external_validation/method_reference_provenance.csv",
         "results/external_method_implementation_audit.json"
       ],
       "closes": [

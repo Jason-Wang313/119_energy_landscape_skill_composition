@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 from pathlib import Path
 from typing import Any
@@ -14,6 +15,7 @@ SPEC_DIR = EXTERNAL / "baseline_specs"
 PACKET_JSON = EXTERNAL / "method_implementation_packet.json"
 PACKET_MD = EXTERNAL / "method_implementation_packet.md"
 WORK_ORDERS_CSV = EXTERNAL / "method_implementation_work_orders.csv"
+REFERENCE_PROVENANCE_CSV = EXTERNAL / "method_reference_provenance.csv"
 AUDIT_JSON = RESULTS / "external_method_implementation_audit.json"
 AUDIT_MD = RESULTS / "external_method_implementation_audit.md"
 
@@ -58,6 +60,18 @@ def read_json(path: Path) -> dict[str, Any]:
 
 def rel(path: Path) -> str:
     return path.relative_to(ROOT).as_posix()
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest().upper()
+
+
+def stable_hash(value: str) -> str:
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
 def add_check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str) -> None:
@@ -132,6 +146,71 @@ def spec_required_log_fields(log_schema: dict[str, Any]) -> list[str]:
     return []
 
 
+def collect_reference_adapter_provenance(specs: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    common_adapter = EXTERNAL / "baselines" / "common_reference_adapter.py"
+    common_hash = sha256_file(common_adapter) if common_adapter.exists() else ""
+    records: list[dict[str, Any]] = []
+    for spec in non_oracle_specs(specs):
+        method = str(spec["method"])
+        adapter = EXTERNAL / "baselines" / method / "adapter.py"
+        metadata_path = EXTERNAL / "baselines" / method / "reference_adapter_metadata.json"
+        metadata = read_json(metadata_path) if metadata_path.exists() else {}
+        adapter_hash = sha256_file(adapter) if adapter.exists() else ""
+        records.append(
+            {
+                "method": method,
+                "role": spec.get("role", ""),
+                "spec_file": spec.get("_path", ""),
+                "adapter_path": rel(adapter),
+                "adapter_sha256": adapter_hash,
+                "metadata_path": rel(metadata_path),
+                "metadata_sha256": sha256_file(metadata_path) if metadata_path.exists() else "",
+                "common_adapter_path": rel(common_adapter),
+                "common_adapter_sha256": common_hash,
+                "reference_policy_hash": stable_hash(f"paper119_reference_adapter:{method}:v1"),
+                "evidence_status": metadata.get("evidence_status", "missing_reference_adapter_metadata"),
+                "oracle_boundary": metadata.get("oracle_boundary", ""),
+                "reference_implementation": metadata.get("reference_implementation") is True,
+                "strict_evidence_ready": False,
+                "reference_adapter_allowed_as_evidence": False,
+                "manifest_declaration_stub": {
+                    "name": method,
+                    "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
+                    "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
+                    "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+                    "interface_reference_adapter": rel(adapter),
+                    "interface_reference_adapter_sha256": adapter_hash,
+                },
+            }
+        )
+    return records
+
+
+def write_reference_provenance_csv(records: list[dict[str, Any]]) -> None:
+    fieldnames = [
+        "method",
+        "role",
+        "spec_file",
+        "adapter_path",
+        "adapter_sha256",
+        "metadata_path",
+        "metadata_sha256",
+        "common_adapter_path",
+        "common_adapter_sha256",
+        "reference_policy_hash",
+        "evidence_status",
+        "oracle_boundary",
+        "reference_implementation",
+        "strict_evidence_ready",
+        "reference_adapter_allowed_as_evidence",
+    ]
+    with REFERENCE_PROVENANCE_CSV.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        for record in records:
+            writer.writerow({key: record.get(key, "") for key in fieldnames})
+
+
 def write_work_orders_csv(orders: list[dict[str, Any]]) -> None:
     fieldnames = [
         "method",
@@ -167,6 +246,7 @@ def write_work_orders_csv(orders: list[dict[str, Any]]) -> None:
 def build_packet(
     specs: list[dict[str, Any]],
     work_orders: list[dict[str, Any]],
+    reference_provenance: list[dict[str, Any]],
     baseline_audit: dict[str, Any],
     adapter_evidence: dict[str, Any],
 ) -> dict[str, Any]:
@@ -180,6 +260,7 @@ def build_packet(
         "source_reports": [
             rel(RESULTS / "external_baseline_contract_audit.json"),
             rel(RESULTS / "external_adapter_contract_evidence_audit.json"),
+            rel(RESULTS / "external_reference_adapter_audit.json"),
             rel(EXTERNAL / "log_schema_v1.json"),
         ],
         "non_oracle_method_count": len(work_orders),
@@ -187,6 +268,15 @@ def build_packet(
         "oracle_role": "post_hoc_upper_bound_only_not_an_implementation_work_order",
         "missing_implementations": missing,
         "work_orders": work_orders,
+        "reference_adapter_policy": (
+            "Reference adapters are executable interface/provenance artifacts only. "
+            "They are not independent implementation evidence and cannot satisfy strict adapter evidence "
+            "without operator-supplied implementations, configs/checkpoints, manifest entries, raw logs, "
+            "and matching policy_or_config_hash values."
+        ),
+        "reference_adapter_provenance_count": len(reference_provenance),
+        "reference_adapter_provenance_csv": rel(REFERENCE_PROVENANCE_CSV),
+        "reference_adapter_provenance": reference_provenance,
         "strict_acceptance_commands": STRICT_ACCEPTANCE_COMMANDS,
         "forbidden_evidence_shortcuts": [
             "using scaffold adapters as manifest-declared implementations",
@@ -208,7 +298,10 @@ def build_packet(
 def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_audit: dict[str, Any], adapter_evidence: dict[str, Any]) -> dict[str, Any]:
     checks: list[dict[str, Any]] = []
     work_orders = packet.get("work_orders", []) or []
+    reference_provenance = packet.get("reference_adapter_provenance", []) or []
     method_names = {order.get("method") for order in work_orders}
+    reference_methods = {record.get("method") for record in reference_provenance}
+    non_oracle_method_names = {str(spec.get("method")) for spec in non_oracle_specs(specs)}
     baseline_missing = set(baseline_audit.get("missing_implementations", []) or [])
     command_text = "\n".join(packet.get("strict_acceptance_commands", []) or [])
     artifact_fields_ok = all(set(REQUIRED_ARTIFACT_FIELDS).issubset(set(order.get("required_artifact_fields", []) or [])) for order in work_orders)
@@ -229,6 +322,30 @@ def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_a
         for order in work_orders
     )
     log_hash_policy_ok = all(order.get("policy_or_config_hash_in_logs_required") is True for order in work_orders)
+    hex_hash_fields = ("adapter_sha256", "metadata_sha256", "common_adapter_sha256", "reference_policy_hash")
+    reference_hashes_ok = all(
+        all(len(str(record.get(field, ""))) == 64 for field in hex_hash_fields)
+        for record in reference_provenance
+    )
+    reference_non_evidence_ok = all(
+        record.get("evidence_status") == "implementation_only_not_rollout_evidence"
+        and record.get("reference_implementation") is True
+        and record.get("strict_evidence_ready") is False
+        and record.get("reference_adapter_allowed_as_evidence") is False
+        and record.get("oracle_boundary") == "non_oracle_reference_adapter"
+        for record in reference_provenance
+    )
+    manifest_stubs_ok = all(
+        str((record.get("manifest_declaration_stub") or {}).get("implementation", "")).startswith("<operator-supplied independent")
+        and "SHA256" in str((record.get("manifest_declaration_stub") or {}).get("checkpoint_or_config_hash", ""))
+        and str((record.get("manifest_declaration_stub") or {}).get("interface_reference_adapter", "")).startswith("external_validation/baselines/")
+        for record in reference_provenance
+    )
+    common_hashes = {record.get("common_adapter_sha256") for record in reference_provenance}
+    reference_policy_hashes_ok = all(
+        record.get("reference_policy_hash") == stable_hash(f"paper119_reference_adapter:{record.get('method')}:v1")
+        for record in reference_provenance
+    )
 
     add_check(
         checks,
@@ -291,6 +408,43 @@ def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_a
     )
     add_check(
         checks,
+        "reference_adapter_provenance_covers_non_oracle_methods",
+        len(reference_provenance) >= 11 and non_oracle_method_names.issubset(reference_methods),
+        f"reference_records={len(reference_provenance)}, missing={sorted(non_oracle_method_names - reference_methods)}",
+    )
+    add_check(
+        checks,
+        "reference_adapter_hashes_recorded",
+        reference_hashes_ok,
+        f"hash_fields={hex_hash_fields}",
+    )
+    add_check(
+        checks,
+        "reference_adapters_marked_non_evidence",
+        reference_non_evidence_ok,
+        "all reference adapters are implementation-only and forbidden as strict evidence",
+    )
+    add_check(
+        checks,
+        "reference_manifest_stubs_not_strict_ready",
+        manifest_stubs_ok,
+        "manifest stubs require operator-supplied independent implementations and hashes",
+    )
+    add_check(
+        checks,
+        "common_reference_adapter_hash_shared",
+        len(common_hashes) == 1
+        and all(record.get("common_adapter_path") == "external_validation/baselines/common_reference_adapter.py" for record in reference_provenance),
+        f"common_hash_count={len(common_hashes)}",
+    )
+    add_check(
+        checks,
+        "reference_policy_hashes_match_adapter_formula",
+        reference_policy_hashes_ok,
+        "reference_policy_hash=sha256(paper119_reference_adapter:<method>:v1)",
+    )
+    add_check(
+        checks,
         "strict_commands_cover_adapter_rollout_pairing_and_evidence",
         all(
             fragment in command_text
@@ -318,8 +472,11 @@ def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_a
     add_check(
         checks,
         "packet_files_written",
-        PACKET_JSON.exists() and PACKET_MD.exists() and WORK_ORDERS_CSV.exists(),
-        f"packet_json={PACKET_JSON.exists()}, packet_md={PACKET_MD.exists()}, csv={WORK_ORDERS_CSV.exists()}",
+        PACKET_JSON.exists() and PACKET_MD.exists() and WORK_ORDERS_CSV.exists() and REFERENCE_PROVENANCE_CSV.exists(),
+        (
+            f"packet_json={PACKET_JSON.exists()}, packet_md={PACKET_MD.exists()}, "
+            f"work_orders_csv={WORK_ORDERS_CSV.exists()}, reference_provenance_csv={REFERENCE_PROVENANCE_CSV.exists()}"
+        ),
     )
 
     passed = all(check["passed"] for check in checks)
@@ -341,13 +498,39 @@ def write_packet_md(packet: dict[str, Any]) -> None:
         "",
         "Not evidence: `true`.",
         f"Non-oracle method work orders: `{packet['non_oracle_method_count']}`.",
+        f"Reference adapter provenance records: `{packet['reference_adapter_provenance_count']}`.",
         f"Strict adapter evidence ready: `{str(packet['strict_adapter_evidence_ready']).lower()}`.",
         "",
         "This packet converts the missing independent baseline layer into concrete implementation work orders. It does not provide real implementations, checkpoints, configs, logs, videos, or manifest evidence.",
         "",
-        "## Forbidden Evidence Shortcuts",
+        "## Reference Adapter Provenance (Non-Evidence)",
+        "",
+        "The current reference adapters are executable interface artifacts. They make the proposed adapter API inspectable, but they are not independent rollout evidence and cannot replace operator-supplied implementations.",
         "",
     ]
+    for record in packet["reference_adapter_provenance"]:
+        lines.extend(
+            [
+                f"### `{record['method']}` reference adapter",
+                "",
+                f"- Adapter: `{record['adapter_path']}`",
+                f"- Adapter SHA256: `{record['adapter_sha256']}`",
+                f"- Metadata: `{record['metadata_path']}`",
+                f"- Metadata SHA256: `{record['metadata_sha256']}`",
+                f"- Shared adapter SHA256: `{record['common_adapter_sha256']}`",
+                f"- Reference policy hash: `{record['reference_policy_hash']}`",
+                f"- Evidence status: `{record['evidence_status']}`",
+                "- Manifest declaration stub:",
+                "```json",
+                json.dumps(record["manifest_declaration_stub"], indent=2, sort_keys=True),
+                "```",
+                "",
+            ]
+        )
+    lines.extend([
+        "## Forbidden Evidence Shortcuts",
+        "",
+    ])
     for item in packet["forbidden_evidence_shortcuts"]:
         lines.append(f"- {item}")
     lines.extend(["", "## Work Orders", ""])
@@ -413,8 +596,10 @@ def main() -> int:
     baseline_audit = read_json(RESULTS / "external_baseline_contract_audit.json")
     adapter_evidence = read_json(RESULTS / "external_adapter_contract_evidence_audit.json")
     work_orders = build_work_orders(specs, log_schema)
+    reference_provenance = collect_reference_adapter_provenance(specs)
     write_work_orders_csv(work_orders)
-    packet = build_packet(specs, work_orders, baseline_audit, adapter_evidence)
+    write_reference_provenance_csv(reference_provenance)
+    packet = build_packet(specs, work_orders, reference_provenance, baseline_audit, adapter_evidence)
     PACKET_JSON.write_text(json.dumps(packet, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_packet_md(packet)
     audit = audit_packet(packet, specs, baseline_audit, adapter_evidence)
@@ -429,6 +614,7 @@ def main() -> int:
     print(f"Wrote {PACKET_JSON}")
     print(f"Wrote {PACKET_MD}")
     print(f"Wrote {WORK_ORDERS_CSV}")
+    print(f"Wrote {REFERENCE_PROVENANCE_CSV}")
     print(f"Wrote {AUDIT_JSON}")
     print(f"Wrote {AUDIT_MD}")
     return 0 if audit["passed"] else 1

@@ -262,6 +262,10 @@ def main() -> int:
         and method_checks.get("manifest_entry_templates_cover_required_hash_fields") is True
         and method_checks.get("work_orders_forbid_scaffolds_and_reference_adapters") is True
         and method_checks.get("policy_or_config_hash_in_logs_required") is True
+        and method_checks.get("reference_adapter_provenance_covers_non_oracle_methods") is True
+        and method_checks.get("reference_adapter_hashes_recorded") is True
+        and method_checks.get("reference_adapters_marked_non_evidence") is True
+        and method_checks.get("reference_manifest_stubs_not_strict_ready") is True
         and method_checks.get("adapter_evidence_still_missing") is True,
         f"method_checks={method_checks}",
     )
@@ -271,8 +275,9 @@ def main() -> int:
         method_checks.get("strict_commands_cover_adapter_rollout_pairing_and_evidence") is True
         and (EXTERNAL / "method_implementation_packet.md").exists()
         and (EXTERNAL / "method_implementation_work_orders.csv").exists()
+        and (EXTERNAL / "method_reference_provenance.csv").exists()
         and (ROOT / "scripts" / "build_external_method_implementation_packet.py").exists(),
-        "method packet, work orders, builder, and strict command order are present",
+        "method packet, work orders, reference provenance, builder, and strict command order are present",
     )
 
     fidelity_ok, fidelity, fidelity_detail = passed_json(
@@ -1033,6 +1038,7 @@ def main() -> int:
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
+        EXTERNAL / "method_reference_provenance.csv",
         EXTERNAL / "platform_qualification_checklist.md",
         EXTERNAL / "independent_validation_route.md",
         EXTERNAL / "independent_validation_route_matrix.csv",

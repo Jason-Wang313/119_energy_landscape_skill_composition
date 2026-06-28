@@ -110,6 +110,7 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
+        EXTERNAL / "method_reference_provenance.csv",
         EXTERNAL / "config_schema_v1.json",
         EXTERNAL / "configs" / "README.md",
         EXTERNAL / "independent_validation_route.md",
@@ -704,9 +705,14 @@ def build_payload() -> dict[str, Any]:
         and method_checks.get("manifest_entry_templates_cover_required_hash_fields") is True
         and method_checks.get("work_orders_forbid_scaffolds_and_reference_adapters") is True
         and method_checks.get("policy_or_config_hash_in_logs_required") is True
+        and method_checks.get("reference_adapter_provenance_covers_non_oracle_methods") is True
+        and method_checks.get("reference_adapter_hashes_recorded") is True
+        and method_checks.get("reference_adapters_marked_non_evidence") is True
+        and method_checks.get("reference_manifest_stubs_not_strict_ready") is True
         and "external_validation/method_implementation_packet.json" in paths
         and "external_validation/method_implementation_packet.md" in paths
         and "external_validation/method_implementation_work_orders.csv" in paths
+        and "external_validation/method_reference_provenance.csv" in paths
         and "results/external_method_implementation_audit.json" in paths
         and "scripts/build_external_method_implementation_packet.py" in paths,
         (

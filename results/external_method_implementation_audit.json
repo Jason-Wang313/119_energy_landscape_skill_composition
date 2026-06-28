@@ -46,6 +46,36 @@
       "passed": true
     },
     {
+      "detail": "reference_records=11, missing=[]",
+      "name": "reference_adapter_provenance_covers_non_oracle_methods",
+      "passed": true
+    },
+    {
+      "detail": "hash_fields=('adapter_sha256', 'metadata_sha256', 'common_adapter_sha256', 'reference_policy_hash')",
+      "name": "reference_adapter_hashes_recorded",
+      "passed": true
+    },
+    {
+      "detail": "all reference adapters are implementation-only and forbidden as strict evidence",
+      "name": "reference_adapters_marked_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "manifest stubs require operator-supplied independent implementations and hashes",
+      "name": "reference_manifest_stubs_not_strict_ready",
+      "passed": true
+    },
+    {
+      "detail": "common_hash_count=1",
+      "name": "common_reference_adapter_hash_shared",
+      "passed": true
+    },
+    {
+      "detail": "reference_policy_hash=sha256(paper119_reference_adapter:<method>:v1)",
+      "name": "reference_policy_hashes_match_adapter_formula",
+      "passed": true
+    },
+    {
       "detail": "commands=['python scripts\\\\build_external_method_implementation_packet.py', 'python scripts\\\\validate_external_adapters.py --strict', 'python scripts\\\\build_external_baseline_contract.py', 'python scripts\\\\validate_external_rollouts.py --write-results --check-video-paths --strict', 'python scripts\\\\audit_external_pairing_integrity.py --strict', 'python scripts\\\\audit_external_evidence.py --strict']",
       "name": "strict_commands_cover_adapter_rollout_pairing_and_evidence",
       "passed": true
@@ -61,7 +91,7 @@
       "passed": true
     },
     {
-      "detail": "packet_json=True, packet_md=True, csv=True",
+      "detail": "packet_json=True, packet_md=True, work_orders_csv=True, reference_provenance_csv=True",
       "name": "packet_files_written",
       "passed": true
     }

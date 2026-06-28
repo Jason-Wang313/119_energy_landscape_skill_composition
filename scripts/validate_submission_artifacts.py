@@ -1390,6 +1390,7 @@ def main():
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
+        EXTERNAL / "method_reference_provenance.csv",
         RESULTS / "external_method_implementation_audit.json",
         RESULTS / "external_method_implementation_audit.md",
         ROOT / "scripts" / "build_external_method_implementation_packet.py",
@@ -1408,6 +1409,28 @@ def main():
         fail("external method implementation packet must not claim strict adapter evidence")
     if int(method_packet.get("non_oracle_method_count", 0) or 0) < 11:
         fail("external method implementation packet has too few non-oracle work orders")
+    if int(method_packet.get("reference_adapter_provenance_count", 0) or 0) < 11:
+        fail("external method implementation packet has too few reference provenance records")
+    if method_packet.get("reference_adapter_provenance_csv") != "external_validation/method_reference_provenance.csv":
+        fail("external method implementation packet should point to method_reference_provenance.csv")
+    reference_provenance = method_packet.get("reference_adapter_provenance", []) or []
+    if len(reference_provenance) < 11:
+        fail("external method implementation packet missing reference adapter provenance")
+    for record in reference_provenance:
+        if record.get("strict_evidence_ready") is not False:
+            fail("reference adapter provenance must not claim strict evidence readiness")
+        if record.get("reference_adapter_allowed_as_evidence") is not False:
+            fail("reference adapter provenance must forbid reference adapters as evidence")
+        if record.get("evidence_status") != "implementation_only_not_rollout_evidence":
+            fail("reference adapter provenance has wrong evidence status")
+        for field in ("adapter_sha256", "metadata_sha256", "common_adapter_sha256", "reference_policy_hash"):
+            if len(str(record.get(field, ""))) != 64:
+                fail(f"reference adapter provenance missing 64-character hash field: {field}")
+        stub = record.get("manifest_declaration_stub", {}) or {}
+        if not str(stub.get("implementation", "")).startswith("<operator-supplied independent"):
+            fail("reference adapter manifest stubs must require operator-supplied independent implementations")
+        if "SHA256" not in str(stub.get("checkpoint_or_config_hash", "")):
+            fail("reference adapter manifest stubs must keep checkpoint/config hash as a placeholder")
     if method_packet.get("oracle_method") != "oracle_basin_composer":
         fail("external method implementation packet should declare the oracle as a post hoc upper bound")
     work_order_methods = {order.get("method") for order in method_packet.get("work_orders", []) or []}
@@ -1444,6 +1467,12 @@ def main():
         "manifest_entry_templates_cover_required_hash_fields",
         "work_orders_forbid_scaffolds_and_reference_adapters",
         "policy_or_config_hash_in_logs_required",
+        "reference_adapter_provenance_covers_non_oracle_methods",
+        "reference_adapter_hashes_recorded",
+        "reference_adapters_marked_non_evidence",
+        "reference_manifest_stubs_not_strict_ready",
+        "common_reference_adapter_hash_shared",
+        "reference_policy_hashes_match_adapter_formula",
         "strict_commands_cover_adapter_rollout_pairing_and_evidence",
         "adapter_evidence_still_missing",
         "no_real_implementation_files_created",
@@ -2198,6 +2227,7 @@ def main():
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
+        EXTERNAL / "method_reference_provenance.csv",
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.md",

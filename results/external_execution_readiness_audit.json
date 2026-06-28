@@ -126,12 +126,12 @@
       "passed": true
     },
     {
-      "detail": "method_checks={'packet_is_non_evidence_and_fail_closed': True, 'work_orders_cover_all_missing_non_oracle_methods': True, 'oracle_excluded_from_work_orders': True, 'spec_files_cover_work_orders': True, 'required_artifact_fields_declared': True, 'required_log_fields_declared': True, 'manifest_entry_templates_cover_required_hash_fields': True, 'work_orders_forbid_scaffolds_and_reference_adapters': True, 'policy_or_config_hash_in_logs_required': True, 'strict_commands_cover_adapter_rollout_pairing_and_evidence': True, 'adapter_evidence_still_missing': True, 'no_real_implementation_files_created': True, 'packet_files_written': True}",
+      "detail": "method_checks={'packet_is_non_evidence_and_fail_closed': True, 'work_orders_cover_all_missing_non_oracle_methods': True, 'oracle_excluded_from_work_orders': True, 'spec_files_cover_work_orders': True, 'required_artifact_fields_declared': True, 'required_log_fields_declared': True, 'manifest_entry_templates_cover_required_hash_fields': True, 'work_orders_forbid_scaffolds_and_reference_adapters': True, 'policy_or_config_hash_in_logs_required': True, 'reference_adapter_provenance_covers_non_oracle_methods': True, 'reference_adapter_hashes_recorded': True, 'reference_adapters_marked_non_evidence': True, 'reference_manifest_stubs_not_strict_ready': True, 'common_reference_adapter_hash_shared': True, 'reference_policy_hashes_match_adapter_formula': True, 'strict_commands_cover_adapter_rollout_pairing_and_evidence': True, 'adapter_evidence_still_missing': True, 'no_real_implementation_files_created': True, 'packet_files_written': True}",
       "name": "external_method_implementation_covers_missing_methods",
       "passed": true
     },
     {
-      "detail": "method packet, work orders, builder, and strict command order are present",
+      "detail": "method packet, work orders, reference provenance, builder, and strict command order are present",
       "name": "external_method_implementation_gate_order",
       "passed": true
     },

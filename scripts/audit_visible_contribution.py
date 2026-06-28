@@ -422,7 +422,11 @@ def main() -> int:
         and method_checks.get("work_orders_cover_all_missing_non_oracle_methods") is True
         and method_checks.get("manifest_entry_templates_cover_required_hash_fields") is True
         and method_checks.get("work_orders_forbid_scaffolds_and_reference_adapters") is True
-        and method_checks.get("policy_or_config_hash_in_logs_required") is True,
+        and method_checks.get("policy_or_config_hash_in_logs_required") is True
+        and method_checks.get("reference_adapter_provenance_covers_non_oracle_methods") is True
+        and method_checks.get("reference_adapter_hashes_recorded") is True
+        and method_checks.get("reference_adapters_marked_non_evidence") is True
+        and method_checks.get("reference_manifest_stubs_not_strict_ready") is True,
         (
             f"method_implementation_packet_ready={method_implementation.get('method_implementation_packet_ready')!r}, "
             f"strict_adapter_evidence_ready={method_implementation.get('strict_adapter_evidence_ready')!r}"
@@ -481,9 +485,10 @@ def main() -> int:
             "external_config_manifest_packet_claim",
             "external_rollout_evidence_packet_claim",
             "external_method_implementation_packet_claim",
+            "external_method_reference_provenance_claim",
             "external_config_materialization_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'local_planner_edge_policy_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_config_materialization_claim'} - claim_names)}",
+        f"missing={sorted({'local_planner_edge_policy_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_config_materialization_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -510,6 +515,7 @@ def main() -> int:
             "External config manifest packet",
             "External rollout evidence packet",
             "External method implementation packet",
+            "reference-adapter provenance catalog",
             "External operator packet",
             "External operator handoff bundle",
             "17/21",
@@ -536,6 +542,7 @@ def main() -> int:
             "External config manifest packet",
             "External rollout evidence packet",
             "External method implementation packet",
+            "reference-adapter provenance catalog",
             "External operator packet",
             "External operator handoff bundle",
             "Haonan/Yilun outreach package",
@@ -563,6 +570,7 @@ def main() -> int:
             "external config manifest packet",
             "external rollout evidence packet",
             "external method implementation packet",
+            "reference-adapter provenance catalog",
             "generated external operator packet",
             "external operator handoff bundle",
             "outreach package now frames Haonan's role as fit/falsification advice",
@@ -590,6 +598,7 @@ def main() -> int:
             "External config manifest packet",
             "External rollout evidence packet",
             "External method implementation packet",
+            "reference-adapter provenance catalog",
             "External operator packet",
             "External operator handoff bundle",
             "outreach PDFs now reflect the operator-packet/no-go stance",
@@ -618,6 +627,8 @@ def main() -> int:
             "scripts/build_external_config_manifest_packet.py",
             "scripts/build_external_rollout_evidence_packet.py",
             "scripts/build_external_method_implementation_packet.py",
+            "method_reference_provenance.csv",
+            "reference-adapter provenance catalog",
             "scripts/build_external_operator_packet.py",
             "scripts/build_external_operator_handoff_bundle.py",
             "operator-packet/no-go stance",
@@ -644,6 +655,7 @@ def main() -> int:
             "external config manifest packet",
             "external rollout evidence packet",
             "external method implementation packet",
+            "reference-adapter provenance catalog",
             "external operator packet",
             "external operator handoff bundle",
             "operator-packet-aligned Haonan/Yilun outreach package",
@@ -651,6 +663,7 @@ def main() -> int:
         "outreach": [
             "results/external_operator_packet.md",
             "ManiSkill fidelity metadata probe",
+            "reference-adapter provenance catalog",
             "do not frame Haonan as responsible for supplying the missing proof",
             "independent validation protocol/operator packet",
         ],
@@ -676,7 +689,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",
