@@ -83,13 +83,10 @@ jobs:
         run: python scripts/build_external_pilot_smoke_packet.py
 
       - name: Audit ManiSkill render-video preflight
-        run: python scripts/audit_maniskill_render_video_preflight.py --timeout-seconds 30 --max-envs 1 --profile-matrix --profile-matrix-max-envs 1
+        run: python scripts/audit_maniskill_render_video_preflight.py --timeout-seconds 30 --max-envs 4 --profile-matrix --profile-matrix-max-envs 1
 
       - name: Audit ManiSkill pilot runtime liveness
         run: python scripts/audit_maniskill_pilot_runtime_liveness.py
-
-      - name: Build ManiSkill render machine qualification
-        run: python scripts/build_maniskill_render_machine_qualification.py
 
       - name: Audit external evidence preflight
         run: python scripts/audit_external_evidence_preflight.py
@@ -123,6 +120,9 @@ jobs:
 
       - name: Probe ManiSkill fidelity metadata
         run: python scripts/probe_maniskill_fidelity_metadata.py
+
+      - name: Build ManiSkill render machine qualification
+        run: python scripts/build_maniskill_render_machine_qualification.py
 
       - name: Build external platform onboarding
         run: python scripts/build_external_platform_onboarding.py

@@ -258,7 +258,7 @@ def main():
     if missing_ci_terms:
         fail(f"GitHub validation workflow missing required terms: {missing_ci_terms}")
     required_ci_render_controls = [
-        "python scripts/audit_maniskill_render_video_preflight.py --timeout-seconds 30 --max-envs 1 --profile-matrix --profile-matrix-max-envs 1",
+        "python scripts/audit_maniskill_render_video_preflight.py --timeout-seconds 30 --max-envs 4 --profile-matrix --profile-matrix-max-envs 1",
     ]
     missing_ci_render_controls = [term for term in required_ci_render_controls if term not in ci_text]
     if missing_ci_render_controls:
