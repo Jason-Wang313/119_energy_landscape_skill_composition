@@ -40,14 +40,14 @@ ICLR-main ready: no
 ## Artifact Checks
 
 - PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `E52A2A75F9BD8D507319ED50AB55882A0381DFDE5F7A785B4D34202254C42D52`.
-- PDF size: `471968` bytes.
+- PDF SHA256: `ADC5CDE7126446F1E131B85094E0F8124F4E920A58222180D9287046B8EDBC4B`.
+- PDF size: `472043` bytes.
 - PDF pages: `30`.
 - Numbered PDF placement: Downloads only.
 - Desktop numbered PDF: absent.
 - Validator: passed.
 - Claim boundary audit: `results/claim_boundary_audit.md` passed and confirms the current package keeps the claim bounded.
-- Visible contribution audit: `results/visible_contribution_audit.md` passed and checks that public-facing docs mention the current Planner-edge policy audit, materializer, External config manifest packet, External rollout evidence packet, External analysis plan, External platform probe, ManiSkill task binding probe, ManiSkill env smoke probe, ManiSkill fidelity metadata probe, External platform onboarding packet, External fidelity provenance packet, External backend integration packet, ManiSkill reference backend readiness audit with MP4 writer path, the guard that state-shaped arrays cannot masquerade as render videos, explicit render-backend/shader controls, ManiSkill reference collection preflight audit, External runner backend probe self-test, External pilot smoke packet, ManiSkill render-video preflight, renderer-failure classifier, ManiSkill pilot runtime liveness audit, External method implementation packet, reference-adapter provenance catalog, strict reference-adapter rejection gate, manifest assembly checklist, external operator packet, External collection runbook route-gate audit, outreach stance, and 17/21 objective requirements satisfied boundary.
+- Visible contribution audit: `results/visible_contribution_audit.md` passed and checks that public-facing docs mention the current Planner-edge policy audit, Local model release card, materializer, External config manifest packet, External rollout evidence packet, External analysis plan, External platform probe, ManiSkill task binding probe, ManiSkill env smoke probe, ManiSkill fidelity metadata probe, External platform onboarding packet, External fidelity provenance packet, External backend integration packet, ManiSkill reference backend readiness audit with MP4 writer path, the guard that state-shaped arrays cannot masquerade as render videos, explicit render-backend/shader controls, ManiSkill reference collection preflight audit, External runner backend probe self-test, External pilot smoke packet, ManiSkill render-video preflight, renderer-failure classifier, ManiSkill pilot runtime liveness audit, External method implementation packet, reference-adapter provenance catalog, strict reference-adapter rejection gate, manifest assembly checklist, external operator packet, External collection runbook route-gate audit, outreach stance, and 17/21 objective requirements satisfied boundary.
 - Reviewer response packet: `docs/reviewer_response_packet.md` and `results/reviewer_response_packet_audit.md` exist, pass, remain non-evidence, cover 12 hostile objections, preserve the 17/21 boundary, and include the one-paper outreach rule.
 - Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 17/21 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
 - Local falsification audit: `results/local_falsification_audit.md` passed and is included in the generated manuscript.
@@ -55,6 +55,7 @@ ICLR-main ready: no
 - Diagnostic mechanism audit: `results/diagnostic_mechanism_audit.md` passed and is included in the generated manuscript.
 - Comparative decision-quality audit: `results/decision_quality_audit.md` passed and is included in the generated manuscript.
 - Planner-edge policy audit: `results/planner_edge_policy_audit.md` passed and is included in the generated manuscript.
+- Local model release card: `docs/local_model_release.md`, `results/local_model_release_manifest.json`, and `results/local_model_release_audit.md` pass and hash-lock the deterministic v5 seam-model source, method parameters, local result artifacts, and reference-adapter hashes while remaining non-external evidence and not a trained robot policy checkpoint.
 - Predictive calibration audit: `results/seam_prediction_calibration_audit.md` passed and is included in the generated manuscript.
 - Manuscript number audit: `results/manuscript_number_audit.md` passed and checks that reported margins, row counts, table values, local falsification numbers, diagnostic mechanism numbers, decision-quality numbers, planner-edge policy numbers, predictive-calibration numbers, and holdout robustness numbers match generated result files.
 - Related-work audit: `results/related_work_audit.md` passed and checks citation coverage, novelty-boundary rows, and outreach/validation boundary wording across 12 required areas.

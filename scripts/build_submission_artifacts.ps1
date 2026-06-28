@@ -71,6 +71,10 @@ try {
         Invoke-Native python scripts\audit_planner_edge_policy.py
     }
 
+    Invoke-Step "Build local model release card" {
+        Invoke-Native python scripts\build_local_model_release.py
+    }
+
     Invoke-Step "Generate manuscript sources" {
         Invoke-Native python scripts\generate_manuscript.py
     }

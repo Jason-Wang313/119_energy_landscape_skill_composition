@@ -132,6 +132,10 @@
       "blocker": "",
       "evidence": [
         "scripts/build_submission_artifacts.ps1",
+        "scripts/build_local_model_release.py",
+        "docs/local_model_release.md",
+        "results/local_model_release_manifest.json",
+        "results/local_model_release_audit.json",
         "scripts/validate_submission_artifacts.py",
         "scripts/self_test_external_backend_contract.py",
         "scripts/self_test_external_config_evidence.py",

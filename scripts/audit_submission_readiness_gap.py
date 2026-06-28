@@ -273,6 +273,7 @@ def main() -> int:
     reproducible_ok = exists_all(
         [
             ROOT / "scripts" / "build_submission_artifacts.ps1",
+            ROOT / "scripts" / "build_local_model_release.py",
             ROOT / "scripts" / "validate_submission_artifacts.py",
             ROOT / "scripts" / "self_test_external_backend_contract.py",
             ROOT / "scripts" / "self_test_external_config_evidence.py",
@@ -283,6 +284,9 @@ def main() -> int:
             ROOT / "scripts" / "self_test_external_evidence_pipeline.py",
             ROOT / ".github" / "workflows" / "paper119-validation.yml",
             DOCS / "reproducibility_checklist.md",
+            DOCS / "local_model_release.md",
+            RESULTS / "local_model_release_manifest.json",
+            RESULTS / "local_model_release_audit.json",
         ]
     )
     add_requirement(
@@ -291,6 +295,10 @@ def main() -> int:
         status="satisfied" if reproducible_ok else "missing",
         evidence=[
             "scripts/build_submission_artifacts.ps1",
+            "scripts/build_local_model_release.py",
+            "docs/local_model_release.md",
+            "results/local_model_release_manifest.json",
+            "results/local_model_release_audit.json",
             "scripts/validate_submission_artifacts.py",
             "scripts/self_test_external_backend_contract.py",
             "scripts/self_test_external_config_evidence.py",

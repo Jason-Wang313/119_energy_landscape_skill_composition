@@ -705,7 +705,7 @@ def make_manuscript(summary):
     a(r"\medskip")
     a(r"\section{Artifact Release Requirements}")
     release_items = [
-        ("Composer code", "Exact basin, barrier, descent, repair, calibration, fixed-risk, and abstention logic."),
+        ("Composer code", "Exact basin, barrier, descent, repair, calibration, fixed-risk, and abstention logic, with a hash-locked local model release card."),
         ("Baseline wrappers", "Identical observations, skill libraries, terminal samples, and compute budgets."),
         ("Raw rollout logs", "Unprocessed observations, actions, handoff states, risk scores, accepted seams, rejected seams, and outcomes."),
         ("Processed CSVs", "Aggregates regenerated from raw logs by public scripts."),

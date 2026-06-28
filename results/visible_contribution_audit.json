@@ -151,6 +151,11 @@
       "passed": true
     },
     {
+      "detail": "release_hash='5CF7C6E592517ECC40371074F6341C489BCAB11E5358E6BA053CB3AD241B5929', local_model_release_ready=True, external_evidence_ready=False",
+      "name": "local_model_release_visible",
+      "passed": true
+    },
+    {
       "detail": "entries=12, not_external_evidence=True",
       "name": "reviewer_response_packet_visible",
       "passed": true

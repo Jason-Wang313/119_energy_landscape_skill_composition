@@ -40,6 +40,9 @@ jobs:
       - name: Audit planner-edge policy quality
         run: python scripts/audit_planner_edge_policy.py
 
+      - name: Build local model release card
+        run: python scripts/build_local_model_release.py
+
       - name: Audit external runner harness
         run: python scripts/audit_external_runner_harness.py
 

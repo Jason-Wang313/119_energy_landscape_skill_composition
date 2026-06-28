@@ -21,7 +21,7 @@
       "passed": true
     },
     {
-      "detail": "commit='ee132b3031cc8dedf8219ff6e23bd448047da4a8'",
+      "detail": "commit='4d077d82da1c0fc8811285e22f3a2504cea7e2a4'",
       "name": "repo_commit_reported",
       "passed": true
     },
@@ -143,26 +143,41 @@
   "primary_route_missing_packages": [],
   "repo": {
     "branch": "codex/paper119-submission-hardening",
-    "commit": "ee132b3031cc8dedf8219ff6e23bd448047da4a8",
+    "commit": "4d077d82da1c0fc8811285e22f3a2504cea7e2a4",
     "dirty_status_lines": [
       " M .github/workflows/paper119-validation.yml",
       " M README.md",
       " M child_status.md",
       " M docs/claim_evidence_ledger.json",
       " M docs/final_audit.md",
-      " M docs/haonan_yilun_outreach_package.md",
+      " M docs/paper119_terminal_audit_20260623.md",
+      " M docs/reproducibility_checklist.md",
       " M docs/submission_readiness_audit_v5.md",
       " M docs/submission_readiness_decision.md",
       " M docs/submission_version_log.md",
+      " M paper/main.pdf",
+      " M paper/main.tex",
+      " M results/camera_ready_design_audit.json",
+      " M results/camera_ready_design_audit.md",
+      " M results/external_platform_probe.json",
+      " M results/external_platform_probe.md",
+      " M results/maniskill_env_smoke_probe.json",
+      " M results/presentation_quality_audit.json",
+      " M results/presentation_quality_audit.md",
+      " M results/submission_readiness_gap_audit.json",
+      " M results/submission_readiness_gap_audit.md",
       " M results/visible_contribution_audit.json",
       " M results/visible_contribution_audit.md",
+      " M scripts/audit_submission_readiness_gap.py",
       " M scripts/audit_visible_contribution.py",
       " M scripts/build_submission_artifacts.ps1",
+      " M scripts/generate_manuscript.py",
       " M scripts/validate_submission_artifacts.py",
-      "?? docs/reviewer_response_packet.md",
-      "?? results/reviewer_response_packet_audit.json",
-      "?? results/reviewer_response_packet_audit.md",
-      "?? scripts/build_reviewer_response_packet.py"
+      "?? docs/local_model_release.md",
+      "?? results/local_model_release_audit.json",
+      "?? results/local_model_release_audit.md",
+      "?? results/local_model_release_manifest.json",
+      "?? scripts/build_local_model_release.py"
     ],
     "git_commands": {
       "rev_parse_branch": {
@@ -186,7 +201,7 @@
         ],
         "returncode": 0,
         "stderr": "",
-        "stdout": "ee132b3031cc8dedf8219ff6e23bd448047da4a8\n"
+        "stdout": "4d077d82da1c0fc8811285e22f3a2504cea7e2a4\n"
       },
       "status_short": {
         "available": true,
@@ -197,7 +212,7 @@
         ],
         "returncode": 0,
         "stderr": "",
-        "stdout": " M .github/workflows/paper119-validation.yml\n M README.md\n M child_status.md\n M docs/claim_evidence_ledger.json\n M docs/final_audit.md\n M docs/haonan_yilun_outreach_package.md\n M docs/submission_readiness_audit_v5.md\n M docs/submission_readiness_decision.md\n M docs/submission_version_log.md\n M results/visible_contribution_audit.json\n M results/visible_contribution_audit.md\n M scripts/audit_visible_contribution.py\n M scripts/build_submission_artifacts.ps1\n M scripts/validate_submission_artifacts.py\n?? docs/reviewer_response_packet.md\n?? results/reviewer_response_packet_audit.json\n?? results/reviewer_response_packet_audit.md\n?? scripts/build_reviewer_response_packet.py\n"
+        "stdout": " M .github/workflows/paper119-validation.yml\n M README.md\n M child_status.md\n M docs/claim_evidence_ledger.json\n M docs/final_audit.md\n M docs/paper119_terminal_audit_20260623.md\n M docs/reproducibility_checklist.md\n M docs/submission_readiness_audit_v5.md\n M docs/submission_readiness_decision.md\n M docs/submission_version_log.md\n M paper/main.pdf\n M paper/main.tex\n M results/camera_ready_design_audit.json\n M results/camera_ready_design_audit.md\n M results/external_platform_probe.json\n M results/external_platform_probe.md\n M results/maniskill_env_smoke_probe.json\n M results/presentation_quality_audit.json\n M results/presentation_quality_audit.md\n M results/submission_readiness_gap_audit.json\n M results/submission_readiness_gap_audit.md\n M results/visible_contribution_audit.json\n M results/visible_contribution_audit.md\n M scripts/audit_submission_readiness_gap.py\n M scripts/audit_visible_contribution.py\n M scripts/build_submission_artifacts.ps1\n M scripts/generate_manuscript.py\n M scripts/validate_submission_artifacts.py\n?? docs/local_model_release.md\n?? results/local_model_release_audit.json\n?? results/local_model_release_audit.md\n?? results/local_model_release_manifest.json\n?? scripts/build_local_model_release.py\n"
       }
     }
   },

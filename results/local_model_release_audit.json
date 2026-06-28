@@ -1,0 +1,73 @@
+{
+  "checks": [
+    {
+      "detail": "src/run_experiment.py",
+      "name": "source_exists",
+      "passed": true
+    },
+    {
+      "detail": "source='v5_expanded', summary='v5_expanded'",
+      "name": "source_version_matches_summary",
+      "passed": true
+    },
+    {
+      "detail": "hash=A70B9C802BAD07FE8621791EA8EA125EBD81B2DD877270DEC7CE89839A43D4E4",
+      "name": "proposed_method_present",
+      "passed": true
+    },
+    {
+      "detail": "methods=12, hashes=12",
+      "name": "method_family_complete",
+      "passed": true
+    },
+    {
+      "detail": "tasks=6, regimes=8, splits=5",
+      "name": "local_dimensions_complete",
+      "passed": true
+    },
+    {
+      "detail": "{'terminal_decision': 'STRONG_REVISE', 'iclr_main_ready': False, 'scope_gate_pass': False, 'local_gates_pass': True, 'strongest_non_oracle': 'proposed_energy_landscape_composer_v4_1', 'missing_scope_evidence': ['no_real_robot_rollouts', 'no_accepted_high_fidelity_skill_composition_simulation', 'no_released_skill_energy_or_policy_checkpoint', 'no_calibrated_contact_force_camera_or_state_logs', 'no_hardware_rollout_videos', 'no_independent_baseline_implementations']}",
+      "name": "summary_remains_bounded",
+      "passed": true
+    },
+    {
+      "detail": "local_gates_pass=True",
+      "name": "local_gates_pass",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "result_artifacts_hash_locked",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "reference_adapter_artifacts_hash_locked",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True, external_evidence_ready=False",
+      "name": "explicitly_not_external_evidence",
+      "passed": true
+    },
+    {
+      "detail": "local deterministic seam model only",
+      "name": "not_a_robot_policy_checkpoint",
+      "passed": true
+    },
+    {
+      "detail": "5CF7C6E592517ECC40371074F6341C489BCAB11E5358E6BA053CB3AD241B5929",
+      "name": "release_hash_present",
+      "passed": true
+    }
+  ],
+  "external_evidence_ready": false,
+  "failed_checks": [],
+  "local_model_release_ready": true,
+  "manifest": "results/local_model_release_manifest.json",
+  "model_card": "docs/local_model_release.md",
+  "not_external_evidence": true,
+  "passed": true,
+  "release_hash": "5CF7C6E592517ECC40371074F6341C489BCAB11E5358E6BA053CB3AD241B5929",
+  "version": "paper119_local_model_release_audit_v1"
+}

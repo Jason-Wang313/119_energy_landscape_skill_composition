@@ -61,7 +61,7 @@
       "passed": true
     },
     {
-      "detail": "sparse_pages=[16, 21, 30]",
+      "detail": "sparse_pages=[16, 21]",
       "name": "sparse_appendix_pages_bounded",
       "passed": true
     },
@@ -93,12 +93,11 @@
   ],
   "density_summary": {
     "maximum": 0.17819273163810978,
-    "mean": 0.09901386008949031,
+    "mean": 0.099061515515297,
     "minimum": 0.018057404780093857,
     "sparse_pages": [
       16,
-      21,
-      30
+      21
     ]
   },
   "failed_checks": [],
@@ -491,9 +490,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.10216522972825494,
+      "foreground_fraction": 0.0998581250682091,
       "height": 770,
-      "luminance_std": 0.14264692309506052,
+      "luminance_std": 0.14122165955858523,
       "page": 28,
       "width": 595
     },
@@ -505,9 +504,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.13861617374222415,
+      "foreground_fraction": 0.1348357524828113,
       "height": 770,
-      "luminance_std": 0.15936938612666382,
+      "luminance_std": 0.15734719766938268,
       "page": 29,
       "width": 595
     },
@@ -519,9 +518,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.026035141329258975,
+      "foreground_fraction": 0.033552330022918256,
       "height": 770,
-      "luminance_std": 0.06633752582253667,
+      "luminance_std": 0.07706015964186454,
       "page": 30,
       "width": 595
     }

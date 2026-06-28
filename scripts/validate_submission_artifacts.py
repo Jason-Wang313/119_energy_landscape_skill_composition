@@ -101,6 +101,7 @@ def main():
         "scripts\\audit_decision_quality.py",
         "scripts\\audit_seam_prediction_calibration.py",
         "scripts\\audit_planner_edge_policy.py",
+        "scripts\\build_local_model_release.py",
         "scripts\\generate_manuscript.py",
         "scripts\\audit_manuscript_numbers.py",
         "scripts\\audit_related_work.py",
@@ -188,6 +189,7 @@ def main():
         "poppler-utils",
         "python -m compileall",
         "python scripts/audit_planner_edge_policy.py",
+        "python scripts/build_local_model_release.py",
         "python scripts/audit_external_runner_harness.py",
         "python scripts/audit_external_backend_contract.py",
         "python scripts/audit_maniskill_backend_readiness.py",
@@ -1386,6 +1388,72 @@ def main():
     dry_manifest = json.loads(dry_manifest_path.read_text(encoding="utf-8"))
     if dry_manifest.get("not_external_evidence") is not True or dry_manifest.get("local_dry_run_only") is not True:
         fail("external local dry-run manifest must remain explicitly non-evidence")
+
+    local_model_release_path = RESULTS / "local_model_release_manifest.json"
+    local_model_release_audit_path = RESULTS / "local_model_release_audit.json"
+    local_model_release_card_path = DOCS / "local_model_release.md"
+    if not local_model_release_path.exists():
+        fail("missing results/local_model_release_manifest.json; run scripts/build_local_model_release.py")
+    if not local_model_release_audit_path.exists():
+        fail("missing results/local_model_release_audit.json; run scripts/build_local_model_release.py")
+    if not local_model_release_card_path.exists():
+        fail("missing docs/local_model_release.md; run scripts/build_local_model_release.py")
+    local_model_release = json.loads(local_model_release_path.read_text(encoding="utf-8"))
+    local_model_release_audit = json.loads(local_model_release_audit_path.read_text(encoding="utf-8"))
+    if local_model_release.get("version") != "paper119_local_model_release_v1":
+        fail("local model release manifest version mismatch")
+    if local_model_release_audit.get("version") != "paper119_local_model_release_audit_v1":
+        fail("local model release audit version mismatch")
+    if local_model_release.get("not_external_evidence") is not True or local_model_release_audit.get("not_external_evidence") is not True:
+        fail("local model release must declare that it is not external evidence")
+    if local_model_release.get("local_model_release_ready") is not True or local_model_release_audit.get("local_model_release_ready") is not True:
+        fail("local model release must be ready as a reproducibility artifact")
+    if local_model_release.get("external_evidence_ready") is not False or local_model_release_audit.get("external_evidence_ready") is not False:
+        fail("local model release must not claim external evidence readiness")
+    if local_model_release.get("does_not_release_trained_robot_policy") is not True:
+        fail("local model release must state that it is not a trained robot policy checkpoint")
+    if local_model_release.get("does_not_release_real_robot_checkpoint") is not True:
+        fail("local model release must state that it is not a real robot checkpoint")
+    if local_model_release.get("source", {}).get("version") != "v5_expanded":
+        fail("local model release source version mismatch")
+    if int(local_model_release.get("dimensions", {}).get("method_count", 0) or 0) < 12:
+        fail("local model release has too few methods")
+    if int(local_model_release.get("dimensions", {}).get("task_count", 0) or 0) < 6:
+        fail("local model release has too few local tasks")
+    proposed_release = local_model_release.get("proposed_method", {}) or {}
+    if proposed_release.get("name") != "barrier_certified_energy_composer_v5":
+        fail("local model release proposed method mismatch")
+    if len(str(proposed_release.get("parameter_hash", ""))) != 64:
+        fail("local model release proposed method hash is missing or malformed")
+    if len(str(local_model_release.get("release_hash", ""))) != 64:
+        fail("local model release hash is missing or malformed")
+    missing_release_artifacts = [
+        item
+        for item in (local_model_release.get("result_artifacts", []) or [])
+        if item.get("exists") is not True or len(str(item.get("sha256", ""))) != 64
+    ]
+    if missing_release_artifacts:
+        fail(f"local model release has missing or unhashed result artifacts: {missing_release_artifacts[:4]}")
+    local_release_checks = {check.get("name"): check.get("passed") for check in local_model_release_audit.get("checks", [])}
+    for required_check in (
+        "source_version_matches_summary",
+        "proposed_method_present",
+        "summary_remains_bounded",
+        "result_artifacts_hash_locked",
+        "explicitly_not_external_evidence",
+        "not_a_robot_policy_checkpoint",
+    ):
+        if local_release_checks.get(required_check) is not True:
+            fail(f"local model release audit missing passing check: {required_check}")
+    local_release_card = local_model_release_card_path.read_text(encoding="utf-8")
+    for required_phrase in (
+        "Local Model Release Card",
+        "Not external evidence: `true`",
+        "not a trained robot policy checkpoint",
+        "does not replace `external_validation/manifest.json`",
+    ):
+        if required_phrase not in local_release_card:
+            fail(f"local model release card missing phrase: {required_phrase}")
 
     adapter_contract_path = RESULTS / "external_adapter_contract_audit.json"
     if not adapter_contract_path.exists():

@@ -23,7 +23,7 @@ This audit renders every PDF page and checks for nonblank pages, reasonable dens
 - `pass` `page_contrast_ok`: weak_contrast_pages=[]
 - `pass` `main_pages_have_enough_content`: weak_main_density=[]
 - `pass` `main_pages_have_enough_contrast`: weak_main_contrast=[]
-- `pass` `sparse_appendix_pages_bounded`: sparse_pages=[16, 21, 30]
+- `pass` `sparse_appendix_pages_bounded`: sparse_pages=[16, 21]
 - `pass` `text_anchor_title_and_abstract`: title_and_abstract
 - `pass` `text_anchor_decision_quality_page`: decision_quality_page
 - `pass` `text_anchor_predictive_calibration_page`: predictive_calibration_page
