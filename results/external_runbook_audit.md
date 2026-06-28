@@ -3,7 +3,7 @@
 Passed: `true`.
 Not evidence: `true`.
 Operator rows: `1440`.
-Validation commands: `43`.
+Validation commands: `44`.
 Runbook: `external_validation/collection_runbook.md`.
 Operator sheet: `external_validation/operator_record_sheet.csv`.
 
@@ -32,6 +32,6 @@ Operator sheet: `external_validation/operator_record_sheet.csv`.
 - `pass` `required_fields_ge_28`: required_fields=29
 - `pass` `strict_commands_present`: strict validation command found
 - `pass` `current_maniskill_route_gates_present`: missing=[]
-- `pass` `gate_order_preserves_preflight_before_collection_and_evidence`: positions={'audit_external_fidelity_acceptance.py': 403, 'audit_external_backend_contract.py': 623, 'audit_maniskill_reference_collection_preflight.py': 725, 'audit_maniskill_render_video_preflight.py': 1112, 'real_collection_runner.py --backend-module <module_or_path>': 1991, 'build_external_manifest.py --write --check-video-paths': 2241, 'validate_external_rollouts.py --write-results --check-video-paths --strict': 2484, 'audit_external_evidence.py --strict': 2694}
+- `pass` `gate_order_preserves_preflight_before_collection_and_evidence`: positions={'audit_external_fidelity_acceptance.py': 403, 'audit_external_backend_contract.py': 623, 'audit_maniskill_reference_collection_preflight.py': 725, 'audit_maniskill_render_video_preflight.py': 1112, 'real_collection_runner.py --backend-module <module_or_path>': 1991, 'build_external_manifest.py --write --check-video-paths': 2241, 'validate_external_rollouts.py --write-results --check-video-paths --strict': 2484, 'audit_external_evidence.py --strict': 2750}
 - `pass` `operator_sheet_exists`: external_validation\operator_record_sheet.csv
 - `pass` `runbook_exists`: external_validation\collection_runbook.md

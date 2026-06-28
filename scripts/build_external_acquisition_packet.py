@@ -34,22 +34,26 @@ MISSING_REQUIREMENT_ACTIONS = {
         "maniskill_pilot_runtime_liveness",
         "maniskill_render_machine_qualification",
         "ablation_collection_packet",
+        "evidence_intake_ledger",
         "run_collection",
         "manifest_and_release",
     ],
     "External rollout metrics recomputed from raw JSONL logs": [
         "rollout_evidence_packet",
         "ablation_collection_packet",
+        "evidence_intake_ledger",
         "run_collection",
         "strict_rollout_recompute",
     ],
     "Manifest-declared real task configs replace non-evidence templates": [
         "config_manifest_packet",
+        "evidence_intake_ledger",
         "real_task_configs",
         "manifest_and_release",
     ],
     "Manifest-declared independent non-oracle baseline evidence and fairness contract": [
         "method_implementation_packet",
+        "evidence_intake_ledger",
         "real_method_implementations",
         "strict_adapter_evidence",
     ],
@@ -250,6 +254,26 @@ ACTION_CATALOG = {
         "closes": [
             "Independent real-robot or accepted high-fidelity external validation evidence",
             "External rollout metrics recomputed from raw JSONL logs",
+        ],
+    },
+    "evidence_intake_ledger": {
+        "title": "Use the evidence intake ledger to close every strict external-evidence failure",
+        "operator_input": "complete the ledger rows for manifest, fidelity, configs, logs/videos, methods, metrics, ablations, pairing, release hashes, and oracle-boundary explanation",
+        "artifacts": [
+            "external_validation/evidence_intake_ledger.md",
+            "external_validation/evidence_intake_ledger.csv",
+            "results/external_evidence_intake_ledger_audit.json",
+        ],
+        "commands": [
+            "python scripts\\build_external_evidence_intake_ledger.py",
+            "python scripts\\build_external_manifest.py --write --check-video-paths",
+            "python scripts\\audit_external_evidence.py --strict",
+        ],
+        "closes": [
+            "Independent real-robot or accepted high-fidelity external validation evidence",
+            "External rollout metrics recomputed from raw JSONL logs",
+            "Manifest-declared real task configs replace non-evidence templates",
+            "Manifest-declared independent non-oracle baseline evidence and fairness contract",
         ],
     },
     "platform_fidelity": {
@@ -541,6 +565,7 @@ def main() -> int:
     config_manifest_path = RESULTS / "external_config_manifest_audit.json"
     rollout_evidence_path = RESULTS / "external_rollout_evidence_audit.json"
     ablation_packet_path = RESULTS / "external_ablation_collection_audit.json"
+    evidence_intake_path = RESULTS / "external_evidence_intake_ledger_audit.json"
     method_packet_path = RESULTS / "external_method_implementation_audit.json"
     pilot_smoke_path = RESULTS / "external_pilot_smoke_packet_audit.json"
     render_preflight_path = RESULTS / "maniskill_render_video_preflight_audit.json"
@@ -567,6 +592,7 @@ def main() -> int:
     config_manifest = require_json(config_manifest_path)
     rollout_evidence = require_json(rollout_evidence_path)
     ablation_packet = require_json(ablation_packet_path)
+    evidence_intake = require_json(evidence_intake_path)
     method_packet = require_json(method_packet_path)
     pilot_smoke = require_json(pilot_smoke_path)
     render_preflight = require_json(render_preflight_path)
@@ -606,6 +632,7 @@ def main() -> int:
                 config_manifest_path,
                 rollout_evidence_path,
                 ablation_packet_path,
+                evidence_intake_path,
                 method_packet_path,
                 pilot_smoke_path,
                 render_preflight_path,
@@ -633,6 +660,8 @@ def main() -> int:
                 maniskill_preflight_path,
                 config_manifest_path,
                 rollout_evidence_path,
+                ablation_packet_path,
+                evidence_intake_path,
                 method_packet_path,
                 pilot_smoke_path,
                 render_preflight_path,
@@ -828,6 +857,26 @@ def main() -> int:
             f"work_order_count={ablation_packet.get('work_order_count')!r}, "
             f"expected_ablation_records={ablation_packet.get('expected_ablation_records')!r}, "
             f"manifest_ablation_evidence_ready={ablation_packet.get('manifest_ablation_evidence_ready')!r}"
+        ),
+    )
+    intake_checks = {check.get("name"): check.get("passed") for check in evidence_intake.get("checks", []) or []}
+    add_check(
+        checks,
+        "evidence_intake_ledger_ready",
+        evidence_intake.get("passed") is True
+        and evidence_intake.get("not_external_evidence") is True
+        and evidence_intake.get("strict_external_evidence_ready") is False
+        and int(evidence_intake.get("blocking_failure_count", 0) or 0) >= 30
+        and evidence_intake.get("blocking_failure_count") == evidence_intake.get("mapped_failure_count")
+        and not evidence_intake.get("unmapped_failures")
+        and intake_checks.get("every_blocking_failure_is_mapped") is True
+        and intake_checks.get("strict_command_spine_covers_final_evidence_path") is True
+        and (EXTERNAL / "evidence_intake_ledger.md").exists()
+        and (EXTERNAL / "evidence_intake_ledger.csv").exists(),
+        (
+            f"mapped={evidence_intake.get('mapped_failure_count')!r}/"
+            f"{evidence_intake.get('blocking_failure_count')!r}, "
+            f"groups={len(evidence_intake.get('closure_groups', []) or [])}"
         ),
     )
     pilot_smoke_checks = {check.get("name"): check.get("passed") for check in pilot_smoke.get("checks", []) or []}
@@ -1118,6 +1167,7 @@ def main() -> int:
         "build_external_backend_integration_packet.py",
         "build_external_config_manifest_packet.py",
         "build_external_rollout_evidence_packet.py",
+        "build_external_evidence_intake_ledger.py",
         "build_external_fidelity_provenance_packet.py",
         "build_external_fidelity_acceptance_draft.py",
         "materialize_fidelity_acceptance.py",
@@ -1192,6 +1242,7 @@ def main() -> int:
                 config_manifest_path,
                 rollout_evidence_path,
                 ablation_packet_path,
+                evidence_intake_path,
                 method_packet_path,
                 pilot_smoke_path,
                 render_preflight_path,
@@ -1245,6 +1296,19 @@ def main() -> int:
             "audit_path": "results/external_ablation_collection_audit.json",
             "audit_md_path": "results/external_ablation_collection_audit.md",
             "operator_packet_path": "external_validation/ablation_collection_packet.md",
+        },
+        "evidence_intake_ledger": {
+            "not_external_evidence": True,
+            "strict_external_evidence_ready": evidence_intake.get("strict_external_evidence_ready") is True,
+            "blocking_failure_count": int(evidence_intake.get("blocking_failure_count", 0) or 0),
+            "mapped_failure_count": int(evidence_intake.get("mapped_failure_count", 0) or 0),
+            "closure_group_count": len(evidence_intake.get("closure_groups", []) or []),
+            "unmapped_failures": list(evidence_intake.get("unmapped_failures", []) or []),
+            "audit_command": "python scripts\\build_external_evidence_intake_ledger.py",
+            "audit_path": "results/external_evidence_intake_ledger_audit.json",
+            "audit_md_path": "results/external_evidence_intake_ledger_audit.md",
+            "operator_packet_path": "external_validation/evidence_intake_ledger.md",
+            "operator_csv_path": "external_validation/evidence_intake_ledger.csv",
         },
         "collection_blockers": collection_blockers,
         "operator_actions": actions,
@@ -1325,6 +1389,21 @@ def main() -> int:
             f"- Expected ablation records: `{ablation_summary['expected_ablation_records']}`",
             f"- Work orders: `{ablation_summary['work_order_count']}`",
             f"- Blocking missing: `{ablation_summary['blocking_missing']}`",
+        ]
+    )
+
+    intake_summary = payload["evidence_intake_ledger"]
+    lines.extend(
+        [
+            "",
+            "## External Evidence Intake Ledger",
+            "",
+            f"- Blocking failures mapped: `{intake_summary['mapped_failure_count']}/{intake_summary['blocking_failure_count']}`",
+            f"- Closure groups: `{intake_summary['closure_group_count']}`",
+            f"- Strict external evidence ready: `{str(intake_summary['strict_external_evidence_ready']).lower()}`",
+            f"- Unmapped failures: `{intake_summary['unmapped_failures']}`",
+            f"- Ledger: `{intake_summary['operator_packet_path']}`",
+            f"- CSV: `{intake_summary['operator_csv_path']}`",
         ]
     )
 

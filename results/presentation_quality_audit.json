@@ -12,7 +12,7 @@
       "passed": true
     },
     {
-      "detail": "bytes=471778",
+      "detail": "bytes=467205",
       "name": "pdf_size_reasonable",
       "passed": true
     },
@@ -22,7 +22,7 @@
       "passed": true
     },
     {
-      "detail": "text_chars=81554",
+      "detail": "text_chars=81365",
       "name": "pdf_text_extractable",
       "passed": true
     },
@@ -237,12 +237,12 @@
       "passed": true
     },
     {
-      "detail": "underfull_count=3",
+      "detail": "underfull_count=2",
       "name": "log_underfull_count_bounded",
       "passed": true
     },
     {
-      "detail": "max_badness=3460",
+      "detail": "max_badness=1442",
       "name": "log_underfull_badness_bounded",
       "passed": true
     }
@@ -251,6 +251,6 @@
   "pages": 30,
   "passed": true,
   "pdf": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\paper\\main.pdf",
-  "pdf_bytes": 471778,
+  "pdf_bytes": 467205,
   "version": "presentation_quality_audit_v1"
 }

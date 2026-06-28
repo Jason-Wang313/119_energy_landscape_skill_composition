@@ -107,6 +107,9 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "ablation_collection_packet.json",
         EXTERNAL / "ablation_collection_packet.md",
         EXTERNAL / "ablation_collection_work_orders.csv",
+        EXTERNAL / "evidence_intake_ledger.json",
+        EXTERNAL / "evidence_intake_ledger.md",
+        EXTERNAL / "evidence_intake_ledger.csv",
         EXTERNAL / "pilot_smoke_packet.json",
         EXTERNAL / "pilot_smoke_packet.md",
         EXTERNAL / "pilot_smoke_work_orders.csv",
@@ -149,6 +152,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_config_manifest_packet.py",
         SCRIPTS / "build_external_rollout_evidence_packet.py",
         SCRIPTS / "build_external_ablation_collection_packet.py",
+        SCRIPTS / "build_external_evidence_intake_ledger.py",
         SCRIPTS / "audit_external_pilot_smoke.py",
         SCRIPTS / "build_external_pilot_smoke_packet.py",
         SCRIPTS / "audit_maniskill_render_video_preflight.py",
@@ -205,6 +209,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_rollout_evidence_audit.md",
         RESULTS / "external_ablation_collection_audit.json",
         RESULTS / "external_ablation_collection_audit.md",
+        RESULTS / "external_evidence_intake_ledger_audit.json",
+        RESULTS / "external_evidence_intake_ledger_audit.md",
         RESULTS / "external_pilot_smoke_audit.json",
         RESULTS / "external_pilot_smoke_audit.md",
         RESULTS / "external_pilot_smoke_packet_audit.json",
@@ -325,6 +331,7 @@ def build_payload() -> dict[str, Any]:
     config_manifest = require_payload(RESULTS / "external_config_manifest_audit.json", "external_config_manifest_audit_v1")
     rollout_evidence = require_payload(RESULTS / "external_rollout_evidence_audit.json", "external_rollout_evidence_audit_v1")
     ablation_packet = require_payload(RESULTS / "external_ablation_collection_audit.json", "external_ablation_collection_audit_v1")
+    evidence_intake = require_payload(RESULTS / "external_evidence_intake_ledger_audit.json", "external_evidence_intake_ledger_v1")
     method_implementation = require_payload(RESULTS / "external_method_implementation_audit.json", "external_method_implementation_audit_v1")
     pilot_smoke = require_payload(RESULTS / "external_pilot_smoke_packet_audit.json", "external_pilot_smoke_packet_audit_v1")
     render_preflight = require_payload(RESULTS / "maniskill_render_video_preflight_audit.json", "maniskill_render_video_preflight_audit_v1")
@@ -695,6 +702,29 @@ def build_payload() -> dict[str, Any]:
             f"manifest_ablation_evidence_ready={ablation_packet.get('manifest_ablation_evidence_ready')!r}"
         ),
     )
+    intake_checks = {check.get("name"): check.get("passed") for check in evidence_intake.get("checks", []) or []}
+    add_check(
+        checks,
+        "evidence_intake_ledger_included",
+        evidence_intake.get("passed") is True
+        and evidence_intake.get("not_external_evidence") is True
+        and evidence_intake.get("strict_external_evidence_ready") is False
+        and int(evidence_intake.get("blocking_failure_count", 0) or 0) >= 30
+        and evidence_intake.get("blocking_failure_count") == evidence_intake.get("mapped_failure_count")
+        and not evidence_intake.get("unmapped_failures")
+        and intake_checks.get("every_blocking_failure_is_mapped") is True
+        and intake_checks.get("strict_command_spine_covers_final_evidence_path") is True
+        and "external_validation/evidence_intake_ledger.json" in paths
+        and "external_validation/evidence_intake_ledger.md" in paths
+        and "external_validation/evidence_intake_ledger.csv" in paths
+        and "results/external_evidence_intake_ledger_audit.json" in paths
+        and "scripts/build_external_evidence_intake_ledger.py" in paths,
+        (
+            f"mapped={evidence_intake.get('mapped_failure_count')!r}/"
+            f"{evidence_intake.get('blocking_failure_count')!r}, "
+            f"groups={len(evidence_intake.get('closure_groups', []) or [])}"
+        ),
+    )
     pilot_smoke_checks = {check.get("name"): check.get("passed") for check in pilot_smoke.get("checks", []) or []}
     add_check(
         checks,
@@ -843,6 +873,7 @@ def build_payload() -> dict[str, Any]:
             "config_manifest_packet",
             "rollout_evidence_packet",
             "ablation_collection_packet",
+            "evidence_intake_ledger",
             "backend_module",
             "real_task_configs",
             "platform_fidelity",
@@ -856,7 +887,7 @@ def build_payload() -> dict[str, Any]:
             "strict_rollout_recompute",
             "final_strict_gate",
         }.issubset(action_ids),
-        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'fidelity_acceptance_materializer', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'ablation_collection_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'maniskill_render_video_preflight', 'maniskill_pilot_runtime_liveness', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
+        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'fidelity_acceptance_materializer', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'ablation_collection_packet', 'evidence_intake_ledger', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'maniskill_render_video_preflight', 'maniskill_pilot_runtime_liveness', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
     )
     add_check(
         checks,

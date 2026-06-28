@@ -26,6 +26,10 @@ def seam_framed_description(text):
     )
 
 
+def display_label(text):
+    return str(text).replace("_", " ")
+
+
 def fmt(value, digits=5):
     return f"{float(value):.{digits}f}"
 
@@ -330,7 +334,7 @@ REFERENCES = r"""
 def add_cards(lines, title, cards, suffix):
     lines.append(rf"\section{{{title}}}")
     for name, desc in cards:
-        lines.append(rf"\paragraph{{{esc(name)}.}} {esc(desc)} {suffix}")
+        lines.append(rf"\paragraph{{{esc(display_label(name))}.}} {esc(desc)} {suffix}")
 
 
 def make_manuscript(summary):
@@ -382,7 +386,7 @@ def make_manuscript(summary):
     a(
         "Robot skills that succeed alone can fail when chained because the terminal state of one skill changes what the next skill can physically do. "
         "A terminal sample may fall outside the next skill's basin, cross a high-energy barrier, or enter a contact mode with nonsmooth descent. "
-        "We frame this boundary as a local world/action model for skill seams. Rather than predict a full future trajectory or replace primitive controllers, the model predicts the small consequence a planner needs before committing: whether action/skill composition will fail, why it is likely to fail, and whether the next move should be accept, repair, probe, abstain, or choose another transition. Outcomes become planner-edge updates for future planning. "
+        "We study this boundary as a local world/action model for skill seams. Rather than predict a full future trajectory or replace primitive controllers, the model predicts the small consequence a planner needs before committing: whether action/skill composition will fail, why it is likely to fail, and whether the next move should be accept, repair, probe, abstain, or choose another transition. Outcomes become planner-edge updates for future planning. "
         "A barrier-certified energy composer implements this interface, acting on a skill edge only when basin overlap, barrier height, descent continuity, repair cost, and fixed-risk calibration are jointly favorable. "
         f"In a frozen local rollout suite with 12 methods, 6 task families, 8 seam regimes, and 10 paired seeds, the composer reaches hard-slice success {fmt(metrics['hard_success_proposed'])} and utility {fmt(metrics['hard_utility_proposed'])}, compared with {fmt(metrics['hard_success_strongest'])} and {fmt(metrics['hard_utility_strongest'])} for the strongest non-oracle predecessor. "
         "It reduces seam failure, barrier violation, damage, calibration error, and realized seam breach while improving basin alignment and descent continuity. "
@@ -392,7 +396,7 @@ def make_manuscript(summary):
 
     a(r"\section{Motivation}")
     a(
-        "A reusable robot skill library still leaves a planning problem: the robot must know what the end of one skill makes possible for the next. This paper focuses on that seam, where a small predictive model of action consequences can be more useful than either a bare graph edge or a full simulator. The model predicts what a completed skill makes feasible, risky, repairable, or impossible for the next skill. Its job is not to operate either primitive or replace the planner; it is to make the transition legible enough that planning can choose the next action, request a repair or probe, abstain, or route through another edge. At this scale, useful world modeling is not a full future video; it is a decision-relevant statement about how a transition changes the next skill's feasible start state."
+        "A reusable robot skill library still leaves a planning problem: the robot must know what the end of one skill makes possible for the next. We treat that seam as the smallest useful place for a world/action model: a compact predictor of what a completed skill makes feasible, risky, repairable, or impossible for the next skill. Its job is not to operate either primitive or replace the planner; it is to make the transition legible enough that planning can choose the next action, request a repair or probe, abstain, or route through another edge. At this scale, useful world modeling is not a full future video; it is a decision-relevant statement about how a transition changes the next skill's feasible start state."
     )
     a(
         "Potential fields, navigation functions, energy-based learning, trajectory optimization, DMPs, and stable dynamical systems have long used scalar landscapes to encode motion and control structure \\citep{khatib1986potential,koditschek1989navigation,lecun2006energy,ratliff2009chomp,ijspeert2013dmp,khansari2011stable}. "
@@ -601,22 +605,24 @@ def make_manuscript(summary):
     a(r"\clearpage")
     add_cards(lines, "Task Cards", TASK_CARDS, "External validation should log terminal samples, basin estimates, barrier values, accepted/rejected seams, and final outcomes.")
     for name, _ in TASK_CARDS:
-        a(rf"\paragraph{{External replication for {esc(name)}.}} Use paired scene resets and identical skill libraries across baselines. Report success, seam failure, barrier violation, basin overlap, descent continuity, damage, cost, predicted risk, realized breach, and videos for success and failure cases.")
+        a(rf"\paragraph{{External replication for {esc(display_label(name))}.}} Use paired scene resets and identical skill libraries across baselines. Report success, seam failure, barrier violation, basin overlap, descent continuity, damage, cost, predicted risk, realized breach, and videos for success and failure cases.")
 
     a(r"\clearpage")
     add_cards(lines, "Regime Cards", REGIME_CARDS, "The regime stays visible so the report cannot hide collapse under an average.")
     for name, _ in REGIME_CARDS:
-        a(rf"\paragraph{{Reviewer question for {esc(name)}.}} Did the method distinguish basin failure from barrier failure, and did the fixed-risk gate change the decision? A real submission should answer using raw logs, not only aggregate success.")
+        a(rf"\paragraph{{Reviewer question for {esc(display_label(name))}.}} Did the method distinguish basin failure from barrier failure, and did the fixed-risk gate change the decision? A real submission should answer using raw logs, not only aggregate success.")
 
     a(r"\clearpage")
     add_cards(lines, "Baseline Cards", BASELINE_CARDS, "The baseline remains visible to avoid weak-comparator games.")
     for name, _ in BASELINE_CARDS:
-        a(rf"\paragraph{{Interface audit for {esc(name)}.}} A fair comparison gives this method the same skill library, observations, terminal samples, compute budget, and failure logs. If the wrapper differs, the comparison is not credible.")
+        a(rf"\paragraph{{Interface audit for {esc(display_label(name))}.}} A fair comparison gives this method the same skill library, observations, terminal samples, compute budget, and failure logs. If the wrapper differs, the comparison is not credible.")
 
     a(r"\clearpage")
     a(r"\section{Failure Case Audit}")
     for row in failures:
-        a(rf"\paragraph{{Case {esc(row['case_id'])}: {esc(row['failure_case'])}.}} {esc(seam_framed_description(row['description']))} Reviewer attack: {esc(row['reviewer_attack'])} V5 response: {esc(row['v5_response'])}. Remaining blocker: {esc(row['remaining_blocker'])}.")
+        failure_label = display_label(row["failure_case"])
+        failure_desc = display_label(seam_framed_description(row["description"]))
+        a(rf"\paragraph{{Case {esc(row['case_id'])}: {esc(failure_label)}.}} {esc(failure_desc)} Reviewer attack: {esc(row['reviewer_attack'])} V5 response: {esc(row['v5_response'])}. Remaining blocker: {esc(row['remaining_blocker'])}.")
 
     a(r"\clearpage")
     a(r"\section{Metric Definitions}")

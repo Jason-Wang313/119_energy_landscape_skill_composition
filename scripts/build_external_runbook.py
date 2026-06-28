@@ -33,6 +33,7 @@ REQUIRED_COMMAND_FRAGMENTS = [
     "real_collection_runner.py --backend-module <module_or_path>",
     "audit_external_evidence_preflight.py",
     "build_external_ablation_collection_packet.py",
+    "build_external_evidence_intake_ledger.py",
 ]
 
 

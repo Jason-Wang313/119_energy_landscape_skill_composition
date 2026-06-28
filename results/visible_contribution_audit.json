@@ -26,12 +26,12 @@
       "passed": true
     },
     {
-      "detail": "files=267, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=273, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
     {
-      "detail": "validation_command_count=43, route_gates=True, gate_order=True",
+      "detail": "validation_command_count=44, route_gates=True, gate_order=True",
       "name": "external_runbook_route_gates_visible",
       "passed": true
     },
@@ -133,6 +133,11 @@
     {
       "detail": "work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False",
       "name": "ablation_collection_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "mapped=36/36, strict_external_evidence_ready=False",
+      "name": "evidence_intake_ledger_visible",
       "passed": true
     },
     {

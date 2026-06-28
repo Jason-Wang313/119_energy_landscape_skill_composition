@@ -139,6 +139,7 @@ def main():
         "scripts\\build_external_config_manifest_packet.py",
         "scripts\\build_external_rollout_evidence_packet.py",
         "scripts\\build_external_ablation_collection_packet.py",
+        "scripts\\build_external_evidence_intake_ledger.py",
         "scripts\\build_external_baseline_contract.py",
         "scripts\\build_external_adapter_scaffolds.py",
         "scripts\\build_external_reference_adapters.py",
@@ -227,6 +228,7 @@ def main():
         "python scripts/build_external_config_manifest_packet.py",
         "python scripts/build_external_rollout_evidence_packet.py",
         "python scripts/build_external_ablation_collection_packet.py",
+        "python scripts/build_external_evidence_intake_ledger.py",
         "python scripts/build_external_analysis_plan.py",
         "python scripts/probe_external_platform.py",
         "python scripts/probe_maniskill_task_bindings.py",
@@ -300,6 +302,8 @@ def main():
         fail("external collection plan must include the rollout evidence packet command")
     if "python scripts\\build_external_ablation_collection_packet.py" not in collection_commands:
         fail("external collection plan must include the external ablation collection packet command")
+    if "python scripts\\build_external_evidence_intake_ledger.py" not in collection_commands:
+        fail("external collection plan must include the external evidence intake ledger command")
     if "python scripts\\audit_external_pilot_smoke.py" not in collection_commands:
         fail("external collection plan must include the pilot smoke audit command")
     if "python scripts\\build_external_pilot_smoke_packet.py" not in collection_commands:
@@ -349,6 +353,7 @@ def main():
         "audit_maniskill_pilot_runtime_liveness.py",
         "build_maniskill_render_machine_qualification.py",
         "build_external_ablation_collection_packet.py",
+        "build_external_evidence_intake_ledger.py",
         "materialize_external_configs.py --platform-type high_fidelity_sim",
         "real_collection_runner.py --backend-module <module_or_path>",
         "audit_external_evidence_preflight.py",
@@ -2508,6 +2513,52 @@ def main():
         if ablation_checks.get(required_check) is not True:
             fail(f"external ablation collection audit missing passing check: {required_check}")
 
+    intake_json_path = EXTERNAL / "evidence_intake_ledger.json"
+    intake_md_path = EXTERNAL / "evidence_intake_ledger.md"
+    intake_csv_path = EXTERNAL / "evidence_intake_ledger.csv"
+    intake_audit_path = RESULTS / "external_evidence_intake_ledger_audit.json"
+    intake_audit_md_path = RESULTS / "external_evidence_intake_ledger_audit.md"
+    for path in (
+        ROOT / "scripts" / "build_external_evidence_intake_ledger.py",
+        intake_json_path,
+        intake_md_path,
+        intake_csv_path,
+        intake_audit_path,
+        intake_audit_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external evidence intake ledger artifact: {path}")
+    intake_ledger = json.loads(intake_audit_path.read_text(encoding="utf-8"))
+    if intake_ledger.get("version") != "external_evidence_intake_ledger_v1":
+        fail("external evidence intake ledger version mismatch")
+    if intake_ledger.get("passed") is not True:
+        fail("external evidence intake ledger did not pass")
+    if intake_ledger.get("not_external_evidence") is not True:
+        fail("external evidence intake ledger must declare that it is not evidence")
+    if intake_ledger.get("strict_external_evidence_ready") is not False:
+        fail("external evidence intake ledger must keep strict external evidence false")
+    if int(intake_ledger.get("blocking_failure_count", 0) or 0) < 30:
+        fail("external evidence intake ledger maps too few strict evidence failures")
+    if intake_ledger.get("blocking_failure_count") != intake_ledger.get("mapped_failure_count"):
+        fail("external evidence intake ledger must map every current strict evidence failure")
+    if intake_ledger.get("unmapped_failures"):
+        fail(f"external evidence intake ledger has unmapped failures: {intake_ledger.get('unmapped_failures')}")
+    if len(intake_ledger.get("closure_groups", []) or []) < 8:
+        fail("external evidence intake ledger must include all closure groups")
+    intake_checks = {check.get("name"): check.get("passed") for check in intake_ledger.get("checks", [])}
+    for required_check in (
+        "ledger_is_non_evidence_and_fail_closed",
+        "strict_external_evidence_is_currently_missing",
+        "every_blocking_failure_is_mapped",
+        "all_required_closure_groups_present",
+        "source_packets_loaded",
+        "manifest_template_declares_expected_evidence_fields",
+        "strict_command_spine_covers_final_evidence_path",
+        "no_real_manifest_written",
+    ):
+        if intake_checks.get(required_check) is not True:
+            fail(f"external evidence intake ledger missing passing check: {required_check}")
+
     if not (ROOT / "scripts" / "self_test_external_rollout_validator.py").exists():
         fail("missing scripts/self_test_external_rollout_validator.py")
     rollout_metrics = json.loads(rollout_metrics_path.read_text(encoding="utf-8"))
@@ -2640,6 +2691,9 @@ def main():
         "external_ablation_collection_packet_ready",
         "external_ablation_collection_not_evidence",
         "external_ablation_collection_covers_strict_ablation_blocker",
+        "external_evidence_intake_ledger_ready",
+        "external_evidence_intake_ledger_not_evidence",
+        "external_evidence_intake_ledger_maps_all_strict_failures",
         "baseline_contract_reports_missing_implementations",
         "adapter_contract_harness_ready",
         "strict_evidence_gates_remain_not_ready",
@@ -2693,6 +2747,9 @@ def main():
         EXTERNAL / "ablation_collection_packet.json",
         EXTERNAL / "ablation_collection_packet.md",
         EXTERNAL / "ablation_collection_work_orders.csv",
+        EXTERNAL / "evidence_intake_ledger.json",
+        EXTERNAL / "evidence_intake_ledger.md",
+        EXTERNAL / "evidence_intake_ledger.csv",
         EXTERNAL / "pilot_smoke_packet.json",
         EXTERNAL / "pilot_smoke_packet.md",
         EXTERNAL / "pilot_smoke_work_orders.csv",
@@ -2705,6 +2762,7 @@ def main():
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.md",
         RESULTS / "external_ablation_collection_audit.md",
+        RESULTS / "external_evidence_intake_ledger_audit.md",
         RESULTS / "external_pilot_smoke_audit.md",
         RESULTS / "external_pilot_smoke_packet_audit.md",
         RESULTS / "external_config_materialization_plan.md",
@@ -2751,6 +2809,7 @@ def main():
         "config_manifest_packet_ready",
         "rollout_evidence_packet_ready",
         "ablation_collection_packet_ready",
+        "evidence_intake_ledger_ready",
         "backend_contract_gate_ready",
         "backend_integration_packet_ready",
         "maniskill_reference_backend_audit_ready",
@@ -2775,6 +2834,17 @@ def main():
     ):
         if acquisition_checks.get(required_check) is not True:
             fail(f"external acquisition packet missing passing check: {required_check}")
+    acquisition_intake = acquisition.get("evidence_intake_ledger", {}) or {}
+    if acquisition_intake.get("strict_external_evidence_ready") is not False:
+        fail("external acquisition packet evidence intake summary must keep strict evidence false")
+    if acquisition_intake.get("blocking_failure_count") != acquisition_intake.get("mapped_failure_count"):
+        fail("external acquisition packet evidence intake summary must map every strict evidence failure")
+    if int(acquisition_intake.get("blocking_failure_count", 0) or 0) < 30:
+        fail("external acquisition packet evidence intake summary maps too few strict evidence failures")
+    if acquisition_intake.get("unmapped_failures"):
+        fail(f"external acquisition packet evidence intake summary has unmapped failures: {acquisition_intake.get('unmapped_failures')}")
+    if "external_validation/evidence_intake_ledger.md" not in str(acquisition_intake.get("operator_packet_path", "")):
+        fail("external acquisition packet evidence intake summary must point to the intake ledger")
 
     operator_packet_path = RESULTS / "external_operator_packet.json"
     if not operator_packet_path.exists():
@@ -2995,6 +3065,23 @@ def main():
     ablation_action_commands = "\n".join(ablation_actions[0].get("commands", []) or [])
     if "build_external_ablation_collection_packet.py" not in ablation_action_commands:
         fail("external operator packet ablation action must rebuild the ablation collection packet")
+    operator_intake = operator_packet.get("evidence_intake_ledger", {}) or {}
+    if operator_intake.get("strict_external_evidence_ready") is not False:
+        fail("external operator packet evidence intake summary must keep strict evidence false")
+    if operator_intake.get("blocking_failure_count") != operator_intake.get("mapped_failure_count"):
+        fail("external operator packet evidence intake summary must map every strict evidence failure")
+    if int(operator_intake.get("blocking_failure_count", 0) or 0) < 30:
+        fail("external operator packet evidence intake summary maps too few strict evidence failures")
+    if operator_intake.get("unmapped_failures"):
+        fail(f"external operator packet evidence intake summary has unmapped failures: {operator_intake.get('unmapped_failures')}")
+    if "external_validation/evidence_intake_ledger.md" not in str(operator_intake.get("packet_path", "")):
+        fail("external operator packet evidence intake summary must point to the intake ledger")
+    intake_actions = [action for action in operator_actions if action.get("id") == "evidence_intake_ledger"]
+    if not intake_actions:
+        fail("external operator packet missing evidence_intake_ledger action")
+    intake_action_commands = "\n".join(intake_actions[0].get("commands", []) or [])
+    if "build_external_evidence_intake_ledger.py" not in intake_action_commands:
+        fail("external operator packet evidence intake action must rebuild the intake ledger")
     if "audit_external_collection_readiness.py --strict" not in operator_packet.get("pre_collection_gate_command", ""):
         fail("external operator packet missing strict pre-collection gate command")
     if "audit_external_backend_contract.py --strict" not in operator_packet.get("backend_contract_gate_command", ""):
@@ -3064,6 +3151,7 @@ def main():
         "config_manifest_packet_included",
         "rollout_evidence_packet_included",
         "ablation_collection_packet_included",
+        "evidence_intake_ledger_included",
         "pilot_smoke_packet_included",
         "maniskill_render_video_preflight_included",
         "maniskill_pilot_runtime_liveness_included",

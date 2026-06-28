@@ -93,8 +93,8 @@
   ],
   "density_summary": {
     "maximum": 0.17718214558550693,
-    "mean": 0.09866251955327585,
-    "minimum": 0.018057404780093857,
+    "mean": 0.09833657099203316,
+    "minimum": 0.018074866310160427,
     "sparse_pages": [
       16,
       21
@@ -112,9 +112,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.1452581032412965,
+      "foreground_fraction": 0.1448826803448652,
       "height": 770,
-      "luminance_std": 0.16741833021087701,
+      "luminance_std": 0.1675289781623331,
       "page": 1,
       "width": 595
     },
@@ -126,9 +126,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.1763549055986031,
+      "foreground_fraction": 0.1730590417985376,
       "height": 770,
-      "luminance_std": 0.17915710024739798,
+      "luminance_std": 0.17762727599274702,
       "page": 2,
       "width": 595
     },
@@ -294,9 +294,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.12091454763723672,
+      "foreground_fraction": 0.12089708610717013,
       "height": 770,
-      "luminance_std": 0.15759106239836979,
+      "luminance_std": 0.15716197393258738,
       "page": 14,
       "width": 595
     },
@@ -308,9 +308,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.11571974244243152,
+      "foreground_fraction": 0.11553203099421587,
       "height": 770,
-      "luminance_std": 0.15456465539534148,
+      "luminance_std": 0.15416471774915405,
       "page": 15,
       "width": 595
     },
@@ -322,9 +322,9 @@
         "right": 105,
         "top": 27
       },
-      "foreground_fraction": 0.018057404780093857,
+      "foreground_fraction": 0.018074866310160427,
       "height": 770,
-      "luminance_std": 0.058336165133196234,
+      "luminance_std": 0.05819083474793801,
       "page": 16,
       "width": 595
     },
@@ -336,9 +336,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.10998144712430427,
+      "foreground_fraction": 0.11000545672814581,
       "height": 770,
-      "luminance_std": 0.15330312117982786,
+      "luminance_std": 0.15247573839741602,
       "page": 17,
       "width": 595
     },
@@ -350,9 +350,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.07384262796027502,
+      "foreground_fraction": 0.07375750300120049,
       "height": 770,
-      "luminance_std": 0.1275687789655346,
+      "luminance_std": 0.12689652172277305,
       "page": 18,
       "width": 595
     },
@@ -364,9 +364,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.1456422569027611,
+      "foreground_fraction": 0.14316053694204955,
       "height": 770,
-      "luminance_std": 0.17031249232113135,
+      "luminance_std": 0.16837403702254564,
       "page": 19,
       "width": 595
     },
@@ -378,9 +378,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.14776819818836626,
+      "foreground_fraction": 0.14512059369202226,
       "height": 770,
-      "luminance_std": 0.17214563790314627,
+      "luminance_std": 0.168809688343848,
       "page": 20,
       "width": 595
     },
@@ -392,9 +392,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.027608861726508786,
+      "foreground_fraction": 0.0268798428462294,
       "height": 770,
-      "luminance_std": 0.07160947908461689,
+      "luminance_std": 0.07009034012855765,
       "page": 21,
       "width": 595
     },

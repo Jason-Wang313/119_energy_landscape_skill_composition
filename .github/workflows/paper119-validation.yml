@@ -157,6 +157,9 @@ jobs:
       - name: Build external ablation collection packet
         run: python scripts/build_external_ablation_collection_packet.py
 
+      - name: Build external evidence intake ledger
+        run: python scripts/build_external_evidence_intake_ledger.py
+
       - name: Build external acquisition packet
         run: python scripts/build_external_acquisition_packet.py
 

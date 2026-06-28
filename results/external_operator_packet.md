@@ -177,6 +177,25 @@ Ablation packet command:
 python scripts\build_external_ablation_collection_packet.py
 ```
 
+## External Evidence Intake Ledger
+
+This ledger is not evidence. It maps every current strict external-evidence failure to the operator artifact, source packet, strict gate, and completion test that would close it.
+
+- Ledger: `external_validation/evidence_intake_ledger.md`
+- CSV: `external_validation/evidence_intake_ledger.csv`
+- Audit JSON: `results/external_evidence_intake_ledger_audit.json`
+- Audit notes: `results/external_evidence_intake_ledger_audit.md`
+- Blocking failures mapped: `36/36`
+- Closure groups: `8`
+- Strict external evidence ready: `false`
+- Unmapped failures: `[]`
+
+Ledger rebuild command:
+
+```powershell
+python scripts\build_external_evidence_intake_ledger.py
+```
+
 ## Commands
 
 Materialize real configs after platform selection:
@@ -229,6 +248,7 @@ Post-collection strict gates:
 - `config_manifest_packet`: Use the config manifest packet as the task-config evidence checklist
 - `rollout_evidence_packet`: Use the rollout evidence packet as the raw-log evidence checklist
 - `ablation_collection_packet`: Collect manifest-declared external ablations
+- `evidence_intake_ledger`: Use the evidence intake ledger to close every strict external-evidence failure
 - `platform_fidelity`: Fill platform fidelity acceptance with real provenance
 - `fidelity_acceptance_draft`: Generate the tracked ManiSkill fidelity acceptance draft
 - `fidelity_acceptance_materializer`: Materialize fidelity acceptance only through the guarded promotion path
@@ -258,6 +278,7 @@ Post-collection strict gates:
 - `pass` `render_video_preflight_recorded_but_not_evidence`: render_video_ready=False, envs=4, failure_classes=['vulkan_descriptor_pool_exhaustion']
 - `pass` `render_machine_qualification_recorded_but_not_evidence`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12
 - `pass` `ablation_collection_packet_recorded_but_not_evidence`: work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False
+- `pass` `evidence_intake_ledger_recorded_but_not_evidence`: mapped=36/36, groups=8
 - `pass` `operator_actions_cover_start_to_finish`: missing=[]
 - `pass` `operator_action_titles_present`: missing_titles=[]
 - `pass` `config_materializer_is_guarded`: write_enabled=False, task_count=4

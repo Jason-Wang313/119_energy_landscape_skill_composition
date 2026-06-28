@@ -67,6 +67,11 @@
       "passed": true
     },
     {
+      "detail": "mapped=36/36, groups=8",
+      "name": "evidence_intake_ledger_recorded_but_not_evidence",
+      "passed": true
+    },
+    {
       "detail": "missing=[]",
       "name": "operator_actions_cover_start_to_finish",
       "passed": true
@@ -114,6 +119,19 @@
   ],
   "collection_ready": false,
   "config_materialization_command": "python scripts\\materialize_external_configs.py --platform-type <real_robot|high_fidelity_sim> --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
+  "evidence_intake_ledger": {
+    "audit_md_path": "results/external_evidence_intake_ledger_audit.md",
+    "audit_path": "results/external_evidence_intake_ledger_audit.json",
+    "blocking_failure_count": 36,
+    "build_command": "python scripts\\build_external_evidence_intake_ledger.py",
+    "closure_group_count": 8,
+    "csv_path": "external_validation/evidence_intake_ledger.csv",
+    "mapped_failure_count": 36,
+    "not_external_evidence": true,
+    "packet_path": "external_validation/evidence_intake_ledger.md",
+    "strict_external_evidence_ready": false,
+    "unmapped_failures": []
+  },
   "fidelity_acceptance_draft": {
     "acceptance_ready": false,
     "build_command": "python scripts\\build_external_fidelity_acceptance_draft.py",
@@ -418,6 +436,27 @@
       "id": "ablation_collection_packet",
       "operator_input": "five required ablated variants on the same accepted task configs, skill library, paired resets, observation interface, and compute budget",
       "title": "Collect manifest-declared external ablations"
+    },
+    {
+      "artifacts": [
+        "external_validation/evidence_intake_ledger.md",
+        "external_validation/evidence_intake_ledger.csv",
+        "results/external_evidence_intake_ledger_audit.json"
+      ],
+      "closes": [
+        "Independent real-robot or accepted high-fidelity external validation evidence",
+        "External rollout metrics recomputed from raw JSONL logs",
+        "Manifest-declared real task configs replace non-evidence templates",
+        "Manifest-declared independent non-oracle baseline evidence and fairness contract"
+      ],
+      "commands": [
+        "python scripts\\build_external_evidence_intake_ledger.py",
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "id": "evidence_intake_ledger",
+      "operator_input": "complete the ledger rows for manifest, fidelity, configs, logs/videos, methods, metrics, ablations, pairing, release hashes, and oracle-boundary explanation",
+      "title": "Use the evidence intake ledger to close every strict external-evidence failure"
     },
     {
       "artifacts": [
@@ -793,6 +832,7 @@
     "results/external_config_materialization_plan.json",
     "results/external_rollout_evidence_audit.json",
     "results/external_ablation_collection_audit.json",
+    "results/external_evidence_intake_ledger_audit.json",
     "results/external_fidelity_provenance_audit.json",
     "results/external_pilot_smoke_packet_audit.json",
     "results/maniskill_pilot_runtime_liveness_audit.json"

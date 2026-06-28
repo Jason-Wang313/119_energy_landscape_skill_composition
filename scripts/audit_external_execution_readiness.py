@@ -886,6 +886,41 @@ def main() -> int:
         ),
     )
 
+    intake_ok, intake_ledger, intake_detail = passed_json(
+        RESULTS / "external_evidence_intake_ledger_audit.json",
+        version="external_evidence_intake_ledger_v1",
+    )
+    add_check(checks, "external_evidence_intake_ledger_ready", intake_ok, intake_detail)
+    intake_checks = {check.get("name"): check.get("passed") for check in intake_ledger.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_evidence_intake_ledger_not_evidence",
+        intake_ledger.get("not_external_evidence") is True
+        and intake_ledger.get("strict_external_evidence_ready") is False,
+        (
+            f"not_external_evidence={intake_ledger.get('not_external_evidence')!r}, "
+            f"strict_external_evidence_ready={intake_ledger.get('strict_external_evidence_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "external_evidence_intake_ledger_maps_all_strict_failures",
+        int(intake_ledger.get("blocking_failure_count", 0) or 0) >= 30
+        and intake_ledger.get("blocking_failure_count") == intake_ledger.get("mapped_failure_count")
+        and not intake_ledger.get("unmapped_failures")
+        and intake_checks.get("every_blocking_failure_is_mapped") is True
+        and intake_checks.get("all_required_closure_groups_present") is True
+        and intake_checks.get("strict_command_spine_covers_final_evidence_path") is True
+        and (EXTERNAL / "evidence_intake_ledger.json").exists()
+        and (EXTERNAL / "evidence_intake_ledger.md").exists()
+        and (EXTERNAL / "evidence_intake_ledger.csv").exists(),
+        (
+            f"mapped={intake_ledger.get('mapped_failure_count')!r}/"
+            f"{intake_ledger.get('blocking_failure_count')!r}, "
+            f"groups={len(intake_ledger.get('closure_groups', []) or [])}"
+        ),
+    )
+
     baseline_ok, baseline, baseline_detail = passed_json(
         RESULTS / "external_baseline_contract_audit.json",
         version="external_baseline_contract_audit_v1",
@@ -1182,6 +1217,10 @@ def main() -> int:
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.md",
         RESULTS / "external_ablation_collection_audit.md",
+        RESULTS / "external_evidence_intake_ledger_audit.md",
+        EXTERNAL / "evidence_intake_ledger.json",
+        EXTERNAL / "evidence_intake_ledger.md",
+        EXTERNAL / "evidence_intake_ledger.csv",
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "maniskill_pilot_runtime_liveness_audit.md",
         DOCS / "independent_validation_protocol.md",
@@ -1301,6 +1340,9 @@ def main() -> int:
         "external_ablation_collection_packet_ready",
         "external_ablation_collection_not_evidence",
         "external_ablation_collection_covers_strict_ablation_blocker",
+        "external_evidence_intake_ledger_ready",
+        "external_evidence_intake_ledger_not_evidence",
+        "external_evidence_intake_ledger_maps_all_strict_failures",
         "baseline_contract_ready",
         "baseline_contract_reports_missing_implementations",
         "adapter_scaffolds_ready",
@@ -1357,6 +1399,7 @@ def main() -> int:
             "completed config manifest packet work orders with manifest-declared config hashes",
             "completed rollout evidence packet work orders with manifest-declared JSONL logs and videos",
             "manifest-declared external ablation logs and videos for basin_overlap, barrier_height, descent_continuity, risk_calibration, and seam_repair",
+            "completed evidence intake ledger rows for all current strict external-evidence failures",
             "manifest-declared videos",
             "manifest-declared independent non-oracle adapter implementations",
             "completed method implementation packet work orders with source/config/checkpoint hashes",

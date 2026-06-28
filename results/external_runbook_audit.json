@@ -46,7 +46,7 @@
       "passed": true
     },
     {
-      "detail": "positions={'audit_external_fidelity_acceptance.py': 403, 'audit_external_backend_contract.py': 623, 'audit_maniskill_reference_collection_preflight.py': 725, 'audit_maniskill_render_video_preflight.py': 1112, 'real_collection_runner.py --backend-module <module_or_path>': 1991, 'build_external_manifest.py --write --check-video-paths': 2241, 'validate_external_rollouts.py --write-results --check-video-paths --strict': 2484, 'audit_external_evidence.py --strict': 2694}",
+      "detail": "positions={'audit_external_fidelity_acceptance.py': 403, 'audit_external_backend_contract.py': 623, 'audit_maniskill_reference_collection_preflight.py': 725, 'audit_maniskill_render_video_preflight.py': 1112, 'real_collection_runner.py --backend-module <module_or_path>': 1991, 'build_external_manifest.py --write --check-video-paths': 2241, 'validate_external_rollouts.py --write-results --check-video-paths --strict': 2484, 'audit_external_evidence.py --strict': 2750}",
       "name": "gate_order_preserves_preflight_before_collection_and_evidence",
       "passed": true
     },
@@ -85,7 +85,8 @@
     "materialize_external_configs.py --platform-type high_fidelity_sim",
     "real_collection_runner.py --backend-module <module_or_path>",
     "audit_external_evidence_preflight.py",
-    "build_external_ablation_collection_packet.py"
+    "build_external_ablation_collection_packet.py",
+    "build_external_evidence_intake_ledger.py"
   ],
   "runbook": "external_validation/collection_runbook.md",
   "task_cards": [
@@ -94,6 +95,6 @@
     "external_validation/task_cards/door_open_navigation.md",
     "external_validation/task_cards/cable_route_insert.md"
   ],
-  "validation_command_count": 43,
+  "validation_command_count": 44,
   "version": "external_runbook_audit_v1"
 }

@@ -86,6 +86,10 @@ def build_payload() -> dict[str, Any]:
         RESULTS / "external_ablation_collection_audit.json",
         "external_ablation_collection_audit_v1",
     )
+    evidence_intake = require_payload(
+        RESULTS / "external_evidence_intake_ledger_audit.json",
+        "external_evidence_intake_ledger_v1",
+    )
     materialization = require_payload(
         RESULTS / "external_config_materialization_plan.json",
         "external_config_materialization_plan_v1",
@@ -123,6 +127,7 @@ def build_payload() -> dict[str, Any]:
         "maniskill_pilot_runtime_liveness",
         "maniskill_render_machine_qualification",
         "ablation_collection_packet",
+        "evidence_intake_ledger",
         "run_collection",
         "manifest_and_release",
         "strict_rollout_recompute",
@@ -281,6 +286,26 @@ def build_payload() -> dict[str, Any]:
             f"work_order_count={ablation_packet.get('work_order_count')!r}, "
             f"expected_ablation_records={ablation_packet.get('expected_ablation_records')!r}, "
             f"manifest_ablation_evidence_ready={ablation_packet.get('manifest_ablation_evidence_ready')!r}"
+        ),
+    )
+    intake_action = actions.get("evidence_intake_ledger", {})
+    intake_commands = "\n".join(intake_action.get("commands", []) or [])
+    intake_checks = {check.get("name"): check.get("passed") for check in evidence_intake.get("checks", []) or []}
+    add_check(
+        checks,
+        "evidence_intake_ledger_recorded_but_not_evidence",
+        evidence_intake.get("passed") is True
+        and evidence_intake.get("not_external_evidence") is True
+        and evidence_intake.get("strict_external_evidence_ready") is False
+        and int(evidence_intake.get("blocking_failure_count", 0) or 0) >= 30
+        and evidence_intake.get("blocking_failure_count") == evidence_intake.get("mapped_failure_count")
+        and not evidence_intake.get("unmapped_failures")
+        and intake_checks.get("every_blocking_failure_is_mapped") is True
+        and "build_external_evidence_intake_ledger.py" in intake_commands,
+        (
+            f"mapped={evidence_intake.get('mapped_failure_count')!r}/"
+            f"{evidence_intake.get('blocking_failure_count')!r}, "
+            f"groups={len(evidence_intake.get('closure_groups', []) or [])}"
         ),
     )
     add_check(
@@ -482,6 +507,19 @@ def build_payload() -> dict[str, Any]:
             "audit_md_path": "results/external_ablation_collection_audit.md",
             "build_command": "python scripts\\build_external_ablation_collection_packet.py",
         },
+        "evidence_intake_ledger": {
+            "not_external_evidence": True,
+            "strict_external_evidence_ready": evidence_intake.get("strict_external_evidence_ready") is True,
+            "blocking_failure_count": int(evidence_intake.get("blocking_failure_count", 0) or 0),
+            "mapped_failure_count": int(evidence_intake.get("mapped_failure_count", 0) or 0),
+            "closure_group_count": len(evidence_intake.get("closure_groups", []) or []),
+            "unmapped_failures": list(evidence_intake.get("unmapped_failures", []) or []),
+            "packet_path": "external_validation/evidence_intake_ledger.md",
+            "csv_path": "external_validation/evidence_intake_ledger.csv",
+            "audit_path": "results/external_evidence_intake_ledger_audit.json",
+            "audit_md_path": "results/external_evidence_intake_ledger_audit.md",
+            "build_command": "python scripts\\build_external_evidence_intake_ledger.py",
+        },
         "pre_collection_gate_command": (
             "python scripts\\audit_external_collection_readiness.py --strict "
             "--backend-module <module_or_path> --task-config-dir external_validation\\configs "
@@ -510,6 +548,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_config_materialization_plan.json",
             "results/external_rollout_evidence_audit.json",
             "results/external_ablation_collection_audit.json",
+            "results/external_evidence_intake_ledger_audit.json",
             "results/external_fidelity_provenance_audit.json",
             "results/external_pilot_smoke_packet_audit.json",
             "results/maniskill_pilot_runtime_liveness_audit.json",
@@ -732,6 +771,31 @@ def write_md(payload: dict[str, Any]) -> None:
             "",
             "```powershell",
             ablation["build_command"],
+            "```",
+        ]
+    )
+
+    intake = payload["evidence_intake_ledger"]
+    lines.extend(
+        [
+            "",
+            "## External Evidence Intake Ledger",
+            "",
+            "This ledger is not evidence. It maps every current strict external-evidence failure to the operator artifact, source packet, strict gate, and completion test that would close it.",
+            "",
+            f"- Ledger: `{intake['packet_path']}`",
+            f"- CSV: `{intake['csv_path']}`",
+            f"- Audit JSON: `{intake['audit_path']}`",
+            f"- Audit notes: `{intake['audit_md_path']}`",
+            f"- Blocking failures mapped: `{intake['mapped_failure_count']}/{intake['blocking_failure_count']}`",
+            f"- Closure groups: `{intake['closure_group_count']}`",
+            f"- Strict external evidence ready: `{str(intake['strict_external_evidence_ready']).lower()}`",
+            f"- Unmapped failures: `{intake['unmapped_failures']}`",
+            "",
+            "Ledger rebuild command:",
+            "",
+            "```powershell",
+            intake["build_command"],
             "```",
         ]
     )

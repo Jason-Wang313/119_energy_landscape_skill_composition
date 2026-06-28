@@ -147,6 +147,7 @@ try {
         Invoke-Native python scripts\audit_external_evidence.py
         Invoke-Native python scripts\build_external_rollout_evidence_packet.py
         Invoke-Native python scripts\build_external_ablation_collection_packet.py
+        Invoke-Native python scripts\build_external_evidence_intake_ledger.py
         Invoke-Native python scripts\build_external_acquisition_packet.py
         Invoke-Native python scripts\build_external_operator_packet.py
         Invoke-Native python scripts\build_external_operator_handoff_bundle.py
