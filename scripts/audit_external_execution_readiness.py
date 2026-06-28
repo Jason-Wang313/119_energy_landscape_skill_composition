@@ -259,6 +259,9 @@ def main() -> int:
         "external_method_implementation_covers_missing_methods",
         method_checks.get("work_orders_cover_all_missing_non_oracle_methods") is True
         and method_checks.get("oracle_excluded_from_work_orders") is True
+        and method_checks.get("manifest_entry_templates_cover_required_hash_fields") is True
+        and method_checks.get("work_orders_forbid_scaffolds_and_reference_adapters") is True
+        and method_checks.get("policy_or_config_hash_in_logs_required") is True
         and method_checks.get("adapter_evidence_still_missing") is True,
         f"method_checks={method_checks}",
     )

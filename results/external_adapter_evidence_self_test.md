@@ -10,6 +10,6 @@ This self-test builds temporary manifest-declared adapter implementations and ex
 
 - `pass` `synthetic_strict_adapters_pass`: passed=True, adapter_count=11
 - `pass` `synthetic_manifest_entries_cover_non_oracle_methods`: methods=11
-- `pass` `missing_manifest_fails_strict`: passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': False, 'manifest_implementation_entries_present': False, 'adapter_results_passed': False}
+- `pass` `missing_manifest_fails_strict`: passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': False, 'manifest_implementation_entries_present': False, 'manifest_declares_all_required_non_oracle_methods': False, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': False, 'manifest_required_hashes_match_artifacts': False, 'adapter_results_passed': False}
 - `pass` `scaffold_adapters_rejected_as_strict_evidence`: failed_adapters=11
-- `pass` `real_adapter_evidence_report_not_overwritten`: before=5d13af70e50616d589853e16574235669441e147b18f94ce071398d6ea1ed940, after=5d13af70e50616d589853e16574235669441e147b18f94ce071398d6ea1ed940
+- `pass` `real_adapter_evidence_report_not_overwritten`: before=0d26f217bbfdb41f97394f0254c131a8c19ad2f1f613264fb8636dec6b33fdbb, after=0d26f217bbfdb41f97394f0254c131a8c19ad2f1f613264fb8636dec6b33fdbb

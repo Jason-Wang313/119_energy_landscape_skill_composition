@@ -141,11 +141,11 @@
   "included_file_count": 246,
   "included_files": [
     {
-      "bytes": 16400,
+      "bytes": 16589,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "CD90226E2F88B324222DE24F370EC0D74E7AD0A9F700C749911F9B15D179B2DC"
+      "sha256": "86CD85D79B91637ED84D2C8A0A5F2065979478C49B2F40A0AFBA37B0D0A1D19D"
     },
     {
       "bytes": 10551,
@@ -925,25 +925,25 @@
       "sha256": "B56A11CB20914B2FD2649DA647F7722DE43D6B04DE3E89704A8CD3F952A4E031"
     },
     {
-      "bytes": 30341,
+      "bytes": 37741,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/method_implementation_packet.json",
-      "sha256": "204CEB4C21FE47243E725D6F22A80B1129B73674BB3FE421FAFE89CF0142FCA2"
+      "sha256": "0E1249BB79ED66190581C0A6291AF7AE846C25C6D5413C2B00C10A253DF1EE66"
     },
     {
-      "bytes": 11808,
+      "bytes": 18703,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/method_implementation_packet.md",
-      "sha256": "4D5984349CBBD00EE0AE33B1373BDBC16532C4D1CC55D0FAC64A633B5ABD719B"
+      "sha256": "8CF68740AB8A1D230D1AAA6FDC24EF1E3C845D1C0328FB86D8DBA1E67B30DCD2"
     },
     {
-      "bytes": 8334,
+      "bytes": 8718,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/method_implementation_work_orders.csv",
-      "sha256": "76AF1F73B62B0DA469EB8D59195D52246399AB74387D8217D922BA29338AA11A"
+      "sha256": "2D33E0D723C20A473C651EB7426534CF8A56DE99D748CE21A6F074CD290CD2F9"
     },
     {
       "bytes": 710130,
@@ -1324,18 +1324,18 @@
       "sha256": "B68911C22003E7E03E48D7486AB58F53AD10457F0C25ABCD47A134E37A247892"
     },
     {
-      "bytes": 30324,
+      "bytes": 30626,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.json",
-      "sha256": "ABFA33F960702CE188DF984861405AF7FEDC7F54FF1A13EA97586FBD1A84D2DD"
+      "sha256": "C958D0CB4EB2D823F0A9A9235EA2F9397F431118E90AB2C111908A3F9AD7C264"
     },
     {
-      "bytes": 23187,
+      "bytes": 23489,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.md",
-      "sha256": "B5AAE867586A8ED94AA0AEDDCA5D1BC5BB2141647758790F6FB50F29CD24F720"
+      "sha256": "0C3CF6790F3449B783F40DF3915ABEC59E0263F28740579118B8A31B669931C2"
     },
     {
       "bytes": 7157,
@@ -1380,18 +1380,18 @@
       "sha256": "3177E678AE10559911411D816D161FD7159B2C52000A8EE64E91078E36E49448"
     },
     {
-      "bytes": 2523,
+      "bytes": 3203,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_method_implementation_audit.json",
-      "sha256": "41840782DC3EB5F94401B7771DCE32581B62CBAED0CBC2DADD5BDFB0406ACA63"
+      "sha256": "FD6362F78BF0CFBFC4714168061B970F0115CF4D958C178BBF68EAAB5C359456"
     },
     {
-      "bytes": 1912,
+      "bytes": 2406,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_method_implementation_audit.md",
-      "sha256": "428B997AE9D07EF6B24950444186AAC256634822B715B632D2BC4F2451C2C2E1"
+      "sha256": "59DA0FC932E329A9D91214406C6E8A0FEB851CF2C7DDD8165B7E82D570B7025B"
     },
     {
       "bytes": 30066,
@@ -1716,11 +1716,11 @@
       "sha256": "A9B57E8629AF6556AF8BB31B0CD10081E1BA1BEC5FBB1178650CD587FDFFAD7B"
     },
     {
-      "bytes": 54406,
+      "bytes": 54693,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_acquisition_packet.py",
-      "sha256": "D46C6AD481CA4BA61E8E1DB2C906A150685C9EE538916978E5F9ABE06EC54B7B"
+      "sha256": "5E98481969D0C3D3D758A0110E7535084AD3408A09C9920B366CA844B6D5AA53"
     },
     {
       "bytes": 16556,
@@ -1765,18 +1765,18 @@
       "sha256": "4F5A002BCFF1FA189D98623E1D1FB7DAEB65604C200B7FE68CB757C96552BB16"
     },
     {
-      "bytes": 16186,
+      "bytes": 19526,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_method_implementation_packet.py",
-      "sha256": "2BBE4A63230A15DC53D69B3D5798765D61EA7F07944B6FBD533AD1F9788FE101"
+      "sha256": "84FBA076C70EA097C5B223886D3A1DFB27D667F5068F2E8930EBCC885AF6EEA5"
     },
     {
-      "bytes": 44888,
+      "bytes": 45154,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "173815393BDFA543A2B2F288E0B5767F6E72D239BCF39ADF8B113322F528D8B1"
+      "sha256": "3555B5B1F237BFE70811948BD3A388B1B84922FFC12D565D8B2B4458B638AC47"
     },
     {
       "bytes": 24280,
@@ -1842,11 +1842,11 @@
       "sha256": "AC9A26FDA7512B17AD35589525DF3A41E7C5CF28C164850C4F835466C69D92E2"
     },
     {
-      "bytes": 16734,
+      "bytes": 22213,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/validate_external_adapters.py",
-      "sha256": "0D59CA82FB8B3F919654AEBA695F643CFCDEFE1B8BF72DC618E73B116CF7E2BF"
+      "sha256": "8A8C66ADE8BBB17AB0DE28FE5F2B6DBD96C3836CB974ABE2D2F0E78309455E88"
     },
     {
       "bytes": 13456,

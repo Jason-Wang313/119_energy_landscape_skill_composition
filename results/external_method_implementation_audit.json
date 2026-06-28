@@ -31,6 +31,21 @@
       "passed": true
     },
     {
+      "detail": "fields=['name', 'implementation', 'checkpoint_or_config_path', 'checkpoint_or_config_hash']",
+      "name": "manifest_entry_templates_cover_required_hash_fields",
+      "passed": true
+    },
+    {
+      "detail": "every non-oracle method requires independent implementation evidence and forbids scaffold/reference adapters as evidence",
+      "name": "work_orders_forbid_scaffolds_and_reference_adapters",
+      "passed": true
+    },
+    {
+      "detail": "every work order requires JSONL policy_or_config_hash to match manifest-declared method provenance",
+      "name": "policy_or_config_hash_in_logs_required",
+      "passed": true
+    },
+    {
       "detail": "commands=['python scripts\\\\build_external_method_implementation_packet.py', 'python scripts\\\\validate_external_adapters.py --strict', 'python scripts\\\\build_external_baseline_contract.py', 'python scripts\\\\validate_external_rollouts.py --write-results --check-video-paths --strict', 'python scripts\\\\audit_external_pairing_integrity.py --strict', 'python scripts\\\\audit_external_evidence.py --strict']",
       "name": "strict_commands_cover_adapter_rollout_pairing_and_evidence",
       "passed": true

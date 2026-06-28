@@ -58,10 +58,12 @@ def baseline_methods() -> list[str]:
 def write_valid_adapter(path: Path, method: str) -> None:
     path.write_text(
         f'''
-POLICY_HASH = "{digest(f"{method}:self_test_policy")}"
+POLICY_HASH = ""
 
 
 def initialize(config):
+    global POLICY_HASH
+    POLICY_HASH = config.get("policy_or_config_hash", "")
     return {{"method_name": config.get("method_name"), "policy_or_config_hash": POLICY_HASH}}
 
 
@@ -91,7 +93,7 @@ def reset(reset_context):
     )
 
 
-def manifest_for_implementations(adapter_paths: dict[str, Path]) -> dict[str, Any]:
+def manifest_for_implementations(adapter_paths: dict[str, Path], config_paths: dict[str, Path]) -> dict[str, Any]:
     return {
         "version": "paper119_external_manifest_v1",
         "route": "high_fidelity_sim",
@@ -99,8 +101,8 @@ def manifest_for_implementations(adapter_paths: dict[str, Path]) -> dict[str, An
             {
                 "name": method,
                 "implementation": rel(path),
-                "checkpoint_or_config_path": "",
-                "checkpoint_or_config_hash": digest(f"{method}:checkpoint"),
+                "checkpoint_or_config_path": rel(config_paths[method]),
+                "checkpoint_or_config_hash": file_digest(config_paths[method]),
             }
             for method, path in sorted(adapter_paths.items())
         ]
@@ -173,17 +175,29 @@ def main() -> int:
     with tempfile.TemporaryDirectory(prefix="paper119_adapter_evidence_selftest_", dir=TMP_ROOT) as tmp_name:
         tmp = Path(tmp_name)
         adapter_dir = tmp / "adapters"
+        config_dir = tmp / "configs"
         adapter_paths: dict[str, Path] = {}
+        config_paths: dict[str, Path] = {}
         for method in baseline_methods():
             target = adapter_dir / method / "adapter.py"
             target.parent.mkdir(parents=True, exist_ok=True)
             write_valid_adapter(target, method)
             adapter_paths[method] = target
+            config = config_dir / method / "config.json"
+            write_json(
+                config,
+                {
+                    "method": method,
+                    "fixed_risk_budget": 0.15,
+                    "self_test_only": True,
+                },
+            )
+            config_paths[method] = config
 
         complete_manifest = tmp / "manifest_complete.json"
         missing_manifest = tmp / "manifest_missing.json"
         scaffold_manifest = tmp / "manifest_scaffolds.json"
-        write_json(complete_manifest, manifest_for_implementations(adapter_paths))
+        write_json(complete_manifest, manifest_for_implementations(adapter_paths, config_paths))
         write_json(scaffold_manifest, manifest_for_scaffolds())
 
         complete_audit = run_strict_with_manifest(complete_manifest)
@@ -205,6 +219,9 @@ def main() -> int:
         and int(complete_audit.get("adapter_count", 0) or 0) >= 11
         and complete_checks.get("manifest_exists") is True
         and complete_checks.get("manifest_implementation_entries_present") is True
+        and complete_checks.get("manifest_declares_all_required_non_oracle_methods") is True
+        and complete_checks.get("manifest_implementation_entries_cover_required_non_oracle_methods") is True
+        and complete_checks.get("manifest_required_hashes_match_artifacts") is True
         and complete_checks.get("adapter_results_passed") is True,
         f"passed={complete_audit.get('passed')!r}, adapter_count={complete_audit.get('adapter_count')!r}",
     )

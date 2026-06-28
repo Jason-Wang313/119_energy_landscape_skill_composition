@@ -10,6 +10,8 @@ This packet converts the missing independent baseline layer into concrete implem
 
 - using scaffold adapters as manifest-declared implementations
 - using reference adapters as rollout evidence without real source/config/checkpoint hashes
+- declaring only a subset of non-oracle methods in the strict adapter manifest
+- using policy_or_config_hash values in JSONL logs that do not match manifest-declared hashes
 - dropping hard methods after viewing method identity or outcomes
 - changing compute budgets after seeing paired-reset performance
 - hand-entering manifest metrics without raw JSONL logs
@@ -24,8 +26,21 @@ This packet converts the missing independent baseline layer into concrete implem
 - Target adapter directory: `external_validation/baselines/barrier_certified_energy_composer_v5`
 - Suggested real implementation path: `external_validation/implementations/barrier_certified_energy_composer_v5/implementation.py`
 - Evidence status: `missing_manifest_declared_implementation`
+- Independent implementation required: `true`
+- Scaffold allowed as evidence: `false`
+- Reference adapter allowed as evidence: `false`
+- Policy/config hash required in logs: `true`
 - Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
+- Manifest method entry template:
+```json
+{
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_path": "external_validation/implementations/barrier_certified_energy_composer_v5/config_or_checkpoint.json",
+  "implementation": "external_validation/implementations/barrier_certified_energy_composer_v5/adapter.py",
+  "name": "barrier_certified_energy_composer_v5"
+}
+```
 
 Forbidden advantages:
 - post hoc oracle basin truth
@@ -39,8 +54,21 @@ Forbidden advantages:
 - Target adapter directory: `external_validation/baselines/behavior_cloned_skill_chain`
 - Suggested real implementation path: `external_validation/implementations/behavior_cloned_skill_chain/implementation.py`
 - Evidence status: `missing_manifest_declared_implementation`
+- Independent implementation required: `true`
+- Scaffold allowed as evidence: `false`
+- Reference adapter allowed as evidence: `false`
+- Policy/config hash required in logs: `true`
 - Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
+- Manifest method entry template:
+```json
+{
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_path": "external_validation/implementations/behavior_cloned_skill_chain/config_or_checkpoint.json",
+  "implementation": "external_validation/implementations/behavior_cloned_skill_chain/adapter.py",
+  "name": "behavior_cloned_skill_chain"
+}
+```
 
 Forbidden advantages:
 - v5 diagnostic labels
@@ -55,8 +83,21 @@ Forbidden advantages:
 - Target adapter directory: `external_validation/baselines/cem_trajectory_composer`
 - Suggested real implementation path: `external_validation/implementations/cem_trajectory_composer/implementation.py`
 - Evidence status: `missing_manifest_declared_implementation`
+- Independent implementation required: `true`
+- Scaffold allowed as evidence: `false`
+- Reference adapter allowed as evidence: `false`
+- Policy/config hash required in logs: `true`
 - Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
+- Manifest method entry template:
+```json
+{
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_path": "external_validation/implementations/cem_trajectory_composer/config_or_checkpoint.json",
+  "implementation": "external_validation/implementations/cem_trajectory_composer/adapter.py",
+  "name": "cem_trajectory_composer"
+}
+```
 
 Forbidden advantages:
 - larger compute budget
@@ -71,8 +112,21 @@ Forbidden advantages:
 - Target adapter directory: `external_validation/baselines/diffusion_skill_stitcher`
 - Suggested real implementation path: `external_validation/implementations/diffusion_skill_stitcher/implementation.py`
 - Evidence status: `missing_manifest_declared_implementation`
+- Independent implementation required: `true`
+- Scaffold allowed as evidence: `false`
+- Reference adapter allowed as evidence: `false`
+- Policy/config hash required in logs: `true`
 - Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
+- Manifest method entry template:
+```json
+{
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_path": "external_validation/implementations/diffusion_skill_stitcher/config_or_checkpoint.json",
+  "implementation": "external_validation/implementations/diffusion_skill_stitcher/adapter.py",
+  "name": "diffusion_skill_stitcher"
+}
+```
 
 Forbidden advantages:
 - v5 accept/reject labels unless explicitly trained on the same data as all baselines
@@ -85,8 +139,21 @@ Forbidden advantages:
 - Target adapter directory: `external_validation/baselines/energy_compatibility_heuristic`
 - Suggested real implementation path: `external_validation/implementations/energy_compatibility_heuristic/implementation.py`
 - Evidence status: `missing_manifest_declared_implementation`
+- Independent implementation required: `true`
+- Scaffold allowed as evidence: `false`
+- Reference adapter allowed as evidence: `false`
+- Policy/config hash required in logs: `true`
 - Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
+- Manifest method entry template:
+```json
+{
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_path": "external_validation/implementations/energy_compatibility_heuristic/config_or_checkpoint.json",
+  "implementation": "external_validation/implementations/energy_compatibility_heuristic/adapter.py",
+  "name": "energy_compatibility_heuristic"
+}
+```
 
 Forbidden advantages:
 - fixed-risk calibration gate
@@ -100,8 +167,21 @@ Forbidden advantages:
 - Target adapter directory: `external_validation/baselines/greedy_module_sequence`
 - Suggested real implementation path: `external_validation/implementations/greedy_module_sequence/implementation.py`
 - Evidence status: `missing_manifest_declared_implementation`
+- Independent implementation required: `true`
+- Scaffold allowed as evidence: `false`
+- Reference adapter allowed as evidence: `false`
+- Policy/config hash required in logs: `true`
 - Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
+- Manifest method entry template:
+```json
+{
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_path": "external_validation/implementations/greedy_module_sequence/config_or_checkpoint.json",
+  "implementation": "external_validation/implementations/greedy_module_sequence/adapter.py",
+  "name": "greedy_module_sequence"
+}
+```
 
 Forbidden advantages:
 - energy seam labels
@@ -116,8 +196,21 @@ Forbidden advantages:
 - Target adapter directory: `external_validation/baselines/option_graph_planner`
 - Suggested real implementation path: `external_validation/implementations/option_graph_planner/implementation.py`
 - Evidence status: `missing_manifest_declared_implementation`
+- Independent implementation required: `true`
+- Scaffold allowed as evidence: `false`
+- Reference adapter allowed as evidence: `false`
+- Policy/config hash required in logs: `true`
 - Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
+- Manifest method entry template:
+```json
+{
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_path": "external_validation/implementations/option_graph_planner/config_or_checkpoint.json",
+  "implementation": "external_validation/implementations/option_graph_planner/adapter.py",
+  "name": "option_graph_planner"
+}
+```
 
 Forbidden advantages:
 - hidden basin classifier
@@ -131,8 +224,21 @@ Forbidden advantages:
 - Target adapter directory: `external_validation/baselines/proposed_energy_landscape_composer_v4_1`
 - Suggested real implementation path: `external_validation/implementations/proposed_energy_landscape_composer_v4_1/implementation.py`
 - Evidence status: `missing_manifest_declared_implementation`
+- Independent implementation required: `true`
+- Scaffold allowed as evidence: `false`
+- Reference adapter allowed as evidence: `false`
+- Policy/config hash required in logs: `true`
 - Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
+- Manifest method entry template:
+```json
+{
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_path": "external_validation/implementations/proposed_energy_landscape_composer_v4_1/config_or_checkpoint.json",
+  "implementation": "external_validation/implementations/proposed_energy_landscape_composer_v4_1/adapter.py",
+  "name": "proposed_energy_landscape_composer_v4_1"
+}
+```
 
 Forbidden advantages:
 - v5-only repair memory
@@ -146,8 +252,21 @@ Forbidden advantages:
 - Target adapter directory: `external_validation/baselines/residual_rl_composer`
 - Suggested real implementation path: `external_validation/implementations/residual_rl_composer/implementation.py`
 - Evidence status: `missing_manifest_declared_implementation`
+- Independent implementation required: `true`
+- Scaffold allowed as evidence: `false`
+- Reference adapter allowed as evidence: `false`
+- Policy/config hash required in logs: `true`
 - Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
+- Manifest method entry template:
+```json
+{
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_path": "external_validation/implementations/residual_rl_composer/config_or_checkpoint.json",
+  "implementation": "external_validation/implementations/residual_rl_composer/adapter.py",
+  "name": "residual_rl_composer"
+}
+```
 
 Forbidden advantages:
 - training on evaluation resets
@@ -161,8 +280,21 @@ Forbidden advantages:
 - Target adapter directory: `external_validation/baselines/stable_dmp_handoff`
 - Suggested real implementation path: `external_validation/implementations/stable_dmp_handoff/implementation.py`
 - Evidence status: `missing_manifest_declared_implementation`
+- Independent implementation required: `true`
+- Scaffold allowed as evidence: `false`
+- Reference adapter allowed as evidence: `false`
+- Policy/config hash required in logs: `true`
 - Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
+- Manifest method entry template:
+```json
+{
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_path": "external_validation/implementations/stable_dmp_handoff/config_or_checkpoint.json",
+  "implementation": "external_validation/implementations/stable_dmp_handoff/adapter.py",
+  "name": "stable_dmp_handoff"
+}
+```
 
 Forbidden advantages:
 - oracle basin membership
@@ -176,8 +308,21 @@ Forbidden advantages:
 - Target adapter directory: `external_validation/baselines/tamp_feasibility_screen`
 - Suggested real implementation path: `external_validation/implementations/tamp_feasibility_screen/implementation.py`
 - Evidence status: `missing_manifest_declared_implementation`
+- Independent implementation required: `true`
+- Scaffold allowed as evidence: `false`
+- Reference adapter allowed as evidence: `false`
+- Policy/config hash required in logs: `true`
 - Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
+- Manifest method entry template:
+```json
+{
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_path": "external_validation/implementations/tamp_feasibility_screen/config_or_checkpoint.json",
+  "implementation": "external_validation/implementations/tamp_feasibility_screen/adapter.py",
+  "name": "tamp_feasibility_screen"
+}
+```
 
 Forbidden advantages:
 - energy descent continuity

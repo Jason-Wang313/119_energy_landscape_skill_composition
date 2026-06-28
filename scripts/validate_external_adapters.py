@@ -34,6 +34,29 @@ def digest(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
+def sha256_file(path: Path) -> str:
+    digest_obj = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest_obj.update(chunk)
+    return digest_obj.hexdigest()
+
+
+def sha256_path(path: Path) -> str:
+    if path.is_file():
+        return sha256_file(path)
+    if path.is_dir():
+        digest_obj = hashlib.sha256()
+        for child in sorted(item for item in path.rglob("*") if item.is_file()):
+            rel = child.relative_to(path).as_posix().encode("utf-8")
+            digest_obj.update(rel)
+            digest_obj.update(b"\0")
+            digest_obj.update(sha256_file(child).encode("ascii"))
+            digest_obj.update(b"\0")
+        return digest_obj.hexdigest()
+    raise FileNotFoundError(path)
+
+
 def read_json(path: Path) -> dict[str, Any]:
     try:
         return json.loads(path.read_text(encoding="utf-8"))
@@ -96,7 +119,11 @@ def import_adapter(path: Path) -> tuple[ModuleType | None, list[str]]:
     return module, errors
 
 
-def synthetic_inputs(method: str) -> tuple[dict[str, Any], list[dict[str, Any]], dict[str, Any], dict[str, Any], dict[str, Any]]:
+def synthetic_inputs(
+    method: str,
+    *,
+    expected_policy_or_config_hash: str | None = None,
+) -> tuple[dict[str, Any], list[dict[str, Any]], dict[str, Any], dict[str, Any], dict[str, Any]]:
     observation = {
         "scene_id": "synthetic_scene_000",
         "task_family": "peg_place_regrasp",
@@ -109,7 +136,7 @@ def synthetic_inputs(method: str) -> tuple[dict[str, Any], list[dict[str, Any]],
     ]
     config = {
         "method_name": method,
-        "policy_or_config_hash": digest(f"{method}:synthetic_config"),
+        "policy_or_config_hash": expected_policy_or_config_hash or digest(f"{method}:synthetic_config"),
         "fixed_risk_budget": 0.15,
     }
     compute_budget = {"wall_clock_seconds": 1.0, "simulator_query_budget": 4}
@@ -129,7 +156,13 @@ def validate_numeric_probability(value: Any, field: str, errors: list[str]) -> N
         errors.append(f"{field}={value!r} outside [0, 1]")
 
 
-def validate_adapter(path: Path, method: str, *, strict: bool) -> tuple[bool, list[str]]:
+def validate_adapter(
+    path: Path,
+    method: str,
+    *,
+    strict: bool,
+    expected_policy_or_config_hash: str | None = None,
+) -> tuple[bool, list[str]]:
     errors: list[str] = []
     if strict and is_scaffold(path):
         errors.append("strict adapter validation rejects scaffold/not_external_evidence implementations")
@@ -144,7 +177,10 @@ def validate_adapter(path: Path, method: str, *, strict: bool) -> tuple[bool, li
     if errors:
         return False, errors
 
-    observation, terminal_samples, config, compute_budget, outcome = synthetic_inputs(method)
+    observation, terminal_samples, config, compute_budget, outcome = synthetic_inputs(
+        method,
+        expected_policy_or_config_hash=expected_policy_or_config_hash,
+    )
     try:
         init_result = module.initialize(dict(config))
     except NotImplementedError:
@@ -195,6 +231,8 @@ def validate_adapter(path: Path, method: str, *, strict: bool) -> tuple[bool, li
         validate_numeric_probability(log_record["predicted_seam_risk"], "log.predicted_seam_risk", errors)
     if "policy_or_config_hash" in log_record and not is_hash(log_record["policy_or_config_hash"]):
         errors.append("log.policy_or_config_hash must be a 64-character SHA256")
+    if expected_policy_or_config_hash and log_record.get("policy_or_config_hash") != expected_policy_or_config_hash:
+        errors.append("log.policy_or_config_hash must match the manifest-declared checkpoint_or_config_hash")
 
     try:
         module.reset({"scene_id": observation["scene_id"], "seed": 0})
@@ -281,31 +319,78 @@ def baseline_spec_methods() -> list[str]:
     return methods
 
 
-def manifest_implementation_entries() -> list[tuple[str, Path]]:
+def required_non_oracle_methods(spec_methods: list[str]) -> list[str]:
+    return sorted(method for method in spec_methods if method not in NON_ORACLE_EXCLUDED)
+
+
+def manifest_method_records() -> tuple[dict[str, dict[str, Any]], list[str], list[str]]:
     if not MANIFEST.exists():
-        return []
+        return {}, [], []
     manifest = read_json(MANIFEST)
-    entries = []
     methods = manifest.get("methods", [])
-    methods = methods if isinstance(methods, list) else []
+    if not isinstance(methods, list):
+        return {}, [], ["manifest.methods is not a list"]
+    records: dict[str, dict[str, Any]] = {}
+    duplicates: list[str] = []
+    malformed: list[str] = []
     for method in methods:
         if not isinstance(method, dict):
+            malformed.append("manifest method entry is not an object")
             continue
         name = str(method.get("name", "")).strip()
         if not name or name in NON_ORACLE_EXCLUDED:
             continue
+        if name in records:
+            duplicates.append(name)
+        records[name] = method
+    return records, duplicates, malformed
+
+
+def manifest_implementation_entries(records: dict[str, dict[str, Any]], required_methods: list[str]) -> list[tuple[str, Path, str | None]]:
+    entries = []
+    for name in required_methods:
+        method = records.get(name, {})
         implementation = str(method.get("implementation", "")).strip()
+        expected_hash = str(method.get("checkpoint_or_config_hash", "")).strip() or None
         if implementation:
-            entries.append((name, rel_path(implementation)))
+            entries.append((name, rel_path(implementation), expected_hash))
     return entries
 
 
-def scaffold_paths() -> list[tuple[str, Path]]:
+def manifest_hash_errors(records: dict[str, dict[str, Any]], required_methods: list[str]) -> list[str]:
+    errors: list[str] = []
+    for name in required_methods:
+        method = records.get(name)
+        if not method:
+            continue
+        implementation = str(method.get("implementation", "")).strip()
+        checkpoint_or_config_path = str(method.get("checkpoint_or_config_path", "")).strip()
+        declared_hash = str(method.get("checkpoint_or_config_hash", "")).strip()
+        if not is_hash(declared_hash):
+            errors.append(f"{name}: checkpoint_or_config_hash is missing or not a 64-character SHA256")
+            continue
+        candidate_paths = [value for value in (checkpoint_or_config_path, implementation) if value]
+        candidate_hashes: list[str] = []
+        for value in candidate_paths:
+            path = rel_path(value)
+            if path.exists():
+                try:
+                    candidate_hashes.append(sha256_path(path).lower())
+                except OSError as exc:
+                    errors.append(f"{name}: could not hash {value}: {exc}")
+        if candidate_hashes and declared_hash.lower() not in candidate_hashes:
+            errors.append(f"{name}: checkpoint_or_config_hash does not match checkpoint/config or implementation artifact")
+        elif not candidate_hashes:
+            errors.append(f"{name}: no hashable checkpoint/config or implementation artifact")
+    return errors
+
+
+def scaffold_paths() -> list[tuple[str, Path, None]]:
     paths = []
     for method in baseline_spec_methods():
         if method in NON_ORACLE_EXCLUDED:
             continue
-        paths.append((method, BASELINES_DIR / method / "adapter_template.py"))
+        paths.append((method, BASELINES_DIR / method / "adapter_template.py", None))
     return paths
 
 
@@ -313,21 +398,65 @@ def build_audit(*, strict: bool) -> dict[str, Any]:
     checks: list[dict[str, Any]] = []
     results: list[dict[str, Any]] = []
     spec_methods = baseline_spec_methods()
+    required_methods = required_non_oracle_methods(spec_methods)
     self_test_ok, self_test_errors = run_contract_self_test()
 
     add_check(checks, "baseline_specs_present", len(spec_methods) >= 12, f"spec_methods={len(spec_methods)}")
     add_check(checks, "contract_self_test_passed", self_test_ok, "; ".join(self_test_errors) if self_test_errors else "temporary good/bad adapters behaved as expected")
     add_check(checks, "log_schema_exists", LOG_SCHEMA.exists(), str(LOG_SCHEMA))
 
-    entries = manifest_implementation_entries() if strict else scaffold_paths()
+    if strict:
+        records, duplicate_methods, malformed_methods = manifest_method_records()
+        missing_declared = sorted(set(required_methods) - set(records))
+        missing_implementations = sorted(
+            method
+            for method in required_methods
+            if not str(records.get(method, {}).get("implementation", "")).strip()
+        )
+        hash_errors = manifest_hash_errors(records, required_methods)
+        entries = manifest_implementation_entries(records, required_methods)
+    else:
+        records, duplicate_methods, malformed_methods = {}, [], []
+        missing_declared, missing_implementations, hash_errors = [], [], []
+        entries = scaffold_paths()
+
     if strict:
         add_check(checks, "manifest_exists", MANIFEST.exists(), str(MANIFEST) if MANIFEST.exists() else "external_validation/manifest.json missing")
         add_check(checks, "manifest_implementation_entries_present", bool(entries), f"entries={len(entries)}")
+        add_check(
+            checks,
+            "manifest_declares_all_required_non_oracle_methods",
+            not missing_declared,
+            f"missing={missing_declared}",
+        )
+        add_check(
+            checks,
+            "manifest_has_no_duplicate_or_malformed_non_oracle_methods",
+            not duplicate_methods and not malformed_methods,
+            f"duplicates={duplicate_methods}, malformed={malformed_methods}",
+        )
+        add_check(
+            checks,
+            "manifest_implementation_entries_cover_required_non_oracle_methods",
+            not missing_implementations,
+            f"missing_implementations={missing_implementations}",
+        )
+        add_check(
+            checks,
+            "manifest_required_hashes_match_artifacts",
+            not missing_declared and not missing_implementations and not hash_errors,
+            f"missing={missing_declared}, missing_implementations={missing_implementations}, errors={hash_errors[:8]}",
+        )
     else:
         add_check(checks, "scaffold_entries_present", len(entries) >= 11, f"entries={len(entries)}")
 
-    for method, path in entries:
-        ok, errors = validate_adapter(path, method, strict=strict)
+    for method, path, expected_hash in entries:
+        ok, errors = validate_adapter(
+            path,
+            method,
+            strict=strict,
+            expected_policy_or_config_hash=expected_hash if expected_hash and is_hash(expected_hash) else None,
+        )
         if not strict and is_scaffold(path):
             # Non-strict mode checks that scaffolds are structurally present, not executable evidence.
             text = path.read_text(encoding="utf-8", errors="ignore") if path.exists() else ""

@@ -15,6 +15,9 @@ This audit checks that every missing non-oracle method has a concrete implementa
 - `pass` `spec_files_cover_work_orders`: spec_count=12, work_orders=11
 - `pass` `required_artifact_fields_declared`: required_artifact_fields=['implementation_path_or_repository', 'implementation_sha256_or_commit', 'checkpoint_or_config_path', 'checkpoint_or_config_hash', 'adapter_path', 'manifest_method_entry', 'policy_or_config_hash_in_logs']
 - `pass` `required_log_fields_declared`: method, policy_or_config_hash, predicted_seam_risk, decision, and failure_diagnosis are required for every work order
+- `pass` `manifest_entry_templates_cover_required_hash_fields`: fields=['name', 'implementation', 'checkpoint_or_config_path', 'checkpoint_or_config_hash']
+- `pass` `work_orders_forbid_scaffolds_and_reference_adapters`: every non-oracle method requires independent implementation evidence and forbids scaffold/reference adapters as evidence
+- `pass` `policy_or_config_hash_in_logs_required`: every work order requires JSONL policy_or_config_hash to match manifest-declared method provenance
 - `pass` `strict_commands_cover_adapter_rollout_pairing_and_evidence`: commands=['python scripts\\build_external_method_implementation_packet.py', 'python scripts\\validate_external_adapters.py --strict', 'python scripts\\build_external_baseline_contract.py', 'python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict', 'python scripts\\audit_external_pairing_integrity.py --strict', 'python scripts\\audit_external_evidence.py --strict']
 - `pass` `adapter_evidence_still_missing`: adapter_evidence_passed=False
 - `pass` `no_real_implementation_files_created`: external_validation/implementations is intentionally absent until a real operator supplies implementations

@@ -30,6 +30,12 @@ REQUIRED_ARTIFACT_FIELDS = [
     "manifest_method_entry",
     "policy_or_config_hash_in_logs",
 ]
+MANIFEST_METHOD_ENTRY_FIELDS = [
+    "name",
+    "implementation",
+    "checkpoint_or_config_path",
+    "checkpoint_or_config_hash",
+]
 
 STRICT_ACCEPTANCE_COMMANDS = [
     r"python scripts\build_external_method_implementation_packet.py",
@@ -89,7 +95,17 @@ def build_work_orders(specs: list[dict[str, Any]], log_schema: dict[str, Any]) -
                 "target_adapter_dir": f"external_validation/baselines/{method}",
                 "suggested_real_implementation_path": f"external_validation/implementations/{method}/implementation.py",
                 "manifest_implementation_key": f"methods[{method}].implementation",
+                "manifest_method_entry_template": {
+                    "name": method,
+                    "implementation": f"external_validation/implementations/{method}/adapter.py",
+                    "checkpoint_or_config_path": f"external_validation/implementations/{method}/config_or_checkpoint.json",
+                    "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+                },
                 "evidence_status": "missing_manifest_declared_implementation",
+                "independent_implementation_required": True,
+                "scaffold_allowed_as_evidence": False,
+                "reference_adapter_allowed_as_evidence": False,
+                "policy_or_config_hash_in_logs_required": True,
                 "allowed_inputs": spec.get("allowed_inputs", []),
                 "forbidden_advantages": spec.get("forbidden_advantages", []),
                 "required_artifact_fields": REQUIRED_ARTIFACT_FIELDS,
@@ -125,6 +141,10 @@ def write_work_orders_csv(orders: list[dict[str, Any]]) -> None:
         "target_adapter_dir",
         "suggested_real_implementation_path",
         "manifest_implementation_key",
+        "independent_implementation_required",
+        "scaffold_allowed_as_evidence",
+        "reference_adapter_allowed_as_evidence",
+        "policy_or_config_hash_in_logs_required",
         "evidence_status",
         "required_artifact_fields",
         "required_log_fields",
@@ -171,6 +191,8 @@ def build_packet(
         "forbidden_evidence_shortcuts": [
             "using scaffold adapters as manifest-declared implementations",
             "using reference adapters as rollout evidence without real source/config/checkpoint hashes",
+            "declaring only a subset of non-oracle methods in the strict adapter manifest",
+            "using policy_or_config_hash values in JSONL logs that do not match manifest-declared hashes",
             "dropping hard methods after viewing method identity or outcomes",
             "changing compute budgets after seeing paired-reset performance",
             "hand-entering manifest metrics without raw JSONL logs",
@@ -194,6 +216,19 @@ def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_a
         {"method", "policy_or_config_hash", "predicted_seam_risk", "decision", "failure_diagnosis"}.issubset(set(order.get("required_log_fields", []) or []))
         for order in work_orders
     )
+    manifest_template_ok = all(
+        set(MANIFEST_METHOD_ENTRY_FIELDS).issubset(set((order.get("manifest_method_entry_template") or {}).keys()))
+        and order.get("manifest_method_entry_template", {}).get("name") == order.get("method")
+        and "SHA256" in str(order.get("manifest_method_entry_template", {}).get("checkpoint_or_config_hash", ""))
+        for order in work_orders
+    )
+    scaffold_policy_ok = all(
+        order.get("independent_implementation_required") is True
+        and order.get("scaffold_allowed_as_evidence") is False
+        and order.get("reference_adapter_allowed_as_evidence") is False
+        for order in work_orders
+    )
+    log_hash_policy_ok = all(order.get("policy_or_config_hash_in_logs_required") is True for order in work_orders)
 
     add_check(
         checks,
@@ -235,6 +270,24 @@ def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_a
         "required_log_fields_declared",
         log_fields_ok,
         "method, policy_or_config_hash, predicted_seam_risk, decision, and failure_diagnosis are required for every work order",
+    )
+    add_check(
+        checks,
+        "manifest_entry_templates_cover_required_hash_fields",
+        manifest_template_ok,
+        f"fields={MANIFEST_METHOD_ENTRY_FIELDS}",
+    )
+    add_check(
+        checks,
+        "work_orders_forbid_scaffolds_and_reference_adapters",
+        scaffold_policy_ok,
+        "every non-oracle method requires independent implementation evidence and forbids scaffold/reference adapters as evidence",
+    )
+    add_check(
+        checks,
+        "policy_or_config_hash_in_logs_required",
+        log_hash_policy_ok,
+        "every work order requires JSONL policy_or_config_hash to match manifest-declared method provenance",
     )
     add_check(
         checks,
@@ -309,8 +362,16 @@ def write_packet_md(packet: dict[str, Any]) -> None:
                 f"- Target adapter directory: `{order['target_adapter_dir']}`",
                 f"- Suggested real implementation path: `{order['suggested_real_implementation_path']}`",
                 f"- Evidence status: `{order['evidence_status']}`",
+                f"- Independent implementation required: `{str(order['independent_implementation_required']).lower()}`",
+                f"- Scaffold allowed as evidence: `{str(order['scaffold_allowed_as_evidence']).lower()}`",
+                f"- Reference adapter allowed as evidence: `{str(order['reference_adapter_allowed_as_evidence']).lower()}`",
+                f"- Policy/config hash required in logs: `{str(order['policy_or_config_hash_in_logs_required']).lower()}`",
                 "- Required artifact fields: " + ", ".join(f"`{field}`" for field in order["required_artifact_fields"]),
                 "- Required log fields: " + ", ".join(f"`{field}`" for field in order["required_log_fields"]),
+                "- Manifest method entry template:",
+                "```json",
+                json.dumps(order["manifest_method_entry_template"], indent=2, sort_keys=True),
+                "```",
                 "",
                 "Forbidden advantages:",
             ]

@@ -398,7 +398,10 @@ def main() -> int:
         and method_implementation.get("not_external_evidence") is True
         and method_implementation.get("method_implementation_packet_ready") is True
         and method_implementation.get("strict_adapter_evidence_ready") is False
-        and method_checks.get("work_orders_cover_all_missing_non_oracle_methods") is True,
+        and method_checks.get("work_orders_cover_all_missing_non_oracle_methods") is True
+        and method_checks.get("manifest_entry_templates_cover_required_hash_fields") is True
+        and method_checks.get("work_orders_forbid_scaffolds_and_reference_adapters") is True
+        and method_checks.get("policy_or_config_hash_in_logs_required") is True,
         (
             f"method_implementation_packet_ready={method_implementation.get('method_implementation_packet_ready')!r}, "
             f"strict_adapter_evidence_ready={method_implementation.get('strict_adapter_evidence_ready')!r}"

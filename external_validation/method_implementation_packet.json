@@ -6,6 +6,8 @@
   "forbidden_evidence_shortcuts": [
     "using scaffold adapters as manifest-declared implementations",
     "using reference adapters as rollout evidence without real source/config/checkpoint hashes",
+    "declaring only a subset of non-oracle methods in the strict adapter manifest",
+    "using policy_or_config_hash values in JSONL logs that do not match manifest-declared hashes",
     "dropping hard methods after viewing method identity or outcomes",
     "changing compute budgets after seeing paired-reset performance",
     "hand-entering manifest metrics without raw JSONL logs"
@@ -67,7 +69,14 @@
         "post hoc oracle basin truth",
         "unpaired reset retries"
       ],
+      "independent_implementation_required": true,
       "manifest_implementation_key": "methods[barrier_certified_energy_composer_v5].implementation",
+      "manifest_method_entry_template": {
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_path": "external_validation/implementations/barrier_certified_energy_composer_v5/config_or_checkpoint.json",
+        "implementation": "external_validation/implementations/barrier_certified_energy_composer_v5/adapter.py",
+        "name": "barrier_certified_energy_composer_v5"
+      },
       "method": "barrier_certified_energy_composer_v5",
       "operator_notes": [
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
@@ -76,6 +85,8 @@
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
+      "policy_or_config_hash_in_logs_required": true,
+      "reference_adapter_allowed_as_evidence": false,
       "required_artifact_fields": [
         "implementation_path_or_repository",
         "implementation_sha256_or_commit",
@@ -97,6 +108,7 @@
         "utility"
       ],
       "role": "primary method",
+      "scaffold_allowed_as_evidence": false,
       "spec_file": "external_validation/baseline_specs/barrier_certified_energy_composer_v5.json",
       "suggested_real_implementation_path": "external_validation/implementations/barrier_certified_energy_composer_v5/implementation.py",
       "target_adapter_dir": "external_validation/baselines/barrier_certified_energy_composer_v5"
@@ -121,7 +133,14 @@
         "post hoc oracle repair",
         "unpaired demonstration resets"
       ],
+      "independent_implementation_required": true,
       "manifest_implementation_key": "methods[behavior_cloned_skill_chain].implementation",
+      "manifest_method_entry_template": {
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_path": "external_validation/implementations/behavior_cloned_skill_chain/config_or_checkpoint.json",
+        "implementation": "external_validation/implementations/behavior_cloned_skill_chain/adapter.py",
+        "name": "behavior_cloned_skill_chain"
+      },
       "method": "behavior_cloned_skill_chain",
       "operator_notes": [
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
@@ -130,6 +149,8 @@
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
+      "policy_or_config_hash_in_logs_required": true,
+      "reference_adapter_allowed_as_evidence": false,
       "required_artifact_fields": [
         "implementation_path_or_repository",
         "implementation_sha256_or_commit",
@@ -151,6 +172,7 @@
         "utility"
       ],
       "role": "demonstration sequence baseline",
+      "scaffold_allowed_as_evidence": false,
       "spec_file": "external_validation/baseline_specs/behavior_cloned_skill_chain.json",
       "suggested_real_implementation_path": "external_validation/implementations/behavior_cloned_skill_chain/implementation.py",
       "target_adapter_dir": "external_validation/baselines/behavior_cloned_skill_chain"
@@ -175,7 +197,14 @@
         "extra reset attempts",
         "oracle basin state"
       ],
+      "independent_implementation_required": true,
       "manifest_implementation_key": "methods[cem_trajectory_composer].implementation",
+      "manifest_method_entry_template": {
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_path": "external_validation/implementations/cem_trajectory_composer/config_or_checkpoint.json",
+        "implementation": "external_validation/implementations/cem_trajectory_composer/adapter.py",
+        "name": "cem_trajectory_composer"
+      },
       "method": "cem_trajectory_composer",
       "operator_notes": [
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
@@ -184,6 +213,8 @@
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
+      "policy_or_config_hash_in_logs_required": true,
+      "reference_adapter_allowed_as_evidence": false,
       "required_artifact_fields": [
         "implementation_path_or_repository",
         "implementation_sha256_or_commit",
@@ -205,6 +236,7 @@
         "utility"
       ],
       "role": "trajectory-search baseline",
+      "scaffold_allowed_as_evidence": false,
       "spec_file": "external_validation/baseline_specs/cem_trajectory_composer.json",
       "suggested_real_implementation_path": "external_validation/implementations/cem_trajectory_composer/implementation.py",
       "target_adapter_dir": "external_validation/baselines/cem_trajectory_composer"
@@ -227,7 +259,14 @@
       "forbidden_advantages": [
         "v5 accept/reject labels unless explicitly trained on the same data as all baselines"
       ],
+      "independent_implementation_required": true,
       "manifest_implementation_key": "methods[diffusion_skill_stitcher].implementation",
+      "manifest_method_entry_template": {
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_path": "external_validation/implementations/diffusion_skill_stitcher/config_or_checkpoint.json",
+        "implementation": "external_validation/implementations/diffusion_skill_stitcher/adapter.py",
+        "name": "diffusion_skill_stitcher"
+      },
       "method": "diffusion_skill_stitcher",
       "operator_notes": [
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
@@ -236,6 +275,8 @@
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
+      "policy_or_config_hash_in_logs_required": true,
+      "reference_adapter_allowed_as_evidence": false,
       "required_artifact_fields": [
         "implementation_path_or_repository",
         "implementation_sha256_or_commit",
@@ -257,6 +298,7 @@
         "utility"
       ],
       "role": "generative handoff sampler baseline",
+      "scaffold_allowed_as_evidence": false,
       "spec_file": "external_validation/baseline_specs/diffusion_skill_stitcher.json",
       "suggested_real_implementation_path": "external_validation/implementations/diffusion_skill_stitcher/implementation.py",
       "target_adapter_dir": "external_validation/baselines/diffusion_skill_stitcher"
@@ -279,7 +321,14 @@
         "fixed-risk calibration gate",
         "repair memory from proposed v5"
       ],
+      "independent_implementation_required": true,
       "manifest_implementation_key": "methods[energy_compatibility_heuristic].implementation",
+      "manifest_method_entry_template": {
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_path": "external_validation/implementations/energy_compatibility_heuristic/config_or_checkpoint.json",
+        "implementation": "external_validation/implementations/energy_compatibility_heuristic/adapter.py",
+        "name": "energy_compatibility_heuristic"
+      },
       "method": "energy_compatibility_heuristic",
       "operator_notes": [
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
@@ -288,6 +337,8 @@
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
+      "policy_or_config_hash_in_logs_required": true,
+      "reference_adapter_allowed_as_evidence": false,
       "required_artifact_fields": [
         "implementation_path_or_repository",
         "implementation_sha256_or_commit",
@@ -309,6 +360,7 @@
         "utility"
       ],
       "role": "non-certified energy heuristic baseline",
+      "scaffold_allowed_as_evidence": false,
       "spec_file": "external_validation/baseline_specs/energy_compatibility_heuristic.json",
       "suggested_real_implementation_path": "external_validation/implementations/energy_compatibility_heuristic/implementation.py",
       "target_adapter_dir": "external_validation/baselines/energy_compatibility_heuristic"
@@ -334,7 +386,14 @@
         "post hoc basin truth",
         "extra reset attempts"
       ],
+      "independent_implementation_required": true,
       "manifest_implementation_key": "methods[greedy_module_sequence].implementation",
+      "manifest_method_entry_template": {
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_path": "external_validation/implementations/greedy_module_sequence/config_or_checkpoint.json",
+        "implementation": "external_validation/implementations/greedy_module_sequence/adapter.py",
+        "name": "greedy_module_sequence"
+      },
       "method": "greedy_module_sequence",
       "operator_notes": [
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
@@ -343,6 +402,8 @@
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
+      "policy_or_config_hash_in_logs_required": true,
+      "reference_adapter_allowed_as_evidence": false,
       "required_artifact_fields": [
         "implementation_path_or_repository",
         "implementation_sha256_or_commit",
@@ -364,6 +425,7 @@
         "utility"
       ],
       "role": "open-loop skill graph baseline",
+      "scaffold_allowed_as_evidence": false,
       "spec_file": "external_validation/baseline_specs/greedy_module_sequence.json",
       "suggested_real_implementation_path": "external_validation/implementations/greedy_module_sequence/implementation.py",
       "target_adapter_dir": "external_validation/baselines/greedy_module_sequence"
@@ -388,7 +450,14 @@
         "hidden basin classifier",
         "privileged barrier score"
       ],
+      "independent_implementation_required": true,
       "manifest_implementation_key": "methods[option_graph_planner].implementation",
+      "manifest_method_entry_template": {
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_path": "external_validation/implementations/option_graph_planner/config_or_checkpoint.json",
+        "implementation": "external_validation/implementations/option_graph_planner/adapter.py",
+        "name": "option_graph_planner"
+      },
       "method": "option_graph_planner",
       "operator_notes": [
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
@@ -397,6 +466,8 @@
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
+      "policy_or_config_hash_in_logs_required": true,
+      "reference_adapter_allowed_as_evidence": false,
       "required_artifact_fields": [
         "implementation_path_or_repository",
         "implementation_sha256_or_commit",
@@ -418,6 +489,7 @@
         "utility"
       ],
       "role": "temporal-abstraction planning baseline",
+      "scaffold_allowed_as_evidence": false,
       "spec_file": "external_validation/baseline_specs/option_graph_planner.json",
       "suggested_real_implementation_path": "external_validation/implementations/option_graph_planner/implementation.py",
       "target_adapter_dir": "external_validation/baselines/option_graph_planner"
@@ -441,7 +513,14 @@
         "v5-only repair memory",
         "v5 fixed-risk calibration updates"
       ],
+      "independent_implementation_required": true,
       "manifest_implementation_key": "methods[proposed_energy_landscape_composer_v4_1].implementation",
+      "manifest_method_entry_template": {
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_path": "external_validation/implementations/proposed_energy_landscape_composer_v4_1/config_or_checkpoint.json",
+        "implementation": "external_validation/implementations/proposed_energy_landscape_composer_v4_1/adapter.py",
+        "name": "proposed_energy_landscape_composer_v4_1"
+      },
       "method": "proposed_energy_landscape_composer_v4_1",
       "operator_notes": [
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
@@ -450,6 +529,8 @@
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
+      "policy_or_config_hash_in_logs_required": true,
+      "reference_adapter_allowed_as_evidence": false,
       "required_artifact_fields": [
         "implementation_path_or_repository",
         "implementation_sha256_or_commit",
@@ -471,6 +552,7 @@
         "utility"
       ],
       "role": "previous proposed method baseline",
+      "scaffold_allowed_as_evidence": false,
       "spec_file": "external_validation/baseline_specs/proposed_energy_landscape_composer_v4_1.json",
       "suggested_real_implementation_path": "external_validation/implementations/proposed_energy_landscape_composer_v4_1/implementation.py",
       "target_adapter_dir": "external_validation/baselines/proposed_energy_landscape_composer_v4_1"
@@ -494,7 +576,14 @@
         "training on evaluation resets",
         "post hoc barrier labels"
       ],
+      "independent_implementation_required": true,
       "manifest_implementation_key": "methods[residual_rl_composer].implementation",
+      "manifest_method_entry_template": {
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_path": "external_validation/implementations/residual_rl_composer/config_or_checkpoint.json",
+        "implementation": "external_validation/implementations/residual_rl_composer/adapter.py",
+        "name": "residual_rl_composer"
+      },
       "method": "residual_rl_composer",
       "operator_notes": [
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
@@ -503,6 +592,8 @@
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
+      "policy_or_config_hash_in_logs_required": true,
+      "reference_adapter_allowed_as_evidence": false,
       "required_artifact_fields": [
         "implementation_path_or_repository",
         "implementation_sha256_or_commit",
@@ -524,6 +615,7 @@
         "utility"
       ],
       "role": "learned residual repair baseline",
+      "scaffold_allowed_as_evidence": false,
       "spec_file": "external_validation/baseline_specs/residual_rl_composer.json",
       "suggested_real_implementation_path": "external_validation/implementations/residual_rl_composer/implementation.py",
       "target_adapter_dir": "external_validation/baselines/residual_rl_composer"
@@ -547,7 +639,14 @@
         "oracle basin membership",
         "future failure labels"
       ],
+      "independent_implementation_required": true,
       "manifest_implementation_key": "methods[stable_dmp_handoff].implementation",
+      "manifest_method_entry_template": {
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_path": "external_validation/implementations/stable_dmp_handoff/config_or_checkpoint.json",
+        "implementation": "external_validation/implementations/stable_dmp_handoff/adapter.py",
+        "name": "stable_dmp_handoff"
+      },
       "method": "stable_dmp_handoff",
       "operator_notes": [
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
@@ -556,6 +655,8 @@
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
+      "policy_or_config_hash_in_logs_required": true,
+      "reference_adapter_allowed_as_evidence": false,
       "required_artifact_fields": [
         "implementation_path_or_repository",
         "implementation_sha256_or_commit",
@@ -577,6 +678,7 @@
         "utility"
       ],
       "role": "stable dynamics handoff baseline",
+      "scaffold_allowed_as_evidence": false,
       "spec_file": "external_validation/baseline_specs/stable_dmp_handoff.json",
       "suggested_real_implementation_path": "external_validation/implementations/stable_dmp_handoff/implementation.py",
       "target_adapter_dir": "external_validation/baselines/stable_dmp_handoff"
@@ -600,7 +702,14 @@
         "energy descent continuity",
         "post hoc contact outcome"
       ],
+      "independent_implementation_required": true,
       "manifest_implementation_key": "methods[tamp_feasibility_screen].implementation",
+      "manifest_method_entry_template": {
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_path": "external_validation/implementations/tamp_feasibility_screen/config_or_checkpoint.json",
+        "implementation": "external_validation/implementations/tamp_feasibility_screen/adapter.py",
+        "name": "tamp_feasibility_screen"
+      },
       "method": "tamp_feasibility_screen",
       "operator_notes": [
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
@@ -609,6 +718,8 @@
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
+      "policy_or_config_hash_in_logs_required": true,
+      "reference_adapter_allowed_as_evidence": false,
       "required_artifact_fields": [
         "implementation_path_or_repository",
         "implementation_sha256_or_commit",
@@ -630,6 +741,7 @@
         "utility"
       ],
       "role": "task-and-motion feasibility baseline",
+      "scaffold_allowed_as_evidence": false,
       "spec_file": "external_validation/baseline_specs/tamp_feasibility_screen.json",
       "suggested_real_implementation_path": "external_validation/implementations/tamp_feasibility_screen/implementation.py",
       "target_adapter_dir": "external_validation/baselines/tamp_feasibility_screen"

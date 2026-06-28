@@ -676,6 +676,9 @@ def build_payload() -> dict[str, Any]:
         and method_implementation.get("strict_adapter_evidence_ready") is False
         and method_checks.get("work_orders_cover_all_missing_non_oracle_methods") is True
         and method_checks.get("oracle_excluded_from_work_orders") is True
+        and method_checks.get("manifest_entry_templates_cover_required_hash_fields") is True
+        and method_checks.get("work_orders_forbid_scaffolds_and_reference_adapters") is True
+        and method_checks.get("policy_or_config_hash_in_logs_required") is True
         and "external_validation/method_implementation_packet.json" in paths
         and "external_validation/method_implementation_packet.md" in paths
         and "external_validation/method_implementation_work_orders.csv" in paths
