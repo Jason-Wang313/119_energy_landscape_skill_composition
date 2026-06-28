@@ -21,6 +21,7 @@ Why strong-revise:
 - The external config manifest packet turns prepared task configs into manifest-declaration and hash-lock work orders while strict config evidence remains false.
 - The external rollout evidence packet turns the missing raw JSONL logs, videos, manifest, strict rollout recomputation, pairing, release, and final evidence gates into operator work orders while strict rollout and external evidence remain false.
 - The manifest assembly checklist maps each required real-manifest field to current file/hash state, blocking status, operator action, and strict gate while keeping `external_validation/manifest.json` unwritten before real evidence.
+- The External manifest builder self-test proves the manifest builder can hash configs/logs/videos/checkpoints, load a complete temporary 1,440-record raw JSONL panel, recompute metrics, write a temporary manifest/report/checklist, and leave the real manifest and real reports untouched.
 - The external analysis plan locks the external primary hypotheses, rollout-schema thresholds, paired-comparison key, exclusion/unblinding policy, and required reporting before collection while remaining non-evidence.
 - The external platform probe records Python, package, GPU/renderer, code-commit, and config/backend hash provenance for the selected public-simulator machine while remaining non-evidence.
 - The ManiSkill task binding probe maps the four external task families to concrete public-simulator environment candidates while accepted task binding and strict evidence remain false.

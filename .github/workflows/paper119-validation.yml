@@ -136,6 +136,9 @@ jobs:
       - name: Audit external release package
         run: python scripts/audit_external_release_package.py
 
+      - name: Self-test external manifest builder
+        run: python scripts/self_test_external_manifest_builder.py
+
       - name: Validate external rollouts
         run: python scripts/validate_external_rollouts.py --write-results
 

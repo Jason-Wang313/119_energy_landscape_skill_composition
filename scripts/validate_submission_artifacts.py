@@ -145,6 +145,7 @@ def main():
         "scripts\\build_external_method_implementation_packet.py",
         "scripts\\self_test_external_adapter_evidence.py",
         "scripts\\build_external_manifest.py --allow-missing",
+        "scripts\\self_test_external_manifest_builder.py",
         "scripts\\audit_external_release_package.py",
         "scripts\\self_test_external_release_package.py",
         "scripts\\audit_external_evidence_preflight.py",
@@ -237,6 +238,7 @@ def main():
         "python scripts/build_external_operator_packet.py",
         "python scripts/build_external_operator_handoff_bundle.py",
         "python scripts/audit_external_release_package.py",
+        "python scripts/self_test_external_manifest_builder.py",
         "python scripts/self_test_external_release_package.py",
         "python scripts/audit_external_execution_readiness.py",
         "python scripts/audit_external_pairing_integrity.py",
@@ -870,6 +872,42 @@ def main():
             fail(f"external release package self-test missing passing check: {required_check}")
     if not (RESULTS / "external_release_package_self_test.md").exists():
         fail("missing results/external_release_package_self_test.md")
+
+    manifest_builder_self_test_path = RESULTS / "external_manifest_builder_self_test.json"
+    if not manifest_builder_self_test_path.exists():
+        fail("missing results/external_manifest_builder_self_test.json; run scripts/self_test_external_manifest_builder.py")
+    if not (ROOT / "scripts" / "self_test_external_manifest_builder.py").exists():
+        fail("missing scripts/self_test_external_manifest_builder.py")
+    manifest_builder_self_test = json.loads(manifest_builder_self_test_path.read_text(encoding="utf-8"))
+    if manifest_builder_self_test.get("version") != "external_manifest_builder_self_test_v1":
+        fail("external manifest builder self-test version mismatch")
+    if manifest_builder_self_test.get("passed") is not True:
+        fail("external manifest builder self-test did not pass")
+    if manifest_builder_self_test.get("not_external_evidence") is not True:
+        fail("external manifest builder self-test must declare that it is not evidence")
+    if manifest_builder_self_test.get("synthetic_manifest_written") is not True:
+        fail("external manifest builder self-test should write a temporary complete manifest")
+    if int(manifest_builder_self_test.get("synthetic_records_loaded", 0) or 0) < 1440:
+        fail("external manifest builder self-test should load the full temporary 1,440-record panel")
+    if manifest_builder_self_test.get("real_template_ready_to_write_manifest") is not False:
+        fail("external manifest builder self-test should keep the real template fail-closed")
+    if manifest_builder_self_test.get("real_manifest_and_reports_unchanged") is not True:
+        fail("external manifest builder self-test must not overwrite the real manifest or manifest-builder reports")
+    manifest_builder_self_checks = {check.get("name"): check.get("passed") for check in manifest_builder_self_test.get("checks", [])}
+    for required_check in (
+        "synthetic_manifest_builder_ready",
+        "synthetic_manifest_written_to_temp_output",
+        "raw_logs_drive_manifest_metrics",
+        "release_artifacts_scanned_from_temp_workspace",
+        "config_and_method_hashes_materialized",
+        "manifest_report_and_checklist_written_in_temp_workspace",
+        "real_manifest_template_remains_fail_closed",
+        "real_manifest_and_reports_not_overwritten",
+    ):
+        if manifest_builder_self_checks.get(required_check) is not True:
+            fail(f"external manifest builder self-test missing passing check: {required_check}")
+    if not (RESULTS / "external_manifest_builder_self_test.md").exists():
+        fail("missing results/external_manifest_builder_self_test.md")
 
     manifest_builder_text = (ROOT / "scripts" / "build_external_manifest.py").read_text(encoding="utf-8")
     if (
