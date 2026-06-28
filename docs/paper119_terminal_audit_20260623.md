@@ -1,6 +1,6 @@
 # Paper 119 Terminal Audit 2026-06-23
 
-Updated artifact note: the current reframed PDF was rebuilt on 2026-06-28 as a 30-page paper with SHA256 `C3196F044EF48CC0B746B5EA217FFC9C20E6A769616A0A3592E124689F1CCE00`.
+Updated artifact note: the current reframed PDF was rebuilt on 2026-06-28 as a 30-page paper with SHA256 `52D462638B8633A05C1EADC4DE04B7946DC8D7137996137EA9A239E6CA671160`.
 
 The v5 expansion was completed as a CPU-only, RAM-light rebuild. The current artifact is a 30-page PDF in Downloads only, with hidden link borders, targeted skill-seam world/action-interface framing, diagnostic and decision-quality audits, and vector-first tables/figures generated from v5 CSV outputs.
 
