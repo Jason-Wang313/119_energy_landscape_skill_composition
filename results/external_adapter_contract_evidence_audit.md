@@ -5,7 +5,7 @@ Strict: `true`.
 Not evidence: `false`.
 Adapters checked: `0`.
 
-Non-strict mode validates the adapter contract harness and scaffold structure only. Strict mode validates manifest-declared real implementations and rejects scaffold-only adapters.
+Non-strict mode validates the adapter contract harness and scaffold structure only. Strict mode validates manifest-declared real implementations and rejects scaffold/reference adapters.
 
 ## Checks
 

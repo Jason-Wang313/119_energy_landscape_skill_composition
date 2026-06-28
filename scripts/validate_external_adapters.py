@@ -93,6 +93,41 @@ def is_scaffold(path: Path) -> bool:
     return False
 
 
+def metadata_marks_reference_adapter(payload: dict[str, Any]) -> bool:
+    return (
+        payload.get("reference_implementation") is True
+        or payload.get("evidence_status") == "implementation_only_not_rollout_evidence"
+        or payload.get("oracle_boundary") in {"non_oracle_reference_adapter", "post_hoc_upper_bound_only"}
+    )
+
+
+def is_reference_adapter(path: Path) -> bool:
+    if not path.exists():
+        return False
+    if path.is_file():
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        if "REFERENCE_IMPLEMENTATION = True" in text or "paper119_reference_adapter_v1" in text:
+            return True
+        metadata = path.parent / "reference_adapter_metadata.json"
+        if metadata.exists() and path.name == "adapter.py":
+            try:
+                payload = read_json(metadata)
+            except SystemExit:
+                return True
+            return metadata_marks_reference_adapter(payload)
+        return False
+    metadata = path / "reference_adapter_metadata.json"
+    if metadata.exists():
+        try:
+            payload = read_json(metadata)
+        except SystemExit:
+            return True
+        if metadata_marks_reference_adapter(payload):
+            return True
+    adapter = path / "adapter.py"
+    return adapter.exists() and is_reference_adapter(adapter)
+
+
 def import_adapter(path: Path) -> tuple[ModuleType | None, list[str]]:
     errors: list[str] = []
     if not path.exists():
@@ -166,6 +201,8 @@ def validate_adapter(
     errors: list[str] = []
     if strict and is_scaffold(path):
         errors.append("strict adapter validation rejects scaffold/not_external_evidence implementations")
+    if strict and is_reference_adapter(path):
+        errors.append("strict adapter validation rejects reference adapters as independent evidence")
     module, import_errors = import_adapter(path)
     errors.extend(import_errors)
     if module is None:
@@ -506,7 +543,7 @@ def write_outputs(audit: dict[str, Any]) -> None:
         f"Not evidence: `{str(audit['not_external_evidence']).lower()}`.",
         f"Adapters checked: `{audit['adapter_count']}`.",
         "",
-        "Non-strict mode validates the adapter contract harness and scaffold structure only. Strict mode validates manifest-declared real implementations and rejects scaffold-only adapters.",
+        "Non-strict mode validates the adapter contract harness and scaffold structure only. Strict mode validates manifest-declared real implementations and rejects scaffold/reference adapters.",
         "",
         "## Checks",
         "",

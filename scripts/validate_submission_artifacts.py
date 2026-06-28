@@ -1338,6 +1338,9 @@ def main():
     failed_reference_adapters = [item for item in reference_adapter.get("adapter_results", []) if item.get("passed") is not True]
     if failed_reference_adapters:
         fail(f"external reference adapters failed: {failed_reference_adapters[:4]}")
+    reference_adapter_checks = {check.get("name"): check.get("passed") for check in reference_adapter.get("checks", [])}
+    if reference_adapter_checks.get("reference_adapter_behavior_contract_passes_non_strict") is not True:
+        fail("external reference adapter audit must prove the non-strict behavior/API contract")
     required_reference_adapter_files = [
         EXTERNAL / "baselines" / "common_reference_adapter.py",
         EXTERNAL / "baselines" / "barrier_certified_energy_composer_v5" / "adapter.py",
@@ -1414,6 +1417,8 @@ def main():
         fail("external adapter evidence self-test should make temporary manifest-declared adapters ready")
     if adapter_evidence_self_test.get("scaffold_adapter_evidence_ready") is not False:
         fail("external adapter evidence self-test should reject scaffolds as strict evidence")
+    if adapter_evidence_self_test.get("reference_adapter_evidence_ready") is not False:
+        fail("external adapter evidence self-test should reject reference adapters as strict evidence")
     if adapter_evidence_self_test.get("missing_manifest_ready") is not False:
         fail("external adapter evidence self-test should reject a missing manifest")
     adapter_evidence_self_checks = {check.get("name"): check.get("passed") for check in adapter_evidence_self_test.get("checks", [])}
@@ -1422,6 +1427,7 @@ def main():
         "synthetic_manifest_entries_cover_non_oracle_methods",
         "missing_manifest_fails_strict",
         "scaffold_adapters_rejected_as_strict_evidence",
+        "reference_adapters_rejected_as_strict_evidence",
         "real_adapter_evidence_report_not_overwritten",
     ):
         if adapter_evidence_self_checks.get(required_check) is not True:

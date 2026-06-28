@@ -129,7 +129,7 @@ def build_audit(entries: list[dict[str, Any]]) -> dict[str, Any]:
         if not path.exists():
             missing.append(entry["adapter"])
             continue
-        ok, errors = validate_adapter(path, str(entry["method"]), strict=True)
+        ok, errors = validate_adapter(path, str(entry["method"]), strict=False)
         adapter_results.append(
             {
                 "method": entry["method"],
@@ -146,6 +146,12 @@ def build_audit(entries: list[dict[str, Any]]) -> dict[str, Any]:
     add_check(checks, "method_count_ge_12", len(adapter_results) >= 12, f"methods={len(adapter_results)}")
     add_check(checks, "non_oracle_reference_adapters_ge_11", len(non_oracle) >= 11, f"non_oracle={len(non_oracle)}")
     add_check(checks, "all_reference_adapters_pass_contract", not failed and bool(adapter_results), f"failed={failed[:4]}")
+    add_check(
+        checks,
+        "reference_adapter_behavior_contract_passes_non_strict",
+        not failed and bool(adapter_results),
+        "reference adapters pass the callable API contract only in non-strict mode",
+    )
     add_check(
         checks,
         "audit_not_rollout_evidence",
@@ -176,7 +182,7 @@ def write_summary(audit: dict[str, Any]) -> None:
         "",
         "These adapters are executable reference implementations for the external validation harness. They can remove adapter engineering ambiguity for an independent operator, but they do not supply real robot or accepted high-fidelity simulator evidence by themselves.",
         "",
-        "Strict evidence still requires a manifest, raw JSONL logs, videos, task configs, checkpoints or hashes, and recomputed rollout metrics.",
+        "The strict reference-adapter rejection gate prevents these files from satisfying independent adapter evidence. Strict evidence still requires a manifest, raw JSONL logs, videos, task configs, checkpoints or hashes, and recomputed rollout metrics.",
         "",
         "## Adapters",
         "",
@@ -193,7 +199,7 @@ def write_summary(audit: dict[str, Any]) -> None:
         f"Adapters checked: `{audit['adapter_count']}`.",
         f"Non-oracle adapters: `{audit['non_oracle_adapter_count']}`.",
         "",
-        "This audit imports and exercises the executable reference adapters against the same API used by strict manifest-declared evidence validation. It is an implementation-readiness check only.",
+        "This audit imports and exercises the executable reference adapters against the same callable API shape used by manifest-declared evidence validation. It is an implementation-readiness check only; strict manifest-declared evidence validation rejects these reference-only adapters.",
         "",
         "## Checks",
         "",

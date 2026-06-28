@@ -6,6 +6,7 @@
   "forbidden_evidence_shortcuts": [
     "using scaffold adapters as manifest-declared implementations",
     "using reference adapters as rollout evidence without real source/config/checkpoint hashes",
+    "using reference adapters to bypass the strict reference-adapter rejection gate",
     "declaring only a subset of non-oracle methods in the strict adapter manifest",
     "using policy_or_config_hash values in JSONL logs that do not match manifest-declared hashes",
     "dropping hard methods after viewing method identity or outcomes",
@@ -31,7 +32,7 @@
   "oracle_method": "oracle_basin_composer",
   "oracle_role": "post_hoc_upper_bound_only_not_an_implementation_work_order",
   "purpose": "Convert the missing independent non-oracle baseline layer into per-method implementation work orders before external rollouts.",
-  "reference_adapter_policy": "Reference adapters are executable interface/provenance artifacts only. They are not independent implementation evidence and cannot satisfy strict adapter evidence without operator-supplied implementations, configs/checkpoints, manifest entries, raw logs, and matching policy_or_config_hash values.",
+  "reference_adapter_policy": "Reference adapters are executable interface/provenance artifacts only. They are not independent implementation evidence; the strict reference-adapter rejection gate prevents them from satisfying strict adapter evidence without operator-supplied implementations, configs/checkpoints, manifest entries, raw logs, and matching policy_or_config_hash values.",
   "reference_adapter_provenance": [
     {
       "adapter_path": "external_validation/baselines/barrier_certified_energy_composer_v5/adapter.py",

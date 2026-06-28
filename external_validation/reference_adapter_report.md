@@ -5,7 +5,7 @@ Evidence status: `implementation_only_not_rollout_evidence`.
 
 These adapters are executable reference implementations for the external validation harness. They can remove adapter engineering ambiguity for an independent operator, but they do not supply real robot or accepted high-fidelity simulator evidence by themselves.
 
-Strict evidence still requires a manifest, raw JSONL logs, videos, task configs, checkpoints or hashes, and recomputed rollout metrics.
+The strict reference-adapter rejection gate prevents these files from satisfying independent adapter evidence. Strict evidence still requires a manifest, raw JSONL logs, videos, task configs, checkpoints or hashes, and recomputed rollout metrics.
 
 ## Adapters
 

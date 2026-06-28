@@ -133,6 +133,22 @@ def manifest_for_scaffolds() -> dict[str, Any]:
     }
 
 
+def manifest_for_reference_adapters() -> dict[str, Any]:
+    return {
+        "version": "paper119_external_manifest_v1",
+        "route": "high_fidelity_sim",
+        "methods": [
+            {
+                "name": method,
+                "implementation": rel(EXTERNAL / "baselines" / method / "adapter.py"),
+                "checkpoint_or_config_path": "",
+                "checkpoint_or_config_hash": file_digest(EXTERNAL / "baselines" / method / "adapter.py"),
+            }
+            for method in baseline_methods()
+        ],
+    }
+
+
 def run_strict_with_manifest(manifest_path: Path) -> dict[str, Any]:
     old_manifest = adapter_audit.MANIFEST
     try:
@@ -156,7 +172,7 @@ def write_report(payload: dict[str, Any]) -> None:
         "Not evidence: `true`.",
         f"Synthetic strict adapter evidence ready: `{str(payload['synthetic_adapter_evidence_ready']).lower()}`.",
         "",
-        "This self-test builds temporary manifest-declared adapter implementations and exercises the strict external-adapter evidence gate directly. It proves complete synthetic adapters can pass, missing manifests fail, scaffold templates are rejected as evidence, and the real adapter evidence audit report is not overwritten.",
+        "This self-test builds temporary manifest-declared adapter implementations and exercises the strict external-adapter evidence gate directly. It proves complete synthetic adapters can pass, missing manifests fail, scaffold templates and reference adapters are rejected as evidence, and the real adapter evidence audit report is not overwritten.",
         "",
         "## Checks",
         "",
@@ -197,18 +213,22 @@ def main() -> int:
         complete_manifest = tmp / "manifest_complete.json"
         missing_manifest = tmp / "manifest_missing.json"
         scaffold_manifest = tmp / "manifest_scaffolds.json"
+        reference_manifest = tmp / "manifest_reference_adapters.json"
         write_json(complete_manifest, manifest_for_implementations(adapter_paths, config_paths))
         write_json(scaffold_manifest, manifest_for_scaffolds())
+        write_json(reference_manifest, manifest_for_reference_adapters())
 
         complete_audit = run_strict_with_manifest(complete_manifest)
         missing_manifest_audit = run_strict_with_manifest(missing_manifest)
         scaffold_audit = run_strict_with_manifest(scaffold_manifest)
+        reference_audit = run_strict_with_manifest(reference_manifest)
 
     report_after = file_digest(REAL_REPORT)
 
     complete_checks = {check.get("name"): check.get("passed") for check in complete_audit.get("checks", [])}
     missing_manifest_checks = {check.get("name"): check.get("passed") for check in missing_manifest_audit.get("checks", [])}
     scaffold_failed = scaffold_audit.get("failed_adapters", [])
+    reference_failed = reference_audit.get("failed_adapters", [])
 
     add_check(
         checks,
@@ -252,6 +272,17 @@ def main() -> int:
     )
     add_check(
         checks,
+        "reference_adapters_rejected_as_strict_evidence",
+        reference_audit.get("passed") is False
+        and len(reference_failed) >= 11
+        and all(
+            any("rejects reference adapters as independent evidence" in str(error) for error in result.get("errors", []))
+            for result in reference_failed
+        ),
+        f"failed_adapters={len(reference_failed)}",
+    )
+    add_check(
+        checks,
         "real_adapter_evidence_report_not_overwritten",
         report_before == report_after,
         f"before={report_before}, after={report_after}",
@@ -264,6 +295,7 @@ def main() -> int:
         "not_external_evidence": True,
         "synthetic_adapter_evidence_ready": complete_audit.get("passed") is True,
         "scaffold_adapter_evidence_ready": scaffold_audit.get("passed") is True,
+        "reference_adapter_evidence_ready": reference_audit.get("passed") is True,
         "missing_manifest_ready": missing_manifest_audit.get("passed") is True,
         "real_adapter_evidence_report_before": report_before,
         "real_adapter_evidence_report_after": report_after,

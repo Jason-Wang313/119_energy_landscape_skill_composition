@@ -270,7 +270,8 @@ def build_packet(
         "work_orders": work_orders,
         "reference_adapter_policy": (
             "Reference adapters are executable interface/provenance artifacts only. "
-            "They are not independent implementation evidence and cannot satisfy strict adapter evidence "
+            "They are not independent implementation evidence; the strict reference-adapter rejection gate "
+            "prevents them from satisfying strict adapter evidence "
             "without operator-supplied implementations, configs/checkpoints, manifest entries, raw logs, "
             "and matching policy_or_config_hash values."
         ),
@@ -281,6 +282,7 @@ def build_packet(
         "forbidden_evidence_shortcuts": [
             "using scaffold adapters as manifest-declared implementations",
             "using reference adapters as rollout evidence without real source/config/checkpoint hashes",
+            "using reference adapters to bypass the strict reference-adapter rejection gate",
             "declaring only a subset of non-oracle methods in the strict adapter manifest",
             "using policy_or_config_hash values in JSONL logs that do not match manifest-declared hashes",
             "dropping hard methods after viewing method identity or outcomes",
@@ -505,7 +507,7 @@ def write_packet_md(packet: dict[str, Any]) -> None:
         "",
         "## Reference Adapter Provenance (Non-Evidence)",
         "",
-        "The current reference adapters are executable interface artifacts. They make the proposed adapter API inspectable, but they are not independent rollout evidence and cannot replace operator-supplied implementations.",
+        "The current reference adapters are executable interface artifacts. They make the proposed adapter API inspectable, but they are not independent rollout evidence, cannot replace operator-supplied implementations, and are blocked by the strict reference-adapter rejection gate.",
         "",
     ]
     for record in packet["reference_adapter_provenance"]:

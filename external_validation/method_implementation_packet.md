@@ -9,7 +9,7 @@ This packet converts the missing independent baseline layer into concrete implem
 
 ## Reference Adapter Provenance (Non-Evidence)
 
-The current reference adapters are executable interface artifacts. They make the proposed adapter API inspectable, but they are not independent rollout evidence and cannot replace operator-supplied implementations.
+The current reference adapters are executable interface artifacts. They make the proposed adapter API inspectable, but they are not independent rollout evidence, cannot replace operator-supplied implementations, and are blocked by the strict reference-adapter rejection gate.
 
 ### `barrier_certified_energy_composer_v5` reference adapter
 
@@ -246,6 +246,7 @@ The current reference adapters are executable interface artifacts. They make the
 
 - using scaffold adapters as manifest-declared implementations
 - using reference adapters as rollout evidence without real source/config/checkpoint hashes
+- using reference adapters to bypass the strict reference-adapter rejection gate
 - declaring only a subset of non-oracle methods in the strict adapter manifest
 - using policy_or_config_hash values in JSONL logs that do not match manifest-declared hashes
 - dropping hard methods after viewing method identity or outcomes

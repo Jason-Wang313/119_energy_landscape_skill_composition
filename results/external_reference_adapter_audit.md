@@ -5,7 +5,7 @@ Not evidence: `true`.
 Adapters checked: `12`.
 Non-oracle adapters: `11`.
 
-This audit imports and exercises the executable reference adapters against the same API used by strict manifest-declared evidence validation. It is an implementation-readiness check only.
+This audit imports and exercises the executable reference adapters against the same callable API shape used by manifest-declared evidence validation. It is an implementation-readiness check only; strict manifest-declared evidence validation rejects these reference-only adapters.
 
 ## Checks
 
@@ -14,6 +14,7 @@ This audit imports and exercises the executable reference adapters against the s
 - `pass` `method_count_ge_12`: methods=12
 - `pass` `non_oracle_reference_adapters_ge_11`: non_oracle=11
 - `pass` `all_reference_adapters_pass_contract`: failed=[]
+- `pass` `reference_adapter_behavior_contract_passes_non_strict`: reference adapters pass the callable API contract only in non-strict mode
 - `pass` `audit_not_rollout_evidence`: reference adapters are executable implementation shims, not robot or high-fidelity rollout evidence
 
 ## Adapter Results

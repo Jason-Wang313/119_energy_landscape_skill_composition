@@ -62,6 +62,7 @@ def main() -> int:
     config_manifest = read_json(RESULTS / "external_config_manifest_audit.json")
     rollout_evidence = read_json(RESULTS / "external_rollout_evidence_audit.json")
     method_implementation = read_json(RESULTS / "external_method_implementation_audit.json")
+    adapter_evidence_self_test = read_json(RESULTS / "external_adapter_evidence_self_test.json")
     materialization = read_json(RESULTS / "external_config_materialization_plan.json")
     planner_policy = read_json(RESULTS / "planner_edge_policy_audit.json")
     reviewer_packet = read_json(RESULTS / "reviewer_response_packet_audit.json")
@@ -486,6 +487,21 @@ def main() -> int:
             f"strict_adapter_evidence_ready={method_implementation.get('strict_adapter_evidence_ready')!r}"
         ),
     )
+    adapter_evidence_self_checks = {check.get("name"): check.get("passed") for check in adapter_evidence_self_test.get("checks", [])}
+    add_check(
+        checks,
+        "strict_reference_adapter_rejection_gate_visible",
+        adapter_evidence_self_test.get("passed") is True
+        and adapter_evidence_self_test.get("not_external_evidence") is True
+        and adapter_evidence_self_test.get("synthetic_adapter_evidence_ready") is True
+        and adapter_evidence_self_test.get("scaffold_adapter_evidence_ready") is False
+        and adapter_evidence_self_test.get("reference_adapter_evidence_ready") is False
+        and adapter_evidence_self_checks.get("reference_adapters_rejected_as_strict_evidence") is True,
+        (
+            f"reference_adapter_evidence_ready={adapter_evidence_self_test.get('reference_adapter_evidence_ready')!r}, "
+            f"check={adapter_evidence_self_checks.get('reference_adapters_rejected_as_strict_evidence')!r}"
+        ),
+    )
     add_check(
         checks,
         "materializer_guard_visible",
@@ -591,6 +607,7 @@ def main() -> int:
             "External rollout evidence packet",
             "External method implementation packet",
             "reference-adapter provenance catalog",
+            "strict reference-adapter rejection gate",
             "manifest assembly checklist",
             "External operator packet",
             "External collection runbook route-gate audit",
@@ -624,6 +641,7 @@ def main() -> int:
             "External rollout evidence packet",
             "External method implementation packet",
             "reference-adapter provenance catalog",
+            "strict reference-adapter rejection gate",
             "manifest assembly checklist",
             "External operator packet",
             "External collection runbook route-gate audit",
@@ -658,6 +676,7 @@ def main() -> int:
             "external rollout evidence packet",
             "external method implementation packet",
             "reference-adapter provenance catalog",
+            "strict reference-adapter rejection gate",
             "manifest assembly checklist",
             "generated external operator packet",
             "external collection runbook route-gate audit",
@@ -692,6 +711,7 @@ def main() -> int:
             "External rollout evidence packet",
             "External method implementation packet",
             "reference-adapter provenance catalog",
+            "strict reference-adapter rejection gate",
             "manifest assembly checklist",
             "External operator packet",
             "External collection runbook route-gate audit",
@@ -728,6 +748,7 @@ def main() -> int:
             "scripts/build_external_method_implementation_packet.py",
             "method_reference_provenance.csv",
             "reference-adapter provenance catalog",
+            "strict reference-adapter rejection gate",
             "manifest_assembly_checklist.csv",
             "manifest assembly checklist",
             "scripts/build_external_operator_packet.py",
@@ -763,6 +784,7 @@ def main() -> int:
             "external rollout evidence packet",
             "external method implementation packet",
             "reference-adapter provenance catalog",
+            "strict reference-adapter rejection gate",
             "manifest assembly checklist",
             "external operator packet",
             "external collection runbook route-gate audit",
@@ -774,6 +796,7 @@ def main() -> int:
             "results/external_operator_packet.md",
             "ManiSkill fidelity metadata probe",
             "reference-adapter provenance catalog",
+            "strict reference-adapter rejection gate",
             "manifest assembly checklist",
             "do not frame Haonan as responsible for supplying the missing proof",
             "independent validation protocol/operator packet",
@@ -810,7 +833,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill render-video preflight, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the manifest assembly checklist, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill render-video preflight, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the manifest assembly checklist, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

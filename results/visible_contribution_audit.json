@@ -126,6 +126,11 @@
       "passed": true
     },
     {
+      "detail": "reference_adapter_evidence_ready=False, check=True",
+      "name": "strict_reference_adapter_rejection_gate_visible",
+      "passed": true
+    },
+    {
       "detail": "write_enabled=False, not_external_evidence=True",
       "name": "materializer_guard_visible",
       "passed": true

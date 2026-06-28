@@ -21,6 +21,11 @@
       "passed": true
     },
     {
+      "detail": "failed_adapters=11",
+      "name": "reference_adapters_rejected_as_strict_evidence",
+      "passed": true
+    },
+    {
       "detail": "before=0d26f217bbfdb41f97394f0254c131a8c19ad2f1f613264fb8636dec6b33fdbb, after=0d26f217bbfdb41f97394f0254c131a8c19ad2f1f613264fb8636dec6b33fdbb",
       "name": "real_adapter_evidence_report_not_overwritten",
       "passed": true
@@ -31,6 +36,7 @@
   "passed": true,
   "real_adapter_evidence_report_after": "0d26f217bbfdb41f97394f0254c131a8c19ad2f1f613264fb8636dec6b33fdbb",
   "real_adapter_evidence_report_before": "0d26f217bbfdb41f97394f0254c131a8c19ad2f1f613264fb8636dec6b33fdbb",
+  "reference_adapter_evidence_ready": false,
   "scaffold_adapter_evidence_ready": false,
   "synthetic_adapter_evidence_ready": true,
   "version": "external_adapter_evidence_self_test_v1"
