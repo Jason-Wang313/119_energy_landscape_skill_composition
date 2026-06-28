@@ -217,7 +217,7 @@ def method_outcome(method: str, scene_index: int) -> tuple[bool, float]:
     return success, 0.65 if success else 0.20
 
 
-def make_record(root: Path, task: str, scene_index: int, method: str, video_path: Path) -> dict[str, Any]:
+def make_record(root: Path, task: str, scene_index: int, method: str, video_path: Path, policy_hashes: dict[str, str]) -> dict[str, Any]:
     success, utility = method_outcome(method, scene_index)
     primary = method == rollout.PRIMARY_METHOD
     oracle = method == rollout.ORACLE_METHOD
@@ -252,28 +252,33 @@ def make_record(root: Path, task: str, scene_index: int, method: str, video_path
         "realized_seam_breach": False if primary or oracle else not success,
         "utility": utility,
         "video_path": rel(root, video_path),
-        "policy_or_config_hash": digest_text(f"{method}:policy_or_config"),
+        "policy_or_config_hash": policy_hashes[method],
     }
 
 
-def write_baseline_artifacts(root: Path, external: Path) -> tuple[list[dict[str, Any]], list[dict[str, str]], list[dict[str, str]]]:
+def write_baseline_artifacts(root: Path, external: Path) -> tuple[list[dict[str, Any]], list[dict[str, str]], list[dict[str, str]], dict[str, str]]:
     methods: list[dict[str, Any]] = []
     code_release: list[dict[str, str]] = []
     checkpoint_release: list[dict[str, str]] = []
+    policy_hashes: dict[str, str] = {}
     for method in METHODS:
         method_entry: dict[str, Any] = {"name": method}
         checkpoint = external / "checkpoints" / f"{method}.sha256"
         checkpoint.parent.mkdir(parents=True, exist_ok=True)
-        checkpoint.write_text(digest_text(f"{method}:checkpoint") + "\n", encoding="utf-8")
+        checkpoint.write_text(json.dumps({"method": method, "synthetic_self_test_only": True}, sort_keys=True) + "\n", encoding="utf-8")
+        checkpoint_hash = file_sha(checkpoint)
+        policy_hashes[method] = checkpoint_hash
         method_entry["checkpoint"] = rel(root, checkpoint)
-        checkpoint_release.append({"path": rel(root, checkpoint), "sha256": file_sha(checkpoint)})
+        method_entry["checkpoint_or_config_path"] = rel(root, checkpoint)
+        method_entry["checkpoint_or_config_hash"] = checkpoint_hash
+        checkpoint_release.append({"path": rel(root, checkpoint), "sha256": checkpoint_hash})
 
         if method != rollout.ORACLE_METHOD:
             adapter = external / "implementations" / method / "adapter.py"
             adapter.parent.mkdir(parents=True, exist_ok=True)
             adapter.write_text(
                 f"""
-POLICY_HASH = "{digest_text(f'{method}:policy_or_config')}"
+POLICY_HASH = "{checkpoint_hash}"
 
 def initialize(config):
     return {{"method_name": config.get("method_name"), "policy_or_config_hash": POLICY_HASH}}
@@ -303,10 +308,10 @@ def reset(reset_context):
             method_entry["implementation"] = rel(root, adapter)
             code_release.append({"path": rel(root, adapter), "sha256": file_sha(adapter)})
         methods.append(method_entry)
-    return methods, code_release, checkpoint_release
+    return methods, code_release, checkpoint_release, policy_hashes
 
 
-def write_task_artifacts(root: Path, external: Path) -> tuple[list[dict[str, Any]], list[dict[str, str]], list[dict[str, str]], list[dict[str, str]]]:
+def write_task_artifacts(root: Path, external: Path, policy_hashes: dict[str, str]) -> tuple[list[dict[str, Any]], list[dict[str, str]], list[dict[str, str]], list[dict[str, str]]]:
     config_release: list[dict[str, str]] = []
     log_release: list[dict[str, str]] = []
     video_release: list[dict[str, str]] = []
@@ -329,7 +334,7 @@ def write_task_artifacts(root: Path, external: Path) -> tuple[list[dict[str, Any
                 for method in METHODS:
                     video_path = video_dir / f"{scene_index:03d}_{method}.mp4"
                     video_path.write_bytes((f"synthetic self-test video bytes for {task} {scene_index} {method}\n".encode("utf-8")) * 32)
-                    record = make_record(root, task, scene_index, method, video_path)
+                    record = make_record(root, task, scene_index, method, video_path, policy_hashes)
                     handle.write(json.dumps(record, sort_keys=True) + "\n")
                     if scene_index == 0 and method in {rollout.PRIMARY_METHOD, "proposed_energy_landscape_composer_v4_1", rollout.ORACLE_METHOD}:
                         video_release.append({"path": rel(root, video_path), "sha256": file_sha(video_path)})
@@ -458,8 +463,8 @@ def main() -> int:
         write_json(external / "fidelity_acceptance.json", make_fidelity_acceptance())
         (scripts / "validate_external_rollouts.py").write_text("# temporary self-test sentinel\n", encoding="utf-8")
 
-        methods, code_release, checkpoint_release = write_baseline_artifacts(root, external)
-        tasks, config_release, log_release, video_release = write_task_artifacts(root, external)
+        methods, code_release, checkpoint_release, policy_hashes = write_baseline_artifacts(root, external)
+        tasks, config_release, log_release, video_release = write_task_artifacts(root, external, policy_hashes)
 
         manifest: dict[str, Any] = {
             "version": "external_validation_v1",
