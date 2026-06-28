@@ -82,6 +82,11 @@
       "passed": true
     },
     {
+      "detail": "qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12",
+      "name": "maniskill_render_machine_qualification_ready",
+      "passed": true
+    },
+    {
       "detail": "method_implementation_packet_ready=True, strict_adapter_evidence_ready=False",
       "name": "method_implementation_packet_ready",
       "passed": true
@@ -147,7 +152,7 @@
       "passed": true
     },
     {
-      "detail": "Probe the selected external platform machine Probe ManiSkill task-family bindings Smoke-test bound ManiSkill environments Probe ManiSkill/SAPIEN fidelity metadata Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Audit the repository ManiSkill/SAPIEN reference backend candidate Audit explicit reference-backend collection preflight Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Fill platform fidelity acceptance with real provenance Generate the tracked ManiSkill fidelity acceptance draft Materialize fidelity acceptance only through the guarded promotion path Run a quarantined first-panel backend smoke test Audit bounded ManiSkill pilot runtime liveness Audit ManiSkill render-backed evidence-video export Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
+      "detail": "Probe the selected external platform machine Probe ManiSkill task-family bindings Smoke-test bound ManiSkill environments Probe ManiSkill/SAPIEN fidelity metadata Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Audit the repository ManiSkill/SAPIEN reference backend candidate Audit explicit reference-backend collection preflight Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Fill platform fidelity acceptance with real provenance Generate the tracked ManiSkill fidelity acceptance draft Materialize fidelity acceptance only through the guarded promotion path Run a quarantined first-panel backend smoke test Audit bounded ManiSkill pilot runtime liveness Audit ManiSkill render-backed evidence-video export Qualify the exact render machine before official collection Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
       "name": "operator_actions_cover_collection_blockers",
       "passed": true
     },
@@ -184,6 +189,7 @@
         "pilot_smoke_packet",
         "maniskill_render_video_preflight",
         "maniskill_pilot_runtime_liveness",
+        "maniskill_render_machine_qualification",
         "run_collection",
         "manifest_and_release"
       ],
@@ -532,6 +538,23 @@
     },
     {
       "artifacts": [
+        "external_validation/render_machine_qualification_packet.md",
+        "scripts/build_maniskill_render_machine_qualification.py",
+        "results/maniskill_render_machine_qualification.json",
+        "results/maniskill_render_machine_qualification.md"
+      ],
+      "closes": [
+        "accepted-machine render-backed MP4 qualification before collection; not evidence"
+      ],
+      "commands": [
+        "python scripts\\build_maniskill_render_machine_qualification.py"
+      ],
+      "id": "maniskill_render_machine_qualification",
+      "operator_input": "accepted collection machine with platform probe, render-backed MP4 preflight, pilot liveness, and no diagnostic fallback videos",
+      "title": "Qualify the exact render machine before official collection"
+    },
+    {
+      "artifacts": [
         "external_validation/fidelity_provenance_packet.md",
         "external_validation/fidelity_provenance_work_orders.csv",
         "results/external_fidelity_provenance_audit.json"
@@ -708,6 +731,30 @@
     "python scripts\\audit_external_pairing_integrity.py --strict",
     "python scripts\\audit_external_evidence.py --strict"
   ],
+  "render_machine_qualification": {
+    "audit_command": "python scripts\\build_maniskill_render_machine_qualification.py",
+    "audit_md_path": "results/maniskill_render_machine_qualification.md",
+    "audit_path": "results/maniskill_render_machine_qualification.json",
+    "blocking_missing": [
+      "render_video_ready is false in results/maniskill_render_video_preflight_audit.json",
+      "PegInsertionSide-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "PegInsertionSide-v1 did not write a renderer-backed MP4",
+      "OpenCabinetDrawer-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "OpenCabinetDrawer-v1 did not write a renderer-backed MP4",
+      "OpenCabinetDoor-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "OpenCabinetDoor-v1 did not write a renderer-backed MP4",
+      "PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "PullCubeTool-v1 did not write a renderer-backed MP4",
+      "pilot runtime liveness is not ready on the selected machine",
+      "pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence",
+      "pilot runtime render_video_ready is false"
+    ],
+    "not_external_evidence": true,
+    "operator_packet_path": "external_validation/render_machine_qualification_packet.md",
+    "qualification_state": "DO_NOT_COLLECT_RENDER_MACHINE",
+    "render_machine_qualified": false,
+    "strict_external_evidence_ready": false
+  },
   "render_video_preflight": {
     "audit_command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4",
     "audit_md_path": "results/maniskill_render_video_preflight_audit.md",
@@ -759,7 +806,8 @@
     "results/external_method_implementation_audit.json",
     "results/external_pilot_smoke_packet_audit.json",
     "results/maniskill_render_video_preflight_audit.json",
-    "results/maniskill_pilot_runtime_liveness_audit.json"
+    "results/maniskill_pilot_runtime_liveness_audit.json",
+    "results/maniskill_render_machine_qualification.json"
   ],
   "strict_collection_command": "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
   "strict_evidence_ready": false,

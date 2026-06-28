@@ -88,6 +88,9 @@ jobs:
       - name: Audit ManiSkill pilot runtime liveness
         run: python scripts/audit_maniskill_pilot_runtime_liveness.py
 
+      - name: Build ManiSkill render machine qualification
+        run: python scripts/build_maniskill_render_machine_qualification.py
+
       - name: Audit external evidence preflight
         run: python scripts/audit_external_evidence_preflight.py
 

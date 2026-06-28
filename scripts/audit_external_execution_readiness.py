@@ -557,6 +557,45 @@ def main() -> int:
         ),
     )
 
+    render_machine_ok, render_machine, render_machine_detail = passed_json(
+        RESULTS / "maniskill_render_machine_qualification.json",
+        version="maniskill_render_machine_qualification_v1",
+    )
+    add_check(checks, "maniskill_render_machine_qualification_ready", render_machine_ok, render_machine_detail)
+    render_machine_checks = {check.get("name"): check.get("passed") for check in render_machine.get("checks", []) or []}
+    add_check(
+        checks,
+        "maniskill_render_machine_qualification_not_evidence",
+        render_machine.get("not_external_evidence") is True
+        and render_machine.get("strict_external_evidence_ready") is False
+        and render_machine.get("qualification_state") == "DO_NOT_COLLECT_RENDER_MACHINE"
+        and render_machine.get("render_machine_qualified") is False
+        and bool(render_machine.get("blocking_missing"))
+        and render_machine_checks.get("qualification_packet_is_non_evidence") is True
+        and render_machine_checks.get("current_machine_fail_closed_when_render_not_ready") is True,
+        (
+            f"qualification_state={render_machine.get('qualification_state')!r}, "
+            f"render_machine_qualified={render_machine.get('render_machine_qualified')!r}, "
+            f"blocking={len(render_machine.get('blocking_missing', []) or [])}"
+        ),
+    )
+    add_check(
+        checks,
+        "maniskill_render_machine_operator_commands",
+        all(
+            fragment in "\n".join(render_machine.get("operator_commands", []) or [])
+            for fragment in (
+                "probe_external_platform.py",
+                "audit_maniskill_render_video_preflight.py",
+                "audit_maniskill_pilot_runtime_liveness.py",
+                "materialize_fidelity_acceptance.py",
+                "audit_external_collection_readiness.py",
+            )
+        )
+        and (EXTERNAL / "render_machine_qualification_packet.md").exists(),
+        "render machine qualification packet commands and packet file are present",
+    )
+
     backend_contract_ok, backend_contract, backend_contract_detail = passed_json(
         RESULTS / "external_backend_contract_audit.json",
         version="external_backend_contract_audit_v1",
@@ -1189,6 +1228,9 @@ def main() -> int:
         "external_runner_backend_probe_exercises_actual_runner_path",
         "maniskill_pilot_runtime_liveness_ready",
         "maniskill_pilot_runtime_liveness_not_evidence",
+        "maniskill_render_machine_qualification_ready",
+        "maniskill_render_machine_qualification_not_evidence",
+        "maniskill_render_machine_operator_commands",
         "external_backend_contract_ready",
         "external_backend_contract_not_evidence",
         "external_backend_contract_fail_closed",
@@ -1280,6 +1322,7 @@ def main() -> int:
             "completed fidelity provenance packet work orders with accepted platform/contact provenance",
             "preflight-cleared external evidence package",
             "bounded ManiSkill pilot runtime liveness on the selected runtime machine",
+            "render-machine qualification with render-backed MP4s on the accepted collection machine",
             "released or hash-declared skill/checkpoint artifacts",
         ],
         "checks": checks,

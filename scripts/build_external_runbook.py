@@ -28,6 +28,7 @@ REQUIRED_COMMAND_FRAGMENTS = [
     "self_test_external_runner_backend.py",
     "audit_maniskill_render_video_preflight.py",
     "audit_maniskill_pilot_runtime_liveness.py",
+    "build_maniskill_render_machine_qualification.py",
     "materialize_external_configs.py --platform-type high_fidelity_sim",
     "real_collection_runner.py --backend-module <module_or_path>",
     "audit_external_evidence_preflight.py",

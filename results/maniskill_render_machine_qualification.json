@@ -1,0 +1,90 @@
+{
+  "blocking_missing": [
+    "render_video_ready is false in results/maniskill_render_video_preflight_audit.json",
+    "PegInsertionSide-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+    "PegInsertionSide-v1 did not write a renderer-backed MP4",
+    "OpenCabinetDrawer-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+    "OpenCabinetDrawer-v1 did not write a renderer-backed MP4",
+    "OpenCabinetDoor-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+    "OpenCabinetDoor-v1 did not write a renderer-backed MP4",
+    "PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+    "PullCubeTool-v1 did not write a renderer-backed MP4",
+    "pilot runtime liveness is not ready on the selected machine",
+    "pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence",
+    "pilot runtime render_video_ready is false"
+  ],
+  "checks": [
+    {
+      "detail": "this script writes only packet/audit files",
+      "name": "qualification_packet_is_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "expected_envs=['PegInsertionSide-v1', 'OpenCabinetDrawer-v1', 'OpenCabinetDoor-v1', 'PullCubeTool-v1']",
+      "name": "source_audits_loaded",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True, strict=False",
+      "name": "render_preflight_remains_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "records=4, expected=['PegInsertionSide-v1', 'OpenCabinetDrawer-v1', 'OpenCabinetDoor-v1', 'PullCubeTool-v1']",
+      "name": "all_primary_envs_have_terminal_render_records",
+      "passed": true
+    },
+    {
+      "detail": "state=DO_NOT_COLLECT_RENDER_MACHINE, blockers=12",
+      "name": "qualification_state_matches_render_and_liveness",
+      "passed": true
+    },
+    {
+      "detail": "state=DO_NOT_COLLECT_RENDER_MACHINE, render_video_ready=False",
+      "name": "current_machine_fail_closed_when_render_not_ready",
+      "passed": true
+    },
+    {
+      "detail": "diagnostic_fallbacks=1, state=DO_NOT_COLLECT_RENDER_MACHINE",
+      "name": "diagnostic_fallbacks_block_evidence",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json remains absent before real evidence",
+      "name": "no_real_manifest_written",
+      "passed": true
+    },
+    {
+      "detail": "operator qualification commands are present",
+      "name": "operator_commands_cover_platform_render_liveness_acceptance_and_collection_readiness",
+      "passed": true
+    }
+  ],
+  "expected_primary_envs": [
+    "PegInsertionSide-v1",
+    "OpenCabinetDrawer-v1",
+    "OpenCabinetDoor-v1",
+    "PullCubeTool-v1"
+  ],
+  "failed_checks": [],
+  "not_external_evidence": true,
+  "operator_commands": [
+    "python scripts\\probe_external_platform.py",
+    "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend <accepted_backend> --shader-pack <accepted_shader_pack> --profile-matrix --profile-matrix-max-envs 1",
+    "python scripts\\audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 180",
+    "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --run-id <accepted_run_id> --unsealed-alias-map"
+  ],
+  "passed": true,
+  "qualification_state": "DO_NOT_COLLECT_RENDER_MACHINE",
+  "render_machine_qualified": false,
+  "render_records_seen": 4,
+  "source_artifacts": [
+    "results/external_platform_probe.json",
+    "results/maniskill_render_video_preflight_audit.json",
+    "results/maniskill_pilot_runtime_liveness_audit.json",
+    "external_validation/maniskill_task_bindings.json"
+  ],
+  "strict_external_evidence_ready": false,
+  "version": "maniskill_render_machine_qualification_v1"
+}

@@ -139,6 +139,24 @@ python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --
 python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4 --width 64 --height 64 --render-backend cpu --shader-pack minimal
 ```
 
+## ManiSkill Render Machine Qualification
+
+This packet is not evidence. It requires the exact collection machine to pass platform probing, render-backed MP4 preflight, pilot liveness, and zero diagnostic fallback videos before official collection can begin.
+
+- Packet: `external_validation/render_machine_qualification_packet.md`
+- Audit JSON: `results/maniskill_render_machine_qualification.json`
+- Audit notes: `results/maniskill_render_machine_qualification.md`
+- Qualification state: `DO_NOT_COLLECT_RENDER_MACHINE`
+- Render machine qualified: `false`
+- Strict external evidence ready: `false`
+- Blocking missing: `['render_video_ready is false in results/maniskill_render_video_preflight_audit.json', 'PegInsertionSide-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', 'PegInsertionSide-v1 did not write a renderer-backed MP4', 'OpenCabinetDrawer-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', 'OpenCabinetDrawer-v1 did not write a renderer-backed MP4', 'OpenCabinetDoor-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', 'OpenCabinetDoor-v1 did not write a renderer-backed MP4', 'PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', 'PullCubeTool-v1 did not write a renderer-backed MP4', 'pilot runtime liveness is not ready on the selected machine', 'pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence', 'pilot runtime render_video_ready is false']`
+
+Qualification packet command:
+
+```powershell
+python scripts\build_maniskill_render_machine_qualification.py
+```
+
 ## Commands
 
 Materialize real configs after platform selection:
@@ -196,6 +214,7 @@ Post-collection strict gates:
 - `pilot_smoke_packet`: Run a quarantined first-panel backend smoke test
 - `maniskill_pilot_runtime_liveness`: Audit bounded ManiSkill pilot runtime liveness
 - `maniskill_render_video_preflight`: Audit ManiSkill render-backed evidence-video export
+- `maniskill_render_machine_qualification`: Qualify the exact render machine before official collection
 - `fidelity_provenance_packet`: Use the fidelity provenance packet as the platform acceptance checklist
 - `alias_unseal`: Unseal method aliases only after configs, implementations, and run plan are frozen
 - `specific_run_id`: Use a specific immutable external run id
@@ -216,6 +235,7 @@ Post-collection strict gates:
 - `pass` `fidelity_acceptance_materializer_guarded`: write_enabled=False, acceptance_write_ready=False
 - `pass` `fidelity_metadata_probe_ready_but_not_evidence`: strict_metadata_ready=True, primary_metadata_missing=[]
 - `pass` `render_video_preflight_recorded_but_not_evidence`: render_video_ready=False, envs=4, failure_classes=['vulkan_descriptor_pool_exhaustion']
+- `pass` `render_machine_qualification_recorded_but_not_evidence`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12
 - `pass` `operator_actions_cover_start_to_finish`: missing=[]
 - `pass` `operator_action_titles_present`: missing_titles=[]
 - `pass` `config_materializer_is_guarded`: write_enabled=False, task_count=4

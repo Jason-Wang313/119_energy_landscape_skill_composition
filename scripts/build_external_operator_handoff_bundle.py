@@ -107,6 +107,7 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "pilot_smoke_packet.json",
         EXTERNAL / "pilot_smoke_packet.md",
         EXTERNAL / "pilot_smoke_work_orders.csv",
+        EXTERNAL / "render_machine_qualification_packet.md",
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
@@ -148,6 +149,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_pilot_smoke_packet.py",
         SCRIPTS / "audit_maniskill_render_video_preflight.py",
         SCRIPTS / "audit_maniskill_pilot_runtime_liveness.py",
+        SCRIPTS / "build_maniskill_render_machine_qualification.py",
         SCRIPTS / "build_external_method_implementation_packet.py",
         SCRIPTS / "materialize_external_configs.py",
         SCRIPTS / "audit_external_backend_contract.py",
@@ -205,6 +207,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "maniskill_render_video_preflight_audit.md",
         RESULTS / "maniskill_pilot_runtime_liveness_audit.json",
         RESULTS / "maniskill_pilot_runtime_liveness_audit.md",
+        RESULTS / "maniskill_render_machine_qualification.json",
+        RESULTS / "maniskill_render_machine_qualification.md",
         RESULTS / "external_method_implementation_audit.json",
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "independent_validation_route_audit.json",
@@ -318,6 +322,7 @@ def build_payload() -> dict[str, Any]:
     pilot_smoke = require_payload(RESULTS / "external_pilot_smoke_packet_audit.json", "external_pilot_smoke_packet_audit_v1")
     render_preflight = require_payload(RESULTS / "maniskill_render_video_preflight_audit.json", "maniskill_render_video_preflight_audit_v1")
     pilot_runtime = require_payload(RESULTS / "maniskill_pilot_runtime_liveness_audit.json", "maniskill_pilot_runtime_liveness_audit_v1")
+    render_machine = require_payload(RESULTS / "maniskill_render_machine_qualification.json", "maniskill_render_machine_qualification_v1")
 
     files = build_file_manifest()
     records = file_records(files)
@@ -743,6 +748,27 @@ def build_payload() -> dict[str, Any]:
             f"videos={pilot_runtime_videos!r}, "
             f"diagnostic_fallbacks={pilot_runtime_fallbacks}, "
             f"failure_summary={pilot_runtime.get('failure_summary')!r}"
+        ),
+    )
+    render_machine_checks = {check.get("name"): check.get("passed") for check in render_machine.get("checks", []) or []}
+    add_check(
+        checks,
+        "maniskill_render_machine_qualification_included",
+        render_machine.get("passed") is True
+        and render_machine.get("not_external_evidence") is True
+        and render_machine.get("strict_external_evidence_ready") is False
+        and render_machine.get("qualification_state") == "DO_NOT_COLLECT_RENDER_MACHINE"
+        and render_machine.get("render_machine_qualified") is False
+        and render_machine_checks.get("qualification_packet_is_non_evidence") is True
+        and render_machine_checks.get("current_machine_fail_closed_when_render_not_ready") is True
+        and "scripts/build_maniskill_render_machine_qualification.py" in paths
+        and "external_validation/render_machine_qualification_packet.md" in paths
+        and "results/maniskill_render_machine_qualification.json" in paths
+        and "results/maniskill_render_machine_qualification.md" in paths,
+        (
+            f"qualification_state={render_machine.get('qualification_state')!r}, "
+            f"render_machine_qualified={render_machine.get('render_machine_qualified')!r}, "
+            f"blocking={len(render_machine.get('blocking_missing', []) or [])}"
         ),
     )
     add_check(

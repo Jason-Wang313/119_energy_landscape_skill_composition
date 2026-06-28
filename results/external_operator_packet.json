@@ -38,6 +38,11 @@
       "passed": true
     },
     {
+      "detail": "qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12",
+      "name": "render_machine_qualification_recorded_but_not_evidence",
+      "passed": true
+    },
+    {
       "detail": "missing=[]",
       "name": "operator_actions_cover_start_to_finish",
       "passed": true
@@ -473,6 +478,23 @@
     },
     {
       "artifacts": [
+        "external_validation/render_machine_qualification_packet.md",
+        "scripts/build_maniskill_render_machine_qualification.py",
+        "results/maniskill_render_machine_qualification.json",
+        "results/maniskill_render_machine_qualification.md"
+      ],
+      "closes": [
+        "accepted-machine render-backed MP4 qualification before collection; not evidence"
+      ],
+      "commands": [
+        "python scripts\\build_maniskill_render_machine_qualification.py"
+      ],
+      "id": "maniskill_render_machine_qualification",
+      "operator_input": "accepted collection machine with platform probe, render-backed MP4 preflight, pilot liveness, and no diagnostic fallback videos",
+      "title": "Qualify the exact render machine before official collection"
+    },
+    {
+      "artifacts": [
         "external_validation/fidelity_provenance_packet.md",
         "external_validation/fidelity_provenance_work_orders.csv",
         "results/external_fidelity_provenance_audit.json"
@@ -657,6 +679,30 @@
     "run_id_specific: run_id='paper119_external_validation_run'"
   ],
   "pre_collection_gate_command": "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+  "render_machine_qualification": {
+    "audit_md_path": "results/maniskill_render_machine_qualification.md",
+    "audit_path": "results/maniskill_render_machine_qualification.json",
+    "blocking_missing": [
+      "render_video_ready is false in results/maniskill_render_video_preflight_audit.json",
+      "PegInsertionSide-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "PegInsertionSide-v1 did not write a renderer-backed MP4",
+      "OpenCabinetDrawer-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "OpenCabinetDrawer-v1 did not write a renderer-backed MP4",
+      "OpenCabinetDoor-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "OpenCabinetDoor-v1 did not write a renderer-backed MP4",
+      "PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "PullCubeTool-v1 did not write a renderer-backed MP4",
+      "pilot runtime liveness is not ready on the selected machine",
+      "pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence",
+      "pilot runtime render_video_ready is false"
+    ],
+    "build_command": "python scripts\\build_maniskill_render_machine_qualification.py",
+    "not_external_evidence": true,
+    "packet_path": "external_validation/render_machine_qualification_packet.md",
+    "qualification_state": "DO_NOT_COLLECT_RENDER_MACHINE",
+    "render_machine_qualified": false,
+    "strict_external_evidence_ready": false
+  },
   "render_video_preflight": {
     "audit_md_path": "results/maniskill_render_video_preflight_audit.md",
     "audit_path": "results/maniskill_render_video_preflight_audit.json",

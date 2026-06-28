@@ -132,6 +132,7 @@ def main():
         "scripts\\build_external_pilot_smoke_packet.py",
         "scripts\\audit_maniskill_render_video_preflight.py",
         "scripts\\audit_maniskill_pilot_runtime_liveness.py",
+        "scripts\\build_maniskill_render_machine_qualification.py",
         "scripts\\validate_external_configs.py",
         "scripts\\self_test_external_config_evidence.py",
         "scripts\\materialize_external_configs.py",
@@ -217,6 +218,7 @@ def main():
         "python scripts/build_external_pilot_smoke_packet.py",
         "python scripts/audit_maniskill_render_video_preflight.py",
         "python scripts/audit_maniskill_pilot_runtime_liveness.py",
+        "python scripts/build_maniskill_render_machine_qualification.py",
         "python scripts/audit_external_evidence_preflight.py",
         "python scripts/self_test_external_config_evidence.py",
         "python scripts/self_test_external_adapter_evidence.py",
@@ -341,6 +343,7 @@ def main():
         "self_test_external_runner_backend.py",
         "audit_maniskill_render_video_preflight.py",
         "audit_maniskill_pilot_runtime_liveness.py",
+        "build_maniskill_render_machine_qualification.py",
         "materialize_external_configs.py --platform-type high_fidelity_sim",
         "real_collection_runner.py --backend-module <module_or_path>",
         "audit_external_evidence_preflight.py",
@@ -2374,6 +2377,58 @@ def main():
     ):
         if pilot_runtime_checks.get(required_check) is not True:
             fail(f"ManiSkill pilot runtime liveness audit missing passing check: {required_check}")
+    render_machine_path = RESULTS / "maniskill_render_machine_qualification.json"
+    render_machine_md_path = RESULTS / "maniskill_render_machine_qualification.md"
+    render_machine_packet_path = EXTERNAL / "render_machine_qualification_packet.md"
+    for path in (
+        ROOT / "scripts" / "build_maniskill_render_machine_qualification.py",
+        render_machine_path,
+        render_machine_md_path,
+        render_machine_packet_path,
+    ):
+        if not path.exists():
+            fail(f"missing ManiSkill render machine qualification artifact: {path}")
+    render_machine = json.loads(render_machine_path.read_text(encoding="utf-8"))
+    if render_machine.get("version") != "maniskill_render_machine_qualification_v1":
+        fail("ManiSkill render machine qualification version mismatch")
+    if render_machine.get("passed") is not True:
+        fail("ManiSkill render machine qualification audit did not pass")
+    if render_machine.get("not_external_evidence") is not True:
+        fail("ManiSkill render machine qualification must declare that it is not evidence")
+    if render_machine.get("strict_external_evidence_ready") is not False:
+        fail("ManiSkill render machine qualification must not claim strict external evidence readiness")
+    if render_machine.get("qualification_state") != "DO_NOT_COLLECT_RENDER_MACHINE":
+        fail("current local render machine qualification should fail closed")
+    if render_machine.get("render_machine_qualified") is not False:
+        fail("current local render machine must remain unqualified until render-backed MP4s and liveness are ready")
+    if int(render_machine.get("render_records_seen", 0) or 0) < 1:
+        fail("render machine qualification must inspect render preflight records")
+    if not render_machine.get("blocking_missing"):
+        fail("render machine qualification must list missing render-machine evidence while unqualified")
+    render_machine_commands = "\n".join(render_machine.get("operator_commands", []) or [])
+    for fragment in (
+        "probe_external_platform.py",
+        "audit_maniskill_render_video_preflight.py",
+        "audit_maniskill_pilot_runtime_liveness.py",
+        "materialize_fidelity_acceptance.py",
+        "audit_external_collection_readiness.py",
+    ):
+        if fragment not in render_machine_commands:
+            fail(f"render machine qualification missing operator command fragment: {fragment}")
+    render_machine_checks = {check.get("name"): check.get("passed") for check in render_machine.get("checks", [])}
+    for required_check in (
+        "qualification_packet_is_non_evidence",
+        "source_audits_loaded",
+        "render_preflight_remains_non_evidence",
+        "all_primary_envs_have_terminal_render_records",
+        "qualification_state_matches_render_and_liveness",
+        "current_machine_fail_closed_when_render_not_ready",
+        "diagnostic_fallbacks_block_evidence",
+        "no_real_manifest_written",
+        "operator_commands_cover_platform_render_liveness_acceptance_and_collection_readiness",
+    ):
+        if render_machine_checks.get(required_check) is not True:
+            fail(f"ManiSkill render machine qualification missing passing check: {required_check}")
     if not (ROOT / "scripts" / "self_test_external_rollout_validator.py").exists():
         fail("missing scripts/self_test_external_rollout_validator.py")
     rollout_metrics = json.loads(rollout_metrics_path.read_text(encoding="utf-8"))
@@ -2455,6 +2510,9 @@ def main():
         "external_pilot_smoke_quarantine_gate",
         "maniskill_pilot_runtime_liveness_ready",
         "maniskill_pilot_runtime_liveness_not_evidence",
+        "maniskill_render_machine_qualification_ready",
+        "maniskill_render_machine_qualification_not_evidence",
+        "maniskill_render_machine_operator_commands",
         "external_backend_contract_ready",
         "external_backend_contract_not_evidence",
         "external_backend_contract_fail_closed",
@@ -2518,6 +2576,7 @@ def main():
         EXTERNAL / "blind_evaluation_protocol.md",
         EXTERNAL / "blinded_operator_sheet.csv",
         EXTERNAL / "method_alias_map.json",
+        EXTERNAL / "render_machine_qualification_packet.md",
         EXTERNAL / "runner" / "README.md",
         EXTERNAL / "runner" / "backend_contract.py",
         EXTERNAL / "runner" / "real_collection_runner.py",
@@ -2529,6 +2588,7 @@ def main():
         RESULTS / "external_acquisition_packet.md",
         RESULTS / "external_operator_packet.md",
         RESULTS / "external_operator_handoff_bundle.md",
+        RESULTS / "maniskill_render_machine_qualification.md",
         RESULTS / "external_analysis_plan_audit.md",
         RESULTS / "external_platform_onboarding_audit.md",
         RESULTS / "external_fidelity_provenance_audit.md",
@@ -2825,6 +2885,12 @@ def main():
     pilot_runtime_commands = "\n".join(pilot_runtime_actions[0].get("commands", []) or [])
     if "audit_maniskill_pilot_runtime_liveness.py" not in pilot_runtime_commands:
         fail("external operator packet liveness action must run the ManiSkill pilot runtime liveness audit")
+    render_machine_actions = [action for action in operator_actions if action.get("id") == "maniskill_render_machine_qualification"]
+    if not render_machine_actions:
+        fail("external operator packet missing maniskill_render_machine_qualification action")
+    render_machine_action_commands = "\n".join(render_machine_actions[0].get("commands", []) or [])
+    if "build_maniskill_render_machine_qualification.py" not in render_machine_action_commands:
+        fail("external operator packet render-machine action must build the render machine qualification packet")
     if "audit_external_collection_readiness.py --strict" not in operator_packet.get("pre_collection_gate_command", ""):
         fail("external operator packet missing strict pre-collection gate command")
     if "audit_external_backend_contract.py --strict" not in operator_packet.get("backend_contract_gate_command", ""):
@@ -2896,6 +2962,7 @@ def main():
         "pilot_smoke_packet_included",
         "maniskill_render_video_preflight_included",
         "maniskill_pilot_runtime_liveness_included",
+        "maniskill_render_machine_qualification_included",
         "method_implementation_packet_included",
         "operator_actions_cover_evidence_collection",
         "post_collection_commands_cover_strict_gates",

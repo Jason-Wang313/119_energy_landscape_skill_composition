@@ -43,6 +43,7 @@
 - External adapter contract validator: `scripts/validate_external_adapters.py`
 - External manifest builder: `scripts/build_external_manifest.py`
 - External manifest builder self-test: `scripts/self_test_external_manifest_builder.py`
+- ManiSkill render machine qualification packet: `scripts/build_maniskill_render_machine_qualification.py`
 - External release package validator: `scripts/audit_external_release_package.py`
 - External evidence preflight validator: `scripts/audit_external_evidence_preflight.py`
 - External evidence acquisition packet builder: `scripts/build_external_acquisition_packet.py`

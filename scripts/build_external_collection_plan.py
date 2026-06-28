@@ -39,6 +39,7 @@ REQUIRED_COMMANDS = [
     r"python scripts\build_external_pilot_smoke_packet.py",
     r"python scripts\audit_maniskill_render_video_preflight.py",
     r"python scripts\audit_maniskill_pilot_runtime_liveness.py",
+    r"python scripts\build_maniskill_render_machine_qualification.py",
     r"python scripts\build_external_blind_eval_plan.py",
     r"python scripts\audit_external_collection_readiness.py",
     r"python scripts\validate_external_configs.py",

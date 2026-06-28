@@ -22,7 +22,7 @@ def esc(text):
 def seam_framed_description(text):
     return str(text).replace(
         "Boundary case for energy-landscape skill composition",
-        "Boundary case for skill-seam world/action modeling",
+        "Boundary case for seam-composition reliability",
     )
 
 

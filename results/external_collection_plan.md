@@ -35,6 +35,7 @@ This file is a collection schedule only. It does not count as external validatio
 - `python scripts\build_external_pilot_smoke_packet.py`
 - `python scripts\audit_maniskill_render_video_preflight.py`
 - `python scripts\audit_maniskill_pilot_runtime_liveness.py`
+- `python scripts\build_maniskill_render_machine_qualification.py`
 - `python scripts\build_external_blind_eval_plan.py`
 - `python scripts\audit_external_collection_readiness.py`
 - `python scripts\validate_external_configs.py`

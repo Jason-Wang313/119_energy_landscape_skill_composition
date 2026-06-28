@@ -32,6 +32,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "pilot_smoke_packet",
         "maniskill_render_video_preflight",
         "maniskill_pilot_runtime_liveness",
+        "maniskill_render_machine_qualification",
         "run_collection",
         "manifest_and_release",
     ],
@@ -309,6 +310,20 @@ ACTION_CATALOG = {
         ],
         "closes": ["pre-collection render-backed MP4 readiness for the tracked ManiSkill route; not evidence"],
     },
+    "maniskill_render_machine_qualification": {
+        "title": "Qualify the exact render machine before official collection",
+        "operator_input": "accepted collection machine with platform probe, render-backed MP4 preflight, pilot liveness, and no diagnostic fallback videos",
+        "artifacts": [
+            "external_validation/render_machine_qualification_packet.md",
+            "scripts/build_maniskill_render_machine_qualification.py",
+            "results/maniskill_render_machine_qualification.json",
+            "results/maniskill_render_machine_qualification.md",
+        ],
+        "commands": [
+            "python scripts\\build_maniskill_render_machine_qualification.py",
+        ],
+        "closes": ["accepted-machine render-backed MP4 qualification before collection; not evidence"],
+    },
     "fidelity_provenance_packet": {
         "title": "Use the fidelity provenance packet as the platform acceptance checklist",
         "operator_input": "complete platform physics/contact, paired-reset replay, operator independence, calibration basis, code commit, skill-library hash, and acceptance gates",
@@ -509,6 +524,7 @@ def main() -> int:
     pilot_smoke_path = RESULTS / "external_pilot_smoke_packet_audit.json"
     render_preflight_path = RESULTS / "maniskill_render_video_preflight_audit.json"
     pilot_runtime_path = RESULTS / "maniskill_pilot_runtime_liveness_audit.json"
+    render_machine_path = RESULTS / "maniskill_render_machine_qualification.json"
 
     gap = require_json(gap_path)
     collection = require_json(collection_path)
@@ -533,6 +549,7 @@ def main() -> int:
     pilot_smoke = require_json(pilot_smoke_path)
     render_preflight = require_json(render_preflight_path)
     pilot_runtime = require_json(pilot_runtime_path)
+    render_machine = require_json(render_machine_path)
 
     missing_requirements = missing_requirements_from_gap(gap)
     missing_names = [row.get("requirement", "") for row in missing_requirements]
@@ -570,6 +587,7 @@ def main() -> int:
                 pilot_smoke_path,
                 render_preflight_path,
                 pilot_runtime_path,
+                render_machine_path,
             ]
         ),
         ", ".join(
@@ -851,6 +869,27 @@ def main() -> int:
             f"failure_summary={pilot_runtime.get('failure_summary')!r}"
         ),
     )
+    render_machine_checks = {check.get("name"): check.get("passed") for check in render_machine.get("checks", []) or []}
+    add_check(
+        checks,
+        "maniskill_render_machine_qualification_ready",
+        render_machine.get("version") == "maniskill_render_machine_qualification_v1"
+        and render_machine.get("passed") is True
+        and render_machine.get("not_external_evidence") is True
+        and render_machine.get("strict_external_evidence_ready") is False
+        and render_machine.get("qualification_state") == "DO_NOT_COLLECT_RENDER_MACHINE"
+        and render_machine.get("render_machine_qualified") is False
+        and render_machine_checks.get("qualification_packet_is_non_evidence") is True
+        and render_machine_checks.get("current_machine_fail_closed_when_render_not_ready") is True
+        and (ROOT / "scripts" / "build_maniskill_render_machine_qualification.py").exists()
+        and (EXTERNAL / "render_machine_qualification_packet.md").exists()
+        and (RESULTS / "maniskill_render_machine_qualification.md").exists(),
+        (
+            f"qualification_state={render_machine.get('qualification_state')!r}, "
+            f"render_machine_qualified={render_machine.get('render_machine_qualified')!r}, "
+            f"blocking={len(render_machine.get('blocking_missing', []) or [])}"
+        ),
+    )
     add_check(
         checks,
         "method_implementation_packet_ready",
@@ -1048,6 +1087,7 @@ def main() -> int:
         "audit_external_pilot_smoke.py",
         "audit_maniskill_render_video_preflight.py",
         "audit_maniskill_pilot_runtime_liveness.py",
+        "build_maniskill_render_machine_qualification.py",
     ]
     command_text = "\n".join(post_collection_commands + [cmd for action in actions for cmd in action["commands"]])
     missing_command_fragments = [fragment for fragment in required_command_fragments if fragment not in command_text]
@@ -1111,6 +1151,7 @@ def main() -> int:
                 pilot_smoke_path,
                 render_preflight_path,
                 pilot_runtime_path,
+                render_machine_path,
             ]
             if path.exists()
         ],
@@ -1135,6 +1176,17 @@ def main() -> int:
             "audit_command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4",
             "audit_path": "results/maniskill_render_video_preflight_audit.json",
             "audit_md_path": "results/maniskill_render_video_preflight_audit.md",
+        },
+        "render_machine_qualification": {
+            "not_external_evidence": True,
+            "qualification_state": render_machine.get("qualification_state"),
+            "render_machine_qualified": render_machine.get("render_machine_qualified") is True,
+            "strict_external_evidence_ready": render_machine.get("strict_external_evidence_ready") is True,
+            "blocking_missing": list(render_machine.get("blocking_missing", []) or []),
+            "audit_command": "python scripts\\build_maniskill_render_machine_qualification.py",
+            "audit_path": "results/maniskill_render_machine_qualification.json",
+            "audit_md_path": "results/maniskill_render_machine_qualification.md",
+            "operator_packet_path": "external_validation/render_machine_qualification_packet.md",
         },
         "collection_blockers": collection_blockers,
         "operator_actions": actions,

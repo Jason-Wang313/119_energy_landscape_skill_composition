@@ -282,6 +282,21 @@
     },
     {
       "detail": "passed",
+      "name": "maniskill_render_machine_qualification_ready",
+      "passed": true
+    },
+    {
+      "detail": "qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12",
+      "name": "maniskill_render_machine_qualification_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "render machine qualification packet commands and packet file are present",
+      "name": "maniskill_render_machine_operator_commands",
+      "passed": true
+    },
+    {
+      "detail": "passed",
       "name": "external_backend_contract_ready",
       "passed": true
     },
@@ -516,12 +531,12 @@
       "passed": true
     },
     {
-      "detail": "missing_requirements=4, operator_actions=28",
+      "detail": "missing_requirements=4, operator_actions=29",
       "name": "external_acquisition_packet_maps_all_blockers",
       "passed": true
     },
     {
-      "detail": "checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'backend_integration_packet_ready': True, 'maniskill_reference_backend_audit_ready': True, 'maniskill_reference_collection_preflight_ready': True, 'config_manifest_packet_ready': True, 'rollout_evidence_packet_ready': True, 'pilot_smoke_packet_ready': True, 'maniskill_render_video_preflight_recorded': True, 'maniskill_pilot_runtime_liveness_ready': True, 'method_implementation_packet_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'platform_probe_ready': True, 'task_binding_probe_ready': True, 'env_smoke_probe_ready': True, 'fidelity_metadata_probe_ready': True, 'platform_onboarding_ready': True, 'fidelity_provenance_packet_ready': True, 'fidelity_acceptance_draft_ready': True, 'fidelity_acceptance_materializer_ready': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}",
+      "detail": "checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'backend_integration_packet_ready': True, 'maniskill_reference_backend_audit_ready': True, 'maniskill_reference_collection_preflight_ready': True, 'config_manifest_packet_ready': True, 'rollout_evidence_packet_ready': True, 'pilot_smoke_packet_ready': True, 'maniskill_render_video_preflight_recorded': True, 'maniskill_pilot_runtime_liveness_ready': True, 'maniskill_render_machine_qualification_ready': True, 'method_implementation_packet_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'platform_probe_ready': True, 'task_binding_probe_ready': True, 'env_smoke_probe_ready': True, 'fidelity_metadata_probe_ready': True, 'platform_onboarding_ready': True, 'fidelity_provenance_packet_ready': True, 'fidelity_acceptance_draft_ready': True, 'fidelity_acceptance_materializer_ready': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}",
       "name": "external_acquisition_packet_backend_gate",
       "passed": true
     },
@@ -561,7 +576,7 @@
       "passed": true
     },
     {
-      "detail": "included_file_count=257, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 80, 'operator_command_source': 34, 'operator_facing_input': 54, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "included_file_count=261, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 82, 'operator_command_source': 35, 'operator_facing_input': 55, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "external_operator_handoff_bundle_hash_manifest",
       "passed": true
     },
@@ -620,6 +635,7 @@
     "completed fidelity provenance packet work orders with accepted platform/contact provenance",
     "preflight-cleared external evidence package",
     "bounded ManiSkill pilot runtime liveness on the selected runtime machine",
+    "render-machine qualification with render-backed MP4s on the accepted collection machine",
     "released or hash-declared skill/checkpoint artifacts"
   ],
   "not_external_evidence": true,

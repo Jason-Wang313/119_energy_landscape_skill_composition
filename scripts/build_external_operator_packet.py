@@ -78,6 +78,10 @@ def build_payload() -> dict[str, Any]:
         RESULTS / "maniskill_render_video_preflight_audit.json",
         "maniskill_render_video_preflight_audit_v1",
     )
+    render_machine = require_payload(
+        RESULTS / "maniskill_render_machine_qualification.json",
+        "maniskill_render_machine_qualification_v1",
+    )
     materialization = require_payload(
         RESULTS / "external_config_materialization_plan.json",
         "external_config_materialization_plan_v1",
@@ -113,6 +117,7 @@ def build_payload() -> dict[str, Any]:
         "pilot_smoke_packet",
         "maniskill_render_video_preflight",
         "maniskill_pilot_runtime_liveness",
+        "maniskill_render_machine_qualification",
         "run_collection",
         "manifest_and_release",
         "strict_rollout_recompute",
@@ -232,6 +237,24 @@ def build_payload() -> dict[str, Any]:
             f"render_video_ready={render_preflight.get('render_video_ready')!r}, "
             f"envs={render_preflight.get('env_count')!r}, "
             f"failure_classes={render_preflight.get('renderer_failure_classes')!r}"
+        ),
+    )
+    render_machine_action = actions.get("maniskill_render_machine_qualification", {})
+    render_machine_commands = "\n".join(render_machine_action.get("commands", []) or [])
+    add_check(
+        checks,
+        "render_machine_qualification_recorded_but_not_evidence",
+        render_machine.get("passed") is True
+        and render_machine.get("not_external_evidence") is True
+        and render_machine.get("strict_external_evidence_ready") is False
+        and render_machine.get("qualification_state") == "DO_NOT_COLLECT_RENDER_MACHINE"
+        and render_machine.get("render_machine_qualified") is False
+        and bool(render_machine.get("blocking_missing"))
+        and "build_maniskill_render_machine_qualification.py" in render_machine_commands,
+        (
+            f"qualification_state={render_machine.get('qualification_state')!r}, "
+            f"render_machine_qualified={render_machine.get('render_machine_qualified')!r}, "
+            f"blocking={len(render_machine.get('blocking_missing', []) or [])}"
         ),
     )
     add_check(
@@ -408,6 +431,17 @@ def build_payload() -> dict[str, Any]:
             "audit_path": "results/maniskill_render_video_preflight_audit.json",
             "audit_md_path": "results/maniskill_render_video_preflight_audit.md",
             "build_command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4",
+        },
+        "render_machine_qualification": {
+            "not_external_evidence": True,
+            "qualification_state": render_machine.get("qualification_state"),
+            "render_machine_qualified": render_machine.get("render_machine_qualified") is True,
+            "strict_external_evidence_ready": render_machine.get("strict_external_evidence_ready") is True,
+            "blocking_missing": list(render_machine.get("blocking_missing", []) or []),
+            "packet_path": "external_validation/render_machine_qualification_packet.md",
+            "audit_path": "results/maniskill_render_machine_qualification.json",
+            "audit_md_path": "results/maniskill_render_machine_qualification.md",
+            "build_command": "python scripts\\build_maniskill_render_machine_qualification.py",
         },
         "pre_collection_gate_command": (
             "python scripts\\audit_external_collection_readiness.py --strict "
@@ -611,6 +645,30 @@ def write_md(payload: dict[str, Any]) -> None:
     )
     for command in render["renderer_profile_retest_commands"] or ["none"]:
         lines.extend(["```powershell", command, "```"])
+
+    render_machine = payload["render_machine_qualification"]
+    lines.extend(
+        [
+            "",
+            "## ManiSkill Render Machine Qualification",
+            "",
+            "This packet is not evidence. It requires the exact collection machine to pass platform probing, render-backed MP4 preflight, pilot liveness, and zero diagnostic fallback videos before official collection can begin.",
+            "",
+            f"- Packet: `{render_machine['packet_path']}`",
+            f"- Audit JSON: `{render_machine['audit_path']}`",
+            f"- Audit notes: `{render_machine['audit_md_path']}`",
+            f"- Qualification state: `{render_machine['qualification_state']}`",
+            f"- Render machine qualified: `{str(render_machine['render_machine_qualified']).lower()}`",
+            f"- Strict external evidence ready: `{str(render_machine['strict_external_evidence_ready']).lower()}`",
+            f"- Blocking missing: `{render_machine['blocking_missing']}`",
+            "",
+            "Qualification packet command:",
+            "",
+            "```powershell",
+            render_machine["build_command"],
+            "```",
+        ]
+    )
 
     lines.extend(
         [
