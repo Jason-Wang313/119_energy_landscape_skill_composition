@@ -38,6 +38,12 @@ python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --
 python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4 --width 64 --height 64 --render-backend cpu --shader-pack minimal
 ```
 
+## Renderer Profile Matrix
+
+- `not_ready` `cpu/minimal` / `PegInsertionSide-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory'
+- `not_ready` `gpu/minimal` / `PegInsertionSide-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory'
+- `not_ready` `sapien_cuda/minimal` / `PegInsertionSide-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory'
+
 ## Environment Results
 
 - `not_ready` `peg_place_regrasp` / `PegInsertionSide-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory'
@@ -59,4 +65,7 @@ python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --
 python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend gpu --shader-pack minimal
 python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend sapien_cuda --shader-pack minimal
 python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4 --width 64 --height 64 --render-backend cpu --shader-pack minimal
+- `pass` `profile_matrix_records_renderer_backends`: profile_matrix=True, backends=['cpu', 'gpu', 'sapien_cuda']
+- `pass` `profile_matrix_terminal_status`: profile_matrix_records=3
+- `pass` `profile_matrix_quarantined_non_evidence`: profile_matrix_records=3
 - `pass` `no_real_manifest_written`: external_validation/manifest.json remains absent

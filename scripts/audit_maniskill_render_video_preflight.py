@@ -174,7 +174,9 @@ def parse_marker(stdout: str) -> dict[str, Any] | None:
 def run_probe(row: dict[str, str], args: argparse.Namespace) -> dict[str, Any]:
     env_id = row["env_id"]
     task_family = row["task_family"]
-    target = VIDEO_DIR / task_family / f"{env_id.replace('/', '_')}_render_preflight.mp4"
+    profile_label = str(getattr(args, "profile_label", "") or "").strip()
+    suffix = f"_{profile_label}" if profile_label else ""
+    target = VIDEO_DIR / task_family / f"{env_id.replace('/', '_')}_render_preflight{suffix}.mp4"
     target.parent.mkdir(parents=True, exist_ok=True)
     command = [
         sys.executable,
@@ -242,6 +244,43 @@ def run_probe(row: dict[str, str], args: argparse.Namespace) -> dict[str, Any]:
         and Path(str(record.get("video_path", ""))).exists()
     )
     return record
+
+
+def parse_profile_spec(spec: str) -> list[tuple[str, str]]:
+    profiles: list[tuple[str, str]] = []
+    seen: set[tuple[str, str]] = set()
+    for raw_item in spec.split(","):
+        item = raw_item.strip()
+        if not item:
+            continue
+        if ":" in item:
+            backend, shader_pack = item.split(":", 1)
+        else:
+            backend, shader_pack = item, "minimal"
+        profile = (backend.strip(), shader_pack.strip())
+        if not profile[0] or not profile[1] or profile in seen:
+            continue
+        seen.add(profile)
+        profiles.append(profile)
+    return profiles
+
+
+def run_profile_matrix(env_rows: list[dict[str, str]], args: argparse.Namespace) -> list[dict[str, Any]]:
+    records: list[dict[str, Any]] = []
+    profile_rows = env_rows[: max(1, args.profile_matrix_max_envs)]
+    for render_backend, shader_pack in parse_profile_spec(args.profile_matrix_spec):
+        profile_args = argparse.Namespace(**vars(args))
+        profile_args.render_backend = render_backend
+        profile_args.shader_pack = shader_pack
+        profile_args.profile_label = f"{render_backend}_{shader_pack}".replace("/", "_")
+        for row in profile_rows:
+            record = run_probe(row, profile_args)
+            record["profile"] = f"{render_backend}/{shader_pack}"
+            record["profile_render_backend"] = render_backend
+            record["profile_shader_pack"] = shader_pack
+            record["renderer_failure_class"] = "" if record.get("render_video_ready") else classify_render_failure(record)
+            records.append(record)
+    return records
 
 
 def summarize_blocker(records: list[dict[str, Any]]) -> str:
@@ -347,6 +386,18 @@ def write_md(payload: dict[str, Any]) -> None:
     lines.extend(["", "## Renderer Profile Retest Commands", ""])
     for command in payload["renderer_profile_retest_commands"]:
         lines.extend(["```powershell", command, "```"])
+    matrix_records = payload.get("profile_matrix_records", []) or []
+    lines.extend(["", "## Renderer Profile Matrix", ""])
+    if not matrix_records:
+        lines.append("- `not_run`")
+    for record in matrix_records:
+        status = "ready" if record.get("render_video_ready") else "not_ready"
+        error = str(record.get("error") or record.get("error_type") or "")
+        lines.append(
+            f"- `{status}` `{record.get('profile')}` / `{record.get('env_id')}`: "
+            f"made_env={record.get('made_env')}, reset_ok={record.get('reset_ok')}, "
+            f"render_ok={record.get('render_ok')}, mp4_ok={record.get('mp4_ok')}, error={error!r}"
+        )
     lines.extend(["", "## Environment Results", ""])
     for record in payload["env_records"]:
         status = "ready" if record.get("render_video_ready") else "not_ready"
@@ -373,6 +424,9 @@ def main() -> int:
     parser.add_argument("--render-backend", default="cpu")
     parser.add_argument("--shader-pack", default="minimal")
     parser.add_argument("--max-envs", type=int, default=4)
+    parser.add_argument("--profile-matrix", action="store_true")
+    parser.add_argument("--profile-matrix-max-envs", type=int, default=1)
+    parser.add_argument("--profile-matrix-spec", default="cpu:minimal,gpu:minimal,sapien_cuda:minimal")
     args = parser.parse_args()
 
     RESULTS.mkdir(exist_ok=True)
@@ -381,9 +435,13 @@ def main() -> int:
     records = [run_probe(row, args) for row in env_rows]
     for record in records:
         record["renderer_failure_class"] = "" if record.get("render_video_ready") else classify_render_failure(record)
+    profile_matrix_records = run_profile_matrix(env_rows, args) if args.profile_matrix else []
     render_ready = bool(records) and all(record.get("render_video_ready") for record in records)
     blocking = [] if render_ready else [summarize_blocker(records) or "no ManiSkill primary environments were render-probed"]
-    failure_classes = sorted({str(record.get("renderer_failure_class")) for record in records if record.get("renderer_failure_class")})
+    all_failure_records = [*records, *profile_matrix_records]
+    failure_classes = sorted(
+        {str(record.get("renderer_failure_class")) for record in all_failure_records if record.get("renderer_failure_class")}
+    )
     operator_remediation = remediation_for_failure_classes(failure_classes)
     retest_commands = profile_retest_commands(args)
 
@@ -434,6 +492,29 @@ def main() -> int:
         all(fragment in "\n".join(retest_commands) for fragment in ("--render-backend cpu", "--render-backend gpu", "--render-backend sapien_cuda")),
         "\n".join(retest_commands),
     )
+    profile_backends = sorted({str(record.get("profile_render_backend")) for record in profile_matrix_records})
+    add_check(
+        checks,
+        "profile_matrix_records_renderer_backends",
+        (not args.profile_matrix) or all(backend in profile_backends for backend in ("cpu", "gpu", "sapien_cuda")),
+        f"profile_matrix={args.profile_matrix}, backends={profile_backends}",
+    )
+    add_check(
+        checks,
+        "profile_matrix_terminal_status",
+        (not args.profile_matrix)
+        or (
+            len(profile_matrix_records) >= 3
+            and all(record.get("timed_out") or record.get("parsed_marker") for record in profile_matrix_records)
+        ),
+        f"profile_matrix_records={len(profile_matrix_records)}",
+    )
+    add_check(
+        checks,
+        "profile_matrix_quarantined_non_evidence",
+        all(record.get("not_external_evidence") is True and is_under(Path(str(record.get("output_path", ""))), PREFLIGHT_ROOT) for record in profile_matrix_records),
+        f"profile_matrix_records={len(profile_matrix_records)}",
+    )
     add_check(
         checks,
         "no_real_manifest_written",
@@ -455,6 +536,10 @@ def main() -> int:
         "renderer_device": args.renderer_device,
         "render_backend": args.render_backend,
         "shader_pack": args.shader_pack,
+        "profile_matrix_enabled": bool(args.profile_matrix),
+        "profile_matrix_max_envs": int(args.profile_matrix_max_envs),
+        "profile_matrix_spec": args.profile_matrix_spec,
+        "profile_matrix_records": profile_matrix_records,
         "output_dir": rel(PREFLIGHT_ROOT),
         "video_dir": rel(VIDEO_DIR),
         "blocking_missing": blocking,

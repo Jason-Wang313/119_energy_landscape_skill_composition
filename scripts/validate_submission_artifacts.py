@@ -2223,6 +2223,20 @@ def main():
         for fragment in ("--render-backend cpu", "--render-backend gpu", "--render-backend sapien_cuda"):
             if fragment not in retest_commands:
                 fail(f"ManiSkill render-video preflight missing renderer retest command fragment: {fragment}")
+    if render_preflight.get("profile_matrix_enabled") is not True:
+        fail("ManiSkill render-video preflight must run the renderer profile matrix")
+    profile_matrix_records = render_preflight.get("profile_matrix_records", []) or []
+    if len(profile_matrix_records) < 3:
+        fail("ManiSkill render-video preflight matrix must record at least cpu/gpu/sapien_cuda attempts")
+    profile_backends = {record.get("profile_render_backend") for record in profile_matrix_records}
+    for backend in ("cpu", "gpu", "sapien_cuda"):
+        if backend not in profile_backends:
+            fail(f"ManiSkill render-video preflight matrix missing backend attempt: {backend}")
+    for record in profile_matrix_records:
+        if record.get("not_external_evidence") is not True:
+            fail("ManiSkill render-video preflight matrix records must be non-evidence")
+        if not (record.get("timed_out") or record.get("parsed_marker")):
+            fail("ManiSkill render-video preflight matrix records must have terminal status")
     render_preflight_checks = {check.get("name"): check.get("passed") for check in render_preflight.get("checks", [])}
     for required_check in (
         "render_preflight_is_non_evidence",
@@ -2234,6 +2248,9 @@ def main():
         "renderer_failure_class_recorded_when_not_ready",
         "operator_remediation_present_when_not_ready",
         "profile_retest_commands_cover_renderer_backends",
+        "profile_matrix_records_renderer_backends",
+        "profile_matrix_terminal_status",
+        "profile_matrix_quarantined_non_evidence",
         "no_real_manifest_written",
     ):
         if render_preflight_checks.get(required_check) is not True:
