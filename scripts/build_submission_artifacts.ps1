@@ -190,6 +190,10 @@ try {
         Invoke-Native python scripts\audit_submission_readiness_gap.py
     }
 
+    Invoke-Step "Build reviewer response packet" {
+        Invoke-Native python scripts\build_reviewer_response_packet.py
+    }
+
     Invoke-Step "Audit visible contribution docs" {
         Invoke-Native python scripts\audit_visible_contribution.py
     }

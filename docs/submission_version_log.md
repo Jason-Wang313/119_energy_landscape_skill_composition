@@ -80,6 +80,7 @@
 - Added `docs/claim_evidence_ledger.json` and `scripts/audit_claim_boundary.py` so the package fails validation if it overclaims beyond the bounded local evidence.
 - Added `scripts/audit_submission_readiness_gap.py` so the active objective is tracked as concrete satisfied, missing, and human-polish requirements without falsely declaring the paper complete.
 - Added `scripts/audit_visible_contribution.py` so README, final audit, readiness docs, version log, child status, and outreach package must stay synchronized with the current materializer/operator-packet/outreach state.
+- Added `scripts/build_reviewer_response_packet.py` and `docs/reviewer_response_packet.md` so the reviewer response packet maps hostile reviewer objections to current evidence, allowed claims, remaining gates, and Haonan/Yilun outreach use without changing STRONG_REVISE.
 - Added `scripts/audit_local_falsification.py` and manuscript integration for abstention, cost/search, risk-monotonicity, slice-coverage, and oracle-gap checks over episode-level hard-slice rows.
 - Added `scripts/audit_holdout_robustness.py` and manuscript integration for task-family, seam-regime, split, task-regime, and hash-fold withheld-slice local robustness checks.
 - Added `scripts/audit_diagnostic_mechanism.py` and manuscript integration for exported diagnostic labels, seam decisions, and planner-edge updates over local rows.

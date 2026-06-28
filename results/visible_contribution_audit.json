@@ -6,6 +6,7 @@
     "outreach": "docs/haonan_yilun_outreach_package.md",
     "readiness_audit": "docs/submission_readiness_audit_v5.md",
     "readiness_decision": "docs/submission_readiness_decision.md",
+    "reviewer": "docs/reviewer_response_packet.md",
     "version_log": "docs/submission_version_log.md"
   },
   "checks": [
@@ -125,6 +126,11 @@
       "passed": true
     },
     {
+      "detail": "entries=12, not_external_evidence=True",
+      "name": "reviewer_response_packet_visible",
+      "passed": true
+    },
+    {
       "detail": "missing=[]",
       "name": "ledger_tracks_new_visible_claims",
       "passed": true
@@ -162,6 +168,11 @@
     {
       "detail": "missing=[]",
       "name": "outreach_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "reviewer_current_visible_contribution_terms",
       "passed": true
     }
   ],

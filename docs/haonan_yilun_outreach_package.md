@@ -52,6 +52,7 @@ Send:
 - One figure or 30-second GIF showing `skill i -> seam critic -> accept/repair/reject -> skill j`.
 - Link to repo/logs only if the repo is clean enough to survive inspection.
 - Keep the independent validation protocol, `results/external_operator_packet.md`, the ManiSkill fidelity metadata probe, the reference-adapter provenance catalog, and the manifest assembly checklist ready as follow-up artifacts, not as first-email clutter.
+- Keep the reviewer response packet ready as a private defense layer for likely objections, not as first-email clutter.
 
 The full PDF can be offered after he shows interest.
 
@@ -196,3 +197,5 @@ Jason
 ## Final Recommendation
 
 Use Paper 119 as the outreach paper, but only after the one-page memo and 4-page preview are polished. Mention CoStream as the primary fit. Mention SIMPACT or OAT only if the email needs a second anchor. Do not mention many papers. A focused, useful ask is stronger than a broad display of familiarity.
+
+The reviewer response packet is for Jason's preparation: it helps answer why this is a skill-seam world/action model, why the evidence is still bounded, and why Haonan should be asked for fit/falsification advice rather than for the missing proof layer.

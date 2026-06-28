@@ -48,6 +48,7 @@ ICLR-main ready: no
 - Validator: passed.
 - Claim boundary audit: `results/claim_boundary_audit.md` passed and confirms the current package keeps the claim bounded.
 - Visible contribution audit: `results/visible_contribution_audit.md` passed and checks that public-facing docs mention the current Planner-edge policy audit, materializer, External config manifest packet, External rollout evidence packet, External analysis plan, External platform probe, ManiSkill task binding probe, ManiSkill env smoke probe, ManiSkill fidelity metadata probe, External platform onboarding packet, External fidelity provenance packet, External backend integration packet, ManiSkill reference backend readiness audit with MP4 writer path, ManiSkill reference collection preflight audit, External runner backend probe self-test, External pilot smoke packet, ManiSkill pilot runtime liveness audit, External method implementation packet, reference-adapter provenance catalog, manifest assembly checklist, external operator packet, outreach stance, and 17/21 objective requirements satisfied boundary.
+- Reviewer response packet: `docs/reviewer_response_packet.md` and `results/reviewer_response_packet_audit.md` exist, pass, remain non-evidence, cover 12 hostile objections, preserve the 17/21 boundary, and include the one-paper outreach rule.
 - Submission readiness gap audit: `results/submission_readiness_gap_audit.md` passed as an incompleteness audit and reports 17/21 objective requirements satisfied, 4 blocking external gaps, and 0 human-polish items.
 - Local falsification audit: `results/local_falsification_audit.md` passed and is included in the generated manuscript.
 - Holdout robustness audit: `results/holdout_robustness_audit.md` passed and is included in the generated manuscript.
@@ -120,6 +121,7 @@ ICLR-main ready: no
 - Visual QA: final title page, overview page, main result figures, fixed-risk figures, and outreach preview figure page inspected after the reframing/figure pass.
 - Independent validation protocol: `docs/independent_validation_protocol.md`.
 - Haonan/Yilun outreach package: `docs/haonan_yilun_outreach_package.md`.
+- Reviewer response packet: `docs/reviewer_response_packet.md` is the reviewer/outreach defense layer for the skill-seam world/action framing and does not change the STRONG_REVISE decision.
 - Outreach memo PDF: `outreach/paper119_one_page_memo.pdf` passed 1-page validation and visual QA; the outreach PDFs now reflect the operator-packet/no-go stance without asking Haonan to supply the missing proof.
 - Four-page preview PDF: `outreach/paper119_four_page_preview.pdf` passed 4-page validation and visual QA.
 

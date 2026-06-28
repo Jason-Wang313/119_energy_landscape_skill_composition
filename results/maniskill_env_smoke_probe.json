@@ -46,7 +46,7 @@
   "env_records": [
     {
       "closed": false,
-      "elapsed_seconds": 0.009674,
+      "elapsed_seconds": 0.133555,
       "env_id": "InsertFlower-v1",
       "error": "EOF when reading a line",
       "error_type": "EOFError",
@@ -77,7 +77,7 @@
     },
     {
       "closed": true,
-      "elapsed_seconds": 5.959877,
+      "elapsed_seconds": 10.265361,
       "env_id": "OpenCabinetDoor-v1",
       "error": "",
       "error_type": "",
@@ -99,7 +99,7 @@
       "observation_type": "Tensor",
       "required_asset_ids": [],
       "reset_ok": true,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 06:35:25,414 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 12:32:41,268 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
       "stdout_tail": "",
       "subprocess_returncode": 0,
       "subprocess_timeout": false,
@@ -110,7 +110,7 @@
     },
     {
       "closed": true,
-      "elapsed_seconds": 5.626551,
+      "elapsed_seconds": 5.971757,
       "env_id": "OpenCabinetDrawer-v1",
       "error": "",
       "error_type": "",
@@ -134,7 +134,7 @@
         "partnet_mobility_cabinet"
       ],
       "reset_ok": true,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 06:35:55,438 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 12:33:15,303 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
       "stdout_tail": "",
       "subprocess_returncode": 0,
       "subprocess_timeout": false,
@@ -145,7 +145,7 @@
     },
     {
       "closed": true,
-      "elapsed_seconds": 5.843991,
+      "elapsed_seconds": 5.266716,
       "env_id": "PegInsertionSide-v1",
       "error": "",
       "error_type": "",
@@ -166,7 +166,7 @@
       "observation_type": "Tensor",
       "required_asset_ids": [],
       "reset_ok": true,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 06:36:23,723 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 12:33:44,432 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
       "stdout_tail": "",
       "subprocess_returncode": 0,
       "subprocess_timeout": false,
@@ -177,7 +177,7 @@
     },
     {
       "closed": true,
-      "elapsed_seconds": 2.48812,
+      "elapsed_seconds": 3.419099,
       "env_id": "PickCube-v1",
       "error": "",
       "error_type": "",
@@ -200,7 +200,7 @@
       "observation_type": "Tensor",
       "required_asset_ids": [],
       "reset_ok": true,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 06:36:52,319 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 12:34:14,656 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
       "stdout_tail": "",
       "subprocess_returncode": 0,
       "subprocess_timeout": false,
@@ -211,7 +211,7 @@
     },
     {
       "closed": false,
-      "elapsed_seconds": 0.003001,
+      "elapsed_seconds": 0.019461,
       "env_id": "PickSingleYCB-v1",
       "error": "EOF when reading a line",
       "error_type": "EOFError",
@@ -242,7 +242,7 @@
     },
     {
       "closed": true,
-      "elapsed_seconds": 3.948163,
+      "elapsed_seconds": 3.780049,
       "env_id": "PullCubeTool-v1",
       "error": "",
       "error_type": "",
@@ -267,7 +267,7 @@
       "observation_type": "Tensor",
       "required_asset_ids": [],
       "reset_ok": true,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 06:37:40,227 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 06:37:42,221 - mani_skill  - WARNING - No initial pose set for articulation builder of panda, setting to default pose q=[1,0,0,0], p=[0,0,0]. There may be simulation issues/bugs if this articulation at it's initial pose collides with other objects at their initial poses.\u001b[0m\n\u001b[33;1m2026-06-28 06:37:42,448 - mani_skill  - WARNING - No initial pose set for actor builder of cube, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n\u001b[33;1m2026-06-28 06:37:42,450 - mani_skill  - WARNING - No initial pose set for actor builder of l_shape_tool, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 12:35:24,750 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 12:35:27,049 - mani_skill  - WARNING - No initial pose set for articulation builder of panda, setting to default pose q=[1,0,0,0], p=[0,0,0]. There may be simulation issues/bugs if this articulation at it's initial pose collides with other objects at their initial poses.\u001b[0m\n\u001b[33;1m2026-06-28 12:35:27,299 - mani_skill  - WARNING - No initial pose set for actor builder of cube, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n\u001b[33;1m2026-06-28 12:35:27,301 - mani_skill  - WARNING - No initial pose set for actor builder of l_shape_tool, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n",
       "stdout_tail": "",
       "subprocess_returncode": 0,
       "subprocess_timeout": false,

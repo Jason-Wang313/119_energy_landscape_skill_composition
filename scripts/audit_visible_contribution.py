@@ -62,6 +62,7 @@ def main() -> int:
     method_implementation = read_json(RESULTS / "external_method_implementation_audit.json")
     materialization = read_json(RESULTS / "external_config_materialization_plan.json")
     planner_policy = read_json(RESULTS / "planner_edge_policy_audit.json")
+    reviewer_packet = read_json(RESULTS / "reviewer_response_packet_audit.json")
     ledger = read_json(DOCS / "claim_evidence_ledger.json")
 
     files = {
@@ -72,6 +73,7 @@ def main() -> int:
         "version_log": DOCS / "submission_version_log.md",
         "child_status": ROOT / "child_status.md",
         "outreach": DOCS / "haonan_yilun_outreach_package.md",
+        "reviewer": DOCS / "reviewer_response_packet.md",
     }
     texts = {name: read_text(path) for name, path in files.items()}
 
@@ -460,6 +462,21 @@ def main() -> int:
             f"breach_delta={planner_metrics.get('selected_realized_breach_delta')!r}"
         ),
     )
+    add_check(
+        checks,
+        "reviewer_response_packet_visible",
+        reviewer_packet.get("version") == "reviewer_response_packet_v1"
+        and reviewer_packet.get("passed") is True
+        and reviewer_packet.get("not_external_evidence") is True
+        and int(reviewer_packet.get("entry_count", 0) or 0) >= 12
+        and "do not list many papers" in texts["reviewer"]
+        and "not for them to be responsible for supplying the missing proof" in texts["reviewer"]
+        and "does not change the current STRONG_REVISE decision" in texts["reviewer"],
+        (
+            f"entries={reviewer_packet.get('entry_count')!r}, "
+            f"not_external_evidence={reviewer_packet.get('not_external_evidence')!r}"
+        ),
+    )
     claim_names = {str(claim.get("name", "")) for claim in ledger.get("permitted_claims", []) if isinstance(claim, dict)}
     add_check(
         checks,
@@ -488,8 +505,9 @@ def main() -> int:
             "external_method_reference_provenance_claim",
             "external_manifest_assembly_checklist_claim",
             "external_config_materialization_claim",
+            "reviewer_response_packet_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'local_planner_edge_policy_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_config_materialization_claim'} - claim_names)}",
+        f"missing={sorted({'local_planner_edge_policy_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -520,6 +538,7 @@ def main() -> int:
             "manifest assembly checklist",
             "External operator packet",
             "External operator handoff bundle",
+            "Reviewer response packet",
             "17/21",
         ],
         "final_audit": [
@@ -548,6 +567,7 @@ def main() -> int:
             "manifest assembly checklist",
             "External operator packet",
             "External operator handoff bundle",
+            "Reviewer response packet",
             "Haonan/Yilun outreach package",
             "17 satisfied, 4 blocking external gaps",
         ],
@@ -577,6 +597,7 @@ def main() -> int:
             "manifest assembly checklist",
             "generated external operator packet",
             "external operator handoff bundle",
+            "reviewer response packet",
             "outreach package now frames Haonan's role as fit/falsification advice",
             "ICLR main ready: no",
         ],
@@ -606,6 +627,7 @@ def main() -> int:
             "manifest assembly checklist",
             "External operator packet",
             "External operator handoff bundle",
+            "Reviewer response packet",
             "outreach PDFs now reflect the operator-packet/no-go stance",
             "17/21 objective requirements satisfied",
         ],
@@ -638,6 +660,8 @@ def main() -> int:
             "manifest assembly checklist",
             "scripts/build_external_operator_packet.py",
             "scripts/build_external_operator_handoff_bundle.py",
+            "scripts/build_reviewer_response_packet.py",
+            "reviewer response packet",
             "operator-packet/no-go stance",
         ],
         "child_status": [
@@ -666,6 +690,7 @@ def main() -> int:
             "manifest assembly checklist",
             "external operator packet",
             "external operator handoff bundle",
+            "reviewer response packet",
             "operator-packet-aligned Haonan/Yilun outreach package",
         ],
         "outreach": [
@@ -675,6 +700,15 @@ def main() -> int:
             "manifest assembly checklist",
             "do not frame Haonan as responsible for supplying the missing proof",
             "independent validation protocol/operator packet",
+            "reviewer response packet",
+        ],
+        "reviewer": [
+            "Not evidence: `true`.",
+            "adaptive physical world/action models for skill seams",
+            "do not list many papers",
+            "not for them to be responsible for supplying the missing proof",
+            "does not change the current STRONG_REVISE decision",
+            "Close all four blocking external requirements",
         ],
     }
     for name, terms in required_terms_by_file.items():
@@ -698,7 +732,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the manifest assembly checklist, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the manifest assembly checklist, the no-go operator packet, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

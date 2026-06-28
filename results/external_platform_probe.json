@@ -21,7 +21,7 @@
       "passed": true
     },
     {
-      "detail": "commit='a90c72888085cbbdb1682951ab08a7a6562a9769'",
+      "detail": "commit='ee132b3031cc8dedf8219ff6e23bd448047da4a8'",
       "name": "repo_commit_reported",
       "passed": true
     },
@@ -143,28 +143,26 @@
   "primary_route_missing_packages": [],
   "repo": {
     "branch": "codex/paper119-submission-hardening",
-    "commit": "a90c72888085cbbdb1682951ab08a7a6562a9769",
+    "commit": "ee132b3031cc8dedf8219ff6e23bd448047da4a8",
     "dirty_status_lines": [
+      " M .github/workflows/paper119-validation.yml",
       " M README.md",
       " M child_status.md",
       " M docs/claim_evidence_ledger.json",
       " M docs/final_audit.md",
+      " M docs/haonan_yilun_outreach_package.md",
       " M docs/submission_readiness_audit_v5.md",
       " M docs/submission_readiness_decision.md",
       " M docs/submission_version_log.md",
-      " M external_validation/README.md",
-      " M external_validation/fidelity_acceptance_draft.json",
-      " M external_validation/fidelity_acceptance_draft.md",
-      " M results/external_fidelity_acceptance_draft_audit.json",
-      " M results/external_fidelity_acceptance_draft_audit.md",
-      " M results/external_operator_handoff_bundle.json",
-      " M results/external_operator_handoff_bundle.md",
-      " M results/external_operator_packet.json",
-      " M results/external_operator_packet.md",
+      " M results/visible_contribution_audit.json",
+      " M results/visible_contribution_audit.md",
       " M scripts/audit_visible_contribution.py",
-      " M scripts/build_external_fidelity_acceptance_draft.py",
-      " M scripts/build_external_operator_packet.py",
-      " M scripts/validate_submission_artifacts.py"
+      " M scripts/build_submission_artifacts.ps1",
+      " M scripts/validate_submission_artifacts.py",
+      "?? docs/reviewer_response_packet.md",
+      "?? results/reviewer_response_packet_audit.json",
+      "?? results/reviewer_response_packet_audit.md",
+      "?? scripts/build_reviewer_response_packet.py"
     ],
     "git_commands": {
       "rev_parse_branch": {
@@ -188,7 +186,7 @@
         ],
         "returncode": 0,
         "stderr": "",
-        "stdout": "a90c72888085cbbdb1682951ab08a7a6562a9769\n"
+        "stdout": "ee132b3031cc8dedf8219ff6e23bd448047da4a8\n"
       },
       "status_short": {
         "available": true,
@@ -199,7 +197,7 @@
         ],
         "returncode": 0,
         "stderr": "",
-        "stdout": " M README.md\n M child_status.md\n M docs/claim_evidence_ledger.json\n M docs/final_audit.md\n M docs/submission_readiness_audit_v5.md\n M docs/submission_readiness_decision.md\n M docs/submission_version_log.md\n M external_validation/README.md\n M external_validation/fidelity_acceptance_draft.json\n M external_validation/fidelity_acceptance_draft.md\n M results/external_fidelity_acceptance_draft_audit.json\n M results/external_fidelity_acceptance_draft_audit.md\n M results/external_operator_handoff_bundle.json\n M results/external_operator_handoff_bundle.md\n M results/external_operator_packet.json\n M results/external_operator_packet.md\n M scripts/audit_visible_contribution.py\n M scripts/build_external_fidelity_acceptance_draft.py\n M scripts/build_external_operator_packet.py\n M scripts/validate_submission_artifacts.py\n"
+        "stdout": " M .github/workflows/paper119-validation.yml\n M README.md\n M child_status.md\n M docs/claim_evidence_ledger.json\n M docs/final_audit.md\n M docs/haonan_yilun_outreach_package.md\n M docs/submission_readiness_audit_v5.md\n M docs/submission_readiness_decision.md\n M docs/submission_version_log.md\n M results/visible_contribution_audit.json\n M results/visible_contribution_audit.md\n M scripts/audit_visible_contribution.py\n M scripts/build_submission_artifacts.ps1\n M scripts/validate_submission_artifacts.py\n?? docs/reviewer_response_packet.md\n?? results/reviewer_response_packet_audit.json\n?? results/reviewer_response_packet_audit.md\n?? scripts/build_reviewer_response_packet.py\n"
       }
     }
   },

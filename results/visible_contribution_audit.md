@@ -3,7 +3,7 @@
 Passed: `true`.
 Not evidence: `true`.
 
-This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the manifest assembly checklist, the no-go operator packet, the no-evidence operator handoff bundle, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.
+This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the manifest assembly checklist, the no-go operator packet, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.
 
 ## Checks
 
@@ -30,6 +30,7 @@ This audit checks that the public-facing contribution docs describe the current 
 - `pass` `method_implementation_packet_visible`: method_implementation_packet_ready=True, strict_adapter_evidence_ready=False
 - `pass` `materializer_guard_visible`: write_enabled=False, not_external_evidence=True
 - `pass` `planner_edge_policy_visible`: frontiers=1680, utility_delta=0.231317169047619, breach_delta=-0.07518194761904762
+- `pass` `reviewer_response_packet_visible`: entries=12, not_external_evidence=True
 - `pass` `ledger_tracks_new_visible_claims`: missing=[]
 - `pass` `README_current_visible_contribution_terms`: missing=[]
 - `pass` `final_audit_current_visible_contribution_terms`: missing=[]
@@ -38,3 +39,4 @@ This audit checks that the public-facing contribution docs describe the current 
 - `pass` `version_log_current_visible_contribution_terms`: missing=[]
 - `pass` `child_status_current_visible_contribution_terms`: missing=[]
 - `pass` `outreach_current_visible_contribution_terms`: missing=[]
+- `pass` `reviewer_current_visible_contribution_terms`: missing=[]

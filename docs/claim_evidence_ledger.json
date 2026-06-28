@@ -62,8 +62,13 @@
     },
     {
       "name": "visible_contribution_claim",
-      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, and outreach package synchronized with the current materializer, operator packet, fidelity acceptance draft, tracked reference route, outreach stance, and readiness boundary.",
-      "evidence": ["scripts/audit_visible_contribution.py", "README.md", "docs/final_audit.md", "docs/submission_readiness_decision.md", "docs/submission_readiness_audit_v5.md", "docs/submission_version_log.md", "child_status.md", "docs/haonan_yilun_outreach_package.md"]
+      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, outreach package, and reviewer response packet synchronized with the current materializer, operator packet, fidelity acceptance draft, tracked reference route, outreach stance, and readiness boundary.",
+      "evidence": ["scripts/audit_visible_contribution.py", "README.md", "docs/final_audit.md", "docs/submission_readiness_decision.md", "docs/submission_readiness_audit_v5.md", "docs/submission_version_log.md", "child_status.md", "docs/haonan_yilun_outreach_package.md", "docs/reviewer_response_packet.md"]
+    },
+    {
+      "name": "reviewer_response_packet_claim",
+      "claim": "The repository provides a non-evidence reviewer response packet that maps hostile reviewer objections to exact local evidence, allowed claims, remaining external gates, and Haonan/Yilun outreach use while preserving the STRONG_REVISE boundary.",
+      "evidence": ["scripts/build_reviewer_response_packet.py", "docs/reviewer_response_packet.md", "results/reviewer_response_packet_audit.json", "results/reviewer_response_packet_audit.md", "results/submission_readiness_gap_audit.json", "docs/haonan_yilun_outreach_package.md"]
     },
     {
       "name": "external_collection_plan_claim",
@@ -315,6 +320,7 @@
     "docs/haonan_yilun_outreach_package.md",
     "docs/independent_validation_protocol.md",
     "docs/related_work_coverage_matrix.md",
+    "docs/reviewer_response_packet.md",
     "docs/submission_readiness_decision.md",
     "docs/submission_readiness_audit_v5.md",
     "docs/submission_version_log.md",
@@ -340,6 +346,7 @@
     "results/maniskill_pilot_runtime_liveness_audit.md",
     "results/external_operator_packet.md",
     "results/external_operator_handoff_bundle.md",
+    "results/reviewer_response_packet_audit.md",
     "results/submission_readiness_gap_audit.md"
   ]
 }

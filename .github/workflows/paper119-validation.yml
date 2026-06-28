@@ -169,6 +169,9 @@ jobs:
       - name: Audit submission readiness gap
         run: python scripts/audit_submission_readiness_gap.py
 
+      - name: Build reviewer response packet
+        run: python scripts/build_reviewer_response_packet.py
+
       - name: Audit visible contribution docs
         run: python scripts/audit_visible_contribution.py
 

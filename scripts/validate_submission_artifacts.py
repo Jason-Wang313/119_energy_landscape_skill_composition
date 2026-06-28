@@ -161,6 +161,7 @@ def main():
         "scripts\\audit_external_execution_readiness.py",
         "scripts\\audit_claim_boundary.py",
         "scripts\\audit_submission_readiness_gap.py",
+        "scripts\\build_reviewer_response_packet.py",
         "pdflatex -interaction=nonstopmode -halt-on-error main.tex",
         "bibtex main",
         "Copy-Item -LiteralPath paper\\main.pdf",
@@ -225,6 +226,7 @@ def main():
         "python scripts/self_test_external_rollout_validator.py",
         "python scripts/self_test_external_evidence_pipeline.py",
         "python scripts/audit_submission_readiness_gap.py",
+        "python scripts/build_reviewer_response_packet.py",
         "python scripts/audit_visible_contribution.py",
         "python scripts/audit_claim_boundary.py",
         "python scripts/validate_submission_artifacts.py",
@@ -1840,6 +1842,54 @@ def main():
     ]
     if missing_gap_phrases:
         fail(f"submission readiness gap audit missing required external blockers: {missing_gap_phrases}")
+
+    reviewer_packet_path = DOCS / "reviewer_response_packet.md"
+    reviewer_packet_audit_path = RESULTS / "reviewer_response_packet_audit.json"
+    if not reviewer_packet_path.exists():
+        fail("missing docs/reviewer_response_packet.md; run scripts/build_reviewer_response_packet.py")
+    if not reviewer_packet_audit_path.exists():
+        fail("missing results/reviewer_response_packet_audit.json; run scripts/build_reviewer_response_packet.py")
+    reviewer_packet_audit = json.loads(reviewer_packet_audit_path.read_text(encoding="utf-8"))
+    if reviewer_packet_audit.get("version") != "reviewer_response_packet_v1":
+        fail("reviewer response packet audit version mismatch")
+    if reviewer_packet_audit.get("passed") is not True:
+        fail("reviewer response packet audit did not pass")
+    if reviewer_packet_audit.get("not_external_evidence") is not True:
+        fail("reviewer response packet audit must declare that it is not external evidence")
+    if int(reviewer_packet_audit.get("entry_count", 0)) < 12:
+        fail("reviewer response packet has too few objection entries")
+    required_reviewer_ids = {
+        "world_action_not_thresholds",
+        "novelty_vs_prior_composer",
+        "synthetic_local_evidence",
+        "abstention_gaming",
+        "search_cost_gaming",
+        "decorative_energy_terms",
+        "baseline_fairness",
+        "planner_update_claim",
+        "calibration_transfer",
+        "contact_rich_scope",
+        "haonan_yilun_fit",
+        "submission_readiness",
+    }
+    reviewer_ids = {entry.get("id") for entry in reviewer_packet_audit.get("entries", [])}
+    missing_reviewer_ids = sorted(required_reviewer_ids - reviewer_ids)
+    if missing_reviewer_ids:
+        fail(f"reviewer response packet missing required objection ids: {missing_reviewer_ids}")
+    reviewer_packet_text = reviewer_packet_path.read_text(encoding="utf-8")
+    required_reviewer_phrases = [
+        "Not evidence: `true`.",
+        "adaptive physical world/action models for skill seams",
+        "do not list many papers",
+        "not for them to be responsible for supplying the missing proof",
+        "Close all four blocking external requirements",
+        "does not change the current STRONG_REVISE decision",
+    ]
+    missing_reviewer_phrases = [phrase for phrase in required_reviewer_phrases if phrase not in reviewer_packet_text]
+    if missing_reviewer_phrases:
+        fail(f"reviewer response packet missing required boundary/outreach phrases: {missing_reviewer_phrases}")
+    if not (RESULTS / "reviewer_response_packet_audit.md").exists():
+        fail("missing results/reviewer_response_packet_audit.md")
 
     external_audit_path = RESULTS / "external_evidence_audit.json"
     if not external_audit_path.exists():
