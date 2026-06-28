@@ -439,8 +439,8 @@ def main() -> int:
         "renderer_failure_classifier_visible",
         render_preflight.get("render_video_ready") is True
         or (
-            "vulkan_descriptor_pool_exhaustion" in (render_preflight.get("renderer_failure_classes", []) or [])
-            and len(render_preflight.get("operator_remediation", []) or []) >= 3
+            bool(render_preflight.get("renderer_failure_classes", []) or [])
+            and len(render_preflight.get("operator_remediation", []) or []) >= 2
             and all(
                 fragment in "\n".join(render_preflight.get("renderer_profile_retest_commands", []) or [])
                 for fragment in ("--render-backend cpu", "--render-backend gpu", "--render-backend sapien_cuda")

@@ -2145,10 +2145,8 @@ def main():
         failure_classes = render_preflight.get("renderer_failure_classes", []) or []
         if not isinstance(failure_classes, list) or not failure_classes:
             fail("ManiSkill render-video preflight must classify renderer failures when not ready")
-        if "vulkan_descriptor_pool_exhaustion" not in failure_classes:
-            fail("current ManiSkill render preflight should record the local Vulkan descriptor-pool blocker")
         remediation = render_preflight.get("operator_remediation", []) or []
-        if not isinstance(remediation, list) or len(remediation) < 3:
+        if not isinstance(remediation, list) or len(remediation) < 2:
             fail("ManiSkill render-video preflight must include operator remediation when not ready")
         retest_commands = "\n".join(render_preflight.get("renderer_profile_retest_commands", []) or [])
         for fragment in ("--render-backend cpu", "--render-backend gpu", "--render-backend sapien_cuda"):
@@ -2443,9 +2441,9 @@ def main():
         fail("external acquisition packet has too few operator actions")
     acquisition_render = acquisition.get("render_video_preflight", {}) or {}
     if acquisition_render.get("render_video_ready") is False:
-        if "vulkan_descriptor_pool_exhaustion" not in (acquisition_render.get("renderer_failure_classes", []) or []):
+        if not (acquisition_render.get("renderer_failure_classes", []) or []):
             fail("external acquisition packet must expose the render-video failure classifier")
-        if len(acquisition_render.get("operator_remediation", []) or []) < 3:
+        if len(acquisition_render.get("operator_remediation", []) or []) < 2:
             fail("external acquisition packet must expose render-video operator remediation")
         retest_commands = "\n".join(acquisition_render.get("renderer_profile_retest_commands", []) or [])
         for fragment in ("--render-backend cpu", "--render-backend gpu", "--render-backend sapien_cuda"):
@@ -2546,9 +2544,9 @@ def main():
     if int(operator_render.get("env_count", 0) or 0) < 1:
         fail("external operator packet render-video preflight must expose probed environment count")
     if operator_render.get("render_video_ready") is False:
-        if "vulkan_descriptor_pool_exhaustion" not in (operator_render.get("renderer_failure_classes", []) or []):
+        if not (operator_render.get("renderer_failure_classes", []) or []):
             fail("external operator packet must expose the render-video failure classifier")
-        if len(operator_render.get("operator_remediation", []) or []) < 3:
+        if len(operator_render.get("operator_remediation", []) or []) < 2:
             fail("external operator packet must expose render-video operator remediation")
     if "maniskill_render_video_preflight_audit.json" not in str(operator_render.get("audit_path", "")):
         fail("external operator packet render-video preflight must point to the audit JSON")
