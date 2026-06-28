@@ -91,6 +91,11 @@
       "passed": true
     },
     {
+      "detail": "materialize_fidelity_acceptance.py",
+      "name": "strict_command_includes_materialize_fidelity_acceptance",
+      "passed": true
+    },
+    {
       "detail": "audit_external_fidelity_acceptance.py --strict",
       "name": "strict_command_includes_audit_external_fidelity_acceptance",
       "passed": true
@@ -131,7 +136,7 @@
       "passed": true
     },
     {
-      "detail": "pilot_sequence=['Run the dry-run packet check without writing logs or videos.', 'Run strict backend qualification against the non-template backend module.', 'Materialize real task configs only with --confirm-real-platform --write after platform values are known.', 'Fill external_validation/fidelity_acceptance.json with platform, simulator, contact, observation, and task-fidelity provenance.', 'Run strict collection readiness with a specific immutable run id and explicit alias unsealing.', 'Collect the full 1,440-record blinded paired-reset panel only after strict readiness passes.', 'Build the manifest and run strict rollout, pairing, release-package, and evidence audits from raw logs.']",
+      "detail": "pilot_sequence=['Run the dry-run packet check without writing logs or videos.', 'Run strict backend qualification against the non-template backend module.', 'Materialize real task configs only with --confirm-real-platform --write after platform values are known.', 'Materialize external_validation/fidelity_acceptance.json only through scripts\\\\materialize_fidelity_acceptance.py after independent operator signoff and real evidence confirmations.', 'Run strict collection readiness with a specific immutable run id and explicit alias unsealing.', 'Collect the full 1,440-record blinded paired-reset panel only after strict readiness passes.', 'Build the manifest and run strict rollout, pairing, release-package, and evidence audits from raw logs.']",
       "name": "pilot_sequence_preserves_gate_order",
       "passed": true
     },

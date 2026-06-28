@@ -116,6 +116,7 @@ def main():
         "scripts\\build_external_platform_onboarding.py",
         "scripts\\build_external_fidelity_provenance_packet.py",
         "scripts\\build_external_fidelity_acceptance_draft.py",
+        "scripts\\materialize_fidelity_acceptance.py",
         "scripts\\audit_external_fidelity_acceptance.py",
         "scripts\\self_test_external_fidelity_acceptance.py",
         "scripts\\build_external_blind_eval_plan.py",
@@ -215,6 +216,7 @@ def main():
         "python scripts/build_external_platform_onboarding.py",
         "python scripts/build_external_fidelity_provenance_packet.py",
         "python scripts/build_external_fidelity_acceptance_draft.py",
+        "python scripts/materialize_fidelity_acceptance.py",
         "python scripts/build_external_backend_integration_packet.py",
         "python scripts/build_external_method_implementation_packet.py",
         "python scripts/build_external_acquisition_packet.py",
@@ -661,6 +663,7 @@ def main():
         "audit_external_backend_contract.py --strict",
         "materialize_external_configs.py",
         "validate_external_configs.py --strict",
+        "materialize_fidelity_acceptance.py",
         "audit_external_fidelity_acceptance.py --strict",
         "audit_external_collection_readiness.py --strict",
         "real_collection_runner.py",
@@ -2271,6 +2274,9 @@ def main():
         "external_fidelity_provenance_not_evidence",
         "external_fidelity_provenance_covers_acceptance_blocker",
         "external_fidelity_provenance_gate_order",
+        "fidelity_acceptance_materializer_ready",
+        "fidelity_acceptance_materializer_not_evidence",
+        "fidelity_acceptance_materializer_guarded",
         "independent_validation_route_ready",
         "independent_route_not_evidence",
         "independent_route_primary_covers_tasks",
@@ -2473,6 +2479,7 @@ def main():
         "platform_onboarding_ready",
         "fidelity_provenance_packet_ready",
         "fidelity_acceptance_draft_ready",
+        "fidelity_acceptance_materializer_ready",
         "post_collection_strict_commands_cover_all_gates",
         "no_real_manifest_written",
         "operator_actions_cover_collection_blockers",
@@ -2534,6 +2541,29 @@ def main():
         fail("external operator packet fidelity draft must expose operator signoff item count")
     if "build_external_fidelity_acceptance_draft.py" not in str(operator_draft.get("build_command", "")):
         fail("external operator packet fidelity draft must include rebuild command")
+    operator_materializer = operator_packet.get("fidelity_acceptance_materializer", {}) or {}
+    if operator_materializer.get("not_external_evidence") is not True:
+        fail("external operator packet fidelity acceptance materializer must be marked non-evidence")
+    if operator_materializer.get("write_enabled") is not False:
+        fail("external operator packet fidelity acceptance materializer must keep write_enabled=false")
+    if operator_materializer.get("acceptance_write_ready") is not False:
+        fail("external operator packet fidelity acceptance materializer must not be write-ready without operator inputs")
+    if operator_materializer.get("strict_fidelity_evidence_ready") is not False:
+        fail("external operator packet fidelity acceptance materializer must preserve strict fidelity evidence false")
+    materializer_command = str(operator_materializer.get("operator_write_command", ""))
+    for fragment in (
+        "materialize_fidelity_acceptance.py",
+        "--confirm-real-platform",
+        "--confirm-independent-operator",
+        "--confirm-render-backed-videos",
+        "--confirm-real-rollout-evidence",
+        "--confirm-manifest-declaration",
+        "--write",
+    ):
+        if fragment not in materializer_command:
+            fail(f"external operator packet fidelity materializer command missing fragment: {fragment}")
+    if operator_materializer.get("plan_path") != "results/fidelity_acceptance_materialization_plan.json":
+        fail("external operator packet fidelity materializer must point to the materialization plan JSON")
     operator_render = operator_packet.get("render_video_preflight", {}) or {}
     if operator_render.get("not_external_evidence") is not True:
         fail("external operator packet render-video preflight must be marked non-evidence")
@@ -2631,6 +2661,12 @@ def main():
         fail("external operator packet missing fidelity_acceptance_draft action")
     if "build_external_fidelity_acceptance_draft.py" not in "\n".join(fidelity_draft_actions[0].get("commands", []) or []):
         fail("external operator packet fidelity draft action must rebuild the fidelity acceptance draft")
+    fidelity_materializer_actions = [action for action in operator_actions if action.get("id") == "fidelity_acceptance_materializer"]
+    if not fidelity_materializer_actions:
+        fail("external operator packet missing fidelity_acceptance_materializer action")
+    materializer_action_commands = "\n".join(fidelity_materializer_actions[0].get("commands", []) or [])
+    if "materialize_fidelity_acceptance.py" not in materializer_action_commands or "--confirm-real-platform" not in materializer_action_commands:
+        fail("external operator packet fidelity materializer action must expose the guarded materialization command")
     method_actions = [action for action in operator_actions if action.get("id") == "method_implementation_packet"]
     if not method_actions:
         fail("external operator packet missing method_implementation_packet action")
@@ -2710,6 +2746,7 @@ def main():
         "fidelity_metadata_probe_included",
         "fidelity_provenance_packet_included",
         "fidelity_acceptance_draft_included",
+        "fidelity_acceptance_materializer_included",
         "backend_integration_packet_included",
         "maniskill_reference_backend_included",
         "maniskill_reference_collection_preflight_included",
@@ -2859,6 +2896,7 @@ def main():
         "build_external_fidelity_provenance_packet.py",
         "build_external_platform_onboarding.py",
         "probe_external_platform.py --strict",
+        "materialize_fidelity_acceptance.py",
         "audit_external_fidelity_acceptance.py --strict",
         "build_external_manifest.py --write",
         "audit_external_collection_readiness.py --strict",
@@ -2958,6 +2996,55 @@ def main():
     ):
         if draft_checks.get(required_check) is not True:
             fail(f"external fidelity acceptance draft audit missing passing check: {required_check}")
+
+    fidelity_materialization_path = RESULTS / "fidelity_acceptance_materialization_plan.json"
+    fidelity_materialization_md_path = RESULTS / "fidelity_acceptance_materialization_plan.md"
+    for path in (
+        ROOT / "scripts" / "materialize_fidelity_acceptance.py",
+        fidelity_materialization_path,
+        fidelity_materialization_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing fidelity acceptance materialization artifact: {path}")
+    fidelity_materialization = json.loads(fidelity_materialization_path.read_text(encoding="utf-8"))
+    if fidelity_materialization.get("version") != "fidelity_acceptance_materialization_plan_v1":
+        fail("fidelity acceptance materialization plan version mismatch")
+    if fidelity_materialization.get("passed") is not True:
+        fail("fidelity acceptance materialization plan did not pass")
+    if fidelity_materialization.get("not_external_evidence") is not True:
+        fail("fidelity acceptance materialization plan must declare non-evidence")
+    if fidelity_materialization.get("write_enabled") is not False:
+        fail("fidelity acceptance materialization plan must keep write_enabled=false during validation")
+    if fidelity_materialization.get("acceptance_write_ready") is not False:
+        fail("fidelity acceptance materialization plan must not be write-ready without operator inputs")
+    if fidelity_materialization.get("strict_fidelity_evidence_ready") is not False:
+        fail("fidelity acceptance materialization plan must keep strict fidelity evidence false")
+    materializer_command = str(fidelity_materialization.get("operator_write_command", ""))
+    for fragment in (
+        "materialize_fidelity_acceptance.py",
+        "--confirm-real-platform",
+        "--confirm-independent-operator",
+        "--confirm-render-backed-videos",
+        "--confirm-real-rollout-evidence",
+        "--confirm-manifest-declaration",
+        "--write",
+    ):
+        if fragment not in materializer_command:
+            fail(f"fidelity acceptance materializer command missing fragment: {fragment}")
+    materializer_checks = {check.get("name"): check.get("passed") for check in fidelity_materialization.get("checks", [])}
+    for required_check in (
+        "draft_exists_and_is_draft_version",
+        "materialized_payload_has_contract_shape",
+        "operator_text_required_before_write",
+        "confirmation_flags_required_before_write",
+        "write_requires_complete_operator_signoff",
+        "default_run_does_not_write_real_acceptance_or_manifest",
+        "gates_accepted_only_after_confirmations",
+        "strict_evidence_remains_external_to_materializer",
+        "operator_write_command_is_guarded",
+    ):
+        if materializer_checks.get(required_check) is not True:
+            fail(f"fidelity acceptance materialization plan missing passing check: {required_check}")
 
     rollout_packet_path = EXTERNAL / "rollout_evidence_packet.json"
     rollout_packet_md_path = EXTERNAL / "rollout_evidence_packet.md"

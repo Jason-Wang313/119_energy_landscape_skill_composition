@@ -351,6 +351,39 @@ def main() -> int:
         f"checks={fidelity_provenance_checks}",
     )
 
+    fidelity_materialization_ok, fidelity_materialization, fidelity_materialization_detail = passed_json(
+        RESULTS / "fidelity_acceptance_materialization_plan.json",
+        version="fidelity_acceptance_materialization_plan_v1",
+    )
+    add_check(checks, "fidelity_acceptance_materializer_ready", fidelity_materialization_ok, fidelity_materialization_detail)
+    fidelity_materialization_checks = {check.get("name"): check.get("passed") for check in fidelity_materialization.get("checks", []) or []}
+    add_check(
+        checks,
+        "fidelity_acceptance_materializer_not_evidence",
+        fidelity_materialization.get("not_external_evidence") is True
+        and fidelity_materialization.get("write_enabled") is False
+        and fidelity_materialization.get("acceptance_write_ready") is False
+        and fidelity_materialization.get("strict_fidelity_evidence_ready") is False,
+        (
+            f"not_external_evidence={fidelity_materialization.get('not_external_evidence')!r}, "
+            f"write_enabled={fidelity_materialization.get('write_enabled')!r}, "
+            f"acceptance_write_ready={fidelity_materialization.get('acceptance_write_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "fidelity_acceptance_materializer_guarded",
+        fidelity_materialization_checks.get("operator_write_command_is_guarded") is True
+        and "materialize_fidelity_acceptance.py" in str(fidelity_materialization.get("operator_write_command", ""))
+        and "--confirm-real-platform" in str(fidelity_materialization.get("operator_write_command", ""))
+        and "--confirm-independent-operator" in str(fidelity_materialization.get("operator_write_command", ""))
+        and "--confirm-render-backed-videos" in str(fidelity_materialization.get("operator_write_command", ""))
+        and "--confirm-real-rollout-evidence" in str(fidelity_materialization.get("operator_write_command", ""))
+        and (ROOT / "scripts" / "materialize_fidelity_acceptance.py").exists()
+        and (RESULTS / "fidelity_acceptance_materialization_plan.md").exists(),
+        str(fidelity_materialization.get("operator_write_command", "")),
+    )
+
     blind_ok, blind, blind_detail = passed_json(
         RESULTS / "external_blind_eval_audit.json",
         version="external_blind_eval_plan_v1",
@@ -1127,6 +1160,9 @@ def main() -> int:
         "external_fidelity_provenance_not_evidence",
         "external_fidelity_provenance_covers_acceptance_blocker",
         "external_fidelity_provenance_gate_order",
+        "fidelity_acceptance_materializer_ready",
+        "fidelity_acceptance_materializer_not_evidence",
+        "fidelity_acceptance_materializer_guarded",
         "independent_validation_route_ready",
         "independent_route_not_evidence",
         "independent_route_primary_covers_tasks",

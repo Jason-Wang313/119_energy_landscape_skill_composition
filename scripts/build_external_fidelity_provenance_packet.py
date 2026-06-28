@@ -23,6 +23,7 @@ STRICT_ACCEPTANCE_COMMANDS = [
     r"python scripts\build_external_fidelity_provenance_packet.py",
     r"python scripts\build_external_platform_onboarding.py",
     r"python scripts\probe_external_platform.py --strict",
+    r"python scripts\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
     r"python scripts\audit_external_fidelity_acceptance.py --strict",
     r"python scripts\build_external_manifest.py --write --check-video-paths",
     r"python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map",
@@ -80,7 +81,7 @@ def build_work_orders(fidelity: dict[str, Any], template: dict[str, Any]) -> lis
             "scope": "platform",
             "operator_input": "run the external platform probe on the selected machine, then fill platform_name, platform_version, physics engine, contact solver, timestep, substeps, robot model, assets, sensors, and contact/force channels",
             "required_artifacts": ["results/external_platform_probe.json", "external_validation/fidelity_acceptance.json"],
-            "acceptance_commands": STRICT_ACCEPTANCE_COMMANDS[:4],
+            "acceptance_commands": STRICT_ACCEPTANCE_COMMANDS[:5],
             "blocks": [item for item in blockers if "platform" in item or "route" in item],
         },
         {
@@ -96,7 +97,7 @@ def build_work_orders(fidelity: dict[str, Any], template: dict[str, Any]) -> lis
             "scope": "collection",
             "operator_input": "prove the selected platform can replay the same scene, seed, skill pair, and initial-state hash across every method panel",
             "required_artifacts": ["external_validation/fidelity_acceptance.json", "external_validation/blinded_operator_sheet.csv"],
-            "acceptance_commands": [STRICT_ACCEPTANCE_COMMANDS[2], STRICT_ACCEPTANCE_COMMANDS[3], STRICT_ACCEPTANCE_COMMANDS[5]],
+            "acceptance_commands": [STRICT_ACCEPTANCE_COMMANDS[2], STRICT_ACCEPTANCE_COMMANDS[3], STRICT_ACCEPTANCE_COMMANDS[6]],
             "blocks": [item for item in blockers if "paired" in item or "acceptance_gates" in item],
         },
         {
@@ -112,7 +113,7 @@ def build_work_orders(fidelity: dict[str, Any], template: dict[str, Any]) -> lis
             "scope": "release",
             "operator_input": "fill code commit, skill-library hash, artifact hash policy, manifest path, and manifest-declared fidelity_acceptance_path",
             "required_artifacts": ["external_validation/fidelity_acceptance.json", "external_validation/manifest.json"],
-            "acceptance_commands": STRICT_ACCEPTANCE_COMMANDS[2:5],
+            "acceptance_commands": STRICT_ACCEPTANCE_COMMANDS[2:6],
             "blocks": [item for item in blockers if "commit" in item or "hash" in item or "manifest" in item],
         },
         {
@@ -289,6 +290,7 @@ def audit_packet(
         "build_external_fidelity_provenance_packet.py",
         "build_external_platform_onboarding.py",
         "probe_external_platform.py --strict",
+        "materialize_fidelity_acceptance.py",
         "audit_external_fidelity_acceptance.py --strict",
         "build_external_manifest.py --write",
         "audit_external_collection_readiness.py --strict",

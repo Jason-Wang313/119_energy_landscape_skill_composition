@@ -23,6 +23,11 @@
       "passed": true
     },
     {
+      "detail": "write_enabled=False, acceptance_write_ready=False",
+      "name": "fidelity_acceptance_materializer_guarded",
+      "passed": true
+    },
+    {
       "detail": "strict_metadata_ready=True, primary_metadata_missing=[]",
       "name": "fidelity_metadata_probe_ready_but_not_evidence",
       "passed": true
@@ -94,6 +99,21 @@
     "remaining_operator_input_count": 10,
     "strict_audit_command_after_promotion": "python scripts\\audit_external_fidelity_acceptance.py --strict",
     "strict_fidelity_evidence_ready": false
+  },
+  "fidelity_acceptance_materializer": {
+    "acceptance_write_ready": false,
+    "missing_confirmation_count": 5,
+    "missing_operator_text_count": 12,
+    "not_external_evidence": true,
+    "operator_write_command": "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
+    "output_path": "external_validation/fidelity_acceptance.json",
+    "plan_command": "python scripts\\materialize_fidelity_acceptance.py",
+    "plan_md_path": "results/fidelity_acceptance_materialization_plan.md",
+    "plan_path": "results/fidelity_acceptance_materialization_plan.json",
+    "source_draft": "external_validation/fidelity_acceptance_draft.json",
+    "strict_external_evidence_ready": false,
+    "strict_fidelity_evidence_ready": false,
+    "write_enabled": false
   },
   "fidelity_metadata_probe": {
     "accepted_fidelity_ready": false,
@@ -384,6 +404,25 @@
     },
     {
       "artifacts": [
+        "scripts/materialize_fidelity_acceptance.py",
+        "results/fidelity_acceptance_materialization_plan.json",
+        "results/fidelity_acceptance_materialization_plan.md",
+        "external_validation/fidelity_acceptance.json"
+      ],
+      "closes": [
+        "guarded promotion from draft fidelity intake to manifest-declared acceptance; still not rollout evidence until strict audits pass"
+      ],
+      "commands": [
+        "python scripts\\materialize_fidelity_acceptance.py",
+        "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
+        "python scripts\\audit_external_fidelity_acceptance.py --strict"
+      ],
+      "id": "fidelity_acceptance_materializer",
+      "operator_input": "real platform provenance, independent operator signoff, render-backed evidence-video readiness, real rollout evidence, manifest declaration, code commit, and skill-library hash",
+      "title": "Materialize fidelity acceptance only through the guarded promotion path"
+    },
+    {
+      "artifacts": [
         "external_validation/pilot_smoke_packet.md",
         "external_validation/pilot_smoke_work_orders.csv",
         "results/external_pilot_smoke_packet_audit.json",
@@ -659,6 +698,7 @@
     "results/maniskill_backend_readiness_audit.json",
     "results/maniskill_reference_collection_preflight_audit.json",
     "results/external_fidelity_acceptance_draft_audit.json",
+    "results/fidelity_acceptance_materialization_plan.json",
     "external_validation/fidelity_acceptance_draft.json",
     "external_validation/fidelity_acceptance_draft.md",
     "results/external_config_materialization_plan.json",

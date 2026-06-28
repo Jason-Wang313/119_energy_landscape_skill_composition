@@ -167,6 +167,14 @@ python scripts\build_external_fidelity_acceptance_draft.py
 
 This writes `external_validation/fidelity_acceptance_draft.{json,md}` and `results/external_fidelity_acceptance_draft_audit.{json,md}`. The draft pre-fills the tracked ManiSkill/SAPIEN route with platform/package/backend/config hashes, task bindings, primary environment smoke status, and fidelity metadata, then reports a fidelity acceptance promotion checklist that separates machine-prefilled readiness from independent operator signoff readiness. It remains draft-only non-evidence: `external_validation/fidelity_acceptance.json` and `external_validation/manifest.json` must still be independently filled, promoted, and strict-audited before any collection can count.
 
+Build the fidelity acceptance materialization plan:
+
+```powershell
+python scripts\materialize_fidelity_acceptance.py
+```
+
+This writes `results/fidelity_acceptance_materialization_plan.{json,md}` without creating `external_validation/fidelity_acceptance.json`. The guarded write command in that report requires independent-operator identity, accepted platform/machine, contact/timestep/replay/calibration/task-binding signoff, render-backed evidence-video readiness, real rollout evidence, manifest declaration, code commit, and skill-library hash before any acceptance file can be materialized. It is not evidence and strict fidelity remains false until the real manifest and strict audits pass.
+
 Build the external backend integration packet:
 
 ```powershell

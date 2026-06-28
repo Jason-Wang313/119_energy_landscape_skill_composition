@@ -60,6 +60,32 @@ Draft rebuild command:
 python scripts\build_external_fidelity_acceptance_draft.py
 ```
 
+## Fidelity Acceptance Materializer
+
+The materializer is the guarded promotion path from the draft to `external_validation/fidelity_acceptance.json`. The default run writes only a plan; the write path requires independent operator fields, real platform confirmation, render-backed evidence-video readiness, real rollout evidence, and manifest declaration.
+
+- Plan JSON: `results/fidelity_acceptance_materialization_plan.json`
+- Plan notes: `results/fidelity_acceptance_materialization_plan.md`
+- Source draft: `external_validation/fidelity_acceptance_draft.json`
+- Output path: `external_validation/fidelity_acceptance.json`
+- Write enabled: `false`
+- Acceptance write ready: `false`
+- Strict fidelity evidence ready: `false`
+- Missing operator text fields: `12`
+- Missing confirmation flags: `5`
+
+Dry-run plan command:
+
+```powershell
+python scripts\materialize_fidelity_acceptance.py
+```
+
+Guarded write command:
+
+```powershell
+python scripts\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write
+```
+
 ## ManiSkill Fidelity Metadata Probe
 
 This probe is not evidence and does not satisfy fidelity acceptance. It records timing, backend, controller, observation, and asset metadata that the independent operator should verify or replace before promoting the fidelity acceptance file.
@@ -166,6 +192,7 @@ Post-collection strict gates:
 - `rollout_evidence_packet`: Use the rollout evidence packet as the raw-log evidence checklist
 - `platform_fidelity`: Fill platform fidelity acceptance with real provenance
 - `fidelity_acceptance_draft`: Generate the tracked ManiSkill fidelity acceptance draft
+- `fidelity_acceptance_materializer`: Materialize fidelity acceptance only through the guarded promotion path
 - `pilot_smoke_packet`: Run a quarantined first-panel backend smoke test
 - `maniskill_pilot_runtime_liveness`: Audit bounded ManiSkill pilot runtime liveness
 - `maniskill_render_video_preflight`: Audit ManiSkill render-backed evidence-video export
@@ -186,6 +213,7 @@ Post-collection strict gates:
 - `pass` `collection_preflight_fail_closed`: collection_ready=False, blocking_missing_count=4
 - `pass` `maniskill_reference_preflight_reaches_only_fidelity_gate`: blocking=["fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
 - `pass` `fidelity_acceptance_draft_ready_but_fail_closed`: draft_ready=True, remaining_operator_inputs=10
+- `pass` `fidelity_acceptance_materializer_guarded`: write_enabled=False, acceptance_write_ready=False
 - `pass` `fidelity_metadata_probe_ready_but_not_evidence`: strict_metadata_ready=True, primary_metadata_missing=[]
 - `pass` `render_video_preflight_recorded_but_not_evidence`: render_video_ready=False, envs=4, failure_classes=['vulkan_descriptor_pool_exhaustion']
 - `pass` `operator_actions_cover_start_to_finish`: missing=[]

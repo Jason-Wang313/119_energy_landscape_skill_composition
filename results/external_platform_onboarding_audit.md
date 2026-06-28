@@ -27,6 +27,7 @@ This audit checks that the public-simulator onboarding packet is specific enough
 - `pass` `strict_command_includes_audit_external_backend_contract`: audit_external_backend_contract.py --strict
 - `pass` `strict_command_includes_materialize_external_configs`: materialize_external_configs.py
 - `pass` `strict_command_includes_validate_external_configs`: validate_external_configs.py --strict
+- `pass` `strict_command_includes_materialize_fidelity_acceptance`: materialize_fidelity_acceptance.py
 - `pass` `strict_command_includes_audit_external_fidelity_acceptance`: audit_external_fidelity_acceptance.py --strict
 - `pass` `strict_command_includes_audit_external_collection_readiness`: audit_external_collection_readiness.py --strict
 - `pass` `strict_command_includes_real_collection_runner`: real_collection_runner.py
@@ -35,5 +36,5 @@ This audit checks that the public-simulator onboarding packet is specific enough
 - `pass` `strict_command_includes_audit_external_pairing_integrity`: audit_external_pairing_integrity.py --strict
 - `pass` `strict_command_includes_audit_external_release_package`: audit_external_release_package.py --strict
 - `pass` `strict_command_includes_audit_external_evidence`: audit_external_evidence.py --strict
-- `pass` `pilot_sequence_preserves_gate_order`: pilot_sequence=['Run the dry-run packet check without writing logs or videos.', 'Run strict backend qualification against the non-template backend module.', 'Materialize real task configs only with --confirm-real-platform --write after platform values are known.', 'Fill external_validation/fidelity_acceptance.json with platform, simulator, contact, observation, and task-fidelity provenance.', 'Run strict collection readiness with a specific immutable run id and explicit alias unsealing.', 'Collect the full 1,440-record blinded paired-reset panel only after strict readiness passes.', 'Build the manifest and run strict rollout, pairing, release-package, and evidence audits from raw logs.']
+- `pass` `pilot_sequence_preserves_gate_order`: pilot_sequence=['Run the dry-run packet check without writing logs or videos.', 'Run strict backend qualification against the non-template backend module.', 'Materialize real task configs only with --confirm-real-platform --write after platform values are known.', 'Materialize external_validation/fidelity_acceptance.json only through scripts\\materialize_fidelity_acceptance.py after independent operator signoff and real evidence confirmations.', 'Run strict collection readiness with a specific immutable run id and explicit alias unsealing.', 'Collect the full 1,440-record blinded paired-reset panel only after strict readiness passes.', 'Build the manifest and run strict rollout, pairing, release-package, and evidence audits from raw logs.']
 - `pass` `packet_files_written`: packet_json=True, packet_md=True

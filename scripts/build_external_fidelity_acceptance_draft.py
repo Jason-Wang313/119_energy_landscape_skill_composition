@@ -55,8 +55,8 @@ MACHINE_PREFILLED_ITEMS = [
 ]
 
 PROMOTION_COMMANDS = [
-    "copy external_validation\\fidelity_acceptance_draft.json external_validation\\fidelity_acceptance.json",
-    "edit external_validation\\fidelity_acceptance.json: change version to paper119_fidelity_acceptance_v1, remove draft_only, fill every remaining operator input, and set gates only after evidence exists",
+    "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
+    "verify external_validation\\fidelity_acceptance.json has version paper119_fidelity_acceptance_v1 and no draft_only/template_only fields before manifest declaration",
     "ensure external_validation/manifest.json declares fidelity_acceptance_path=external_validation/fidelity_acceptance.json together with real logs, videos, configs, checkpoints, and method hashes",
     "python scripts\\build_external_manifest.py --write --check-video-paths",
     "python scripts\\audit_external_fidelity_acceptance.py --strict",
@@ -600,6 +600,12 @@ def audit_draft(draft: dict[str, Any]) -> dict[str, Any]:
         REAL_ACCEPTANCE_PATH in command_text
         and REAL_MANIFEST_PATH in command_text
         and "paper119_fidelity_acceptance_v1" in command_text
+        and "materialize_fidelity_acceptance.py" in command_text
+        and "--confirm-real-platform" in command_text
+        and "--confirm-independent-operator" in command_text
+        and "--confirm-render-backed-videos" in command_text
+        and "--confirm-real-rollout-evidence" in command_text
+        and "--confirm-manifest-declaration" in command_text
         and "audit_external_fidelity_acceptance.py --strict" in command_text
         and "audit_external_collection_readiness.py --strict" in command_text,
         command_text,

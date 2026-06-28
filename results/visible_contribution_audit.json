@@ -26,7 +26,7 @@
       "passed": true
     },
     {
-      "detail": "files=251, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=254, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -73,6 +73,11 @@
     {
       "detail": "draft_ready=True, remaining_operator_inputs=10, acceptance_ready=False",
       "name": "fidelity_acceptance_draft_visible",
+      "passed": true
+    },
+    {
+      "detail": "write_enabled=False, acceptance_write_ready=False",
+      "name": "fidelity_acceptance_materializer_visible",
       "passed": true
     },
     {

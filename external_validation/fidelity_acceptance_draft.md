@@ -16,7 +16,7 @@ This is an operator-editable draft for the tracked ManiSkill/SAPIEN route. It pr
 - Physics engine: `SAPIEN 3.0.3 via ManiSkill`
 - Backend hash: `3479C8AEA42FC8BCDFF30B8108AD70733136945748F02785A18100FAAEF3A255`
 - Candidate skill-library hash: `DEC645752806D23BDC114D67B348C468C60E933EAB99E71859F5CC724F160C44`
-- Code commit captured in draft: `5d67ccfdb89c56e6f7f5bf619ac665c5d9be228e`
+- Code commit captured in draft: `9bda752f1045aec6146410930b5fe3fd554a727e`
 - Primary route install ready: `true`
 - Primary env smoke recorded: `true`
 - Primary env smoke ready: `true`
@@ -86,8 +86,8 @@ Operator signoff items:
 
 ## Promotion Commands
 
-- `copy external_validation\fidelity_acceptance_draft.json external_validation\fidelity_acceptance.json`
-- `edit external_validation\fidelity_acceptance.json: change version to paper119_fidelity_acceptance_v1, remove draft_only, fill every remaining operator input, and set gates only after evidence exists`
+- `python scripts\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write`
+- `verify external_validation\fidelity_acceptance.json has version paper119_fidelity_acceptance_v1 and no draft_only/template_only fields before manifest declaration`
 - `ensure external_validation/manifest.json declares fidelity_acceptance_path=external_validation/fidelity_acceptance.json together with real logs, videos, configs, checkpoints, and method hashes`
 - `python scripts\build_external_manifest.py --write --check-video-paths`
 - `python scripts\audit_external_fidelity_acceptance.py --strict`

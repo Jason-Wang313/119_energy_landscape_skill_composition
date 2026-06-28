@@ -140,6 +140,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "probe_maniskill_fidelity_metadata.py",
         SCRIPTS / "build_external_fidelity_provenance_packet.py",
         SCRIPTS / "build_external_fidelity_acceptance_draft.py",
+        SCRIPTS / "materialize_fidelity_acceptance.py",
         SCRIPTS / "build_external_backend_integration_packet.py",
         SCRIPTS / "build_external_config_manifest_packet.py",
         SCRIPTS / "build_external_rollout_evidence_packet.py",
@@ -187,6 +188,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_fidelity_provenance_audit.md",
         RESULTS / "external_fidelity_acceptance_draft_audit.json",
         RESULTS / "external_fidelity_acceptance_draft_audit.md",
+        RESULTS / "fidelity_acceptance_materialization_plan.json",
+        RESULTS / "fidelity_acceptance_materialization_plan.md",
         RESULTS / "external_backend_integration_audit.json",
         RESULTS / "external_backend_integration_audit.md",
         RESULTS / "external_config_manifest_audit.json",
@@ -302,6 +305,7 @@ def build_payload() -> dict[str, Any]:
     onboarding = require_payload(RESULTS / "external_platform_onboarding_audit.json", "external_platform_onboarding_audit_v1")
     fidelity_provenance = require_payload(RESULTS / "external_fidelity_provenance_audit.json", "external_fidelity_provenance_audit_v1")
     fidelity_draft = require_payload(RESULTS / "external_fidelity_acceptance_draft_audit.json", "external_fidelity_acceptance_draft_audit_v1")
+    fidelity_materialization = require_payload(RESULTS / "fidelity_acceptance_materialization_plan.json", "fidelity_acceptance_materialization_plan_v1")
     backend_integration = require_payload(RESULTS / "external_backend_integration_audit.json", "external_backend_integration_audit_v1")
     maniskill_backend = require_payload(RESULTS / "maniskill_backend_readiness_audit.json", "maniskill_reference_backend_audit_v1")
     maniskill_preflight = require_payload(RESULTS / "maniskill_reference_collection_preflight_audit.json", "maniskill_reference_collection_preflight_audit_v1")
@@ -525,6 +529,24 @@ def build_payload() -> dict[str, Any]:
             f"draft_ready={fidelity_draft.get('draft_ready')!r}, "
             f"remaining_operator_inputs={fidelity_draft.get('remaining_operator_input_count')!r}, "
             f"acceptance_ready={fidelity_draft.get('acceptance_ready')!r}"
+        ),
+    )
+    fidelity_materialization_checks = {check.get("name"): check.get("passed") for check in fidelity_materialization.get("checks", []) or []}
+    add_check(
+        checks,
+        "fidelity_acceptance_materializer_included",
+        fidelity_materialization.get("passed") is True
+        and fidelity_materialization.get("not_external_evidence") is True
+        and fidelity_materialization.get("write_enabled") is False
+        and fidelity_materialization.get("acceptance_write_ready") is False
+        and fidelity_materialization.get("strict_fidelity_evidence_ready") is False
+        and fidelity_materialization_checks.get("operator_write_command_is_guarded") is True
+        and "scripts/materialize_fidelity_acceptance.py" in paths
+        and "results/fidelity_acceptance_materialization_plan.json" in paths
+        and "results/fidelity_acceptance_materialization_plan.md" in paths,
+        (
+            f"write_enabled={fidelity_materialization.get('write_enabled')!r}, "
+            f"acceptance_write_ready={fidelity_materialization.get('acceptance_write_ready')!r}"
         ),
     )
     backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration.get("checks", []) or []}
@@ -755,6 +777,7 @@ def build_payload() -> dict[str, Any]:
             "fidelity_metadata_probe",
             "fidelity_provenance_packet",
             "fidelity_acceptance_draft",
+            "fidelity_acceptance_materializer",
             "backend_integration_packet",
             "maniskill_reference_backend_audit",
             "maniskill_reference_collection_preflight",
@@ -773,7 +796,7 @@ def build_payload() -> dict[str, Any]:
             "strict_rollout_recompute",
             "final_strict_gate",
         }.issubset(action_ids),
-        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'maniskill_render_video_preflight', 'maniskill_pilot_runtime_liveness', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
+        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'fidelity_acceptance_materializer', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'maniskill_render_video_preflight', 'maniskill_pilot_runtime_liveness', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
     )
     add_check(
         checks,
@@ -820,6 +843,7 @@ def build_payload() -> dict[str, Any]:
             "results/maniskill_fidelity_metadata_probe.json",
             "results/external_fidelity_provenance_audit.json",
             "results/external_fidelity_acceptance_draft_audit.json",
+            "results/fidelity_acceptance_materialization_plan.json",
             "results/external_backend_integration_audit.json",
             "results/maniskill_backend_readiness_audit.json",
             "results/external_config_manifest_audit.json",

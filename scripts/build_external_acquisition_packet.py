@@ -25,6 +25,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "maniskill_reference_backend_audit",
         "maniskill_reference_collection_preflight",
         "fidelity_acceptance_draft",
+        "fidelity_acceptance_materializer",
         "rollout_evidence_packet",
         "backend_module",
         "platform_fidelity",
@@ -250,6 +251,22 @@ ACTION_CATALOG = {
             "python scripts\\audit_external_fidelity_acceptance.py --strict",
         ],
         "closes": ["platform fidelity acceptance intake; still not evidence until promoted, manifest-declared, and strict-audited"],
+    },
+    "fidelity_acceptance_materializer": {
+        "title": "Materialize fidelity acceptance only through the guarded promotion path",
+        "operator_input": "real platform provenance, independent operator signoff, render-backed evidence-video readiness, real rollout evidence, manifest declaration, code commit, and skill-library hash",
+        "artifacts": [
+            "scripts/materialize_fidelity_acceptance.py",
+            "results/fidelity_acceptance_materialization_plan.json",
+            "results/fidelity_acceptance_materialization_plan.md",
+            "external_validation/fidelity_acceptance.json",
+        ],
+        "commands": [
+            "python scripts\\materialize_fidelity_acceptance.py",
+            "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
+            "python scripts\\audit_external_fidelity_acceptance.py --strict",
+        ],
+        "closes": ["guarded promotion from draft fidelity intake to manifest-declared acceptance; still not rollout evidence until strict audits pass"],
     },
     "pilot_smoke_packet": {
         "title": "Run a quarantined first-panel backend smoke test",
@@ -480,6 +497,7 @@ def main() -> int:
     onboarding_path = RESULTS / "external_platform_onboarding_audit.json"
     fidelity_provenance_path = RESULTS / "external_fidelity_provenance_audit.json"
     fidelity_draft_path = RESULTS / "external_fidelity_acceptance_draft_audit.json"
+    fidelity_materialization_path = RESULTS / "fidelity_acceptance_materialization_plan.json"
     config_materialization_path = RESULTS / "external_config_materialization_plan.json"
     backend_contract_path = RESULTS / "external_backend_contract_audit.json"
     backend_integration_path = RESULTS / "external_backend_integration_audit.json"
@@ -503,6 +521,7 @@ def main() -> int:
     onboarding = require_json(onboarding_path)
     fidelity_provenance = require_json(fidelity_provenance_path)
     fidelity_draft = require_json(fidelity_draft_path)
+    fidelity_materialization = require_json(fidelity_materialization_path)
     config_materialization = require_json(config_materialization_path)
     backend_contract = require_json(backend_contract_path)
     backend_integration = require_json(backend_integration_path)
@@ -539,6 +558,7 @@ def main() -> int:
                 onboarding_path,
                 fidelity_provenance_path,
                 fidelity_draft_path,
+                fidelity_materialization_path,
                 config_materialization_path,
                 backend_contract_path,
                 backend_integration_path,
@@ -564,6 +584,7 @@ def main() -> int:
                 onboarding_path,
                 fidelity_provenance_path,
                 fidelity_draft_path,
+                fidelity_materialization_path,
                 config_materialization_path,
                 backend_contract_path,
                 backend_integration_path,
@@ -980,6 +1001,25 @@ def main() -> int:
             f"acceptance_ready={fidelity_draft.get('acceptance_ready')!r}"
         ),
     )
+    materializer_checks = {check.get("name"): check.get("passed") for check in fidelity_materialization.get("checks", []) or []}
+    add_check(
+        checks,
+        "fidelity_acceptance_materializer_ready",
+        fidelity_materialization.get("version") == "fidelity_acceptance_materialization_plan_v1"
+        and fidelity_materialization.get("passed") is True
+        and fidelity_materialization.get("not_external_evidence") is True
+        and fidelity_materialization.get("write_enabled") is False
+        and fidelity_materialization.get("acceptance_write_ready") is False
+        and fidelity_materialization.get("strict_fidelity_evidence_ready") is False
+        and materializer_checks.get("draft_exists_and_is_draft_version") is True
+        and materializer_checks.get("operator_write_command_is_guarded") is True
+        and (ROOT / "scripts" / "materialize_fidelity_acceptance.py").exists()
+        and (RESULTS / "fidelity_acceptance_materialization_plan.md").exists(),
+        (
+            f"write_enabled={fidelity_materialization.get('write_enabled')!r}, "
+            f"acceptance_write_ready={fidelity_materialization.get('acceptance_write_ready')!r}"
+        ),
+    )
 
     post_collection_commands = collection.get("post_collection_strict_commands", []) or []
     required_command_fragments = [
@@ -997,6 +1037,7 @@ def main() -> int:
         "build_external_rollout_evidence_packet.py",
         "build_external_fidelity_provenance_packet.py",
         "build_external_fidelity_acceptance_draft.py",
+        "materialize_fidelity_acceptance.py",
         "build_external_platform_onboarding.py",
         "probe_external_platform.py",
         "probe_maniskill_task_bindings.py",
@@ -1059,6 +1100,7 @@ def main() -> int:
                 onboarding_path,
                 fidelity_provenance_path,
                 fidelity_draft_path,
+                fidelity_materialization_path,
                 config_materialization_path,
                 backend_contract_path,
                 backend_integration_path,

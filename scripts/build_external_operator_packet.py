@@ -66,6 +66,10 @@ def build_payload() -> dict[str, Any]:
         RESULTS / "external_fidelity_acceptance_draft_audit.json",
         "external_fidelity_acceptance_draft_audit_v1",
     )
+    fidelity_materialization = require_payload(
+        RESULTS / "fidelity_acceptance_materialization_plan.json",
+        "fidelity_acceptance_materialization_plan_v1",
+    )
     fidelity_metadata = require_payload(
         RESULTS / "maniskill_fidelity_metadata_probe.json",
         "maniskill_fidelity_metadata_probe_v1",
@@ -93,6 +97,7 @@ def build_payload() -> dict[str, Any]:
         "platform_onboarding",
         "fidelity_provenance_packet",
         "fidelity_acceptance_draft",
+        "fidelity_acceptance_materializer",
         "backend_integration_packet",
         "maniskill_reference_backend_audit",
         "maniskill_reference_collection_preflight",
@@ -169,6 +174,28 @@ def build_payload() -> dict[str, Any]:
         (
             f"draft_ready={fidelity_draft.get('draft_ready')!r}, "
             f"remaining_operator_inputs={fidelity_draft.get('remaining_operator_input_count')!r}"
+        ),
+    )
+    materializer_checks = {check.get("name"): check.get("passed") for check in fidelity_materialization.get("checks", []) or []}
+    add_check(
+        checks,
+        "fidelity_acceptance_materializer_guarded",
+        fidelity_materialization.get("passed") is True
+        and fidelity_materialization.get("not_external_evidence") is True
+        and fidelity_materialization.get("write_enabled") is False
+        and fidelity_materialization.get("acceptance_write_ready") is False
+        and fidelity_materialization.get("strict_fidelity_evidence_ready") is False
+        and fidelity_materialization.get("strict_external_evidence_ready") is False
+        and "materialize_fidelity_acceptance.py" in str(fidelity_materialization.get("operator_write_command", ""))
+        and "--confirm-real-platform" in str(fidelity_materialization.get("operator_write_command", ""))
+        and "--confirm-independent-operator" in str(fidelity_materialization.get("operator_write_command", ""))
+        and "--confirm-render-backed-videos" in str(fidelity_materialization.get("operator_write_command", ""))
+        and "--confirm-real-rollout-evidence" in str(fidelity_materialization.get("operator_write_command", ""))
+        and "--confirm-manifest-declaration" in str(fidelity_materialization.get("operator_write_command", ""))
+        and materializer_checks.get("operator_write_command_is_guarded") is True,
+        (
+            f"write_enabled={fidelity_materialization.get('write_enabled')!r}, "
+            f"acceptance_write_ready={fidelity_materialization.get('acceptance_write_ready')!r}"
         ),
     )
     metadata_action = actions.get("fidelity_metadata_probe", {})
@@ -342,6 +369,21 @@ def build_payload() -> dict[str, Any]:
             "build_command": "python scripts\\build_external_fidelity_acceptance_draft.py",
             "strict_audit_command_after_promotion": "python scripts\\audit_external_fidelity_acceptance.py --strict",
         },
+        "fidelity_acceptance_materializer": {
+            "not_external_evidence": True,
+            "write_enabled": fidelity_materialization.get("write_enabled") is True,
+            "acceptance_write_ready": fidelity_materialization.get("acceptance_write_ready") is True,
+            "strict_fidelity_evidence_ready": fidelity_materialization.get("strict_fidelity_evidence_ready") is True,
+            "strict_external_evidence_ready": fidelity_materialization.get("strict_external_evidence_ready") is True,
+            "source_draft": fidelity_materialization.get("source_draft", "external_validation/fidelity_acceptance_draft.json"),
+            "output_path": fidelity_materialization.get("output_path", "external_validation/fidelity_acceptance.json"),
+            "plan_path": "results/fidelity_acceptance_materialization_plan.json",
+            "plan_md_path": "results/fidelity_acceptance_materialization_plan.md",
+            "missing_operator_text_count": len(fidelity_materialization.get("missing_operator_text", []) or []),
+            "missing_confirmation_count": len(fidelity_materialization.get("missing_confirmations", []) or []),
+            "operator_write_command": fidelity_materialization.get("operator_write_command", ""),
+            "plan_command": "python scripts\\materialize_fidelity_acceptance.py",
+        },
         "fidelity_metadata_probe": {
             "not_external_evidence": True,
             "metadata_probe_ready": fidelity_metadata.get("metadata_probe_ready") is True,
@@ -389,6 +431,7 @@ def build_payload() -> dict[str, Any]:
             "results/maniskill_backend_readiness_audit.json",
             "results/maniskill_reference_collection_preflight_audit.json",
             "results/external_fidelity_acceptance_draft_audit.json",
+            "results/fidelity_acceptance_materialization_plan.json",
             "external_validation/fidelity_acceptance_draft.json",
             "external_validation/fidelity_acceptance_draft.md",
             "results/external_config_materialization_plan.json",
@@ -478,6 +521,38 @@ def write_md(payload: dict[str, Any]) -> None:
             "",
             "```powershell",
             draft["build_command"],
+            "```",
+        ]
+    )
+
+    materializer = payload["fidelity_acceptance_materializer"]
+    lines.extend(
+        [
+            "",
+            "## Fidelity Acceptance Materializer",
+            "",
+            "The materializer is the guarded promotion path from the draft to `external_validation/fidelity_acceptance.json`. The default run writes only a plan; the write path requires independent operator fields, real platform confirmation, render-backed evidence-video readiness, real rollout evidence, and manifest declaration.",
+            "",
+            f"- Plan JSON: `{materializer['plan_path']}`",
+            f"- Plan notes: `{materializer['plan_md_path']}`",
+            f"- Source draft: `{materializer['source_draft']}`",
+            f"- Output path: `{materializer['output_path']}`",
+            f"- Write enabled: `{str(materializer['write_enabled']).lower()}`",
+            f"- Acceptance write ready: `{str(materializer['acceptance_write_ready']).lower()}`",
+            f"- Strict fidelity evidence ready: `{str(materializer['strict_fidelity_evidence_ready']).lower()}`",
+            f"- Missing operator text fields: `{materializer['missing_operator_text_count']}`",
+            f"- Missing confirmation flags: `{materializer['missing_confirmation_count']}`",
+            "",
+            "Dry-run plan command:",
+            "",
+            "```powershell",
+            materializer["plan_command"],
+            "```",
+            "",
+            "Guarded write command:",
+            "",
+            "```powershell",
+            materializer["operator_write_command"],
             "```",
         ]
     )

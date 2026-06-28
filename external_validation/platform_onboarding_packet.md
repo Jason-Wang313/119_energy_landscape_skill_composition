@@ -166,7 +166,7 @@ Must document:
 1. Run the dry-run packet check without writing logs or videos.
 2. Run strict backend qualification against the non-template backend module.
 3. Materialize real task configs only with --confirm-real-platform --write after platform values are known.
-4. Fill external_validation/fidelity_acceptance.json with platform, simulator, contact, observation, and task-fidelity provenance.
+4. Materialize external_validation/fidelity_acceptance.json only through scripts\materialize_fidelity_acceptance.py after independent operator signoff and real evidence confirmations.
 5. Run strict collection readiness with a specific immutable run id and explicit alias unsealing.
 6. Collect the full 1,440-record blinded paired-reset panel only after strict readiness passes.
 7. Build the manifest and run strict rollout, pairing, release-package, and evidence audits from raw logs.
@@ -180,6 +180,7 @@ Must document:
 - `python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --alias-map external_validation\method_alias_map.json`
 - `python scripts\materialize_external_configs.py --platform-type high_fidelity_sim --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write`
 - `python scripts\validate_external_configs.py --strict`
+- `python scripts\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write`
 - `python scripts\audit_external_fidelity_acceptance.py --strict`
 - `python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map`
 - `python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id <specific_run_id> --unsealed-alias-map`

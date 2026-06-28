@@ -25,6 +25,7 @@ This packet is a non-evidence work-order layer for platform fidelity and provena
 - `python scripts\build_external_fidelity_provenance_packet.py`
 - `python scripts\build_external_platform_onboarding.py`
 - `python scripts\probe_external_platform.py --strict`
+- `python scripts\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write`
 - `python scripts\audit_external_fidelity_acceptance.py --strict`
 - `python scripts\build_external_manifest.py --write --check-video-paths`
 - `python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map`

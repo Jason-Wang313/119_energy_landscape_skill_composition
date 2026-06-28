@@ -51,6 +51,7 @@ def main() -> int:
     onboarding = read_json(RESULTS / "external_platform_onboarding_audit.json")
     fidelity_provenance = read_json(RESULTS / "external_fidelity_provenance_audit.json")
     fidelity_draft = read_json(RESULTS / "external_fidelity_acceptance_draft_audit.json")
+    fidelity_materialization = read_json(RESULTS / "fidelity_acceptance_materialization_plan.json")
     backend_integration = read_json(RESULTS / "external_backend_integration_audit.json")
     maniskill_backend = read_json(RESULTS / "maniskill_backend_readiness_audit.json")
     reference_preflight = read_json(RESULTS / "maniskill_reference_collection_preflight_audit.json")
@@ -268,6 +269,22 @@ def main() -> int:
             f"draft_ready={fidelity_draft.get('draft_ready')!r}, "
             f"remaining_operator_inputs={fidelity_draft.get('remaining_operator_input_count')!r}, "
             f"acceptance_ready={fidelity_draft.get('acceptance_ready')!r}"
+        ),
+    )
+    fidelity_materialization_checks = {check.get("name"): check.get("passed") for check in fidelity_materialization.get("checks", []) or []}
+    add_check(
+        checks,
+        "fidelity_acceptance_materializer_visible",
+        fidelity_materialization.get("version") == "fidelity_acceptance_materialization_plan_v1"
+        and fidelity_materialization.get("passed") is True
+        and fidelity_materialization.get("not_external_evidence") is True
+        and fidelity_materialization.get("write_enabled") is False
+        and fidelity_materialization.get("acceptance_write_ready") is False
+        and fidelity_materialization.get("strict_fidelity_evidence_ready") is False
+        and fidelity_materialization_checks.get("operator_write_command_is_guarded") is True,
+        (
+            f"write_enabled={fidelity_materialization.get('write_enabled')!r}, "
+            f"acceptance_write_ready={fidelity_materialization.get('acceptance_write_ready')!r}"
         ),
     )
     backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration.get("checks", []) or []}
@@ -578,6 +595,7 @@ def main() -> int:
             "external_platform_onboarding_claim",
             "external_fidelity_provenance_packet_claim",
             "external_fidelity_acceptance_draft_claim",
+            "external_fidelity_acceptance_materializer_claim",
             "external_backend_integration_packet_claim",
             "maniskill_reference_backend_claim",
             "maniskill_reference_collection_preflight_claim",
@@ -593,7 +611,7 @@ def main() -> int:
             "external_config_materialization_claim",
             "reviewer_response_packet_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'local_planner_edge_policy_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
+        f"missing={sorted({'local_planner_edge_policy_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -610,6 +628,7 @@ def main() -> int:
             "External fidelity provenance packet",
             "External fidelity acceptance draft",
             "fidelity acceptance promotion checklist",
+            "Fidelity acceptance materialization plan",
             "External backend integration packet",
             "ManiSkill reference backend readiness audit",
             "ManiSkill reference collection preflight audit",
@@ -645,6 +664,7 @@ def main() -> int:
             "External fidelity provenance packet",
             "External fidelity acceptance draft",
             "fidelity acceptance promotion checklist",
+            "Fidelity acceptance materialization plan",
             "External backend integration packet",
             "ManiSkill reference backend readiness audit",
             "ManiSkill reference collection preflight audit",
@@ -681,6 +701,7 @@ def main() -> int:
             "external fidelity provenance packet",
             "external fidelity acceptance draft",
             "fidelity acceptance promotion checklist",
+            "fidelity acceptance materializer",
             "external backend integration packet",
             "ManiSkill reference backend readiness audit",
             "ManiSkill reference collection preflight audit",
@@ -717,6 +738,7 @@ def main() -> int:
             "External fidelity provenance packet",
             "External fidelity acceptance draft",
             "fidelity acceptance promotion checklist",
+            "Fidelity acceptance materialization plan",
             "External backend integration packet",
             "ManiSkill reference backend readiness audit",
             "ManiSkill reference collection preflight audit",
@@ -753,6 +775,7 @@ def main() -> int:
             "scripts/build_external_fidelity_provenance_packet.py",
             "scripts/build_external_fidelity_acceptance_draft.py",
             "fidelity acceptance promotion checklist",
+            "scripts/materialize_fidelity_acceptance.py",
             "scripts/build_external_backend_integration_packet.py",
             "scripts/audit_maniskill_backend_readiness.py",
             "scripts/audit_maniskill_reference_collection_preflight.py",
@@ -792,6 +815,7 @@ def main() -> int:
             "external fidelity provenance packet",
             "external fidelity acceptance draft",
             "fidelity acceptance promotion checklist",
+            "fidelity acceptance materializer",
             "external backend integration packet",
             "ManiSkill reference backend readiness audit",
             "ManiSkill reference collection preflight audit",
@@ -818,6 +842,7 @@ def main() -> int:
         "outreach": [
             "results/external_operator_packet.md",
             "ManiSkill fidelity metadata probe",
+            "fidelity acceptance materializer",
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
             "manifest assembly checklist",
@@ -857,7 +882,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill render-video preflight and renderer-failure classifier, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the manifest assembly checklist, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill render-video preflight and renderer-failure classifier, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the manifest assembly checklist, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",
