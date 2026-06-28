@@ -172,11 +172,11 @@
       "sha256": "D5A1269B3AFA2DFCE6270E32C6348D60894A4E6ACF4C7C3790ABCDAF8E83E718"
     },
     {
-      "bytes": 15779,
+      "bytes": 16452,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/reproducibility_checklist.md",
-      "sha256": "7DF703E9FB42011598723C1B67057FDD631A55889699C549A4C4AD26AF2D1E33"
+      "sha256": "8FE531CED57C6073F841103269CA4E4C4A664953B8A851ABAE88A32DF29F9EBE"
     },
     {
       "bytes": 9502,
@@ -1674,7 +1674,7 @@
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_render_video_preflight_audit.json",
-      "sha256": "5C0C7493267A0CD61489C2D98E66FBA844A3FCDDB86435C6A08684002253FF39"
+      "sha256": "2EF5249F6B839E90773F76A267468D576079145481730CA04DF619C33E845A45"
     },
     {
       "bytes": 6047,

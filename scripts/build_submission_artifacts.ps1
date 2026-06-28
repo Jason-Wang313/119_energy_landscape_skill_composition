@@ -3,7 +3,10 @@ param(
     [switch]$InstallDependencies,
     [switch]$SkipExperiment,
     [switch]$SkipOutreach,
-    [string]$CanonicalPdf = "C:\Users\wangz\Downloads\119.pdf"
+    [string]$CanonicalPdf = "C:\Users\wangz\Downloads\119.pdf",
+    [ValidateRange(1, 3600)][int]$RenderPreflightTimeoutSeconds = 45,
+    [ValidateRange(1, 16)][int]$RenderPreflightMaxEnvs = 4,
+    [ValidateRange(1, 8)][int]$RenderProfileMatrixMaxEnvs = 1
 )
 
 Set-StrictMode -Version Latest
@@ -120,7 +123,7 @@ try {
         Invoke-Native python scripts\self_test_external_runner_backend.py
         Invoke-Native python scripts\audit_external_pilot_smoke.py
         Invoke-Native python scripts\build_external_pilot_smoke_packet.py
-        Invoke-Native python scripts\audit_maniskill_render_video_preflight.py --profile-matrix --profile-matrix-max-envs 1
+        Invoke-Native python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds $RenderPreflightTimeoutSeconds --max-envs $RenderPreflightMaxEnvs --profile-matrix --profile-matrix-max-envs $RenderProfileMatrixMaxEnvs
         Invoke-Native python scripts\audit_maniskill_pilot_runtime_liveness.py
         Invoke-Native python scripts\validate_external_configs.py
         Invoke-Native python scripts\self_test_external_config_evidence.py

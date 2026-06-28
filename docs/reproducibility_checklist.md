@@ -272,3 +272,11 @@ Reproduction command:
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\build_submission_artifacts.ps1
 ```
+
+The full build keeps the render-backed video preflight bounded by default: 45 seconds per probed environment, four primary environments for the main preflight, and one environment per renderer profile in the `cpu/minimal`, `gpu/minimal`, and `sapien_cuda/minimal` matrix. To make those bounds explicit on another machine:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\build_submission_artifacts.ps1 -RenderPreflightTimeoutSeconds 45 -RenderPreflightMaxEnvs 4 -RenderProfileMatrixMaxEnvs 1
+```
+
+Changing these bounds only changes pre-collection diagnostics. It does not make local outputs external evidence or satisfy `external_validation/manifest.json`.

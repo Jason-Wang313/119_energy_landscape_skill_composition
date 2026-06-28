@@ -179,6 +179,18 @@ def main():
     missing_build_steps = [step for step in required_build_steps if step not in build_text]
     if missing_build_steps:
         fail(f"build script missing required steps: {missing_build_steps}")
+    required_build_controls = [
+        "$RenderPreflightTimeoutSeconds = 45",
+        "$RenderPreflightMaxEnvs = 4",
+        "$RenderProfileMatrixMaxEnvs = 1",
+        "--timeout-seconds $RenderPreflightTimeoutSeconds",
+        "--max-envs $RenderPreflightMaxEnvs",
+        "--profile-matrix",
+        "--profile-matrix-max-envs $RenderProfileMatrixMaxEnvs",
+    ]
+    missing_build_controls = [term for term in required_build_controls if term not in build_text]
+    if missing_build_controls:
+        fail(f"build script missing bounded render-preflight controls: {missing_build_controls}")
 
     ci_workflow = ROOT / ".github" / "workflows" / "paper119-validation.yml"
     if not ci_workflow.exists():
@@ -241,6 +253,12 @@ def main():
     missing_ci_terms = [term for term in required_ci_terms if term not in ci_text]
     if missing_ci_terms:
         fail(f"GitHub validation workflow missing required terms: {missing_ci_terms}")
+    required_ci_render_controls = [
+        "python scripts/audit_maniskill_render_video_preflight.py --timeout-seconds 30 --max-envs 1 --profile-matrix --profile-matrix-max-envs 1",
+    ]
+    missing_ci_render_controls = [term for term in required_ci_render_controls if term not in ci_text]
+    if missing_ci_render_controls:
+        fail(f"GitHub validation workflow missing bounded render-preflight controls: {missing_ci_render_controls}")
 
     collection_plan_path = RESULTS / "external_collection_plan.json"
     if not collection_plan_path.exists():
