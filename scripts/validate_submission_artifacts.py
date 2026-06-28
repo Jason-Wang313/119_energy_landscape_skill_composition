@@ -128,6 +128,7 @@ def main():
         "scripts\\audit_external_collection_readiness.py",
         "scripts\\audit_external_pilot_smoke.py",
         "scripts\\build_external_pilot_smoke_packet.py",
+        "scripts\\audit_maniskill_render_video_preflight.py",
         "scripts\\audit_maniskill_pilot_runtime_liveness.py",
         "scripts\\validate_external_configs.py",
         "scripts\\self_test_external_config_evidence.py",
@@ -198,6 +199,7 @@ def main():
         "python scripts/audit_external_collection_readiness.py",
         "python scripts/audit_external_pilot_smoke.py",
         "python scripts/build_external_pilot_smoke_packet.py",
+        "python scripts/audit_maniskill_render_video_preflight.py",
         "python scripts/audit_maniskill_pilot_runtime_liveness.py",
         "python scripts/audit_external_evidence_preflight.py",
         "python scripts/self_test_external_config_evidence.py",
@@ -2066,6 +2068,42 @@ def main():
     ):
         if pilot_smoke_packet_checks.get(required_check) is not True:
             fail(f"external pilot smoke packet audit missing passing check: {required_check}")
+    render_preflight_path = RESULTS / "maniskill_render_video_preflight_audit.json"
+    render_preflight_md_path = RESULTS / "maniskill_render_video_preflight_audit.md"
+    for path in (
+        ROOT / "scripts" / "audit_maniskill_render_video_preflight.py",
+        render_preflight_path,
+        render_preflight_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing ManiSkill render-video preflight artifact: {path}")
+    render_preflight = json.loads(render_preflight_path.read_text(encoding="utf-8"))
+    if render_preflight.get("version") != "maniskill_render_video_preflight_audit_v1":
+        fail("ManiSkill render-video preflight audit version mismatch")
+    if render_preflight.get("passed") is not True:
+        fail("ManiSkill render-video preflight audit did not pass")
+    if render_preflight.get("not_external_evidence") is not True:
+        fail("ManiSkill render-video preflight audit must declare that it is not evidence")
+    if render_preflight.get("strict_external_evidence_ready") is not False:
+        fail("ManiSkill render-video preflight audit must not claim strict external evidence readiness")
+    if not isinstance(render_preflight.get("render_video_ready"), bool):
+        fail("ManiSkill render-video preflight must record a boolean render_video_ready state")
+    if int(render_preflight.get("env_count", 0) or 0) < 1:
+        fail("ManiSkill render-video preflight must probe at least one primary environment")
+    if render_preflight.get("render_video_ready") is False and not render_preflight.get("blocking_missing"):
+        fail("ManiSkill render-video preflight must explain the render-video blocker when not ready")
+    render_preflight_checks = {check.get("name"): check.get("passed") for check in render_preflight.get("checks", [])}
+    for required_check in (
+        "render_preflight_is_non_evidence",
+        "quarantine_paths_are_not_official_evidence",
+        "primary_envs_loaded",
+        "each_probe_has_terminal_status",
+        "render_readiness_recorded_without_overclaim",
+        "blocking_summary_present_when_not_ready",
+        "no_real_manifest_written",
+    ):
+        if render_preflight_checks.get(required_check) is not True:
+            fail(f"ManiSkill render-video preflight audit missing passing check: {required_check}")
     pilot_runtime_path = RESULTS / "maniskill_pilot_runtime_liveness_audit.json"
     pilot_runtime_md_path = RESULTS / "maniskill_pilot_runtime_liveness_audit.md"
     for path in (
@@ -2345,6 +2383,7 @@ def main():
         "maniskill_reference_backend_audit_ready",
         "maniskill_reference_collection_preflight_ready",
         "pilot_smoke_packet_ready",
+        "maniskill_render_video_preflight_recorded",
         "method_implementation_packet_ready",
         "preflight_operator_actions_present",
         "route_independent_of_haonan",
@@ -2416,6 +2455,19 @@ def main():
         fail("external operator packet fidelity draft must expose operator signoff item count")
     if "build_external_fidelity_acceptance_draft.py" not in str(operator_draft.get("build_command", "")):
         fail("external operator packet fidelity draft must include rebuild command")
+    operator_render = operator_packet.get("render_video_preflight", {}) or {}
+    if operator_render.get("not_external_evidence") is not True:
+        fail("external operator packet render-video preflight must be marked non-evidence")
+    if not isinstance(operator_render.get("render_video_ready"), bool):
+        fail("external operator packet render-video preflight must report render_video_ready")
+    if operator_render.get("strict_external_evidence_ready") is not False:
+        fail("external operator packet render-video preflight must preserve strict evidence false")
+    if int(operator_render.get("env_count", 0) or 0) < 1:
+        fail("external operator packet render-video preflight must expose probed environment count")
+    if "maniskill_render_video_preflight_audit.json" not in str(operator_render.get("audit_path", "")):
+        fail("external operator packet render-video preflight must point to the audit JSON")
+    if "audit_maniskill_render_video_preflight.py" not in str(operator_render.get("build_command", "")):
+        fail("external operator packet render-video preflight must include rebuild command")
     operator_actions = operator_packet.get("operator_actions", []) or []
     if len(operator_actions) < 10:
         fail("external operator packet has too few operator actions")
@@ -2454,6 +2506,12 @@ def main():
     metadata_commands = "\n".join(metadata_actions[0].get("commands", []) or [])
     if "probe_maniskill_fidelity_metadata.py" not in metadata_commands or "probe_maniskill_fidelity_metadata.py --strict" not in metadata_commands:
         fail("external operator packet fidelity metadata action must include non-strict and strict probe commands")
+    render_preflight_actions = [action for action in operator_actions if action.get("id") == "maniskill_render_video_preflight"]
+    if not render_preflight_actions:
+        fail("external operator packet missing maniskill_render_video_preflight action")
+    render_preflight_commands = "\n".join(render_preflight_actions[0].get("commands", []) or [])
+    if "audit_maniskill_render_video_preflight.py" not in render_preflight_commands:
+        fail("external operator packet render preflight action must expose render-video preflight command")
     backend_integration_actions = [action for action in operator_actions if action.get("id") == "backend_integration_packet"]
     if not backend_integration_actions:
         fail("external operator packet missing backend_integration_packet action")
@@ -2574,6 +2632,7 @@ def main():
         "config_manifest_packet_included",
         "rollout_evidence_packet_included",
         "pilot_smoke_packet_included",
+        "maniskill_render_video_preflight_included",
         "maniskill_pilot_runtime_liveness_included",
         "method_implementation_packet_included",
         "operator_actions_cover_evidence_collection",
@@ -2929,9 +2988,9 @@ def main():
     if r"\hypersetup{hidelinks}" not in tex:
         fail("hidden citation/link configuration missing")
     framing_terms = [
-        "local world/action-modeling problem",
-        "compact predictive interface between a skill library and a planner",
-        "world/action model in this limited sense",
+        "local instance of world/action modeling",
+        "compact interface that predicts a skill transition's physical consequence",
+        "The term world/action model is used in this limited sense",
         "action-conditioned physical interface between a skill library and a planner",
         "world/action-model view at a deliberately local scale",
         "prediction-action-update loop",

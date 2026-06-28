@@ -370,6 +370,9 @@ def make_manuscript(summary):
     a(r"\usepackage{enumitem}")
     a(r"\hypersetup{hidelinks}")
     a(r"\setlist[itemize]{leftmargin=1.2em,itemsep=0.15em,topsep=0.2em}")
+    a(r"\setlength{\textfloatsep}{0.7em plus 0.1em minus 0.2em}")
+    a(r"\setlength{\floatsep}{0.6em plus 0.1em minus 0.2em}")
+    a(r"\setlength{\intextsep}{0.7em plus 0.1em minus 0.2em}")
     a(r"\raggedbottom")
     a(r"\title{Local World/Action Models\\for Robot Skill Seams}")
     a(r"\author{Anonymous Authors}")
@@ -379,7 +382,7 @@ def make_manuscript(summary):
     a(
         "A skill library becomes reliably composable when the planner can predict what one skill makes possible for the next. "
         "A terminal state may fall outside the next skill's attraction basin, cross a high-energy barrier, or enter a contact mode where descent is no longer smooth. "
-        "We study that handoff as a local world/action-modeling problem: a compact predictive interface between a skill library and a planner. The local world is the seam state; the action is transition, repair, probe, abstention, or alternate-edge choice. Given terminal evidence, next-skill basin/descent estimates, and a candidate transition, the interface predicts whether the composition will fail, diagnoses why, chooses accept, repair, probe, abstain, or another transition, and records planner-edge evidence for later plans. "
+        "We treat that handoff as a local instance of world/action modeling: a compact interface that predicts a skill transition's physical consequence before the planner commits. Here the modeled state is the seam, and the actions are transition, repair, probe, abstention, and alternate-edge choice. Given terminal evidence, next-skill basin/descent estimates, and a candidate transition, the interface predicts whether the composition will fail, diagnoses why, chooses accept, repair, probe, abstain, or another transition, and records planner-edge evidence for later plans. "
         "A barrier-certified energy composer implements this interface, acting on a skill edge only when basin overlap, barrier height, descent continuity, repair cost, and fixed-risk calibration are jointly favorable. "
         f"In a frozen local rollout suite with 12 methods, 6 task families, 8 seam regimes, and 10 paired seeds, the composer reaches hard-slice success {fmt(metrics['hard_success_proposed'])} and utility {fmt(metrics['hard_utility_proposed'])}, compared with {fmt(metrics['hard_success_strongest'])} and {fmt(metrics['hard_utility_strongest'])} for the strongest non-oracle predecessor. "
         "It reduces seam failure, barrier violation, damage, calibration error, and realized seam breach while improving basin alignment and descent continuity. "
@@ -403,7 +406,7 @@ def make_manuscript(summary):
         "The broader motivation is to understand how a robot represents the physical consequences of action, notices when that representation is incomplete, and adapts future planning from the outcome. We use the world/action-model view at a deliberately local scale: the model is not a whole robot simulator, and the prediction-action-update loop is limited to the handoff. That restraint is intentional. Rather than renaming every controller check as a world model, the paper studies the small interface where a planner asks, before committing to the next skill, what this transition is likely to do, why it might fail, which response is warranted, and what should be remembered afterward."
     )
     a(
-        "Concretely, the contribution is a seam-level action model: predict whether a transition will fail, diagnose the likely failure mode, choose accept, repair, probe, abstain, or an alternate transition, and write the observed outcome back to planner-edge memory so future planning queries do not treat every graph edge as equally safe. The energy composer is one implementation of that interface; the paper's claim is the smaller and testable one that skill seams need a predictive physical action model, and that energy landscapes are one way to implement and falsify it."
+        "Concretely, the contribution is deliberately local: a seam-level action model that predicts whether a transition will fail, diagnoses the likely failure mode, chooses accept, repair, probe, abstain, or an alternate transition, and writes the observed outcome back to planner-edge memory so future planning queries do not treat every graph edge as equally safe. The energy composer is one implementation of that interface; the paper's claim is the smaller and testable one that skill seams need a predictive physical action model, and that energy landscapes are one way to implement and falsify it."
     )
 
     a(r"\section{Problem Setup}")
@@ -415,7 +418,7 @@ def make_manuscript(summary):
     )
     a(
         r"Operationally, the seam model maps a candidate transition to a consequence tuple: predicted basin compatibility, barrier exposure, descent continuity, repair cost, calibrated risk, and a failure label such as basin mismatch, high barrier, contact-mode discontinuity, model uncertainty, or missing bridge skill. "
-        r"We use world/action model in this limited sense: the output is not a general simulator and does not try to predict every future observation. The local world is the physical seam state around a handoff; the action is the proposed skill transition, repair, probe, abstention, or alternate edge. The model predicts how that action changes the next skill's feasible start set, turns the prediction into a decision, and records the result as an edge belief for future plans. An abstention or repair recommendation is therefore not a bookkeeping flag; it is a physical statement about what the current skill library cannot yet compose reliably."
+        r"The term world/action model is used in this limited sense: the output is not a general simulator and does not try to predict every future observation. The local world is the physical seam state around a handoff; the action is the proposed skill transition, repair, probe, abstention, or alternate edge. The model predicts how that action changes the next skill's feasible start set, turns the prediction into a decision, and records the result as an edge belief for future plans. An abstention or repair recommendation is therefore not a bookkeeping flag; it is a physical statement about what the current skill library cannot yet compose reliably."
     )
     a(
         r"More explicitly, the interface can be read as "
@@ -577,7 +580,7 @@ def make_manuscript(summary):
 
     a(r"\section{Discussion}")
     a(
-        "The interpretation is intentionally modest. A skill seam is a small place where a robot representation of world and action has to become predictive: the same transition can be safe, repairable, uncertain, or impossible depending on terminal state, basin geometry, contact mode, and accumulated seam evidence. This paper makes that representation explicit enough for planning without claiming to solve full robot world modeling. Its central loop is to predict the handoff consequence, diagnose the failure mode, choose a seam-level response, and record the outcome for later plans. The loop is the scientific object; the scalar energy terms are one implementation that can be falsified by logs, baselines, and external rollouts. If future external validation succeeds, the most important claim would not be that this particular energy score is universal, but that embodied agents benefit from local world/action models at the skill seams where their plans usually become brittle."
+        "The interpretation is intentionally modest. A skill seam is a small place where a robot representation has to become predictive about action consequences: the same transition can be safe, repairable, uncertain, or impossible depending on terminal state, basin geometry, contact mode, and accumulated seam evidence. This paper makes that representation explicit enough for planning without claiming to solve full robot world modeling. Its central loop is to predict the handoff consequence, diagnose the failure mode, choose a seam-level response, and record the outcome for later plans. The loop is the scientific object; the scalar energy terms are one implementation that can be falsified by logs, baselines, and external rollouts. If future external validation succeeds, the most important claim would not be that this particular energy score is universal, but that embodied agents benefit from local world/action models at the skill seams where their plans usually become brittle."
     )
 
     a(r"\section{Scope And Validation}")

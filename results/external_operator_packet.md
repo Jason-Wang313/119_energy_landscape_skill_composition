@@ -78,6 +78,24 @@ Probe rebuild command:
 python scripts\probe_maniskill_fidelity_metadata.py
 ```
 
+## ManiSkill Render-Video Preflight
+
+This preflight is not evidence and does not satisfy fidelity acceptance. It checks whether the selected ManiSkill/SAPIEN runtime can export render-backed RGB MP4 files before official collection, separating evidence-video readiness from diagnostic fallback videos.
+
+- Audit JSON: `results/maniskill_render_video_preflight_audit.json`
+- Audit notes: `results/maniskill_render_video_preflight_audit.md`
+- Render video ready: `false`
+- Strict external evidence ready: `false`
+- Environments probed: `4`
+- Render-ready environments: `0`
+- Blocking missing: `['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory']`
+
+Render preflight command:
+
+```powershell
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4
+```
+
 ## Commands
 
 Materialize real configs after platform selection:
@@ -133,6 +151,7 @@ Post-collection strict gates:
 - `fidelity_acceptance_draft`: Generate the tracked ManiSkill fidelity acceptance draft
 - `pilot_smoke_packet`: Run a quarantined first-panel backend smoke test
 - `maniskill_pilot_runtime_liveness`: Audit bounded ManiSkill pilot runtime liveness
+- `maniskill_render_video_preflight`: Audit ManiSkill render-backed evidence-video export
 - `fidelity_provenance_packet`: Use the fidelity provenance packet as the platform acceptance checklist
 - `alias_unseal`: Unseal method aliases only after configs, implementations, and run plan are frozen
 - `specific_run_id`: Use a specific immutable external run id
@@ -151,6 +170,7 @@ Post-collection strict gates:
 - `pass` `maniskill_reference_preflight_reaches_only_fidelity_gate`: blocking=["fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
 - `pass` `fidelity_acceptance_draft_ready_but_fail_closed`: draft_ready=True, remaining_operator_inputs=10
 - `pass` `fidelity_metadata_probe_ready_but_not_evidence`: strict_metadata_ready=True, primary_metadata_missing=[]
+- `pass` `render_video_preflight_recorded_but_not_evidence`: render_video_ready=False, envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory']
 - `pass` `operator_actions_cover_start_to_finish`: missing=[]
 - `pass` `operator_action_titles_present`: missing_titles=[]
 - `pass` `config_materializer_is_guarded`: write_enabled=False, task_count=4

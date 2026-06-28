@@ -92,8 +92,8 @@
     }
   ],
   "density_summary": {
-    "maximum": 0.17754883771690494,
-    "mean": 0.09863640001455125,
+    "maximum": 0.17718214558550693,
+    "mean": 0.09872108843537414,
     "minimum": 0.018057404780093857,
     "sparse_pages": [
       16,
@@ -113,9 +113,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.14455091127360034,
+      "foreground_fraction": 0.14620539124740806,
       "height": 770,
-      "luminance_std": 0.1671107507580691,
+      "luminance_std": 0.16773201625002937,
       "page": 1,
       "width": 595
     },
@@ -127,9 +127,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.17754883771690494,
+      "foreground_fraction": 0.16980683182363854,
       "height": 770,
-      "luminance_std": 0.17988997344692711,
+      "luminance_std": 0.17587360898014714,
       "page": 2,
       "width": 595
     },
@@ -141,9 +141,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.16907999563461748,
+      "foreground_fraction": 0.16392229619120374,
       "height": 770,
-      "luminance_std": 0.1521760752415197,
+      "luminance_std": 0.1494385326056307,
       "page": 3,
       "width": 595
     },
@@ -155,9 +155,9 @@
         "right": 105,
         "top": 27
       },
-      "foreground_fraction": 0.1094576012223071,
+      "foreground_fraction": 0.10803448652188148,
       "height": 770,
-      "luminance_std": 0.16944560759338603,
+      "luminance_std": 0.16855455474237271,
       "page": 4,
       "width": 595
     },
@@ -169,9 +169,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.12496343992142311,
+      "foreground_fraction": 0.1406286150823966,
       "height": 770,
-      "luminance_std": 0.14673712160365365,
+      "luminance_std": 0.1556501858338069,
       "page": 5,
       "width": 595
     },
@@ -183,9 +183,9 @@
         "right": 105,
         "top": 27
       },
-      "foreground_fraction": 0.0852362763287133,
+      "foreground_fraction": 0.0918716577540107,
       "height": 770,
-      "luminance_std": 0.1349640005572007,
+      "luminance_std": 0.13946882702603522,
       "page": 6,
       "width": 595
     },
@@ -197,24 +197,10 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.12322820037105751,
+      "foreground_fraction": 0.12129651860744298,
       "height": 770,
-      "luminance_std": 0.17009634075656144,
+      "luminance_std": 0.16941772398968422,
       "page": 7,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 31,
-        "left": 71,
-        "minimum": 27,
-        "right": 105,
-        "top": 27
-      },
-      "foreground_fraction": 0.1289097457164684,
-      "height": 770,
-      "luminance_std": 0.11787367868093322,
-      "page": 8,
       "width": 595
     },
     {
@@ -225,9 +211,23 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.07630470369966168,
+      "foreground_fraction": 0.13701407835861618,
       "height": 770,
-      "luminance_std": 0.10375561954894034,
+      "luminance_std": 0.12438698677612073,
+      "page": 8,
+      "width": 595
+    },
+    {
+      "edge_margins_px": {
+        "bottom": 31,
+        "left": 71,
+        "minimum": 27,
+        "right": 105,
+        "top": 27
+      },
+      "foreground_fraction": 0.06296409472880062,
+      "height": 770,
+      "luminance_std": 0.08986739361656974,
       "page": 9,
       "width": 595
     },
@@ -253,9 +253,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.17710575139146567,
+      "foreground_fraction": 0.17718214558550693,
       "height": 770,
-      "luminance_std": 0.1802942582550824,
+      "luminance_std": 0.18025598502460333,
       "page": 11,
       "width": 595
     },

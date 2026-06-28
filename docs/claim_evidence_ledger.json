@@ -146,6 +146,11 @@
       "evidence": ["scripts/audit_maniskill_pilot_runtime_liveness.py", "results/maniskill_pilot_runtime_liveness_audit.json", "results/maniskill_pilot_runtime_liveness_audit.md", "external_validation/README.md"]
     },
     {
+      "name": "maniskill_render_video_preflight_claim",
+      "claim": "The repository provides a non-evidence ManiSkill render-video preflight that probes whether the tracked public-simulator runtime can export render-backed RGB MP4 files before official collection, records the current renderer blocker, and keeps strict external evidence false.",
+      "evidence": ["scripts/audit_maniskill_render_video_preflight.py", "results/maniskill_render_video_preflight_audit.json", "results/maniskill_render_video_preflight_audit.md", "results/external_acquisition_packet.json", "results/external_operator_packet.json"]
+    },
+    {
       "name": "external_method_implementation_packet_claim",
       "claim": "The repository provides a non-evidence method implementation packet that turns the missing independent non-oracle baseline layer into per-method work orders while strict adapter evidence remains missing.",
       "evidence": ["scripts/build_external_method_implementation_packet.py", "external_validation/method_implementation_packet.json", "external_validation/method_implementation_packet.md", "external_validation/method_implementation_work_orders.csv", "results/external_method_implementation_audit.json", "results/external_method_implementation_audit.md", "results/external_baseline_contract_audit.json", "results/external_adapter_contract_evidence_audit.json"]
@@ -343,6 +348,7 @@
     "results/external_config_manifest_audit.md",
     "results/external_rollout_evidence_audit.md",
     "results/external_method_implementation_audit.md",
+    "results/maniskill_render_video_preflight_audit.md",
     "results/maniskill_pilot_runtime_liveness_audit.md",
     "results/external_operator_packet.md",
     "results/external_operator_handoff_bundle.md",

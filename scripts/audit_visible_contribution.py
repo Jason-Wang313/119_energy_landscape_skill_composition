@@ -57,6 +57,7 @@ def main() -> int:
     runner_probe = read_json(RESULTS / "external_runner_backend_self_test.json")
     pilot_smoke = read_json(RESULTS / "external_pilot_smoke_packet_audit.json")
     pilot_runtime = read_json(RESULTS / "maniskill_pilot_runtime_liveness_audit.json")
+    render_preflight = read_json(RESULTS / "maniskill_render_video_preflight_audit.json")
     config_manifest = read_json(RESULTS / "external_config_manifest_audit.json")
     rollout_evidence = read_json(RESULTS / "external_rollout_evidence_audit.json")
     method_implementation = read_json(RESULTS / "external_method_implementation_audit.json")
@@ -381,6 +382,21 @@ def main() -> int:
             f"failure_summary={pilot_runtime.get('failure_summary')!r}"
         ),
     )
+    add_check(
+        checks,
+        "maniskill_render_video_preflight_visible",
+        render_preflight.get("version") == "maniskill_render_video_preflight_audit_v1"
+        and render_preflight.get("passed") is True
+        and render_preflight.get("not_external_evidence") is True
+        and render_preflight.get("strict_external_evidence_ready") is False
+        and int(render_preflight.get("env_count", 0) or 0) >= 1
+        and isinstance(render_preflight.get("render_video_ready"), bool),
+        (
+            f"render_video_ready={render_preflight.get('render_video_ready')!r}, "
+            f"envs={render_preflight.get('env_count')!r}, "
+            f"blocking={render_preflight.get('blocking_missing')!r}"
+        ),
+    )
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", []) or []}
     config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", []) or []}
     rollout_evidence_checks = {check.get("name"): check.get("passed") for check in rollout_evidence.get("checks", []) or []}
@@ -499,6 +515,7 @@ def main() -> int:
             "external_runner_backend_probe_claim",
             "external_pilot_smoke_packet_claim",
             "maniskill_pilot_runtime_liveness_claim",
+            "maniskill_render_video_preflight_claim",
             "external_config_manifest_packet_claim",
             "external_rollout_evidence_packet_claim",
             "external_method_implementation_packet_claim",
@@ -507,7 +524,7 @@ def main() -> int:
             "external_config_materialization_claim",
             "reviewer_response_packet_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'local_planner_edge_policy_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
+        f"missing={sorted({'local_planner_edge_policy_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -530,6 +547,7 @@ def main() -> int:
             "MP4 writer path",
             "External runner backend probe self-test",
             "External pilot smoke packet",
+            "ManiSkill render-video preflight",
             "ManiSkill pilot runtime liveness audit",
             "External config manifest packet",
             "External rollout evidence packet",
@@ -559,6 +577,7 @@ def main() -> int:
             "MP4 writer path",
             "External runner backend probe self-test",
             "External pilot smoke packet",
+            "ManiSkill render-video preflight",
             "ManiSkill pilot runtime liveness audit",
             "External config manifest packet",
             "External rollout evidence packet",
@@ -589,6 +608,7 @@ def main() -> int:
             "MP4 writer path",
             "external runner backend probe self-test",
             "external pilot smoke packet",
+            "ManiSkill render-video preflight",
             "ManiSkill pilot runtime liveness audit",
             "external config manifest packet",
             "external rollout evidence packet",
@@ -619,6 +639,7 @@ def main() -> int:
             "MP4 writer path",
             "External runner backend probe self-test",
             "External pilot smoke packet",
+            "ManiSkill render-video preflight",
             "ManiSkill pilot runtime liveness audit",
             "External config manifest packet",
             "External rollout evidence packet",
@@ -650,6 +671,7 @@ def main() -> int:
             "scripts/self_test_external_runner_backend.py",
             "scripts/build_external_pilot_smoke_packet.py",
             "scripts/audit_external_pilot_smoke.py",
+            "scripts/audit_maniskill_render_video_preflight.py",
             "scripts/audit_maniskill_pilot_runtime_liveness.py",
             "scripts/build_external_config_manifest_packet.py",
             "scripts/build_external_rollout_evidence_packet.py",
@@ -682,6 +704,7 @@ def main() -> int:
             "MP4 writer path",
             "external runner backend probe self-test",
             "external pilot smoke packet",
+            "ManiSkill render-video preflight",
             "ManiSkill pilot runtime liveness audit",
             "external config manifest packet",
             "external rollout evidence packet",
@@ -701,6 +724,7 @@ def main() -> int:
             "do not frame Haonan as responsible for supplying the missing proof",
             "independent validation protocol/operator packet",
             "reviewer response packet",
+            "ManiSkill render-video preflight",
         ],
         "reviewer": [
             "Not evidence: `true`.",
@@ -732,7 +756,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the manifest assembly checklist, the no-go operator packet, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill render-video preflight, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the manifest assembly checklist, the no-go operator packet, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

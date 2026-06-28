@@ -70,6 +70,10 @@ def build_payload() -> dict[str, Any]:
         RESULTS / "maniskill_fidelity_metadata_probe.json",
         "maniskill_fidelity_metadata_probe_v1",
     )
+    render_preflight = require_payload(
+        RESULTS / "maniskill_render_video_preflight_audit.json",
+        "maniskill_render_video_preflight_audit_v1",
+    )
     materialization = require_payload(
         RESULTS / "external_config_materialization_plan.json",
         "external_config_materialization_plan_v1",
@@ -102,6 +106,7 @@ def build_payload() -> dict[str, Any]:
         "method_implementation_packet",
         "real_method_implementations",
         "pilot_smoke_packet",
+        "maniskill_render_video_preflight",
         "maniskill_pilot_runtime_liveness",
         "run_collection",
         "manifest_and_release",
@@ -181,6 +186,23 @@ def build_payload() -> dict[str, Any]:
         (
             f"strict_metadata_ready={fidelity_metadata.get('strict_metadata_ready')!r}, "
             f"primary_metadata_missing={fidelity_metadata.get('primary_metadata_missing')!r}"
+        ),
+    )
+    render_action = actions.get("maniskill_render_video_preflight", {})
+    render_commands = "\n".join(render_action.get("commands", []) or [])
+    add_check(
+        checks,
+        "render_video_preflight_recorded_but_not_evidence",
+        render_preflight.get("passed") is True
+        and render_preflight.get("not_external_evidence") is True
+        and render_preflight.get("strict_external_evidence_ready") is False
+        and int(render_preflight.get("env_count", 0) or 0) >= 1
+        and isinstance(render_preflight.get("render_video_ready"), bool)
+        and "audit_maniskill_render_video_preflight.py" in render_commands,
+        (
+            f"render_video_ready={render_preflight.get('render_video_ready')!r}, "
+            f"envs={render_preflight.get('env_count')!r}, "
+            f"blocking={render_preflight.get('blocking_missing')!r}"
         ),
     )
     add_check(
@@ -329,6 +351,17 @@ def build_payload() -> dict[str, Any]:
             "primary_timing_summary": fidelity_metadata.get("primary_timing_summary", {}),
             "build_command": "python scripts\\probe_maniskill_fidelity_metadata.py",
         },
+        "render_video_preflight": {
+            "not_external_evidence": True,
+            "render_video_ready": render_preflight.get("render_video_ready") is True,
+            "strict_external_evidence_ready": render_preflight.get("strict_external_evidence_ready") is True,
+            "env_count": int(render_preflight.get("env_count", 0) or 0),
+            "render_ready_env_count": int(render_preflight.get("render_ready_env_count", 0) or 0),
+            "blocking_missing": list(render_preflight.get("blocking_missing", []) or []),
+            "audit_path": "results/maniskill_render_video_preflight_audit.json",
+            "audit_md_path": "results/maniskill_render_video_preflight_audit.md",
+            "build_command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4",
+        },
         "pre_collection_gate_command": (
             "python scripts\\audit_external_collection_readiness.py --strict "
             "--backend-module <module_or_path> --task-config-dir external_validation\\configs "
@@ -346,6 +379,7 @@ def build_payload() -> dict[str, Any]:
             "results/maniskill_task_binding_probe.json",
             "results/maniskill_env_smoke_probe.json",
             "results/maniskill_fidelity_metadata_probe.json",
+            "results/maniskill_render_video_preflight_audit.json",
             "results/external_backend_contract_audit.json",
             "results/maniskill_backend_readiness_audit.json",
             "results/maniskill_reference_collection_preflight_audit.json",
@@ -463,6 +497,30 @@ def write_md(payload: dict[str, Any]) -> None:
             "",
             "```powershell",
             metadata["build_command"],
+            "```",
+        ]
+    )
+
+    render = payload["render_video_preflight"]
+    lines.extend(
+        [
+            "",
+            "## ManiSkill Render-Video Preflight",
+            "",
+            "This preflight is not evidence and does not satisfy fidelity acceptance. It checks whether the selected ManiSkill/SAPIEN runtime can export render-backed RGB MP4 files before official collection, separating evidence-video readiness from diagnostic fallback videos.",
+            "",
+            f"- Audit JSON: `{render['audit_path']}`",
+            f"- Audit notes: `{render['audit_md_path']}`",
+            f"- Render video ready: `{str(render['render_video_ready']).lower()}`",
+            f"- Strict external evidence ready: `{str(render['strict_external_evidence_ready']).lower()}`",
+            f"- Environments probed: `{render['env_count']}`",
+            f"- Render-ready environments: `{render['render_ready_env_count']}`",
+            f"- Blocking missing: `{render['blocking_missing']}`",
+            "",
+            "Render preflight command:",
+            "",
+            "```powershell",
+            render["build_command"],
             "```",
         ]
     )

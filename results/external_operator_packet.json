@@ -28,6 +28,11 @@
       "passed": true
     },
     {
+      "detail": "render_video_ready=False, envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory']",
+      "name": "render_video_preflight_recorded_but_not_evidence",
+      "passed": true
+    },
+    {
       "detail": "missing=[]",
       "name": "operator_actions_cover_start_to_finish",
       "passed": true
@@ -413,6 +418,22 @@
     },
     {
       "artifacts": [
+        "scripts/audit_maniskill_render_video_preflight.py",
+        "results/maniskill_render_video_preflight_audit.json",
+        "results/maniskill_render_video_preflight_audit.md"
+      ],
+      "closes": [
+        "pre-collection render-backed MP4 readiness for the tracked ManiSkill route; not evidence"
+      ],
+      "commands": [
+        "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4"
+      ],
+      "id": "maniskill_render_video_preflight",
+      "operator_input": "selected ManiSkill/SAPIEN runtime machine with renderer access before full external collection",
+      "title": "Audit ManiSkill render-backed evidence-video export"
+    },
+    {
+      "artifacts": [
         "external_validation/fidelity_provenance_packet.md",
         "external_validation/fidelity_provenance_work_orders.csv",
         "results/external_fidelity_provenance_audit.json"
@@ -597,6 +618,19 @@
     "run_id_specific: run_id='paper119_external_validation_run'"
   ],
   "pre_collection_gate_command": "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+  "render_video_preflight": {
+    "audit_md_path": "results/maniskill_render_video_preflight_audit.md",
+    "audit_path": "results/maniskill_render_video_preflight_audit.json",
+    "blocking_missing": [
+      "render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory"
+    ],
+    "build_command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4",
+    "env_count": 4,
+    "not_external_evidence": true,
+    "render_ready_env_count": 0,
+    "render_video_ready": false,
+    "strict_external_evidence_ready": false
+  },
   "source_reports": [
     "results/external_collection_readiness_audit.json",
     "results/external_acquisition_packet.json",
@@ -604,6 +638,7 @@
     "results/maniskill_task_binding_probe.json",
     "results/maniskill_env_smoke_probe.json",
     "results/maniskill_fidelity_metadata_probe.json",
+    "results/maniskill_render_video_preflight_audit.json",
     "results/external_backend_contract_audit.json",
     "results/maniskill_backend_readiness_audit.json",
     "results/maniskill_reference_collection_preflight_audit.json",

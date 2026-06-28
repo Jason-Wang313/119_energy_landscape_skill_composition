@@ -145,6 +145,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_rollout_evidence_packet.py",
         SCRIPTS / "audit_external_pilot_smoke.py",
         SCRIPTS / "build_external_pilot_smoke_packet.py",
+        SCRIPTS / "audit_maniskill_render_video_preflight.py",
         SCRIPTS / "audit_maniskill_pilot_runtime_liveness.py",
         SCRIPTS / "build_external_method_implementation_packet.py",
         SCRIPTS / "materialize_external_configs.py",
@@ -196,6 +197,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_pilot_smoke_audit.md",
         RESULTS / "external_pilot_smoke_packet_audit.json",
         RESULTS / "external_pilot_smoke_packet_audit.md",
+        RESULTS / "maniskill_render_video_preflight_audit.json",
+        RESULTS / "maniskill_render_video_preflight_audit.md",
         RESULTS / "maniskill_pilot_runtime_liveness_audit.json",
         RESULTS / "maniskill_pilot_runtime_liveness_audit.md",
         RESULTS / "external_method_implementation_audit.json",
@@ -306,6 +309,7 @@ def build_payload() -> dict[str, Any]:
     rollout_evidence = require_payload(RESULTS / "external_rollout_evidence_audit.json", "external_rollout_evidence_audit_v1")
     method_implementation = require_payload(RESULTS / "external_method_implementation_audit.json", "external_method_implementation_audit_v1")
     pilot_smoke = require_payload(RESULTS / "external_pilot_smoke_packet_audit.json", "external_pilot_smoke_packet_audit_v1")
+    render_preflight = require_payload(RESULTS / "maniskill_render_video_preflight_audit.json", "maniskill_render_video_preflight_audit_v1")
     pilot_runtime = require_payload(RESULTS / "maniskill_pilot_runtime_liveness_audit.json", "maniskill_pilot_runtime_liveness_audit_v1")
 
     files = build_file_manifest()
@@ -350,6 +354,7 @@ def build_payload() -> dict[str, Any]:
         and onboarding.get("strict_evidence_ready") is False
         and maniskill_backend.get("official_collection_ready") is False
         and maniskill_backend.get("strict_external_evidence_ready") is False
+        and render_preflight.get("strict_external_evidence_ready") is False
         and preflight.get("evidence_ready") is False
         and release.get("release_package_ready") is False
         and pairing.get("pairing_ready") is False,
@@ -651,6 +656,27 @@ def build_payload() -> dict[str, Any]:
             f"strict_evidence_ready={pilot_smoke.get('strict_evidence_ready')!r}"
         ),
     )
+    render_preflight_checks = {check.get("name"): check.get("passed") for check in render_preflight.get("checks", []) or []}
+    add_check(
+        checks,
+        "maniskill_render_video_preflight_included",
+        render_preflight.get("passed") is True
+        and render_preflight.get("not_external_evidence") is True
+        and render_preflight.get("strict_external_evidence_ready") is False
+        and isinstance(render_preflight.get("render_video_ready"), bool)
+        and int(render_preflight.get("env_count", 0) or 0) >= 1
+        and render_preflight_checks.get("render_preflight_is_non_evidence") is True
+        and render_preflight_checks.get("quarantine_paths_are_not_official_evidence") is True
+        and render_preflight_checks.get("render_readiness_recorded_without_overclaim") is True
+        and "scripts/audit_maniskill_render_video_preflight.py" in paths
+        and "results/maniskill_render_video_preflight_audit.json" in paths
+        and "results/maniskill_render_video_preflight_audit.md" in paths,
+        (
+            f"render_video_ready={render_preflight.get('render_video_ready')!r}, "
+            f"env_count={render_preflight.get('env_count')!r}, "
+            f"blocking={render_preflight.get('blocking_missing')!r}"
+        ),
+    )
     pilot_runtime_checks = {check.get("name"): check.get("passed") for check in pilot_runtime.get("checks", []) or []}
     pilot_runtime_records = int(pilot_runtime.get("records_observed", 0) or 0)
     pilot_runtime_videos = int(pilot_runtime.get("videos_written", 0) or 0)
@@ -739,6 +765,7 @@ def build_payload() -> dict[str, Any]:
             "platform_fidelity",
             "method_implementation_packet",
             "pilot_smoke_packet",
+            "maniskill_render_video_preflight",
             "maniskill_pilot_runtime_liveness",
             "real_method_implementations",
             "run_collection",
@@ -746,7 +773,7 @@ def build_payload() -> dict[str, Any]:
             "strict_rollout_recompute",
             "final_strict_gate",
         }.issubset(action_ids),
-        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'maniskill_pilot_runtime_liveness', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
+        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'maniskill_render_video_preflight', 'maniskill_pilot_runtime_liveness', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
     )
     add_check(
         checks,
@@ -799,6 +826,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_rollout_evidence_audit.json",
             "results/external_pilot_smoke_packet_audit.json",
             "results/external_pilot_smoke_audit.json",
+            "results/maniskill_render_video_preflight_audit.json",
             "results/maniskill_pilot_runtime_liveness_audit.json",
             "results/external_method_implementation_audit.json",
             "results/external_evidence_preflight.json",

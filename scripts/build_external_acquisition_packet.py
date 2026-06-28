@@ -29,6 +29,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "backend_module",
         "platform_fidelity",
         "pilot_smoke_packet",
+        "maniskill_render_video_preflight",
         "maniskill_pilot_runtime_liveness",
         "run_collection",
         "manifest_and_release",
@@ -278,6 +279,19 @@ ACTION_CATALOG = {
         ],
         "closes": ["pre-collection runtime liveness check for the tracked ManiSkill route; not evidence"],
     },
+    "maniskill_render_video_preflight": {
+        "title": "Audit ManiSkill render-backed evidence-video export",
+        "operator_input": "selected ManiSkill/SAPIEN runtime machine with renderer access before full external collection",
+        "artifacts": [
+            "scripts/audit_maniskill_render_video_preflight.py",
+            "results/maniskill_render_video_preflight_audit.json",
+            "results/maniskill_render_video_preflight_audit.md",
+        ],
+        "commands": [
+            "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4",
+        ],
+        "closes": ["pre-collection render-backed MP4 readiness for the tracked ManiSkill route; not evidence"],
+    },
     "fidelity_provenance_packet": {
         "title": "Use the fidelity provenance packet as the platform acceptance checklist",
         "operator_input": "complete platform physics/contact, paired-reset replay, operator independence, calibration basis, code commit, skill-library hash, and acceptance gates",
@@ -475,6 +489,7 @@ def main() -> int:
     rollout_evidence_path = RESULTS / "external_rollout_evidence_audit.json"
     method_packet_path = RESULTS / "external_method_implementation_audit.json"
     pilot_smoke_path = RESULTS / "external_pilot_smoke_packet_audit.json"
+    render_preflight_path = RESULTS / "maniskill_render_video_preflight_audit.json"
     pilot_runtime_path = RESULTS / "maniskill_pilot_runtime_liveness_audit.json"
 
     gap = require_json(gap_path)
@@ -497,6 +512,7 @@ def main() -> int:
     rollout_evidence = require_json(rollout_evidence_path)
     method_packet = require_json(method_packet_path)
     pilot_smoke = require_json(pilot_smoke_path)
+    render_preflight = require_json(render_preflight_path)
     pilot_runtime = require_json(pilot_runtime_path)
 
     missing_requirements = missing_requirements_from_gap(gap)
@@ -532,6 +548,7 @@ def main() -> int:
                 rollout_evidence_path,
                 method_packet_path,
                 pilot_smoke_path,
+                render_preflight_path,
                 pilot_runtime_path,
             ]
         ),
@@ -556,6 +573,7 @@ def main() -> int:
                 rollout_evidence_path,
                 method_packet_path,
                 pilot_smoke_path,
+                render_preflight_path,
                 pilot_runtime_path,
             ]
         ),
@@ -744,6 +762,26 @@ def main() -> int:
         (
             f"pilot_smoke_packet_ready={pilot_smoke.get('pilot_smoke_packet_ready')!r}, "
             f"strict_evidence_ready={pilot_smoke.get('strict_evidence_ready')!r}"
+        ),
+    )
+    render_preflight_checks = {check.get("name"): check.get("passed") for check in render_preflight.get("checks", []) or []}
+    add_check(
+        checks,
+        "maniskill_render_video_preflight_recorded",
+        render_preflight.get("version") == "maniskill_render_video_preflight_audit_v1"
+        and render_preflight.get("passed") is True
+        and render_preflight.get("not_external_evidence") is True
+        and render_preflight.get("strict_external_evidence_ready") is False
+        and int(render_preflight.get("env_count", 0) or 0) >= 1
+        and isinstance(render_preflight.get("render_video_ready"), bool)
+        and render_preflight_checks.get("render_preflight_is_non_evidence") is True
+        and render_preflight_checks.get("quarantine_paths_are_not_official_evidence") is True
+        and (ROOT / "scripts" / "audit_maniskill_render_video_preflight.py").exists()
+        and (RESULTS / "maniskill_render_video_preflight_audit.md").exists(),
+        (
+            f"render_video_ready={render_preflight.get('render_video_ready')!r}, "
+            f"envs={render_preflight.get('env_count')!r}, "
+            f"blocking={render_preflight.get('blocking_missing')!r}"
         ),
     )
     pilot_runtime_checks = {check.get("name"): check.get("passed") for check in pilot_runtime.get("checks", []) or []}
@@ -965,6 +1003,7 @@ def main() -> int:
         "build_external_method_implementation_packet.py",
         "build_external_pilot_smoke_packet.py",
         "audit_external_pilot_smoke.py",
+        "audit_maniskill_render_video_preflight.py",
         "audit_maniskill_pilot_runtime_liveness.py",
     ]
     command_text = "\n".join(post_collection_commands + [cmd for action in actions for cmd in action["commands"]])
@@ -1025,6 +1064,8 @@ def main() -> int:
                 config_manifest_path,
                 rollout_evidence_path,
                 method_packet_path,
+                pilot_smoke_path,
+                render_preflight_path,
                 pilot_runtime_path,
             ]
             if path.exists()
@@ -1037,6 +1078,17 @@ def main() -> int:
             }
             for row in missing_requirements
         ],
+        "render_video_preflight": {
+            "not_external_evidence": True,
+            "render_video_ready": render_preflight.get("render_video_ready") is True,
+            "strict_external_evidence_ready": render_preflight.get("strict_external_evidence_ready") is True,
+            "env_count": int(render_preflight.get("env_count", 0) or 0),
+            "render_ready_env_count": int(render_preflight.get("render_ready_env_count", 0) or 0),
+            "blocking_missing": list(render_preflight.get("blocking_missing", []) or []),
+            "audit_command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4",
+            "audit_path": "results/maniskill_render_video_preflight_audit.json",
+            "audit_md_path": "results/maniskill_render_video_preflight_audit.md",
+        },
         "collection_blockers": collection_blockers,
         "operator_actions": actions,
         "strict_collection_command": collection.get("strict_collection_command", ""),

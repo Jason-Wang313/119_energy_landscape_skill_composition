@@ -79,6 +79,9 @@ jobs:
       - name: Build external pilot smoke packet
         run: python scripts/build_external_pilot_smoke_packet.py
 
+      - name: Audit ManiSkill render-video preflight
+        run: python scripts/audit_maniskill_render_video_preflight.py --timeout-seconds 30 --max-envs 1
+
       - name: Audit ManiSkill pilot runtime liveness
         run: python scripts/audit_maniskill_pilot_runtime_liveness.py
 
