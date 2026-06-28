@@ -839,8 +839,18 @@ def main() -> int:
     add_check(
         checks,
         "manifest_builder_fail_closed",
-        manifest_report.get("manifest_written") is False and manifest_report.get("records_loaded") == 0,
-        f"manifest_written={manifest_report.get('manifest_written')!r}, records_loaded={manifest_report.get('records_loaded')!r}",
+        manifest_report.get("manifest_written") is False
+        and manifest_report.get("records_loaded") == 0
+        and manifest_report.get("assembly_checklist_csv") == "external_validation/manifest_assembly_checklist.csv"
+        and int(manifest_report.get("assembly_checklist_row_count", 0) or 0) >= 30
+        and int(manifest_report.get("assembly_blocking_count", 0) or 0) >= 20
+        and (EXTERNAL / "manifest_assembly_checklist.csv").exists(),
+        (
+            f"manifest_written={manifest_report.get('manifest_written')!r}, "
+            f"records_loaded={manifest_report.get('records_loaded')!r}, "
+            f"assembly_rows={manifest_report.get('assembly_checklist_row_count')!r}, "
+            f"assembly_blocking={manifest_report.get('assembly_blocking_count')!r}"
+        ),
     )
 
     preflight_path = RESULTS / "external_evidence_preflight.json"
@@ -1018,6 +1028,7 @@ def main() -> int:
         EXTERNAL / "collection_runbook.md",
         EXTERNAL / "operator_record_sheet.csv",
         EXTERNAL / "manifest_template.json",
+        EXTERNAL / "manifest_assembly_checklist.csv",
         EXTERNAL / "log_schema_v1.json",
         EXTERNAL / "statistical_analysis_plan.json",
         EXTERNAL / "statistical_analysis_plan.md",

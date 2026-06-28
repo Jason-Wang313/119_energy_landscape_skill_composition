@@ -124,7 +124,7 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `adapter_contract_harness_ready`: passed
 - `pass` `adapter_contract_not_evidence`: not_external_evidence=True
 - `pass` `manifest_builder_report_exists`: results/external_manifest_builder_report.json
-- `pass` `manifest_builder_fail_closed`: manifest_written=False, records_loaded=0
+- `pass` `manifest_builder_fail_closed`: manifest_written=False, records_loaded=0, assembly_rows=35, assembly_blocking=28
 - `pass` `external_evidence_preflight_ready`: passed
 - `pass` `external_evidence_preflight_not_evidence`: not_external_evidence=True
 - `pass` `external_evidence_preflight_fail_closed`: evidence_ready=False, readiness_state='COLLECT_EXTERNAL_EVIDENCE', blocking_missing_count=56
@@ -141,7 +141,7 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_operator_handoff_bundle_ready`: passed
 - `pass` `external_operator_handoff_bundle_not_evidence`: not_external_evidence=True, strict_evidence_ready=False, handoff_bundle_ready=True, start_state='DO_NOT_COLLECT_YET'
 - `pass` `external_operator_handoff_bundle_excludes_evidence_paths`: forbidden_included_paths=[]
-- `pass` `external_operator_handoff_bundle_hash_manifest`: included_file_count=246, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 74, 'operator_command_source': 31, 'operator_facing_input': 52, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}
+- `pass` `external_operator_handoff_bundle_hash_manifest`: included_file_count=247, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 74, 'operator_command_source': 31, 'operator_facing_input': 53, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}
 - `pass` `strict_evidence_gates_remain_not_ready`: external_submission_ready=False, rollout_passed=False, config_passed=False, adapter_passed=False
 - `pass` `operator_packet_paths_exist`: missing=[]
 - `pass` `task_cards_ge_4`: task_cards=4

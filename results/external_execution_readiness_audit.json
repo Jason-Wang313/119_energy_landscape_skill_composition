@@ -461,7 +461,7 @@
       "passed": true
     },
     {
-      "detail": "manifest_written=False, records_loaded=0",
+      "detail": "manifest_written=False, records_loaded=0, assembly_rows=35, assembly_blocking=28",
       "name": "manifest_builder_fail_closed",
       "passed": true
     },
@@ -546,7 +546,7 @@
       "passed": true
     },
     {
-      "detail": "included_file_count=246, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 74, 'operator_command_source': 31, 'operator_facing_input': 52, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "included_file_count=247, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 74, 'operator_command_source': 31, 'operator_facing_input': 53, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "external_operator_handoff_bundle_hash_manifest",
       "passed": true
     },

@@ -1,4 +1,359 @@
 {
+  "assembly_blocking_count": 28,
+  "assembly_checklist_csv": "external_validation/manifest_assembly_checklist.csv",
+  "assembly_checklist_row_count": 35,
+  "assembly_checklist_rows": [
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "not_accepted_in_current_repo",
+      "item": "accepted_fidelity_provenance",
+      "operator_action": "promote the fidelity acceptance draft only after independent operator signoff, platform/contact provenance, calibration basis, and replay evidence exist",
+      "phase": "platform_fidelity",
+      "required_path": "external_validation/fidelity_acceptance.json",
+      "strict_gate": "python scripts\\audit_external_fidelity_acceptance.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "missing",
+      "item": "code_commit_and_skill_library_hash",
+      "operator_action": "record the exact commit and skill-library hash used before collecting external logs",
+      "phase": "run_identity",
+      "required_path": "manifest.code_commit; manifest.skill_library_hash",
+      "strict_gate": "python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "false",
+      "current_hash": "021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9",
+      "current_state": "present",
+      "item": "peg_place_regrasp_config",
+      "operator_action": "manifest-declare the exact config consumed by the backend and lock config_hash before collection",
+      "phase": "task_configs",
+      "required_path": "external_validation/configs/peg_place_regrasp.json",
+      "strict_gate": "python scripts\\validate_external_configs.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "missing",
+      "item": "peg_place_regrasp_jsonl",
+      "operator_action": "collect 30 paired-reset episodes per manifest-declared method for this task",
+      "phase": "rollout_logs",
+      "required_path": "external_validation/logs/peg_place_regrasp.jsonl",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "missing",
+      "item": "peg_place_regrasp_videos",
+      "operator_action": "write reviewable videos for manifest-declared rollout records; do not use placeholder media",
+      "phase": "rollout_videos",
+      "required_path": "external_validation/videos/peg_place_regrasp",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "blocking_until_real_evidence": "false",
+      "current_hash": "1288223014CB9D9285E4249B2FA607FFC16EBEE20B6F44E0241B63E88233E471",
+      "current_state": "present",
+      "item": "drawer_to_pick_transfer_config",
+      "operator_action": "manifest-declare the exact config consumed by the backend and lock config_hash before collection",
+      "phase": "task_configs",
+      "required_path": "external_validation/configs/drawer_to_pick_transfer.json",
+      "strict_gate": "python scripts\\validate_external_configs.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "missing",
+      "item": "drawer_to_pick_transfer_jsonl",
+      "operator_action": "collect 30 paired-reset episodes per manifest-declared method for this task",
+      "phase": "rollout_logs",
+      "required_path": "external_validation/logs/drawer_to_pick_transfer.jsonl",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "missing",
+      "item": "drawer_to_pick_transfer_videos",
+      "operator_action": "write reviewable videos for manifest-declared rollout records; do not use placeholder media",
+      "phase": "rollout_videos",
+      "required_path": "external_validation/videos/drawer_to_pick_transfer",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "blocking_until_real_evidence": "false",
+      "current_hash": "13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61",
+      "current_state": "present",
+      "item": "door_open_navigation_config",
+      "operator_action": "manifest-declare the exact config consumed by the backend and lock config_hash before collection",
+      "phase": "task_configs",
+      "required_path": "external_validation/configs/door_open_navigation.json",
+      "strict_gate": "python scripts\\validate_external_configs.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "missing",
+      "item": "door_open_navigation_jsonl",
+      "operator_action": "collect 30 paired-reset episodes per manifest-declared method for this task",
+      "phase": "rollout_logs",
+      "required_path": "external_validation/logs/door_open_navigation.jsonl",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "missing",
+      "item": "door_open_navigation_videos",
+      "operator_action": "write reviewable videos for manifest-declared rollout records; do not use placeholder media",
+      "phase": "rollout_videos",
+      "required_path": "external_validation/videos/door_open_navigation",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "blocking_until_real_evidence": "false",
+      "current_hash": "8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E",
+      "current_state": "present",
+      "item": "cable_route_insert_config",
+      "operator_action": "manifest-declare the exact config consumed by the backend and lock config_hash before collection",
+      "phase": "task_configs",
+      "required_path": "external_validation/configs/cable_route_insert.json",
+      "strict_gate": "python scripts\\validate_external_configs.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "missing",
+      "item": "cable_route_insert_jsonl",
+      "operator_action": "collect 30 paired-reset episodes per manifest-declared method for this task",
+      "phase": "rollout_logs",
+      "required_path": "external_validation/logs/cable_route_insert.jsonl",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "missing",
+      "item": "cable_route_insert_videos",
+      "operator_action": "write reviewable videos for manifest-declared rollout records; do not use placeholder media",
+      "phase": "rollout_videos",
+      "required_path": "external_validation/videos/cable_route_insert",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "greedy_module_sequence",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "behavior_cloned_skill_chain",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "option_graph_planner",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "tamp_feasibility_screen",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "stable_dmp_handoff",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "diffusion_skill_stitcher",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "cem_trajectory_composer",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "residual_rl_composer",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "energy_compatibility_heuristic",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "proposed_energy_landscape_composer_v4_1",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "barrier_certified_energy_composer_v5",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "false",
+      "current_hash": "",
+      "current_state": "oracle_upper_bound_not_independent_method",
+      "item": "oracle_basin_composer",
+      "operator_action": "keep oracle reported only as a post-hoc upper bound and explain saturation/boundary in the manifest metrics",
+      "phase": "method_implementations",
+      "required_path": "post_hoc_upper_bound",
+      "strict_gate": "python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "false",
+      "current_hash": "",
+      "current_state": "entries=7",
+      "item": "code",
+      "operator_action": "hash-lock real code artifacts into the release package after collection",
+      "phase": "release_artifacts",
+      "required_path": "manifest.release_artifacts.code",
+      "strict_gate": "python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "false",
+      "current_hash": "",
+      "current_state": "entries=5",
+      "item": "configs",
+      "operator_action": "hash-lock real configs artifacts into the release package after collection",
+      "phase": "release_artifacts",
+      "required_path": "manifest.release_artifacts.configs",
+      "strict_gate": "python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "entries=0",
+      "item": "logs",
+      "operator_action": "hash-lock real logs artifacts into the release package after collection",
+      "phase": "release_artifacts",
+      "required_path": "manifest.release_artifacts.logs",
+      "strict_gate": "python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "entries=0",
+      "item": "videos",
+      "operator_action": "hash-lock real videos artifacts into the release package after collection",
+      "phase": "release_artifacts",
+      "required_path": "manifest.release_artifacts.videos",
+      "strict_gate": "python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "entries=0",
+      "item": "checkpoints",
+      "operator_action": "hash-lock real checkpoints artifacts into the release package after collection",
+      "phase": "release_artifacts",
+      "required_path": "manifest.release_artifacts.checkpoints",
+      "strict_gate": "python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "records_loaded=0; schema_errors=4",
+      "item": "schema_valid_records",
+      "operator_action": "load raw JSONL logs with zero schema/video-path errors and recompute metrics from records",
+      "phase": "rollout_metrics",
+      "required_path": "manifest-declared JSONL logs",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "episodes=0; success_margin=None; utility_margin=None",
+      "item": "primary_thresholds",
+      "operator_action": "do not hand-enter primary metrics; let the manifest builder write metrics after strict raw-log recomputation",
+      "phase": "rollout_metrics",
+      "required_path": "manifest.metrics",
+      "strict_gate": "python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "not_ready_without_real_manifest_logs",
+      "item": "paired_reset_integrity",
+      "operator_action": "pass complete duplicate-free paired-reset panels across all manifest-declared methods",
+      "phase": "final_strict_gates",
+      "required_path": "external_validation/logs/*.jsonl",
+      "strict_gate": "python scripts\\audit_external_pairing_integrity.py --strict"
+    },
+    {
+      "blocking_until_real_evidence": "true",
+      "current_hash": "",
+      "current_state": "warnings=11; schema_errors=4",
+      "item": "final_external_evidence_gate",
+      "operator_action": "run the final evidence gate only after fidelity, configs, logs, videos, methods, release artifacts, and recomputed metrics are real",
+      "phase": "final_strict_gates",
+      "required_path": "external_validation/manifest.json",
+      "strict_gate": "python scripts\\audit_external_evidence.py --strict"
+    }
+  ],
   "manifest_written": false,
   "not_external_evidence": true,
   "output": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\manifest.json",

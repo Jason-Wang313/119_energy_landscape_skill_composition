@@ -25,7 +25,7 @@
       "passed": true
     },
     {
-      "detail": "files=247, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=248, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },

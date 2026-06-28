@@ -357,7 +357,11 @@ ACTION_CATALOG = {
     "manifest_and_release": {
         "title": "Build the real manifest and hash-lock release artifacts",
         "operator_input": "manifest paths, code commit, skill-library hash, config/log/video/checkpoint hashes",
-        "artifacts": ["external_validation/manifest.json", "results/external_manifest_builder_report.json"],
+        "artifacts": [
+            "external_validation/manifest.json",
+            "external_validation/manifest_assembly_checklist.csv",
+            "results/external_manifest_builder_report.json",
+        ],
         "commands": [
             "python scripts\\build_external_manifest.py --write --check-video-paths",
             "python scripts\\audit_external_release_package.py --strict",

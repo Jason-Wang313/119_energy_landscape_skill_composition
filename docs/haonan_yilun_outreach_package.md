@@ -51,7 +51,7 @@ Send:
 - A 4-page clean technical preview.
 - One figure or 30-second GIF showing `skill i -> seam critic -> accept/repair/reject -> skill j`.
 - Link to repo/logs only if the repo is clean enough to survive inspection.
-- Keep the independent validation protocol, `results/external_operator_packet.md`, the ManiSkill fidelity metadata probe, and the reference-adapter provenance catalog ready as follow-up artifacts, not as first-email clutter.
+- Keep the independent validation protocol, `results/external_operator_packet.md`, the ManiSkill fidelity metadata probe, the reference-adapter provenance catalog, and the manifest assembly checklist ready as follow-up artifacts, not as first-email clutter.
 
 The full PDF can be offered after he shows interest.
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import json
 import math
@@ -18,6 +19,7 @@ DEFAULT_OUTPUT = EXTERNAL / "manifest.json"
 DEFAULT_SCHEMA = EXTERNAL / "log_schema_v1.json"
 REPORT_JSON = RESULTS / "external_manifest_builder_report.json"
 REPORT_MD = RESULTS / "external_manifest_builder_report.md"
+ASSEMBLY_CHECKLIST_CSV = EXTERNAL / "manifest_assembly_checklist.csv"
 
 PRIMARY_METHOD = "barrier_certified_energy_composer_v5"
 ORACLE_METHOD = "oracle_basin_composer"
@@ -305,8 +307,237 @@ def update_manifest_hashes(root: Path, manifest: dict[str, Any]) -> list[str]:
     return warnings
 
 
+def checklist_row(
+    phase: str,
+    item: str,
+    required_path: str,
+    current_state: str,
+    current_hash: str,
+    blocking: bool,
+    strict_gate: str,
+    operator_action: str,
+) -> dict[str, str]:
+    return {
+        "phase": phase,
+        "item": item,
+        "required_path": required_path,
+        "current_state": current_state,
+        "current_hash": current_hash,
+        "blocking_until_real_evidence": str(bool(blocking)).lower(),
+        "strict_gate": strict_gate,
+        "operator_action": operator_action,
+    }
+
+
+def path_state(root: Path, value: Any) -> tuple[str, str]:
+    if not isinstance(value, str) or not value.strip():
+        return "missing_path", ""
+    path = rel_path(root, value)
+    if not path.exists():
+        return "missing", ""
+    return ("present", sha256_path(path))
+
+
+def build_manifest_assembly_checklist(
+    root: Path,
+    manifest: dict[str, Any],
+    records: list[dict[str, Any]],
+    schema_errors: list[str],
+    warnings: list[str],
+    summary: dict[str, Any],
+) -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    rows.append(
+        checklist_row(
+            "platform_fidelity",
+            "accepted_fidelity_provenance",
+            str(manifest.get("fidelity_acceptance_path", "external_validation/fidelity_acceptance.json")),
+            "not_accepted_in_current_repo",
+            "",
+            True,
+            r"python scripts\audit_external_fidelity_acceptance.py --strict",
+            "promote the fidelity acceptance draft only after independent operator signoff, platform/contact provenance, calibration basis, and replay evidence exist",
+        )
+    )
+    rows.append(
+        checklist_row(
+            "run_identity",
+            "code_commit_and_skill_library_hash",
+            "manifest.code_commit; manifest.skill_library_hash",
+            "missing" if not manifest.get("code_commit") or not manifest.get("skill_library_hash") else "present",
+            "",
+            not bool(manifest.get("code_commit") and manifest.get("skill_library_hash")),
+            r"python scripts\audit_external_release_package.py --strict",
+            "record the exact commit and skill-library hash used before collecting external logs",
+        )
+    )
+
+    for task in manifest.get("tasks", []):
+        if not isinstance(task, dict):
+            continue
+        task_family = str(task.get("task_family", "unknown"))
+        config_state, config_hash = path_state(root, task.get("config_path"))
+        rows.append(
+            checklist_row(
+                "task_configs",
+                f"{task_family}_config",
+                str(task.get("config_path", "")),
+                config_state if task.get("config_hash") else f"{config_state}_hash_not_manifest_declared",
+                str(task.get("config_hash") or config_hash),
+                not bool(task.get("config_hash")),
+                r"python scripts\validate_external_configs.py --strict",
+                "manifest-declare the exact config consumed by the backend and lock config_hash before collection",
+            )
+        )
+        log_state, log_hash = path_state(root, task.get("log_jsonl"))
+        rows.append(
+            checklist_row(
+                "rollout_logs",
+                f"{task_family}_jsonl",
+                str(task.get("log_jsonl", "")),
+                log_state,
+                log_hash,
+                log_state != "present",
+                r"python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict",
+                f"collect {int(task.get('episodes_per_method', 0) or 0)} paired-reset episodes per manifest-declared method for this task",
+            )
+        )
+        video_state, video_hash = path_state(root, task.get("video_dir"))
+        rows.append(
+            checklist_row(
+                "rollout_videos",
+                f"{task_family}_videos",
+                str(task.get("video_dir", "")),
+                video_state,
+                video_hash,
+                video_state != "present",
+                r"python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict",
+                "write reviewable videos for manifest-declared rollout records; do not use placeholder media",
+            )
+        )
+
+    for method in manifest.get("methods", []):
+        if not isinstance(method, dict):
+            continue
+        name = str(method.get("name", "unknown"))
+        if name == ORACLE_METHOD:
+            rows.append(
+                checklist_row(
+                    "method_implementations",
+                    name,
+                    "post_hoc_upper_bound",
+                    "oracle_upper_bound_not_independent_method",
+                    "",
+                    False,
+                    r"python scripts\audit_external_evidence.py --strict",
+                    "keep oracle reported only as a post-hoc upper bound and explain saturation/boundary in the manifest metrics",
+                )
+            )
+            continue
+        implementation_state, implementation_hash = path_state(root, method.get("implementation"))
+        checkpoint_state, checkpoint_hash = path_state(root, method.get("checkpoint_or_config_path"))
+        declared_hash = str(method.get("checkpoint_or_config_hash", ""))
+        rows.append(
+            checklist_row(
+                "method_implementations",
+                name,
+                str(method.get("implementation", "") or method.get("checkpoint_or_config_path", "")),
+                (
+                    f"implementation={implementation_state}; checkpoint_or_config={checkpoint_state}; "
+                    f"manifest_hash={'present' if declared_hash else 'missing'}"
+                ),
+                declared_hash or checkpoint_hash or implementation_hash,
+                not bool(declared_hash and (implementation_state == "present" or checkpoint_state == "present")),
+                r"python scripts\validate_external_adapters.py --strict",
+                "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+            )
+        )
+
+    release = manifest.get("release_artifacts", {}) if isinstance(manifest.get("release_artifacts"), dict) else {}
+    for kind in ("code", "configs", "logs", "videos", "checkpoints"):
+        entries = release.get(kind, [])
+        entries = entries if isinstance(entries, list) else []
+        rows.append(
+            checklist_row(
+                "release_artifacts",
+                kind,
+                f"manifest.release_artifacts.{kind}",
+                f"entries={len(entries)}",
+                "",
+                len(entries) == 0,
+                r"python scripts\audit_external_release_package.py --strict",
+                f"hash-lock real {kind} artifacts into the release package after collection",
+            )
+        )
+
+    rows.extend(
+        [
+            checklist_row(
+                "rollout_metrics",
+                "schema_valid_records",
+                "manifest-declared JSONL logs",
+                f"records_loaded={len(records)}; schema_errors={len(schema_errors)}",
+                "",
+                not records or bool(schema_errors),
+                r"python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict",
+                "load raw JSONL logs with zero schema/video-path errors and recompute metrics from records",
+            ),
+            checklist_row(
+                "rollout_metrics",
+                "primary_thresholds",
+                "manifest.metrics",
+                f"episodes={summary.get('episodes', 0)}; success_margin={summary.get('external_success_margin')}; utility_margin={summary.get('external_utility_margin')}",
+                "",
+                not records or bool(schema_errors),
+                r"python scripts\audit_external_evidence.py --strict",
+                "do not hand-enter primary metrics; let the manifest builder write metrics after strict raw-log recomputation",
+            ),
+            checklist_row(
+                "final_strict_gates",
+                "paired_reset_integrity",
+                "external_validation/logs/*.jsonl",
+                "not_ready_without_real_manifest_logs",
+                "",
+                True,
+                r"python scripts\audit_external_pairing_integrity.py --strict",
+                "pass complete duplicate-free paired-reset panels across all manifest-declared methods",
+            ),
+            checklist_row(
+                "final_strict_gates",
+                "final_external_evidence_gate",
+                "external_validation/manifest.json",
+                f"warnings={len(warnings)}; schema_errors={len(schema_errors)}",
+                "",
+                True,
+                r"python scripts\audit_external_evidence.py --strict",
+                "run the final evidence gate only after fidelity, configs, logs, videos, methods, release artifacts, and recomputed metrics are real",
+            ),
+        ]
+    )
+    return rows
+
+
+def write_assembly_checklist(rows: list[dict[str, str]]) -> None:
+    EXTERNAL.mkdir(exist_ok=True)
+    fieldnames = [
+        "phase",
+        "item",
+        "required_path",
+        "current_state",
+        "current_hash",
+        "blocking_until_real_evidence",
+        "strict_gate",
+        "operator_action",
+    ]
+    with ASSEMBLY_CHECKLIST_CSV.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
 def write_report(report: dict[str, Any]) -> None:
     RESULTS.mkdir(exist_ok=True)
+    write_assembly_checklist(report.get("assembly_checklist_rows", []) or [])
     REPORT_JSON.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     lines = [
         "# External Manifest Builder Report",
@@ -322,6 +553,9 @@ def write_report(report: dict[str, Any]) -> None:
         f"- Records loaded: `{report['records_loaded']}`.",
         f"- Schema errors: `{len(report['schema_errors'])}`.",
         f"- Warnings: `{len(report['warnings'])}`.",
+        f"- Manifest assembly checklist: `{report['assembly_checklist_csv']}`.",
+        f"- Checklist rows: `{report['assembly_checklist_row_count']}`.",
+        f"- Checklist blocking rows: `{report['assembly_blocking_count']}`.",
         "",
         "## Schema Errors",
         "",
@@ -335,6 +569,17 @@ def write_report(report: dict[str, Any]) -> None:
     if report["warnings"]:
         for warning in report["warnings"][:100]:
             lines.append(f"- {warning}")
+    else:
+        lines.append("- none")
+    lines.extend(["", "## Manifest Assembly Checklist", ""])
+    rows = report.get("assembly_checklist_rows", []) or []
+    if rows:
+        for row in rows[:120]:
+            lines.append(
+                "- "
+                f"`{row.get('phase')}` `{row.get('item')}`: "
+                f"{row.get('current_state')} -> {row.get('operator_action')}"
+            )
     else:
         lines.append("- none")
     REPORT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -386,6 +631,8 @@ def main() -> int:
                 and float(oracle.get("utility", 0.0)) >= float(primary.get("utility", 0.0))
             )
 
+    assembly_rows = build_manifest_assembly_checklist(root, manifest, records, schema_errors, warnings, summary)
+    assembly_blocking_count = sum(1 for row in assembly_rows if row.get("blocking_until_real_evidence") == "true")
     ready = bool(records) and not schema_errors
     manifest_written = False
     if args.write:
@@ -402,6 +649,12 @@ def main() -> int:
                     "schema_errors": schema_errors,
                     "warnings": warnings,
                     "summary": summary,
+                    "assembly_checklist_csv": rel_path(root, str(ASSEMBLY_CHECKLIST_CSV)).as_posix()
+                    if not ASSEMBLY_CHECKLIST_CSV.is_absolute()
+                    else posix_rel(root, ASSEMBLY_CHECKLIST_CSV),
+                    "assembly_checklist_row_count": len(assembly_rows),
+                    "assembly_blocking_count": assembly_blocking_count,
+                    "assembly_checklist_rows": assembly_rows,
                 }
             )
             raise SystemExit("refusing to write manifest because evidence is incomplete; use --allow-missing only for a draft")
@@ -420,6 +673,10 @@ def main() -> int:
         "schema_errors": schema_errors,
         "warnings": warnings,
         "summary": summary,
+        "assembly_checklist_csv": posix_rel(root, ASSEMBLY_CHECKLIST_CSV),
+        "assembly_checklist_row_count": len(assembly_rows),
+        "assembly_blocking_count": assembly_blocking_count,
+        "assembly_checklist_rows": assembly_rows,
     }
     write_report(report)
 

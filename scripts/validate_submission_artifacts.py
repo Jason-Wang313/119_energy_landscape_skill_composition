@@ -827,8 +827,12 @@ def main():
         fail("missing results/external_release_package_self_test.md")
 
     manifest_builder_text = (ROOT / "scripts" / "build_external_manifest.py").read_text(encoding="utf-8")
-    if "CORE_CODE_ARTIFACTS" not in manifest_builder_text or "release[\"code\"]" not in manifest_builder_text:
-        fail("external manifest builder must populate release_artifacts.code")
+    if (
+        "CORE_CODE_ARTIFACTS" not in manifest_builder_text
+        or "release[\"code\"]" not in manifest_builder_text
+        or "manifest_assembly_checklist.csv" not in manifest_builder_text
+    ):
+        fail("external manifest builder must populate release_artifacts.code and the manifest assembly checklist")
 
     blind_eval_path = RESULTS / "external_blind_eval_audit.json"
     if not blind_eval_path.exists():
@@ -1495,6 +1499,24 @@ def main():
         fail("external manifest builder unexpectedly loaded external records while scope gate is false")
     if not any("missing log file" in str(error) for error in manifest_builder_report.get("schema_errors", [])):
         fail("external manifest builder report should currently identify missing external logs")
+    manifest_checklist_path = EXTERNAL / "manifest_assembly_checklist.csv"
+    if not manifest_checklist_path.exists():
+        fail("missing external_validation/manifest_assembly_checklist.csv; run scripts/build_external_manifest.py --allow-missing")
+    if manifest_builder_report.get("assembly_checklist_csv") != "external_validation/manifest_assembly_checklist.csv":
+        fail("external manifest builder report should point to manifest_assembly_checklist.csv")
+    assembly_rows = manifest_builder_report.get("assembly_checklist_rows", []) or []
+    if int(manifest_builder_report.get("assembly_checklist_row_count", 0) or 0) < 30:
+        fail("external manifest assembly checklist has too few rows")
+    if int(manifest_builder_report.get("assembly_blocking_count", 0) or 0) < 20:
+        fail("external manifest assembly checklist should expose current blocking rows")
+    if count_rows(manifest_checklist_path) != int(manifest_builder_report.get("assembly_checklist_row_count", 0) or 0):
+        fail("external manifest assembly checklist CSV row count does not match report")
+    assembly_phases = {str(row.get("phase", "")) for row in assembly_rows if isinstance(row, dict)}
+    for phase in ("platform_fidelity", "task_configs", "rollout_logs", "rollout_videos", "method_implementations", "release_artifacts", "rollout_metrics", "final_strict_gates"):
+        if phase not in assembly_phases:
+            fail(f"external manifest assembly checklist missing phase: {phase}")
+    if not any(row.get("item") == "final_external_evidence_gate" and row.get("blocking_until_real_evidence") == "true" for row in assembly_rows if isinstance(row, dict)):
+        fail("external manifest assembly checklist must keep the final evidence gate blocking")
 
     preflight_path = RESULTS / "external_evidence_preflight.json"
     if not preflight_path.exists():
@@ -2228,6 +2250,7 @@ def main():
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
         EXTERNAL / "method_reference_provenance.csv",
+        EXTERNAL / "manifest_assembly_checklist.csv",
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.md",

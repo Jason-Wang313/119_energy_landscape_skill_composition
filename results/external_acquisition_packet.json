@@ -586,6 +586,7 @@
     {
       "artifacts": [
         "external_validation/manifest.json",
+        "external_validation/manifest_assembly_checklist.csv",
         "results/external_manifest_builder_report.json"
       ],
       "closes": [

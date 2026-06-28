@@ -111,6 +111,7 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
         EXTERNAL / "method_reference_provenance.csv",
+        EXTERNAL / "manifest_assembly_checklist.csv",
         EXTERNAL / "config_schema_v1.json",
         EXTERNAL / "configs" / "README.md",
         EXTERNAL / "independent_validation_route.md",
