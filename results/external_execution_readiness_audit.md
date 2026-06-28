@@ -84,7 +84,7 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_pilot_smoke_packet_ready`: passed
 - `pass` `external_pilot_smoke_quarantine_gate`: checks={'packet_is_non_evidence_and_fail_closed': True, 'quarantine_dirs_are_separate_from_official_evidence': True, 'runner_backend_probe_already_exercises_actual_runner': True, 'pilot_commands_preserve_gate_order': True, 'pilot_audit_reports_non_evidence_state': True, 'collection_readiness_remains_official_gate': True, 'packet_files_written': True}
 - `pass` `maniskill_pilot_runtime_liveness_ready`: passed
-- `pass` `maniskill_pilot_runtime_liveness_not_evidence`: pilot_runtime_ready=False, timed_out=False, records=0, videos=0, failure_summary="RuntimeError: record_video requires renderable ManiSkill RGB frames; verify render_mode='rgb_array', camera setup, and renderer availability during fidelity acceptance. Last render status: RuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory"
+- `pass` `maniskill_pilot_runtime_liveness_not_evidence`: pilot_runtime_ready=False, runner_io_ready=True, render_video_ready=False, timed_out=False, records=1, videos=1, diagnostic_fallbacks=1, failure_summary='runner wrote quarantined schema-valid row/video using diagnostic non-evidence video fallback; render-backed video remains unavailable'
 - `pass` `external_backend_contract_ready`: passed
 - `pass` `external_backend_contract_not_evidence`: not_external_evidence=True
 - `pass` `external_backend_contract_fail_closed`: backend_contract_harness_ready=True, actual_backend_ready=False

@@ -750,15 +750,21 @@ def main() -> int:
         and pilot_runtime.get("not_external_evidence") is True
         and pilot_runtime.get("strict_external_evidence_ready") is False
         and pilot_runtime.get("pilot_runtime_ready") is False
+        and pilot_runtime.get("runner_io_ready") is True
+        and pilot_runtime.get("render_video_ready") is False
+        and len(pilot_runtime.get("diagnostic_video_fallbacks", []) or []) >= 1
         and pilot_runtime_checks.get("bounded_runner_subprocess_exercised") is True
         and pilot_runtime_checks.get("timeout_or_result_recorded_as_readiness_state") is True
         and (ROOT / "scripts" / "audit_maniskill_pilot_runtime_liveness.py").exists()
         and (RESULTS / "maniskill_pilot_runtime_liveness_audit.md").exists(),
         (
             f"pilot_runtime_ready={pilot_runtime.get('pilot_runtime_ready')!r}, "
+            f"runner_io_ready={pilot_runtime.get('runner_io_ready')!r}, "
+            f"render_video_ready={pilot_runtime.get('render_video_ready')!r}, "
             f"timed_out={pilot_runtime.get('timed_out')!r}, "
             f"records={pilot_runtime.get('records_observed')!r}, "
             f"videos={pilot_runtime.get('videos_written')!r}, "
+            f"diagnostic_fallbacks={len(pilot_runtime.get('diagnostic_video_fallbacks', []) or [])}, "
             f"failure_summary={pilot_runtime.get('failure_summary')!r}"
         ),
     )

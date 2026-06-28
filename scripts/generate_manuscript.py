@@ -371,13 +371,13 @@ def make_manuscript(summary):
     a(r"\hypersetup{hidelinks}")
     a(r"\setlist[itemize]{leftmargin=1.2em,itemsep=0.15em,topsep=0.2em}")
     a(r"\raggedbottom")
-    a(r"\title{Skill-Seam World/Action Models\\for Robot Composition}")
+    a(r"\title{Local World/Action Models\\for Robot Skill Seams}")
     a(r"\author{Anonymous Authors}")
     a(r"\begin{document}")
     a(r"\maketitle")
     a(r"\begin{abstract}")
     a(
-        "Robot skills can still fail when chained because the end of one skill changes what the next skill can safely do. "
+        "Robot skill libraries still need a physical action model: a planner must predict what one skill makes possible for the next. "
         "A terminal state may fall outside the next skill's attraction basin, cross a high-energy barrier, or enter a contact mode where descent is no longer smooth. "
         "We study that handoff as a local world/action-modeling problem: a compact predictive interface between a skill library and a planner. The local world is the seam state; the action is a transition, repair, probe, abstention, or alternate edge. Given terminal evidence, next-skill basin/descent estimates, and a candidate transition, the interface predicts whether the composition will fail, diagnoses why, chooses accept, repair, probe, abstain, or another transition, and records planner-edge evidence for later plans. "
         "A barrier-certified energy composer implements this interface, acting on a skill edge only when basin overlap, barrier height, descent continuity, repair cost, and fixed-risk calibration are jointly favorable. "
@@ -389,7 +389,7 @@ def make_manuscript(summary):
 
     a(r"\section{Motivation}")
     a(
-        "A reusable robot skill library still leaves a planning problem: the robot must know what the end of one skill makes possible for the next. This paper focuses on that seam, where a small predictive action model can be more useful than either a bare graph edge or a full simulator. The model predicts what a completed skill makes feasible, risky, repairable, or impossible for the next skill. Its job is not to operate either primitive or replace the planner; it is to make the transition legible enough that planning can choose the next action, request a repair or probe, abstain, or route through another edge. At this scale, the useful prediction is not a full future video, but a decision-relevant statement about how a transition changes the next skill's feasible start state."
+        "A reusable robot skill library still leaves a planning problem: the robot must know what the end of one skill makes possible for the next. This paper focuses on that seam, where a small predictive model of action consequences can be more useful than either a bare graph edge or a full simulator. The model predicts what a completed skill makes feasible, risky, repairable, or impossible for the next skill. Its job is not to operate either primitive or replace the planner; it is to make the transition legible enough that planning can choose the next action, request a repair or probe, abstain, or route through another edge. At this scale, the useful prediction is not a full future video, but a decision-relevant statement about how a transition changes the next skill's feasible start state."
     )
     a(
         "Potential fields, navigation functions, energy-based learning, trajectory optimization, DMPs, and stable dynamical systems have long used scalar landscapes to encode motion and control structure \\citep{khatib1986potential,koditschek1989navigation,lecun2006energy,ratliff2009chomp,ijspeert2013dmp,khansari2011stable}. "

@@ -65,7 +65,7 @@ Audit bounded ManiSkill pilot runtime liveness:
 python scripts\audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 60 --max-rows 1
 ```
 
-This writes `results/maniskill_pilot_runtime_liveness_audit.{json,md}`. It launches the tracked ManiSkill reference runner in quarantined `external_validation/pilot_runtime_guard/` directories with a strict timeout. It is not evidence and does not replace the pilot-smoke packet. The current local report is fail-closed: `pilot_runtime_ready=false`, with zero schema-valid pilot rows/videos and a concrete renderer failure summary before official collection. Use an accepted GPU/render machine or fix the backend before official collection.
+This writes `results/maniskill_pilot_runtime_liveness_audit.{json,md}`. It launches the tracked ManiSkill reference runner in quarantined `external_validation/pilot_runtime_guard/` directories with a strict timeout. It is not evidence and does not replace the pilot-smoke packet. The current local report is fail-closed for official collection: `pilot_runtime_ready=false`, `runner_io_ready=true`, and `render_video_ready=false`. The runner can write one quarantined schema-valid pilot row/video only through a diagnostic non-evidence video fallback; use an accepted GPU/render machine or fix render-backed RGB video before official collection.
 
 Build the independent operator packet:
 

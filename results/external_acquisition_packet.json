@@ -72,7 +72,7 @@
       "passed": true
     },
     {
-      "detail": "pilot_runtime_ready=False, timed_out=False, records=0, videos=0, failure_summary=\"RuntimeError: record_video requires renderable ManiSkill RGB frames; verify render_mode='rgb_array', camera setup, and renderer availability during fidelity acceptance. Last render status: RuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory\"",
+      "detail": "pilot_runtime_ready=False, runner_io_ready=True, render_video_ready=False, timed_out=False, records=1, videos=1, diagnostic_fallbacks=1, failure_summary='runner wrote quarantined schema-valid row/video using diagnostic non-evidence video fallback; render-backed video remains unavailable'",
       "name": "maniskill_pilot_runtime_liveness_ready",
       "passed": true
     },

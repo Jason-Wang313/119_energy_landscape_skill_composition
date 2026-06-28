@@ -1984,8 +1984,14 @@ def main():
         fail("ManiSkill pilot runtime liveness audit must not claim strict external evidence readiness")
     if pilot_runtime.get("pilot_runtime_ready") is not False:
         fail("current local ManiSkill pilot runtime should remain not ready before accepted runtime evidence")
-    if int(pilot_runtime.get("records_observed", -1) or 0) != 0 or int(pilot_runtime.get("videos_written", -1) or 0) != 0:
-        fail("current local ManiSkill pilot runtime liveness audit should not record pilot rows/videos")
+    if pilot_runtime.get("runner_io_ready") is not True:
+        fail("current local ManiSkill pilot runtime should exercise the quarantined runner I/O path")
+    if pilot_runtime.get("render_video_ready") is not False:
+        fail("current local ManiSkill pilot runtime must not mark render-backed video ready")
+    if int(pilot_runtime.get("records_observed", -1) or 0) < 1 or int(pilot_runtime.get("videos_written", -1) or 0) < 1:
+        fail("current local ManiSkill pilot runtime liveness audit should record a quarantined diagnostic pilot row/video")
+    if len(pilot_runtime.get("diagnostic_video_fallbacks", []) or []) < 1:
+        fail("current local ManiSkill pilot runtime should expose the diagnostic non-evidence video fallback")
     if not str(pilot_runtime.get("failure_summary", "")).strip():
         fail("ManiSkill pilot runtime liveness audit must record a failure summary")
     pilot_runtime_checks = {check.get("name"): check.get("passed") for check in pilot_runtime.get("checks", [])}
@@ -1995,6 +2001,8 @@ def main():
         "bounded_runner_subprocess_exercised",
         "timeout_or_result_recorded_as_readiness_state",
         "ready_requires_schema_valid_records_and_videos",
+        "runner_io_ready_allows_only_quarantined_diagnostic_fallback",
+        "diagnostic_fallback_does_not_mark_render_ready",
         "no_real_manifest_written",
     ):
         if pilot_runtime_checks.get(required_check) is not True:

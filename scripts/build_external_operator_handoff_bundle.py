@@ -657,13 +657,19 @@ def build_payload() -> dict[str, Any]:
         and pilot_runtime.get("not_external_evidence") is True
         and pilot_runtime.get("strict_external_evidence_ready") is False
         and pilot_runtime.get("pilot_runtime_ready") is False
+        and pilot_runtime.get("runner_io_ready") is True
+        and pilot_runtime.get("render_video_ready") is False
+        and len(pilot_runtime.get("diagnostic_video_fallbacks", []) or []) >= 1
         and pilot_runtime_checks.get("bounded_runner_subprocess_exercised") is True
         and "scripts/audit_maniskill_pilot_runtime_liveness.py" in paths
         and "results/maniskill_pilot_runtime_liveness_audit.json" in paths
         and "results/maniskill_pilot_runtime_liveness_audit.md" in paths,
         (
             f"pilot_runtime_ready={pilot_runtime.get('pilot_runtime_ready')!r}, "
+            f"runner_io_ready={pilot_runtime.get('runner_io_ready')!r}, "
+            f"render_video_ready={pilot_runtime.get('render_video_ready')!r}, "
             f"timed_out={pilot_runtime.get('timed_out')!r}, "
+            f"diagnostic_fallbacks={len(pilot_runtime.get('diagnostic_video_fallbacks', []) or [])}, "
             f"failure_summary={pilot_runtime.get('failure_summary')!r}"
         ),
     )

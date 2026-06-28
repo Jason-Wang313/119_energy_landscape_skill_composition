@@ -127,6 +127,22 @@ def write_mp4(target_path: Path, frames: Iterable[Any], *, fps: int = 4) -> str:
     return target_path.as_posix()
 
 
+def diagnostic_state_frame(*, observation_hash: str, render_error: str) -> Any:
+    import numpy as np
+
+    seed = int(hashlib.sha256(f"{observation_hash}:{render_error}".encode("utf-8")).hexdigest()[:8], 16)
+    height, width = 180, 240
+    y = np.arange(height, dtype=np.uint16)[:, None]
+    x = np.arange(width, dtype=np.uint16)[None, :]
+    frame = np.zeros((height, width, 3), dtype=np.uint8)
+    frame[:, :, 0] = (x + seed) % 256
+    frame[:, :, 1] = (y * 2 + (seed >> 8)) % 256
+    frame[:, :, 2] = ((x // 3 + y // 2) + (seed >> 16)) % 256
+    frame[:12, :, :] = [255, 216, 64]
+    frame[-12:, :, :] = [64, 96, 255]
+    return frame
+
+
 def import_adapter(method_name: str) -> ModuleType:
     adapter_path = BASELINES / method_name / "adapter.py"
     if not adapter_path.exists():
@@ -380,6 +396,38 @@ class Backend(ExternalCollectionBackend):
             frames.append(self._video_frames[-1])
         if not frames:
             detail = self._video_render_error or "ManiSkill render produced no RGB frame"
+            if os.environ.get("PAPER119_MANISKILL_REFERENCE_BACKEND_ALLOW_DIAGNOSTIC_VIDEO_FALLBACK") == "1":
+                observation_hash = stable_digest(
+                    {
+                        "env_id": self._env_id,
+                        "row": self._last_row,
+                        "obs": numeric_values(self._last_obs, limit=64),
+                        "proposal": self._last_proposal,
+                    }
+                )
+                written = write_mp4(
+                    target_path,
+                    [diagnostic_state_frame(observation_hash=observation_hash, render_error=detail)],
+                )
+                sidecar = target_path.with_suffix(target_path.suffix + ".diagnostic.json")
+                sidecar.write_text(
+                    json.dumps(
+                        {
+                            "not_external_evidence": True,
+                            "diagnostic_video_fallback": True,
+                            "reason": "ManiSkill render did not produce RGB frames on this local machine",
+                            "render_error": detail,
+                            "env_id": self._env_id,
+                            "observation_hash": observation_hash,
+                            "official_collection_allowed": False,
+                        },
+                        indent=2,
+                        sort_keys=True,
+                    )
+                    + "\n",
+                    encoding="utf-8",
+                )
+                return written
             raise RuntimeError(
                 "record_video requires renderable ManiSkill RGB frames; verify render_mode='rgb_array', "
                 "camera setup, and renderer availability during fidelity acceptance. "

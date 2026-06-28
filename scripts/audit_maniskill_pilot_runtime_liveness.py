@@ -110,11 +110,27 @@ def count_videos(video_dir: Path) -> int:
     return sum(1 for path in video_dir.rglob("*") if path.is_file() and path.suffix.lower() == ".mp4")
 
 
+def diagnostic_sidecars(video_dir: Path) -> list[Path]:
+    if not video_dir.exists():
+        return []
+    return sorted(video_dir.rglob("*.mp4.diagnostic.json"))
+
+
 def clean_ansi(text: str) -> str:
     return re.sub(r"\x1b\[[0-9;]*m", "", text)
 
 
-def summarize_failure(*, timed_out: bool, returncode: int | None, stderr: str, records: int, videos: int) -> str:
+def summarize_failure(
+    *,
+    timed_out: bool,
+    returncode: int | None,
+    stderr: str,
+    records: int,
+    videos: int,
+    diagnostic_fallbacks: int,
+) -> str:
+    if records and videos and returncode == 0 and not timed_out and diagnostic_fallbacks:
+        return "runner wrote quarantined schema-valid row/video using diagnostic non-evidence video fallback; render-backed video remains unavailable"
     if records and videos and returncode == 0 and not timed_out:
         return "pilot runtime produced schema-valid records and videos"
     if timed_out:
@@ -150,6 +166,7 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
     ]
     env = os.environ.copy()
     env["PAPER119_MANISKILL_REFERENCE_BACKEND_ENABLE_ROLLOUTS"] = "1"
+    env["PAPER119_MANISKILL_REFERENCE_BACKEND_ALLOW_DIAGNOSTIC_VIDEO_FALLBACK"] = "1"
     try:
         proc = subprocess.run(
             command,
@@ -185,20 +202,24 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
             )
         )
     videos_written = count_videos(GUARD_VIDEO_DIR)
+    diagnostic_fallback_paths = diagnostic_sidecars(GUARD_VIDEO_DIR)
     failure_summary = summarize_failure(
         timed_out=timed_out,
         returncode=returncode,
         stderr=stderr,
         records=len(records),
         videos=videos_written,
+        diagnostic_fallbacks=len(diagnostic_fallback_paths),
     )
-    pilot_runtime_ready = (
+    runner_io_ready = (
         not timed_out
         and returncode == 0
         and len(records) >= args.max_rows
         and videos_written >= args.max_rows
         and not schema_errors
     )
+    render_video_ready = runner_io_ready and not diagnostic_fallback_paths
+    pilot_runtime_ready = render_video_ready
     return {
         "command": command,
         "timed_out": timed_out,
@@ -210,6 +231,9 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
         "failure_summary": failure_summary,
         "schema_errors": schema_errors,
         "log_files": [rel(path) for path in log_paths],
+        "diagnostic_video_fallbacks": [rel(path) for path in diagnostic_fallback_paths],
+        "runner_io_ready": runner_io_ready,
+        "render_video_ready": render_video_ready,
         "pilot_runtime_ready": pilot_runtime_ready,
     }
 
@@ -262,6 +286,33 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
     )
     add_check(
         checks,
+        "runner_io_ready_allows_only_quarantined_diagnostic_fallback",
+        (
+            not result["runner_io_ready"]
+            or (
+                result["records_observed"] >= args.max_rows
+                and result["videos_written"] >= args.max_rows
+                and all(path.startswith("external_validation/pilot_runtime_guard/") for path in result["diagnostic_video_fallbacks"])
+            )
+        ),
+        (
+            f"runner_io_ready={result['runner_io_ready']}, "
+            f"diagnostic_fallbacks={len(result['diagnostic_video_fallbacks'])}"
+        ),
+    )
+    add_check(
+        checks,
+        "diagnostic_fallback_does_not_mark_render_ready",
+        (not result["diagnostic_video_fallbacks"] and result["render_video_ready"] == result["pilot_runtime_ready"])
+        or (bool(result["diagnostic_video_fallbacks"]) and result["render_video_ready"] is False and result["pilot_runtime_ready"] is False),
+        (
+            f"render_video_ready={result['render_video_ready']}, "
+            f"pilot_runtime_ready={result['pilot_runtime_ready']}, "
+            f"diagnostic_fallbacks={len(result['diagnostic_video_fallbacks'])}"
+        ),
+    )
+    add_check(
+        checks,
         "no_real_manifest_written",
         not (EXTERNAL / "manifest.json").exists(),
         "external_validation/manifest.json remains absent",
@@ -269,16 +320,25 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
     passed = all(check["passed"] for check in checks)
     blocking_missing = []
     if not result["pilot_runtime_ready"]:
-        blocking_missing.append(
-            "bounded ManiSkill reference runner did not produce a complete schema-valid pilot row/video on this machine; "
-            f"{result['failure_summary']}; use an accepted GPU/render machine or fix the backend before official collection"
-        )
+        if result["runner_io_ready"] and result["diagnostic_video_fallbacks"]:
+            blocking_missing.append(
+                "bounded ManiSkill reference runner produced a quarantined schema-valid pilot row/video only by using "
+                "a diagnostic non-evidence video fallback; render-backed RGB video remains unavailable, so use an "
+                "accepted GPU/render machine or fix the renderer before official collection"
+            )
+        else:
+            blocking_missing.append(
+                "bounded ManiSkill reference runner did not produce a complete schema-valid pilot row/video on this machine; "
+                f"{result['failure_summary']}; use an accepted GPU/render machine or fix the backend before official collection"
+            )
     return {
         "version": "maniskill_pilot_runtime_liveness_audit_v1",
         "passed": passed,
         "not_external_evidence": True,
         "strict_external_evidence_ready": False,
         "pilot_runtime_ready": result["pilot_runtime_ready"],
+        "runner_io_ready": result["runner_io_ready"],
+        "render_video_ready": result["render_video_ready"],
         "readiness_state": "PILOT_RUNTIME_READY" if result["pilot_runtime_ready"] else "PILOT_RUNTIME_NOT_READY",
         "timeout_seconds": args.timeout_seconds,
         "max_rows": args.max_rows,
@@ -292,6 +352,7 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         "returncode": result["returncode"],
         "schema_errors": result["schema_errors"],
         "log_files": result["log_files"],
+        "diagnostic_video_fallbacks": result["diagnostic_video_fallbacks"],
         "blocking_missing": blocking_missing,
         "command": " ".join(result["command"]),
         "stdout_tail": result["stdout_tail"],
@@ -309,10 +370,13 @@ def write_outputs(payload: dict[str, Any]) -> None:
         f"Passed: `{str(payload['passed']).lower()}`.",
         "Not evidence: `true`.",
         f"Pilot runtime ready: `{str(payload['pilot_runtime_ready']).lower()}`.",
+        f"Runner I/O ready: `{str(payload['runner_io_ready']).lower()}`.",
+        f"Render video ready: `{str(payload['render_video_ready']).lower()}`.",
         f"Readiness state: `{payload['readiness_state']}`.",
         f"Timed out: `{str(payload['timed_out']).lower()}`.",
         f"Records observed: `{payload['records_observed']}`.",
         f"Videos written: `{payload['videos_written']}`.",
+        f"Diagnostic video fallbacks: `{len(payload['diagnostic_video_fallbacks'])}`.",
         f"Failure summary: `{payload['failure_summary']}`.",
         "",
         "This bounded liveness audit launches the tracked ManiSkill reference runner in a subprocess against quarantined `pilot_runtime_guard` directories. It is not rollout evidence and cannot satisfy the external evidence gate; it only prevents a slow CPU/render backend from silently blocking an official collection attempt.",

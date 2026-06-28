@@ -8,3 +8,4 @@ __pycache__/
 *.out
 *.fdb_latexmk
 *.fls
+external_validation/pilot_runtime_guard/
