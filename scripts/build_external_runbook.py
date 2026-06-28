@@ -19,6 +19,20 @@ OPERATOR_SHEET = EXTERNAL / "operator_record_sheet.csv"
 OUT_JSON = RESULTS / "external_runbook_audit.json"
 OUT_MD = RESULTS / "external_runbook_audit.md"
 
+REQUIRED_COMMAND_FRAGMENTS = [
+    "probe_maniskill_fidelity_metadata.py",
+    "audit_external_runner_harness.py",
+    "audit_external_backend_contract.py",
+    "audit_maniskill_backend_readiness.py",
+    "audit_maniskill_reference_collection_preflight.py",
+    "self_test_external_runner_backend.py",
+    "audit_maniskill_render_video_preflight.py",
+    "audit_maniskill_pilot_runtime_liveness.py",
+    "materialize_external_configs.py --platform-type high_fidelity_sim",
+    "real_collection_runner.py --backend-module <module_or_path>",
+    "audit_external_evidence_preflight.py",
+]
+
 
 TASK_DETAILS = {
     "peg_place_regrasp": {
@@ -311,6 +325,8 @@ def add_check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str
 def build_audit(plan: dict[str, Any], schema: dict[str, Any], rows: list[dict[str, str]], card_paths: list[Path], config_paths: list[Path]) -> dict[str, Any]:
     checks: list[dict[str, Any]] = []
     required_records = int(plan.get("total_required_records", 0))
+    commands = [str(command) for command in plan.get("validation_commands", [])]
+    command_text = "\n".join(commands)
     add_check(checks, "not_external_evidence_declared", True, "runbook and generated sheets are collection scaffolding only")
     add_check(checks, "operator_row_count_matches_plan", len(rows) == required_records, f"rows={len(rows)}, required={required_records}")
     add_check(checks, "operator_row_count_ge_1440", len(rows) >= 1440, f"rows={len(rows)}")
@@ -318,7 +334,31 @@ def build_audit(plan: dict[str, Any], schema: dict[str, Any], rows: list[dict[st
     add_check(checks, "config_templates_match_tasks", len(config_paths) == int(plan.get("task_family_count", 0)), f"templates={len(config_paths)}")
     add_check(checks, "method_count_ge_12", int(plan.get("method_count", 0)) >= 12, f"method_count={plan.get('method_count')}")
     add_check(checks, "required_fields_ge_28", len(schema.get("required_fields", {})) >= 28, f"required_fields={len(schema.get('required_fields', {}))}")
-    add_check(checks, "strict_commands_present", any("--strict" in str(command) for command in plan.get("validation_commands", [])), "strict validation command found")
+    add_check(checks, "strict_commands_present", any("--strict" in command for command in commands), "strict validation command found")
+    missing_fragments = [fragment for fragment in REQUIRED_COMMAND_FRAGMENTS if fragment not in command_text]
+    add_check(
+        checks,
+        "current_maniskill_route_gates_present",
+        not missing_fragments,
+        f"missing={missing_fragments}",
+    )
+    gate_order_fragments = [
+        "audit_external_fidelity_acceptance.py",
+        "audit_external_backend_contract.py",
+        "audit_maniskill_reference_collection_preflight.py",
+        "audit_maniskill_render_video_preflight.py",
+        "real_collection_runner.py --backend-module <module_or_path>",
+        "build_external_manifest.py --write --check-video-paths",
+        "validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "audit_external_evidence.py --strict",
+    ]
+    gate_positions = [command_text.find(fragment) for fragment in gate_order_fragments]
+    add_check(
+        checks,
+        "gate_order_preserves_preflight_before_collection_and_evidence",
+        all(position >= 0 for position in gate_positions) and gate_positions == sorted(gate_positions),
+        f"positions={dict(zip(gate_order_fragments, gate_positions))}",
+    )
     add_check(checks, "operator_sheet_exists", OPERATOR_SHEET.exists(), str(OPERATOR_SHEET.relative_to(ROOT)))
     add_check(checks, "runbook_exists", RUNBOOK_MD.exists(), str(RUNBOOK_MD.relative_to(ROOT)))
     return {
@@ -328,6 +368,8 @@ def build_audit(plan: dict[str, Any], schema: dict[str, Any], rows: list[dict[st
         "runbook": RUNBOOK_MD.relative_to(ROOT).as_posix(),
         "operator_record_sheet": OPERATOR_SHEET.relative_to(ROOT).as_posix(),
         "operator_rows": len(rows),
+        "validation_command_count": len(commands),
+        "required_command_fragments": REQUIRED_COMMAND_FRAGMENTS,
         "task_cards": [path.relative_to(ROOT).as_posix() for path in card_paths],
         "config_templates": [path.relative_to(ROOT).as_posix() for path in config_paths],
         "checks": checks,
@@ -342,6 +384,7 @@ def write_audit_md(audit: dict[str, Any]) -> None:
         f"Passed: `{str(audit['passed']).lower()}`.",
         f"Not evidence: `{str(audit['not_external_evidence']).lower()}`.",
         f"Operator rows: `{audit['operator_rows']}`.",
+        f"Validation commands: `{audit['validation_command_count']}`.",
         f"Runbook: `{audit['runbook']}`.",
         f"Operator sheet: `{audit['operator_record_sheet']}`.",
         "",

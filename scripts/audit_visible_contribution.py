@@ -58,6 +58,7 @@ def main() -> int:
     pilot_smoke = read_json(RESULTS / "external_pilot_smoke_packet_audit.json")
     pilot_runtime = read_json(RESULTS / "maniskill_pilot_runtime_liveness_audit.json")
     render_preflight = read_json(RESULTS / "maniskill_render_video_preflight_audit.json")
+    runbook = read_json(RESULTS / "external_runbook_audit.json")
     config_manifest = read_json(RESULTS / "external_config_manifest_audit.json")
     rollout_evidence = read_json(RESULTS / "external_rollout_evidence_audit.json")
     method_implementation = read_json(RESULTS / "external_method_implementation_audit.json")
@@ -137,6 +138,21 @@ def main() -> int:
             f"files={handoff.get('included_file_count')!r}, "
             f"forbidden={handoff.get('forbidden_included_paths')!r}, "
             f"start_state={handoff.get('start_state')!r}"
+        ),
+    )
+    runbook_checks = {check.get("name"): check.get("passed") for check in runbook.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_runbook_route_gates_visible",
+        runbook.get("passed") is True
+        and runbook.get("not_external_evidence") is True
+        and int(runbook.get("validation_command_count", 0) or 0) >= 40
+        and runbook_checks.get("current_maniskill_route_gates_present") is True
+        and runbook_checks.get("gate_order_preserves_preflight_before_collection_and_evidence") is True,
+        (
+            f"validation_command_count={runbook.get('validation_command_count')!r}, "
+            f"route_gates={runbook_checks.get('current_maniskill_route_gates_present')!r}, "
+            f"gate_order={runbook_checks.get('gate_order_preserves_preflight_before_collection_and_evidence')!r}"
         ),
     )
     add_check(
@@ -555,6 +571,7 @@ def main() -> int:
             "reference-adapter provenance catalog",
             "manifest assembly checklist",
             "External operator packet",
+            "External collection runbook route-gate audit",
             "External operator handoff bundle",
             "Reviewer response packet",
             "17/21",
@@ -585,6 +602,7 @@ def main() -> int:
             "reference-adapter provenance catalog",
             "manifest assembly checklist",
             "External operator packet",
+            "External collection runbook route-gate audit",
             "External operator handoff bundle",
             "Reviewer response packet",
             "Haonan/Yilun outreach package",
@@ -616,6 +634,7 @@ def main() -> int:
             "reference-adapter provenance catalog",
             "manifest assembly checklist",
             "generated external operator packet",
+            "external collection runbook route-gate audit",
             "external operator handoff bundle",
             "reviewer response packet",
             "outreach package now frames Haonan's role as fit/falsification advice",
@@ -647,6 +666,7 @@ def main() -> int:
             "reference-adapter provenance catalog",
             "manifest assembly checklist",
             "External operator packet",
+            "External collection runbook route-gate audit",
             "External operator handoff bundle",
             "Reviewer response packet",
             "outreach PDFs now reflect the operator-packet/no-go stance",
@@ -681,6 +701,7 @@ def main() -> int:
             "manifest_assembly_checklist.csv",
             "manifest assembly checklist",
             "scripts/build_external_operator_packet.py",
+            "current ManiSkill route gates",
             "scripts/build_external_operator_handoff_bundle.py",
             "scripts/build_reviewer_response_packet.py",
             "reviewer response packet",
@@ -712,6 +733,7 @@ def main() -> int:
             "reference-adapter provenance catalog",
             "manifest assembly checklist",
             "external operator packet",
+            "external collection runbook route-gate audit",
             "external operator handoff bundle",
             "reviewer response packet",
             "operator-packet-aligned Haonan/Yilun outreach package",
@@ -756,7 +778,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill render-video preflight, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the manifest assembly checklist, the no-go operator packet, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill render-video preflight, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the manifest assembly checklist, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

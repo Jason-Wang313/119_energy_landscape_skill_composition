@@ -41,6 +41,16 @@
       "passed": true
     },
     {
+      "detail": "missing=[]",
+      "name": "current_maniskill_route_gates_present",
+      "passed": true
+    },
+    {
+      "detail": "positions={'audit_external_fidelity_acceptance.py': 403, 'audit_external_backend_contract.py': 623, 'audit_maniskill_reference_collection_preflight.py': 725, 'audit_maniskill_render_video_preflight.py': 1112, 'real_collection_runner.py --backend-module <module_or_path>': 1928, 'build_external_manifest.py --write --check-video-paths': 2178, 'validate_external_rollouts.py --write-results --check-video-paths --strict': 2421, 'audit_external_evidence.py --strict': 2571}",
+      "name": "gate_order_preserves_preflight_before_collection_and_evidence",
+      "passed": true
+    },
+    {
       "detail": "external_validation\\operator_record_sheet.csv",
       "name": "operator_sheet_exists",
       "passed": true
@@ -62,6 +72,19 @@
   "operator_record_sheet": "external_validation/operator_record_sheet.csv",
   "operator_rows": 1440,
   "passed": true,
+  "required_command_fragments": [
+    "probe_maniskill_fidelity_metadata.py",
+    "audit_external_runner_harness.py",
+    "audit_external_backend_contract.py",
+    "audit_maniskill_backend_readiness.py",
+    "audit_maniskill_reference_collection_preflight.py",
+    "self_test_external_runner_backend.py",
+    "audit_maniskill_render_video_preflight.py",
+    "audit_maniskill_pilot_runtime_liveness.py",
+    "materialize_external_configs.py --platform-type high_fidelity_sim",
+    "real_collection_runner.py --backend-module <module_or_path>",
+    "audit_external_evidence_preflight.py"
+  ],
   "runbook": "external_validation/collection_runbook.md",
   "task_cards": [
     "external_validation/task_cards/peg_place_regrasp.md",
@@ -69,5 +92,6 @@
     "external_validation/task_cards/door_open_navigation.md",
     "external_validation/task_cards/cable_route_insert.md"
   ],
+  "validation_command_count": 41,
   "version": "external_runbook_audit_v1"
 }

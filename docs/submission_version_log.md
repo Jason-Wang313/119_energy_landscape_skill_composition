@@ -48,6 +48,7 @@
 - Added `scripts/build_external_method_implementation_packet.py` so the missing non-oracle baseline implementation layer is converted into concrete non-evidence work orders while strict adapter evidence remains fail-closed.
 - Added `external_validation/method_reference_provenance.csv` as a reference-adapter provenance catalog that hash-lists the current non-oracle interface adapters without treating them as independent evidence.
 - Added `scripts/build_external_runbook.py` so the collection schedule becomes a non-evidence operator packet with a runbook, 1,440-row record sheet, task cards, config templates, and audit.
+- Updated the external collection plan and runbook audit so the operator runbook now carries 41 validation commands, the current ManiSkill route gates, and the actual high-fidelity collection command template before strict evidence gates.
 - Added `external_validation/platform_qualification_checklist.md` and `scripts/audit_external_execution_readiness.py` so the independent external-validation packet is checked as executable while still remaining explicitly non-evidence.
 - Added `scripts/audit_external_backend_contract.py` so the independent backend module must pass a standalone contract qualification gate before collection readiness can be trusted.
 - Added `scripts/self_test_external_backend_contract.py` so strict backend qualification is tested on temporary complete, incomplete, and template backends without creating evidence.

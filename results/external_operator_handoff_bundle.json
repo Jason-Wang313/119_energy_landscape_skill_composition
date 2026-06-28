@@ -146,11 +146,11 @@
   "included_file_count": 251,
   "included_files": [
     {
-      "bytes": 17655,
+      "bytes": 17870,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "47A792899045E2BB0247D395A8746C3280D61785E5B5E104980096C54F10D2CF"
+      "sha256": "276C164A63F4DAA8E2EF48DC0913B498E5091CE6336A7F4BE0574F1C260801C5"
     },
     {
       "bytes": 11039,
@@ -174,11 +174,11 @@
       "sha256": "A597A3AA983731D9261A6617214842A2F0256DD7731A763D71ABAA0AB2A0DECB"
     },
     {
-      "bytes": 8208,
+      "bytes": 8439,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "4DF0CF98F440355BD265305EA7DCDF354243FD07F6CDA3FDBEDAE27B0D6EF249"
+      "sha256": "3E507428BC03FE54DDBA1EE2D2B2832B1387C909739052876077F66BA495BE2D"
     },
     {
       "bytes": 30696,
@@ -755,11 +755,11 @@
       "sha256": "BAAF6BC6B7BFA0DAD346498D8C7FACEE413FD2A0844E5F833A519BBAD4BEEBF5"
     },
     {
-      "bytes": 4092,
+      "bytes": 5185,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/collection_runbook.md",
-      "sha256": "238BAEC4A9C95DBD84EA66AFB7AE4013E3A7396685F08380A055DD75A60064D6"
+      "sha256": "76D0B534701B7871E4AF3366A971036493F7DD0879A68D458497D6ACC305E434"
     },
     {
       "bytes": 10400,
@@ -1259,18 +1259,18 @@
       "sha256": "9EC804D278A6BEBB749B193C799210EEC6894349742C2D4363E877BF8D4A5B96"
     },
     {
-      "bytes": 145981,
+      "bytes": 147126,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_collection_plan.json",
-      "sha256": "7ABF6969753B93808A408A19713AC127FDFA8F82467CBEB5F7B79F2AD2F11A29"
+      "sha256": "B7E2EF5CD36F397464B7D660AD003F784E9FFA111F803D1FFFB7D9AE6BBD623A"
     },
     {
-      "bytes": 4437,
+      "bytes": 5530,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_collection_plan.md",
-      "sha256": "300240030DCD06E4BF4DBB44D221E1EB413A914575C11727A4334C0CA03F7F5D"
+      "sha256": "DCEDFA3B914A373BF93B9CABCD930AD8EFAE61029D2BD84DB61DC325230F536E"
     },
     {
       "bytes": 4152,
@@ -1539,18 +1539,18 @@
       "sha256": "89FE156606AD8BCE8B3174FA4A02DF006D5BD8E1A593E82636C00D115EF9FF86"
     },
     {
-      "bytes": 2160,
+      "bytes": 3531,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_runbook_audit.json",
-      "sha256": "FDDDDCED20BAD8BFA15A82467C5DE0ADF9D3D2BBFACAE4B6387C1BD517ED9B3A"
+      "sha256": "66713C3D887EF6DA066B2991EC5AFA2545A2A0927E6AABE9B9614361065A1749"
     },
     {
-      "bytes": 1425,
+      "bytes": 2061,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_runbook_audit.md",
-      "sha256": "2E23CAC4EEBACF8FB9A88A1D3ED1F3731A8843FAE7D011AF2CAF108E8BFCAF5E"
+      "sha256": "31D3C9077086EBA0564594FCB185F246761EAEF9E045BB1AF1E2694DE9C5947A"
     },
     {
       "bytes": 2617,

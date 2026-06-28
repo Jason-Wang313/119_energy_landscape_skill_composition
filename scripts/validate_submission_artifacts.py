@@ -254,58 +254,75 @@ def main():
         fail("external collection plan has too few methods")
     if int(collection_plan.get("task_family_count", 0)) < 4:
         fail("external collection plan has too few task families")
-    if "python scripts\\audit_external_evidence.py --strict" not in collection_plan.get("validation_commands", []):
+    collection_commands = collection_plan.get("validation_commands", []) or []
+    collection_command_text = "\n".join(str(command) for command in collection_commands)
+    if "python scripts\\audit_external_evidence.py --strict" not in collection_commands:
         fail("external collection plan must include the strict external evidence audit command")
-    if "python scripts\\build_external_baseline_contract.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\build_external_baseline_contract.py" not in collection_commands:
         fail("external collection plan must include the baseline implementation contract command")
-    if "python scripts\\build_external_adapter_scaffolds.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\build_external_adapter_scaffolds.py" not in collection_commands:
         fail("external collection plan must include the adapter scaffold command")
-    if "python scripts\\validate_external_adapters.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\validate_external_adapters.py" not in collection_commands:
         fail("external collection plan must include the adapter contract validation command")
-    if "python scripts\\build_external_backend_integration_packet.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\build_external_backend_integration_packet.py" not in collection_commands:
         fail("external collection plan must include the backend integration packet command")
-    if "python scripts\\build_external_config_manifest_packet.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\build_external_config_manifest_packet.py" not in collection_commands:
         fail("external collection plan must include the config manifest packet command")
-    if "python scripts\\build_external_rollout_evidence_packet.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\build_external_rollout_evidence_packet.py" not in collection_commands:
         fail("external collection plan must include the rollout evidence packet command")
-    if "python scripts\\audit_external_pilot_smoke.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\audit_external_pilot_smoke.py" not in collection_commands:
         fail("external collection plan must include the pilot smoke audit command")
-    if "python scripts\\build_external_pilot_smoke_packet.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\build_external_pilot_smoke_packet.py" not in collection_commands:
         fail("external collection plan must include the pilot smoke packet command")
-    if "python scripts\\build_external_method_implementation_packet.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\build_external_method_implementation_packet.py" not in collection_commands:
         fail("external collection plan must include the method implementation packet command")
-    if "python scripts\\validate_external_adapters.py --strict" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\validate_external_adapters.py --strict" not in collection_commands:
         fail("external collection plan must include the strict adapter implementation validation command")
-    if "python scripts\\audit_external_release_package.py --strict" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\audit_external_release_package.py --strict" not in collection_commands:
         fail("external collection plan must include the strict release package audit command")
-    if "python scripts\\audit_external_pairing_integrity.py --strict" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\audit_external_pairing_integrity.py --strict" not in collection_commands:
         fail("external collection plan must include the strict pairing integrity audit command")
-    if "python scripts\\validate_external_configs.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\validate_external_configs.py" not in collection_commands:
         fail("external collection plan must include the config template validation command")
-    if "python scripts\\validate_external_configs.py --strict" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\validate_external_configs.py --strict" not in collection_commands:
         fail("external collection plan must include the strict config evidence validation command")
-    if "python scripts\\audit_external_fidelity_acceptance.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\audit_external_fidelity_acceptance.py" not in collection_commands:
         fail("external collection plan must include the fidelity acceptance audit command")
-    if "python scripts\\build_external_blind_eval_plan.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\build_external_blind_eval_plan.py" not in collection_commands:
         fail("external collection plan must include the blind evaluation plan command")
-    if "python scripts\\build_independent_validation_route.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\build_independent_validation_route.py" not in collection_commands:
         fail("external collection plan must include the independent validation route command")
-    if "python scripts\\probe_external_platform.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\probe_external_platform.py" not in collection_commands:
         fail("external collection plan must include the external platform probe command")
-    if "python scripts\\probe_maniskill_task_bindings.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\probe_maniskill_task_bindings.py" not in collection_commands:
         fail("external collection plan must include the ManiSkill task binding probe command")
-    if "python scripts\\probe_maniskill_env_smoke.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\probe_maniskill_env_smoke.py" not in collection_commands:
         fail("external collection plan must include the ManiSkill env smoke probe command")
-    if "python scripts\\build_external_platform_onboarding.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\build_external_platform_onboarding.py" not in collection_commands:
         fail("external collection plan must include the external platform onboarding command")
-    if "python scripts\\build_external_fidelity_provenance_packet.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\build_external_fidelity_provenance_packet.py" not in collection_commands:
         fail("external collection plan must include the fidelity provenance packet command")
-    if "python scripts\\audit_external_collection_readiness.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\audit_external_collection_readiness.py" not in collection_commands:
         fail("external collection plan must include the collection readiness audit command")
-    if "python scripts\\audit_external_collection_readiness.py --strict" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\audit_external_collection_readiness.py --strict" not in collection_commands:
         fail("external collection plan must include the strict collection readiness audit command")
-    if "python scripts\\build_external_analysis_plan.py" not in collection_plan.get("validation_commands", []):
+    if "python scripts\\build_external_analysis_plan.py" not in collection_commands:
         fail("external collection plan must include the external statistical analysis plan command")
+    for fragment in (
+        "probe_maniskill_fidelity_metadata.py",
+        "audit_external_runner_harness.py",
+        "audit_external_backend_contract.py",
+        "audit_maniskill_backend_readiness.py",
+        "audit_maniskill_reference_collection_preflight.py",
+        "self_test_external_runner_backend.py",
+        "audit_maniskill_render_video_preflight.py",
+        "audit_maniskill_pilot_runtime_liveness.py",
+        "materialize_external_configs.py --platform-type high_fidelity_sim",
+        "real_collection_runner.py --backend-module <module_or_path>",
+        "audit_external_evidence_preflight.py",
+    ):
+        if fragment not in collection_command_text:
+            fail(f"external collection plan missing current route gate command fragment: {fragment}")
 
     analysis_plan_path = EXTERNAL / "statistical_analysis_plan.json"
     analysis_plan_md_path = EXTERNAL / "statistical_analysis_plan.md"
@@ -887,6 +904,15 @@ def main():
         fail("external runbook has too few task cards")
     if len(runbook_audit.get("config_templates", [])) < 4:
         fail("external runbook has too few config templates")
+    if int(runbook_audit.get("validation_command_count", 0)) < 40:
+        fail("external runbook has too few validation commands for the current route")
+    runbook_checks = {entry.get("name"): entry.get("passed") for entry in runbook_audit.get("checks", [])}
+    for required_check in (
+        "current_maniskill_route_gates_present",
+        "gate_order_preserves_preflight_before_collection_and_evidence",
+    ):
+        if runbook_checks.get(required_check) is not True:
+            fail(f"external runbook audit missing passing check: {required_check}")
     required_runbook_files = [
         EXTERNAL / "collection_runbook.md",
         EXTERNAL / "operator_record_sheet.csv",
