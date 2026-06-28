@@ -1,29 +1,29 @@
 {
-  "abstract_words": 258,
+  "abstract_words": 243,
   "checks": [
     {
-      "detail": "words=258",
+      "detail": "words=243",
       "name": "abstract_exists",
       "passed": true
     },
     {
-      "detail": "words=258",
+      "detail": "words=243",
       "name": "abstract_length_conference_reasonable",
       "passed": true
     },
     {
-      "detail": "positions=[2502, 6873, 10435, 12448, 13338, 14872, 23953, 28915]",
+      "detail": "positions=[2345, 6510, 10072, 12085, 12975, 14509, 23590, 28552]",
       "name": "required_sections_present",
       "passed": true
     },
     {
-      "detail": "positions=[2502, 6873, 10435, 12448, 13338, 14872, 23953, 28915]",
+      "detail": "positions=[2345, 6510, 10072, 12085, 12975, 14509, 23590, 28552]",
       "name": "required_sections_in_order",
       "passed": true
     },
     {
-      "detail": "local world/action-modeling problem",
-      "name": "core_frame_term_local world/action-modeling prob",
+      "detail": "local world/action model for skill seams",
+      "name": "core_frame_term_local world/action model for ski",
       "passed": true
     },
     {
@@ -32,13 +32,13 @@
       "passed": true
     },
     {
-      "detail": "action-conditioned physical interface between a skill library and a planner",
-      "name": "core_frame_term_action-conditioned physical inte",
+      "detail": "action-conditioned model of whether a proposed edge",
+      "name": "core_frame_term_action-conditioned model of whet",
       "passed": true
     },
     {
-      "detail": "world/action-model view at a deliberately local scale",
-      "name": "core_frame_term_world/action-model view at a del",
+      "detail": "deliberately local form",
+      "name": "core_frame_term_deliberately local form",
       "passed": true
     },
     {
@@ -52,8 +52,8 @@
       "passed": true
     },
     {
-      "detail": "choose a different transition",
-      "name": "core_frame_term_choose a different transition",
+      "detail": "choose another transition",
+      "name": "core_frame_term_choose another transition",
       "passed": true
     },
     {
@@ -127,7 +127,7 @@
       "passed": true
     },
     {
-      "detail": "count=10",
+      "detail": "count=8",
       "name": "world_action_framing_not_overdone",
       "passed": true
     },
@@ -198,5 +198,5 @@
   "not_external_evidence": true,
   "passed": true,
   "version": "manuscript_readability_audit_v1",
-  "world_action_phrase_count": 10
+  "world_action_phrase_count": 8
 }

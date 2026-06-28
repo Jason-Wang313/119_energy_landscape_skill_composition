@@ -3227,17 +3227,17 @@ def main():
     if r"\hypersetup{hidelinks}" not in tex:
         fail("hidden citation/link configuration missing")
     framing_terms = [
-        "local instance of world/action modeling",
-        "compact interface that predicts a skill transition's physical consequence",
+        "local world/action model for skill seams",
+        "compact predictive interface between a skill library and a planner",
         "The term world/action model is used in this limited sense",
-        "action-conditioned physical interface between a skill library and a planner",
-        "world/action-model view at a deliberately local scale",
+        "action-conditioned model of whether a proposed edge",
+        "deliberately local form",
         "prediction-action-update loop",
     ]
     missing_framing_terms = [term for term in framing_terms if term not in tex]
     if missing_framing_terms:
         fail(f"manuscript missing natural world/action seam framing: {missing_framing_terms}")
-    if "accept, repair, probe, abstain" not in tex or "choose a different transition" not in tex:
+    if "accept, repair, probe, abstain" not in tex or "choose another transition" not in tex:
         fail("manuscript missing repair/probe/abstain/transition decision framing")
     if "planner-edge updates for future planning" not in tex or "planner's edge beliefs" not in tex:
         fail("manuscript missing future-planning memory framing")

@@ -27,13 +27,13 @@ REQUIRED_SECTIONS = [
 ]
 
 CORE_FRAME_TERMS = [
-    "local world/action-modeling problem",
+    "local world/action model for skill seams",
     "compact predictive interface between a skill library and a planner",
-    "action-conditioned physical interface between a skill library and a planner",
-    "world/action-model view at a deliberately local scale",
+    "action-conditioned model of whether a proposed edge",
+    "deliberately local form",
     "prediction-action-update loop",
     "accept, repair, probe, abstain",
-    "choose a different transition",
+    "choose another transition",
     "planner-edge updates for future planning",
     "planner's edge beliefs",
 ]
