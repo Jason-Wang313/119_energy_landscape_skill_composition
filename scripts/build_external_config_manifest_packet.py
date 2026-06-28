@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+import validate_external_configs as config_validator
+
 
 ROOT = Path(__file__).resolve().parents[1]
 EXTERNAL = ROOT / "external_validation"
@@ -69,12 +71,23 @@ def config_records(schema: dict[str, Any], manifest_template: dict[str, Any]) ->
         task_family = str(task.get("task_family", ""))
         config_path = str(task.get("config_path", ""))
         path = ROOT / config_path if config_path else CONFIG_DIR / f"{task_family}.json"
+        strict_validation_passed = False
+        strict_validation_errors: list[str] = ["config file missing"]
+        if path.exists():
+            strict_validation_passed, strict_validation_errors = config_validator.validate_config(
+                path,
+                schema,
+                strict=True,
+                manifest_task=task,
+            )
         record = {
             "task_family": task_family,
             "manifest_config_path": config_path,
             "config_path": rel(path) if path.exists() else config_path,
             "config_exists": path.exists(),
             "sha256": sha256_file(path) if path.exists() else "",
+            "strict_validation_passed_if_manifest_declared": strict_validation_passed,
+            "strict_validation_errors": strict_validation_errors,
             "platform_type": task.get("platform_type", ""),
             "platform_name_in_manifest_template": task.get("platform_name", ""),
             "log_jsonl": task.get("log_jsonl", ""),
@@ -247,6 +260,18 @@ def audit_packet(
         and all(record.get("config_exists") is True and len(str(record.get("sha256", ""))) == 64 for record in records),
         f"hashes={[record.get('sha256') for record in records]}",
     )
+    strict_config_errors = {
+        str(record.get("task_family", "")): record.get("strict_validation_errors", [])
+        for record in records
+        if record.get("strict_validation_passed_if_manifest_declared") is not True
+    }
+    add_check(
+        checks,
+        "prepared_configs_pass_strict_schema_if_manifest_declared",
+        len(records) >= 4
+        and all(record.get("strict_validation_passed_if_manifest_declared") is True for record in records),
+        f"errors={strict_config_errors}",
+    )
     add_check(
         checks,
         "work_orders_cover_config_to_manifest_path",
@@ -343,10 +368,10 @@ def write_packet_md(packet: dict[str, Any]) -> None:
     ]
     for item in packet["forbidden_evidence_shortcuts"]:
         lines.append(f"- {item}")
-    lines.extend(["", "## Task Config Records", "", "| Task | Config path | Prepared hash | Log | Video dir |", "|---|---|---|---|---|"])
+    lines.extend(["", "## Task Config Records", "", "| Task | Config path | Prepared hash | Strict-ready if manifest-declared | Log | Video dir |", "|---|---|---|---|---|---|"])
     for record in packet["task_config_records"]:
         lines.append(
-            f"| `{record['task_family']}` | `{record['config_path']}` | `{record['sha256']}` | `{record['log_jsonl']}` | `{record['video_dir']}` |"
+            f"| `{record['task_family']}` | `{record['config_path']}` | `{record['sha256']}` | `{str(record['strict_validation_passed_if_manifest_declared']).lower()}` | `{record['log_jsonl']}` | `{record['video_dir']}` |"
         )
     lines.extend(["", "## Work Orders", ""])
     for order in packet["work_orders"]:

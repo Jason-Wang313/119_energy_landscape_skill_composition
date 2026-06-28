@@ -16,12 +16,12 @@ This packet turns prepared task configs into a manifest-declaration checklist. I
 
 ## Task Config Records
 
-| Task | Config path | Prepared hash | Log | Video dir |
-|---|---|---|---|---|
-| `peg_place_regrasp` | `external_validation/configs/peg_place_regrasp.json` | `021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9` | `external_validation/logs/peg_place_regrasp.jsonl` | `external_validation/videos/peg_place_regrasp` |
-| `drawer_to_pick_transfer` | `external_validation/configs/drawer_to_pick_transfer.json` | `1288223014CB9D9285E4249B2FA607FFC16EBEE20B6F44E0241B63E88233E471` | `external_validation/logs/drawer_to_pick_transfer.jsonl` | `external_validation/videos/drawer_to_pick_transfer` |
-| `door_open_navigation` | `external_validation/configs/door_open_navigation.json` | `13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61` | `external_validation/logs/door_open_navigation.jsonl` | `external_validation/videos/door_open_navigation` |
-| `cable_route_insert` | `external_validation/configs/cable_route_insert.json` | `8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E` | `external_validation/logs/cable_route_insert.jsonl` | `external_validation/videos/cable_route_insert` |
+| Task | Config path | Prepared hash | Strict-ready if manifest-declared | Log | Video dir |
+|---|---|---|---|---|---|
+| `peg_place_regrasp` | `external_validation/configs/peg_place_regrasp.json` | `021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9` | `true` | `external_validation/logs/peg_place_regrasp.jsonl` | `external_validation/videos/peg_place_regrasp` |
+| `drawer_to_pick_transfer` | `external_validation/configs/drawer_to_pick_transfer.json` | `1288223014CB9D9285E4249B2FA607FFC16EBEE20B6F44E0241B63E88233E471` | `true` | `external_validation/logs/drawer_to_pick_transfer.jsonl` | `external_validation/videos/drawer_to_pick_transfer` |
+| `door_open_navigation` | `external_validation/configs/door_open_navigation.json` | `13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61` | `true` | `external_validation/logs/door_open_navigation.jsonl` | `external_validation/videos/door_open_navigation` |
+| `cable_route_insert` | `external_validation/configs/cable_route_insert.json` | `8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E` | `true` | `external_validation/logs/cable_route_insert.jsonl` | `external_validation/videos/cable_route_insert` |
 
 ## Work Orders
 

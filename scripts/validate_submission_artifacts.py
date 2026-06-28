@@ -2537,6 +2537,7 @@ def main():
         "strict_config_evidence_still_fails_without_manifest",
         "manifest_template_declares_all_collection_tasks",
         "prepared_config_files_have_hashes",
+        "prepared_configs_pass_strict_schema_if_manifest_declared",
         "work_orders_cover_config_to_manifest_path",
         "strict_commands_cover_config_manifest_release_and_evidence",
         "collection_readiness_preserves_config_boundary",

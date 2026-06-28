@@ -695,6 +695,7 @@ def main() -> int:
         checks,
         "external_config_manifest_covers_manifest_config_blocker",
         config_manifest_checks.get("work_orders_cover_config_to_manifest_path") is True
+        and config_manifest_checks.get("prepared_configs_pass_strict_schema_if_manifest_declared") is True
         and (EXTERNAL / "config_manifest_packet.json").exists()
         and (EXTERNAL / "config_manifest_packet.md").exists()
         and (EXTERNAL / "config_manifest_work_orders.csv").exists(),
