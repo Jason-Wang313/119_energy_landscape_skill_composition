@@ -850,6 +850,42 @@ def main() -> int:
         f"checks={rollout_evidence_checks}",
     )
 
+    ablation_ok, ablation_packet, ablation_detail = passed_json(
+        RESULTS / "external_ablation_collection_audit.json",
+        version="external_ablation_collection_audit_v1",
+    )
+    add_check(checks, "external_ablation_collection_packet_ready", ablation_ok, ablation_detail)
+    ablation_checks = {check.get("name"): check.get("passed") for check in ablation_packet.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_ablation_collection_not_evidence",
+        ablation_packet.get("not_external_evidence") is True
+        and ablation_packet.get("strict_external_evidence_ready") is False
+        and ablation_packet.get("manifest_ablation_evidence_ready") is False,
+        (
+            f"not_external_evidence={ablation_packet.get('not_external_evidence')!r}, "
+            f"manifest_ablation_evidence_ready={ablation_packet.get('manifest_ablation_evidence_ready')!r}, "
+            f"strict_external_evidence_ready={ablation_packet.get('strict_external_evidence_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "external_ablation_collection_covers_strict_ablation_blocker",
+        int(ablation_packet.get("work_order_count", 0) or 0) == 5
+        and int(ablation_packet.get("expected_ablation_records", 0) or 0) >= 600
+        and ablation_checks.get("every_required_ablation_has_work_order") is True
+        and ablation_checks.get("required_ablations_match_strict_audit") is True
+        and ablation_checks.get("operator_commands_cover_collection_manifest_rollout_and_strict_evidence") is True
+        and (EXTERNAL / "ablation_collection_packet.json").exists()
+        and (EXTERNAL / "ablation_collection_packet.md").exists()
+        and (EXTERNAL / "ablation_collection_work_orders.csv").exists(),
+        (
+            f"work_order_count={ablation_packet.get('work_order_count')!r}, "
+            f"expected_ablation_records={ablation_packet.get('expected_ablation_records')!r}, "
+            f"checks={ablation_checks}"
+        ),
+    )
+
     baseline_ok, baseline, baseline_detail = passed_json(
         RESULTS / "external_baseline_contract_audit.json",
         version="external_baseline_contract_audit_v1",
@@ -1118,6 +1154,9 @@ def main() -> int:
         EXTERNAL / "rollout_evidence_packet.json",
         EXTERNAL / "rollout_evidence_packet.md",
         EXTERNAL / "rollout_evidence_work_orders.csv",
+        EXTERNAL / "ablation_collection_packet.json",
+        EXTERNAL / "ablation_collection_packet.md",
+        EXTERNAL / "ablation_collection_work_orders.csv",
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
@@ -1142,6 +1181,7 @@ def main() -> int:
         RESULTS / "external_backend_integration_audit.md",
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.md",
+        RESULTS / "external_ablation_collection_audit.md",
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "maniskill_pilot_runtime_liveness_audit.md",
         DOCS / "independent_validation_protocol.md",
@@ -1258,6 +1298,9 @@ def main() -> int:
         "external_rollout_evidence_not_evidence",
         "external_rollout_evidence_covers_raw_log_blocker",
         "external_rollout_evidence_gate_order",
+        "external_ablation_collection_packet_ready",
+        "external_ablation_collection_not_evidence",
+        "external_ablation_collection_covers_strict_ablation_blocker",
         "baseline_contract_ready",
         "baseline_contract_reports_missing_implementations",
         "adapter_scaffolds_ready",
@@ -1313,6 +1356,7 @@ def main() -> int:
             "manifest-declared task configs with hashes",
             "completed config manifest packet work orders with manifest-declared config hashes",
             "completed rollout evidence packet work orders with manifest-declared JSONL logs and videos",
+            "manifest-declared external ablation logs and videos for basin_overlap, barrier_height, descent_continuity, risk_calibration, and seam_repair",
             "manifest-declared videos",
             "manifest-declared independent non-oracle adapter implementations",
             "completed method implementation packet work orders with source/config/checkpoint hashes",

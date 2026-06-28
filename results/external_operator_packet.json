@@ -1,4 +1,23 @@
 {
+  "ablation_collection": {
+    "audit_md_path": "results/external_ablation_collection_audit.md",
+    "audit_path": "results/external_ablation_collection_audit.json",
+    "blocking_missing": [
+      "manifest.ablations.basin_overlap is not true with manifest-declared external ablation evidence",
+      "manifest.ablations.barrier_height is not true with manifest-declared external ablation evidence",
+      "manifest.ablations.descent_continuity is not true with manifest-declared external ablation evidence",
+      "manifest.ablations.risk_calibration is not true with manifest-declared external ablation evidence",
+      "manifest.ablations.seam_repair is not true with manifest-declared external ablation evidence"
+    ],
+    "build_command": "python scripts\\build_external_ablation_collection_packet.py",
+    "expected_ablation_records": 600,
+    "manifest_ablation_evidence_ready": false,
+    "not_external_evidence": true,
+    "packet_path": "external_validation/ablation_collection_packet.md",
+    "strict_external_evidence_ready": false,
+    "work_order_count": 5,
+    "work_orders_path": "external_validation/ablation_collection_work_orders.csv"
+  },
   "backend_contract_gate_command": "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
   "blocking_missing_count": 4,
   "checks": [
@@ -40,6 +59,11 @@
     {
       "detail": "qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12",
       "name": "render_machine_qualification_recorded_but_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False",
+      "name": "ablation_collection_packet_recorded_but_not_evidence",
       "passed": true
     },
     {
@@ -375,6 +399,25 @@
       "id": "rollout_evidence_packet",
       "operator_input": "complete the rollout work orders with manifest-declared JSONL logs, videos, config hashes, method hashes, and strict recomputation",
       "title": "Use the rollout evidence packet as the raw-log evidence checklist"
+    },
+    {
+      "artifacts": [
+        "external_validation/ablation_collection_packet.md",
+        "external_validation/ablation_collection_work_orders.csv",
+        "results/external_ablation_collection_audit.json"
+      ],
+      "closes": [
+        "Independent real-robot or accepted high-fidelity external validation evidence",
+        "External rollout metrics recomputed from raw JSONL logs"
+      ],
+      "commands": [
+        "python scripts\\build_external_ablation_collection_packet.py",
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "id": "ablation_collection_packet",
+      "operator_input": "five required ablated variants on the same accepted task configs, skill library, paired resets, observation interface, and compute budget",
+      "title": "Collect manifest-declared external ablations"
     },
     {
       "artifacts": [
@@ -749,6 +792,7 @@
     "external_validation/fidelity_acceptance_draft.md",
     "results/external_config_materialization_plan.json",
     "results/external_rollout_evidence_audit.json",
+    "results/external_ablation_collection_audit.json",
     "results/external_fidelity_provenance_audit.json",
     "results/external_pilot_smoke_packet_audit.json",
     "results/maniskill_pilot_runtime_liveness_audit.json"

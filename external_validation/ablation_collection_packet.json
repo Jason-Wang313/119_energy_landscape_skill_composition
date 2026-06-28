@@ -1,0 +1,114 @@
+{
+  "audit_version": "external_ablation_collection_audit_v1",
+  "blocking_missing": [
+    "manifest.ablations.basin_overlap is not true with manifest-declared external ablation evidence",
+    "manifest.ablations.barrier_height is not true with manifest-declared external ablation evidence",
+    "manifest.ablations.descent_continuity is not true with manifest-declared external ablation evidence",
+    "manifest.ablations.risk_calibration is not true with manifest-declared external ablation evidence",
+    "manifest.ablations.seam_repair is not true with manifest-declared external ablation evidence"
+  ],
+  "checks": [
+    {
+      "detail": "writes only packet/audit/work-order files",
+      "name": "packet_is_non_evidence_and_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "passed=True, not_external_evidence=True",
+      "name": "collection_plan_loaded",
+      "passed": true
+    },
+    {
+      "detail": "tasks=['peg_place_regrasp', 'drawer_to_pick_transfer', 'door_open_navigation', 'cable_route_insert'], resets_per_task=30, expected_records=600",
+      "name": "task_and_reset_budget_preserved",
+      "passed": true
+    },
+    {
+      "detail": "strict_missing=['basin_overlap', 'barrier_height', 'descent_continuity', 'risk_calibration', 'seam_repair']",
+      "name": "required_ablations_match_strict_audit",
+      "passed": true
+    },
+    {
+      "detail": "work_orders=5",
+      "name": "every_required_ablation_has_work_order",
+      "passed": true
+    },
+    {
+      "detail": "local ablation variants are present in results/ablation_metrics.csv",
+      "name": "work_orders_use_local_reference_variants",
+      "passed": true
+    },
+    {
+      "detail": "manifest_ablation_keys=['barrier_height', 'basin_overlap', 'descent_continuity', 'risk_calibration', 'seam_repair']",
+      "name": "manifest_template_declares_ablation_booleans",
+      "passed": true
+    },
+    {
+      "detail": "strict ablation commands preserve collection-to-manifest gate order",
+      "name": "operator_commands_cover_collection_manifest_rollout_and_strict_evidence",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json remains absent before real evidence",
+      "name": "no_real_manifest_written",
+      "passed": true
+    }
+  ],
+  "expected_ablation_records": 600,
+  "manifest_ablation_evidence_ready": false,
+  "not_external_evidence": true,
+  "operator_commands": [
+    "python scripts\\build_external_ablation_collection_packet.py",
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+    "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "paired_resets_per_task": 30,
+  "passed": true,
+  "required_ablations": [
+    {
+      "component_removed": "basin-overlap posterior",
+      "external_variant": "minus_basin_overlap",
+      "id": "basin_overlap",
+      "local_reference_variant": "minus_basin_overlap"
+    },
+    {
+      "component_removed": "barrier-height term",
+      "external_variant": "minus_barrier_height",
+      "id": "barrier_height",
+      "local_reference_variant": "minus_barrier_height"
+    },
+    {
+      "component_removed": "descent-continuity term",
+      "external_variant": "minus_descent_continuity",
+      "id": "descent_continuity",
+      "local_reference_variant": "minus_descent_continuity"
+    },
+    {
+      "component_removed": "risk calibration",
+      "external_variant": "minus_calibration",
+      "id": "risk_calibration",
+      "local_reference_variant": "minus_calibration"
+    },
+    {
+      "component_removed": "high-energy seam repair",
+      "external_variant": "minus_high_energy_repair",
+      "id": "seam_repair",
+      "local_reference_variant": "minus_high_energy_repair"
+    }
+  ],
+  "source_collection_plan": "results/external_collection_plan.json",
+  "source_external_evidence_audit": "results/external_evidence_audit.json",
+  "strict_external_evidence_ready": false,
+  "task_families": [
+    "peg_place_regrasp",
+    "drawer_to_pick_transfer",
+    "door_open_navigation",
+    "cable_route_insert"
+  ],
+  "version": "external_ablation_collection_packet_v1",
+  "work_order_count": 5,
+  "work_orders_path": "external_validation/ablation_collection_work_orders.csv"
+}

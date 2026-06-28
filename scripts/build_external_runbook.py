@@ -32,6 +32,7 @@ REQUIRED_COMMAND_FRAGMENTS = [
     "materialize_external_configs.py --platform-type high_fidelity_sim",
     "real_collection_runner.py --backend-module <module_or_path>",
     "audit_external_evidence_preflight.py",
+    "build_external_ablation_collection_packet.py",
 ]
 
 

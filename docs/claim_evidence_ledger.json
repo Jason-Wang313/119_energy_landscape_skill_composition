@@ -236,6 +236,11 @@
       "evidence": ["scripts/build_external_rollout_evidence_packet.py", "external_validation/rollout_evidence_packet.json", "external_validation/rollout_evidence_packet.md", "external_validation/rollout_evidence_work_orders.csv", "results/external_rollout_evidence_audit.json", "results/external_rollout_evidence_audit.md", "results/external_rollout_metrics.json", "results/external_evidence_preflight.json"]
     },
     {
+      "name": "external_ablation_collection_packet_claim",
+      "claim": "The repository provides a non-evidence external ablation collection packet that maps the strict external ablation blocker to five manifest-declared ablation work orders over the same accepted configs, skill library, resets, observation interface, and compute budget, while manifest ablation evidence and strict external evidence remain false.",
+      "evidence": ["scripts/build_external_ablation_collection_packet.py", "external_validation/ablation_collection_packet.json", "external_validation/ablation_collection_packet.md", "external_validation/ablation_collection_work_orders.csv", "results/external_ablation_collection_audit.json", "results/external_ablation_collection_audit.md", "results/external_evidence_audit.json", "results/external_collection_plan.json"]
+    },
+    {
       "name": "external_baseline_contract_claim",
       "claim": "The repository provides a non-evidence baseline implementation contract, method matrix, and per-method adapter specs, while explicitly recording that independent non-oracle implementations are still missing.",
       "evidence": ["scripts/build_external_baseline_contract.py", "external_validation/baseline_implementation_contract.md", "external_validation/baseline_implementation_matrix.csv", "external_validation/baseline_specs/barrier_certified_energy_composer_v5.json", "external_validation/baseline_specs/oracle_basin_composer.json", "results/external_baseline_contract_audit.json", "results/external_baseline_contract_audit.md"]
@@ -358,6 +363,7 @@
     "external_validation/backend_integration_packet.md",
     "external_validation/config_manifest_packet.md",
     "external_validation/rollout_evidence_packet.md",
+    "external_validation/ablation_collection_packet.md",
     "external_validation/method_implementation_packet.md",
     "external_validation/README.md",
     "results/external_analysis_plan_audit.md",
@@ -368,6 +374,7 @@
     "results/external_runner_backend_self_test.md",
     "results/external_config_manifest_audit.md",
     "results/external_rollout_evidence_audit.md",
+    "results/external_ablation_collection_audit.md",
     "results/external_method_implementation_audit.md",
     "results/maniskill_render_video_preflight_audit.md",
     "results/maniskill_pilot_runtime_liveness_audit.md",

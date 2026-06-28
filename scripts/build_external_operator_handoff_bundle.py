@@ -104,6 +104,9 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "rollout_evidence_packet.json",
         EXTERNAL / "rollout_evidence_packet.md",
         EXTERNAL / "rollout_evidence_work_orders.csv",
+        EXTERNAL / "ablation_collection_packet.json",
+        EXTERNAL / "ablation_collection_packet.md",
+        EXTERNAL / "ablation_collection_work_orders.csv",
         EXTERNAL / "pilot_smoke_packet.json",
         EXTERNAL / "pilot_smoke_packet.md",
         EXTERNAL / "pilot_smoke_work_orders.csv",
@@ -145,6 +148,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_backend_integration_packet.py",
         SCRIPTS / "build_external_config_manifest_packet.py",
         SCRIPTS / "build_external_rollout_evidence_packet.py",
+        SCRIPTS / "build_external_ablation_collection_packet.py",
         SCRIPTS / "audit_external_pilot_smoke.py",
         SCRIPTS / "build_external_pilot_smoke_packet.py",
         SCRIPTS / "audit_maniskill_render_video_preflight.py",
@@ -199,6 +203,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.json",
         RESULTS / "external_rollout_evidence_audit.md",
+        RESULTS / "external_ablation_collection_audit.json",
+        RESULTS / "external_ablation_collection_audit.md",
         RESULTS / "external_pilot_smoke_audit.json",
         RESULTS / "external_pilot_smoke_audit.md",
         RESULTS / "external_pilot_smoke_packet_audit.json",
@@ -318,6 +324,7 @@ def build_payload() -> dict[str, Any]:
     maniskill_preflight = require_payload(RESULTS / "maniskill_reference_collection_preflight_audit.json", "maniskill_reference_collection_preflight_audit_v1")
     config_manifest = require_payload(RESULTS / "external_config_manifest_audit.json", "external_config_manifest_audit_v1")
     rollout_evidence = require_payload(RESULTS / "external_rollout_evidence_audit.json", "external_rollout_evidence_audit_v1")
+    ablation_packet = require_payload(RESULTS / "external_ablation_collection_audit.json", "external_ablation_collection_audit_v1")
     method_implementation = require_payload(RESULTS / "external_method_implementation_audit.json", "external_method_implementation_audit_v1")
     pilot_smoke = require_payload(RESULTS / "external_pilot_smoke_packet_audit.json", "external_pilot_smoke_packet_audit_v1")
     render_preflight = require_payload(RESULTS / "maniskill_render_video_preflight_audit.json", "maniskill_render_video_preflight_audit_v1")
@@ -665,6 +672,29 @@ def build_payload() -> dict[str, Any]:
             f"strict_external_evidence_ready={rollout_evidence.get('strict_external_evidence_ready')!r}"
         ),
     )
+    ablation_checks = {check.get("name"): check.get("passed") for check in ablation_packet.get("checks", []) or []}
+    add_check(
+        checks,
+        "ablation_collection_packet_included",
+        ablation_packet.get("passed") is True
+        and ablation_packet.get("not_external_evidence") is True
+        and ablation_packet.get("strict_external_evidence_ready") is False
+        and ablation_packet.get("manifest_ablation_evidence_ready") is False
+        and int(ablation_packet.get("work_order_count", 0) or 0) == 5
+        and int(ablation_packet.get("expected_ablation_records", 0) or 0) >= 600
+        and ablation_checks.get("every_required_ablation_has_work_order") is True
+        and ablation_checks.get("operator_commands_cover_collection_manifest_rollout_and_strict_evidence") is True
+        and "external_validation/ablation_collection_packet.json" in paths
+        and "external_validation/ablation_collection_packet.md" in paths
+        and "external_validation/ablation_collection_work_orders.csv" in paths
+        and "results/external_ablation_collection_audit.json" in paths
+        and "scripts/build_external_ablation_collection_packet.py" in paths,
+        (
+            f"work_order_count={ablation_packet.get('work_order_count')!r}, "
+            f"expected_ablation_records={ablation_packet.get('expected_ablation_records')!r}, "
+            f"manifest_ablation_evidence_ready={ablation_packet.get('manifest_ablation_evidence_ready')!r}"
+        ),
+    )
     pilot_smoke_checks = {check.get("name"): check.get("passed") for check in pilot_smoke.get("checks", []) or []}
     add_check(
         checks,
@@ -812,6 +842,7 @@ def build_payload() -> dict[str, Any]:
             "maniskill_reference_collection_preflight",
             "config_manifest_packet",
             "rollout_evidence_packet",
+            "ablation_collection_packet",
             "backend_module",
             "real_task_configs",
             "platform_fidelity",
@@ -825,7 +856,7 @@ def build_payload() -> dict[str, Any]:
             "strict_rollout_recompute",
             "final_strict_gate",
         }.issubset(action_ids),
-        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'fidelity_acceptance_materializer', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'maniskill_render_video_preflight', 'maniskill_pilot_runtime_liveness', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
+        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'fidelity_acceptance_materializer', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'ablation_collection_packet', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'maniskill_render_video_preflight', 'maniskill_pilot_runtime_liveness', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
     )
     add_check(
         checks,

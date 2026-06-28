@@ -57,6 +57,7 @@ REQUIRED_COMMANDS = [
     r"python scripts\audit_external_evidence_preflight.py",
     r"python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict",
     r"python scripts\audit_external_pairing_integrity.py --strict",
+    r"python scripts\build_external_ablation_collection_packet.py",
     r"python scripts\audit_external_evidence.py --strict",
 ]
 

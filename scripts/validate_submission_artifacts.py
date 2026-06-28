@@ -138,6 +138,7 @@ def main():
         "scripts\\materialize_external_configs.py",
         "scripts\\build_external_config_manifest_packet.py",
         "scripts\\build_external_rollout_evidence_packet.py",
+        "scripts\\build_external_ablation_collection_packet.py",
         "scripts\\build_external_baseline_contract.py",
         "scripts\\build_external_adapter_scaffolds.py",
         "scripts\\build_external_reference_adapters.py",
@@ -225,6 +226,7 @@ def main():
         "python scripts/materialize_external_configs.py",
         "python scripts/build_external_config_manifest_packet.py",
         "python scripts/build_external_rollout_evidence_packet.py",
+        "python scripts/build_external_ablation_collection_packet.py",
         "python scripts/build_external_analysis_plan.py",
         "python scripts/probe_external_platform.py",
         "python scripts/probe_maniskill_task_bindings.py",
@@ -296,6 +298,8 @@ def main():
         fail("external collection plan must include the config manifest packet command")
     if "python scripts\\build_external_rollout_evidence_packet.py" not in collection_commands:
         fail("external collection plan must include the rollout evidence packet command")
+    if "python scripts\\build_external_ablation_collection_packet.py" not in collection_commands:
+        fail("external collection plan must include the external ablation collection packet command")
     if "python scripts\\audit_external_pilot_smoke.py" not in collection_commands:
         fail("external collection plan must include the pilot smoke audit command")
     if "python scripts\\build_external_pilot_smoke_packet.py" not in collection_commands:
@@ -344,6 +348,7 @@ def main():
         "audit_maniskill_render_video_preflight.py",
         "audit_maniskill_pilot_runtime_liveness.py",
         "build_maniskill_render_machine_qualification.py",
+        "build_external_ablation_collection_packet.py",
         "materialize_external_configs.py --platform-type high_fidelity_sim",
         "real_collection_runner.py --backend-module <module_or_path>",
         "audit_external_evidence_preflight.py",
@@ -2429,6 +2434,80 @@ def main():
     ):
         if render_machine_checks.get(required_check) is not True:
             fail(f"ManiSkill render machine qualification missing passing check: {required_check}")
+
+    ablation_packet_path = EXTERNAL / "ablation_collection_packet.json"
+    ablation_packet_md_path = EXTERNAL / "ablation_collection_packet.md"
+    ablation_orders_path = EXTERNAL / "ablation_collection_work_orders.csv"
+    ablation_audit_path = RESULTS / "external_ablation_collection_audit.json"
+    ablation_audit_md_path = RESULTS / "external_ablation_collection_audit.md"
+    for path in (
+        ROOT / "scripts" / "build_external_ablation_collection_packet.py",
+        ablation_packet_path,
+        ablation_packet_md_path,
+        ablation_orders_path,
+        ablation_audit_path,
+        ablation_audit_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external ablation collection packet artifact: {path}")
+    ablation_packet = json.loads(ablation_packet_path.read_text(encoding="utf-8"))
+    ablation_audit = json.loads(ablation_audit_path.read_text(encoding="utf-8"))
+    required_ablation_ids = {
+        "basin_overlap",
+        "barrier_height",
+        "descent_continuity",
+        "risk_calibration",
+        "seam_repair",
+    }
+    for payload, label in ((ablation_packet, "packet"), (ablation_audit, "audit")):
+        expected_version = (
+            "external_ablation_collection_packet_v1"
+            if label == "packet"
+            else "external_ablation_collection_audit_v1"
+        )
+        if payload.get("version") != expected_version:
+            fail(f"external ablation collection {label} version mismatch")
+        if payload.get("passed") is not True:
+            fail(f"external ablation collection {label} did not pass")
+        if payload.get("not_external_evidence") is not True:
+            fail(f"external ablation collection {label} must declare that it is not evidence")
+        if payload.get("strict_external_evidence_ready") is not False:
+            fail(f"external ablation collection {label} must keep strict external evidence false")
+        if payload.get("manifest_ablation_evidence_ready") is not False:
+            fail(f"external ablation collection {label} must keep manifest ablation evidence false")
+        if int(payload.get("work_order_count", 0) or 0) != 5:
+            fail(f"external ablation collection {label} must define exactly five work orders")
+        if int(payload.get("expected_ablation_records", 0) or 0) < 600:
+            fail(f"external ablation collection {label} has too few expected ablation records")
+        ablation_ids = {str(row.get("id", "")) for row in payload.get("required_ablations", []) or []}
+        if ablation_ids != required_ablation_ids:
+            fail(f"external ablation collection {label} required ablation IDs mismatch: {sorted(ablation_ids)}")
+    ablation_commands = "\n".join(ablation_audit.get("operator_commands", []) or [])
+    for fragment in (
+        "build_external_ablation_collection_packet.py",
+        "audit_external_collection_readiness.py --strict",
+        "real_collection_runner.py",
+        "build_external_manifest.py --write",
+        "validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "audit_external_evidence.py --strict",
+    ):
+        if fragment not in ablation_commands:
+            fail(f"external ablation collection audit missing operator command fragment: {fragment}")
+    ablation_checks = {check.get("name"): check.get("passed") for check in ablation_audit.get("checks", [])}
+    for required_check in (
+        "packet_is_non_evidence_and_fail_closed",
+        "collection_plan_loaded",
+        "task_and_reset_budget_preserved",
+        "required_ablations_match_strict_audit",
+        "every_required_ablation_has_work_order",
+        "work_orders_use_local_reference_variants",
+        "manifest_template_declares_ablation_booleans",
+        "operator_commands_cover_collection_manifest_rollout_and_strict_evidence",
+        "no_real_manifest_written",
+    ):
+        if ablation_checks.get(required_check) is not True:
+            fail(f"external ablation collection audit missing passing check: {required_check}")
+
     if not (ROOT / "scripts" / "self_test_external_rollout_validator.py").exists():
         fail("missing scripts/self_test_external_rollout_validator.py")
     rollout_metrics = json.loads(rollout_metrics_path.read_text(encoding="utf-8"))
@@ -2558,6 +2637,9 @@ def main():
         "external_rollout_evidence_not_evidence",
         "external_rollout_evidence_covers_raw_log_blocker",
         "external_rollout_evidence_gate_order",
+        "external_ablation_collection_packet_ready",
+        "external_ablation_collection_not_evidence",
+        "external_ablation_collection_covers_strict_ablation_blocker",
         "baseline_contract_reports_missing_implementations",
         "adapter_contract_harness_ready",
         "strict_evidence_gates_remain_not_ready",
@@ -2608,6 +2690,9 @@ def main():
         EXTERNAL / "rollout_evidence_packet.json",
         EXTERNAL / "rollout_evidence_packet.md",
         EXTERNAL / "rollout_evidence_work_orders.csv",
+        EXTERNAL / "ablation_collection_packet.json",
+        EXTERNAL / "ablation_collection_packet.md",
+        EXTERNAL / "ablation_collection_work_orders.csv",
         EXTERNAL / "pilot_smoke_packet.json",
         EXTERNAL / "pilot_smoke_packet.md",
         EXTERNAL / "pilot_smoke_work_orders.csv",
@@ -2619,6 +2704,7 @@ def main():
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.md",
+        RESULTS / "external_ablation_collection_audit.md",
         RESULTS / "external_pilot_smoke_audit.md",
         RESULTS / "external_pilot_smoke_packet_audit.md",
         RESULTS / "external_config_materialization_plan.md",
@@ -2664,6 +2750,7 @@ def main():
         "config_materializer_ready",
         "config_manifest_packet_ready",
         "rollout_evidence_packet_ready",
+        "ablation_collection_packet_ready",
         "backend_contract_gate_ready",
         "backend_integration_packet_ready",
         "maniskill_reference_backend_audit_ready",
@@ -2891,6 +2978,23 @@ def main():
     render_machine_action_commands = "\n".join(render_machine_actions[0].get("commands", []) or [])
     if "build_maniskill_render_machine_qualification.py" not in render_machine_action_commands:
         fail("external operator packet render-machine action must build the render machine qualification packet")
+    operator_ablation = operator_packet.get("ablation_collection", {}) or {}
+    if operator_ablation.get("manifest_ablation_evidence_ready") is not False:
+        fail("external operator packet ablation summary must keep manifest ablation evidence false")
+    if operator_ablation.get("strict_external_evidence_ready") is not False:
+        fail("external operator packet ablation summary must keep strict evidence false")
+    if int(operator_ablation.get("work_order_count", 0) or 0) != 5:
+        fail("external operator packet ablation summary must expose five work orders")
+    if int(operator_ablation.get("expected_ablation_records", 0) or 0) < 600:
+        fail("external operator packet ablation summary has too few expected records")
+    if "external_validation/ablation_collection_packet.md" not in str(operator_ablation.get("packet_path", "")):
+        fail("external operator packet ablation summary must point to the ablation packet")
+    ablation_actions = [action for action in operator_actions if action.get("id") == "ablation_collection_packet"]
+    if not ablation_actions:
+        fail("external operator packet missing ablation_collection_packet action")
+    ablation_action_commands = "\n".join(ablation_actions[0].get("commands", []) or [])
+    if "build_external_ablation_collection_packet.py" not in ablation_action_commands:
+        fail("external operator packet ablation action must rebuild the ablation collection packet")
     if "audit_external_collection_readiness.py --strict" not in operator_packet.get("pre_collection_gate_command", ""):
         fail("external operator packet missing strict pre-collection gate command")
     if "audit_external_backend_contract.py --strict" not in operator_packet.get("backend_contract_gate_command", ""):
@@ -2959,6 +3063,7 @@ def main():
         "maniskill_reference_collection_preflight_included",
         "config_manifest_packet_included",
         "rollout_evidence_packet_included",
+        "ablation_collection_packet_included",
         "pilot_smoke_packet_included",
         "maniskill_render_video_preflight_included",
         "maniskill_pilot_runtime_liveness_included",

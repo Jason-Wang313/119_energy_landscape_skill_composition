@@ -157,6 +157,26 @@ Qualification packet command:
 python scripts\build_maniskill_render_machine_qualification.py
 ```
 
+## External Ablation Collection
+
+This packet is not evidence. It converts the strict external ablation requirement into five manifest-declared work orders that must use the same accepted configs, skill library, resets, observation interface, and compute budget as the primary method.
+
+- Packet: `external_validation/ablation_collection_packet.md`
+- Work orders: `external_validation/ablation_collection_work_orders.csv`
+- Audit JSON: `results/external_ablation_collection_audit.json`
+- Audit notes: `results/external_ablation_collection_audit.md`
+- Expected ablation records: `600`
+- Work-order count: `5`
+- Manifest ablation evidence ready: `false`
+- Strict external evidence ready: `false`
+- Blocking missing: `['manifest.ablations.basin_overlap is not true with manifest-declared external ablation evidence', 'manifest.ablations.barrier_height is not true with manifest-declared external ablation evidence', 'manifest.ablations.descent_continuity is not true with manifest-declared external ablation evidence', 'manifest.ablations.risk_calibration is not true with manifest-declared external ablation evidence', 'manifest.ablations.seam_repair is not true with manifest-declared external ablation evidence']`
+
+Ablation packet command:
+
+```powershell
+python scripts\build_external_ablation_collection_packet.py
+```
+
 ## Commands
 
 Materialize real configs after platform selection:
@@ -208,6 +228,7 @@ Post-collection strict gates:
 - `real_task_configs`: Create real manifest-declared task configs
 - `config_manifest_packet`: Use the config manifest packet as the task-config evidence checklist
 - `rollout_evidence_packet`: Use the rollout evidence packet as the raw-log evidence checklist
+- `ablation_collection_packet`: Collect manifest-declared external ablations
 - `platform_fidelity`: Fill platform fidelity acceptance with real provenance
 - `fidelity_acceptance_draft`: Generate the tracked ManiSkill fidelity acceptance draft
 - `fidelity_acceptance_materializer`: Materialize fidelity acceptance only through the guarded promotion path
@@ -236,6 +257,7 @@ Post-collection strict gates:
 - `pass` `fidelity_metadata_probe_ready_but_not_evidence`: strict_metadata_ready=True, primary_metadata_missing=[]
 - `pass` `render_video_preflight_recorded_but_not_evidence`: render_video_ready=False, envs=4, failure_classes=['vulkan_descriptor_pool_exhaustion']
 - `pass` `render_machine_qualification_recorded_but_not_evidence`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12
+- `pass` `ablation_collection_packet_recorded_but_not_evidence`: work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False
 - `pass` `operator_actions_cover_start_to_finish`: missing=[]
 - `pass` `operator_action_titles_present`: missing_titles=[]
 - `pass` `config_materializer_is_guarded`: write_enabled=False, task_count=4

@@ -82,6 +82,10 @@ def build_payload() -> dict[str, Any]:
         RESULTS / "maniskill_render_machine_qualification.json",
         "maniskill_render_machine_qualification_v1",
     )
+    ablation_packet = require_payload(
+        RESULTS / "external_ablation_collection_audit.json",
+        "external_ablation_collection_audit_v1",
+    )
     materialization = require_payload(
         RESULTS / "external_config_materialization_plan.json",
         "external_config_materialization_plan_v1",
@@ -118,6 +122,7 @@ def build_payload() -> dict[str, Any]:
         "maniskill_render_video_preflight",
         "maniskill_pilot_runtime_liveness",
         "maniskill_render_machine_qualification",
+        "ablation_collection_packet",
         "run_collection",
         "manifest_and_release",
         "strict_rollout_recompute",
@@ -255,6 +260,27 @@ def build_payload() -> dict[str, Any]:
             f"qualification_state={render_machine.get('qualification_state')!r}, "
             f"render_machine_qualified={render_machine.get('render_machine_qualified')!r}, "
             f"blocking={len(render_machine.get('blocking_missing', []) or [])}"
+        ),
+    )
+    ablation_action = actions.get("ablation_collection_packet", {})
+    ablation_commands = "\n".join(ablation_action.get("commands", []) or [])
+    ablation_checks = {check.get("name"): check.get("passed") for check in ablation_packet.get("checks", []) or []}
+    add_check(
+        checks,
+        "ablation_collection_packet_recorded_but_not_evidence",
+        ablation_packet.get("passed") is True
+        and ablation_packet.get("not_external_evidence") is True
+        and ablation_packet.get("strict_external_evidence_ready") is False
+        and ablation_packet.get("manifest_ablation_evidence_ready") is False
+        and int(ablation_packet.get("work_order_count", 0) or 0) == 5
+        and int(ablation_packet.get("expected_ablation_records", 0) or 0) >= 600
+        and ablation_checks.get("every_required_ablation_has_work_order") is True
+        and ablation_checks.get("task_and_reset_budget_preserved") is True
+        and "build_external_ablation_collection_packet.py" in ablation_commands,
+        (
+            f"work_order_count={ablation_packet.get('work_order_count')!r}, "
+            f"expected_ablation_records={ablation_packet.get('expected_ablation_records')!r}, "
+            f"manifest_ablation_evidence_ready={ablation_packet.get('manifest_ablation_evidence_ready')!r}"
         ),
     )
     add_check(
@@ -443,6 +469,19 @@ def build_payload() -> dict[str, Any]:
             "audit_md_path": "results/maniskill_render_machine_qualification.md",
             "build_command": "python scripts\\build_maniskill_render_machine_qualification.py",
         },
+        "ablation_collection": {
+            "not_external_evidence": True,
+            "manifest_ablation_evidence_ready": ablation_packet.get("manifest_ablation_evidence_ready") is True,
+            "strict_external_evidence_ready": ablation_packet.get("strict_external_evidence_ready") is True,
+            "expected_ablation_records": int(ablation_packet.get("expected_ablation_records", 0) or 0),
+            "work_order_count": int(ablation_packet.get("work_order_count", 0) or 0),
+            "blocking_missing": list(ablation_packet.get("blocking_missing", []) or []),
+            "packet_path": "external_validation/ablation_collection_packet.md",
+            "work_orders_path": "external_validation/ablation_collection_work_orders.csv",
+            "audit_path": "results/external_ablation_collection_audit.json",
+            "audit_md_path": "results/external_ablation_collection_audit.md",
+            "build_command": "python scripts\\build_external_ablation_collection_packet.py",
+        },
         "pre_collection_gate_command": (
             "python scripts\\audit_external_collection_readiness.py --strict "
             "--backend-module <module_or_path> --task-config-dir external_validation\\configs "
@@ -470,6 +509,7 @@ def build_payload() -> dict[str, Any]:
             "external_validation/fidelity_acceptance_draft.md",
             "results/external_config_materialization_plan.json",
             "results/external_rollout_evidence_audit.json",
+            "results/external_ablation_collection_audit.json",
             "results/external_fidelity_provenance_audit.json",
             "results/external_pilot_smoke_packet_audit.json",
             "results/maniskill_pilot_runtime_liveness_audit.json",
@@ -666,6 +706,32 @@ def write_md(payload: dict[str, Any]) -> None:
             "",
             "```powershell",
             render_machine["build_command"],
+            "```",
+        ]
+    )
+
+    ablation = payload["ablation_collection"]
+    lines.extend(
+        [
+            "",
+            "## External Ablation Collection",
+            "",
+            "This packet is not evidence. It converts the strict external ablation requirement into five manifest-declared work orders that must use the same accepted configs, skill library, resets, observation interface, and compute budget as the primary method.",
+            "",
+            f"- Packet: `{ablation['packet_path']}`",
+            f"- Work orders: `{ablation['work_orders_path']}`",
+            f"- Audit JSON: `{ablation['audit_path']}`",
+            f"- Audit notes: `{ablation['audit_md_path']}`",
+            f"- Expected ablation records: `{ablation['expected_ablation_records']}`",
+            f"- Work-order count: `{ablation['work_order_count']}`",
+            f"- Manifest ablation evidence ready: `{str(ablation['manifest_ablation_evidence_ready']).lower()}`",
+            f"- Strict external evidence ready: `{str(ablation['strict_external_evidence_ready']).lower()}`",
+            f"- Blocking missing: `{ablation['blocking_missing']}`",
+            "",
+            "Ablation packet command:",
+            "",
+            "```powershell",
+            ablation["build_command"],
             "```",
         ]
     )
