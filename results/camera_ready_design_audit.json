@@ -92,8 +92,8 @@
     }
   ],
   "density_summary": {
-    "maximum": 0.17732620320855616,
-    "mean": 0.09869489614027427,
+    "maximum": 0.17718214558550693,
+    "mean": 0.09866251955327585,
     "minimum": 0.018057404780093857,
     "sparse_pages": [
       16,
@@ -126,9 +126,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.17732620320855616,
+      "foreground_fraction": 0.1763549055986031,
       "height": 770,
-      "luminance_std": 0.17947880288441007,
+      "luminance_std": 0.17915710024739798,
       "page": 2,
       "width": 595
     },

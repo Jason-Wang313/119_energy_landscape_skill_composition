@@ -12,8 +12,8 @@ This audit checks that the generated manuscript is naturally framed around a bou
 
 - `pass` `abstract_exists`: words=243
 - `pass` `abstract_length_conference_reasonable`: words=243
-- `pass` `required_sections_present`: positions=[2345, 6510, 10072, 12085, 12975, 14509, 23590, 28552]
-- `pass` `required_sections_in_order`: positions=[2345, 6510, 10072, 12085, 12975, 14509, 23590, 28552]
+- `pass` `required_sections_present`: positions=[2345, 6470, 10032, 12045, 12935, 14469, 23550, 28512]
+- `pass` `required_sections_in_order`: positions=[2345, 6470, 10032, 12045, 12935, 14469, 23550, 28512]
 - `pass` `core_frame_term_local world/action model for ski`: local world/action model for skill seams
 - `pass` `core_frame_term_compact predictive interface bet`: compact predictive interface between a skill library and a planner
 - `pass` `core_frame_term_action-conditioned model of whet`: action-conditioned model of whether a proposed edge
@@ -34,7 +34,7 @@ This audit checks that the generated manuscript is naturally framed around a bou
 - `pass` `matrix_term_World/action models and hierarch`: World/action models and hierarchical world models
 - `pass` `matrix_term_Closest outreach works`: Closest outreach works
 - `pass` `matrix_term_External Validation Boundary`: External Validation Boundary
-- `pass` `identity_phrase_not_forced`: count=1
+- `pass` `identity_phrase_not_forced`: count=0
 - `pass` `world_action_framing_not_overdone`: count=8
 - `pass` `contact_rich_is_not_the_identity`: contact-rich count=1
 - `pass` `contact_positioning_is_testbed`: contact-rich examples are positioned as a testbed

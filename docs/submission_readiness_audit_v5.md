@@ -40,8 +40,8 @@ ICLR-main ready: no
 ## Artifact Checks
 
 - PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `E38431534F0FAF0F42FAD8534B1E13A9A15EBEF391A09299DF9B778710E73A18`.
-- PDF size: `471840` bytes.
+- PDF SHA256: `4B719E18B8B6AEF42DF0D5540C3E681BE8DBAEB0BCC8D653D7CB87591795A593`.
+- PDF size: `471778` bytes.
 - PDF pages: `30`.
 - Numbered PDF placement: Downloads only.
 - Desktop numbered PDF: absent.
