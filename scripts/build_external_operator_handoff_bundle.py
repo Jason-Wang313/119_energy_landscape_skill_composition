@@ -650,17 +650,34 @@ def build_payload() -> dict[str, Any]:
         ),
     )
     pilot_runtime_checks = {check.get("name"): check.get("passed") for check in pilot_runtime.get("checks", []) or []}
-    add_check(
-        checks,
-        "maniskill_pilot_runtime_liveness_included",
+    pilot_runtime_records = int(pilot_runtime.get("records_observed", 0) or 0)
+    pilot_runtime_videos = int(pilot_runtime.get("videos_written", 0) or 0)
+    pilot_runtime_fallbacks = len(pilot_runtime.get("diagnostic_video_fallbacks", []) or [])
+    pilot_runtime_basic = (
         pilot_runtime.get("passed") is True
         and pilot_runtime.get("not_external_evidence") is True
         and pilot_runtime.get("strict_external_evidence_ready") is False
         and pilot_runtime.get("pilot_runtime_ready") is False
-        and pilot_runtime.get("runner_io_ready") is True
         and pilot_runtime.get("render_video_ready") is False
-        and len(pilot_runtime.get("diagnostic_video_fallbacks", []) or []) >= 1
         and pilot_runtime_checks.get("bounded_runner_subprocess_exercised") is True
+    )
+    pilot_runtime_diagnostic_io = (
+        pilot_runtime.get("runner_io_ready") is True
+        and pilot_runtime_records >= 1
+        and pilot_runtime_videos >= 1
+        and pilot_runtime_fallbacks >= 1
+    )
+    pilot_runtime_unavailable = (
+        pilot_runtime.get("runner_io_ready") is False
+        and pilot_runtime_records == 0
+        and pilot_runtime_videos == 0
+        and pilot_runtime_fallbacks == 0
+    )
+    add_check(
+        checks,
+        "maniskill_pilot_runtime_liveness_included",
+        pilot_runtime_basic
+        and (pilot_runtime_diagnostic_io or pilot_runtime_unavailable)
         and "scripts/audit_maniskill_pilot_runtime_liveness.py" in paths
         and "results/maniskill_pilot_runtime_liveness_audit.json" in paths
         and "results/maniskill_pilot_runtime_liveness_audit.md" in paths,
@@ -669,7 +686,9 @@ def build_payload() -> dict[str, Any]:
             f"runner_io_ready={pilot_runtime.get('runner_io_ready')!r}, "
             f"render_video_ready={pilot_runtime.get('render_video_ready')!r}, "
             f"timed_out={pilot_runtime.get('timed_out')!r}, "
-            f"diagnostic_fallbacks={len(pilot_runtime.get('diagnostic_video_fallbacks', []) or [])}, "
+            f"records={pilot_runtime_records!r}, "
+            f"videos={pilot_runtime_videos!r}, "
+            f"diagnostic_fallbacks={pilot_runtime_fallbacks}, "
             f"failure_summary={pilot_runtime.get('failure_summary')!r}"
         ),
     )

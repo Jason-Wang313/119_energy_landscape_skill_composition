@@ -103,7 +103,7 @@
       "passed": true
     },
     {
-      "detail": "pilot_runtime_ready=False, runner_io_ready=True, render_video_ready=False, timed_out=False, diagnostic_fallbacks=1, failure_summary='runner wrote quarantined schema-valid row/video using diagnostic non-evidence video fallback; render-backed video remains unavailable'",
+      "detail": "pilot_runtime_ready=False, runner_io_ready=True, render_video_ready=False, timed_out=False, records=1, videos=1, diagnostic_fallbacks=1, failure_summary='runner wrote quarantined schema-valid row/video using diagnostic non-evidence video fallback; render-backed video remains unavailable'",
       "name": "maniskill_pilot_runtime_liveness_included",
       "passed": true
     },
@@ -1324,18 +1324,18 @@
       "sha256": "B68911C22003E7E03E48D7486AB58F53AD10457F0C25ABCD47A134E37A247892"
     },
     {
-      "bytes": 30564,
+      "bytes": 30570,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.json",
-      "sha256": "DC3A04699064F691DDC742D27D0BC4A038E0F3E56AEB2830A959E2F0CBE44B99"
+      "sha256": "10277174921687E57065BA82B04384A54E754E50D82386E050646DB206A5055B"
     },
     {
-      "bytes": 23429,
+      "bytes": 23435,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.md",
-      "sha256": "36E81698CC27D0738966EE9CFC6ED9900A759D65362AD6588F883FFCBDE3D7C9"
+      "sha256": "EB3BB514D50A44D7E1DEA4CD52A1944D302557CA6391BF6B4A49FE119DFBDFDC"
     },
     {
       "bytes": 7157,
@@ -1716,11 +1716,11 @@
       "sha256": "A9B57E8629AF6556AF8BB31B0CD10081E1BA1BEC5FBB1178650CD587FDFFAD7B"
     },
     {
-      "bytes": 55148,
+      "bytes": 55747,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_acquisition_packet.py",
-      "sha256": "6894EC6A3445B5E2FD2556EC2F50012A54B52BC843B19B081AC3E0453AF928CD"
+      "sha256": "DA393B4D0D25DC180E08A19DFFF92352BC4EB6AE6AE8E1ADF70E6D02940FA95D"
     },
     {
       "bytes": 16556,
@@ -1772,11 +1772,11 @@
       "sha256": "84FBA076C70EA097C5B223886D3A1DFB27D667F5068F2E8930EBCC885AF6EEA5"
     },
     {
-      "bytes": 45609,
+      "bytes": 46339,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "BD80583A5690179738934007B5DF722A05A4AD41B037EBDF7C9BA682A637D568"
+      "sha256": "8CE18A5A8E8EA8593CF89E1D9A7DD47432DC44DA00A6895EA742B9E5BE49995B"
     },
     {
       "bytes": 24280,

@@ -1984,14 +1984,28 @@ def main():
         fail("ManiSkill pilot runtime liveness audit must not claim strict external evidence readiness")
     if pilot_runtime.get("pilot_runtime_ready") is not False:
         fail("current local ManiSkill pilot runtime should remain not ready before accepted runtime evidence")
-    if pilot_runtime.get("runner_io_ready") is not True:
-        fail("current local ManiSkill pilot runtime should exercise the quarantined runner I/O path")
     if pilot_runtime.get("render_video_ready") is not False:
         fail("current local ManiSkill pilot runtime must not mark render-backed video ready")
-    if int(pilot_runtime.get("records_observed", -1) or 0) < 1 or int(pilot_runtime.get("videos_written", -1) or 0) < 1:
-        fail("current local ManiSkill pilot runtime liveness audit should record a quarantined diagnostic pilot row/video")
-    if len(pilot_runtime.get("diagnostic_video_fallbacks", []) or []) < 1:
-        fail("current local ManiSkill pilot runtime should expose the diagnostic non-evidence video fallback")
+    pilot_runtime_records = int(pilot_runtime.get("records_observed", 0) or 0)
+    pilot_runtime_videos = int(pilot_runtime.get("videos_written", 0) or 0)
+    pilot_runtime_fallbacks = len(pilot_runtime.get("diagnostic_video_fallbacks", []) or [])
+    pilot_runtime_diagnostic_io = (
+        pilot_runtime.get("runner_io_ready") is True
+        and pilot_runtime_records >= 1
+        and pilot_runtime_videos >= 1
+        and pilot_runtime_fallbacks >= 1
+    )
+    pilot_runtime_unavailable = (
+        pilot_runtime.get("runner_io_ready") is False
+        and pilot_runtime_records == 0
+        and pilot_runtime_videos == 0
+        and pilot_runtime_fallbacks == 0
+    )
+    if not (pilot_runtime_diagnostic_io or pilot_runtime_unavailable):
+        fail(
+            "ManiSkill pilot runtime liveness audit must either record a quarantined diagnostic "
+            "non-evidence row/video or fail closed with zero rows/videos when the runtime is unavailable"
+        )
     if not str(pilot_runtime.get("failure_summary", "")).strip():
         fail("ManiSkill pilot runtime liveness audit must record a failure summary")
     pilot_runtime_checks = {check.get("name"): check.get("passed") for check in pilot_runtime.get("checks", [])}

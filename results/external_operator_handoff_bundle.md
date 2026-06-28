@@ -231,8 +231,8 @@ Post-collection strict gates:
 - `results/external_config_template_audit.md` (generated_non_evidence_report, 797 bytes, sha256 `4CC337580323BADB03441EE8478DDDEF19CC9857F1B0B032264B78DB6A947DF7`)
 - `results/external_evidence_preflight.json` (generated_non_evidence_report, 12344 bytes, sha256 `D163EA7B1E6DC2EFBBF26DC10C324A5CB76CD216BEB969C316D5A994F8DCE0B1`)
 - `results/external_evidence_preflight.md` (generated_non_evidence_report, 4745 bytes, sha256 `B68911C22003E7E03E48D7486AB58F53AD10457F0C25ABCD47A134E37A247892`)
-- `results/external_execution_readiness_audit.json` (generated_non_evidence_report, 30564 bytes, sha256 `DC3A04699064F691DDC742D27D0BC4A038E0F3E56AEB2830A959E2F0CBE44B99`)
-- `results/external_execution_readiness_audit.md` (generated_non_evidence_report, 23429 bytes, sha256 `36E81698CC27D0738966EE9CFC6ED9900A759D65362AD6588F883FFCBDE3D7C9`)
+- `results/external_execution_readiness_audit.json` (generated_non_evidence_report, 30570 bytes, sha256 `10277174921687E57065BA82B04384A54E754E50D82386E050646DB206A5055B`)
+- `results/external_execution_readiness_audit.md` (generated_non_evidence_report, 23435 bytes, sha256 `EB3BB514D50A44D7E1DEA4CD52A1944D302557CA6391BF6B4A49FE119DFBDFDC`)
 - `results/external_fidelity_acceptance_audit.json` (generated_non_evidence_report, 7157 bytes, sha256 `BDCB4A5BB6B441B3426803A5F18EBA003528818FBE3A303A324D95B9A20732F0`)
 - `results/external_fidelity_acceptance_audit.md` (generated_non_evidence_report, 5313 bytes, sha256 `768F42B68BEE3F0FC7C0F5DE78EC3CD4FFFED70AB05FF4756838A4323A924422`)
 - `results/external_fidelity_acceptance_draft_audit.json` (generated_non_evidence_report, 5441 bytes, sha256 `158DD224489AFFAC38A2597CDA68E3F27165EEB86E4873924EECF4055EB9D9D0`)
@@ -287,7 +287,7 @@ Post-collection strict gates:
 - `scripts/audit_maniskill_backend_readiness.py` (operator_command_source, 8884 bytes, sha256 `596DD2BE7A1952C6BA315CB303E4AB08105E9FEF9F81901763B874C2BD180F48`)
 - `scripts/audit_maniskill_pilot_runtime_liveness.py` (operator_command_source, 16669 bytes, sha256 `1E19B6D45CF3BB2A9A5A0DD91CF293F84A18057094A593ED66B72E4A467E624B`)
 - `scripts/audit_maniskill_reference_collection_preflight.py` (operator_command_source, 8466 bytes, sha256 `A9B57E8629AF6556AF8BB31B0CD10081E1BA1BEC5FBB1178650CD587FDFFAD7B`)
-- `scripts/build_external_acquisition_packet.py` (operator_command_source, 55148 bytes, sha256 `6894EC6A3445B5E2FD2556EC2F50012A54B52BC843B19B081AC3E0453AF928CD`)
+- `scripts/build_external_acquisition_packet.py` (operator_command_source, 55747 bytes, sha256 `DA393B4D0D25DC180E08A19DFFF92352BC4EB6AE6AE8E1ADF70E6D02940FA95D`)
 - `scripts/build_external_analysis_plan.py` (operator_command_source, 16556 bytes, sha256 `58146063D30C8D028FF8307AC787B7B5CDE73628949E2BEE1E2042AF46895869`)
 - `scripts/build_external_backend_integration_packet.py` (operator_command_source, 19894 bytes, sha256 `9BB1413B2D478C383C0F77FB32D83F645B6B506EF65B8F6DB6A6FA760D22DAAA`)
 - `scripts/build_external_config_manifest_packet.py` (operator_command_source, 20688 bytes, sha256 `3A7C195E4C4841C3C4C368326E7A1E09E1A10DFBD27A76CE6EDF541F34C9B1E8`)
@@ -295,7 +295,7 @@ Post-collection strict gates:
 - `scripts/build_external_fidelity_provenance_packet.py` (operator_command_source, 21473 bytes, sha256 `6B8748DDFFAE3ECA55291447F638D06A3468EC9EAAE59DE8C555D232929EB871`)
 - `scripts/build_external_manifest.py` (operator_command_source, 19782 bytes, sha256 `4F5A002BCFF1FA189D98623E1D1FB7DAEB65604C200B7FE68CB757C96552BB16`)
 - `scripts/build_external_method_implementation_packet.py` (operator_command_source, 19526 bytes, sha256 `84FBA076C70EA097C5B223886D3A1DFB27D667F5068F2E8930EBCC885AF6EEA5`)
-- `scripts/build_external_operator_handoff_bundle.py` (operator_command_source, 45609 bytes, sha256 `BD80583A5690179738934007B5DF722A05A4AD41B037EBDF7C9BA682A637D568`)
+- `scripts/build_external_operator_handoff_bundle.py` (operator_command_source, 46339 bytes, sha256 `8CE18A5A8E8EA8593CF89E1D9A7DD47432DC44DA00A6895EA742B9E5BE49995B`)
 - `scripts/build_external_operator_packet.py` (operator_command_source, 24280 bytes, sha256 `9996772132EA473A84C8247113462092E7F71A5BCEFF08395A7C83361DD19F4C`)
 - `scripts/build_external_pilot_smoke_packet.py` (operator_command_source, 11266 bytes, sha256 `F3A2D24716D7DCE1D337453137191E821E1F81ADBAA8ABF446C2446E489C00CE`)
 - `scripts/build_external_platform_onboarding.py` (operator_command_source, 30878 bytes, sha256 `C4ED6FD67A2A473D274357433B61CE37CC6E50A0D6EB3E0EF8538192FCEF8360`)
@@ -329,7 +329,7 @@ Post-collection strict gates:
 - `pass` `config_manifest_packet_included`: config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False
 - `pass` `rollout_evidence_packet_included`: rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False
 - `pass` `pilot_smoke_packet_included`: pilot_smoke_packet_ready=True, strict_evidence_ready=False
-- `pass` `maniskill_pilot_runtime_liveness_included`: pilot_runtime_ready=False, runner_io_ready=True, render_video_ready=False, timed_out=False, diagnostic_fallbacks=1, failure_summary='runner wrote quarantined schema-valid row/video using diagnostic non-evidence video fallback; render-backed video remains unavailable'
+- `pass` `maniskill_pilot_runtime_liveness_included`: pilot_runtime_ready=False, runner_io_ready=True, render_video_ready=False, timed_out=False, records=1, videos=1, diagnostic_fallbacks=1, failure_summary='runner wrote quarantined schema-valid row/video using diagnostic non-evidence video fallback; render-backed video remains unavailable'
 - `pass` `method_implementation_packet_included`: method_implementation_packet_ready=True, strict_adapter_evidence_ready=False
 - `pass` `operator_actions_cover_evidence_collection`: missing=[]
 - `pass` `post_collection_commands_cover_strict_gates`: commands=8
