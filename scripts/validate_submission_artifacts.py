@@ -9,6 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 RESULTS = ROOT / "results"
+DOCS = ROOT / "docs"
 PAPER = ROOT / "paper"
 FIGURES = ROOT / "figures"
 EXTERNAL = ROOT / "external_validation"
@@ -3113,6 +3114,20 @@ def main():
     digest = sha256(DOWNLOADS_PDF)
     if paper_digest != digest:
         fail(f"canonical PDF is stale: paper/main.pdf SHA256={paper_digest}, canonical SHA256={digest}")
+    size_text = f"PDF size: `{DOWNLOADS_PDF.stat().st_size}` bytes."
+    public_digest_files = [
+        ROOT / "README.md",
+        DOCS / "final_audit.md",
+        DOCS / "submission_readiness_audit_v5.md",
+        DOCS / "paper119_terminal_audit_20260623.md",
+    ]
+    for path in public_digest_files:
+        text = path.read_text(encoding="utf-8")
+        if digest not in text:
+            fail(f"public PDF SHA256 is stale or missing in {path}")
+    for path in (ROOT / "README.md", DOCS / "final_audit.md", DOCS / "submission_readiness_audit_v5.md"):
+        if size_text not in path.read_text(encoding="utf-8"):
+            fail(f"public PDF size is stale or missing in {path}")
     print(f"Paper 119 validation passed. SHA256={digest} pages={pages}")
 
 
