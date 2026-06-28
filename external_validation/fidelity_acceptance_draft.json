@@ -99,7 +99,7 @@
     "timestep_seconds": "Probe-observed sim_timestep=0.01, control_timestep=0.05; OPERATOR_VERIFY_TIMESTEP_SECONDS_BEFORE_ACCEPTANCE"
   },
   "prefilled_hashes": {
-    "backend_module_sha256": "D720B3355AFC134031F49D14D24F4A97D4717722296D771DD44FD267FDE6D88B",
+    "backend_module_sha256": "9191885A35286E201B9F0510DFC4B2E5620F5114DC87BF3403494EC1BA021D4F",
     "skill_library_hash": "DEC645752806D23BDC114D67B348C468C60E933EAB99E71859F5CC724F160C44",
     "task_config_hashes": {
       "cable_route_insert": "8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E",
@@ -278,8 +278,8 @@
   "provenance": {
     "artifact_hash_policy": "sha256",
     "backend_module": "external_validation/runner/maniskill_reference_backend.py",
-    "backend_module_hash": "D720B3355AFC134031F49D14D24F4A97D4717722296D771DD44FD267FDE6D88B",
-    "code_commit": "ee132b3031cc8dedf8219ff6e23bd448047da4a8",
+    "backend_module_hash": "9191885A35286E201B9F0510DFC4B2E5620F5114DC87BF3403494EC1BA021D4F",
+    "code_commit": "56d26bc813331487b4c4eb30f33f4035c944329c",
     "date_locked": "DRAFT_NOT_LOCKED",
     "fidelity_metadata_probe_path": "results/maniskill_fidelity_metadata_probe.json",
     "fidelity_metadata_probe_ready": true,
@@ -327,28 +327,21 @@
       "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"
     ],
     "repo_dirty_status_lines": [
-      "M .github/workflows/paper119-validation.yml",
-      " M README.md",
+      "M README.md",
       " M child_status.md",
       " M docs/claim_evidence_ledger.json",
       " M docs/final_audit.md",
-      " M docs/haonan_yilun_outreach_package.md",
       " M docs/submission_readiness_audit_v5.md",
       " M docs/submission_readiness_decision.md",
       " M docs/submission_version_log.md",
-      " M results/external_platform_probe.json",
-      " M results/external_platform_probe.md",
-      " M results/maniskill_env_smoke_probe.json",
-      " M results/maniskill_fidelity_metadata_probe.json",
-      " M results/visible_contribution_audit.json",
-      " M results/visible_contribution_audit.md",
+      " M external_validation/README.md",
+      " M external_validation/runner/README.md",
+      " M external_validation/runner/maniskill_reference_backend.py",
+      " M results/maniskill_backend_readiness_audit.json",
+      " M results/maniskill_backend_readiness_audit.md",
+      " M scripts/audit_maniskill_backend_readiness.py",
       " M scripts/audit_visible_contribution.py",
-      " M scripts/build_submission_artifacts.ps1",
-      " M scripts/validate_submission_artifacts.py",
-      "?? docs/reviewer_response_packet.md",
-      "?? results/reviewer_response_packet_audit.json",
-      "?? results/reviewer_response_packet_audit.md",
-      "?? scripts/build_reviewer_response_packet.py"
+      " M scripts/validate_submission_artifacts.py"
     ],
     "skill_library_hash": "DEC645752806D23BDC114D67B348C468C60E933EAB99E71859F5CC724F160C44",
     "strict_fidelity_metadata_ready": true

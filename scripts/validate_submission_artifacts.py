@@ -1037,6 +1037,7 @@ def main():
         "official_collection_fail_closed_without_enable_flag",
         "video_export_fail_closed_before_reset",
         "synthetic_mp4_writer_passes",
+        "state_shaped_arrays_rejected_as_video_frames",
         "strict_evidence_remains_false",
     ):
         if maniskill_backend_checks.get(required_check) is not True:

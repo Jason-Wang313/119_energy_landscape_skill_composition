@@ -18,6 +18,7 @@ from external_validation.runner.backend_contract import ExternalCollectionBacken
 ROOT = Path(__file__).resolve().parents[2]
 EXTERNAL = ROOT / "external_validation"
 BASELINES = EXTERNAL / "baselines"
+MIN_VIDEO_FRAME_EDGE = 16
 
 
 def clamp(value: float, lower: float = 0.0, upper: float = 1.0) -> float:
@@ -63,6 +64,8 @@ def numeric_values(value: Any, *, limit: int = 128) -> list[float]:
 def _find_frame_candidate(value: Any) -> Any | None:
     if value is None:
         return None
+    if _looks_like_rgb_array(value):
+        return value
     if isinstance(value, dict):
         preferred_keys = ("rgb", "image", "color", "Color", "rgba", "sensor_data")
         for key in preferred_keys:
@@ -80,9 +83,30 @@ def _find_frame_candidate(value: Any) -> Any | None:
             candidate = _find_frame_candidate(child)
             if candidate is not None:
                 return candidate
-    if hasattr(value, "shape") or hasattr(value, "tolist"):
-        return value
     return None
+
+
+def _shape_of(value: Any) -> tuple[int, ...] | None:
+    shape = getattr(value, "shape", None)
+    if shape is None:
+        return None
+    try:
+        return tuple(int(dim) for dim in shape)
+    except (TypeError, ValueError):
+        return None
+
+
+def _looks_like_rgb_array(value: Any) -> bool:
+    shape = _shape_of(value)
+    if shape is None:
+        return False
+    if len(shape) == 4:
+        height, width, channels = shape[-3], shape[-2], shape[-1]
+    elif len(shape) == 3:
+        height, width, channels = shape[0], shape[1], shape[2]
+    else:
+        return False
+    return height >= MIN_VIDEO_FRAME_EDGE and width >= MIN_VIDEO_FRAME_EDGE and channels >= 3
 
 
 def _as_uint8_rgb_frame(value: Any) -> Any:
@@ -96,10 +120,13 @@ def _as_uint8_rgb_frame(value: Any) -> Any:
     frame = np.asarray(candidate)
     if frame.ndim == 4:
         frame = frame[0]
-    if frame.ndim == 2:
-        frame = np.repeat(frame[:, :, None], 3, axis=2)
     if frame.ndim != 3 or frame.shape[2] < 3:
         raise RuntimeError(f"render frame has unsupported shape {frame.shape}")
+    if frame.shape[0] < MIN_VIDEO_FRAME_EDGE or frame.shape[1] < MIN_VIDEO_FRAME_EDGE:
+        raise RuntimeError(
+            f"render frame shape {frame.shape} is too small for evidence video; "
+            "refusing state-like arrays"
+        )
     frame = frame[:, :, :3]
     if frame.dtype != np.uint8:
         frame = frame.astype(np.float32)

@@ -150,6 +150,26 @@ def build_payload() -> dict[str, Any]:
         video_writer_ok,
         video_writer_detail,
     )
+    extractor = getattr(backend_module, "_as_uint8_rgb_frame", None)
+    state_frame_rejected = False
+    state_frame_detail = "_as_uint8_rgb_frame missing"
+    if callable(extractor):
+        import numpy as np
+
+        try:
+            extractor({"state": np.arange(27, dtype=np.float32).reshape(1, 9, 3)})
+            state_frame_detail = "state-shaped array was accepted as an RGB frame"
+        except RuntimeError as exc:
+            state_frame_rejected = "state-like arrays" in str(exc) or "RGB-like frame" in str(exc)
+            state_frame_detail = str(exc)
+        except Exception as exc:  # noqa: BLE001 - report the concrete extractor failure.
+            state_frame_detail = f"{type(exc).__name__}: {exc}"
+    add_check(
+        checks,
+        "state_shaped_arrays_rejected_as_video_frames",
+        state_frame_rejected,
+        state_frame_detail,
+    )
     add_check(
         checks,
         "strict_evidence_remains_false",
