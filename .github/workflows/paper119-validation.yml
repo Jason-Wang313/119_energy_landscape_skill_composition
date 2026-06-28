@@ -79,6 +79,9 @@ jobs:
       - name: Build external pilot smoke packet
         run: python scripts/build_external_pilot_smoke_packet.py
 
+      - name: Audit ManiSkill pilot runtime liveness
+        run: python scripts/audit_maniskill_pilot_runtime_liveness.py
+
       - name: Audit external evidence preflight
         run: python scripts/audit_external_evidence_preflight.py
 

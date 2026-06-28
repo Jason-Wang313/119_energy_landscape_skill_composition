@@ -127,6 +127,7 @@ def main():
         "scripts\\audit_external_collection_readiness.py",
         "scripts\\audit_external_pilot_smoke.py",
         "scripts\\build_external_pilot_smoke_packet.py",
+        "scripts\\audit_maniskill_pilot_runtime_liveness.py",
         "scripts\\validate_external_configs.py",
         "scripts\\self_test_external_config_evidence.py",
         "scripts\\materialize_external_configs.py",
@@ -195,6 +196,7 @@ def main():
         "python scripts/audit_external_collection_readiness.py",
         "python scripts/audit_external_pilot_smoke.py",
         "python scripts/build_external_pilot_smoke_packet.py",
+        "python scripts/audit_maniskill_pilot_runtime_liveness.py",
         "python scripts/audit_external_evidence_preflight.py",
         "python scripts/self_test_external_config_evidence.py",
         "python scripts/self_test_external_adapter_evidence.py",
@@ -1981,6 +1983,8 @@ def main():
         fail("current local ManiSkill pilot runtime should remain not ready before accepted runtime evidence")
     if int(pilot_runtime.get("records_observed", -1) or 0) != 0 or int(pilot_runtime.get("videos_written", -1) or 0) != 0:
         fail("current local ManiSkill pilot runtime liveness audit should not record pilot rows/videos")
+    if not str(pilot_runtime.get("failure_summary", "")).strip():
+        fail("ManiSkill pilot runtime liveness audit must record a failure summary")
     pilot_runtime_checks = {check.get("name"): check.get("passed") for check in pilot_runtime.get("checks", [])}
     for required_check in (
         "runtime_guard_is_non_evidence",

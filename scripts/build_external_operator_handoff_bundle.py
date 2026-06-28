@@ -663,7 +663,8 @@ def build_payload() -> dict[str, Any]:
         and "results/maniskill_pilot_runtime_liveness_audit.md" in paths,
         (
             f"pilot_runtime_ready={pilot_runtime.get('pilot_runtime_ready')!r}, "
-            f"timed_out={pilot_runtime.get('timed_out')!r}"
+            f"timed_out={pilot_runtime.get('timed_out')!r}, "
+            f"failure_summary={pilot_runtime.get('failure_summary')!r}"
         ),
     )
     add_check(

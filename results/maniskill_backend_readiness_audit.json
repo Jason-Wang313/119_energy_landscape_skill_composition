@@ -19,7 +19,7 @@
       "passed": true
     },
     {
-      "detail": "{\"backend_module_sha256\": \"E30E5A3292B6ACB7B9819914A6FDA6BD068B5B469031EEF1FF4E7AA852D140B2\", \"collection_enabled_by_default\": false, \"contact_solver\": \"operator_verified_by_fidelity_acceptance\", \"gymnasium_version\": \"1.2.3\", \"maniskill_version\": \"3.0.1\", \"not_external_evidence\": true, \"operating_system\": \"Windows-10-10.0.26200-SP0\", \"physics_timestep\": \"operator_verified_by_fidelity_acceptance\", \"platform_name\": \"ManiSkill-SAPIEN-reference-backend\", \"platform_type\": \"high_fidelity_sim\", \"platform_version\": \"3.0.1\", \"python_version\": \"3.10.11\", \"renderer\": \"operator_default_or_cpu\", \"sapien_version\": \"3.0.3\", \"sensor_modalities\": [\"state\", \"camera\", \"contact_or_force\"], \"torch_version\": \"2.10.0\"}",
+      "detail": "{\"backend_module_sha256\": \"D720B3355AFC134031F49D14D24F4A97D4717722296D771DD44FD267FDE6D88B\", \"collection_enabled_by_default\": false, \"contact_solver\": \"operator_verified_by_fidelity_acceptance\", \"gymnasium_version\": \"1.2.3\", \"maniskill_version\": \"3.0.1\", \"not_external_evidence\": true, \"operating_system\": \"Windows-10-10.0.26200-SP0\", \"physics_timestep\": \"operator_verified_by_fidelity_acceptance\", \"platform_name\": \"ManiSkill-SAPIEN-reference-backend\", \"platform_type\": \"high_fidelity_sim\", \"platform_version\": \"3.0.1\", \"python_version\": \"3.10.11\", \"renderer\": \"operator_default_or_cpu\", \"sapien_version\": \"3.0.3\", \"sensor_modalities\": [\"state\", \"camera\", \"contact_or_force\"], \"torch_version\": \"2.10.0\"}",
       "name": "backend_platform_provenance_complete",
       "passed": true
     },
@@ -85,7 +85,7 @@
   "official_collection_ready": false,
   "passed": true,
   "platform_provenance": {
-    "backend_module_sha256": "E30E5A3292B6ACB7B9819914A6FDA6BD068B5B469031EEF1FF4E7AA852D140B2",
+    "backend_module_sha256": "D720B3355AFC134031F49D14D24F4A97D4717722296D771DD44FD267FDE6D88B",
     "collection_enabled_by_default": false,
     "contact_solver": "operator_verified_by_fidelity_acceptance",
     "gymnasium_version": "1.2.3",

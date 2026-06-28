@@ -1,6 +1,6 @@
 {
   "blocking_missing": [
-    "bounded ManiSkill reference runner did not produce a complete schema-valid pilot row/video on this machine; use an accepted GPU/render machine or fix the backend before official collection"
+    "bounded ManiSkill reference runner did not produce a complete schema-valid pilot row/video on this machine; RuntimeError: record_video requires renderable ManiSkill RGB frames; verify render_mode='rgb_array', camera setup, and renderer availability during fidelity acceptance. Last render status: RuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; use an accepted GPU/render machine or fix the backend before official collection"
   ],
   "checks": [
     {
@@ -14,7 +14,7 @@
       "passed": true
     },
     {
-      "detail": "timeout_seconds=60, timed_out=True, returncode=None",
+      "detail": "timeout_seconds=60, timed_out=False, returncode=1",
       "name": "bounded_runner_subprocess_exercised",
       "passed": true
     },
@@ -34,7 +34,8 @@
       "passed": true
     }
   ],
-  "command": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\python.exe external_validation/runner/real_collection_runner.py --backend-module external_validation/runner/maniskill_reference_backend.py --task-config-dir external_validation/configs --output-log-dir external_validation/pilot_runtime_guard/logs --video-dir external_validation/pilot_runtime_guard/videos --run-id paper119_pilot_runtime_guard_local_20260628 --unsealed-alias-map --max-rows 1 --force",
+  "command": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\python.exe external_validation/runner/real_collection_runner.py --backend-module external_validation/runner/maniskill_reference_backend.py --task-config-dir external_validation/configs --output-log-dir external_validation/pilot_runtime_guard/logs --video-dir external_validation/pilot_runtime_guard/videos --run-id paper119_pilot_runtime_guard_local --unsealed-alias-map --max-rows 1 --force",
+  "failure_summary": "RuntimeError: record_video requires renderable ManiSkill RGB frames; verify render_mode='rgb_array', camera setup, and renderer availability during fidelity acceptance. Last render status: RuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
   "log_dir": "external_validation/pilot_runtime_guard/logs",
   "log_files": [],
   "max_rows": 1,
@@ -43,13 +44,13 @@
   "pilot_runtime_ready": false,
   "readiness_state": "PILOT_RUNTIME_NOT_READY",
   "records_observed": 0,
-  "returncode": null,
-  "run_id": "paper119_pilot_runtime_guard_local_20260628",
+  "returncode": 1,
+  "run_id": "paper119_pilot_runtime_guard_local",
   "schema_errors": [],
-  "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 07:23:35,266 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+  "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 08:49:25,407 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\nTraceback (most recent call last):\n  File \"C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\runner\\real_collection_runner.py\", line 371, in <module>\n    raise SystemExit(main())\n  File \"C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\runner\\real_collection_runner.py\", line 367, in main\n    return run_collection(args)\n  File \"C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\runner\\real_collection_runner.py\", line 325, in run_collection\n    video_path = backend.record_video(target_video)\n  File \"C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\runner\\maniskill_reference_backend.py\", line 383, in record_video\n    raise RuntimeError(\nRuntimeError: record_video requires renderable ManiSkill RGB frames; verify render_mode='rgb_array', camera setup, and renderer availability during fidelity acceptance. Last render status: RuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory\n",
   "stdout_tail": "",
   "strict_external_evidence_ready": false,
-  "timed_out": true,
+  "timed_out": false,
   "timeout_seconds": 60,
   "version": "maniskill_pilot_runtime_liveness_audit_v1",
   "video_dir": "external_validation/pilot_runtime_guard/videos",

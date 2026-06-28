@@ -4,6 +4,7 @@ import argparse
 import csv
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -109,6 +110,24 @@ def count_videos(video_dir: Path) -> int:
     return sum(1 for path in video_dir.rglob("*") if path.is_file() and path.suffix.lower() == ".mp4")
 
 
+def clean_ansi(text: str) -> str:
+    return re.sub(r"\x1b\[[0-9;]*m", "", text)
+
+
+def summarize_failure(*, timed_out: bool, returncode: int | None, stderr: str, records: int, videos: int) -> str:
+    if records and videos and returncode == 0 and not timed_out:
+        return "pilot runtime produced schema-valid records and videos"
+    if timed_out:
+        return "runner timed out before producing the required pilot record/video"
+    cleaned = clean_ansi(stderr)
+    runtime_errors = [line.strip() for line in cleaned.splitlines() if "RuntimeError:" in line]
+    if runtime_errors:
+        return runtime_errors[-1]
+    if returncode not in (None, 0):
+        return f"runner exited with returncode {returncode} before producing the required pilot record/video"
+    return "runner did not produce the required pilot record/video"
+
+
 def run_guard(args: argparse.Namespace) -> dict[str, Any]:
     clear_guard_outputs()
     command = [
@@ -166,6 +185,13 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
             )
         )
     videos_written = count_videos(GUARD_VIDEO_DIR)
+    failure_summary = summarize_failure(
+        timed_out=timed_out,
+        returncode=returncode,
+        stderr=stderr,
+        records=len(records),
+        videos=videos_written,
+    )
     pilot_runtime_ready = (
         not timed_out
         and returncode == 0
@@ -181,6 +207,7 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
         "stderr_tail": stderr[-2000:],
         "records_observed": len(records),
         "videos_written": videos_written,
+        "failure_summary": failure_summary,
         "schema_errors": schema_errors,
         "log_files": [rel(path) for path in log_paths],
         "pilot_runtime_ready": pilot_runtime_ready,
@@ -243,7 +270,8 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
     blocking_missing = []
     if not result["pilot_runtime_ready"]:
         blocking_missing.append(
-            "bounded ManiSkill reference runner did not produce a complete schema-valid pilot row/video on this machine; use an accepted GPU/render machine or fix the backend before official collection"
+            "bounded ManiSkill reference runner did not produce a complete schema-valid pilot row/video on this machine; "
+            f"{result['failure_summary']}; use an accepted GPU/render machine or fix the backend before official collection"
         )
     return {
         "version": "maniskill_pilot_runtime_liveness_audit_v1",
@@ -259,6 +287,7 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         "video_dir": rel(GUARD_VIDEO_DIR),
         "records_observed": result["records_observed"],
         "videos_written": result["videos_written"],
+        "failure_summary": result["failure_summary"],
         "timed_out": result["timed_out"],
         "returncode": result["returncode"],
         "schema_errors": result["schema_errors"],
@@ -284,6 +313,7 @@ def write_outputs(payload: dict[str, Any]) -> None:
         f"Timed out: `{str(payload['timed_out']).lower()}`.",
         f"Records observed: `{payload['records_observed']}`.",
         f"Videos written: `{payload['videos_written']}`.",
+        f"Failure summary: `{payload['failure_summary']}`.",
         "",
         "This bounded liveness audit launches the tracked ManiSkill reference runner in a subprocess against quarantined `pilot_runtime_guard` directories. It is not rollout evidence and cannot satisfy the external evidence gate; it only prevents a slow CPU/render backend from silently blocking an official collection attempt.",
         "",

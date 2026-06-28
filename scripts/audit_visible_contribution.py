@@ -354,7 +354,8 @@ def main() -> int:
             f"pilot_runtime_ready={pilot_runtime.get('pilot_runtime_ready')!r}, "
             f"timed_out={pilot_runtime.get('timed_out')!r}, "
             f"records={pilot_runtime.get('records_observed')!r}, "
-            f"videos={pilot_runtime.get('videos_written')!r}"
+            f"videos={pilot_runtime.get('videos_written')!r}, "
+            f"failure_summary={pilot_runtime.get('failure_summary')!r}"
         ),
     )
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", []) or []}

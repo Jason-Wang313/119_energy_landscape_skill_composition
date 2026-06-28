@@ -99,8 +99,8 @@
     "timestep_seconds": "Probe-observed sim_timestep=0.01, control_timestep=0.05; OPERATOR_VERIFY_TIMESTEP_SECONDS_BEFORE_ACCEPTANCE"
   },
   "prefilled_hashes": {
-    "backend_module_sha256": "E30E5A3292B6ACB7B9819914A6FDA6BD068B5B469031EEF1FF4E7AA852D140B2",
-    "skill_library_hash": "62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1",
+    "backend_module_sha256": "D720B3355AFC134031F49D14D24F4A97D4717722296D771DD44FD267FDE6D88B",
+    "skill_library_hash": "DEC645752806D23BDC114D67B348C468C60E933EAB99E71859F5CC724F160C44",
     "task_config_hashes": {
       "cable_route_insert": "8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E",
       "door_open_navigation": "13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61",
@@ -278,8 +278,8 @@
   "provenance": {
     "artifact_hash_policy": "sha256",
     "backend_module": "external_validation/runner/maniskill_reference_backend.py",
-    "backend_module_hash": "E30E5A3292B6ACB7B9819914A6FDA6BD068B5B469031EEF1FF4E7AA852D140B2",
-    "code_commit": "83bb3f5eb29c25ceefbb77a583d15e105f2afe0a",
+    "backend_module_hash": "D720B3355AFC134031F49D14D24F4A97D4717722296D771DD44FD267FDE6D88B",
+    "code_commit": "4401eb7e904421a61979d963d845264095b6e100",
     "date_locked": "DRAFT_NOT_LOCKED",
     "fidelity_metadata_probe_path": "results/maniskill_fidelity_metadata_probe.json",
     "fidelity_metadata_probe_ready": true,
@@ -327,10 +327,32 @@
       "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"
     ],
     "repo_dirty_status_lines": [
-      "M scripts/build_external_fidelity_acceptance_draft.py",
+      "M .github/workflows/paper119-validation.yml",
+      " M README.md",
+      " M docs/claim_evidence_ledger.json",
+      " M docs/final_audit.md",
+      " M docs/submission_readiness_audit_v5.md",
+      " M docs/submission_readiness_decision.md",
+      " M docs/submission_version_log.md",
+      " M external_validation/README.md",
+      " M external_validation/runner/maniskill_reference_backend.py",
+      " M paper/main.tex",
+      " M results/maniskill_backend_readiness_audit.json",
+      " M results/maniskill_backend_readiness_audit.md",
+      " M results/maniskill_pilot_runtime_liveness_audit.json",
+      " M results/maniskill_pilot_runtime_liveness_audit.md",
+      " M results/manuscript_readability_audit.json",
+      " M results/manuscript_readability_audit.md",
+      " M scripts/audit_external_execution_readiness.py",
+      " M scripts/audit_maniskill_pilot_runtime_liveness.py",
+      " M scripts/audit_visible_contribution.py",
+      " M scripts/build_external_acquisition_packet.py",
+      " M scripts/build_external_operator_handoff_bundle.py",
+      " M scripts/build_submission_artifacts.ps1",
+      " M scripts/generate_manuscript.py",
       " M scripts/validate_submission_artifacts.py"
     ],
-    "skill_library_hash": "62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1",
+    "skill_library_hash": "DEC645752806D23BDC114D67B348C468C60E933EAB99E71859F5CC724F160C44",
     "strict_fidelity_metadata_ready": true
   },
   "purpose": "Operator-editable draft for the tracked ManiSkill/SAPIEN route. This file pre-fills reproducible provenance anchors but cannot satisfy fidelity acceptance until independently completed, renamed, manifest-declared, and strict-audited.",

@@ -86,7 +86,7 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 - `pass` `config_manifest_packet_ready`: config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False
 - `pass` `rollout_evidence_packet_ready`: rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False
 - `pass` `pilot_smoke_packet_ready`: pilot_smoke_packet_ready=True, strict_evidence_ready=False
-- `pass` `maniskill_pilot_runtime_liveness_ready`: pilot_runtime_ready=False, timed_out=True, records=0, videos=0
+- `pass` `maniskill_pilot_runtime_liveness_ready`: pilot_runtime_ready=False, timed_out=False, records=0, videos=0, failure_summary="RuntimeError: record_video requires renderable ManiSkill RGB frames; verify render_mode='rgb_array', camera setup, and renderer availability during fidelity acceptance. Last render status: RuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory"
 - `pass` `method_implementation_packet_ready`: method_implementation_packet_ready=True, strict_adapter_evidence_ready=False
 - `pass` `preflight_operator_actions_present`: operator_next_actions=5, evidence_ready=False
 - `pass` `route_independent_of_haonan`: primary_route='maniskill_sapien_primary'

@@ -14,9 +14,9 @@ This is an operator-editable draft for the tracked ManiSkill/SAPIEN route. It pr
 - Platform: `ManiSkill-SAPIEN-reference-backend`
 - Version: `ManiSkill 3.0.1; SAPIEN 3.0.3`
 - Physics engine: `SAPIEN 3.0.3 via ManiSkill`
-- Backend hash: `E30E5A3292B6ACB7B9819914A6FDA6BD068B5B469031EEF1FF4E7AA852D140B2`
-- Candidate skill-library hash: `62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1`
-- Code commit captured in draft: `83bb3f5eb29c25ceefbb77a583d15e105f2afe0a`
+- Backend hash: `D720B3355AFC134031F49D14D24F4A97D4717722296D771DD44FD267FDE6D88B`
+- Candidate skill-library hash: `DEC645752806D23BDC114D67B348C468C60E933EAB99E71859F5CC724F160C44`
+- Code commit captured in draft: `4401eb7e904421a61979d963d845264095b6e100`
 - Primary route install ready: `true`
 - Primary env smoke recorded: `true`
 - Primary env smoke ready: `true`

@@ -163,6 +163,8 @@ class Backend(ExternalCollectionBackend):
         self._last_config: dict[str, Any] = {}
         self._last_proposal: dict[str, Any] = {}
         self._video_frames: list[Any] = []
+        self._video_render_attempted = False
+        self._video_render_error = ""
 
     def platform_provenance(self) -> dict[str, Any]:
         return {
@@ -217,10 +219,13 @@ class Backend(ExternalCollectionBackend):
     def _try_capture_video_frame(self) -> None:
         if self._env is None:
             return
+        self._video_render_attempted = True
         try:
             frame = self._env.render()
             self._video_frames.append(_as_uint8_rgb_frame(frame))
-        except Exception:
+            self._video_render_error = ""
+        except Exception as exc:
+            self._video_render_error = f"{type(exc).__name__}: {exc}"
             return
 
     def reset_scene(self, reset_spec: dict[str, Any]) -> dict[str, Any]:
@@ -239,6 +244,8 @@ class Backend(ExternalCollectionBackend):
         self._last_row = dict(row)
         self._last_config = dict(config)
         self._video_frames = []
+        self._video_render_attempted = False
+        self._video_render_error = ""
         self._try_capture_video_frame()
         return {
             "initial_state_hash": stable_digest({"env_id": env_id, "seed": seed, "obs": numeric_values(obs, limit=64)}),
@@ -367,13 +374,16 @@ class Backend(ExternalCollectionBackend):
         if self._env is None:
             raise RuntimeError("record_video requires a reset ManiSkill environment")
         frames = list(self._video_frames)
-        self._try_capture_video_frame()
-        if len(self._video_frames) > len(frames):
+        if not frames and not self._video_render_attempted:
+            self._try_capture_video_frame()
+        if not frames and len(self._video_frames) > len(frames):
             frames.append(self._video_frames[-1])
         if not frames:
+            detail = self._video_render_error or "ManiSkill render produced no RGB frame"
             raise RuntimeError(
                 "record_video requires renderable ManiSkill RGB frames; verify render_mode='rgb_array', "
-                "camera setup, and renderer availability during fidelity acceptance"
+                "camera setup, and renderer availability during fidelity acceptance. "
+                f"Last render status: {detail}"
             )
         return write_mp4(target_path, frames)
 

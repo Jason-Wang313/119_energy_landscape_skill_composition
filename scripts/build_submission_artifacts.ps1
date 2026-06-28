@@ -115,6 +115,7 @@ try {
         Invoke-Native python scripts\self_test_external_runner_backend.py
         Invoke-Native python scripts\audit_external_pilot_smoke.py
         Invoke-Native python scripts\build_external_pilot_smoke_packet.py
+        Invoke-Native python scripts\audit_maniskill_pilot_runtime_liveness.py
         Invoke-Native python scripts\validate_external_configs.py
         Invoke-Native python scripts\self_test_external_config_evidence.py
         Invoke-Native python scripts\materialize_external_configs.py
