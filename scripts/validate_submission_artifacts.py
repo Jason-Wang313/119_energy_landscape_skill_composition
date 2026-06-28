@@ -1028,6 +1028,13 @@ def main():
         fail("ManiSkill reference backend audit must not mark strict external evidence ready")
     if int(maniskill_backend.get("method_adapter_count", 0) or 0) < 12:
         fail("ManiSkill reference backend should cover all 12 reference adapters")
+    backend_platform = maniskill_backend.get("platform_provenance", {}) or {}
+    if backend_platform.get("render_backend") != "cpu":
+        fail("ManiSkill reference backend provenance must record explicit render_backend=cpu")
+    if backend_platform.get("shader_pack") != "minimal":
+        fail("ManiSkill reference backend provenance must record explicit shader_pack=minimal")
+    if int(backend_platform.get("render_width", 0) or 0) < 16 or int(backend_platform.get("render_height", 0) or 0) < 16:
+        fail("ManiSkill reference backend provenance must record explicit render dimensions")
     maniskill_backend_checks = {check.get("name"): check.get("passed") for check in maniskill_backend.get("checks", [])}
     for required_check in (
         "backend_contract_strict_passes",
@@ -2117,6 +2124,15 @@ def main():
         fail("ManiSkill render-video preflight must record a boolean render_video_ready state")
     if int(render_preflight.get("env_count", 0) or 0) < 1:
         fail("ManiSkill render-video preflight must probe at least one primary environment")
+    if render_preflight.get("render_backend") != "cpu":
+        fail("ManiSkill render-video preflight must record explicit render_backend=cpu")
+    if render_preflight.get("shader_pack") != "minimal":
+        fail("ManiSkill render-video preflight must record explicit shader_pack=minimal")
+    if int(render_preflight.get("width", 0) or 0) < 16 or int(render_preflight.get("height", 0) or 0) < 16:
+        fail("ManiSkill render-video preflight must record explicit render dimensions")
+    for record in render_preflight.get("env_records", []) or []:
+        if record.get("render_backend") != render_preflight.get("render_backend") or record.get("shader_pack") != render_preflight.get("shader_pack"):
+            fail("ManiSkill render-video preflight env records must carry the audited render backend/shader pack")
     if render_preflight.get("render_video_ready") is False and not render_preflight.get("blocking_missing"):
         fail("ManiSkill render-video preflight must explain the render-video blocker when not ready")
     render_preflight_checks = {check.get("name"): check.get("passed") for check in render_preflight.get("checks", [])}
@@ -2153,6 +2169,12 @@ def main():
         fail("current local ManiSkill pilot runtime should remain not ready before accepted runtime evidence")
     if pilot_runtime.get("render_video_ready") is not False:
         fail("current local ManiSkill pilot runtime must not mark render-backed video ready")
+    if pilot_runtime.get("render_backend") != "cpu":
+        fail("ManiSkill pilot runtime liveness audit must record explicit render_backend=cpu")
+    if pilot_runtime.get("shader_pack") != "minimal":
+        fail("ManiSkill pilot runtime liveness audit must record explicit shader_pack=minimal")
+    if int(pilot_runtime.get("render_width", 0) or 0) < 16 or int(pilot_runtime.get("render_height", 0) or 0) < 16:
+        fail("ManiSkill pilot runtime liveness audit must record explicit render dimensions")
     pilot_runtime_records = int(pilot_runtime.get("records_observed", 0) or 0)
     pilot_runtime_videos = int(pilot_runtime.get("videos_written", 0) or 0)
     pilot_runtime_fallbacks = len(pilot_runtime.get("diagnostic_video_fallbacks", []) or [])

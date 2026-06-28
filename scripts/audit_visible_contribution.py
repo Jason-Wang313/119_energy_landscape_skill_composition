@@ -285,6 +285,7 @@ def main() -> int:
         ),
     )
     maniskill_backend_checks = {check.get("name"): check.get("passed") for check in maniskill_backend.get("checks", []) or []}
+    maniskill_backend_platform = maniskill_backend.get("platform_provenance", {}) or {}
     add_check(
         checks,
         "maniskill_reference_backend_visible",
@@ -297,6 +298,10 @@ def main() -> int:
         and maniskill_backend.get("reference_backend_collection_enabled") is False
         and maniskill_backend.get("official_collection_ready") is False
         and maniskill_backend.get("strict_external_evidence_ready") is False
+        and maniskill_backend_platform.get("render_backend") == "cpu"
+        and maniskill_backend_platform.get("shader_pack") == "minimal"
+        and int(maniskill_backend_platform.get("render_width", 0) or 0) >= 16
+        and int(maniskill_backend_platform.get("render_height", 0) or 0) >= 16
         and maniskill_backend_checks.get("official_collection_fail_closed_without_enable_flag") is True
         and maniskill_backend_checks.get("video_export_fail_closed_before_reset") is True
         and maniskill_backend_checks.get("synthetic_mp4_writer_passes") is True
@@ -304,6 +309,8 @@ def main() -> int:
         (
             f"backend_contract_ready={maniskill_backend.get('backend_contract_ready')!r}, "
             f"video_writer_ready={maniskill_backend.get('video_writer_ready')!r}, "
+            f"render_backend={maniskill_backend_platform.get('render_backend')!r}, "
+            f"shader_pack={maniskill_backend_platform.get('shader_pack')!r}, "
             f"official_collection_ready={maniskill_backend.get('official_collection_ready')!r}, "
             f"strict_external_evidence_ready={maniskill_backend.get('strict_external_evidence_ready')!r}"
         ),
@@ -368,6 +375,10 @@ def main() -> int:
         and pilot_runtime.get("strict_external_evidence_ready") is False
         and pilot_runtime.get("pilot_runtime_ready") is False
         and pilot_runtime.get("render_video_ready") is False
+        and pilot_runtime.get("render_backend") == "cpu"
+        and pilot_runtime.get("shader_pack") == "minimal"
+        and int(pilot_runtime.get("render_width", 0) or 0) >= 16
+        and int(pilot_runtime.get("render_height", 0) or 0) >= 16
         and pilot_runtime_checks.get("bounded_runner_subprocess_exercised") is True
         and pilot_runtime_checks.get("timeout_or_result_recorded_as_readiness_state") is True
     )
@@ -392,6 +403,8 @@ def main() -> int:
             f"pilot_runtime_ready={pilot_runtime.get('pilot_runtime_ready')!r}, "
             f"runner_io_ready={pilot_runtime.get('runner_io_ready')!r}, "
             f"render_video_ready={pilot_runtime.get('render_video_ready')!r}, "
+            f"render_backend={pilot_runtime.get('render_backend')!r}, "
+            f"shader_pack={pilot_runtime.get('shader_pack')!r}, "
             f"timed_out={pilot_runtime.get('timed_out')!r}, "
             f"records={pilot_runtime_records!r}, "
             f"videos={pilot_runtime_videos!r}, "
@@ -407,9 +420,15 @@ def main() -> int:
         and render_preflight.get("not_external_evidence") is True
         and render_preflight.get("strict_external_evidence_ready") is False
         and int(render_preflight.get("env_count", 0) or 0) >= 1
+        and render_preflight.get("render_backend") == "cpu"
+        and render_preflight.get("shader_pack") == "minimal"
+        and int(render_preflight.get("width", 0) or 0) >= 16
+        and int(render_preflight.get("height", 0) or 0) >= 16
         and isinstance(render_preflight.get("render_video_ready"), bool),
         (
             f"render_video_ready={render_preflight.get('render_video_ready')!r}, "
+            f"render_backend={render_preflight.get('render_backend')!r}, "
+            f"shader_pack={render_preflight.get('shader_pack')!r}, "
             f"envs={render_preflight.get('env_count')!r}, "
             f"blocking={render_preflight.get('blocking_missing')!r}"
         ),
@@ -563,6 +582,7 @@ def main() -> int:
             "ManiSkill reference collection preflight audit",
             "MP4 writer path",
             "state-shaped arrays cannot masquerade as render videos",
+            "explicit render-backend/shader controls",
             "External runner backend probe self-test",
             "External pilot smoke packet",
             "ManiSkill render-video preflight",
@@ -595,6 +615,7 @@ def main() -> int:
             "ManiSkill reference collection preflight audit",
             "MP4 writer path",
             "state-shaped arrays cannot masquerade as render videos",
+            "explicit render-backend/shader controls",
             "External runner backend probe self-test",
             "External pilot smoke packet",
             "ManiSkill render-video preflight",
@@ -628,6 +649,7 @@ def main() -> int:
             "ManiSkill reference collection preflight audit",
             "MP4 writer path",
             "state-shaped arrays cannot masquerade as render videos",
+            "explicit render-backend/shader controls",
             "external runner backend probe self-test",
             "external pilot smoke packet",
             "ManiSkill render-video preflight",
@@ -661,6 +683,7 @@ def main() -> int:
             "ManiSkill reference collection preflight audit",
             "MP4 writer path",
             "state-shaped arrays cannot masquerade as render videos",
+            "explicit render-backend/shader controls",
             "External runner backend probe self-test",
             "External pilot smoke packet",
             "ManiSkill render-video preflight",
@@ -694,6 +717,7 @@ def main() -> int:
             "scripts/audit_maniskill_reference_collection_preflight.py",
             "synthetic MP4 writer check",
             "state-shaped arrays cannot masquerade as render videos",
+            "explicit render-backend/shader controls",
             "scripts/self_test_external_runner_backend.py",
             "scripts/build_external_pilot_smoke_packet.py",
             "scripts/audit_external_pilot_smoke.py",
@@ -730,6 +754,7 @@ def main() -> int:
             "ManiSkill reference collection preflight audit",
             "MP4 writer path",
             "state-shaped arrays cannot masquerade as render videos",
+            "explicit render-backend/shader controls",
             "external runner backend probe self-test",
             "external pilot smoke packet",
             "ManiSkill render-video preflight",
@@ -785,7 +810,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path and state-shaped array video guard, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill render-video preflight, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the manifest assembly checklist, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill render-video preflight, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the manifest assembly checklist, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

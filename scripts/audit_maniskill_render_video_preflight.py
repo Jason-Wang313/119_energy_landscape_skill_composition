@@ -88,12 +88,16 @@ def render_probe_code() -> str:
         height = int(sys.argv[3])
         seed = int(sys.argv[4])
         output_path = Path(sys.argv[5])
+        render_backend = sys.argv[6]
+        shader_pack = sys.argv[7]
 
         payload = {
             "env_id": env_id,
             "width": width,
             "height": height,
             "seed": seed,
+            "render_backend": render_backend,
+            "shader_pack": shader_pack,
             "made_env": False,
             "reset_ok": False,
             "step_ok": False,
@@ -114,8 +118,9 @@ def render_probe_code() -> str:
             kwargs = {
                 "obs_mode": "state",
                 "render_mode": "rgb_array",
-                "sensor_configs": {"width": width, "height": height},
-                "human_render_camera_configs": {"width": width, "height": height},
+                "render_backend": render_backend,
+                "sensor_configs": {"width": width, "height": height, "shader_pack": shader_pack},
+                "human_render_camera_configs": {"width": width, "height": height, "shader_pack": shader_pack},
             }
             try:
                 env = gym.make(env_id, **kwargs)
@@ -180,9 +185,15 @@ def run_probe(row: dict[str, str], args: argparse.Namespace) -> dict[str, Any]:
         str(args.height),
         str(args.seed),
         str(target),
+        str(args.render_backend),
+        str(args.shader_pack),
     ]
     env = os.environ.copy()
     env.setdefault("SAPIEN_RENDERER_DEVICE", args.renderer_device)
+    env["PAPER119_MANISKILL_RENDER_BACKEND"] = str(args.render_backend)
+    env["PAPER119_MANISKILL_SHADER_PACK"] = str(args.shader_pack)
+    env["PAPER119_MANISKILL_RENDER_WIDTH"] = str(args.width)
+    env["PAPER119_MANISKILL_RENDER_HEIGHT"] = str(args.height)
     try:
         proc = subprocess.run(
             command,
@@ -284,6 +295,8 @@ def main() -> int:
     parser.add_argument("--height", type=int, default=64)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--renderer-device", default="cpu")
+    parser.add_argument("--render-backend", default="cpu")
+    parser.add_argument("--shader-pack", default="minimal")
     parser.add_argument("--max-envs", type=int, default=4)
     args = parser.parse_args()
 
@@ -342,6 +355,8 @@ def main() -> int:
         "height": args.height,
         "timeout_seconds": args.timeout_seconds,
         "renderer_device": args.renderer_device,
+        "render_backend": args.render_backend,
+        "shader_pack": args.shader_pack,
         "output_dir": rel(PREFLIGHT_ROOT),
         "video_dir": rel(VIDEO_DIR),
         "blocking_missing": blocking,

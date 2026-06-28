@@ -19,6 +19,10 @@ ROOT = Path(__file__).resolve().parents[2]
 EXTERNAL = ROOT / "external_validation"
 BASELINES = EXTERNAL / "baselines"
 MIN_VIDEO_FRAME_EDGE = 16
+DEFAULT_RENDER_BACKEND = "cpu"
+DEFAULT_SHADER_PACK = "minimal"
+DEFAULT_RENDER_WIDTH = 128
+DEFAULT_RENDER_HEIGHT = 128
 
 
 def clamp(value: float, lower: float = 0.0, upper: float = 1.0) -> float:
@@ -34,6 +38,13 @@ def package_version(name: str) -> str:
 
 def stable_digest(value: Any) -> str:
     return hashlib.sha256(json.dumps(value, sort_keys=True, default=str).encode("utf-8")).hexdigest().upper()
+
+
+def int_from_env(name: str, default: int) -> int:
+    try:
+        return max(16, int(os.environ.get(name, str(default))))
+    except ValueError:
+        return default
 
 
 def numeric_values(value: Any, *, limit: int = 128) -> list[float]:
@@ -210,6 +221,8 @@ class Backend(ExternalCollectionBackend):
         self._video_render_error = ""
 
     def platform_provenance(self) -> dict[str, Any]:
+        render_backend = os.environ.get("PAPER119_MANISKILL_RENDER_BACKEND", DEFAULT_RENDER_BACKEND)
+        shader_pack = os.environ.get("PAPER119_MANISKILL_SHADER_PACK", DEFAULT_SHADER_PACK)
         return {
             "platform_type": "high_fidelity_sim",
             "platform_name": "ManiSkill-SAPIEN-reference-backend",
@@ -221,7 +234,11 @@ class Backend(ExternalCollectionBackend):
             "python_version": platform.python_version(),
             "operating_system": platform.platform(),
             "sensor_modalities": ["state", "camera", "contact_or_force"],
-            "renderer": os.environ.get("SAPIEN_RENDERER_DEVICE", "operator_default_or_cpu"),
+            "renderer": render_backend,
+            "render_backend": render_backend,
+            "shader_pack": shader_pack,
+            "render_width": int_from_env("PAPER119_MANISKILL_RENDER_WIDTH", DEFAULT_RENDER_WIDTH),
+            "render_height": int_from_env("PAPER119_MANISKILL_RENDER_HEIGHT", DEFAULT_RENDER_HEIGHT),
             "physics_timestep": "operator_verified_by_fidelity_acceptance",
             "contact_solver": "operator_verified_by_fidelity_acceptance",
             "backend_module_sha256": sha256_file(Path(__file__)),
@@ -252,10 +269,19 @@ class Backend(ExternalCollectionBackend):
         import gymnasium as gym
         import mani_skill  # noqa: F401
 
+        render_backend = os.environ.get("PAPER119_MANISKILL_RENDER_BACKEND", DEFAULT_RENDER_BACKEND)
+        shader_pack = os.environ.get("PAPER119_MANISKILL_SHADER_PACK", DEFAULT_SHADER_PACK)
+        width = int_from_env("PAPER119_MANISKILL_RENDER_WIDTH", DEFAULT_RENDER_WIDTH)
+        height = int_from_env("PAPER119_MANISKILL_RENDER_HEIGHT", DEFAULT_RENDER_HEIGHT)
+        render_kwargs = {
+            "render_backend": render_backend,
+            "sensor_configs": {"width": width, "height": height, "shader_pack": shader_pack},
+            "human_render_camera_configs": {"width": width, "height": height, "shader_pack": shader_pack},
+        }
         try:
-            self._env = gym.make(env_id, obs_mode="state", render_mode="rgb_array")
+            self._env = gym.make(env_id, obs_mode="state", render_mode="rgb_array", **render_kwargs)
         except TypeError:
-            self._env = gym.make(env_id, obs_mode="state")
+            self._env = gym.make(env_id, obs_mode="state", render_mode="rgb_array")
         self._env_id = env_id
         return self._env
 

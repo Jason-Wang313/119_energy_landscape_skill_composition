@@ -6,6 +6,9 @@ Pilot runtime ready: `false`.
 Runner I/O ready: `true`.
 Render video ready: `false`.
 Readiness state: `PILOT_RUNTIME_NOT_READY`.
+Render backend: `cpu`.
+Shader pack: `minimal`.
+Render size: `128x128`.
 Timed out: `false`.
 Records observed: `1`.
 Videos written: `1`.
@@ -28,7 +31,7 @@ C:\Users\wangz\AppData\Local\Programs\Python\Python310\python.exe external_valid
 
 - `pass` `runtime_guard_is_non_evidence`: the guard writes only a liveness report and quarantined pilot_runtime_guard outputs
 - `pass` `quarantine_paths_are_not_official_evidence`: log_dir=external_validation/pilot_runtime_guard/logs, video_dir=external_validation/pilot_runtime_guard/videos
-- `pass` `bounded_runner_subprocess_exercised`: timeout_seconds=60, timed_out=False, returncode=0
+- `pass` `bounded_runner_subprocess_exercised`: timeout_seconds=180, timed_out=False, returncode=0
 - `pass` `timeout_or_result_recorded_as_readiness_state`: pilot_runtime_ready=False
 - `pass` `ready_requires_schema_valid_records_and_videos`: records=1, videos=1, schema_errors=0
 - `pass` `runner_io_ready_allows_only_quarantined_diagnostic_fallback`: runner_io_ready=True, diagnostic_fallbacks=1

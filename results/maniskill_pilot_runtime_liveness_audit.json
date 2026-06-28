@@ -14,7 +14,7 @@
       "passed": true
     },
     {
-      "detail": "timeout_seconds=60, timed_out=False, returncode=0",
+      "detail": "timeout_seconds=180, timed_out=False, returncode=0",
       "name": "bounded_runner_subprocess_exercised",
       "passed": true
     },
@@ -59,16 +59,20 @@
   "pilot_runtime_ready": false,
   "readiness_state": "PILOT_RUNTIME_NOT_READY",
   "records_observed": 1,
+  "render_backend": "cpu",
+  "render_height": 128,
   "render_video_ready": false,
+  "render_width": 128,
   "returncode": 0,
   "run_id": "paper119_pilot_runtime_guard_local",
   "runner_io_ready": true,
   "schema_errors": [],
-  "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 14:26:04,864 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+  "shader_pack": "minimal",
+  "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n",
   "stdout_tail": "External collection runner wrote 1 JSONL records. Not validated until manifest and strict audits pass.\n",
   "strict_external_evidence_ready": false,
   "timed_out": false,
-  "timeout_seconds": 60,
+  "timeout_seconds": 180,
   "version": "maniskill_pilot_runtime_liveness_audit_v1",
   "video_dir": "external_validation/pilot_runtime_guard/videos",
   "videos_written": 1

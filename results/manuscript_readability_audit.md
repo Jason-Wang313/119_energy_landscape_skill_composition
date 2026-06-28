@@ -2,18 +2,18 @@
 
 Passed: `true`.
 Not evidence: `true`.
-Abstract words: `253`.
-World/action phrase count: `7`.
+Abstract words: `258`.
+World/action phrase count: `10`.
 Contact-rich phrase count: `1`.
 
 This audit checks that the generated manuscript is naturally framed around a bounded skill-seam world/action model, keeps contact-rich manipulation as a testbed rather than the identity, and has machine-audited related-work/reference coverage. It is not external robot evidence.
 
 ## Checks
 
-- `pass` `abstract_exists`: words=253
-- `pass` `abstract_length_conference_reasonable`: words=253
-- `pass` `required_sections_present`: positions=[2291, 6387, 9939, 11952, 12842, 14376, 23457, 28413]
-- `pass` `required_sections_in_order`: positions=[2291, 6387, 9939, 11952, 12842, 14376, 23457, 28413]
+- `pass` `abstract_exists`: words=258
+- `pass` `abstract_length_conference_reasonable`: words=258
+- `pass` `required_sections_present`: positions=[2502, 6873, 10435, 12448, 13338, 14872, 23953, 28915]
+- `pass` `required_sections_in_order`: positions=[2502, 6873, 10435, 12448, 13338, 14872, 23953, 28915]
 - `pass` `core_frame_term_local world/action-modeling prob`: local world/action-modeling problem
 - `pass` `core_frame_term_compact predictive interface bet`: compact predictive interface between a skill library and a planner
 - `pass` `core_frame_term_action-conditioned physical inte`: action-conditioned physical interface between a skill library and a planner
@@ -34,8 +34,8 @@ This audit checks that the generated manuscript is naturally framed around a bou
 - `pass` `matrix_term_World/action models and hierarch`: World/action models and hierarchical world models
 - `pass` `matrix_term_Closest outreach works`: Closest outreach works
 - `pass` `matrix_term_External Validation Boundary`: External Validation Boundary
-- `pass` `identity_phrase_not_forced`: count=0
-- `pass` `world_action_framing_not_overdone`: count=7
+- `pass` `identity_phrase_not_forced`: count=1
+- `pass` `world_action_framing_not_overdone`: count=10
 - `pass` `contact_rich_is_not_the_identity`: contact-rich count=1
 - `pass` `contact_positioning_is_testbed`: contact-rich examples are positioned as a testbed
 - `pass` `no_stale_internal_or_manual_polish_terms`: hits=[]

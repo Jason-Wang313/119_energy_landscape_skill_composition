@@ -167,6 +167,10 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
     env = os.environ.copy()
     env["PAPER119_MANISKILL_REFERENCE_BACKEND_ENABLE_ROLLOUTS"] = "1"
     env["PAPER119_MANISKILL_REFERENCE_BACKEND_ALLOW_DIAGNOSTIC_VIDEO_FALLBACK"] = "1"
+    env.setdefault("PAPER119_MANISKILL_RENDER_BACKEND", args.render_backend)
+    env.setdefault("PAPER119_MANISKILL_SHADER_PACK", args.shader_pack)
+    env.setdefault("PAPER119_MANISKILL_RENDER_WIDTH", str(args.render_width))
+    env.setdefault("PAPER119_MANISKILL_RENDER_HEIGHT", str(args.render_height))
     try:
         proc = subprocess.run(
             command,
@@ -235,6 +239,10 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
         "runner_io_ready": runner_io_ready,
         "render_video_ready": render_video_ready,
         "pilot_runtime_ready": pilot_runtime_ready,
+        "render_backend": env.get("PAPER119_MANISKILL_RENDER_BACKEND", ""),
+        "shader_pack": env.get("PAPER119_MANISKILL_SHADER_PACK", ""),
+        "render_width": int(env.get("PAPER119_MANISKILL_RENDER_WIDTH", "0") or 0),
+        "render_height": int(env.get("PAPER119_MANISKILL_RENDER_HEIGHT", "0") or 0),
     }
 
 
@@ -343,6 +351,10 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         "timeout_seconds": args.timeout_seconds,
         "max_rows": args.max_rows,
         "run_id": args.run_id,
+        "render_backend": result["render_backend"],
+        "shader_pack": result["shader_pack"],
+        "render_width": result["render_width"],
+        "render_height": result["render_height"],
         "log_dir": rel(GUARD_LOG_DIR),
         "video_dir": rel(GUARD_VIDEO_DIR),
         "records_observed": result["records_observed"],
@@ -373,6 +385,9 @@ def write_outputs(payload: dict[str, Any]) -> None:
         f"Runner I/O ready: `{str(payload['runner_io_ready']).lower()}`.",
         f"Render video ready: `{str(payload['render_video_ready']).lower()}`.",
         f"Readiness state: `{payload['readiness_state']}`.",
+        f"Render backend: `{payload['render_backend']}`.",
+        f"Shader pack: `{payload['shader_pack']}`.",
+        f"Render size: `{payload['render_width']}x{payload['render_height']}`.",
         f"Timed out: `{str(payload['timed_out']).lower()}`.",
         f"Records observed: `{payload['records_observed']}`.",
         f"Videos written: `{payload['videos_written']}`.",
@@ -411,6 +426,10 @@ def main() -> int:
     parser.add_argument("--timeout-seconds", type=int, default=60)
     parser.add_argument("--max-rows", type=int, default=1)
     parser.add_argument("--run-id", default="paper119_pilot_runtime_guard_local")
+    parser.add_argument("--render-backend", default="cpu")
+    parser.add_argument("--shader-pack", default="minimal")
+    parser.add_argument("--render-width", type=int, default=128)
+    parser.add_argument("--render-height", type=int, default=128)
     args = parser.parse_args()
     payload = build_payload(args)
     write_outputs(payload)

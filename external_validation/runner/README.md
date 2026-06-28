@@ -29,6 +29,8 @@ python scripts\audit_maniskill_backend_readiness.py
 
 This audit checks `external_validation/runner/maniskill_reference_backend.py` against the backend API, task configs, platform-provenance fields, all 12 reference adapters, and a synthetic MP4 writer path. It also checks that state-shaped arrays cannot masquerade as render videos. It is not rollout evidence. The reference backend is fail-closed for official collection by default, and real evidence still requires accepted fidelity provenance, explicit alias unsealing, a specific run id, renderable per-episode videos, JSONL logs, a manifest, and strict evidence audits.
 
+The reference backend records explicit render-backend/shader controls in platform provenance. Defaults are `PAPER119_MANISKILL_RENDER_BACKEND=cpu`, `PAPER119_MANISKILL_SHADER_PACK=minimal`, `PAPER119_MANISKILL_RENDER_WIDTH=128`, and `PAPER119_MANISKILL_RENDER_HEIGHT=128`; change them only as part of an audited external platform qualification.
+
 Explicit reference-backend preflight:
 
 ```powershell

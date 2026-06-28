@@ -1,23 +1,23 @@
 {
-  "abstract_words": 253,
+  "abstract_words": 258,
   "checks": [
     {
-      "detail": "words=253",
+      "detail": "words=258",
       "name": "abstract_exists",
       "passed": true
     },
     {
-      "detail": "words=253",
+      "detail": "words=258",
       "name": "abstract_length_conference_reasonable",
       "passed": true
     },
     {
-      "detail": "positions=[2291, 6387, 9939, 11952, 12842, 14376, 23457, 28413]",
+      "detail": "positions=[2502, 6873, 10435, 12448, 13338, 14872, 23953, 28915]",
       "name": "required_sections_present",
       "passed": true
     },
     {
-      "detail": "positions=[2291, 6387, 9939, 11952, 12842, 14376, 23457, 28413]",
+      "detail": "positions=[2502, 6873, 10435, 12448, 13338, 14872, 23953, 28915]",
       "name": "required_sections_in_order",
       "passed": true
     },
@@ -122,12 +122,12 @@
       "passed": true
     },
     {
-      "detail": "count=0",
+      "detail": "count=1",
       "name": "identity_phrase_not_forced",
       "passed": true
     },
     {
-      "detail": "count=7",
+      "detail": "count=10",
       "name": "world_action_framing_not_overdone",
       "passed": true
     },
@@ -198,5 +198,5 @@
   "not_external_evidence": true,
   "passed": true,
   "version": "manuscript_readability_audit_v1",
-  "world_action_phrase_count": 7
+  "world_action_phrase_count": 10
 }

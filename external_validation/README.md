@@ -67,6 +67,8 @@ python scripts\audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 60 --
 
 This writes `results/maniskill_pilot_runtime_liveness_audit.{json,md}`. It launches the tracked ManiSkill reference runner in quarantined `external_validation/pilot_runtime_guard/` directories with a strict timeout. It is not evidence and does not replace the pilot-smoke packet. The current local report is fail-closed for official collection: `pilot_runtime_ready=false`, `runner_io_ready=true`, and `render_video_ready=false`. The runner can write one quarantined schema-valid pilot row/video only through a diagnostic non-evidence video fallback; use an accepted GPU/render machine or fix render-backed RGB video before official collection.
 
+The ManiSkill reference path uses explicit render-backend/shader controls. Defaults are `PAPER119_MANISKILL_RENDER_BACKEND=cpu`, `PAPER119_MANISKILL_SHADER_PACK=minimal`, `PAPER119_MANISKILL_RENDER_WIDTH=128`, and `PAPER119_MANISKILL_RENDER_HEIGHT=128`; the render-video preflight and pilot runtime liveness audit record these values so evidence videos are never confused with implicit local renderer defaults.
+
 Build the independent operator packet:
 
 ```powershell
@@ -180,6 +182,8 @@ python scripts\audit_maniskill_backend_readiness.py
 ```
 
 This writes `results/maniskill_backend_readiness_audit.{json,md}`. It contract-qualifies `external_validation/runner/maniskill_reference_backend.py` against the backend API, task configs, platform-provenance fields, all 12 reference adapters, and a synthetic MP4 writer path, while checking that state-shaped arrays cannot masquerade as render videos. It is not evidence: official collection still requires accepted fidelity provenance, installed assets, explicit alias unsealing, a specific run id, renderable per-episode videos, JSONL logs, a manifest, and strict evidence audits.
+
+The readiness audit records explicit render-backend/shader controls in platform provenance: `PAPER119_MANISKILL_RENDER_BACKEND`, `PAPER119_MANISKILL_SHADER_PACK`, `PAPER119_MANISKILL_RENDER_WIDTH`, and `PAPER119_MANISKILL_RENDER_HEIGHT`.
 
 Audit the explicit reference-backend collection preflight:
 
