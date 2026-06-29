@@ -20,6 +20,8 @@ Reviewer packet: the reviewer response packet now records the natural skill-seam
 
 external postcollection evidence seal: `external_validation/postcollection_evidence_seal.md` now records the non-evidence hash-lock step for raw JSONL logs, rollout videos, prepared configs, precollection receipt, and operator metadata after official collection and before manifest promotion.
 
+external postcollection evidence seal self-test: `results/external_postcollection_evidence_seal_self_test.md` now proves the seal builder can reach manifest-promotion readiness on a temporary complete sealed fixture while missing operator metadata, incomplete official videos, and pre-existing manifests fail without touching the real seal.
+
 external postcollection seal consistency gate: `results/external_postcollection_seal_consistency_audit.md` now recomputes sealed raw-log, video, config, precollection, and metadata hashes before manifest promotion while remaining non-evidence.
 
 external postcollection seal consistency self-test: `results/external_postcollection_seal_consistency_self_test.md` now proves the gate can pass on a temporary complete sealed fixture while hash drift and unsealed official artifacts fail without overwriting the real report.

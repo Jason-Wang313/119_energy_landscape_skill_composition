@@ -144,6 +144,7 @@ def main():
         "scripts\\build_external_precollection_manifest_draft.py",
         "scripts\\build_external_precollection_freeze_receipt.py",
         "scripts\\build_external_postcollection_evidence_seal.py",
+        "scripts\\self_test_external_postcollection_evidence_seal.py",
         "scripts\\audit_external_postcollection_seal_consistency.py",
         "scripts\\self_test_external_postcollection_seal_consistency.py",
         "scripts\\build_external_baseline_contract.py",
@@ -238,6 +239,7 @@ def main():
         "python scripts/build_external_precollection_manifest_draft.py",
         "python scripts/build_external_precollection_freeze_receipt.py",
         "python scripts/build_external_postcollection_evidence_seal.py",
+        "python scripts/self_test_external_postcollection_evidence_seal.py",
         "python scripts/audit_external_postcollection_seal_consistency.py",
         "python scripts/self_test_external_postcollection_seal_consistency.py",
         "python scripts/build_external_analysis_plan.py",
@@ -2154,6 +2156,46 @@ def main():
     ):
         if postcollection_checks.get(required_check) is not True:
             fail(f"external postcollection evidence seal audit missing passing check: {required_check}")
+
+    postcollection_seal_self_test_path = RESULTS / "external_postcollection_evidence_seal_self_test.json"
+    postcollection_seal_self_test_md_path = RESULTS / "external_postcollection_evidence_seal_self_test.md"
+    for path in (
+        ROOT / "scripts" / "self_test_external_postcollection_evidence_seal.py",
+        postcollection_seal_self_test_path,
+        postcollection_seal_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external postcollection evidence seal self-test artifact: {path}")
+    postcollection_seal_self_test = json.loads(postcollection_seal_self_test_path.read_text(encoding="utf-8"))
+    if postcollection_seal_self_test.get("version") != "external_postcollection_evidence_seal_self_test_v1":
+        fail("external postcollection evidence seal self-test version mismatch")
+    if postcollection_seal_self_test.get("passed") is not True:
+        fail("external postcollection evidence seal self-test did not pass")
+    if postcollection_seal_self_test.get("not_external_evidence") is not True:
+        fail("external postcollection evidence seal self-test must declare that it is not evidence")
+    if postcollection_seal_self_test.get("synthetic_seal_ready") is not True:
+        fail("external postcollection evidence seal self-test should make a temporary complete seal ready")
+    if postcollection_seal_self_test.get("missing_operator_metadata_rejected") is not True:
+        fail("external postcollection evidence seal self-test should reject missing operator metadata")
+    if postcollection_seal_self_test.get("incomplete_video_set_rejected") is not True:
+        fail("external postcollection evidence seal self-test should reject incomplete official videos")
+    if postcollection_seal_self_test.get("manifest_present_rejected") is not True:
+        fail("external postcollection evidence seal self-test should reject pre-existing manifest promotion")
+    if postcollection_seal_self_test.get("real_reports_untouched") is not True:
+        fail("external postcollection evidence seal self-test should not overwrite the real seal reports")
+    postcollection_seal_self_checks = {
+        check.get("name"): check.get("passed") for check in postcollection_seal_self_test.get("checks", [])
+    }
+    for required_check in (
+        "synthetic_complete_seal_reaches_manifest_promotion",
+        "synthetic_ready_checks_cover_order_inventory_and_boundary",
+        "missing_operator_metadata_rejected",
+        "incomplete_video_set_rejected",
+        "manifest_present_rejected_before_promotion",
+        "real_postcollection_seal_reports_not_overwritten",
+    ):
+        if postcollection_seal_self_checks.get(required_check) is not True:
+            fail(f"external postcollection evidence seal self-test missing passing check: {required_check}")
 
     postcollection_consistency_path = RESULTS / "external_postcollection_seal_consistency_audit.json"
     postcollection_consistency_md_path = RESULTS / "external_postcollection_seal_consistency_audit.md"

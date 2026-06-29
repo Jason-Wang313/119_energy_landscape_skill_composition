@@ -216,6 +216,11 @@
       "passed": true
     },
     {
+      "detail": "synthetic_ready=True, metadata_rejected=True, videos_rejected=True, manifest_rejected=True",
+      "name": "postcollection_evidence_seal_self_test_visible",
+      "passed": true
+    },
+    {
       "detail": "matched=11, records=0, videos=0, consistency_ready=False",
       "name": "postcollection_seal_consistency_gate_visible",
       "passed": true

@@ -226,6 +226,11 @@
       "evidence": ["scripts/build_external_postcollection_evidence_seal.py", "external_validation/postcollection_evidence_seal.json", "external_validation/postcollection_evidence_seal.md", "external_validation/postcollection_evidence_seal.csv", "results/external_postcollection_evidence_seal_audit.json", "results/external_postcollection_evidence_seal_audit.md"]
     },
     {
+      "name": "external_postcollection_evidence_seal_self_test_claim",
+      "claim": "The repository self-tests the External postcollection evidence seal builder on a temporary complete sealed fixture while proving missing operator metadata, incomplete official videos, and pre-existing manifests fail without overwriting the real seal.",
+      "evidence": ["scripts/self_test_external_postcollection_evidence_seal.py", "results/external_postcollection_evidence_seal_self_test.json", "results/external_postcollection_evidence_seal_self_test.md", "scripts/build_external_postcollection_evidence_seal.py"]
+    },
+    {
       "name": "external_postcollection_seal_consistency_gate_claim",
       "claim": "The repository provides a non-evidence External postcollection seal consistency gate that recomputes the sealed raw-log, video, config, precollection, and metadata hashes before manifest promotion, rejecting hash drift or unsealed official artifacts while keeping strict external evidence false.",
       "evidence": ["scripts/audit_external_postcollection_seal_consistency.py", "results/external_postcollection_seal_consistency_audit.json", "results/external_postcollection_seal_consistency_audit.md", "external_validation/postcollection_evidence_seal.json", "external_validation/postcollection_evidence_seal.csv"]
