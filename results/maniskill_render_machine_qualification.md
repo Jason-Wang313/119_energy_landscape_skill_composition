@@ -5,6 +5,7 @@ Not evidence: `true`.
 Qualification state: `DO_NOT_COLLECT_RENDER_MACHINE`.
 Render machine qualified: `false`.
 Strict external evidence ready: `false`.
+Renderer failure classes: `['vulkan_descriptor_pool_exhaustion']`.
 
 This packet is an operator gate for the exact machine that will collect render-backed videos. It does not run collection, does not write `external_validation/manifest.json`, and does not turn diagnostic fallback videos into evidence.
 
@@ -18,13 +19,13 @@ This packet is an operator gate for the exact machine that will collect render-b
 ## Blocking Missing
 
 - render_video_ready is false in results/maniskill_render_video_preflight_audit.json
-- PegInsertionSide-v1 has no render-backed MP4: render preflight exceeded 45 seconds
+- PegInsertionSide-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory
 - PegInsertionSide-v1 did not write a renderer-backed MP4
-- OpenCabinetDrawer-v1 has no render-backed MP4: render preflight exceeded 45 seconds
+- OpenCabinetDrawer-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory
 - OpenCabinetDrawer-v1 did not write a renderer-backed MP4
-- OpenCabinetDoor-v1 has no render-backed MP4: render preflight exceeded 45 seconds
+- OpenCabinetDoor-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory
 - OpenCabinetDoor-v1 did not write a renderer-backed MP4
-- PullCubeTool-v1 has no render-backed MP4: render preflight exceeded 45 seconds
+- PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory
 - PullCubeTool-v1 did not write a renderer-backed MP4
 - pilot runtime liveness is not ready on the selected machine
 - pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence
@@ -36,7 +37,7 @@ This packet is an operator gate for the exact machine that will collect render-b
 python scripts\probe_external_platform.py
 ```
 ```powershell
-python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend <accepted_backend> --shader-pack <accepted_shader_pack> --profile-matrix --profile-matrix-max-envs 1
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend <accepted_backend> --shader-pack <accepted_shader_pack> --profile-matrix --profile-matrix-max-envs 1 --timeout-diagnosis-seconds 180 --timeout-diagnosis-width 64 --timeout-diagnosis-height 64
 ```
 ```powershell
 python scripts\audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 180
@@ -56,6 +57,7 @@ python scripts\audit_external_collection_readiness.py --strict --backend-module 
 - `pass` `all_primary_envs_have_terminal_render_records`: records=4, expected=['PegInsertionSide-v1', 'OpenCabinetDrawer-v1', 'OpenCabinetDoor-v1', 'PullCubeTool-v1']
 - `pass` `qualification_state_matches_render_and_liveness`: state=DO_NOT_COLLECT_RENDER_MACHINE, blockers=12
 - `pass` `current_machine_fail_closed_when_render_not_ready`: state=DO_NOT_COLLECT_RENDER_MACHINE, render_video_ready=False
+- `pass` `renderer_failure_classes_propagated`: failure_classes=['vulkan_descriptor_pool_exhaustion']
 - `pass` `diagnostic_fallbacks_block_evidence`: diagnostic_fallbacks=1, state=DO_NOT_COLLECT_RENDER_MACHINE
 - `pass` `no_real_manifest_written`: external_validation/manifest.json remains absent before real evidence
 - `pass` `operator_commands_cover_platform_render_liveness_acceptance_and_collection_readiness`: operator qualification commands are present

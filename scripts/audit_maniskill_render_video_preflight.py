@@ -288,6 +288,29 @@ def run_profile_matrix(env_rows: list[dict[str, str]], args: argparse.Namespace)
     return records
 
 
+def run_timeout_diagnosis(records: list[dict[str, Any]], args: argparse.Namespace) -> list[dict[str, Any]]:
+    if int(args.timeout_diagnosis_seconds) <= 0:
+        return []
+    timed_out_envs = [
+        {"task_family": str(record.get("task_family", "")), "env_id": str(record.get("env_id", ""))}
+        for record in records
+        if record.get("timed_out") and record.get("task_family") and record.get("env_id")
+    ]
+    diagnosis_rows = timed_out_envs[: max(0, int(args.timeout_diagnosis_max_envs))]
+    diagnosis_records: list[dict[str, Any]] = []
+    for row in diagnosis_rows:
+        diagnosis_args = argparse.Namespace(**vars(args))
+        diagnosis_args.timeout_seconds = int(args.timeout_diagnosis_seconds)
+        diagnosis_args.width = int(args.timeout_diagnosis_width)
+        diagnosis_args.height = int(args.timeout_diagnosis_height)
+        diagnosis_args.profile_label = "timeout_diagnosis"
+        record = run_probe(row, diagnosis_args)
+        record["timeout_diagnosis"] = True
+        record["renderer_failure_class"] = "" if record.get("render_video_ready") else classify_render_failure(record)
+        diagnosis_records.append(record)
+    return diagnosis_records
+
+
 def summarize_blocker(records: list[dict[str, Any]]) -> str:
     failed = [record for record in records if not record.get("render_video_ready")]
     if not failed:
@@ -297,6 +320,17 @@ def summarize_blocker(records: list[dict[str, Any]]) -> str:
         error = str(record.get("error") or record.get("error_type") or "no render-backed MP4")
         fragments.append(f"{record.get('env_id')}: {error}")
     return "render-backed MP4 preflight is not ready on this machine; " + "; ".join(fragments)
+
+
+def summarize_timeout_diagnosis(records: list[dict[str, Any]]) -> str:
+    if not records:
+        return ""
+    fragments = []
+    for record in records[:3]:
+        failure_class = str(record.get("renderer_failure_class") or "unknown_render_failure")
+        error = str(record.get("error") or record.get("error_type") or "no diagnostic error")
+        fragments.append(f"{record.get('env_id')}: {failure_class}: {error}")
+    return "timeout diagnosis retest found " + "; ".join(fragments)
 
 
 def classify_render_failure(record: dict[str, Any]) -> str:
@@ -412,6 +446,19 @@ def write_md(payload: dict[str, Any]) -> None:
             f"made_env={record.get('made_env')}, reset_ok={record.get('reset_ok')}, "
             f"render_ok={record.get('render_ok')}, mp4_ok={record.get('mp4_ok')}, error={error!r}"
         )
+    diagnosis_records = payload.get("timeout_diagnosis_records", []) or []
+    lines.extend(["", "## Timeout Diagnosis Retest", ""])
+    if not diagnosis_records:
+        lines.append("- `not_run`")
+    for record in diagnosis_records:
+        status = "ready" if record.get("render_video_ready") else "not_ready"
+        error = str(record.get("error") or record.get("error_type") or "")
+        lines.append(
+            f"- `{status}` `{record.get('task_family')}` / `{record.get('env_id')}`: "
+            f"class={record.get('renderer_failure_class')}, made_env={record.get('made_env')}, "
+            f"reset_ok={record.get('reset_ok')}, render_ok={record.get('render_ok')}, "
+            f"mp4_ok={record.get('mp4_ok')}, error={error!r}"
+        )
     lines.extend(["", "## Checks", ""])
     for check in payload["checks"]:
         status = "pass" if check["passed"] else "fail"
@@ -432,6 +479,10 @@ def main() -> int:
     parser.add_argument("--profile-matrix", action="store_true")
     parser.add_argument("--profile-matrix-max-envs", type=int, default=1)
     parser.add_argument("--profile-matrix-spec", default="cpu:minimal,gpu:minimal,sapien_cuda:minimal")
+    parser.add_argument("--timeout-diagnosis-seconds", type=int, default=0)
+    parser.add_argument("--timeout-diagnosis-max-envs", type=int, default=1)
+    parser.add_argument("--timeout-diagnosis-width", type=int, default=32)
+    parser.add_argument("--timeout-diagnosis-height", type=int, default=32)
     args = parser.parse_args()
 
     RESULTS.mkdir(exist_ok=True)
@@ -440,10 +491,14 @@ def main() -> int:
     records = [run_probe(row, args) for row in env_rows]
     for record in records:
         record["renderer_failure_class"] = "" if record.get("render_video_ready") else classify_render_failure(record)
+    timeout_diagnosis_records = run_timeout_diagnosis(records, args)
     profile_matrix_records = run_profile_matrix(env_rows, args) if args.profile_matrix else []
     render_ready = bool(records) and all(record.get("render_video_ready") for record in records)
     blocking = [] if render_ready else [summarize_blocker(records) or "no ManiSkill primary environments were render-probed"]
-    all_failure_records = [*records, *profile_matrix_records]
+    diagnosis_summary = summarize_timeout_diagnosis(timeout_diagnosis_records)
+    if diagnosis_summary and not render_ready:
+        blocking.append(diagnosis_summary)
+    all_failure_records = [*records, *timeout_diagnosis_records, *profile_matrix_records]
     failure_classes = sorted(
         {str(record.get("renderer_failure_class")) for record in all_failure_records if record.get("renderer_failure_class")}
     )
@@ -522,6 +577,24 @@ def main() -> int:
     )
     add_check(
         checks,
+        "timeout_diagnosis_quarantined_non_evidence",
+        all(
+            record.get("not_external_evidence") is True
+            and record.get("timeout_diagnosis") is True
+            and is_under(Path(str(record.get("output_path", ""))), PREFLIGHT_ROOT)
+            for record in timeout_diagnosis_records
+        ),
+        f"timeout_diagnosis_records={len(timeout_diagnosis_records)}",
+    )
+    add_check(
+        checks,
+        "timeout_diagnosis_terminal_status",
+        (not timeout_diagnosis_records)
+        or all(record.get("timed_out") or record.get("parsed_marker") for record in timeout_diagnosis_records),
+        f"timeout_diagnosis_records={len(timeout_diagnosis_records)}",
+    )
+    add_check(
+        checks,
         "no_real_manifest_written",
         not (EXTERNAL / "manifest.json").exists(),
         "external_validation/manifest.json remains absent",
@@ -545,6 +618,11 @@ def main() -> int:
         "profile_matrix_max_envs": int(args.profile_matrix_max_envs),
         "profile_matrix_spec": args.profile_matrix_spec,
         "profile_matrix_records": profile_matrix_records,
+        "timeout_diagnosis_seconds": int(args.timeout_diagnosis_seconds),
+        "timeout_diagnosis_max_envs": int(args.timeout_diagnosis_max_envs),
+        "timeout_diagnosis_width": int(args.timeout_diagnosis_width),
+        "timeout_diagnosis_height": int(args.timeout_diagnosis_height),
+        "timeout_diagnosis_records": timeout_diagnosis_records,
         "output_dir": rel(PREFLIGHT_ROOT),
         "video_dir": rel(VIDEO_DIR),
         "blocking_missing": blocking,

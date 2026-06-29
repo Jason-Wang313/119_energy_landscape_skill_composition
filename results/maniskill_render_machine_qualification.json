@@ -1,13 +1,13 @@
 {
   "blocking_missing": [
     "render_video_ready is false in results/maniskill_render_video_preflight_audit.json",
-    "PegInsertionSide-v1 has no render-backed MP4: render preflight exceeded 45 seconds",
+    "PegInsertionSide-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
     "PegInsertionSide-v1 did not write a renderer-backed MP4",
-    "OpenCabinetDrawer-v1 has no render-backed MP4: render preflight exceeded 45 seconds",
+    "OpenCabinetDrawer-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
     "OpenCabinetDrawer-v1 did not write a renderer-backed MP4",
-    "OpenCabinetDoor-v1 has no render-backed MP4: render preflight exceeded 45 seconds",
+    "OpenCabinetDoor-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
     "OpenCabinetDoor-v1 did not write a renderer-backed MP4",
-    "PullCubeTool-v1 has no render-backed MP4: render preflight exceeded 45 seconds",
+    "PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
     "PullCubeTool-v1 did not write a renderer-backed MP4",
     "pilot runtime liveness is not ready on the selected machine",
     "pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence",
@@ -45,6 +45,11 @@
       "passed": true
     },
     {
+      "detail": "failure_classes=['vulkan_descriptor_pool_exhaustion']",
+      "name": "renderer_failure_classes_propagated",
+      "passed": true
+    },
+    {
       "detail": "diagnostic_fallbacks=1, state=DO_NOT_COLLECT_RENDER_MACHINE",
       "name": "diagnostic_fallbacks_block_evidence",
       "passed": true
@@ -70,7 +75,7 @@
   "not_external_evidence": true,
   "operator_commands": [
     "python scripts\\probe_external_platform.py",
-    "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend <accepted_backend> --shader-pack <accepted_shader_pack> --profile-matrix --profile-matrix-max-envs 1",
+    "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend <accepted_backend> --shader-pack <accepted_shader_pack> --profile-matrix --profile-matrix-max-envs 1 --timeout-diagnosis-seconds 180 --timeout-diagnosis-width 64 --timeout-diagnosis-height 64",
     "python scripts\\audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 180",
     "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
     "python scripts\\audit_external_collection_readiness.py --strict --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --run-id <accepted_run_id> --unsealed-alias-map"
@@ -79,6 +84,9 @@
   "qualification_state": "DO_NOT_COLLECT_RENDER_MACHINE",
   "render_machine_qualified": false,
   "render_records_seen": 4,
+  "renderer_failure_classes": [
+    "vulkan_descriptor_pool_exhaustion"
+  ],
   "source_artifacts": [
     "results/external_platform_probe.json",
     "results/maniskill_render_video_preflight_audit.json",
@@ -86,5 +94,6 @@
     "external_validation/maniskill_task_bindings.json"
   ],
   "strict_external_evidence_ready": false,
+  "timeout_diagnosis_record_count": 0,
   "version": "maniskill_render_machine_qualification_v1"
 }

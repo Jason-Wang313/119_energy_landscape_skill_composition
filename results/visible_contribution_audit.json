@@ -121,12 +121,12 @@
       "passed": true
     },
     {
-      "detail": "render_video_ready=False, render_backend='cpu', shader_pack='minimal', envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: render preflight exceeded 45 seconds; OpenCabinetDrawer-v1: render preflight exceeded 45 seconds; OpenCabinetDoor-v1: render preflight exceeded 45 seconds; PullCubeTool-v1: render preflight exceeded 45 seconds']",
+      "detail": "render_video_ready=False, render_backend='cpu', shader_pack='minimal', envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory']",
       "name": "maniskill_render_video_preflight_visible",
       "passed": true
     },
     {
-      "detail": "classes=['render_timeout'], remediation=3",
+      "detail": "classes=['vulkan_descriptor_pool_exhaustion'], remediation=5",
       "name": "renderer_failure_classifier_visible",
       "passed": true
     },

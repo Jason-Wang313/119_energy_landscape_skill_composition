@@ -157,7 +157,7 @@
     },
     {
       "name": "maniskill_render_video_preflight_claim",
-      "claim": "The repository provides a non-evidence ManiSkill render-video preflight that probes whether the tracked public-simulator runtime can export render-backed RGB MP4 files before official collection, records explicit render-backend/shader controls and a bounded renderer profile matrix, classifies the current renderer blocker with a renderer-failure classifier, and keeps strict external evidence false.",
+      "claim": "The repository provides a non-evidence ManiSkill render-video preflight that probes whether the tracked public-simulator runtime can export render-backed RGB MP4 files before official collection, records explicit render-backend/shader controls, a bounded timeout diagnosis retest, and a bounded renderer profile matrix, classifies the current renderer blocker with a renderer-failure classifier, and keeps strict external evidence false.",
       "evidence": ["scripts/audit_maniskill_render_video_preflight.py", "results/maniskill_render_video_preflight_audit.json", "results/maniskill_render_video_preflight_audit.md", "results/external_acquisition_packet.json", "results/external_operator_packet.json"]
     },
     {

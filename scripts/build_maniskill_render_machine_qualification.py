@@ -86,6 +86,13 @@ def classify_state(preflight: dict[str, Any], liveness: dict[str, Any], expected
     return ("QUALIFIED_FOR_RENDER_BACKED_PILOT" if not blockers else "DO_NOT_COLLECT_RENDER_MACHINE", blockers)
 
 
+def renderer_failure_classes(preflight: dict[str, Any]) -> list[str]:
+    classes = preflight.get("renderer_failure_classes", [])
+    if isinstance(classes, list):
+        return sorted({str(item) for item in classes if str(item).strip()})
+    return []
+
+
 def write_outputs(payload: dict[str, Any]) -> None:
     RESULTS.mkdir(exist_ok=True)
     EXTERNAL.mkdir(exist_ok=True)
@@ -99,6 +106,7 @@ def write_outputs(payload: dict[str, Any]) -> None:
         f"Qualification state: `{payload['qualification_state']}`.",
         f"Render machine qualified: `{str(payload['render_machine_qualified']).lower()}`.",
         f"Strict external evidence ready: `{str(payload['strict_external_evidence_ready']).lower()}`.",
+        f"Renderer failure classes: `{payload['renderer_failure_classes']}`.",
         "",
         "This packet is an operator gate for the exact machine that will collect render-backed videos. It does not run collection, does not write `external_validation/manifest.json`, and does not turn diagnostic fallback videos into evidence.",
         "",
@@ -136,6 +144,7 @@ def main() -> int:
     expected_envs = primary_env_ids(bindings)
     records = render_records(preflight)
     state, blockers = classify_state(preflight, liveness, expected_envs)
+    failure_classes = renderer_failure_classes(preflight)
     checks: list[dict[str, Any]] = []
 
     add_check(checks, "qualification_packet_is_non_evidence", True, "this script writes only packet/audit files")
@@ -171,6 +180,12 @@ def main() -> int:
     )
     add_check(
         checks,
+        "renderer_failure_classes_propagated",
+        preflight.get("render_video_ready") is True or bool(failure_classes),
+        f"failure_classes={failure_classes}",
+    )
+    add_check(
+        checks,
         "diagnostic_fallbacks_block_evidence",
         fallback_count(liveness) == 0 or state == "DO_NOT_COLLECT_RENDER_MACHINE",
         f"diagnostic_fallbacks={fallback_count(liveness)}, state={state}",
@@ -184,7 +199,7 @@ def main() -> int:
 
     operator_commands = [
         "python scripts\\probe_external_platform.py",
-        "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend <accepted_backend> --shader-pack <accepted_shader_pack> --profile-matrix --profile-matrix-max-envs 1",
+        "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend <accepted_backend> --shader-pack <accepted_shader_pack> --profile-matrix --profile-matrix-max-envs 1 --timeout-diagnosis-seconds 180 --timeout-diagnosis-width 64 --timeout-diagnosis-height 64",
         "python scripts\\audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 180",
         "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
         "python scripts\\audit_external_collection_readiness.py --strict --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --run-id <accepted_run_id> --unsealed-alias-map",
@@ -213,6 +228,8 @@ def main() -> int:
         "strict_external_evidence_ready": False,
         "qualification_state": state,
         "render_machine_qualified": state == "QUALIFIED_FOR_RENDER_BACKED_PILOT",
+        "renderer_failure_classes": failure_classes,
+        "timeout_diagnosis_record_count": len(preflight.get("timeout_diagnosis_records", []) or []),
         "expected_primary_envs": expected_envs,
         "render_records_seen": len(records),
         "blocking_missing": blockers,
