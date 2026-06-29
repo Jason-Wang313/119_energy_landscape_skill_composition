@@ -1740,6 +1740,10 @@ def main():
         fail("external adapter evidence self-test must declare that it is not evidence")
     if adapter_evidence_self_test.get("synthetic_adapter_evidence_ready") is not True:
         fail("external adapter evidence self-test should make temporary manifest-declared adapters ready")
+    if adapter_evidence_self_test.get("tracked_candidate_config_fixture_ready") is not True:
+        fail("external adapter evidence self-test should pass strict validation with tracked candidate configs and temporary independent adapters")
+    if int(adapter_evidence_self_test.get("tracked_candidate_config_count", 0) or 0) < 11:
+        fail("external adapter evidence self-test should cover all tracked non-oracle candidate method configs")
     if adapter_evidence_self_test.get("scaffold_adapter_evidence_ready") is not False:
         fail("external adapter evidence self-test should reject scaffolds as strict evidence")
     if adapter_evidence_self_test.get("reference_adapter_evidence_ready") is not False:
@@ -1758,6 +1762,8 @@ def main():
     for required_check in (
         "synthetic_strict_adapters_pass",
         "synthetic_manifest_entries_cover_non_oracle_methods",
+        "tracked_candidate_configs_pass_strict_with_temp_independent_adapters",
+        "tracked_candidate_config_methods_match_non_oracle_methods",
         "missing_manifest_fails_strict",
         "leaky_or_reference_provenance_fails_strict",
         "implementation_hash_cannot_replace_checkpoint_or_config",

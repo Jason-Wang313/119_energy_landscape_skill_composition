@@ -70,7 +70,7 @@
   - Durable report: `results/external_rollout_validator_self_test.md`
 - External backend contract self-test: `scripts/self_test_external_backend_contract.py`
 - External config evidence self-test: `scripts/self_test_external_config_evidence.py`
-- External adapter evidence self-test: `scripts/self_test_external_adapter_evidence.py`
+- External adapter evidence self-test: `scripts/self_test_external_adapter_evidence.py` verifies temporary strict adapters and tracked candidate method configs without promoting them to evidence.
 - External fidelity acceptance self-test: `scripts/self_test_external_fidelity_acceptance.py`
 - External precollection freeze receipt self-test: `scripts/self_test_external_precollection_freeze_receipt.py`
 - External postcollection evidence seal self-test: `scripts/self_test_external_postcollection_evidence_seal.py`

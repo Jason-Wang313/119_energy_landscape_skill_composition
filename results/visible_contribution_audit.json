@@ -287,7 +287,7 @@
       "passed": true
     },
     {
-      "detail": "reference_adapter_evidence_ready=False, leaky_provenance_ready=False, implementation_hash_only_ready=False, fairness_mismatch_ready=False, check=True",
+      "detail": "tracked_candidate_config_fixture_ready=True, reference_adapter_evidence_ready=False, leaky_provenance_ready=False, implementation_hash_only_ready=False, fairness_mismatch_ready=False, check=True",
       "name": "strict_reference_adapter_rejection_gate_visible",
       "passed": true
     },

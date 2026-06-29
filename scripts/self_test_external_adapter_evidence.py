@@ -68,6 +68,19 @@ def baseline_methods() -> list[str]:
     return methods
 
 
+def candidate_config_paths() -> dict[str, Path]:
+    paths: dict[str, Path] = {}
+    for method in baseline_methods():
+        path = EXTERNAL / "method_config_candidates" / f"{method}.json"
+        if not path.exists():
+            raise SystemExit(f"missing candidate method config for self-test: {path}")
+        payload = read_json(path)
+        if payload.get("method") != method:
+            raise SystemExit(f"candidate method config has wrong method: {path}")
+        paths[method] = path
+    return paths
+
+
 def write_valid_adapter(path: Path, method: str) -> None:
     path.write_text(
         f'''
@@ -269,8 +282,9 @@ def write_report(payload: dict[str, Any]) -> None:
         f"Passed: `{str(payload['passed']).lower()}`.",
         "Not evidence: `true`.",
         f"Synthetic strict adapter evidence ready: `{str(payload['synthetic_adapter_evidence_ready']).lower()}`.",
+        f"Tracked candidate-config fixture ready: `{str(payload['tracked_candidate_config_fixture_ready']).lower()}`.",
         "",
-        "This self-test builds temporary manifest-declared adapter implementations and exercises the strict external-adapter evidence gate directly. It proves complete synthetic adapters can pass, missing manifests fail, scaffold templates and reference adapters are rejected as evidence, implementation-source hashes cannot replace checkpoint/config artifacts, fairness-contract bindings are required, and the real adapter evidence audit report is not overwritten.",
+        "This self-test builds temporary manifest-declared adapter implementations and exercises the strict external-adapter evidence gate directly. It proves complete synthetic adapters can pass, the tracked candidate method-config hashes can bind to a strict manifest fixture once temporary independent adapters and provenance are supplied, missing manifests fail, scaffold templates and reference adapters are rejected as evidence, implementation-source hashes cannot replace checkpoint/config artifacts, fairness-contract bindings are required, and the real adapter evidence audit report is not overwritten.",
         "",
         "## Checks",
         "",
@@ -316,7 +330,10 @@ def main() -> int:
         implementation_hash_manifest = tmp / "manifest_implementation_hash_only.json"
         missing_fairness_manifest = tmp / "manifest_missing_fairness_contract.json"
         fairness_mismatch_manifest = tmp / "manifest_fairness_mismatch.json"
+        candidate_config_manifest = tmp / "manifest_tracked_candidate_configs.json"
         write_json(complete_manifest, manifest_for_implementations(adapter_paths, config_paths))
+        tracked_candidate_config_paths = candidate_config_paths()
+        write_json(candidate_config_manifest, manifest_for_implementations(adapter_paths, tracked_candidate_config_paths))
         write_json(scaffold_manifest, manifest_for_scaffolds())
         write_json(reference_manifest, manifest_for_reference_adapters())
         write_json(leaky_manifest, manifest_with_leaky_provenance(adapter_paths, config_paths))
@@ -325,6 +342,7 @@ def main() -> int:
         write_json(fairness_mismatch_manifest, manifest_with_fairness_mismatch(adapter_paths, config_paths))
 
         complete_audit = run_strict_with_manifest(complete_manifest)
+        candidate_config_audit = run_strict_with_manifest(candidate_config_manifest)
         missing_manifest_audit = run_strict_with_manifest(missing_manifest)
         scaffold_audit = run_strict_with_manifest(scaffold_manifest)
         reference_audit = run_strict_with_manifest(reference_manifest)
@@ -336,6 +354,7 @@ def main() -> int:
     report_after = file_digest(REAL_REPORT)
 
     complete_checks = {check.get("name"): check.get("passed") for check in complete_audit.get("checks", [])}
+    candidate_config_checks = {check.get("name"): check.get("passed") for check in candidate_config_audit.get("checks", [])}
     missing_manifest_checks = {check.get("name"): check.get("passed") for check in missing_manifest_audit.get("checks", [])}
     leaky_checks = {check.get("name"): check.get("passed") for check in leaky_audit.get("checks", [])}
     implementation_hash_checks = {check.get("name"): check.get("passed") for check in implementation_hash_audit.get("checks", [])}
@@ -367,6 +386,31 @@ def main() -> int:
         "synthetic_manifest_entries_cover_non_oracle_methods",
         {result.get("method") for result in complete_audit.get("adapter_results", [])} == set(baseline_methods()),
         f"methods={len(complete_audit.get('adapter_results', []))}",
+    )
+    add_check(
+        checks,
+        "tracked_candidate_configs_pass_strict_with_temp_independent_adapters",
+        candidate_config_audit.get("passed") is True
+        and candidate_config_audit.get("strict") is True
+        and candidate_config_audit.get("not_external_evidence") is False
+        and int(candidate_config_audit.get("adapter_count", 0) or 0) >= 11
+        and candidate_config_checks.get("manifest_checkpoint_or_config_artifacts_declared") is True
+        and candidate_config_checks.get("manifest_required_hashes_match_artifacts") is True
+        and candidate_config_checks.get("manifest_independent_provenance_declared") is True
+        and candidate_config_checks.get("manifest_fairness_contract_bound_to_methods") is True
+        and candidate_config_checks.get("adapter_results_passed") is True,
+        (
+            f"passed={candidate_config_audit.get('passed')!r}, "
+            f"adapter_count={candidate_config_audit.get('adapter_count')!r}, "
+            f"checks={candidate_config_checks}"
+        ),
+    )
+    add_check(
+        checks,
+        "tracked_candidate_config_methods_match_non_oracle_methods",
+        {result.get("method") for result in candidate_config_audit.get("adapter_results", [])} == set(baseline_methods())
+        and set(tracked_candidate_config_paths) == set(baseline_methods()),
+        f"candidate_methods={len(tracked_candidate_config_paths)}, adapter_results={len(candidate_config_audit.get('adapter_results', []))}",
     )
     add_check(
         checks,
@@ -439,6 +483,9 @@ def main() -> int:
         "passed": passed,
         "not_external_evidence": True,
         "synthetic_adapter_evidence_ready": complete_audit.get("passed") is True,
+        "tracked_candidate_config_fixture_ready": candidate_config_audit.get("passed") is True,
+        "tracked_candidate_config_count": len(tracked_candidate_config_paths),
+        "tracked_candidate_config_methods": sorted(tracked_candidate_config_paths),
         "leaky_provenance_ready": leaky_audit.get("passed") is True,
         "implementation_hash_only_ready": implementation_hash_audit.get("passed") is True,
         "missing_fairness_contract_ready": missing_fairness_audit.get("passed") is True,
@@ -453,7 +500,8 @@ def main() -> int:
     write_report(payload)
     print(
         "External adapter evidence self-test: "
-        f"{'PASS' if passed else 'FAIL'}; synthetic_adapter_evidence_ready={payload['synthetic_adapter_evidence_ready']}"
+        f"{'PASS' if passed else 'FAIL'}; synthetic_adapter_evidence_ready={payload['synthetic_adapter_evidence_ready']}; "
+        f"tracked_candidate_config_fixture_ready={payload['tracked_candidate_config_fixture_ready']}"
     )
     print(f"Wrote {OUT_JSON}")
     print(f"Wrote {OUT_MD}")
