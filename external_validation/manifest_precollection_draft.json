@@ -27,7 +27,7 @@
   "manifest_assembly_blocking_count": 28,
   "manifest_assembly_blocking_items": [
     {
-      "current_state": "not_accepted_in_current_repo",
+      "current_state": "missing",
       "item": "accepted_fidelity_provenance",
       "phase": "platform_fidelity",
       "required_path": "external_validation/fidelity_acceptance.json",
@@ -97,77 +97,77 @@
       "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
     },
     {
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "greedy_module_sequence",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
     },
     {
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "behavior_cloned_skill_chain",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
     },
     {
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "option_graph_planner",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
     },
     {
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "tamp_feasibility_screen",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
     },
     {
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "stable_dmp_handoff",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
     },
     {
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "diffusion_skill_stitcher",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
     },
     {
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "cem_trajectory_composer",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
     },
     {
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "residual_rl_composer",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
     },
     {
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "energy_compatibility_heuristic",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
     },
     {
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "proposed_energy_landscape_composer_v4_1",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
     },
     {
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "barrier_certified_energy_composer_v5",
       "phase": "method_implementations",
       "required_path": "",
@@ -493,7 +493,7 @@
     {
       "exists": true,
       "path": "results/external_manifest_builder_report.json",
-      "sha256": "48F0B28FC3F4FE80EA59755B5A2A5E97F1DDE9BC72F7781E7290FE863EB6552A"
+      "sha256": "E42AA95FC6891B19A22EA26DDB1249D711A1D85C7531F906D476F3AF738FE852"
     },
     {
       "exists": true,
@@ -518,7 +518,7 @@
     {
       "exists": true,
       "path": "results/external_method_implementation_audit.json",
-      "sha256": "A3A3235E819C3124BD968BD50EC8EF2AF8AFA6266845DC742B87D70C559A2CF3"
+      "sha256": "934C0151A2A8807EA4F148EA9F90A5184380FE81F0E6330E30C94BE6C93C3BE3"
     },
     {
       "exists": true,
@@ -528,7 +528,7 @@
     {
       "exists": true,
       "path": "results/maniskill_render_machine_qualification.json",
-      "sha256": "626D2AD7E3B58FF961D507B09BCE3F6C277BA453EB1A8A25A64BF3E79C8D5BE0"
+      "sha256": "A4368710B2F688975DCC1E33348C3F73162D49135544934BCC5F50FE33E4DC50"
     }
   ],
   "strict_config_evidence_ready": false,

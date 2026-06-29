@@ -171,18 +171,18 @@
   "included_file_count": 278,
   "included_files": [
     {
-      "bytes": 20548,
+      "bytes": 20673,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "A2FD3A952315B5C8172A31BB49E783AE6AB6E7FCD31E6D845BA7838EFC74CEB2"
+      "sha256": "66F5B54259E0E382E99061A93DB6D592CC1BAF8BE7FD61162FBB3BA9B6A01F7F"
     },
     {
-      "bytes": 11671,
+      "bytes": 11768,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/haonan_yilun_outreach_package.md",
-      "sha256": "A57A66BF1393E0BD6A10712B5BFBBF30660480BA882C4672EF0616BB039A1C55"
+      "sha256": "1DDAB625612FB226179E8596047B8D80BC593E6A789370E8EA86BF701C61BBC9"
     },
     {
       "bytes": 21628,
@@ -199,11 +199,11 @@
       "sha256": "FFC41551F2AD82490EC379631C2FC2CCB64BDAFA2DF84F96E863A727A9CEC5D1"
     },
     {
-      "bytes": 11217,
+      "bytes": 11328,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "2E68B3D37F3B5D0509A20D00A445A91C69CFB6BA612981CB77164063FE245929"
+      "sha256": "7AF7497FD56B96E33F0911350D23E82C1145841767D1A6588262A06E791C1821"
     },
     {
       "bytes": 32120,
@@ -983,18 +983,18 @@
       "sha256": "BF2194D543F83448F03BBD9ADB5310C9BDE7313228EA876BE7FE75CD788A4917"
     },
     {
-      "bytes": 11110,
+      "bytes": 11089,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/manifest_assembly_checklist.csv",
-      "sha256": "5BD0A3D79EC32D1AF93802DB8B6640063413674687F0648BD6BE2A7A05C9CD31"
+      "sha256": "572827C87C44B677B5897E2215FB3741E38000A40C23AF5141AFBC923D31FAEA"
     },
     {
-      "bytes": 24447,
+      "bytes": 24646,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/manifest_precollection_draft.json",
-      "sha256": "0135357C004233A7F2B7BCB776C8CDAE16F9D984C8D06DB70A113BCA32AC14D9"
+      "sha256": "0318877951C69CA0D194F813EEFAC3C9A3E86945A93765845E877E558400ED0B"
     },
     {
       "bytes": 5473,
@@ -1515,18 +1515,18 @@
       "sha256": "3EB901F308352BD9E61C6C82D2704448506BB2DDD3DFECB9373121F5CA607F67"
     },
     {
-      "bytes": 2466,
+      "bytes": 2674,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_manifest_builder_self_test.json",
-      "sha256": "B0678BBDAF10335B56157F2EA51A543855DD6082176DD0F730010B0342D2BAF8"
+      "sha256": "30008478A73C62389E341A6D9F839DBDE2B2EC5807173E949646F1CB861909E8"
     },
     {
-      "bytes": 2202,
+      "bytes": 2348,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_manifest_builder_self_test.md",
-      "sha256": "674252E7948E4DD111A67F48D50549E4C2DF912BE2062DDBCA2C700096F6B833"
+      "sha256": "83CC75004A0B4C959D91B489A9809CEA43D95D4E81376D5D3C93C4819710D54E"
     },
     {
       "bytes": 4659,
@@ -1984,11 +1984,11 @@
       "sha256": "0F61DEC8809A6636131EE22680355EED2A4A02533F9C06ED824229152C0B7F18"
     },
     {
-      "bytes": 31428,
+      "bytes": 33515,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_manifest.py",
-      "sha256": "DD29D15D30C7C2BD09E46A51F782C1B875075693361CF555EDDBDC5463752BDC"
+      "sha256": "FA9F3890C25B2FEA0F484520C38270BDE202F02317734563983522F3237EA09D"
     },
     {
       "bytes": 32001,
@@ -2089,11 +2089,11 @@
       "sha256": "AC9A26FDA7512B17AD35589525DF3A41E7C5CF28C164850C4F835466C69D92E2"
     },
     {
-      "bytes": 14270,
+      "bytes": 16969,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/self_test_external_manifest_builder.py",
-      "sha256": "A146670D0FB4DFB56BC4D7EF71B7435ECAA38A7DE3391B52FD1694D92F7A677C"
+      "sha256": "B1E82E117C28D2C4B5B5F4D4CCD5019D42CA375E2AF4135F56D7384D8F4B77CC"
     },
     {
       "bytes": 26918,

@@ -197,12 +197,12 @@
     },
     {
       "name": "external_manifest_assembly_checklist_claim",
-      "claim": "The repository provides a non-evidence manifest assembly checklist that maps each required external manifest field to the current file/hash state, blocking status, operator action, and strict gate before `external_validation/manifest.json` can be written.",
+      "claim": "The repository provides a non-evidence manifest assembly checklist and strict manifest promotion gate that map each required external manifest field to the current file/hash state, blocking status, operator action, and strict gate before `external_validation/manifest.json` can be written.",
       "evidence": ["scripts/build_external_manifest.py", "external_validation/manifest_assembly_checklist.csv", "results/external_manifest_builder_report.json", "results/external_manifest_builder_report.md"]
     },
     {
       "name": "external_manifest_builder_self_test_claim",
-      "claim": "The repository provides a non-evidence External manifest builder self-test that exercises the manifest builder's hash scan, raw JSONL loading, metric recomputation, report, checklist, and temporary manifest-write path while leaving the real manifest and real reports untouched.",
+      "claim": "The repository provides a non-evidence External manifest builder self-test that exercises the manifest builder's hash scan, raw JSONL loading, metric recomputation, report, checklist, temporary manifest-write path, and partial-manifest refusal path while leaving the real manifest and real reports untouched.",
       "evidence": ["scripts/self_test_external_manifest_builder.py", "results/external_manifest_builder_self_test.json", "results/external_manifest_builder_self_test.md", "scripts/build_external_manifest.py"]
     },
     {

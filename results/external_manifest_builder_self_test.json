@@ -31,12 +31,17 @@
       "passed": true
     },
     {
-      "detail": "template_status={'ready_to_write_manifest': False, 'records_loaded': 0, 'schema_error_count': 4, 'warning_count': 11}",
+      "detail": "ready=False, written=False, write_blockers=1",
+      "name": "partial_manifest_with_missing_method_refuses_write",
+      "passed": true
+    },
+    {
+      "detail": "template_status={'ready_to_write_manifest': False, 'records_loaded': 0, 'schema_error_count': 4, 'warning_count': 11, 'manifest_write_blocking_count': 28}",
       "name": "real_manifest_template_remains_fail_closed",
       "passed": true
     },
     {
-      "detail": "before={'external_validation/manifest.json': None, 'external_validation/manifest_assembly_checklist.csv': '3A92EDDE50739CAFB7DEEBD138D99B35A6DFE01CD527A8220250831271C6DE1B', 'results/external_manifest_builder_report.json': '48F0B28FC3F4FE80EA59755B5A2A5E97F1DDE9BC72F7781E7290FE863EB6552A', 'results/external_manifest_builder_report.md': '565BF58C64C466EF64D6DBFFD352FA9B2D50FC336D23E3FC1900D9346BD4821B'}, after={'external_validation/manifest.json': None, 'external_validation/manifest_assembly_checklist.csv': '3A92EDDE50739CAFB7DEEBD138D99B35A6DFE01CD527A8220250831271C6DE1B', 'results/external_manifest_builder_report.json': '48F0B28FC3F4FE80EA59755B5A2A5E97F1DDE9BC72F7781E7290FE863EB6552A', 'results/external_manifest_builder_report.md': '565BF58C64C466EF64D6DBFFD352FA9B2D50FC336D23E3FC1900D9346BD4821B'}",
+      "detail": "before={'external_validation/manifest.json': None, 'external_validation/manifest_assembly_checklist.csv': '572827C87C44B677B5897E2215FB3741E38000A40C23AF5141AFBC923D31FAEA', 'results/external_manifest_builder_report.json': 'E42AA95FC6891B19A22EA26DDB1249D711A1D85C7531F906D476F3AF738FE852', 'results/external_manifest_builder_report.md': 'F616DFADCC8944C7029F1EE3D9E3DE0EFB46823580B7E1DB809CAE3F166A58C4'}, after={'external_validation/manifest.json': None, 'external_validation/manifest_assembly_checklist.csv': '572827C87C44B677B5897E2215FB3741E38000A40C23AF5141AFBC923D31FAEA', 'results/external_manifest_builder_report.json': 'E42AA95FC6891B19A22EA26DDB1249D711A1D85C7531F906D476F3AF738FE852', 'results/external_manifest_builder_report.md': 'F616DFADCC8944C7029F1EE3D9E3DE0EFB46823580B7E1DB809CAE3F166A58C4'}",
       "name": "real_manifest_and_reports_not_overwritten",
       "passed": true
     }

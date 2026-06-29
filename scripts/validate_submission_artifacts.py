@@ -916,6 +916,7 @@ def main():
         "release_artifacts_scanned_from_temp_workspace",
         "config_and_method_hashes_materialized",
         "manifest_report_and_checklist_written_in_temp_workspace",
+        "partial_manifest_with_missing_method_refuses_write",
         "real_manifest_template_remains_fail_closed",
         "real_manifest_and_reports_not_overwritten",
     ):
@@ -1707,6 +1708,13 @@ def main():
         fail("external manifest assembly checklist has too few rows")
     if int(manifest_builder_report.get("assembly_blocking_count", 0) or 0) < 20:
         fail("external manifest assembly checklist should expose current blocking rows")
+    if int(manifest_builder_report.get("manifest_write_blocking_count", 0) or 0) < 20:
+        fail("external manifest builder should expose pre-write manifest promotion blockers")
+    write_blocking_rows = manifest_builder_report.get("manifest_write_blocking_rows", []) or []
+    if not isinstance(write_blocking_rows, list) or not write_blocking_rows:
+        fail("external manifest builder report must list manifest_write_blocking_rows")
+    if any(row.get("phase") == "final_strict_gates" for row in write_blocking_rows if isinstance(row, dict)):
+        fail("manifest_write_blocking_rows should exclude post-write final strict gates")
     if count_rows(manifest_checklist_path) != int(manifest_builder_report.get("assembly_checklist_row_count", 0) or 0):
         fail("external manifest assembly checklist CSV row count does not match report")
     assembly_phases = {str(row.get("phase", "")) for row in assembly_rows if isinstance(row, dict)}

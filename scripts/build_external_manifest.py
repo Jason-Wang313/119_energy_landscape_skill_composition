@@ -347,14 +347,16 @@ def build_manifest_assembly_checklist(
     summary: dict[str, Any],
 ) -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
+    fidelity_path = str(manifest.get("fidelity_acceptance_path", "external_validation/fidelity_acceptance.json"))
+    fidelity_state, fidelity_hash = path_state(root, fidelity_path)
     rows.append(
         checklist_row(
             "platform_fidelity",
             "accepted_fidelity_provenance",
-            str(manifest.get("fidelity_acceptance_path", "external_validation/fidelity_acceptance.json")),
-            "not_accepted_in_current_repo",
-            "",
-            True,
+            fidelity_path,
+            fidelity_state,
+            fidelity_hash,
+            fidelity_state != "present",
             r"python scripts\audit_external_fidelity_acceptance.py --strict",
             "promote the fidelity acceptance draft only after independent operator signoff, platform/contact provenance, calibration basis, and replay evidence exist",
         )
@@ -384,7 +386,7 @@ def build_manifest_assembly_checklist(
                 str(task.get("config_path", "")),
                 config_state if task.get("config_hash") else f"{config_state}_hash_not_manifest_declared",
                 str(task.get("config_hash") or config_hash),
-                not bool(task.get("config_hash")),
+                not bool(task.get("config_hash") and config_state == "present"),
                 r"python scripts\validate_external_configs.py --strict",
                 "manifest-declare the exact config consumed by the backend and lock config_hash before collection",
             )
@@ -450,7 +452,8 @@ def build_manifest_assembly_checklist(
                 declared_hash or checkpoint_hash or implementation_hash,
                 not bool(
                     declared_hash
-                    and (implementation_state == "present" or checkpoint_state == "present")
+                    and implementation_state == "present"
+                    and checkpoint_state == "present"
                     and provenance_state == "present"
                 ),
                 r"python scripts\validate_external_adapters.py --strict",
@@ -522,6 +525,15 @@ def build_manifest_assembly_checklist(
     return rows
 
 
+def manifest_write_blocking_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    post_write_phases = {"final_strict_gates"}
+    return [
+        row
+        for row in rows
+        if row.get("blocking_until_real_evidence") == "true" and row.get("phase") not in post_write_phases
+    ]
+
+
 def write_assembly_checklist(rows: list[dict[str, str]]) -> None:
     EXTERNAL.mkdir(exist_ok=True)
     fieldnames = [
@@ -561,6 +573,7 @@ def write_report(report: dict[str, Any]) -> None:
         f"- Manifest assembly checklist: `{report['assembly_checklist_csv']}`.",
         f"- Checklist rows: `{report['assembly_checklist_row_count']}`.",
         f"- Checklist blocking rows: `{report['assembly_blocking_count']}`.",
+        f"- Manifest write blocking rows: `{report['manifest_write_blocking_count']}`.",
         "",
         "## Schema Errors",
         "",
@@ -597,7 +610,7 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT, help="Manifest output path.")
     parser.add_argument("--workspace-root", type=Path, default=ROOT, help="Repository root used for relative paths.")
     parser.add_argument("--write", action="store_true", help="Write the manifest. Omit for report-only preview.")
-    parser.add_argument("--allow-missing", action="store_true", help="Return success and write a report even when evidence is incomplete.")
+    parser.add_argument("--allow-missing", action="store_true", help="Return success for an incomplete report-only draft. It never permits --write.")
     parser.add_argument("--check-video-paths", action="store_true", help="Require every JSONL video_path to exist while building.")
     args = parser.parse_args()
 
@@ -638,10 +651,33 @@ def main() -> int:
 
     assembly_rows = build_manifest_assembly_checklist(root, manifest, records, schema_errors, warnings, summary)
     assembly_blocking_count = sum(1 for row in assembly_rows if row.get("blocking_until_real_evidence") == "true")
-    ready = bool(records) and not schema_errors
+    write_blocking_rows = manifest_write_blocking_rows(assembly_rows)
+    ready = bool(records) and not schema_errors and not warnings and not write_blocking_rows
     manifest_written = False
     if args.write:
-        if not ready and not args.allow_missing:
+        if args.allow_missing:
+            write_report(
+                {
+                    "version": "external_manifest_builder_report_v1",
+                    "template": str(args.template),
+                    "output": str(args.output),
+                    "manifest_written": False,
+                    "ready_to_write_manifest": ready,
+                    "not_external_evidence": True,
+                    "records_loaded": len(records),
+                    "schema_errors": schema_errors,
+                    "warnings": warnings,
+                    "summary": summary,
+                    "assembly_checklist_csv": posix_rel(root, ASSEMBLY_CHECKLIST_CSV),
+                    "assembly_checklist_row_count": len(assembly_rows),
+                    "assembly_blocking_count": assembly_blocking_count,
+                    "manifest_write_blocking_count": len(write_blocking_rows),
+                    "manifest_write_blocking_rows": write_blocking_rows,
+                    "assembly_checklist_rows": assembly_rows,
+                }
+            )
+            raise SystemExit("refusing to write manifest with --allow-missing; omit --write for a draft report")
+        if not ready:
             write_report(
                 {
                     "version": "external_manifest_builder_report_v1",
@@ -659,10 +695,12 @@ def main() -> int:
                     else posix_rel(root, ASSEMBLY_CHECKLIST_CSV),
                     "assembly_checklist_row_count": len(assembly_rows),
                     "assembly_blocking_count": assembly_blocking_count,
+                    "manifest_write_blocking_count": len(write_blocking_rows),
+                    "manifest_write_blocking_rows": write_blocking_rows,
                     "assembly_checklist_rows": assembly_rows,
                 }
             )
-            raise SystemExit("refusing to write manifest because evidence is incomplete; use --allow-missing only for a draft")
+            raise SystemExit("refusing to write manifest because pre-write evidence assembly is incomplete")
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(manifest, indent=2, sort_keys=False) + "\n", encoding="utf-8")
         manifest_written = True
@@ -681,6 +719,8 @@ def main() -> int:
         "assembly_checklist_csv": posix_rel(root, ASSEMBLY_CHECKLIST_CSV),
         "assembly_checklist_row_count": len(assembly_rows),
         "assembly_blocking_count": assembly_blocking_count,
+        "manifest_write_blocking_count": len(write_blocking_rows),
+        "manifest_write_blocking_rows": write_blocking_rows,
         "assembly_checklist_rows": assembly_rows,
     }
     write_report(report)

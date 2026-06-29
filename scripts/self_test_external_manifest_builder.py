@@ -132,7 +132,8 @@ def run_manifest_builder(root: Path, external: Path, results: Path) -> tuple[dic
             )
 
     rows = manifest_builder.build_manifest_assembly_checklist(root, manifest, records, schema_errors, warnings, summary)
-    ready = bool(records) and not schema_errors
+    write_blocking_rows = manifest_builder.manifest_write_blocking_rows(rows)
+    ready = bool(records) and not schema_errors and not warnings and not write_blocking_rows
     if ready:
         output.write_text(json.dumps(manifest, indent=2, sort_keys=False) + "\n", encoding="utf-8")
     report = {
@@ -149,6 +150,8 @@ def run_manifest_builder(root: Path, external: Path, results: Path) -> tuple[dic
         "assembly_checklist_csv": rel(root, external / "manifest_assembly_checklist.csv"),
         "assembly_checklist_row_count": len(rows),
         "assembly_blocking_count": sum(1 for row in rows if row.get("blocking_until_real_evidence") == "true"),
+        "manifest_write_blocking_count": len(write_blocking_rows),
+        "manifest_write_blocking_rows": write_blocking_rows,
         "assembly_checklist_rows": rows,
     }
     manifest_builder.write_report(report)
@@ -160,11 +163,21 @@ def inspect_real_template() -> dict[str, Any]:
     schema = manifest_builder.read_json(EXTERNAL / "log_schema_v1.json")
     records, schema_errors = manifest_builder.load_records(ROOT, manifest, schema, check_video_paths=True)
     warnings = manifest_builder.update_manifest_hashes(ROOT, manifest)
+    rows = manifest_builder.build_manifest_assembly_checklist(
+        ROOT,
+        manifest,
+        records,
+        schema_errors,
+        warnings,
+        {"episodes": 0},
+    )
+    write_blocking_rows = manifest_builder.manifest_write_blocking_rows(rows)
     return {
-        "ready_to_write_manifest": bool(records) and not schema_errors,
+        "ready_to_write_manifest": bool(records) and not schema_errors and not warnings and not write_blocking_rows,
         "records_loaded": len(records),
         "schema_error_count": len(schema_errors),
         "warning_count": len(warnings),
+        "manifest_write_blocking_count": len(write_blocking_rows),
     }
 
 
@@ -267,6 +280,43 @@ def main() -> int:
             and (external / "manifest_assembly_checklist.csv").exists()
             and int(builder_report.get("assembly_checklist_row_count", 0) or 0) >= 30,
             f"checklist_rows={builder_report.get('assembly_checklist_row_count')}",
+        )
+
+    with tempfile.TemporaryDirectory(prefix="paper119_manifest_builder_partial_selftest_") as tmp_name:
+        root = Path(tmp_name)
+        external = root / "external_validation"
+        results = root / "results"
+        external.mkdir()
+        results.mkdir()
+        (external / "log_schema_v1.json").write_text((EXTERNAL / "log_schema_v1.json").read_text(encoding="utf-8"), encoding="utf-8")
+        (external / "config_schema_v1.json").write_text((EXTERNAL / "config_schema_v1.json").read_text(encoding="utf-8"), encoding="utf-8")
+        write_json(external / "fidelity_acceptance.json", fixture.make_fidelity_acceptance())
+        template = build_template(root, external)
+        missing_method = "greedy_module_sequence"
+        for method in template.get("methods", []):
+            if isinstance(method, dict) and method.get("name") == missing_method:
+                implementation = root / str(method.get("implementation", ""))
+                if implementation.exists():
+                    implementation.unlink()
+                method["implementation"] = f"external_validation/implementations/{missing_method}/missing_adapter.py"
+                break
+        write_json(external / "manifest_template.json", template)
+
+        _, partial_report = run_manifest_builder(root, external, results)
+        partial_output = external / "manifest.json"
+        partial_blockers = partial_report.get("manifest_write_blocking_rows", []) or []
+        add_check(
+            checks,
+            "partial_manifest_with_missing_method_refuses_write",
+            partial_report.get("ready_to_write_manifest") is False
+            and partial_report.get("manifest_written") is False
+            and not partial_output.exists()
+            and any(missing_method in str(row.get("item", "")) for row in partial_blockers),
+            (
+                f"ready={partial_report.get('ready_to_write_manifest')!r}, "
+                f"written={partial_report.get('manifest_written')!r}, "
+                f"write_blockers={len(partial_blockers)}"
+            ),
         )
 
     real_after = real_path_digests()

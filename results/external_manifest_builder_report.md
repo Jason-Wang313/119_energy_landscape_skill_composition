@@ -14,6 +14,7 @@ Output: `C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape
 - Manifest assembly checklist: `external_validation/manifest_assembly_checklist.csv`.
 - Checklist rows: `35`.
 - Checklist blocking rows: `28`.
+- Manifest write blocking rows: `26`.
 
 ## Schema Errors
 
@@ -38,7 +39,7 @@ Output: `C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape
 
 ## Manifest Assembly Checklist
 
-- `platform_fidelity` `accepted_fidelity_provenance`: not_accepted_in_current_repo -> promote the fidelity acceptance draft only after independent operator signoff, platform/contact provenance, calibration basis, and replay evidence exist
+- `platform_fidelity` `accepted_fidelity_provenance`: missing -> promote the fidelity acceptance draft only after independent operator signoff, platform/contact provenance, calibration basis, and replay evidence exist
 - `run_identity` `code_commit_and_skill_library_hash`: missing -> record the exact commit and skill-library hash used before collecting external logs
 - `task_configs` `peg_place_regrasp_config`: present -> manifest-declare the exact config consumed by the backend and lock config_hash before collection
 - `rollout_logs` `peg_place_regrasp_jsonl`: missing -> collect 30 paired-reset episodes per manifest-declared method for this task
