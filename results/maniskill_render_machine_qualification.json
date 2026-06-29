@@ -1,13 +1,13 @@
 {
   "blocking_missing": [
     "render_video_ready is false in results/maniskill_render_video_preflight_audit.json",
-    "PegInsertionSide-v1 has no render-backed MP4: render preflight exceeded 30 seconds",
+    "PegInsertionSide-v1 has no render-backed MP4: render preflight exceeded 30 seconds after progress stage import_start",
     "PegInsertionSide-v1 did not write a renderer-backed MP4",
-    "OpenCabinetDrawer-v1 has no render-backed MP4: render preflight exceeded 30 seconds",
+    "OpenCabinetDrawer-v1 has no render-backed MP4: render preflight exceeded 30 seconds after progress stage import_start",
     "OpenCabinetDrawer-v1 did not write a renderer-backed MP4",
-    "OpenCabinetDoor-v1 has no render-backed MP4: render preflight exceeded 30 seconds",
+    "OpenCabinetDoor-v1 has no render-backed MP4: render preflight exceeded 30 seconds after progress stage close_done",
     "OpenCabinetDoor-v1 did not write a renderer-backed MP4",
-    "PullCubeTool-v1 has no render-backed MP4: render preflight exceeded 30 seconds",
+    "PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
     "PullCubeTool-v1 did not write a renderer-backed MP4",
     "pilot runtime liveness is not ready on the selected machine",
     "pilot runtime render_video_ready is false"
@@ -44,7 +44,7 @@
       "passed": true
     },
     {
-      "detail": "failure_classes=['render_timeout']",
+      "detail": "failure_classes=['render_timeout', 'vulkan_descriptor_pool_exhaustion']",
       "name": "renderer_failure_classes_propagated",
       "passed": true
     },
@@ -84,7 +84,8 @@
   "render_machine_qualified": false,
   "render_records_seen": 4,
   "renderer_failure_classes": [
-    "render_timeout"
+    "render_timeout",
+    "vulkan_descriptor_pool_exhaustion"
   ],
   "source_artifacts": [
     "results/external_platform_probe.json",

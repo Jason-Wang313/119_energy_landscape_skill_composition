@@ -120,6 +120,29 @@ def clean_ansi(text: str) -> str:
     return re.sub(r"\x1b\[[0-9;]*m", "", text)
 
 
+def coerce_output(value: Any) -> str:
+    if isinstance(value, str):
+        return value
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
+    return ""
+
+
+def parse_collection_progress(stdout: str) -> list[dict[str, Any]]:
+    marker = "PAPER119_COLLECTION_STAGE "
+    stages: list[dict[str, Any]] = []
+    for line in stdout.splitlines():
+        if not line.startswith(marker):
+            continue
+        try:
+            payload = json.loads(line[len(marker) :])
+        except json.JSONDecodeError:
+            continue
+        if isinstance(payload, dict):
+            stages.append(payload)
+    return stages
+
+
 def summarize_failure(
     *,
     timed_out: bool,
@@ -128,18 +151,23 @@ def summarize_failure(
     records: int,
     videos: int,
     diagnostic_fallbacks: int,
+    last_progress_stage: str,
 ) -> str:
     if records and videos and returncode == 0 and not timed_out and diagnostic_fallbacks:
         return "runner wrote quarantined schema-valid row/video using diagnostic non-evidence video fallback; render-backed video remains unavailable"
     if records and videos and returncode == 0 and not timed_out:
         return "pilot runtime produced schema-valid records and videos"
     if timed_out:
+        if last_progress_stage:
+            return f"runner timed out after progress stage {last_progress_stage} before producing the required pilot record/video"
         return "runner timed out before producing the required pilot record/video"
     cleaned = clean_ansi(stderr)
     runtime_errors = [line.strip() for line in cleaned.splitlines() if "RuntimeError:" in line]
     if runtime_errors:
         return runtime_errors[-1]
     if returncode not in (None, 0):
+        if last_progress_stage:
+            return f"runner exited with returncode {returncode} after progress stage {last_progress_stage} before producing the required pilot record/video"
         return f"runner exited with returncode {returncode} before producing the required pilot record/video"
     return "runner did not produce the required pilot record/video"
 
@@ -148,6 +176,7 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
     clear_guard_outputs()
     command = [
         sys.executable,
+        "-u",
         "external_validation/runner/real_collection_runner.py",
         "--backend-module",
         "external_validation/runner/maniskill_reference_backend.py",
@@ -167,6 +196,7 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
     env = os.environ.copy()
     env["PAPER119_MANISKILL_REFERENCE_BACKEND_ENABLE_ROLLOUTS"] = "1"
     env["PAPER119_MANISKILL_REFERENCE_BACKEND_ALLOW_DIAGNOSTIC_VIDEO_FALLBACK"] = "1"
+    env["PAPER119_COLLECTION_PROGRESS"] = "1"
     env.setdefault("PAPER119_MANISKILL_RENDER_BACKEND", args.render_backend)
     env.setdefault("PAPER119_MANISKILL_SHADER_PACK", args.shader_pack)
     env.setdefault("PAPER119_MANISKILL_RENDER_WIDTH", str(args.render_width))
@@ -182,13 +212,15 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
         )
         timed_out = False
         returncode = proc.returncode
-        stdout = proc.stdout
-        stderr = proc.stderr
+        stdout = coerce_output(proc.stdout)
+        stderr = coerce_output(proc.stderr)
     except subprocess.TimeoutExpired as exc:
         timed_out = True
         returncode = None
-        stdout = exc.stdout if isinstance(exc.stdout, str) else ""
-        stderr = exc.stderr if isinstance(exc.stderr, str) else ""
+        stdout = coerce_output(exc.stdout)
+        stderr = coerce_output(exc.stderr)
+    progress_stages = parse_collection_progress(stdout)
+    last_progress_stage = str(progress_stages[-1].get("stage", "")) if progress_stages else ""
     records, parse_errors, log_paths = load_records(GUARD_LOG_DIR)
     schema = read_json(EXTERNAL / "log_schema_v1.json")
     methods = load_methods()
@@ -214,6 +246,7 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
         records=len(records),
         videos=videos_written,
         diagnostic_fallbacks=len(diagnostic_fallback_paths),
+        last_progress_stage=last_progress_stage,
     )
     runner_io_ready = (
         not timed_out
@@ -230,6 +263,8 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
         "returncode": returncode,
         "stdout_tail": stdout[-2000:],
         "stderr_tail": stderr[-2000:],
+        "collection_progress_stages": progress_stages[-40:],
+        "last_progress_stage": last_progress_stage,
         "records_observed": len(records),
         "videos_written": videos_written,
         "failure_summary": failure_summary,
@@ -269,6 +304,12 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         "bounded_runner_subprocess_exercised",
         result["timed_out"] or result["returncode"] is not None,
         f"timeout_seconds={args.timeout_seconds}, timed_out={result['timed_out']}, returncode={result['returncode']}",
+    )
+    add_check(
+        checks,
+        "collection_progress_markers_recorded",
+        (not result["timed_out"]) or bool(result["last_progress_stage"]),
+        f"last_progress_stage={result['last_progress_stage']!r}",
     )
     add_check(
         checks,
@@ -360,6 +401,8 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         "records_observed": result["records_observed"],
         "videos_written": result["videos_written"],
         "failure_summary": result["failure_summary"],
+        "last_progress_stage": result["last_progress_stage"],
+        "collection_progress_stages": result["collection_progress_stages"],
         "timed_out": result["timed_out"],
         "returncode": result["returncode"],
         "schema_errors": result["schema_errors"],
@@ -393,6 +436,7 @@ def write_outputs(payload: dict[str, Any]) -> None:
         f"Videos written: `{payload['videos_written']}`.",
         f"Diagnostic video fallbacks: `{len(payload['diagnostic_video_fallbacks'])}`.",
         f"Failure summary: `{payload['failure_summary']}`.",
+        f"Last progress stage: `{payload['last_progress_stage'] or 'none'}`.",
         "",
         "This bounded liveness audit launches the tracked ManiSkill reference runner in a subprocess against quarantined `pilot_runtime_guard` directories. It is not rollout evidence and cannot satisfy the external evidence gate; it only prevents a slow CPU/render backend from silently blocking an official collection attempt.",
         "",
@@ -418,6 +462,12 @@ def write_outputs(payload: dict[str, Any]) -> None:
         lines.extend(["", "## Schema Errors", ""])
         for error in payload["schema_errors"][:50]:
             lines.append(f"- {error}")
+    lines.extend(["", "## Collection Progress", ""])
+    if payload["collection_progress_stages"]:
+        for stage in payload["collection_progress_stages"][-20:]:
+            lines.append(f"- `{stage.get('stage')}`: {stage}")
+    else:
+        lines.append("- none")
     OUT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 

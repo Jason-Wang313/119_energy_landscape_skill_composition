@@ -132,12 +132,12 @@
       "passed": true
     },
     {
-      "detail": "render_video_ready=False, envs=4, failure_classes=['render_timeout']",
+      "detail": "render_video_ready=False, envs=4, failure_classes=['render_timeout', 'vulkan_descriptor_pool_exhaustion']",
       "name": "maniskill_render_video_preflight_recorded",
       "passed": true
     },
     {
-      "detail": "pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, timed_out=True, records=0, videos=0, diagnostic_fallbacks=0, failure_summary='runner timed out before producing the required pilot record/video'",
+      "detail": "pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, timed_out=False, records=0, videos=0, diagnostic_fallbacks=0, failure_summary='runner exited with returncode 1 after progress stage record_video_start before producing the required pilot record/video'",
       "name": "maniskill_pilot_runtime_liveness_ready",
       "passed": true
     },
@@ -856,13 +856,13 @@
     "audit_path": "results/maniskill_render_machine_qualification.json",
     "blocking_missing": [
       "render_video_ready is false in results/maniskill_render_video_preflight_audit.json",
-      "PegInsertionSide-v1 has no render-backed MP4: render preflight exceeded 30 seconds",
+      "PegInsertionSide-v1 has no render-backed MP4: render preflight exceeded 30 seconds after progress stage import_start",
       "PegInsertionSide-v1 did not write a renderer-backed MP4",
-      "OpenCabinetDrawer-v1 has no render-backed MP4: render preflight exceeded 30 seconds",
+      "OpenCabinetDrawer-v1 has no render-backed MP4: render preflight exceeded 30 seconds after progress stage import_start",
       "OpenCabinetDrawer-v1 did not write a renderer-backed MP4",
-      "OpenCabinetDoor-v1 has no render-backed MP4: render preflight exceeded 30 seconds",
+      "OpenCabinetDoor-v1 has no render-backed MP4: render preflight exceeded 30 seconds after progress stage close_done",
       "OpenCabinetDoor-v1 did not write a renderer-backed MP4",
-      "PullCubeTool-v1 has no render-backed MP4: render preflight exceeded 30 seconds",
+      "PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
       "PullCubeTool-v1 did not write a renderer-backed MP4",
       "pilot runtime liveness is not ready on the selected machine",
       "pilot runtime render_video_ready is false"
@@ -878,19 +878,23 @@
     "audit_md_path": "results/maniskill_render_video_preflight_audit.md",
     "audit_path": "results/maniskill_render_video_preflight_audit.json",
     "blocking_missing": [
-      "render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: render preflight exceeded 30 seconds; OpenCabinetDrawer-v1: render preflight exceeded 30 seconds; OpenCabinetDoor-v1: render preflight exceeded 30 seconds; PullCubeTool-v1: render preflight exceeded 30 seconds"
+      "render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: render preflight exceeded 30 seconds after progress stage import_start (last progress stage: import_start); OpenCabinetDrawer-v1: render preflight exceeded 30 seconds after progress stage import_start (last progress stage: import_start); OpenCabinetDoor-v1: render preflight exceeded 30 seconds after progress stage close_done (last progress stage: close_done); PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done)"
     ],
     "env_count": 4,
     "not_external_evidence": true,
     "operator_remediation": [
       "Do not use diagnostic fallback videos as external evidence; rerun this preflight on the exact accepted collection machine.",
       "Record Python, ManiSkill, SAPIEN, GPU/Vulkan, render backend, shader pack, and driver provenance with scripts\\probe_external_platform.py before fidelity acceptance.",
+      "Treat vk::Device::allocateDescriptorSetsUnique/ErrorOutOfPoolMemory as a renderer-resource blocker for this machine, not as rollout evidence failure.",
+      "Retest one primary environment at a time with explicit renderer profiles before official collection: cpu/minimal, gpu/minimal, and sapien_cuda/minimal.",
+      "Use a machine whose SAPIEN/Vulkan renderer can capture RGB frames for all four primary task families before promoting fidelity acceptance.",
       "Increase --timeout-seconds only after confirming the renderer is making progress and output directories remain quarantined."
     ],
     "render_ready_env_count": 0,
     "render_video_ready": false,
     "renderer_failure_classes": [
-      "render_timeout"
+      "render_timeout",
+      "vulkan_descriptor_pool_exhaustion"
     ],
     "renderer_profile_retest_commands": [
       "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 30 --max-envs 1 --width 64 --height 64 --render-backend cpu --shader-pack minimal",

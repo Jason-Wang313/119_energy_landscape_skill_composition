@@ -486,6 +486,7 @@ def main() -> int:
         and int(pilot_runtime.get("render_width", 0) or 0) >= 16
         and int(pilot_runtime.get("render_height", 0) or 0) >= 16
         and pilot_runtime_checks.get("bounded_runner_subprocess_exercised") is True
+        and pilot_runtime_checks.get("collection_progress_markers_recorded") is True
         and pilot_runtime_checks.get("timeout_or_result_recorded_as_readiness_state") is True
     )
     pilot_runtime_diagnostic_io = (
@@ -515,6 +516,7 @@ def main() -> int:
             f"records={pilot_runtime_records!r}, "
             f"videos={pilot_runtime_videos!r}, "
             f"diagnostic_fallbacks={pilot_runtime_fallbacks}, "
+            f"last_stage={pilot_runtime.get('last_progress_stage')!r}, "
             f"failure_summary={pilot_runtime.get('failure_summary')!r}"
         ),
     )
@@ -530,11 +532,13 @@ def main() -> int:
         and render_preflight.get("shader_pack") == "minimal"
         and int(render_preflight.get("width", 0) or 0) >= 16
         and int(render_preflight.get("height", 0) or 0) >= 16
-        and isinstance(render_preflight.get("render_video_ready"), bool),
+        and isinstance(render_preflight.get("render_video_ready"), bool)
+        and {check.get("name"): check.get("passed") for check in render_preflight.get("checks", []) or []}.get("render_progress_markers_recorded") is True,
         (
             f"render_video_ready={render_preflight.get('render_video_ready')!r}, "
             f"render_backend={render_preflight.get('render_backend')!r}, "
             f"shader_pack={render_preflight.get('shader_pack')!r}, "
+            f"last_stages={[record.get('last_progress_stage') for record in render_preflight.get('env_records', []) or []]}, "
             f"envs={render_preflight.get('env_count')!r}, "
             f"blocking={render_preflight.get('blocking_missing')!r}"
         ),
@@ -921,6 +925,7 @@ def main() -> int:
             "ManiSkill render-video preflight",
             "ManiSkill render machine qualification packet",
             "renderer-failure classifier",
+            "render/pilot progress markers",
             "timeout diagnosis retest",
             "renderer profile matrix",
             "ManiSkill pilot runtime liveness audit",
@@ -979,6 +984,7 @@ def main() -> int:
             "ManiSkill render-video preflight",
             "ManiSkill render machine qualification packet",
             "renderer-failure classifier",
+            "render/pilot progress markers",
             "timeout diagnosis retest",
             "renderer profile matrix",
             "ManiSkill pilot runtime liveness audit",
@@ -1038,6 +1044,7 @@ def main() -> int:
             "ManiSkill render-video preflight",
             "ManiSkill render machine qualification packet",
             "renderer-failure classifier",
+            "render/pilot progress markers",
             "timeout diagnosis retest",
             "renderer profile matrix",
             "ManiSkill pilot runtime liveness audit",
@@ -1097,6 +1104,7 @@ def main() -> int:
             "ManiSkill render-video preflight",
             "ManiSkill render machine qualification packet",
             "renderer-failure classifier",
+            "render/pilot progress markers",
             "timeout diagnosis retest",
             "renderer profile matrix",
             "ManiSkill pilot runtime liveness audit",
@@ -1157,6 +1165,7 @@ def main() -> int:
             "scripts/audit_maniskill_render_video_preflight.py",
             "scripts/build_maniskill_render_machine_qualification.py",
             "renderer-failure classifier",
+            "render/pilot progress markers",
             "timeout diagnosis retest",
             "renderer profile matrix",
             "scripts/audit_maniskill_pilot_runtime_liveness.py",
@@ -1218,6 +1227,7 @@ def main() -> int:
             "ManiSkill render-video preflight",
             "ManiSkill render machine qualification packet",
             "renderer-failure classifier",
+            "render/pilot progress markers",
             "timeout diagnosis retest",
             "renderer profile matrix",
             "ManiSkill pilot runtime liveness audit",

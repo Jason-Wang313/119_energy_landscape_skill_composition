@@ -131,17 +131,17 @@
       "passed": true
     },
     {
-      "detail": "pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, render_backend='cpu', shader_pack='minimal', timed_out=True, records=0, videos=0, diagnostic_fallbacks=0, failure_summary='runner timed out before producing the required pilot record/video'",
+      "detail": "pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, render_backend='cpu', shader_pack='minimal', timed_out=False, records=0, videos=0, diagnostic_fallbacks=0, last_stage='record_video_start', failure_summary='runner exited with returncode 1 after progress stage record_video_start before producing the required pilot record/video'",
       "name": "maniskill_pilot_runtime_liveness_visible",
       "passed": true
     },
     {
-      "detail": "render_video_ready=False, render_backend='cpu', shader_pack='minimal', envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: render preflight exceeded 30 seconds; OpenCabinetDrawer-v1: render preflight exceeded 30 seconds; OpenCabinetDoor-v1: render preflight exceeded 30 seconds; PullCubeTool-v1: render preflight exceeded 30 seconds']",
+      "detail": "render_video_ready=False, render_backend='cpu', shader_pack='minimal', last_stages=['import_start', 'import_start', 'close_done', 'close_done'], envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: render preflight exceeded 30 seconds after progress stage import_start (last progress stage: import_start); OpenCabinetDrawer-v1: render preflight exceeded 30 seconds after progress stage import_start (last progress stage: import_start); OpenCabinetDoor-v1: render preflight exceeded 30 seconds after progress stage close_done (last progress stage: close_done); PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done)']",
       "name": "maniskill_render_video_preflight_visible",
       "passed": true
     },
     {
-      "detail": "classes=['render_timeout'], remediation=3",
+      "detail": "classes=['render_timeout', 'vulkan_descriptor_pool_exhaustion'], remediation=6",
       "name": "renderer_failure_classifier_visible",
       "passed": true
     },

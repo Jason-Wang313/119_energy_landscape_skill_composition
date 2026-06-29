@@ -2471,6 +2471,7 @@ def main():
         "quarantine_paths_are_not_official_evidence",
         "primary_envs_loaded",
         "each_probe_has_terminal_status",
+        "render_progress_markers_recorded",
         "render_readiness_recorded_without_overclaim",
         "blocking_summary_present_when_not_ready",
         "renderer_failure_class_recorded_when_not_ready",
@@ -2538,6 +2539,7 @@ def main():
         "runtime_guard_is_non_evidence",
         "quarantine_paths_are_not_official_evidence",
         "bounded_runner_subprocess_exercised",
+        "collection_progress_markers_recorded",
         "timeout_or_result_recorded_as_readiness_state",
         "ready_requires_schema_valid_records_and_videos",
         "runner_io_ready_allows_only_quarantined_diagnostic_fallback",
@@ -2546,6 +2548,8 @@ def main():
     ):
         if pilot_runtime_checks.get(required_check) is not True:
             fail(f"ManiSkill pilot runtime liveness audit missing passing check: {required_check}")
+    if pilot_runtime.get("timed_out") is True and not str(pilot_runtime.get("last_progress_stage", "")).strip():
+        fail("ManiSkill pilot runtime timeout must record the last collection progress stage")
     render_machine_path = RESULTS / "maniskill_render_machine_qualification.json"
     render_machine_md_path = RESULTS / "maniskill_render_machine_qualification.md"
     render_machine_packet_path = EXTERNAL / "render_machine_qualification_packet.md"

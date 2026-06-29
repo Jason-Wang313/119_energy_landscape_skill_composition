@@ -152,12 +152,12 @@
     },
     {
       "name": "maniskill_pilot_runtime_liveness_claim",
-      "claim": "The repository provides a non-evidence bounded ManiSkill pilot runtime liveness audit that launches the tracked reference runner in quarantined output directories, records explicit render-backend/shader controls and a concrete local timeout/render failure summary before any official collection, and keeps official collection blocked until an accepted runtime path is available.",
+      "claim": "The repository provides a non-evidence bounded ManiSkill pilot runtime liveness audit that launches the tracked reference runner in quarantined output directories, records explicit render-backend/shader controls, render/pilot progress markers, and a concrete stage-aware local runtime/video-guard failure summary before any official collection, and keeps official collection blocked until an accepted runtime path is available.",
       "evidence": ["scripts/audit_maniskill_pilot_runtime_liveness.py", "results/maniskill_pilot_runtime_liveness_audit.json", "results/maniskill_pilot_runtime_liveness_audit.md", "external_validation/README.md"]
     },
     {
       "name": "maniskill_render_video_preflight_claim",
-      "claim": "The repository provides a non-evidence ManiSkill render-video preflight that probes whether the tracked public-simulator runtime can export render-backed RGB MP4 files before official collection, records explicit render-backend/shader controls, a bounded timeout diagnosis retest, and a bounded renderer profile matrix, classifies the current renderer blocker with a renderer-failure classifier, and keeps strict external evidence false.",
+      "claim": "The repository provides a non-evidence ManiSkill render-video preflight that probes whether the tracked public-simulator runtime can export render-backed RGB MP4 files before official collection, records explicit render-backend/shader controls, render/pilot progress markers, a bounded timeout diagnosis retest, and a bounded renderer profile matrix, classifies the current renderer blocker with a renderer-failure classifier, and keeps strict external evidence false.",
       "evidence": ["scripts/audit_maniskill_render_video_preflight.py", "results/maniskill_render_video_preflight_audit.json", "results/maniskill_render_video_preflight_audit.md", "results/external_acquisition_packet.json", "results/external_operator_packet.json"]
     },
     {

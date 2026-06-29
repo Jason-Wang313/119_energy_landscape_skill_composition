@@ -1,6 +1,6 @@
 {
   "blocking_missing": [
-    "bounded ManiSkill reference runner did not produce a complete schema-valid pilot row/video on this machine; runner timed out before producing the required pilot record/video; use an accepted GPU/render machine or fix the backend before official collection"
+    "bounded ManiSkill reference runner did not produce a complete schema-valid pilot row/video on this machine; runner exited with returncode 1 after progress stage record_video_start before producing the required pilot record/video; use an accepted GPU/render machine or fix the backend before official collection"
   ],
   "checks": [
     {
@@ -14,8 +14,13 @@
       "passed": true
     },
     {
-      "detail": "timeout_seconds=60, timed_out=True, returncode=None",
+      "detail": "timeout_seconds=60, timed_out=False, returncode=1",
       "name": "bounded_runner_subprocess_exercised",
+      "passed": true
+    },
+    {
+      "detail": "last_progress_stage='record_video_start'",
+      "name": "collection_progress_markers_recorded",
       "passed": true
     },
     {
@@ -44,9 +49,116 @@
       "passed": true
     }
   ],
-  "command": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\python.exe external_validation/runner/real_collection_runner.py --backend-module external_validation/runner/maniskill_reference_backend.py --task-config-dir external_validation/configs --output-log-dir external_validation/pilot_runtime_guard/logs --video-dir external_validation/pilot_runtime_guard/videos --run-id paper119_pilot_runtime_guard_local --unsealed-alias-map --max-rows 1 --force",
+  "collection_progress_stages": [
+    {
+      "max_rows": 1,
+      "rows": 1,
+      "stage": "rows_loaded"
+    },
+    {
+      "backend_module": "external_validation/runner/maniskill_reference_backend.py",
+      "stage": "backend_create_start"
+    },
+    {
+      "stage": "backend_created"
+    },
+    {
+      "stage": "backend_contract_validated"
+    },
+    {
+      "platform_name": "ManiSkill-SAPIEN-reference-backend",
+      "platform_type": "high_fidelity_sim",
+      "stage": "platform_provenance_loaded"
+    },
+    {
+      "method_alias": "method_05",
+      "row_index": 1,
+      "scene_id": "peg_place_regrasp_reset_000",
+      "stage": "row_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "row_index": 1,
+      "stage": "load_task_config_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "row_index": 1,
+      "stage": "load_task_config_done",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "reset_scene_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "reset_scene_done",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "capture_observation_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "capture_observation_done",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "terminal_samples_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "samples": 8,
+      "stage": "terminal_samples_done",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "run_method_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "run_method_done",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "execute_skill_pair_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "execute_skill_pair_done",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "record_video_start",
+      "task_family": "peg_place_regrasp"
+    }
+  ],
+  "command": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\python.exe -u external_validation/runner/real_collection_runner.py --backend-module external_validation/runner/maniskill_reference_backend.py --task-config-dir external_validation/configs --output-log-dir external_validation/pilot_runtime_guard/logs --video-dir external_validation/pilot_runtime_guard/videos --run-id paper119_pilot_runtime_guard_local --unsealed-alias-map --max-rows 1 --force",
   "diagnostic_video_fallbacks": [],
-  "failure_summary": "runner timed out before producing the required pilot record/video",
+  "failure_summary": "runner exited with returncode 1 after progress stage record_video_start before producing the required pilot record/video",
+  "last_progress_stage": "record_video_start",
   "log_dir": "external_validation/pilot_runtime_guard/logs",
   "log_files": [],
   "max_rows": 1,
@@ -59,15 +171,15 @@
   "render_height": 128,
   "render_video_ready": false,
   "render_width": 128,
-  "returncode": null,
+  "returncode": 1,
   "run_id": "paper119_pilot_runtime_guard_local",
   "runner_io_ready": false,
   "schema_errors": [],
   "shader_pack": "minimal",
-  "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n",
-  "stdout_tail": "",
+  "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\nbackend produced diagnostic fallback video sidecar, which cannot be official evidence: C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\pilot_runtime_guard\\videos\\peg_place_regrasp\\paper119_blind_peg_place_regrasp_r000_method_05.4D84DD563A0C.staging.mp4.diagnostic.json\n",
+  "stdout_tail": "art\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"row_index\": 1, \"stage\": \"load_task_config_start\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"row_index\": 1, \"stage\": \"load_task_config_done\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"reset_scene_start\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"reset_scene_done\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"capture_observation_start\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"capture_observation_done\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"terminal_samples_start\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"samples\": 8, \"stage\": \"terminal_samples_done\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"run_method_start\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"run_method_done\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"execute_skill_pair_start\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"execute_skill_pair_done\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"record_video_start\", \"task_family\": \"peg_place_regrasp\"}\n",
   "strict_external_evidence_ready": false,
-  "timed_out": true,
+  "timed_out": false,
   "timeout_seconds": 60,
   "version": "maniskill_pilot_runtime_liveness_audit_v1",
   "video_dir": "external_validation/pilot_runtime_guard/videos",

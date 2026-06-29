@@ -5,6 +5,7 @@ import csv
 import importlib
 import importlib.util
 import json
+import os
 import sys
 from pathlib import Path
 from types import ModuleType
@@ -70,6 +71,13 @@ REQUIRED_RECORD_FIELDS = (
 
 def fail(message: str) -> None:
     raise SystemExit(message)
+
+
+def emit_progress(stage: str, **fields: Any) -> None:
+    if os.environ.get("PAPER119_COLLECTION_PROGRESS") != "1":
+        return
+    payload = {"stage": stage, **fields}
+    print("PAPER119_COLLECTION_STAGE " + json.dumps(payload, sort_keys=True, default=str), flush=True)
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -487,6 +495,7 @@ def run_collection(args: argparse.Namespace) -> int:
     rows = read_rows(args.operator_sheet, max_rows=args.max_rows)
     if not rows:
         fail("operator sheet has no rows")
+    emit_progress("rows_loaded", rows=len(rows), max_rows=args.max_rows)
 
     alias_map = alias_lookup(args.alias_map) if args.unsealed_alias_map else None
     if args.dry_run:
@@ -503,13 +512,21 @@ def run_collection(args: argparse.Namespace) -> int:
     manifest_methods = set(alias_map.values())
     manifest_tasks = {row["task_family"] for row in rows}
     manifest_video_dirs = {task: args.video_dir / task for task in manifest_tasks}
+    emit_progress("backend_create_start", backend_module=str(args.backend_module))
     backend = create_backend(args.backend_module)
+    emit_progress("backend_created")
     backend_errors = validate_backend_object(backend)
     if backend_errors:
         fail("; ".join(backend_errors))
+    emit_progress("backend_contract_validated")
     provenance = backend.platform_provenance()
     if not isinstance(provenance, dict):
         fail("platform_provenance must return a dict")
+    emit_progress(
+        "platform_provenance_loaded",
+        platform_type=str(provenance.get("platform_type", "")),
+        platform_name=str(provenance.get("platform_name", "")),
+    )
 
     output_paths = sorted({args.output_log_dir / f"{row['task_family']}.jsonl" for row in rows})
     output_video_paths = sorted({args.video_dir / row["task_family"] / Path(row["expected_video_path"]).name for row in rows})
@@ -527,28 +544,44 @@ def run_collection(args: argparse.Namespace) -> int:
     pending_records_by_log: dict[Path, list[dict[str, Any]]] = {}
     pending_videos: list[tuple[Path, Path]] = []
     try:
-        for row in rows:
+        for row_index, row in enumerate(rows, start=1):
             task_family = row["task_family"]
+            emit_progress(
+                "row_start",
+                row_index=row_index,
+                task_family=task_family,
+                scene_id=row.get("scene_id", ""),
+                method_alias=row.get("method_alias", ""),
+            )
             config = config_cache.get(task_family)
             if config is None:
+                emit_progress("load_task_config_start", row_index=row_index, task_family=task_family)
                 config = load_task_config(task_family, args.task_config_dir, dry_run=False)
                 backend.load_task_config(task_family, config)
                 config_cache[task_family] = config
+                emit_progress("load_task_config_done", row_index=row_index, task_family=task_family)
             alias = row["method_alias"]
             if alias not in alias_map:
                 fail(f"alias {alias!r} missing from method alias map")
             method_name = alias_map[alias]
 
             reset_spec = {"row": row, "task_config": config, "provenance": provenance}
+            emit_progress("reset_scene_start", row_index=row_index, task_family=task_family, method=method_name)
             reset_result = backend.reset_scene(reset_spec)
             if not isinstance(reset_result, dict):
                 fail("reset_scene must return a dict")
+            emit_progress("reset_scene_done", row_index=row_index, task_family=task_family, method=method_name)
+            emit_progress("capture_observation_start", row_index=row_index, task_family=task_family, method=method_name)
             observation = backend.capture_observation()
             if not isinstance(observation, dict):
                 fail("capture_observation must return a dict")
+            emit_progress("capture_observation_done", row_index=row_index, task_family=task_family, method=method_name)
+            emit_progress("terminal_samples_start", row_index=row_index, task_family=task_family, method=method_name)
             terminal_samples = backend.terminal_samples({"row": row, "config": config, "observation": observation})
             if not isinstance(terminal_samples, list) or not terminal_samples:
                 fail("terminal_samples must return a non-empty list")
+            emit_progress("terminal_samples_done", row_index=row_index, task_family=task_family, method=method_name, samples=len(terminal_samples))
+            emit_progress("run_method_start", row_index=row_index, task_family=task_family, method=method_name)
             proposal = backend.run_method(
                 method_name,
                 {
@@ -562,16 +595,21 @@ def run_collection(args: argparse.Namespace) -> int:
             )
             if not isinstance(proposal, dict):
                 fail("run_method must return a dict")
+            emit_progress("run_method_done", row_index=row_index, task_family=task_family, method=method_name)
+            emit_progress("execute_skill_pair_start", row_index=row_index, task_family=task_family, method=method_name)
             outcome = backend.execute_skill_pair({"row": row, "config": config, "proposal": proposal})
             if not isinstance(outcome, dict):
                 fail("execute_skill_pair must return a dict")
+            emit_progress("execute_skill_pair_done", row_index=row_index, task_family=task_family, method=method_name)
             target_video = args.video_dir / task_family / Path(row["expected_video_path"]).name
             staged_video = stage_video_path(target_video, args.run_id)
             staged_video.parent.mkdir(parents=True, exist_ok=True)
             cleanup_video_artifact(staged_video)
             pending_videos.append((staged_video, target_video))
+            emit_progress("record_video_start", row_index=row_index, task_family=task_family, method=method_name)
             video_path = backend.record_video(staged_video)
             validate_official_video(video_path, expected_target=staged_video, video_dir=args.video_dir)
+            emit_progress("record_video_done", row_index=row_index, task_family=task_family, method=method_name)
             policy_hash = str(proposal.get("policy_or_config_hash") or backend.policy_or_config_hash(method_name))
             record = build_record(
                 row=row,
@@ -600,10 +638,12 @@ def run_collection(args: argparse.Namespace) -> int:
             log_path = args.output_log_dir / f"{task_family}.jsonl"
             pending_records_by_log.setdefault(log_path, []).append(record)
             pending_log_lines.setdefault(log_path, []).append(json.dumps(record, sort_keys=True) + "\n")
+            emit_progress("row_record_ready", row_index=row_index, task_family=task_family, method=method_name)
     except BaseException:
         cleanup_staged_videos(pending_videos)
         raise
 
+    emit_progress("promote_artifacts_start", records=sum(len(lines) for lines in pending_log_lines.values()), videos=len(pending_videos))
     written = promote_pending_artifacts(
         pending_log_lines,
         pending_videos,
@@ -614,6 +654,7 @@ def run_collection(args: argparse.Namespace) -> int:
         manifest_tasks=manifest_tasks,
         manifest_video_dirs=manifest_video_dirs,
     )
+    emit_progress("promote_artifacts_done", records=written, videos=len(pending_videos))
     print(f"External collection runner wrote {written} JSONL records. Not validated until manifest and strict audits pass.")
     return 0
 

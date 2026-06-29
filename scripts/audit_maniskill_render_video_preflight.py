@@ -52,6 +52,14 @@ def clean_ansi(text: str) -> str:
     return re.sub(r"\x1b\[[0-9;]*m", "", text)
 
 
+def coerce_output(value: Any) -> str:
+    if isinstance(value, str):
+        return value
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
+    return ""
+
+
 def clear_preflight_outputs() -> None:
     if PREFLIGHT_ROOT.exists():
         resolved = PREFLIGHT_ROOT.resolve()
@@ -80,6 +88,7 @@ def render_probe_code() -> str:
         r"""
         import json
         import sys
+        import time
         import traceback
         from pathlib import Path
 
@@ -110,11 +119,25 @@ def render_probe_code() -> str:
             "traceback_tail": "",
         }
         env = None
+        def emit_stage(stage, **extra):
+            marker_payload = {
+                "stage": stage,
+                "env_id": env_id,
+                "render_backend": render_backend,
+                "shader_pack": shader_pack,
+                "time": round(time.time(), 3),
+            }
+            marker_payload.update(extra)
+            print("PAPER119_RENDER_STAGE " + json.dumps(marker_payload, sort_keys=True), flush=True)
+
         try:
+            emit_stage("start")
+            emit_stage("import_start")
             import gymnasium as gym
             import mani_skill  # noqa: F401
             from external_validation.runner.maniskill_reference_backend import _as_uint8_rgb_frame, write_mp4
 
+            emit_stage("import_done")
             kwargs = {
                 "obs_mode": "state",
                 "render_mode": "rgb_array",
@@ -123,37 +146,54 @@ def render_probe_code() -> str:
                 "human_render_camera_configs": {"width": width, "height": height, "shader_pack": shader_pack},
             }
             try:
+                emit_stage("make_env_start")
                 env = gym.make(env_id, **kwargs)
             except TypeError:
+                emit_stage("make_env_retry_without_render_kwargs")
                 env = gym.make(env_id, obs_mode="state", render_mode="rgb_array")
             payload["made_env"] = True
+            emit_stage("make_env_done")
+            emit_stage("reset_start")
             env.reset(seed=seed)
             payload["reset_ok"] = True
             frames = []
+            emit_stage("initial_render_start")
             frame = env.render()
             frames.append(_as_uint8_rgb_frame(frame))
             payload["render_ok"] = True
+            emit_stage("initial_render_done")
             try:
+                emit_stage("step_start")
                 env.step(env.action_space.sample())
                 payload["step_ok"] = True
+                emit_stage("step_done")
+                emit_stage("post_step_render_start")
                 frame = env.render()
                 frames.append(_as_uint8_rgb_frame(frame))
+                emit_stage("post_step_render_done")
             except Exception as step_exc:  # noqa: BLE001 - preflight reports environment-specific step/render issues.
                 payload["step_error"] = f"{type(step_exc).__name__}: {step_exc}"
+                emit_stage("step_or_post_step_render_error", error=payload["step_error"])
+            emit_stage("mp4_write_start", frames=len(frames))
             written = write_mp4(output_path, frames, fps=4)
             payload["mp4_ok"] = True
             payload["video_path"] = str(written).replace("\\", "/")
             payload["video_size_bytes"] = output_path.stat().st_size if output_path.exists() else 0
+            emit_stage("mp4_write_done", video_size_bytes=payload["video_size_bytes"])
         except Exception as exc:  # noqa: BLE001 - all renderer failures are data for this preflight.
             payload["error_type"] = type(exc).__name__
             payload["error"] = str(exc)
             payload["traceback_tail"] = "\n".join(traceback.format_exc().splitlines()[-12:])
+            emit_stage("error", error_type=payload["error_type"], error=payload["error"])
         finally:
             try:
                 if env is not None:
+                    emit_stage("close_start")
                     env.close()
+                    emit_stage("close_done")
             except Exception as close_exc:  # noqa: BLE001
                 payload["close_error"] = f"{type(close_exc).__name__}: {close_exc}"
+                emit_stage("close_error", error=payload["close_error"])
             print("PAPER119_RENDER_PREFLIGHT " + json.dumps(payload, sort_keys=True))
         """
     )
@@ -171,6 +211,27 @@ def parse_marker(stdout: str) -> dict[str, Any] | None:
     return None
 
 
+def parse_progress_stages(stdout: str) -> list[dict[str, Any]]:
+    marker = "PAPER119_RENDER_STAGE "
+    stages: list[dict[str, Any]] = []
+    for line in stdout.splitlines():
+        if not line.startswith(marker):
+            continue
+        try:
+            payload = json.loads(line[len(marker) :])
+        except json.JSONDecodeError:
+            continue
+        if isinstance(payload, dict):
+            stages.append(payload)
+    return stages
+
+
+def display_command(command: list[str]) -> str:
+    if len(command) >= 4 and command[2] == "-c":
+        return " ".join([*command[:3], "<render_probe_code>", *command[4:]])
+    return " ".join(command[:2] + ["<render_probe_code>", *command[3:]])
+
+
 def run_probe(row: dict[str, str], args: argparse.Namespace) -> dict[str, Any]:
     env_id = row["env_id"]
     task_family = row["task_family"]
@@ -180,6 +241,7 @@ def run_probe(row: dict[str, str], args: argparse.Namespace) -> dict[str, Any]:
     target.parent.mkdir(parents=True, exist_ok=True)
     command = [
         sys.executable,
+        "-u",
         "-c",
         render_probe_code(),
         env_id,
@@ -206,24 +268,28 @@ def run_probe(row: dict[str, str], args: argparse.Namespace) -> dict[str, Any]:
             timeout=args.timeout_seconds,
         )
         timed_out = False
-        stdout = proc.stdout
-        stderr = proc.stderr
+        stdout = coerce_output(proc.stdout)
+        stderr = coerce_output(proc.stderr)
         returncode: int | None = proc.returncode
     except subprocess.TimeoutExpired as exc:
         timed_out = True
-        stdout = exc.stdout if isinstance(exc.stdout, str) else ""
-        stderr = exc.stderr if isinstance(exc.stderr, str) else ""
+        stdout = coerce_output(exc.stdout)
+        stderr = coerce_output(exc.stderr)
         returncode = None
 
     marker_payload = parse_marker(stdout) or {}
+    progress_stages = parse_progress_stages(stdout)
+    last_progress_stage = str(progress_stages[-1].get("stage", "")) if progress_stages else ""
     record: dict[str, Any] = {
         "task_family": task_family,
         "env_id": env_id,
-        "command": " ".join(command[:2] + ["<render_probe_code>", *command[3:]]),
+        "command": display_command(command),
         "timed_out": timed_out,
         "returncode": returncode,
         "stdout_tail": stdout[-2000:],
         "stderr_tail": stderr[-2000:],
+        "progress_stages": progress_stages[-40:],
+        "last_progress_stage": last_progress_stage,
         "parsed_marker": bool(marker_payload),
         "output_path": rel(target),
         "render_backend": str(args.render_backend),
@@ -236,7 +302,8 @@ def run_probe(row: dict[str, str], args: argparse.Namespace) -> dict[str, Any]:
     record.update(marker_payload)
     if timed_out:
         record["error_type"] = "TimeoutExpired"
-        record["error"] = f"render preflight exceeded {args.timeout_seconds} seconds"
+        suffix = f" after progress stage {last_progress_stage}" if last_progress_stage else ""
+        record["error"] = f"render preflight exceeded {args.timeout_seconds} seconds{suffix}"
     if not record.get("error") and returncode not in (0, None):
         cleaned = clean_ansi(stderr)
         runtime_errors = [line.strip() for line in cleaned.splitlines() if "RuntimeError:" in line]
@@ -318,7 +385,9 @@ def summarize_blocker(records: list[dict[str, Any]]) -> str:
     fragments = []
     for record in failed[:4]:
         error = str(record.get("error") or record.get("error_type") or "no render-backed MP4")
-        fragments.append(f"{record.get('env_id')}: {error}")
+        last_stage = str(record.get("last_progress_stage", "") or "")
+        stage_suffix = f" (last progress stage: {last_stage})" if last_stage else ""
+        fragments.append(f"{record.get('env_id')}: {error}{stage_suffix}")
     return "render-backed MP4 preflight is not ready on this machine; " + "; ".join(fragments)
 
 
@@ -435,7 +504,8 @@ def write_md(payload: dict[str, Any]) -> None:
         lines.append(
             f"- `{status}` `{record.get('profile')}` / `{record.get('env_id')}`: "
             f"made_env={record.get('made_env')}, reset_ok={record.get('reset_ok')}, "
-            f"render_ok={record.get('render_ok')}, mp4_ok={record.get('mp4_ok')}, error={error!r}"
+            f"render_ok={record.get('render_ok')}, mp4_ok={record.get('mp4_ok')}, "
+            f"error={error!r}, last_stage={record.get('last_progress_stage')!r}"
         )
     lines.extend(["", "## Environment Results", ""])
     for record in payload["env_records"]:
@@ -444,7 +514,8 @@ def write_md(payload: dict[str, Any]) -> None:
         lines.append(
             f"- `{status}` `{record.get('task_family')}` / `{record.get('env_id')}`: "
             f"made_env={record.get('made_env')}, reset_ok={record.get('reset_ok')}, "
-            f"render_ok={record.get('render_ok')}, mp4_ok={record.get('mp4_ok')}, error={error!r}"
+            f"render_ok={record.get('render_ok')}, mp4_ok={record.get('mp4_ok')}, "
+            f"error={error!r}, last_stage={record.get('last_progress_stage')!r}"
         )
     diagnosis_records = payload.get("timeout_diagnosis_records", []) or []
     lines.extend(["", "## Timeout Diagnosis Retest", ""])
@@ -457,7 +528,8 @@ def write_md(payload: dict[str, Any]) -> None:
             f"- `{status}` `{record.get('task_family')}` / `{record.get('env_id')}`: "
             f"class={record.get('renderer_failure_class')}, made_env={record.get('made_env')}, "
             f"reset_ok={record.get('reset_ok')}, render_ok={record.get('render_ok')}, "
-            f"mp4_ok={record.get('mp4_ok')}, error={error!r}"
+            f"mp4_ok={record.get('mp4_ok')}, error={error!r}, "
+            f"last_stage={record.get('last_progress_stage')!r}"
         )
     lines.extend(["", "## Checks", ""])
     for check in payload["checks"]:
@@ -521,6 +593,12 @@ def main() -> int:
         "each_probe_has_terminal_status",
         bool(records) and all(record.get("timed_out") or record.get("parsed_marker") for record in records),
         f"records={len(records)}",
+    )
+    add_check(
+        checks,
+        "render_progress_markers_recorded",
+        all((not record.get("timed_out")) or record.get("last_progress_stage") for record in records),
+        f"last_stages={[record.get('last_progress_stage') for record in records]}",
     )
     add_check(
         checks,
