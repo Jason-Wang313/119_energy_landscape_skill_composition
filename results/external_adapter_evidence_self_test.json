@@ -11,8 +11,13 @@
       "passed": true
     },
     {
-      "detail": "passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': False, 'manifest_implementation_entries_present': False, 'manifest_declares_all_required_non_oracle_methods': False, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': False, 'manifest_required_hashes_match_artifacts': False, 'adapter_results_passed': False}",
+      "detail": "passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': False, 'manifest_implementation_entries_present': False, 'manifest_declares_all_required_non_oracle_methods': False, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': False, 'manifest_required_hashes_match_artifacts': False, 'manifest_independent_provenance_declared': False, 'adapter_results_passed': False}",
       "name": "missing_manifest_fails_strict",
+      "passed": true
+    },
+    {
+      "detail": "passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': True, 'manifest_implementation_entries_present': True, 'manifest_declares_all_required_non_oracle_methods': True, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': True, 'manifest_required_hashes_match_artifacts': True, 'manifest_independent_provenance_declared': False, 'adapter_results_passed': True}",
+      "name": "leaky_or_reference_provenance_fails_strict",
       "passed": true
     },
     {
@@ -31,6 +36,7 @@
       "passed": true
     }
   ],
+  "leaky_provenance_ready": false,
   "missing_manifest_ready": false,
   "not_external_evidence": true,
   "passed": true,

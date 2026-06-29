@@ -146,9 +146,9 @@
     {
       "blocking_until_real_evidence": "true",
       "current_hash": "",
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "greedy_module_sequence",
-      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, declare implementation_provenance signoff, and ensure JSONL policy_or_config_hash matches it",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
@@ -156,9 +156,9 @@
     {
       "blocking_until_real_evidence": "true",
       "current_hash": "",
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "behavior_cloned_skill_chain",
-      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, declare implementation_provenance signoff, and ensure JSONL policy_or_config_hash matches it",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
@@ -166,9 +166,9 @@
     {
       "blocking_until_real_evidence": "true",
       "current_hash": "",
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "option_graph_planner",
-      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, declare implementation_provenance signoff, and ensure JSONL policy_or_config_hash matches it",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
@@ -176,9 +176,9 @@
     {
       "blocking_until_real_evidence": "true",
       "current_hash": "",
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "tamp_feasibility_screen",
-      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, declare implementation_provenance signoff, and ensure JSONL policy_or_config_hash matches it",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
@@ -186,9 +186,9 @@
     {
       "blocking_until_real_evidence": "true",
       "current_hash": "",
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "stable_dmp_handoff",
-      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, declare implementation_provenance signoff, and ensure JSONL policy_or_config_hash matches it",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
@@ -196,9 +196,9 @@
     {
       "blocking_until_real_evidence": "true",
       "current_hash": "",
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "diffusion_skill_stitcher",
-      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, declare implementation_provenance signoff, and ensure JSONL policy_or_config_hash matches it",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
@@ -206,9 +206,9 @@
     {
       "blocking_until_real_evidence": "true",
       "current_hash": "",
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "cem_trajectory_composer",
-      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, declare implementation_provenance signoff, and ensure JSONL policy_or_config_hash matches it",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
@@ -216,9 +216,9 @@
     {
       "blocking_until_real_evidence": "true",
       "current_hash": "",
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "residual_rl_composer",
-      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, declare implementation_provenance signoff, and ensure JSONL policy_or_config_hash matches it",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
@@ -226,9 +226,9 @@
     {
       "blocking_until_real_evidence": "true",
       "current_hash": "",
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "energy_compatibility_heuristic",
-      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, declare implementation_provenance signoff, and ensure JSONL policy_or_config_hash matches it",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
@@ -236,9 +236,9 @@
     {
       "blocking_until_real_evidence": "true",
       "current_hash": "",
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "proposed_energy_landscape_composer_v4_1",
-      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, declare implementation_provenance signoff, and ensure JSONL policy_or_config_hash matches it",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"
@@ -246,9 +246,9 @@
     {
       "blocking_until_real_evidence": "true",
       "current_hash": "",
-      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
       "item": "barrier_certified_energy_composer_v5",
-      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+      "operator_action": "supply an independent non-oracle implementation or wrapper, lock its source/config hash, declare implementation_provenance signoff, and ensure JSONL policy_or_config_hash matches it",
       "phase": "method_implementations",
       "required_path": "",
       "strict_gate": "python scripts\\validate_external_adapters.py --strict"

@@ -61,9 +61,9 @@ This packet maps the remaining main-conference blockers to concrete operator inp
 ## ManiSkill Render-Video Preflight
 
 - Render video ready: `false`
-- Renderer failure classes: `['vulkan_descriptor_pool_exhaustion']`
-- Operator remediation items: `5`
-- Blocking missing: `['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory']`
+- Renderer failure classes: `['render_timeout']`
+- Operator remediation items: `3`
+- Blocking missing: `['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: render preflight exceeded 45 seconds; OpenCabinetDrawer-v1: render preflight exceeded 45 seconds; OpenCabinetDoor-v1: render preflight exceeded 45 seconds; PullCubeTool-v1: render preflight exceeded 45 seconds']`
 
 Renderer profile retest commands:
 
@@ -131,7 +131,7 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 - `pass` `ablation_collection_packet_ready`: work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False
 - `pass` `evidence_intake_ledger_ready`: mapped=36/36, groups=8
 - `pass` `pilot_smoke_packet_ready`: pilot_smoke_packet_ready=True, strict_evidence_ready=False
-- `pass` `maniskill_render_video_preflight_recorded`: render_video_ready=False, envs=4, failure_classes=['vulkan_descriptor_pool_exhaustion']
+- `pass` `maniskill_render_video_preflight_recorded`: render_video_ready=False, envs=4, failure_classes=['render_timeout']
 - `pass` `maniskill_pilot_runtime_liveness_ready`: pilot_runtime_ready=False, runner_io_ready=True, render_video_ready=False, timed_out=False, records=1, videos=1, diagnostic_fallbacks=1, failure_summary='runner wrote quarantined schema-valid row/video using diagnostic non-evidence video fallback; render-backed video remains unavailable'
 - `pass` `maniskill_render_machine_qualification_ready`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12
 - `pass` `method_implementation_packet_ready`: method_implementation_packet_ready=True, strict_adapter_evidence_ready=False

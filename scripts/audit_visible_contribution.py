@@ -623,6 +623,7 @@ def main() -> int:
         and method_implementation.get("strict_adapter_evidence_ready") is False
         and method_checks.get("work_orders_cover_all_missing_non_oracle_methods") is True
         and method_checks.get("manifest_entry_templates_cover_required_hash_fields") is True
+        and method_checks.get("manifest_entry_templates_require_independent_provenance") is True
         and method_checks.get("work_orders_forbid_scaffolds_and_reference_adapters") is True
         and method_checks.get("policy_or_config_hash_in_logs_required") is True
         and method_checks.get("reference_adapter_provenance_covers_non_oracle_methods") is True
@@ -643,9 +644,12 @@ def main() -> int:
         and adapter_evidence_self_test.get("synthetic_adapter_evidence_ready") is True
         and adapter_evidence_self_test.get("scaffold_adapter_evidence_ready") is False
         and adapter_evidence_self_test.get("reference_adapter_evidence_ready") is False
+        and adapter_evidence_self_test.get("leaky_provenance_ready") is False
+        and adapter_evidence_self_checks.get("leaky_or_reference_provenance_fails_strict") is True
         and adapter_evidence_self_checks.get("reference_adapters_rejected_as_strict_evidence") is True,
         (
             f"reference_adapter_evidence_ready={adapter_evidence_self_test.get('reference_adapter_evidence_ready')!r}, "
+            f"leaky_provenance_ready={adapter_evidence_self_test.get('leaky_provenance_ready')!r}, "
             f"check={adapter_evidence_self_checks.get('reference_adapters_rejected_as_strict_evidence')!r}"
         ),
     )
@@ -791,6 +795,7 @@ def main() -> int:
             "External method implementation packet",
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
+            "strict independent method provenance gate",
             "manifest assembly checklist",
             "External manifest builder self-test",
             "External operator packet",
@@ -835,6 +840,7 @@ def main() -> int:
             "External method implementation packet",
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
+            "strict independent method provenance gate",
             "manifest assembly checklist",
             "External manifest builder self-test",
             "External operator packet",
@@ -880,6 +886,7 @@ def main() -> int:
             "external method implementation packet",
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
+            "strict independent method provenance gate",
             "manifest assembly checklist",
             "External manifest builder self-test",
             "generated external operator packet",
@@ -925,6 +932,7 @@ def main() -> int:
             "External method implementation packet",
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
+            "strict independent method provenance gate",
             "manifest assembly checklist",
             "External manifest builder self-test",
             "External operator packet",
@@ -972,6 +980,7 @@ def main() -> int:
             "method_reference_provenance.csv",
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
+            "strict independent method provenance gate",
             "manifest_assembly_checklist.csv",
             "manifest assembly checklist",
             "scripts/self_test_external_manifest_builder.py",
@@ -1018,6 +1027,7 @@ def main() -> int:
             "external method implementation packet",
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
+            "strict independent method provenance gate",
             "manifest assembly checklist",
             "External manifest builder self-test",
             "external operator packet",
@@ -1032,6 +1042,7 @@ def main() -> int:
             "fidelity acceptance materializer",
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
+            "strict independent method provenance gate",
             "manifest assembly checklist",
             "do not frame Haonan as responsible for supplying the missing proof",
             "independent validation protocol/operator packet",

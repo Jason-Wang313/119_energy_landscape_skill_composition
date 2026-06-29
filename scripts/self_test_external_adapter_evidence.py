@@ -93,6 +93,34 @@ def reset(reset_context):
     )
 
 
+def implementation_provenance_for(method: str) -> dict[str, Any]:
+    if method == "barrier_certified_energy_composer_v5":
+        evidence_role = "paper_method_under_test"
+        uses_proposed_method_code = True
+    elif method == "proposed_energy_landscape_composer_v4_1":
+        evidence_role = "paper_predecessor_method"
+        uses_proposed_method_code = True
+    else:
+        evidence_role = "independent_non_oracle_method"
+        uses_proposed_method_code = False
+    return {
+        "evidence_role": evidence_role,
+        "implementation_origin": "synthetic_self_test_operator_fixture",
+        "independent_operator_or_lab": "paper119_synthetic_self_test_operator",
+        "operator_signoff_id": f"synthetic_signoff_{method}",
+        "same_skill_library": True,
+        "same_observation_interface": True,
+        "same_compute_budget": True,
+        "policy_or_config_hash_locked": True,
+        "oracle_access": False,
+        "uses_scaffold_template": False,
+        "uses_reference_adapter": False,
+        "uses_eval_outcome_tuning": False,
+        "uses_unblinded_method_identity_during_collection": False,
+        "uses_proposed_method_code": uses_proposed_method_code,
+    }
+
+
 def manifest_for_implementations(adapter_paths: dict[str, Path], config_paths: dict[str, Path]) -> dict[str, Any]:
     return {
         "version": "paper119_external_manifest_v1",
@@ -103,6 +131,7 @@ def manifest_for_implementations(adapter_paths: dict[str, Path], config_paths: d
                 "implementation": rel(path),
                 "checkpoint_or_config_path": rel(config_paths[method]),
                 "checkpoint_or_config_hash": file_digest(config_paths[method]),
+                "implementation_provenance": implementation_provenance_for(method),
             }
             for method, path in sorted(adapter_paths.items())
         ]
@@ -147,6 +176,16 @@ def manifest_for_reference_adapters() -> dict[str, Any]:
             for method in baseline_methods()
         ],
     }
+
+
+def manifest_with_leaky_provenance(adapter_paths: dict[str, Path], config_paths: dict[str, Path]) -> dict[str, Any]:
+    manifest = manifest_for_implementations(adapter_paths, config_paths)
+    for method in manifest["methods"]:
+        if method.get("name") not in {"barrier_certified_energy_composer_v5", "proposed_energy_landscape_composer_v4_1", "oracle_basin_composer"}:
+            method["implementation_provenance"]["uses_reference_adapter"] = True
+            method["implementation_provenance"]["uses_proposed_method_code"] = True
+            break
+    return manifest
 
 
 def run_strict_with_manifest(manifest_path: Path) -> dict[str, Any]:
@@ -214,19 +253,23 @@ def main() -> int:
         missing_manifest = tmp / "manifest_missing.json"
         scaffold_manifest = tmp / "manifest_scaffolds.json"
         reference_manifest = tmp / "manifest_reference_adapters.json"
+        leaky_manifest = tmp / "manifest_leaky_provenance.json"
         write_json(complete_manifest, manifest_for_implementations(adapter_paths, config_paths))
         write_json(scaffold_manifest, manifest_for_scaffolds())
         write_json(reference_manifest, manifest_for_reference_adapters())
+        write_json(leaky_manifest, manifest_with_leaky_provenance(adapter_paths, config_paths))
 
         complete_audit = run_strict_with_manifest(complete_manifest)
         missing_manifest_audit = run_strict_with_manifest(missing_manifest)
         scaffold_audit = run_strict_with_manifest(scaffold_manifest)
         reference_audit = run_strict_with_manifest(reference_manifest)
+        leaky_audit = run_strict_with_manifest(leaky_manifest)
 
     report_after = file_digest(REAL_REPORT)
 
     complete_checks = {check.get("name"): check.get("passed") for check in complete_audit.get("checks", [])}
     missing_manifest_checks = {check.get("name"): check.get("passed") for check in missing_manifest_audit.get("checks", [])}
+    leaky_checks = {check.get("name"): check.get("passed") for check in leaky_audit.get("checks", [])}
     scaffold_failed = scaffold_audit.get("failed_adapters", [])
     reference_failed = reference_audit.get("failed_adapters", [])
 
@@ -242,6 +285,7 @@ def main() -> int:
         and complete_checks.get("manifest_declares_all_required_non_oracle_methods") is True
         and complete_checks.get("manifest_implementation_entries_cover_required_non_oracle_methods") is True
         and complete_checks.get("manifest_required_hashes_match_artifacts") is True
+        and complete_checks.get("manifest_independent_provenance_declared") is True
         and complete_checks.get("adapter_results_passed") is True,
         f"passed={complete_audit.get('passed')!r}, adapter_count={complete_audit.get('adapter_count')!r}",
     )
@@ -258,6 +302,13 @@ def main() -> int:
         and missing_manifest_checks.get("manifest_exists") is False
         and missing_manifest_checks.get("manifest_implementation_entries_present") is False,
         f"passed={missing_manifest_audit.get('passed')!r}, checks={missing_manifest_checks}",
+    )
+    add_check(
+        checks,
+        "leaky_or_reference_provenance_fails_strict",
+        leaky_audit.get("passed") is False
+        and leaky_checks.get("manifest_independent_provenance_declared") is False,
+        f"passed={leaky_audit.get('passed')!r}, checks={leaky_checks}",
     )
     add_check(
         checks,
@@ -294,6 +345,7 @@ def main() -> int:
         "passed": passed,
         "not_external_evidence": True,
         "synthetic_adapter_evidence_ready": complete_audit.get("passed") is True,
+        "leaky_provenance_ready": leaky_audit.get("passed") is True,
         "scaffold_adapter_evidence_ready": scaffold_audit.get("passed") is True,
         "reference_adapter_evidence_ready": reference_audit.get("passed") is True,
         "missing_manifest_ready": missing_manifest_audit.get("passed") is True,

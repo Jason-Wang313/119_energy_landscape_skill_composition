@@ -38,7 +38,7 @@ This audit checks that the public-facing contribution docs describe the current 
 - `pass` `evidence_intake_ledger_visible`: mapped=36/36, strict_external_evidence_ready=False
 - `pass` `precollection_manifest_draft_visible`: prepared_configs=4, method_gaps=11, rollout_gaps=8, official_manifest_exists=False
 - `pass` `method_implementation_packet_visible`: method_implementation_packet_ready=True, strict_adapter_evidence_ready=False
-- `pass` `strict_reference_adapter_rejection_gate_visible`: reference_adapter_evidence_ready=False, check=True
+- `pass` `strict_reference_adapter_rejection_gate_visible`: reference_adapter_evidence_ready=False, leaky_provenance_ready=False, check=True
 - `pass` `materializer_guard_visible`: write_enabled=False, not_external_evidence=True
 - `pass` `planner_edge_policy_visible`: frontiers=1680, utility_delta=0.231317169047619, breach_delta=-0.07518194761904762
 - `pass` `local_model_release_visible`: release_hash='5CF7C6E592517ECC40371074F6341C489BCAB11E5358E6BA053CB3AD241B5929', local_model_release_ready=True, external_evidence_ready=False

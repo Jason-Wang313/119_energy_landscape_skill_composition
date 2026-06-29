@@ -166,7 +166,7 @@
       "passed": true
     },
     {
-      "detail": "reference_adapter_evidence_ready=False, check=True",
+      "detail": "reference_adapter_evidence_ready=False, leaky_provenance_ready=False, check=True",
       "name": "strict_reference_adapter_rejection_gate_visible",
       "passed": true
     },

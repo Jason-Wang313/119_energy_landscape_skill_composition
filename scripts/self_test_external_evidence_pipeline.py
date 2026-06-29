@@ -58,6 +58,35 @@ BASELINE_SUCCESS_CUTOFFS = {
 FIXED_RISK_BUDGET = 0.15
 
 
+def implementation_provenance_for(method: str) -> dict[str, Any]:
+    if method == rollout.PRIMARY_METHOD:
+        evidence_role = "paper_method_under_test"
+        uses_proposed_method_code = True
+    elif method == "proposed_energy_landscape_composer_v4_1":
+        evidence_role = "paper_predecessor_method"
+        uses_proposed_method_code = True
+    else:
+        evidence_role = "independent_non_oracle_method"
+        uses_proposed_method_code = False
+
+    return {
+        "evidence_role": evidence_role,
+        "implementation_origin": "synthetic_full_pipeline_self_test_fixture",
+        "independent_operator_or_lab": "paper119_synthetic_full_pipeline_operator",
+        "operator_signoff_id": f"synthetic_full_pipeline_signoff_{method}",
+        "same_skill_library": True,
+        "same_observation_interface": True,
+        "same_compute_budget": True,
+        "policy_or_config_hash_locked": True,
+        "oracle_access": False,
+        "uses_scaffold_template": False,
+        "uses_reference_adapter": False,
+        "uses_eval_outcome_tuning": False,
+        "uses_unblinded_method_identity_during_collection": False,
+        "uses_proposed_method_code": uses_proposed_method_code,
+    }
+
+
 def digest_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
@@ -278,6 +307,8 @@ def write_baseline_artifacts(root: Path, external: Path) -> tuple[list[dict[str,
         method_entry["checkpoint"] = rel(root, checkpoint)
         method_entry["checkpoint_or_config_path"] = rel(root, checkpoint)
         method_entry["checkpoint_or_config_hash"] = checkpoint_hash
+        if method != rollout.ORACLE_METHOD:
+            method_entry["implementation_provenance"] = implementation_provenance_for(method)
         checkpoint_release.append({"path": rel(root, checkpoint), "sha256": checkpoint_hash})
 
         if method != rollout.ORACLE_METHOD:

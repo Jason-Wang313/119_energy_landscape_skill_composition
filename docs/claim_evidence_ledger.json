@@ -277,8 +277,8 @@
     },
     {
       "name": "external_adapter_contract_claim",
-      "claim": "The repository provides a non-evidence adapter contract validator and strict adapter-evidence self-test for the seam-model API, while recording that real strict manifest-declared adapter evidence is still missing until independent implementations replace scaffolds.",
-      "evidence": ["scripts/validate_external_adapters.py", "scripts/self_test_external_adapter_evidence.py", "results/external_adapter_contract_audit.json", "results/external_adapter_contract_audit.md", "results/external_adapter_contract_evidence_audit.json", "results/external_adapter_contract_evidence_audit.md", "results/external_adapter_evidence_self_test.json", "results/external_adapter_evidence_self_test.md", "external_validation/README.md"]
+      "claim": "The repository provides a non-evidence adapter contract validator, strict adapter-evidence self-test, and strict independent method provenance gate for the seam-model API, while recording that real strict manifest-declared adapter evidence is still missing until independent implementations replace scaffolds/reference adapters and declare non-leaky provenance.",
+      "evidence": ["scripts/validate_external_adapters.py", "scripts/self_test_external_adapter_evidence.py", "scripts/build_external_method_implementation_packet.py", "external_validation/method_implementation_packet.md", "external_validation/manifest_template.json", "results/external_method_implementation_audit.json", "results/external_adapter_contract_audit.json", "results/external_adapter_contract_audit.md", "results/external_adapter_contract_evidence_audit.json", "results/external_adapter_contract_evidence_audit.md", "results/external_adapter_evidence_self_test.json", "results/external_adapter_evidence_self_test.md", "external_validation/README.md"]
     },
     {
       "name": "external_release_package_self_test_claim",

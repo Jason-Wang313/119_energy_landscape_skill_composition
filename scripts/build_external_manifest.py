@@ -437,6 +437,7 @@ def build_manifest_assembly_checklist(
         implementation_state, implementation_hash = path_state(root, method.get("implementation"))
         checkpoint_state, checkpoint_hash = path_state(root, method.get("checkpoint_or_config_path"))
         declared_hash = str(method.get("checkpoint_or_config_hash", ""))
+        provenance_state = "present" if isinstance(method.get("implementation_provenance"), dict) else "missing"
         rows.append(
             checklist_row(
                 "method_implementations",
@@ -444,12 +445,16 @@ def build_manifest_assembly_checklist(
                 str(method.get("implementation", "") or method.get("checkpoint_or_config_path", "")),
                 (
                     f"implementation={implementation_state}; checkpoint_or_config={checkpoint_state}; "
-                    f"manifest_hash={'present' if declared_hash else 'missing'}"
+                    f"manifest_hash={'present' if declared_hash else 'missing'}; provenance={provenance_state}"
                 ),
                 declared_hash or checkpoint_hash or implementation_hash,
-                not bool(declared_hash and (implementation_state == "present" or checkpoint_state == "present")),
+                not bool(
+                    declared_hash
+                    and (implementation_state == "present" or checkpoint_state == "present")
+                    and provenance_state == "present"
+                ),
                 r"python scripts\validate_external_adapters.py --strict",
-                "supply an independent non-oracle implementation or wrapper, lock its source/config hash, and ensure JSONL policy_or_config_hash matches it",
+                "supply an independent non-oracle implementation or wrapper, lock its source/config hash, declare implementation_provenance signoff, and ensure JSONL policy_or_config_hash matches it",
             )
         )
 

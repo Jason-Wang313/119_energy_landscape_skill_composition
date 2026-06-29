@@ -1563,11 +1563,14 @@ def main():
         fail("external adapter evidence self-test should reject reference adapters as strict evidence")
     if adapter_evidence_self_test.get("missing_manifest_ready") is not False:
         fail("external adapter evidence self-test should reject a missing manifest")
+    if adapter_evidence_self_test.get("leaky_provenance_ready") is not False:
+        fail("external adapter evidence self-test should reject leaky or reference-adapter provenance")
     adapter_evidence_self_checks = {check.get("name"): check.get("passed") for check in adapter_evidence_self_test.get("checks", [])}
     for required_check in (
         "synthetic_strict_adapters_pass",
         "synthetic_manifest_entries_cover_non_oracle_methods",
         "missing_manifest_fails_strict",
+        "leaky_or_reference_provenance_fails_strict",
         "scaffold_adapters_rejected_as_strict_evidence",
         "reference_adapters_rejected_as_strict_evidence",
         "real_adapter_evidence_report_not_overwritten",
@@ -1622,6 +1625,13 @@ def main():
             fail("reference adapter manifest stubs must require operator-supplied independent implementations")
         if "SHA256" not in str(stub.get("checkpoint_or_config_hash", "")):
             fail("reference adapter manifest stubs must keep checkpoint/config hash as a placeholder")
+        provenance = stub.get("implementation_provenance", {}) or {}
+        if not isinstance(provenance, dict):
+            fail("reference adapter manifest stubs must include implementation_provenance")
+        if provenance.get("oracle_access") is not False or provenance.get("uses_reference_adapter") is not False:
+            fail("reference adapter manifest stubs must forbid oracle access and reference-adapter use")
+        if provenance.get("policy_or_config_hash_locked") is not True:
+            fail("reference adapter manifest stubs must require locked policy/config hashes")
     if method_packet.get("oracle_method") != "oracle_basin_composer":
         fail("external method implementation packet should declare the oracle as a post hoc upper bound")
     work_order_methods = {order.get("method") for order in method_packet.get("work_orders", []) or []}
@@ -1656,6 +1666,7 @@ def main():
         "required_artifact_fields_declared",
         "required_log_fields_declared",
         "manifest_entry_templates_cover_required_hash_fields",
+        "manifest_entry_templates_require_independent_provenance",
         "work_orders_forbid_scaffolds_and_reference_adapters",
         "policy_or_config_hash_in_logs_required",
         "reference_adapter_provenance_covers_non_oracle_methods",

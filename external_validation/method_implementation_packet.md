@@ -26,6 +26,22 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
+  "implementation_provenance": {
+    "evidence_role": "paper_method_under_test",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": true,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "interface_reference_adapter": "external_validation/baselines/barrier_certified_energy_composer_v5/adapter.py",
   "interface_reference_adapter_sha256": "DFECC8475DFE638A5F23B7941CEB00C1F8094EF2256BE60F20CA6F817341859B",
   "name": "barrier_certified_energy_composer_v5"
@@ -47,6 +63,22 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "interface_reference_adapter": "external_validation/baselines/behavior_cloned_skill_chain/adapter.py",
   "interface_reference_adapter_sha256": "9B3548FB33CAB6503F8BF9F6189FEDC2177897E83C3FDF2D657CA6E1019F4890",
   "name": "behavior_cloned_skill_chain"
@@ -68,6 +100,22 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "interface_reference_adapter": "external_validation/baselines/cem_trajectory_composer/adapter.py",
   "interface_reference_adapter_sha256": "81B7FFAE412D296A7A5E9D0ADEF0BBE2031FB4D4FB08B65DD6408F1101668FDB",
   "name": "cem_trajectory_composer"
@@ -89,6 +137,22 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "interface_reference_adapter": "external_validation/baselines/diffusion_skill_stitcher/adapter.py",
   "interface_reference_adapter_sha256": "B16C610BCB5906C72BFD7495792D5635546513E91BC44CAC98C9C5DA3F3177BF",
   "name": "diffusion_skill_stitcher"
@@ -110,6 +174,22 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "interface_reference_adapter": "external_validation/baselines/energy_compatibility_heuristic/adapter.py",
   "interface_reference_adapter_sha256": "C59B9E9BA7621A12731D0228488B990593915A23A884FC2042842D550637FC59",
   "name": "energy_compatibility_heuristic"
@@ -131,6 +211,22 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "interface_reference_adapter": "external_validation/baselines/greedy_module_sequence/adapter.py",
   "interface_reference_adapter_sha256": "8C9F465960077E3B8A67DC398B236C2C1C0E4F253E51366A56EA77E5ED5CC963",
   "name": "greedy_module_sequence"
@@ -152,6 +248,22 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "interface_reference_adapter": "external_validation/baselines/option_graph_planner/adapter.py",
   "interface_reference_adapter_sha256": "BA19AC254B64D5F79600E44EE88A748FC237D3910BA592014D732E632535B22D",
   "name": "option_graph_planner"
@@ -173,6 +285,22 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
+  "implementation_provenance": {
+    "evidence_role": "paper_predecessor_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": true,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "interface_reference_adapter": "external_validation/baselines/proposed_energy_landscape_composer_v4_1/adapter.py",
   "interface_reference_adapter_sha256": "ADE2084726B6A6DE7B2F90DFA6A1C4F5D2614551079E978AF9B849A794C6A540",
   "name": "proposed_energy_landscape_composer_v4_1"
@@ -194,6 +322,22 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "interface_reference_adapter": "external_validation/baselines/residual_rl_composer/adapter.py",
   "interface_reference_adapter_sha256": "5B72C98DC049FC0476451EE9E89A0F94D2E50DC1B20AF7CB327D6A60404919FF",
   "name": "residual_rl_composer"
@@ -215,6 +359,22 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "interface_reference_adapter": "external_validation/baselines/stable_dmp_handoff/adapter.py",
   "interface_reference_adapter_sha256": "3C16F0F4178F4F9A6FA6EEB88CF0CC7EB5A78890351C0EB2DDCFBCF6BC031F89",
   "name": "stable_dmp_handoff"
@@ -236,6 +396,22 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "interface_reference_adapter": "external_validation/baselines/tamp_feasibility_screen/adapter.py",
   "interface_reference_adapter_sha256": "1664C0DB0B62CAAE96F3BB2DDE13956797A82FC00BFA11D12C8F2E06C51C6AA9",
   "name": "tamp_feasibility_screen"
@@ -249,6 +425,7 @@ The current reference adapters are executable interface artifacts. They make the
 - using reference adapters to bypass the strict reference-adapter rejection gate
 - declaring only a subset of non-oracle methods in the strict adapter manifest
 - using policy_or_config_hash values in JSONL logs that do not match manifest-declared hashes
+- omitting implementation_provenance or using provenance that permits oracle access, scaffold/reference adapters, proposed-code leakage for independent baselines, or post-outcome tuning
 - dropping hard methods after viewing method identity or outcomes
 - changing compute budgets after seeing paired-reset performance
 - hand-entering manifest metrics without raw JSONL logs
@@ -267,7 +444,7 @@ The current reference adapters are executable interface artifacts. They make the
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -275,6 +452,22 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "external_validation/implementations/barrier_certified_energy_composer_v5/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/barrier_certified_energy_composer_v5/adapter.py",
+  "implementation_provenance": {
+    "evidence_role": "paper_method_under_test",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": true,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "name": "barrier_certified_energy_composer_v5"
 }
 ```
@@ -295,7 +488,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -303,6 +496,22 @@ Forbidden advantages:
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "external_validation/implementations/behavior_cloned_skill_chain/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/behavior_cloned_skill_chain/adapter.py",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "name": "behavior_cloned_skill_chain"
 }
 ```
@@ -324,7 +533,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -332,6 +541,22 @@ Forbidden advantages:
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "external_validation/implementations/cem_trajectory_composer/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/cem_trajectory_composer/adapter.py",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "name": "cem_trajectory_composer"
 }
 ```
@@ -353,7 +578,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -361,6 +586,22 @@ Forbidden advantages:
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "external_validation/implementations/diffusion_skill_stitcher/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/diffusion_skill_stitcher/adapter.py",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "name": "diffusion_skill_stitcher"
 }
 ```
@@ -380,7 +621,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -388,6 +629,22 @@ Forbidden advantages:
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "external_validation/implementations/energy_compatibility_heuristic/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/energy_compatibility_heuristic/adapter.py",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "name": "energy_compatibility_heuristic"
 }
 ```
@@ -408,7 +665,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -416,6 +673,22 @@ Forbidden advantages:
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "external_validation/implementations/greedy_module_sequence/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/greedy_module_sequence/adapter.py",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "name": "greedy_module_sequence"
 }
 ```
@@ -437,7 +710,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -445,6 +718,22 @@ Forbidden advantages:
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "external_validation/implementations/option_graph_planner/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/option_graph_planner/adapter.py",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "name": "option_graph_planner"
 }
 ```
@@ -465,7 +754,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -473,6 +762,22 @@ Forbidden advantages:
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "external_validation/implementations/proposed_energy_landscape_composer_v4_1/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/proposed_energy_landscape_composer_v4_1/adapter.py",
+  "implementation_provenance": {
+    "evidence_role": "paper_predecessor_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": true,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "name": "proposed_energy_landscape_composer_v4_1"
 }
 ```
@@ -493,7 +798,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -501,6 +806,22 @@ Forbidden advantages:
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "external_validation/implementations/residual_rl_composer/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/residual_rl_composer/adapter.py",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "name": "residual_rl_composer"
 }
 ```
@@ -521,7 +842,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -529,6 +850,22 @@ Forbidden advantages:
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "external_validation/implementations/stable_dmp_handoff/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/stable_dmp_handoff/adapter.py",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "name": "stable_dmp_handoff"
 }
 ```
@@ -549,7 +886,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -557,6 +894,22 @@ Forbidden advantages:
   "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
   "checkpoint_or_config_path": "external_validation/implementations/tamp_feasibility_screen/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/tamp_feasibility_screen/adapter.py",
+  "implementation_provenance": {
+    "evidence_role": "independent_non_oracle_method",
+    "implementation_origin": "<operator/lab/repository source for this implementation>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<signoff id or dated note>",
+    "oracle_access": false,
+    "policy_or_config_hash_locked": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_proposed_method_code": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
   "name": "tamp_feasibility_screen"
 }
 ```

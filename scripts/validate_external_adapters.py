@@ -27,7 +27,22 @@ REQUIRED_API = ("initialize", "propose", "log", "reset")
 REQUIRED_PROPOSAL_FIELDS = ("decision", "predicted_seam_risk", "failure_diagnosis", "repair_action")
 REQUIRED_LOG_FIELDS = ("predicted_seam_risk", "decision", "failure_diagnosis", "repair_action", "policy_or_config_hash")
 NON_ORACLE_EXCLUDED = {"oracle_basin_composer"}
+PAPER_METHODS_UNDER_TEST = {"barrier_certified_energy_composer_v5", "proposed_energy_landscape_composer_v4_1"}
 HEX64 = "0123456789abcdef"
+PLACEHOLDER_TEXT = {"", "todo", "tbd", "unknown", "none", "n/a", "na", "placeholder"}
+REQUIRED_PROVENANCE_TRUE_FIELDS = (
+    "same_skill_library",
+    "same_observation_interface",
+    "same_compute_budget",
+    "policy_or_config_hash_locked",
+)
+REQUIRED_PROVENANCE_FALSE_FIELDS = (
+    "oracle_access",
+    "uses_scaffold_template",
+    "uses_reference_adapter",
+    "uses_eval_outcome_tuning",
+    "uses_unblinded_method_identity_during_collection",
+)
 
 
 def digest(value: str) -> str:
@@ -75,6 +90,13 @@ def add_check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str
 
 def is_hash(value: Any) -> bool:
     return isinstance(value, str) and len(value) == 64 and all(char in HEX64 for char in value.lower())
+
+
+def is_placeholder_text(value: Any) -> bool:
+    if not isinstance(value, str):
+        return True
+    text = value.strip()
+    return not text or text.lower() in PLACEHOLDER_TEXT or ("<" in text and ">" in text)
 
 
 def is_scaffold(path: Path) -> bool:
@@ -422,6 +444,39 @@ def manifest_hash_errors(records: dict[str, dict[str, Any]], required_methods: l
     return errors
 
 
+def manifest_provenance_errors(records: dict[str, dict[str, Any]], required_methods: list[str]) -> list[str]:
+    errors: list[str] = []
+    for name in required_methods:
+        method = records.get(name)
+        if not method:
+            continue
+        provenance = method.get("implementation_provenance")
+        if not isinstance(provenance, dict):
+            errors.append(f"{name}: implementation_provenance object is missing")
+            continue
+        role = str(provenance.get("evidence_role", "")).strip()
+        if name in PAPER_METHODS_UNDER_TEST:
+            allowed_roles = {"paper_method_under_test", "paper_predecessor_method", "independent_non_oracle_method"}
+        else:
+            allowed_roles = {"independent_non_oracle_method"}
+        if role not in allowed_roles:
+            errors.append(f"{name}: implementation_provenance.evidence_role={role!r} must be one of {sorted(allowed_roles)}")
+        for field in ("implementation_origin", "independent_operator_or_lab", "operator_signoff_id"):
+            if is_placeholder_text(provenance.get(field)):
+                errors.append(f"{name}: implementation_provenance.{field} is missing or placeholder")
+        for field in REQUIRED_PROVENANCE_TRUE_FIELDS:
+            if provenance.get(field) is not True:
+                errors.append(f"{name}: implementation_provenance.{field} must be true")
+        for field in REQUIRED_PROVENANCE_FALSE_FIELDS:
+            if provenance.get(field) is not False:
+                errors.append(f"{name}: implementation_provenance.{field} must be false")
+        if name not in PAPER_METHODS_UNDER_TEST and provenance.get("uses_proposed_method_code") is not False:
+            errors.append(f"{name}: independent baseline provenance must set uses_proposed_method_code=false")
+        if not isinstance(provenance.get("uses_proposed_method_code"), bool):
+            errors.append(f"{name}: implementation_provenance.uses_proposed_method_code must be boolean")
+    return errors
+
+
 def scaffold_paths() -> list[tuple[str, Path, None]]:
     paths = []
     for method in baseline_spec_methods():
@@ -451,10 +506,11 @@ def build_audit(*, strict: bool) -> dict[str, Any]:
             if not str(records.get(method, {}).get("implementation", "")).strip()
         )
         hash_errors = manifest_hash_errors(records, required_methods)
+        provenance_errors = manifest_provenance_errors(records, required_methods)
         entries = manifest_implementation_entries(records, required_methods)
     else:
         records, duplicate_methods, malformed_methods = {}, [], []
-        missing_declared, missing_implementations, hash_errors = [], [], []
+        missing_declared, missing_implementations, hash_errors, provenance_errors = [], [], [], []
         entries = scaffold_paths()
 
     if strict:
@@ -483,6 +539,12 @@ def build_audit(*, strict: bool) -> dict[str, Any]:
             "manifest_required_hashes_match_artifacts",
             not missing_declared and not missing_implementations and not hash_errors,
             f"missing={missing_declared}, missing_implementations={missing_implementations}, errors={hash_errors[:8]}",
+        )
+        add_check(
+            checks,
+            "manifest_independent_provenance_declared",
+            not missing_declared and not missing_implementations and not provenance_errors,
+            f"missing={missing_declared}, missing_implementations={missing_implementations}, errors={provenance_errors[:8]}",
         )
     else:
         add_check(checks, "scaffold_entries_present", len(entries) >= 11, f"entries={len(entries)}")
