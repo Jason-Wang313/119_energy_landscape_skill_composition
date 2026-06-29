@@ -28,6 +28,7 @@ RESULT_ARTIFACTS = [
     RESULTS / "ablation_metrics.csv",
     RESULTS / "fixed_risk_metrics.csv",
     RESULTS / "planner_edge_policy_audit.json",
+    RESULTS / "failure_memory_adaptation_audit.json",
     RESULTS / "seam_prediction_calibration_audit.json",
     RESULTS / "diagnostic_mechanism_audit.json",
     RESULTS / "decision_quality_audit.json",

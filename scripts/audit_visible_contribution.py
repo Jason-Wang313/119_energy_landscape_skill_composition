@@ -88,6 +88,7 @@ def main() -> int:
     adapter_evidence_self_test = read_json(RESULTS / "external_adapter_evidence_self_test.json")
     materialization = read_json(RESULTS / "external_config_materialization_plan.json")
     planner_policy = read_json(RESULTS / "planner_edge_policy_audit.json")
+    failure_memory = read_json(RESULTS / "failure_memory_adaptation_audit.json")
     local_model_release = read_json(RESULTS / "local_model_release_audit.json")
     release_package = read_json(RESULTS / "external_release_package_audit.json")
     release_package_self_test = read_json(RESULTS / "external_release_package_self_test.json")
@@ -845,6 +846,29 @@ def main() -> int:
             f"breach_delta={planner_metrics.get('selected_realized_breach_delta')!r}"
         ),
     )
+    failure_memory_metrics = failure_memory.get("proposed_metrics", {})
+    failure_memory_comparison = failure_memory.get("comparison", {})
+    add_check(
+        checks,
+        "failure_memory_adaptation_visible",
+        failure_memory.get("version") == "failure_memory_adaptation_audit_v1"
+        and failure_memory.get("passed") is True
+        and failure_memory.get("not_external_evidence") is True
+        and int(failure_memory_metrics.get("memory_signature_count", 0) or 0) >= 2000
+        and int(failure_memory_metrics.get("frontiers_covered", 0) or 0) >= 1600
+        and float(failure_memory_metrics.get("memory_breach_future_breach_correlation", 0.0) or 0.0) >= 0.90
+        and float(failure_memory_metrics.get("high_low_future_breach_gap", 0.0) or 0.0) >= 0.04
+        and float(failure_memory_metrics.get("high_low_future_utility_gap", 0.0) or 0.0) <= -0.12
+        and float(failure_memory_comparison.get("high_memory_future_breach_delta", 0.0) or 0.0) <= -0.06
+        and float(failure_memory_comparison.get("high_memory_future_utility_delta", 0.0) or 0.0) >= 0.20
+        and (ROOT / "paper" / "generated_failure_memory_adaptation_table.tex").exists(),
+        (
+            f"signatures={failure_memory_metrics.get('memory_signature_count')!r}, "
+            f"frontiers={failure_memory_metrics.get('frontiers_covered')!r}, "
+            f"corr={failure_memory_metrics.get('memory_breach_future_breach_correlation')!r}, "
+            f"breach_delta={failure_memory_comparison.get('high_memory_future_breach_delta')!r}"
+        ),
+    )
     local_model_release_checks = {check.get("name"): check.get("passed") for check in local_model_release.get("checks", []) or []}
     add_check(
         checks,
@@ -885,6 +909,7 @@ def main() -> int:
         "ledger_tracks_new_visible_claims",
         {
             "local_planner_edge_policy_claim",
+            "local_failure_memory_adaptation_claim",
             "local_model_release_claim",
             "external_platform_probe_claim",
             "maniskill_task_binding_probe_claim",
@@ -919,13 +944,14 @@ def main() -> int:
             "external_config_materialization_claim",
             "reviewer_response_packet_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'local_planner_edge_policy_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'external_config_manifest_packet_claim', 'external_config_evidence_hash_gate_claim', 'external_rollout_evidence_packet_claim', 'external_strict_video_evidence_gate_claim', 'external_ablation_collection_packet_claim', 'external_evidence_intake_ledger_claim', 'external_precollection_manifest_draft_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
+        f"missing={sorted({'local_planner_edge_policy_claim', 'local_failure_memory_adaptation_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'external_config_manifest_packet_claim', 'external_config_evidence_hash_gate_claim', 'external_rollout_evidence_packet_claim', 'external_strict_video_evidence_gate_claim', 'external_ablation_collection_packet_claim', 'external_evidence_intake_ledger_claim', 'external_precollection_manifest_draft_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
         "README": [
             "adaptive physical world/action model for skill seams",
             "Planner-edge policy audit",
+            "Failure-memory adaptation audit",
             "Local model release card",
             "External config materialization plan",
             "External analysis plan",
@@ -987,6 +1013,7 @@ def main() -> int:
         "final_audit": [
             "External config materialization plan",
             "Planner-edge policy audit",
+            "Failure-memory adaptation audit",
             "Local model release card",
             "External analysis plan",
             "External platform probe",
@@ -1048,6 +1075,7 @@ def main() -> int:
         "readiness_decision": [
             "guarded config materialization plan",
             "planner-edge policy audit",
+            "failure-memory adaptation audit",
             "local model release card",
             "external analysis plan",
             "external platform probe",
@@ -1109,6 +1137,7 @@ def main() -> int:
         "readiness_audit": [
             "External config materialization plan",
             "Planner-edge policy audit",
+            "Failure-memory adaptation audit",
             "Local model release card",
             "External analysis plan",
             "External platform probe",
@@ -1170,6 +1199,7 @@ def main() -> int:
         "version_log": [
             "scripts/materialize_external_configs.py",
             "scripts/audit_planner_edge_policy.py",
+            "scripts/audit_failure_memory_adaptation.py",
             "scripts/build_local_model_release.py",
             "scripts/build_external_analysis_plan.py",
             "scripts/probe_external_platform.py",
@@ -1234,6 +1264,7 @@ def main() -> int:
         "child_status": [
             "external config materialization plan",
             "planner-edge policy audit",
+            "failure-memory adaptation audit",
             "local model release card",
             "external analysis plan",
             "external platform probe",
@@ -1319,6 +1350,7 @@ def main() -> int:
         "reviewer": [
             "Not evidence: `true`.",
             "adaptive physical world/action models for skill seams",
+            "failure-memory adaptation audit",
             "do not list many papers",
             "not for them to be responsible for supplying the missing proof",
             "does not change the current STRONG_REVISE decision",
@@ -1365,7 +1397,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the strict MP4 video evidence gate, the strict full-method coverage gate, the strict rollout sample-count gate, the strict paired-panel gate, the strict rollout uniqueness gate, confidence-gated external rollout statistics, the final rollout confidence summary gate, the strict task-config hash gate, the strict policy/config hash gate, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, atomic official evidence promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, and ManiSkill render machine qualification packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the manifest assembly checklist, the External manifest builder self-test, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the failure-memory adaptation audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the strict MP4 video evidence gate, the strict full-method coverage gate, the strict rollout sample-count gate, the strict paired-panel gate, the strict rollout uniqueness gate, confidence-gated external rollout statistics, the final rollout confidence summary gate, the strict task-config hash gate, the strict policy/config hash gate, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, atomic official evidence promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, and ManiSkill render machine qualification packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the manifest assembly checklist, the External manifest builder self-test, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

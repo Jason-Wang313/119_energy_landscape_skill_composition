@@ -6,7 +6,7 @@ Local model release ready: `true`.
 External evidence ready: `false`.
 Manifest: `results/local_model_release_manifest.json`.
 Model card: `docs/local_model_release.md`.
-Release hash: `5CF7C6E592517ECC40371074F6341C489BCAB11E5358E6BA053CB3AD241B5929`.
+Release hash: `546D8DA38D310FBB51EBFC15C41DFD7A9058EC1631EA60019501378FD487A57D`.
 
 ## Checks
 
@@ -21,4 +21,4 @@ Release hash: `5CF7C6E592517ECC40371074F6341C489BCAB11E5358E6BA053CB3AD241B5929`
 - `pass` `reference_adapter_artifacts_hash_locked`: missing=[]
 - `pass` `explicitly_not_external_evidence`: not_external_evidence=True, external_evidence_ready=False
 - `pass` `not_a_robot_policy_checkpoint`: local deterministic seam model only
-- `pass` `release_hash_present`: 5CF7C6E592517ECC40371074F6341C489BCAB11E5358E6BA053CB3AD241B5929
+- `pass` `release_hash_present`: 546D8DA38D310FBB51EBFC15C41DFD7A9058EC1631EA60019501378FD487A57D

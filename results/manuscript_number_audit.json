@@ -127,6 +127,30 @@
       "source": "results/planner_edge_policy_audit.json positive group counts"
     },
     {
+      "expected": "This yields 2,210 observed-to-held-out signature pairs over 1,667 frontiers",
+      "name": "failure_memory_signature_count_sentence",
+      "passed": true,
+      "source": "results/failure_memory_adaptation_audit.json signature and frontier counts"
+    },
+    {
+      "expected": "Observed breach predicts held-out breach with correlation 0.957 and MAE 0.005, improving on held-out predicted-risk MAE by 0.003",
+      "name": "failure_memory_predictive_sentence",
+      "passed": true,
+      "source": "results/failure_memory_adaptation_audit.json predictive memory metrics"
+    },
+    {
+      "expected": "High-memory-risk signatures have held-out breach 0.120 versus 0.074 for low-memory-risk signatures, and held-out utility 0.796 versus 0.956",
+      "name": "failure_memory_high_low_sentence",
+      "passed": true,
+      "source": "results/failure_memory_adaptation_audit.json high/low memory metrics"
+    },
+    {
+      "expected": "Against the predecessor's high-memory-risk signatures, v5 reduces future breach by 0.083 and raises future utility by 0.248",
+      "name": "failure_memory_predecessor_sentence",
+      "passed": true,
+      "source": "results/failure_memory_adaptation_audit.json predecessor comparison"
+    },
+    {
       "expected": "ten-bin local calibration error between predicted seam risk and realized seam breach is 0.007, compared with 0.015 for the strongest predecessor; the maximum bin gap is 0.013",
       "name": "calibration_ece_sentence",
       "passed": true,
@@ -325,6 +349,30 @@
       "source": "generated table derived from result JSON/CSV"
     },
     {
+      "expected": "2,210 observed-to-held-out signature pairs",
+      "name": "failure_memory_table_signature_pairs",
+      "passed": true,
+      "source": "generated table derived from result JSON/CSV"
+    },
+    {
+      "expected": "r=0.957",
+      "name": "failure_memory_table_correlation",
+      "passed": true,
+      "source": "generated table derived from result JSON/CSV"
+    },
+    {
+      "expected": "held-out breach 0.120",
+      "name": "failure_memory_table_high_breach",
+      "passed": true,
+      "source": "generated table derived from result JSON/CSV"
+    },
+    {
+      "expected": "breach lower by 0.083",
+      "name": "failure_memory_table_predecessor_delta",
+      "passed": true,
+      "source": "generated table derived from result JSON/CSV"
+    },
+    {
       "expected": "ECE10 0.007 vs strongest baseline 0.015",
       "name": "calibration_table_ece",
       "passed": true,
@@ -378,6 +426,7 @@
     "paper/generated_diagnostic_mechanism_table.tex",
     "paper/generated_decision_quality_table.tex",
     "paper/generated_planner_edge_policy_table.tex",
+    "paper/generated_failure_memory_adaptation_table.tex",
     "paper/generated_seam_prediction_calibration_table.tex"
   ],
   "version": "manuscript_number_audit_v1"

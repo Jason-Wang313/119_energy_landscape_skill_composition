@@ -86,7 +86,7 @@
     "dynamics_mismatch",
     "combined_seam_stress"
   ],
-  "release_hash": "5CF7C6E592517ECC40371074F6341C489BCAB11E5358E6BA053CB3AD241B5929",
+  "release_hash": "546D8DA38D310FBB51EBFC15C41DFD7A9058EC1631EA60019501378FD487A57D",
   "result_artifacts": [
     {
       "exists": true,
@@ -121,6 +121,11 @@
       "exists": true,
       "path": "results/planner_edge_policy_audit.json",
       "sha256": "817A4483C10936022E7193AABFF793945FE8EF79792AA6604D4F91421FB2EA49"
+    },
+    {
+      "exists": true,
+      "path": "results/failure_memory_adaptation_audit.json",
+      "sha256": "FF81D1851CE4B05B15D0CB08E7554A1A744608FFEE0AF9F4E3BE07918AF6B4BE"
     },
     {
       "exists": true,

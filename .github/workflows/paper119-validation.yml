@@ -40,6 +40,9 @@ jobs:
       - name: Audit planner-edge policy quality
         run: python scripts/audit_planner_edge_policy.py
 
+      - name: Audit failure-memory adaptation
+        run: python scripts/audit_failure_memory_adaptation.py
+
       - name: Build local model release card
         run: python scripts/build_local_model_release.py
 

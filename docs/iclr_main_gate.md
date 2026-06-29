@@ -27,7 +27,7 @@ Local evidence digest:
 - Comparative decision-quality audit: accept coverage `0.404` vs `0.000`, accepted-seam breach above the `0.15` budget rate `0.000`, and 3,850 recovered predecessor-abstained accepts with utility `+0.243`, success `+0.091`, and realized breach `-0.077`.
 - External execution readiness audit: independent operator packet ready for a 1,440-record high-fidelity validation run, but explicitly non-evidence until real manifest-declared logs, configs, videos, checkpoints, and implementations exist.
 - External reference adapter audit: 12 executable implementation-only adapters, including 11 non-oracle baselines, pass the API contract and remove validation-harness ambiguity; they are not robot or high-fidelity rollout evidence.
-- External local dry run: 1,440 external-schema JSONL records are generated from the frozen local suite and recomputed successfully as a plumbing check; they are not external evidence.
+- External local dry run: 20,640 external-schema JSONL records are generated from the frozen local suite and recomputed successfully as a plumbing check; they are not external evidence.
 - Figure readability audit: all seven main figure companions pass render-resolution, contrast, margin, and manuscript-reference checks.
 - Camera-ready design audit: all 30 rendered PDF pages pass nonblank, density, contrast, margin, sparse-page, canonical-parity, and text-anchor checks.
 - Manuscript readability audit: central framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and stale manual-polish blocker removal pass.

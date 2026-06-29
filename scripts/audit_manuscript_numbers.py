@@ -47,6 +47,7 @@ def main() -> int:
     diagnostic = read_json(RESULTS / "diagnostic_mechanism_audit.json")
     decision_quality = read_json(RESULTS / "decision_quality_audit.json")
     planner_policy = read_json(RESULTS / "planner_edge_policy_audit.json")
+    failure_memory = read_json(RESULTS / "failure_memory_adaptation_audit.json")
     calibration = read_json(RESULTS / "seam_prediction_calibration_audit.json")
     tex_path = PAPER / "main.tex"
     if not tex_path.exists():
@@ -58,6 +59,7 @@ def main() -> int:
     diagnostic_table = (PAPER / "generated_diagnostic_mechanism_table.tex").read_text(encoding="utf-8")
     decision_table = (PAPER / "generated_decision_quality_table.tex").read_text(encoding="utf-8")
     planner_table = (PAPER / "generated_planner_edge_policy_table.tex").read_text(encoding="utf-8")
+    failure_memory_table = (PAPER / "generated_failure_memory_adaptation_table.tex").read_text(encoding="utf-8")
     calibration_table = (PAPER / "generated_seam_prediction_calibration_table.tex").read_text(encoding="utf-8")
 
     metrics = summary.get("metrics", {})
@@ -69,6 +71,8 @@ def main() -> int:
     diagnostic_metrics = diagnostic.get("metrics", {})
     decision_metrics = decision_quality.get("metrics", {})
     planner_metrics = planner_policy.get("metrics", {})
+    failure_memory_metrics = failure_memory.get("proposed_metrics", {})
+    failure_memory_comparison = failure_memory.get("comparison", {})
     calibration_metrics = calibration.get("proposed_metrics", {})
     calibration_baseline = calibration.get("strongest_baseline_metrics", {})
     calibration_derived = calibration.get("derived", {})
@@ -276,6 +280,52 @@ def main() -> int:
     )
     add_check(
         checks,
+        "failure_memory_signature_count_sentence",
+        (
+            f"This yields {int(failure_memory_metrics['memory_signature_count']):,} observed-to-held-out signature pairs "
+            f"over {int(failure_memory_metrics['frontiers_covered']):,} frontiers"
+        ),
+        tex,
+        "results/failure_memory_adaptation_audit.json signature and frontier counts",
+    )
+    add_check(
+        checks,
+        "failure_memory_predictive_sentence",
+        (
+            f"Observed breach predicts held-out breach with correlation "
+            f"{fmt(failure_memory_metrics['memory_breach_future_breach_correlation'], 3)} and MAE "
+            f"{fmt(failure_memory_metrics['memory_breach_mae'], 3)}, improving on held-out predicted-risk MAE by "
+            f"{fmt(failure_memory_metrics['memory_mae_improvement_over_future_predicted_risk'], 3)}"
+        ),
+        tex,
+        "results/failure_memory_adaptation_audit.json predictive memory metrics",
+    )
+    add_check(
+        checks,
+        "failure_memory_high_low_sentence",
+        (
+            f"High-memory-risk signatures have held-out breach "
+            f"{fmt(failure_memory_metrics['high_memory_future_breach'], 3)} versus "
+            f"{fmt(failure_memory_metrics['low_memory_future_breach'], 3)} for low-memory-risk signatures, "
+            f"and held-out utility {fmt(failure_memory_metrics['high_memory_future_utility'], 3)} versus "
+            f"{fmt(failure_memory_metrics['low_memory_future_utility'], 3)}"
+        ),
+        tex,
+        "results/failure_memory_adaptation_audit.json high/low memory metrics",
+    )
+    add_check(
+        checks,
+        "failure_memory_predecessor_sentence",
+        (
+            f"Against the predecessor's high-memory-risk signatures, v5 reduces future breach by "
+            f"{fmt(-failure_memory_comparison['high_memory_future_breach_delta'], 3)} and raises future utility by "
+            f"{fmt(failure_memory_comparison['high_memory_future_utility_delta'], 3)}"
+        ),
+        tex,
+        "results/failure_memory_adaptation_audit.json predecessor comparison",
+    )
+    add_check(
+        checks,
         "calibration_ece_sentence",
         (
             f"ten-bin local calibration error between predicted seam risk and realized seam breach is "
@@ -413,6 +463,10 @@ def main() -> int:
         ("planner_table_executable_coverage", f"executable-edge coverage {fmt(planner_metrics['proposed_executable_edge_coverage'], 3)} vs {fmt(planner_metrics['baseline_executable_edge_coverage'], 3)}", planner_table),
         ("planner_table_selected_utility", f"selected-edge utility {fmt(planner_metrics['proposed_selected_utility'], 3)} vs {fmt(planner_metrics['baseline_selected_utility'], 3)}", planner_table),
         ("planner_table_safety", f"success delta {float(planner_metrics['selected_success_delta']):+.3f}", planner_table),
+        ("failure_memory_table_signature_pairs", f"{int(failure_memory_metrics['memory_signature_count']):,} observed-to-held-out signature pairs", failure_memory_table),
+        ("failure_memory_table_correlation", f"r={fmt(failure_memory_metrics['memory_breach_future_breach_correlation'], 3)}", failure_memory_table),
+        ("failure_memory_table_high_breach", f"held-out breach {fmt(failure_memory_metrics['high_memory_future_breach'], 3)}", failure_memory_table),
+        ("failure_memory_table_predecessor_delta", f"breach lower by {abs(float(failure_memory_comparison['high_memory_future_breach_delta'])):.3f}", failure_memory_table),
         ("calibration_table_ece", f"ECE10 {fmt(calibration_metrics['expected_calibration_error_10'], 3)} vs strongest baseline {fmt(calibration_baseline['expected_calibration_error_10'], 3)}", calibration_table),
         ("calibration_table_correlation", f"risk-breach correlation {fmt(calibration_metrics['risk_breach_correlation'], 3)}, Spearman {fmt(calibration_metrics['risk_breach_spearman'], 3)}", calibration_table),
         ("calibration_table_decision_relevance", f"utility is lower by {fmt(-calibration_derived['highest_lowest_decile_utility_delta'], 3)}", calibration_table),
@@ -444,6 +498,7 @@ def main() -> int:
             "paper/generated_diagnostic_mechanism_table.tex",
             "paper/generated_decision_quality_table.tex",
             "paper/generated_planner_edge_policy_table.tex",
+            "paper/generated_failure_memory_adaptation_table.tex",
             "paper/generated_seam_prediction_calibration_table.tex",
         ],
     }

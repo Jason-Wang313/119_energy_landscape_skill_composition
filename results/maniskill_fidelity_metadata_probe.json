@@ -28,7 +28,7 @@
       "passed": true
     },
     {
-      "detail": "missing_asset_ids=['oakink-v2', 'ycb']",
+      "detail": "missing_asset_ids=[]",
       "name": "asset_requirements_reported",
       "passed": true
     },
@@ -42,33 +42,28 @@
   "env_records": [
     {
       "closed": false,
-      "elapsed_seconds": 27.130201,
+      "elapsed_seconds": null,
       "env_id": "InsertFlower-v1",
-      "error": "EOF when reading a line",
-      "error_type": "EOFError",
-      "import_error": "",
+      "error": "timed out after 90s",
+      "error_type": "TimeoutExpired",
       "made_env": false,
       "metadata": {},
-      "missing_asset_ids": [
-        "oakink-v2"
-      ],
+      "missing_asset_ids": [],
       "primary_for": [],
-      "required_asset_ids": [
-        "oakink-v2"
-      ],
+      "required_asset_ids": [],
       "reset_ok": false,
       "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n",
-      "stdout_tail": "Could not find asset oakink-v2 at C:\\Users\\wangz\\.maniskill\\data\\tasks\\oakink-v2\n\n-------------------------\nEnvironment InsertFlower-v1 requires asset(s) oakink-v2 which could not be found. Would you like to download them now?\n(y|n): PAPER119_MANISKILL_FIDELITY_METADATA {\"closed\": false, \"elapsed_seconds\": 27.130201, \"env_id\": \"InsertFlower-v1\", \"error\": \"EOF when reading a line\", \"error_type\": \"EOFError\", \"import_error\": \"\", \"made_env\": false, \"metadata\": {}, \"missing_asset_ids\": [\"oakink-v2\"], \"required_asset_ids\": [\"oakink-v2\"], \"reset_ok\": false, \"traceback_tail\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 84, in <module>\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\gymnasium\\\\envs\\\\registration.py\\\", line 734, in make\\n    env = env_creator(**env_spec_kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 182, in make\\n    env = env_spec.make(**kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 70, in make\\n    response = download_asset.prompt_yes_no(\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\download_asset.py\\\", line 28, in prompt_yes_no\\n    answer = input(\\\"(y|n): \\\")\\nEOFError: EOF when reading a line\\n\"}\n",
-      "subprocess_returncode": 0,
-      "subprocess_timeout": false,
+      "stdout_tail": "Could not find asset oakink-v2 at C:\\Users\\wangz\\.maniskill\\data\\tasks\\oakink-v2\n\n-------------------------\nEnvironment InsertFlower-v1 requires asset(s) oakink-v2 which could not be found. Would you like to download them now?\n(y|n): ",
+      "subprocess_returncode": null,
+      "subprocess_timeout": true,
       "support_for": [
         "cable_route_insert"
       ],
-      "traceback_tail": "Traceback (most recent call last):\n  File \"<string>\", line 84, in <module>\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\gymnasium\\envs\\registration.py\", line 734, in make\n    env = env_creator(**env_spec_kwargs)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\registration.py\", line 182, in make\n    env = env_spec.make(**kwargs)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\registration.py\", line 70, in make\n    response = download_asset.prompt_yes_no(\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\download_asset.py\", line 28, in prompt_yes_no\n    answer = input(\"(y|n): \")\nEOFError: EOF when reading a line\n"
+      "traceback_tail": ""
     },
     {
       "closed": true,
-      "elapsed_seconds": 33.23973,
+      "elapsed_seconds": 32.908724,
       "env_id": "OpenCabinetDoor-v1",
       "error": "",
       "error_type": "",
@@ -115,8 +110,8 @@
       ],
       "required_asset_ids": [],
       "reset_ok": true,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 12:36:29,013 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
-      "stdout_tail": "PAPER119_MANISKILL_FIDELITY_METADATA {\"closed\": true, \"elapsed_seconds\": 33.23973, \"env_id\": \"OpenCabinetDoor-v1\", \"error\": \"\", \"error_type\": \"\", \"import_error\": \"\", \"made_env\": true, \"metadata\": {\"agent_class\": \"Fetch\", \"agent_uid\": \"fetch\", \"available_controller_names\": [\"pd_joint_delta_pos\"], \"control_freq_hz\": 20, \"control_timestep_seconds\": 0.05, \"controller_repr\": \"CombinedController(dof=13, active_joints=15\\n    arm: PDJointPosController(dof=7, active_joints=7, joints=(shoulder_pan_joint, shoulder_lift_joint, upperarm_roll_joint, elbow_flex_joint, forearm_roll_joint, wrist_flex_joint, wrist_roll_joint))\\n    gripper: PDJointPosMimicController(dof=1, active_joints=2, mimic_to_control_joint_map={\\n        r_gripper_finger_joint: l_gripper_finger_joint,\\n    })\\n    body: PDJointPosController(dof=3, active_joints=3, joints=(head_pan_joint, head_tilt_joint, torso_lift_joint))\\n    base: PDBaseForwardVelController(dof=2, active_joints=3, joints=(root_x_axis_joint, root_y_axis_joint, root_z_rotation_joint))\\n)\", \"controller_type\": \"CombinedController\", \"derived_substeps_per_control_step\": 5.0, \"device\": \"device(type='cpu')\", \"env_class\": \"OpenCabinetDoorEnv\", \"gpu_sim_enabled\": false, \"info_keys\": [\"elapsed_steps\", \"handle_link_pos\", \"open_enough\", \"reconfigure\", \"success\"], \"num_envs\": 1, \"obs_mode\": \"state\", \"observation_shape\": \"torch.Size([1, 44])\", \"observation_space\": \"Box(-inf, inf, (1, 44), float32)\", \"observation_type\": \"Tensor\", \"render_mode\": null, \"reward_mode\": \"normalized_dense\", \"robot_repr\": \"<fetch: struct of type <class 'mani_skill.utils.structs.articulation.Articulation'>; managing 1 <class 'sapien.pysapien.physx.PhysxArticulation'> objects>\", \"scene_backend_type\": \"PhysxCpuSystem\", \"scene_timestep_seconds\": 0.009999999776482582, \"scene_type\": \"ManiSkillScene\", \"sim_freq_hz\": 100, \"sim_timestep_seconds\": 0.01}, \"missing_asset_ids\": [], \"required_asset_ids\": [], \"reset_ok\": true, \"traceback_tail\": \"\"}\n",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-29 20:53:12,079 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stdout_tail": "PAPER119_MANISKILL_FIDELITY_METADATA {\"closed\": true, \"elapsed_seconds\": 32.908724, \"env_id\": \"OpenCabinetDoor-v1\", \"error\": \"\", \"error_type\": \"\", \"import_error\": \"\", \"made_env\": true, \"metadata\": {\"agent_class\": \"Fetch\", \"agent_uid\": \"fetch\", \"available_controller_names\": [\"pd_joint_delta_pos\"], \"control_freq_hz\": 20, \"control_timestep_seconds\": 0.05, \"controller_repr\": \"CombinedController(dof=13, active_joints=15\\n    arm: PDJointPosController(dof=7, active_joints=7, joints=(shoulder_pan_joint, shoulder_lift_joint, upperarm_roll_joint, elbow_flex_joint, forearm_roll_joint, wrist_flex_joint, wrist_roll_joint))\\n    gripper: PDJointPosMimicController(dof=1, active_joints=2, mimic_to_control_joint_map={\\n        r_gripper_finger_joint: l_gripper_finger_joint,\\n    })\\n    body: PDJointPosController(dof=3, active_joints=3, joints=(head_pan_joint, head_tilt_joint, torso_lift_joint))\\n    base: PDBaseForwardVelController(dof=2, active_joints=3, joints=(root_x_axis_joint, root_y_axis_joint, root_z_rotation_joint))\\n)\", \"controller_type\": \"CombinedController\", \"derived_substeps_per_control_step\": 5.0, \"device\": \"device(type='cpu')\", \"env_class\": \"OpenCabinetDoorEnv\", \"gpu_sim_enabled\": false, \"info_keys\": [\"elapsed_steps\", \"handle_link_pos\", \"open_enough\", \"reconfigure\", \"success\"], \"num_envs\": 1, \"obs_mode\": \"state\", \"observation_shape\": \"torch.Size([1, 44])\", \"observation_space\": \"Box(-inf, inf, (1, 44), float32)\", \"observation_type\": \"Tensor\", \"render_mode\": null, \"reward_mode\": \"normalized_dense\", \"robot_repr\": \"<fetch: struct of type <class 'mani_skill.utils.structs.articulation.Articulation'>; managing 1 <class 'sapien.pysapien.physx.PhysxArticulation'> objects>\", \"scene_backend_type\": \"PhysxCpuSystem\", \"scene_timestep_seconds\": 0.009999999776482582, \"scene_type\": \"ManiSkillScene\", \"sim_freq_hz\": 100, \"sim_timestep_seconds\": 0.01}, \"missing_asset_ids\": [], \"required_asset_ids\": [], \"reset_ok\": true, \"traceback_tail\": \"\"}\n",
       "subprocess_returncode": 0,
       "subprocess_timeout": false,
       "support_for": [],
@@ -124,7 +119,7 @@
     },
     {
       "closed": true,
-      "elapsed_seconds": 24.789931,
+      "elapsed_seconds": 30.942019,
       "env_id": "OpenCabinetDrawer-v1",
       "error": "",
       "error_type": "",
@@ -173,8 +168,8 @@
         "partnet_mobility_cabinet"
       ],
       "reset_ok": true,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 12:36:57,050 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
-      "stdout_tail": "PAPER119_MANISKILL_FIDELITY_METADATA {\"closed\": true, \"elapsed_seconds\": 24.789931, \"env_id\": \"OpenCabinetDrawer-v1\", \"error\": \"\", \"error_type\": \"\", \"import_error\": \"\", \"made_env\": true, \"metadata\": {\"agent_class\": \"Fetch\", \"agent_uid\": \"fetch\", \"available_controller_names\": [\"pd_joint_delta_pos\"], \"control_freq_hz\": 20, \"control_timestep_seconds\": 0.05, \"controller_repr\": \"CombinedController(dof=13, active_joints=15\\n    arm: PDJointPosController(dof=7, active_joints=7, joints=(shoulder_pan_joint, shoulder_lift_joint, upperarm_roll_joint, elbow_flex_joint, forearm_roll_joint, wrist_flex_joint, wrist_roll_joint))\\n    gripper: PDJointPosMimicController(dof=1, active_joints=2, mimic_to_control_joint_map={\\n        r_gripper_finger_joint: l_gripper_finger_joint,\\n    })\\n    body: PDJointPosController(dof=3, active_joints=3, joints=(head_pan_joint, head_tilt_joint, torso_lift_joint))\\n    base: PDBaseForwardVelController(dof=2, active_joints=3, joints=(root_x_axis_joint, root_y_axis_joint, root_z_rotation_joint))\\n)\", \"controller_type\": \"CombinedController\", \"derived_substeps_per_control_step\": 5.0, \"device\": \"device(type='cpu')\", \"env_class\": \"OpenCabinetDrawerEnv\", \"gpu_sim_enabled\": false, \"info_keys\": [\"elapsed_steps\", \"handle_link_pos\", \"open_enough\", \"reconfigure\", \"success\"], \"num_envs\": 1, \"obs_mode\": \"state\", \"observation_shape\": \"torch.Size([1, 44])\", \"observation_space\": \"Box(-inf, inf, (1, 44), float32)\", \"observation_type\": \"Tensor\", \"render_mode\": null, \"reward_mode\": \"normalized_dense\", \"robot_repr\": \"<fetch: struct of type <class 'mani_skill.utils.structs.articulation.Articulation'>; managing 1 <class 'sapien.pysapien.physx.PhysxArticulation'> objects>\", \"scene_backend_type\": \"PhysxCpuSystem\", \"scene_timestep_seconds\": 0.009999999776482582, \"scene_type\": \"ManiSkillScene\", \"sim_freq_hz\": 100, \"sim_timestep_seconds\": 0.01}, \"missing_asset_ids\": [], \"required_asset_ids\": [\"partnet_mobility_cabinet\"], \"reset_ok\": true, \"traceback_tail\": \"\"}\n",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-29 20:53:44,897 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stdout_tail": "PAPER119_MANISKILL_FIDELITY_METADATA {\"closed\": true, \"elapsed_seconds\": 30.942019, \"env_id\": \"OpenCabinetDrawer-v1\", \"error\": \"\", \"error_type\": \"\", \"import_error\": \"\", \"made_env\": true, \"metadata\": {\"agent_class\": \"Fetch\", \"agent_uid\": \"fetch\", \"available_controller_names\": [\"pd_joint_delta_pos\"], \"control_freq_hz\": 20, \"control_timestep_seconds\": 0.05, \"controller_repr\": \"CombinedController(dof=13, active_joints=15\\n    arm: PDJointPosController(dof=7, active_joints=7, joints=(shoulder_pan_joint, shoulder_lift_joint, upperarm_roll_joint, elbow_flex_joint, forearm_roll_joint, wrist_flex_joint, wrist_roll_joint))\\n    gripper: PDJointPosMimicController(dof=1, active_joints=2, mimic_to_control_joint_map={\\n        r_gripper_finger_joint: l_gripper_finger_joint,\\n    })\\n    body: PDJointPosController(dof=3, active_joints=3, joints=(head_pan_joint, head_tilt_joint, torso_lift_joint))\\n    base: PDBaseForwardVelController(dof=2, active_joints=3, joints=(root_x_axis_joint, root_y_axis_joint, root_z_rotation_joint))\\n)\", \"controller_type\": \"CombinedController\", \"derived_substeps_per_control_step\": 5.0, \"device\": \"device(type='cpu')\", \"env_class\": \"OpenCabinetDrawerEnv\", \"gpu_sim_enabled\": false, \"info_keys\": [\"elapsed_steps\", \"handle_link_pos\", \"open_enough\", \"reconfigure\", \"success\"], \"num_envs\": 1, \"obs_mode\": \"state\", \"observation_shape\": \"torch.Size([1, 44])\", \"observation_space\": \"Box(-inf, inf, (1, 44), float32)\", \"observation_type\": \"Tensor\", \"render_mode\": null, \"reward_mode\": \"normalized_dense\", \"robot_repr\": \"<fetch: struct of type <class 'mani_skill.utils.structs.articulation.Articulation'>; managing 1 <class 'sapien.pysapien.physx.PhysxArticulation'> objects>\", \"scene_backend_type\": \"PhysxCpuSystem\", \"scene_timestep_seconds\": 0.009999999776482582, \"scene_type\": \"ManiSkillScene\", \"sim_freq_hz\": 100, \"sim_timestep_seconds\": 0.01}, \"missing_asset_ids\": [], \"required_asset_ids\": [\"partnet_mobility_cabinet\"], \"reset_ok\": true, \"traceback_tail\": \"\"}\n",
       "subprocess_returncode": 0,
       "subprocess_timeout": false,
       "support_for": [],
@@ -182,7 +177,7 @@
     },
     {
       "closed": true,
-      "elapsed_seconds": 23.538408,
+      "elapsed_seconds": 29.788658,
       "env_id": "PegInsertionSide-v1",
       "error": "",
       "error_type": "",
@@ -228,8 +223,8 @@
       ],
       "required_asset_ids": [],
       "reset_ok": true,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 12:37:24,442 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
-      "stdout_tail": "PAPER119_MANISKILL_FIDELITY_METADATA {\"closed\": true, \"elapsed_seconds\": 23.538408, \"env_id\": \"PegInsertionSide-v1\", \"error\": \"\", \"error_type\": \"\", \"import_error\": \"\", \"made_env\": true, \"metadata\": {\"agent_class\": \"PandaWristCam\", \"agent_uid\": \"panda_wristcam\", \"available_controller_names\": [\"pd_joint_delta_pos\"], \"control_freq_hz\": 20, \"control_timestep_seconds\": 0.05, \"controller_repr\": \"CombinedController(dof=8, active_joints=9\\n    arm: PDJointPosController(dof=7, active_joints=7, joints=(panda_joint1, panda_joint2, panda_joint3, panda_joint4, panda_joint5, panda_joint6, panda_joint7))\\n    gripper: PDJointPosMimicController(dof=1, active_joints=2, mimic_to_control_joint_map={\\n        panda_finger_joint2: panda_finger_joint1,\\n    })\\n)\", \"controller_type\": \"CombinedController\", \"derived_substeps_per_control_step\": 5.0, \"device\": \"device(type='cpu')\", \"env_class\": \"PegInsertionSideEnv\", \"gpu_sim_enabled\": false, \"info_keys\": [\"elapsed_steps\", \"peg_head_pos_at_hole\", \"reconfigure\", \"success\"], \"num_envs\": 1, \"obs_mode\": \"state\", \"observation_shape\": \"torch.Size([1, 43])\", \"observation_space\": \"Box(-inf, inf, (1, 43), float32)\", \"observation_type\": \"Tensor\", \"render_mode\": null, \"reward_mode\": \"normalized_dense\", \"robot_repr\": \"<panda_wristcam: struct of type <class 'mani_skill.utils.structs.articulation.Articulation'>; managing 1 <class 'sapien.pysapien.physx.PhysxArticulation'> objects>\", \"scene_backend_type\": \"PhysxCpuSystem\", \"scene_timestep_seconds\": 0.009999999776482582, \"scene_type\": \"ManiSkillScene\", \"sim_freq_hz\": 100, \"sim_timestep_seconds\": 0.01}, \"missing_asset_ids\": [], \"required_asset_ids\": [], \"reset_ok\": true, \"traceback_tail\": \"\"}\n",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-29 20:54:18,477 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stdout_tail": "PAPER119_MANISKILL_FIDELITY_METADATA {\"closed\": true, \"elapsed_seconds\": 29.788658, \"env_id\": \"PegInsertionSide-v1\", \"error\": \"\", \"error_type\": \"\", \"import_error\": \"\", \"made_env\": true, \"metadata\": {\"agent_class\": \"PandaWristCam\", \"agent_uid\": \"panda_wristcam\", \"available_controller_names\": [\"pd_joint_delta_pos\"], \"control_freq_hz\": 20, \"control_timestep_seconds\": 0.05, \"controller_repr\": \"CombinedController(dof=8, active_joints=9\\n    arm: PDJointPosController(dof=7, active_joints=7, joints=(panda_joint1, panda_joint2, panda_joint3, panda_joint4, panda_joint5, panda_joint6, panda_joint7))\\n    gripper: PDJointPosMimicController(dof=1, active_joints=2, mimic_to_control_joint_map={\\n        panda_finger_joint2: panda_finger_joint1,\\n    })\\n)\", \"controller_type\": \"CombinedController\", \"derived_substeps_per_control_step\": 5.0, \"device\": \"device(type='cpu')\", \"env_class\": \"PegInsertionSideEnv\", \"gpu_sim_enabled\": false, \"info_keys\": [\"elapsed_steps\", \"peg_head_pos_at_hole\", \"reconfigure\", \"success\"], \"num_envs\": 1, \"obs_mode\": \"state\", \"observation_shape\": \"torch.Size([1, 43])\", \"observation_space\": \"Box(-inf, inf, (1, 43), float32)\", \"observation_type\": \"Tensor\", \"render_mode\": null, \"reward_mode\": \"normalized_dense\", \"robot_repr\": \"<panda_wristcam: struct of type <class 'mani_skill.utils.structs.articulation.Articulation'>; managing 1 <class 'sapien.pysapien.physx.PhysxArticulation'> objects>\", \"scene_backend_type\": \"PhysxCpuSystem\", \"scene_timestep_seconds\": 0.009999999776482582, \"scene_type\": \"ManiSkillScene\", \"sim_freq_hz\": 100, \"sim_timestep_seconds\": 0.01}, \"missing_asset_ids\": [], \"required_asset_ids\": [], \"reset_ok\": true, \"traceback_tail\": \"\"}\n",
       "subprocess_returncode": 0,
       "subprocess_timeout": false,
       "support_for": [],
@@ -237,7 +232,7 @@
     },
     {
       "closed": true,
-      "elapsed_seconds": 21.539088,
+      "elapsed_seconds": 30.80584,
       "env_id": "PickCube-v1",
       "error": "",
       "error_type": "",
@@ -283,8 +278,8 @@
       "primary_for": [],
       "required_asset_ids": [],
       "reset_ok": true,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 12:37:50,131 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
-      "stdout_tail": "PAPER119_MANISKILL_FIDELITY_METADATA {\"closed\": true, \"elapsed_seconds\": 21.539088, \"env_id\": \"PickCube-v1\", \"error\": \"\", \"error_type\": \"\", \"import_error\": \"\", \"made_env\": true, \"metadata\": {\"agent_class\": \"Panda\", \"agent_uid\": \"panda\", \"available_controller_names\": [\"pd_joint_delta_pos\"], \"control_freq_hz\": 20, \"control_timestep_seconds\": 0.05, \"controller_repr\": \"CombinedController(dof=8, active_joints=9\\n    arm: PDJointPosController(dof=7, active_joints=7, joints=(panda_joint1, panda_joint2, panda_joint3, panda_joint4, panda_joint5, panda_joint6, panda_joint7))\\n    gripper: PDJointPosMimicController(dof=1, active_joints=2, mimic_to_control_joint_map={\\n        panda_finger_joint2: panda_finger_joint1,\\n    })\\n)\", \"controller_type\": \"CombinedController\", \"derived_substeps_per_control_step\": 5.0, \"device\": \"device(type='cpu')\", \"env_class\": \"PickCubeEnv\", \"gpu_sim_enabled\": false, \"info_keys\": [\"elapsed_steps\", \"is_grasped\", \"is_obj_placed\", \"is_robot_static\", \"reconfigure\", \"success\"], \"num_envs\": 1, \"obs_mode\": \"state\", \"observation_shape\": \"torch.Size([1, 42])\", \"observation_space\": \"Box(-inf, inf, (1, 42), float32)\", \"observation_type\": \"Tensor\", \"render_mode\": null, \"reward_mode\": \"normalized_dense\", \"robot_repr\": \"<panda: struct of type <class 'mani_skill.utils.structs.articulation.Articulation'>; managing 1 <class 'sapien.pysapien.physx.PhysxArticulation'> objects>\", \"scene_backend_type\": \"PhysxCpuSystem\", \"scene_timestep_seconds\": 0.009999999776482582, \"scene_type\": \"ManiSkillScene\", \"sim_freq_hz\": 100, \"sim_timestep_seconds\": 0.01}, \"missing_asset_ids\": [], \"required_asset_ids\": [], \"reset_ok\": true, \"traceback_tail\": \"\"}\n",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-29 20:54:55,334 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stdout_tail": "PAPER119_MANISKILL_FIDELITY_METADATA {\"closed\": true, \"elapsed_seconds\": 30.80584, \"env_id\": \"PickCube-v1\", \"error\": \"\", \"error_type\": \"\", \"import_error\": \"\", \"made_env\": true, \"metadata\": {\"agent_class\": \"Panda\", \"agent_uid\": \"panda\", \"available_controller_names\": [\"pd_joint_delta_pos\"], \"control_freq_hz\": 20, \"control_timestep_seconds\": 0.05, \"controller_repr\": \"CombinedController(dof=8, active_joints=9\\n    arm: PDJointPosController(dof=7, active_joints=7, joints=(panda_joint1, panda_joint2, panda_joint3, panda_joint4, panda_joint5, panda_joint6, panda_joint7))\\n    gripper: PDJointPosMimicController(dof=1, active_joints=2, mimic_to_control_joint_map={\\n        panda_finger_joint2: panda_finger_joint1,\\n    })\\n)\", \"controller_type\": \"CombinedController\", \"derived_substeps_per_control_step\": 5.0, \"device\": \"device(type='cpu')\", \"env_class\": \"PickCubeEnv\", \"gpu_sim_enabled\": false, \"info_keys\": [\"elapsed_steps\", \"is_grasped\", \"is_obj_placed\", \"is_robot_static\", \"reconfigure\", \"success\"], \"num_envs\": 1, \"obs_mode\": \"state\", \"observation_shape\": \"torch.Size([1, 42])\", \"observation_space\": \"Box(-inf, inf, (1, 42), float32)\", \"observation_type\": \"Tensor\", \"render_mode\": null, \"reward_mode\": \"normalized_dense\", \"robot_repr\": \"<panda: struct of type <class 'mani_skill.utils.structs.articulation.Articulation'>; managing 1 <class 'sapien.pysapien.physx.PhysxArticulation'> objects>\", \"scene_backend_type\": \"PhysxCpuSystem\", \"scene_timestep_seconds\": 0.009999999776482582, \"scene_type\": \"ManiSkillScene\", \"sim_freq_hz\": 100, \"sim_timestep_seconds\": 0.01}, \"missing_asset_ids\": [], \"required_asset_ids\": [], \"reset_ok\": true, \"traceback_tail\": \"\"}\n",
       "subprocess_returncode": 0,
       "subprocess_timeout": false,
       "support_for": [
@@ -294,33 +289,28 @@
     },
     {
       "closed": false,
-      "elapsed_seconds": 21.327533,
+      "elapsed_seconds": null,
       "env_id": "PickSingleYCB-v1",
-      "error": "EOF when reading a line",
-      "error_type": "EOFError",
-      "import_error": "",
+      "error": "timed out after 90s",
+      "error_type": "TimeoutExpired",
       "made_env": false,
       "metadata": {},
-      "missing_asset_ids": [
-        "ycb"
-      ],
+      "missing_asset_ids": [],
       "primary_for": [],
-      "required_asset_ids": [
-        "ycb"
-      ],
+      "required_asset_ids": [],
       "reset_ok": false,
       "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n",
-      "stdout_tail": "Could not find asset ycb at C:\\Users\\wangz\\.maniskill\\data\\assets\\mani_skill2_ycb\n\n-------------------------\nEnvironment PickSingleYCB-v1 requires asset(s) ycb which could not be found. Would you like to download them now?\n(y|n): PAPER119_MANISKILL_FIDELITY_METADATA {\"closed\": false, \"elapsed_seconds\": 21.327533, \"env_id\": \"PickSingleYCB-v1\", \"error\": \"EOF when reading a line\", \"error_type\": \"EOFError\", \"import_error\": \"\", \"made_env\": false, \"metadata\": {}, \"missing_asset_ids\": [\"ycb\"], \"required_asset_ids\": [\"ycb\"], \"reset_ok\": false, \"traceback_tail\": \"Traceback (most recent call last):\\n  File \\\"<string>\\\", line 84, in <module>\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\gymnasium\\\\envs\\\\registration.py\\\", line 734, in make\\n    env = env_creator(**env_spec_kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 182, in make\\n    env = env_spec.make(**kwargs)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\registration.py\\\", line 70, in make\\n    response = download_asset.prompt_yes_no(\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\download_asset.py\\\", line 28, in prompt_yes_no\\n    answer = input(\\\"(y|n): \\\")\\nEOFError: EOF when reading a line\\n\"}\n",
-      "subprocess_returncode": 0,
-      "subprocess_timeout": false,
+      "stdout_tail": "Could not find asset ycb at C:\\Users\\wangz\\.maniskill\\data\\assets\\mani_skill2_ycb\n\n-------------------------\nEnvironment PickSingleYCB-v1 requires asset(s) ycb which could not be found. Would you like to download them now?\n(y|n): ",
+      "subprocess_returncode": null,
+      "subprocess_timeout": true,
       "support_for": [
         "drawer_to_pick_transfer"
       ],
-      "traceback_tail": "Traceback (most recent call last):\n  File \"<string>\", line 84, in <module>\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\gymnasium\\envs\\registration.py\", line 734, in make\n    env = env_creator(**env_spec_kwargs)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\registration.py\", line 182, in make\n    env = env_spec.make(**kwargs)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\registration.py\", line 70, in make\n    response = download_asset.prompt_yes_no(\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\download_asset.py\", line 28, in prompt_yes_no\n    answer = input(\"(y|n): \")\nEOFError: EOF when reading a line\n"
+      "traceback_tail": ""
     },
     {
       "closed": true,
-      "elapsed_seconds": 25.977935,
+      "elapsed_seconds": 27.578441,
       "env_id": "PullCubeTool-v1",
       "error": "",
       "error_type": "",
@@ -370,8 +360,8 @@
       ],
       "required_asset_ids": [],
       "reset_ok": true,
-      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-28 12:38:41,371 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-28 12:38:42,126 - mani_skill  - WARNING - No initial pose set for articulation builder of panda, setting to default pose q=[1,0,0,0], p=[0,0,0]. There may be simulation issues/bugs if this articulation at it's initial pose collides with other objects at their initial poses.\u001b[0m\n\u001b[33;1m2026-06-28 12:38:42,344 - mani_skill  - WARNING - No initial pose set for actor builder of cube, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n\u001b[33;1m2026-06-28 12:38:42,348 - mani_skill  - WARNING - No initial pose set for actor builder of l_shape_tool, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n",
-      "stdout_tail": "PAPER119_MANISKILL_FIDELITY_METADATA {\"closed\": true, \"elapsed_seconds\": 25.977935, \"env_id\": \"PullCubeTool-v1\", \"error\": \"\", \"error_type\": \"\", \"import_error\": \"\", \"made_env\": true, \"metadata\": {\"agent_class\": \"Panda\", \"agent_uid\": \"panda\", \"available_controller_names\": [\"pd_joint_delta_pos\"], \"control_freq_hz\": 20, \"control_timestep_seconds\": 0.05, \"controller_repr\": \"CombinedController(dof=8, active_joints=9\\n    arm: PDJointPosController(dof=7, active_joints=7, joints=(panda_joint1, panda_joint2, panda_joint3, panda_joint4, panda_joint5, panda_joint6, panda_joint7))\\n    gripper: PDJointPosMimicController(dof=1, active_joints=2, mimic_to_control_joint_map={\\n        panda_finger_joint2: panda_finger_joint1,\\n    })\\n)\", \"controller_type\": \"CombinedController\", \"derived_substeps_per_control_step\": 5.0, \"device\": \"device(type='cpu')\", \"env_class\": \"PullCubeToolEnv\", \"gpu_sim_enabled\": false, \"info_keys\": [\"cube_distance\", \"cube_progress\", \"elapsed_steps\", \"reconfigure\", \"reward\", \"success\", \"success_at_end\", \"success_once\"], \"num_envs\": 1, \"obs_mode\": \"state\", \"observation_shape\": \"torch.Size([1, 39])\", \"observation_space\": \"Box(-inf, inf, (1, 39), float32)\", \"observation_type\": \"Tensor\", \"render_mode\": null, \"reward_mode\": \"normalized_dense\", \"robot_repr\": \"<panda: struct of type <class 'mani_skill.utils.structs.articulation.Articulation'>; managing 1 <class 'sapien.pysapien.physx.PhysxArticulation'> objects>\", \"scene_backend_type\": \"PhysxCpuSystem\", \"scene_timestep_seconds\": 0.009999999776482582, \"scene_type\": \"ManiSkillScene\", \"sim_freq_hz\": 100, \"sim_timestep_seconds\": 0.01}, \"missing_asset_ids\": [], \"required_asset_ids\": [], \"reset_ok\": true, \"traceback_tail\": \"\"}\n",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-29 20:56:54,942 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n\u001b[33;1m2026-06-29 20:56:55,977 - mani_skill  - WARNING - No initial pose set for articulation builder of panda, setting to default pose q=[1,0,0,0], p=[0,0,0]. There may be simulation issues/bugs if this articulation at it's initial pose collides with other objects at their initial poses.\u001b[0m\n\u001b[33;1m2026-06-29 20:56:56,194 - mani_skill  - WARNING - No initial pose set for actor builder of cube, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n\u001b[33;1m2026-06-29 20:56:56,198 - mani_skill  - WARNING - No initial pose set for actor builder of l_shape_tool, setting to default pose q=[1,0,0,0], p=[0,0,0]. Not setting reasonable initial poses may slow down simulation, see https://github.com/haosulab/ManiSkill/issues/421.\u001b[0m\n",
+      "stdout_tail": "PAPER119_MANISKILL_FIDELITY_METADATA {\"closed\": true, \"elapsed_seconds\": 27.578441, \"env_id\": \"PullCubeTool-v1\", \"error\": \"\", \"error_type\": \"\", \"import_error\": \"\", \"made_env\": true, \"metadata\": {\"agent_class\": \"Panda\", \"agent_uid\": \"panda\", \"available_controller_names\": [\"pd_joint_delta_pos\"], \"control_freq_hz\": 20, \"control_timestep_seconds\": 0.05, \"controller_repr\": \"CombinedController(dof=8, active_joints=9\\n    arm: PDJointPosController(dof=7, active_joints=7, joints=(panda_joint1, panda_joint2, panda_joint3, panda_joint4, panda_joint5, panda_joint6, panda_joint7))\\n    gripper: PDJointPosMimicController(dof=1, active_joints=2, mimic_to_control_joint_map={\\n        panda_finger_joint2: panda_finger_joint1,\\n    })\\n)\", \"controller_type\": \"CombinedController\", \"derived_substeps_per_control_step\": 5.0, \"device\": \"device(type='cpu')\", \"env_class\": \"PullCubeToolEnv\", \"gpu_sim_enabled\": false, \"info_keys\": [\"cube_distance\", \"cube_progress\", \"elapsed_steps\", \"reconfigure\", \"reward\", \"success\", \"success_at_end\", \"success_once\"], \"num_envs\": 1, \"obs_mode\": \"state\", \"observation_shape\": \"torch.Size([1, 39])\", \"observation_space\": \"Box(-inf, inf, (1, 39), float32)\", \"observation_type\": \"Tensor\", \"render_mode\": null, \"reward_mode\": \"normalized_dense\", \"robot_repr\": \"<panda: struct of type <class 'mani_skill.utils.structs.articulation.Articulation'>; managing 1 <class 'sapien.pysapien.physx.PhysxArticulation'> objects>\", \"scene_backend_type\": \"PhysxCpuSystem\", \"scene_timestep_seconds\": 0.009999999776482582, \"scene_type\": \"ManiSkillScene\", \"sim_freq_hz\": 100, \"sim_timestep_seconds\": 0.01}, \"missing_asset_ids\": [], \"required_asset_ids\": [], \"reset_ok\": true, \"traceback_tail\": \"\"}\n",
       "subprocess_returncode": 0,
       "subprocess_timeout": false,
       "support_for": [],
@@ -379,10 +369,7 @@
     }
   ],
   "metadata_probe_ready": true,
-  "missing_asset_ids": [
-    "oakink-v2",
-    "ycb"
-  ],
+  "missing_asset_ids": [],
   "not_external_evidence": true,
   "passed": true,
   "primary_env_count": 4,

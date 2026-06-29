@@ -104,7 +104,7 @@ Realized seam breach & 0.095 & 0.171 \\
 \includegraphics[width=0.86\linewidth]{../figures/energy_landscape_composition_hard_success_v5.png}
 \end{center}
 
-The proposed composer improves hard success by 0.08460 and hard utility by 0.23517 against the strongest non-oracle predecessor. It also reduces seam failure, barrier violation, damage, composition cost, risk calibration error, and realized seam breach while improving basin alignment and descent continuity. A diagnostic audit checks exported failure labels, seam decisions, and planner-edge updates over 230,400 local rows, so the mechanism evidence is not only aggregate success.
+The proposed composer improves hard success by 0.08460 and hard utility by 0.23517 against the strongest non-oracle predecessor. It also reduces seam failure, barrier violation, damage, composition cost, risk calibration error, and realized seam breach while improving basin alignment and descent continuity. A diagnostic audit checks exported failure labels, seam decisions, and planner-edge updates over 230,400 local rows, and a failure-memory adaptation audit checks whether early diagnostic/update signatures predict held-out seam outcomes locally, so the mechanism evidence is not only aggregate success.
 
 \textbf{Why this evidence is not enough yet.}
 The current package is a strong local audit, not a final deployment claim. A main-conference version needs real robot or accepted high-fidelity skill-composition validation, released logs, videos, policy/checkpoint hashes, calibrated sensor/state traces, and manifest-declared independent baseline evidence from real external runs.

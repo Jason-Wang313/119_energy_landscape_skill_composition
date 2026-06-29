@@ -123,7 +123,7 @@
       "passed": true
     },
     {
-      "detail": "render_video_ready=False, env_count=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: render preflight exceeded 30 seconds after progress stage import_start (last progress stage: import_start); OpenCabinetDrawer-v1: render preflight exceeded 30 seconds after progress stage import_start (last progress stage: import_start); OpenCabinetDoor-v1: render preflight exceeded 30 seconds after progress stage close_done (last progress stage: close_done); PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done)']",
+      "detail": "render_video_ready=False, env_count=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done)']",
       "name": "maniskill_render_video_preflight_included",
       "passed": true
     },
@@ -171,18 +171,18 @@
   "included_file_count": 278,
   "included_files": [
     {
-      "bytes": 23757,
+      "bytes": 24274,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "ED88939FD1AB51939101752D49CE1CD338911B16AB6A1FF9D984994F69BCF5FE"
+      "sha256": "2C7C4EBCC2ADC62B6D0F3AC3AC5EC04A699B03BDFBEA5B4B053966C74CCA8712"
     },
     {
-      "bytes": 12044,
+      "bytes": 12363,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/haonan_yilun_outreach_package.md",
-      "sha256": "9CA285406C369BDCA2174F61C06185EC2BB916983FC7AA328F4E1B4AF5722C0D"
+      "sha256": "C50296D0277DE2E5B5A8DB56B08BAD3D90F55717E8F095F42D4A15CA31BBF49E"
     },
     {
       "bytes": 21628,
@@ -192,18 +192,18 @@
       "sha256": "D5A1269B3AFA2DFCE6270E32C6348D60894A4E6ACF4C7C3790ABCDAF8E83E718"
     },
     {
-      "bytes": 17396,
+      "bytes": 17580,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/reproducibility_checklist.md",
-      "sha256": "FFC41551F2AD82490EC379631C2FC2CCB64BDAFA2DF84F96E863A727A9CEC5D1"
+      "sha256": "9CED7FEA9A3F4D19B1F59013C9446678587FB0F18A8FC3A76CCDBA93609BAEDA"
     },
     {
-      "bytes": 15025,
+      "bytes": 15315,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "C52D4D5E08692697E7CCFC019DF5B5970C00AA9A2C62178AFBCB7341B1F7417C"
+      "sha256": "D8E9D6E9AC47918C06D6BC0459B71A956F2C8F15CAC337A95EB4EEE493FE6DDD"
     },
     {
       "bytes": 32120,
@@ -920,18 +920,18 @@
       "sha256": "DBB96E0D48333D12C8E5BA92644247248C8F574B2CA6B2DD783D08A7A1B084C6"
     },
     {
-      "bytes": 26039,
+      "bytes": 29172,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/fidelity_acceptance_draft.json",
-      "sha256": "0E07DB657FD7F8665347C90451CAF679A4B13BA3263447DD2F54D2F4FCB93959"
+      "sha256": "8845B666D6228B2DC551D16EAF65AB181A7F87741D85CF2E8019313D0EAC7E56"
     },
     {
       "bytes": 6080,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/fidelity_acceptance_draft.md",
-      "sha256": "B429A97DAF03D6E24228A53273C42E8867F9FA5106C50E095B6BEFAAB55DD905"
+      "sha256": "C2CF9487EDE8C74F498123D15CC111B3CE16743D5781CC7261C447B3FB9D8452"
     },
     {
       "bytes": 4582,
@@ -994,7 +994,7 @@
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/manifest_precollection_draft.json",
-      "sha256": "6E8A3C7B3ED0E7EA5DCC58F54949541AA975486C9952C605AD3B10414C0FCC20"
+      "sha256": "3823590EA93D742A39044821213EAD295E5C7014EF6F2B1A335F9AB20E6DCD67"
     },
     {
       "bytes": 5473,
@@ -1102,11 +1102,11 @@
       "sha256": "F64B68656335697769F9E7E60F19D974CF5D36D118D94B1296A7368CF49F4C2C"
     },
     {
-      "bytes": 4866,
+      "bytes": 4808,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/render_machine_qualification_packet.md",
-      "sha256": "32AACFC038576826424EA958BA629981805E11761F4B2C2586B5462362268DE4"
+      "sha256": "8C36DC0A76D4124D93B2C2F048F423B02655697EB8BD0568BB38EA37A43D9963"
     },
     {
       "bytes": 13301,
@@ -1249,18 +1249,18 @@
       "sha256": "50DB11390933EFA90710391C3F7EFF62333FA59EE22778D563E7C8E71E1D877B"
     },
     {
-      "bytes": 48291,
+      "bytes": 48066,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.json",
-      "sha256": "CF6CDF4DB7F031F17644C551612FBEDCBA2E04A6EB050BE3BCC221A035B1819A"
+      "sha256": "856901D23E34C6FEB8C13FED2F31120C1393465F3163C0036FFFFCDD79556ACD"
     },
     {
-      "bytes": 29638,
+      "bytes": 29576,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.md",
-      "sha256": "2D09F1BBD189FA609CEA7A96ECF2AD72CAC801554B1EE927FD1AE32B4E2B773A"
+      "sha256": "7DEEB88E53450AC124FA1A4F3742AF2AA5FFE07171EB9EAD1736FAA8A12BB0DA"
     },
     {
       "bytes": 3130,
@@ -1491,14 +1491,14 @@
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_fidelity_acceptance_draft_audit.json",
-      "sha256": "7D68263EDC1CEC914607AF3005C7565023BB0891C022503688B7A74A6AB3CC2F"
+      "sha256": "07C26EDA37E0BA356BC7533FF30ADB30A867DB5CE681F96D020786E573A926C8"
     },
     {
       "bytes": 4980,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_fidelity_acceptance_draft_audit.md",
-      "sha256": "FAE32B6023D273425E9A561CFD92F52A32994F25A5435351C75163D9FD5527F3"
+      "sha256": "E2660D429D81871379F501D4ECE1C2B4D549759A199D43A8A5BE45AC2C93B7F0"
     },
     {
       "bytes": 3802,
@@ -1543,18 +1543,18 @@
       "sha256": "00B1FA80C6AD1ABF786EC65890CAAE17E44B84BD109BE4FFFA821E224C1A706B"
     },
     {
-      "bytes": 47341,
+      "bytes": 47116,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.json",
-      "sha256": "034084364ED5FA176CD9413CC8BF9BF3C4D7BF544F7DE62CC9BF4B76CAFF774F"
+      "sha256": "D83C2B4D9C8615C1AADD33E1721B7D027EA194A19E792B16A2AC73D723A4E41F"
     },
     {
-      "bytes": 22214,
+      "bytes": 22130,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.md",
-      "sha256": "9B6ABC499BECC320C26C0D2F954049457BDBE035A43BF43610B805D0AB41ACA2"
+      "sha256": "ABA2DF8C83B0E1718020AACB8715FDDBE8C294A0463631C9EEA5247D73FD4ADC"
     },
     {
       "bytes": 525,
@@ -1613,18 +1613,18 @@
       "sha256": "4F6DE951424279045E153C48055277689AF5FCE6FA12112C9B9743A6C796C748"
     },
     {
-      "bytes": 12121,
+      "bytes": 13741,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_platform_probe.json",
-      "sha256": "3FB3273B09C39CB246BA2722250C7338A5F8CB0A295974D937A6CBA96C82AF61"
+      "sha256": "F6111A1F07E29BCD17EE532F09F147D0D8707E28D153200AF1997675B3804CA5"
     },
     {
       "bytes": 2287,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_platform_probe.md",
-      "sha256": "9D0A853416C46561696F4CB8C2D03CA5D786E464951F39F0DEB787B2ED7924D1"
+      "sha256": "3ED7CB9D15B83408733665AC1B46492F1EABD342A8A59E61D754B2E56E0ADBA4"
     },
     {
       "bytes": 4369,
@@ -1753,11 +1753,11 @@
       "sha256": "D0235D466AEF1F013CB1EB14E75691D5C34370E7B3D6360E7A736A94167DCCDD"
     },
     {
-      "bytes": 13636,
+      "bytes": 13635,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_env_smoke_probe.json",
-      "sha256": "CA3B08871C1E212BF46C2168C27C6B95DAAFD81959DC07C55961BB6ED57F05CE"
+      "sha256": "3A13C3BFB4F4CE7369E0D2B6D8B01C7ED4C57BD3DC1E34E36104B6589D59C860"
     },
     {
       "bytes": 2044,
@@ -1767,18 +1767,18 @@
       "sha256": "7DE60A2FA9A7C2C2F73FD7D1021B4DB9AC0D676495EB99D482AA38C61BD97DAD"
     },
     {
-      "bytes": 34325,
+      "bytes": 29603,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_fidelity_metadata_probe.json",
-      "sha256": "4C588E6BD1777BB32E5E1CA09AFDF831E53CC9CE7A2740516B569113BCE293B6"
+      "sha256": "2D453A436E2135437D9529045DC04E0E3DF7357FB6AB45DAE004C549AFA51F1F"
     },
     {
-      "bytes": 3204,
+      "bytes": 3182,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_fidelity_metadata_probe.md",
-      "sha256": "0A63990319D5C3518BF802412F526D441A022AB1AE542D8A5EE6F18C40F9CCC6"
+      "sha256": "94FE873908607EE198278AF04CDCEA4087E4288AB033761D809F65F30CED7DCD"
     },
     {
       "bytes": 9112,
@@ -1809,32 +1809,32 @@
       "sha256": "28691987D608EA40FA50EBD7BCA64E7240E5583DCEDFC72E729829EDDF35F942"
     },
     {
-      "bytes": 5233,
+      "bytes": 5170,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_render_machine_qualification.json",
-      "sha256": "413D0ED2AE13F1988EFE8E85E4ABF7BD4507FBA4BBB471B2ABFA63E16EDC2104"
+      "sha256": "1E20A7F52A27743C77C5F7CED64E64049CBC25196E74EFB7526FD5C5F9AED168"
     },
     {
-      "bytes": 4866,
+      "bytes": 4808,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_render_machine_qualification.md",
-      "sha256": "32AACFC038576826424EA958BA629981805E11761F4B2C2586B5462362268DE4"
+      "sha256": "8C36DC0A76D4124D93B2C2F048F423B02655697EB8BD0568BB38EA37A43D9963"
     },
     {
-      "bytes": 49187,
+      "bytes": 59038,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_render_video_preflight_audit.json",
-      "sha256": "42E1B5346B4985DF986AB2D9F507F351143BCC479B55989EF52D9D1E0AE551B2"
+      "sha256": "537FB0E6BC8DBAFA3BB2BB8AE53F5E22FFA5A65A813C360BCE66CDCC4BDF0087"
     },
     {
-      "bytes": 7055,
+      "bytes": 6814,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_render_video_preflight_audit.md",
-      "sha256": "344D4E552C5014FA6232B7842D1491A62DEB97D54D49360067044514E3FD114C"
+      "sha256": "F45F78DF724808D0F7BCEFDCA83C34CA60E72EA59B593EBE489EB80AC651B543"
     },
     {
       "bytes": 9710,

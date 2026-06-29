@@ -10,6 +10,7 @@
 - Diagnostic mechanism validator: `scripts/audit_diagnostic_mechanism.py`
 - Comparative decision-quality validator: `scripts/audit_decision_quality.py`
 - Planner-edge policy validator: `scripts/audit_planner_edge_policy.py`
+- Failure-memory adaptation validator: `scripts/audit_failure_memory_adaptation.py`
 - Local model release card builder: `scripts/build_local_model_release.py`
 - Seam prediction calibration validator: `scripts/audit_seam_prediction_calibration.py`
 - Manuscript number validator: `scripts/audit_manuscript_numbers.py`
@@ -99,6 +100,8 @@
   - `results/decision_quality_audit.md`
   - `results/planner_edge_policy_audit.json`
   - `results/planner_edge_policy_audit.md`
+  - `results/failure_memory_adaptation_audit.json`
+  - `results/failure_memory_adaptation_audit.md`
   - `docs/local_model_release.md`
   - `results/local_model_release_manifest.json`
   - `results/local_model_release_audit.json`

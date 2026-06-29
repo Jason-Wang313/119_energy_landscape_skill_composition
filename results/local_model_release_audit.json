@@ -56,7 +56,7 @@
       "passed": true
     },
     {
-      "detail": "5CF7C6E592517ECC40371074F6341C489BCAB11E5358E6BA053CB3AD241B5929",
+      "detail": "546D8DA38D310FBB51EBFC15C41DFD7A9058EC1631EA60019501378FD487A57D",
       "name": "release_hash_present",
       "passed": true
     }
@@ -68,6 +68,6 @@
   "model_card": "docs/local_model_release.md",
   "not_external_evidence": true,
   "passed": true,
-  "release_hash": "5CF7C6E592517ECC40371074F6341C489BCAB11E5358E6BA053CB3AD241B5929",
+  "release_hash": "546D8DA38D310FBB51EBFC15C41DFD7A9058EC1631EA60019501378FD487A57D",
   "version": "paper119_local_model_release_audit_v1"
 }

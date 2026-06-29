@@ -20,6 +20,8 @@ OUT_MD = RESULTS / "external_local_dry_run_metrics.md"
 SOURCE_CSV = RESULTS / "cell_metrics.csv"
 SCHEMA_PATH = EXTERNAL / "log_schema_v1.json"
 FIXED_RISK_BUDGET = 0.15
+# First-N deterministic dry-run sample large enough for the external validator's bootstrap gates.
+EPISODES_PER_METHOD = 430
 TASKS = [
     "peg_place_regrasp",
     "drawer_to_pick_transfer",
@@ -98,10 +100,10 @@ def select_rows(rows: list[dict[str, str]]) -> dict[tuple[str, str], list[dict[s
                     row["split"],
                 ),
             )
-            if len(candidates) < 30:
+            if len(candidates) < EPISODES_PER_METHOD:
                 missing.append(f"{task}/{method}: {len(candidates)}")
                 continue
-            selected[(task, method)] = candidates[:30]
+            selected[(task, method)] = candidates[:EPISODES_PER_METHOD]
     if missing:
         raise SystemExit(f"not enough local rows for dry run: {missing[:8]}")
     return selected
@@ -125,7 +127,7 @@ def make_config(task: str) -> dict[str, Any]:
         ],
         "reset_protocol": {
             "paired_resets": True,
-            "reset_count": 30,
+            "reset_count": EPISODES_PER_METHOD,
             "scene_id_template": f"{task}_{{regime}}_{{split}}_seed{{seed}}_episode{{episode}}",
             "initial_state_hash_required": True,
         },
@@ -139,13 +141,20 @@ def make_config(task: str) -> dict[str, Any]:
             "wall_clock_seconds": 0,
             "simulator_query_budget": 0,
         },
-        "paired_reset_count": 30,
+        "paired_reset_count": EPISODES_PER_METHOD,
         "fixed_risk_budget": FIXED_RISK_BUDGET,
         "must_log": list(json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))["required_fields"]),
     }
 
 
-def make_record(row: dict[str, str], task: str, method: str, dry_episode: int, video_path: Path) -> dict[str, Any]:
+def make_record(
+    row: dict[str, str],
+    task: str,
+    method: str,
+    dry_episode: int,
+    video_path: Path,
+    policy_hash: str,
+) -> dict[str, Any]:
     scene_id = f"{task}_{row['regime']}_{row['split']}_seed{row['seed']}_episode{row['episode']}"
     initial_key = f"{task}:{row['regime']}:{row['split']}:{row['seed']}:{row['episode']}:initial"
     terminal_key = f"{task}:{row['regime']}:{row['split']}:{row['seed']}:{row['episode']}:terminal:{method}"
@@ -183,7 +192,7 @@ def make_record(row: dict[str, str], task: str, method: str, dry_episode: int, v
         "realized_seam_breach": realized_breach_value > FIXED_RISK_BUDGET,
         "utility": float(row["composition_utility"]),
         "video_path": rel(video_path),
-        "policy_or_config_hash": digest_text(f"{method}:local_dry_run_config"),
+        "policy_or_config_hash": policy_hash,
     }
 
 
@@ -201,6 +210,7 @@ def write_dry_run_artifacts(selected: dict[tuple[str, str], list[dict[str, str]]
     (DRY_RUN / "checkpoints").mkdir()
     (DRY_RUN / "implementations").mkdir()
 
+    method_policy_hashes = {method: digest_text(f"{method}:local_dry_run_config") for method in METHODS}
     release_artifacts = {"code": [], "configs": [], "logs": [], "videos": [], "checkpoints": []}
     tasks = []
     for task in TASKS:
@@ -210,22 +220,29 @@ def write_dry_run_artifacts(selected: dict[tuple[str, str], list[dict[str, str]]
 
         video_dir = DRY_RUN / "videos" / task
         video_dir.mkdir(parents=True, exist_ok=True)
-        video_path = video_dir / "placeholder_not_external_evidence.mp4"
-        video_path.write_bytes(b"local dry run placeholder; not rollout video evidence\n")
-        release_artifacts["videos"].append({"path": rel(video_path), "sha256": file_sha256(video_path)})
 
         log_path = DRY_RUN / "logs" / f"{task}.jsonl"
         with log_path.open("w", encoding="utf-8") as handle:
             for method in METHODS:
                 for dry_episode, row in enumerate(selected[(task, method)]):
-                    handle.write(json.dumps(make_record(row, task, method, dry_episode, video_path), sort_keys=True) + "\n")
+                    video_path = video_dir / f"{method}_{dry_episode:03d}_placeholder_not_external_evidence.mp4"
+                    video_path.write_bytes(
+                        f"local dry run placeholder for {task}/{method}/{dry_episode}; not rollout video evidence\n".encode("utf-8")
+                    )
+                    handle.write(
+                        json.dumps(
+                            make_record(row, task, method, dry_episode, video_path, method_policy_hashes[method]),
+                            sort_keys=True,
+                        )
+                        + "\n"
+                    )
         release_artifacts["logs"].append({"path": rel(log_path), "sha256": file_sha256(log_path)})
         tasks.append(
             {
                 "task_family": task,
                 "platform_type": "high_fidelity_sim",
                 "platform_name": "LocalFrozenSuite-v5-DRY-RUN-NOT-EVIDENCE",
-                "episodes_per_method": 30,
+                "episodes_per_method": EPISODES_PER_METHOD,
                 "log_jsonl": rel(log_path),
                 "video_dir": rel(video_dir),
                 "config_path": rel(config_path),
@@ -237,7 +254,7 @@ def write_dry_run_artifacts(selected: dict[tuple[str, str], list[dict[str, str]]
     methods = []
     for method in METHODS:
         checkpoint = DRY_RUN / "checkpoints" / f"{method}.sha256"
-        checkpoint.write_text(digest_text(f"{method}:local_dry_run_config") + "\n", encoding="utf-8")
+        checkpoint.write_text(method_policy_hashes[method] + "\n", encoding="utf-8")
         release_artifacts["checkpoints"].append({"path": rel(checkpoint), "sha256": file_sha256(checkpoint)})
         implementation = ""
         if method != "oracle_basin_composer":
@@ -250,7 +267,7 @@ def write_dry_run_artifacts(selected: dict[tuple[str, str], list[dict[str, str]]
                 "name": method,
                 "implementation": implementation if method != "oracle_basin_composer" else "post_hoc_upper_bound",
                 "checkpoint_or_config_path": rel(checkpoint),
-                "checkpoint_or_config_hash": file_sha256(checkpoint),
+                "checkpoint_or_config_hash": method_policy_hashes[method],
             }
         )
 

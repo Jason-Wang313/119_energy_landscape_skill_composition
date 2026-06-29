@@ -43,7 +43,7 @@
     "contact_or_force_logging_required": false,
     "state_logging_required": true
   },
-  "paired_reset_count": 30,
+  "paired_reset_count": 430,
   "platform_name": "LocalFrozenSuite-v5-DRY-RUN-NOT-EVIDENCE",
   "platform_type": "high_fidelity_sim",
   "required_fidelity_checks": [
@@ -53,7 +53,7 @@
   "reset_protocol": {
     "initial_state_hash_required": true,
     "paired_resets": true,
-    "reset_count": 30,
+    "reset_count": 430,
     "scene_id_template": "peg_place_regrasp_{regime}_{split}_seed{seed}_episode{episode}"
   },
   "seam_under_test": "Local dry-run handoff for peg_place_regrasp; generated from frozen local CSV rows.",

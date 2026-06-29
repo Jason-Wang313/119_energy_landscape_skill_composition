@@ -9,3 +9,4 @@ __pycache__/
 *.fdb_latexmk
 *.fls
 external_validation/pilot_runtime_guard/
+external_validation/local_dry_run/videos/**/*.mp4

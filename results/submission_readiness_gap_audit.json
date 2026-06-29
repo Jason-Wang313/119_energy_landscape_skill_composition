@@ -37,10 +37,11 @@
         "results\\diagnostic_mechanism_audit.json",
         "results\\decision_quality_audit.json",
         "results\\planner_edge_policy_audit.json",
+        "results\\failure_memory_adaptation_audit.json",
         "results\\seam_prediction_calibration_audit.json",
         "results\\manuscript_number_audit.json"
       ],
-      "requirement": "Local falsification, holdout, diagnostic, decision-quality, planner-edge policy, predictive-calibration, and number provenance audits",
+      "requirement": "Local falsification, holdout, diagnostic, decision-quality, planner-edge policy, failure-memory adaptation, predictive-calibration, and number provenance audits",
       "status": "satisfied",
       "submission_blocking": true
     },

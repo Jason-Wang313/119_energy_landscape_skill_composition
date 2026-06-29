@@ -74,6 +74,10 @@ try {
         Invoke-Native python scripts\audit_planner_edge_policy.py
     }
 
+    Invoke-Step "Audit failure-memory adaptation" {
+        Invoke-Native python scripts\audit_failure_memory_adaptation.py
+    }
+
     Invoke-Step "Build local model release card" {
         Invoke-Native python scripts\build_local_model_release.py
     }

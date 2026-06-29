@@ -352,6 +352,9 @@ def make_manuscript(summary):
     decision_metrics = decision_quality["metrics"]
     planner_policy = load_json("planner_edge_policy_audit.json")
     planner_metrics = planner_policy["metrics"]
+    failure_memory = load_json("failure_memory_adaptation_audit.json")
+    failure_memory_metrics = failure_memory["proposed_metrics"]
+    failure_memory_comparison = failure_memory["comparison"]
     calibration = load_json("seam_prediction_calibration_audit.json")
     calibration_metrics = calibration["proposed_metrics"]
     calibration_baseline = calibration["strongest_baseline_metrics"]
@@ -518,6 +521,17 @@ def make_manuscript(summary):
     )
     a(r"\begin{center}\small\resizebox{\linewidth}{!}{\input{generated_planner_edge_policy_table.tex}}\end{center}")
     a(r"\noindent{\small\textbf{Planner-edge policy table.} Local hard-slice check that planner-edge updates select better future transition candidates while preserving the external-validation boundary.}")
+
+    a(r"\subsection{Failure-Memory Adaptation Audit}")
+    a(
+        "The previous audit asks whether exported updates can choose a better edge. We also test the smaller memory claim directly: after a few attempts, does the observed seam outcome become useful evidence for later planning queries with the same diagnostic/update signature? "
+        f"For each local hard-slice frontier, episodes 0--3 are treated as observed memory and episodes 4--7 are held out. This yields {int(failure_memory_metrics['memory_signature_count']):,} observed-to-held-out signature pairs over {int(failure_memory_metrics['frontiers_covered']):,} frontiers. "
+        f"Observed breach predicts held-out breach with correlation {fmt(failure_memory_metrics['memory_breach_future_breach_correlation'], 3)} and MAE {fmt(failure_memory_metrics['memory_breach_mae'], 3)}, improving on held-out predicted-risk MAE by {fmt(failure_memory_metrics['memory_mae_improvement_over_future_predicted_risk'], 3)}. "
+        f"High-memory-risk signatures have held-out breach {fmt(failure_memory_metrics['high_memory_future_breach'], 3)} versus {fmt(failure_memory_metrics['low_memory_future_breach'], 3)} for low-memory-risk signatures, and held-out utility {fmt(failure_memory_metrics['high_memory_future_utility'], 3)} versus {fmt(failure_memory_metrics['low_memory_future_utility'], 3)}. "
+        f"Against the predecessor's high-memory-risk signatures, v5 reduces future breach by {fmt(-failure_memory_comparison['high_memory_future_breach_delta'], 3)} and raises future utility by {fmt(failure_memory_comparison['high_memory_future_utility_delta'], 3)}. This is local evidence for planner-memory adaptation, not a substitute for external robot or high-fidelity validation."
+    )
+    a(r"\begin{center}\small\resizebox{\linewidth}{!}{\input{generated_failure_memory_adaptation_table.tex}}\end{center}")
+    a(r"\noindent{\small\textbf{Failure-memory table.} Local observed-to-held-out audit that seam outcomes become future planning evidence while preserving the external-validation boundary.}")
 
     a(r"\subsection{Predictive Calibration Audit}")
     a(

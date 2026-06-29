@@ -12,8 +12,8 @@ This audit checks that the generated manuscript is naturally framed around a bou
 
 - `pass` `abstract_exists`: words=247
 - `pass` `abstract_length_conference_reasonable`: words=247
-- `pass` `required_sections_present`: positions=[2370, 6338, 9889, 11830, 12700, 14234, 23315, 28277]
-- `pass` `required_sections_in_order`: positions=[2370, 6338, 9889, 11830, 12700, 14234, 23315, 28277]
+- `pass` `required_sections_present`: positions=[2370, 6338, 9889, 11830, 12700, 14234, 24630, 29592]
+- `pass` `required_sections_in_order`: positions=[2370, 6338, 9889, 11830, 12700, 14234, 24630, 29592]
 - `pass` `core_frame_term_local world/action model for ski`: local world/action model for skill seams
 - `pass` `core_frame_term_compact predictive interface bet`: compact predictive interface between a skill library and a planner
 - `pass` `core_frame_term_action-conditioned model of whet`: action-conditioned model of whether a proposed edge

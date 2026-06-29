@@ -96,7 +96,7 @@ Hi Haonan,
 
 I'm Jason Wang. I have been working on a project that treats skill handoff as a local world/action-modeling problem: given skill `i` and skill `j`, estimate terminal/basin overlap, barrier height, descent continuity, repair cost, and calibrated seam risk before committing to the transition.
 
-The resulting composer chooses among accept, repair, probe, abstain, or alternate transition. In a frozen local suite, it improves hard-slice success and utility over option-graph, TAMP-feasibility, diffusion-stitching, CEM, residual-repair, and energy-heuristic baselines, while reducing seam failures and realized breach. The local rows also expose diagnostic labels, seam decisions, and planner-edge updates, with a consistency audit over those mechanism outputs. I am keeping the claim bounded until external validation: the contribution is seam certification for composition, not a universal manipulation policy.
+The resulting composer chooses among accept, repair, probe, abstain, or alternate transition. In a frozen local suite, it improves hard-slice success and utility over option-graph, TAMP-feasibility, diffusion-stitching, CEM, residual-repair, and energy-heuristic baselines, while reducing seam failures and realized breach. The local rows also expose diagnostic labels, seam decisions, and planner-edge updates, with a consistency audit over those mechanism outputs, plus a failure-memory adaptation audit showing early diagnostic/update signatures predict held-out seam outcomes locally. I am keeping the claim bounded until external validation: the contribution is seam certification for composition, not a universal manipulation policy.
 
 CoStream seems like a particularly natural point of contact because it composes semantic, predictive, and reactive behaviors through a shared action interface. My question is whether a seam critic of this kind could be useful as a reliability layer for behavior composition.
 
@@ -136,6 +136,7 @@ Current evidence:
 - Hard utility: `0.88827` vs `0.65310`.
 - Reduces seam failure, barrier violation, damage, risk calibration error, and realized breach.
 - Diagnostic audit: exported failure labels, seam decisions, and planner-edge updates have zero rule mismatches over 230,400 local rows.
+- Failure-memory adaptation audit: early diagnostic/update signatures predict held-out seam breach and utility locally, supporting the planner-memory framing without counting as external evidence.
 
 Validation ask:
 

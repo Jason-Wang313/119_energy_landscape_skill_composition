@@ -14,8 +14,8 @@ This audit is meant to prevent false completion claims. It passes only while the
   Evidence: paper/main.tex, scripts/generate_manuscript.py, scripts/validate_submission_artifacts.py
 - `satisfied` Defensible bounded local mechanism claim with frozen local gates
   Evidence: results/summary.json, results/hard_aggregate_metrics.csv, paper/main.tex
-- `satisfied` Local falsification, holdout, diagnostic, decision-quality, planner-edge policy, predictive-calibration, and number provenance audits
-  Evidence: results\local_falsification_audit.json, results\holdout_robustness_audit.json, results\diagnostic_mechanism_audit.json, results\decision_quality_audit.json, results\planner_edge_policy_audit.json, results\seam_prediction_calibration_audit.json, results\manuscript_number_audit.json
+- `satisfied` Local falsification, holdout, diagnostic, decision-quality, planner-edge policy, failure-memory adaptation, predictive-calibration, and number provenance audits
+  Evidence: results\local_falsification_audit.json, results\holdout_robustness_audit.json, results\diagnostic_mechanism_audit.json, results\decision_quality_audit.json, results\planner_edge_policy_audit.json, results\failure_memory_adaptation_audit.json, results\seam_prediction_calibration_audit.json, results\manuscript_number_audit.json
 - `missing` Independent real-robot or accepted high-fidelity external validation evidence
   Evidence gap: strict external evidence audit is NOT_READY; real manifest/log/video/checkpoint evidence and accepted robot/simulator fidelity provenance are missing
   Evidence: results/external_evidence_audit.json, results/external_fidelity_acceptance_audit.json, external_validation/manifest.json

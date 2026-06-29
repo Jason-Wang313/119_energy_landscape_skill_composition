@@ -105,14 +105,25 @@ def bad_release_artifacts(tmp: Path) -> dict[str, list[dict[str, str]]]:
     scaffold = EXTERNAL / "baselines" / "barrier_certified_energy_composer_v5" / "adapter_template.py"
     template_config = EXTERNAL / "config_templates" / "peg_place_regrasp.json"
     local_log = EXTERNAL / "local_dry_run" / "logs" / "peg_place_regrasp.jsonl"
-    placeholder_video = EXTERNAL / "local_dry_run" / "videos" / "peg_place_regrasp" / "placeholder_not_external_evidence.mp4"
+    generated_placeholder_video = (
+        EXTERNAL
+        / "local_dry_run"
+        / "videos"
+        / "peg_place_regrasp"
+        / "barrier_certified_energy_composer_v5_000_placeholder_not_external_evidence.mp4"
+    )
     local_checkpoint = EXTERNAL / "local_dry_run" / "checkpoints" / "barrier_certified_energy_composer_v5.sha256"
-    for path in (scaffold, template_config, local_log, placeholder_video, local_checkpoint):
+    for path in (scaffold, template_config, local_log, local_checkpoint):
         if not path.exists():
             raise SystemExit(f"missing expected bad release fixture: {path}")
     internal_artifact_dir = tmp / "internal_artifacts"
     staged_log = internal_artifact_dir / "peg_place_regrasp.staging.jsonl"
     backup_log = internal_artifact_dir / "peg_place_regrasp.backup.jsonl"
+    placeholder_video = (
+        generated_placeholder_video
+        if generated_placeholder_video.exists()
+        else internal_artifact_dir / "placeholder_not_external_evidence.mp4"
+    )
     diagnostic_video = internal_artifact_dir / "peg_place_regrasp.diagnostic.mp4"
     fallback_video = internal_artifact_dir / "peg_place_regrasp.fallback.mp4"
     backup_video = internal_artifact_dir / "peg_place_regrasp.backup.mp4"
@@ -121,6 +132,8 @@ def bad_release_artifacts(tmp: Path) -> dict[str, list[dict[str, str]]]:
     empty_video_dir.mkdir(parents=True, exist_ok=True)
     staged_log.write_text(json.dumps({"not_external_evidence": True, "kind": "staged_log"}) + "\n", encoding="utf-8")
     backup_log.write_text(json.dumps({"not_external_evidence": True, "kind": "backup_log"}) + "\n", encoding="utf-8")
+    if not placeholder_video.exists():
+        placeholder_video.write_bytes((b"placeholder not external evidence self-test video bytes\n" * 40))
     diagnostic_video.write_bytes((b"diagnostic release-package self-test video bytes\n" * 40))
     fallback_video.write_bytes((b"fallback release-package self-test video bytes\n" * 40))
     backup_video.write_bytes((b"backup release-package self-test video bytes\n" * 40))

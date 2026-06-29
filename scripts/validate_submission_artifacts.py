@@ -2047,6 +2047,41 @@ def main():
     if not (PAPER / "generated_planner_edge_policy_table.tex").exists():
         fail("missing paper/generated_planner_edge_policy_table.tex")
 
+    failure_memory_path = RESULTS / "failure_memory_adaptation_audit.json"
+    if not failure_memory_path.exists():
+        fail("missing results/failure_memory_adaptation_audit.json; run scripts/audit_failure_memory_adaptation.py")
+    failure_memory = json.loads(failure_memory_path.read_text(encoding="utf-8"))
+    if failure_memory.get("version") != "failure_memory_adaptation_audit_v1":
+        fail("failure-memory adaptation audit version mismatch")
+    if failure_memory.get("passed") is not True:
+        fail("failure-memory adaptation audit did not pass")
+    if failure_memory.get("not_external_evidence") is not True:
+        fail("failure-memory adaptation audit must declare that it is not external evidence")
+    failure_memory_metrics = failure_memory.get("proposed_metrics", {})
+    failure_memory_comparison = failure_memory.get("comparison", {})
+    if int(failure_memory_metrics.get("memory_signature_count", 0)) < 2000:
+        fail("failure-memory adaptation audit has too few observed-to-held-out signatures")
+    if int(failure_memory_metrics.get("frontiers_covered", 0)) < 1600:
+        fail("failure-memory adaptation audit covers too few local planning frontiers")
+    if int(failure_memory_metrics.get("task_groups", 0)) < 6 or int(failure_memory_metrics.get("regime_groups", 0)) < 7 or int(failure_memory_metrics.get("split_groups", 0)) < 4:
+        fail("failure-memory adaptation audit does not cover all local task/regime/split groups")
+    if float(failure_memory_metrics.get("memory_breach_future_breach_correlation", 0.0)) < 0.90:
+        fail("failure-memory adaptation audit observed breach is not predictive enough of held-out breach")
+    if float(failure_memory_metrics.get("memory_breach_mae", 1.0)) > 0.006:
+        fail("failure-memory adaptation audit memory breach MAE is too high")
+    if float(failure_memory_metrics.get("memory_mae_improvement_over_future_predicted_risk", 0.0)) < 0.002:
+        fail("failure-memory adaptation audit does not improve enough over held-out predicted-risk MAE")
+    if float(failure_memory_metrics.get("high_low_future_breach_gap", 0.0)) < 0.04:
+        fail("failure-memory adaptation audit high-memory-risk signatures do not predict enough future breach separation")
+    if float(failure_memory_metrics.get("high_low_future_utility_gap", 0.0)) > -0.12:
+        fail("failure-memory adaptation audit high-memory-risk signatures do not predict enough future utility loss")
+    if float(failure_memory_comparison.get("high_memory_future_breach_delta", 0.0)) > -0.06:
+        fail("failure-memory adaptation audit v5 high-memory-risk breach is not lower enough than predecessor")
+    if float(failure_memory_comparison.get("high_memory_future_utility_delta", 0.0)) < 0.20:
+        fail("failure-memory adaptation audit v5 high-memory-risk utility is not higher enough than predecessor")
+    if not (PAPER / "generated_failure_memory_adaptation_table.tex").exists():
+        fail("missing paper/generated_failure_memory_adaptation_table.tex")
+
     calibration_path = RESULTS / "seam_prediction_calibration_audit.json"
     if not calibration_path.exists():
         fail("missing results/seam_prediction_calibration_audit.json; run scripts/audit_seam_prediction_calibration.py")
@@ -3896,6 +3931,14 @@ def main():
         fail("manuscript missing planner-edge policy audit table")
     if "local planning frontier" not in tex or "does not use realized utility to choose the edge" not in tex:
         fail("manuscript missing planner-edge policy interpretation")
+    if "\\subsection{Failure-Memory Adaptation Audit}" not in tex:
+        fail("manuscript missing failure-memory adaptation audit subsection")
+    if "generated_failure_memory_adaptation_table.tex" not in tex:
+        fail("manuscript missing failure-memory adaptation audit table")
+    if "episodes 0--3 are treated as observed memory" not in tex or "observed-to-held-out signature pairs" not in tex:
+        fail("manuscript missing failure-memory observed-to-held-out interpretation")
+    if "local evidence for planner-memory adaptation" not in tex:
+        fail("manuscript missing bounded planner-memory adaptation interpretation")
     if "\\subsection{Predictive Calibration Audit}" not in tex:
         fail("manuscript missing predictive calibration audit subsection")
     if "generated_seam_prediction_calibration_table.tex" not in tex:
@@ -4033,6 +4076,7 @@ def main():
         "maniskill_pilot_runtime_liveness_visible",
         "materializer_guard_visible",
         "planner_edge_policy_visible",
+        "failure_memory_adaptation_visible",
         "ledger_tracks_new_visible_claims",
         "README_current_visible_contribution_terms",
         "final_audit_current_visible_contribution_terms",

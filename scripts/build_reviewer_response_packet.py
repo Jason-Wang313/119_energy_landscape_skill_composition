@@ -50,6 +50,7 @@ def main() -> int:
     falsification = read_json(RESULTS / "local_falsification_audit.json")
     decision = read_json(RESULTS / "decision_quality_audit.json")
     planner = read_json(RESULTS / "planner_edge_policy_audit.json")
+    failure_memory = read_json(RESULTS / "failure_memory_adaptation_audit.json")
     calibration = read_json(RESULTS / "seam_prediction_calibration_audit.json")
     diagnostic = read_json(RESULTS / "diagnostic_mechanism_audit.json")
 
@@ -57,6 +58,8 @@ def main() -> int:
     falsification_metrics = falsification["metrics"]
     decision_metrics = decision["metrics"]
     planner_metrics = planner["metrics"]
+    failure_memory_metrics = failure_memory["proposed_metrics"]
+    failure_memory_comparison = failure_memory["comparison"]
     calibration_metrics = calibration["derived"]
     diagnostic_metrics = diagnostic["metrics"]
 
@@ -192,13 +195,24 @@ def main() -> int:
             "reviewer_objection": "The paper says future planning improves, but the evidence may only be one-step classification.",
             "response": (
                 "Use the planner-edge policy audit: it chooses future candidate edges using exported planner-edge updates first, "
-                "then predicted risk, basin alignment, descent, and cost without using realized utility to choose."
+                "then predicted risk, basin alignment, descent, and cost without using realized utility to choose. The failure-memory "
+                "adaptation audit separately checks whether observed seam memories predict held-out outcomes for the same diagnostic/update signature."
             ),
-            "evidence": ["results/planner_edge_policy_audit.json", "results/planner_edge_policy_audit.md", "paper/generated_planner_edge_policy_table.tex"],
+            "evidence": [
+                "results/planner_edge_policy_audit.json",
+                "results/planner_edge_policy_audit.md",
+                "results/failure_memory_adaptation_audit.json",
+                "results/failure_memory_adaptation_audit.md",
+                "paper/generated_planner_edge_policy_table.tex",
+                "paper/generated_failure_memory_adaptation_table.tex",
+            ],
             "local_fact": (
                 f"Across {int(planner_metrics['frontier_count']):,} local planning frontiers, selected-edge utility improves by "
                 f"{fmt(planner_metrics['selected_utility_delta'])}, success by {fmt(planner_metrics['selected_success_delta'])}, "
-                f"and realized breach by {fmt(planner_metrics['selected_realized_breach_delta'])}."
+                f"and realized breach by {fmt(planner_metrics['selected_realized_breach_delta'])}. The failure-memory audit adds "
+                f"{int(failure_memory_metrics['memory_signature_count']):,} observed-to-held-out signature pairs with breach correlation "
+                f"{fmt(failure_memory_metrics['memory_breach_future_breach_correlation'])}, and v5 lowers high-memory-risk future breach by "
+                f"{fmt(-failure_memory_comparison['high_memory_future_breach_delta'])} versus the predecessor."
             ),
             "allowed_claim": "Local planner-edge updates change future transition selection under a fixed audit policy.",
             "remaining_gate": "External runs must log edge updates and replay planner-frontier selection from raw records.",

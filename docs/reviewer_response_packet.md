@@ -139,9 +139,9 @@ Evidence:
 
 ### 8. The paper says future planning improves, but the evidence may only be one-step classification.
 
-Response: Use the planner-edge policy audit: it chooses future candidate edges using exported planner-edge updates first, then predicted risk, basin alignment, descent, and cost without using realized utility to choose.
+Response: Use the planner-edge policy audit: it chooses future candidate edges using exported planner-edge updates first, then predicted risk, basin alignment, descent, and cost without using realized utility to choose. The failure-memory adaptation audit separately checks whether observed seam memories predict held-out outcomes for the same diagnostic/update signature.
 
-Current local fact: Across 1,680 local planning frontiers, selected-edge utility improves by 0.231, success by 0.080, and realized breach by -0.075.
+Current local fact: Across 1,680 local planning frontiers, selected-edge utility improves by 0.231, success by 0.080, and realized breach by -0.075. The failure-memory audit adds 2,210 observed-to-held-out signature pairs with breach correlation 0.957, and v5 lowers high-memory-risk future breach by 0.083 versus the predecessor.
 
 Allowed claim: Local planner-edge updates change future transition selection under a fixed audit policy.
 
@@ -152,7 +152,10 @@ Outreach use: This is one of the best bridges to Yilun's planning/world-model in
 Evidence:
 - `results/planner_edge_policy_audit.json`
 - `results/planner_edge_policy_audit.md`
+- `results/failure_memory_adaptation_audit.json`
+- `results/failure_memory_adaptation_audit.md`
 - `paper/generated_planner_edge_policy_table.tex`
+- `paper/generated_failure_memory_adaptation_table.tex`
 
 ### 9. Predicted seam risk may be calibrated locally but fail after transfer.
 

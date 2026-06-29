@@ -42,7 +42,7 @@ def main() -> None:
         for forbidden in ("please do the real validation", "get to Yilun", "already main-conference ready"):
             if forbidden in text:
                 fail(f"{name} contains forbidden outreach framing: {forbidden}")
-        for required in ("diagnostic audit", "planner-edge updates", "operator packet"):
+        for required in ("diagnostic audit", "planner-edge updates", "failure-memory adaptation audit", "operator packet"):
             if required not in text:
                 fail(f"{name} missing required mechanism-audit framing: {required}")
 
@@ -52,6 +52,7 @@ def main() -> None:
     package_text = package.read_text(encoding="utf-8")
     for required in (
         "diagnostic labels, seam decisions, and planner-edge updates",
+        "failure-memory adaptation audit",
         "Do not pitch this as",
         "results/external_operator_packet.md",
         "do not frame Haonan as responsible for supplying the missing proof",

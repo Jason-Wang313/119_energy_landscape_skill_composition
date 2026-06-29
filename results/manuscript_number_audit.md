@@ -27,6 +27,10 @@ This audit checks that manuscript and table numbers are traceable to generated r
 - `pass` `planner_edge_coverage_sentence` from results/planner_edge_policy_audit.json executable coverage: `The proposed seam model selects executable accept/repair/transition edges on 0.667 of frontiers versus 0.165 for the strongest predecessor`
 - `pass` `planner_edge_selected_outcome_sentence` from results/planner_edge_policy_audit.json selected-edge outcomes: `Selected-edge utility is 0.889 versus 0.658, success is 0.795 versus 0.715, and realized breach is 0.089 versus 0.164`
 - `pass` `planner_edge_positive_groups_sentence` from results/planner_edge_policy_audit.json positive group counts: `The selected-edge utility margin is positive in 6/6 task families, 7/7 seam regimes, and 4/4 deployment splits`
+- `pass` `failure_memory_signature_count_sentence` from results/failure_memory_adaptation_audit.json signature and frontier counts: `This yields 2,210 observed-to-held-out signature pairs over 1,667 frontiers`
+- `pass` `failure_memory_predictive_sentence` from results/failure_memory_adaptation_audit.json predictive memory metrics: `Observed breach predicts held-out breach with correlation 0.957 and MAE 0.005, improving on held-out predicted-risk MAE by 0.003`
+- `pass` `failure_memory_high_low_sentence` from results/failure_memory_adaptation_audit.json high/low memory metrics: `High-memory-risk signatures have held-out breach 0.120 versus 0.074 for low-memory-risk signatures, and held-out utility 0.796 versus 0.956`
+- `pass` `failure_memory_predecessor_sentence` from results/failure_memory_adaptation_audit.json predecessor comparison: `Against the predecessor's high-memory-risk signatures, v5 reduces future breach by 0.083 and raises future utility by 0.248`
 - `pass` `calibration_ece_sentence` from results/seam_prediction_calibration_audit.json ECE and max gap: `ten-bin local calibration error between predicted seam risk and realized seam breach is 0.007, compared with 0.015 for the strongest predecessor; the maximum bin gap is 0.013`
 - `pass` `calibration_mean_correlation_sentence` from results/seam_prediction_calibration_audit.json mean and correlation metrics: `Mean predicted risk is 0.102 versus realized breach 0.095, with risk-breach correlation 0.971 and Spearman 0.950`
 - `pass` `calibration_decile_sentence` from results/seam_prediction_calibration_audit.json decile deltas: `highest-risk decile has realized breach 0.080 higher and utility 0.251 lower than the lowest-risk decile`
@@ -60,6 +64,10 @@ This audit checks that manuscript and table numbers are traceable to generated r
 - `pass` `planner_table_executable_coverage` from generated table derived from result JSON/CSV: `executable-edge coverage 0.667 vs 0.165`
 - `pass` `planner_table_selected_utility` from generated table derived from result JSON/CSV: `selected-edge utility 0.889 vs 0.658`
 - `pass` `planner_table_safety` from generated table derived from result JSON/CSV: `success delta +0.080`
+- `pass` `failure_memory_table_signature_pairs` from generated table derived from result JSON/CSV: `2,210 observed-to-held-out signature pairs`
+- `pass` `failure_memory_table_correlation` from generated table derived from result JSON/CSV: `r=0.957`
+- `pass` `failure_memory_table_high_breach` from generated table derived from result JSON/CSV: `held-out breach 0.120`
+- `pass` `failure_memory_table_predecessor_delta` from generated table derived from result JSON/CSV: `breach lower by 0.083`
 - `pass` `calibration_table_ece` from generated table derived from result JSON/CSV: `ECE10 0.007 vs strongest baseline 0.015`
 - `pass` `calibration_table_correlation` from generated table derived from result JSON/CSV: `risk-breach correlation 0.971, Spearman 0.950`
 - `pass` `calibration_table_decision_relevance` from generated table derived from result JSON/CSV: `utility is lower by 0.251`

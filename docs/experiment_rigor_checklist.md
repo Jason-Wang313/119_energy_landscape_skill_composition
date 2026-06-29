@@ -25,7 +25,7 @@
 - [x] External baseline implementation contract, method matrix, per-method specs, and audit exist while explicitly marking the independent non-oracle implementations as still missing.
 - [x] External baseline adapter scaffolds exist and are rejected as evidence by the strict audit unless replaced with real independent implementations.
 - [x] External reference adapters exist for all 12 methods and pass the adapter contract as implementation-only artifacts, without being counted as rollout evidence.
-- [x] External local dry run converts frozen local rows into 1,440 schema-compatible JSONL records and recomputes external-style metrics while explicitly remaining non-evidence.
+- [x] External local dry run converts frozen local rows into 20,640 schema-compatible JSONL records and recomputes external-style metrics while explicitly remaining non-evidence.
 - [x] External adapter contract validator checks the seam-model API shape, proposal fields, log fields, and hash reporting; strict mode remains blocked until manifest-declared real implementations replace scaffolds.
 - [x] Scaffold guard self-test verifies that scaffold-only adapters are detected while ordinary replacement files are not falsely rejected.
 - [x] Raw external rollout JSONL schema and metric recomputation validator exist and currently fail until a real manifest/log package is supplied.

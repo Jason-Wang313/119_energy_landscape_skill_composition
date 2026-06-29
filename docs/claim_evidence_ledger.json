@@ -41,6 +41,11 @@
       "evidence": ["results/planner_edge_policy_audit.json", "results/planner_edge_policy_audit.md", "paper/generated_planner_edge_policy_table.tex", "paper/main.tex"]
     },
     {
+      "name": "local_failure_memory_adaptation_claim",
+      "claim": "On local hard-slice observed-to-held-out seam signatures, early seam outcomes provide predictive planner-memory evidence for later breach and utility, while preserving the external-validation boundary.",
+      "evidence": ["results/failure_memory_adaptation_audit.json", "results/failure_memory_adaptation_audit.md", "paper/generated_failure_memory_adaptation_table.tex", "paper/main.tex"]
+    },
+    {
       "name": "local_predictive_calibration_claim",
       "claim": "On the local hard slice, predicted seam risk tracks realized seam breach with low ten-bin calibration error, monotone risk deciles, and decision-relevant utility separation while preserving the external-validation boundary.",
       "evidence": ["results/seam_prediction_calibration_audit.json", "results/seam_prediction_calibration_audit.md", "paper/generated_seam_prediction_calibration_table.tex", "paper/main.tex"]
@@ -67,7 +72,7 @@
     },
     {
       "name": "visible_contribution_claim",
-      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, outreach package, and reviewer response packet synchronized with the current materializer, operator packet, fidelity acceptance draft, tracked reference route, strict config evidence hash gate, strict full-method coverage gate, strict rollout sample-count gate, strict paired-panel gate, strict rollout uniqueness gate, confidence-gated external rollout statistics, final rollout confidence summary gate, official video write guard, official JSONL write guard, atomic official evidence promotion, release-package internal-artifact rejection, final release artifact hash recomputation, reference-adapter provenance, strict reference-adapter rejection gate, strict checkpoint/config artifact gate, outreach stance, and readiness boundary.",
+      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, outreach package, and reviewer response packet synchronized with the current planner-edge policy audit, failure-memory adaptation audit, materializer, operator packet, fidelity acceptance draft, tracked reference route, strict config evidence hash gate, strict full-method coverage gate, strict rollout sample-count gate, strict paired-panel gate, strict rollout uniqueness gate, confidence-gated external rollout statistics, final rollout confidence summary gate, official video write guard, official JSONL write guard, atomic official evidence promotion, release-package internal-artifact rejection, final release artifact hash recomputation, reference-adapter provenance, strict reference-adapter rejection gate, strict checkpoint/config artifact gate, outreach stance, and readiness boundary.",
       "evidence": ["scripts/audit_visible_contribution.py", "README.md", "docs/final_audit.md", "docs/submission_readiness_decision.md", "docs/submission_readiness_audit_v5.md", "docs/submission_version_log.md", "child_status.md", "docs/haonan_yilun_outreach_package.md", "docs/reviewer_response_packet.md"]
     },
     {

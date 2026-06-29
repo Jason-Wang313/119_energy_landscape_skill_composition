@@ -11,12 +11,12 @@
   },
   "checks": [
     {
-      "detail": "path=C:\\Users\\wangz\\Downloads\\119.pdf, sha=317D3156519D8E5062DCB23FF6EE487175ECD3F7B2B81268DB194359F8433B60, size=467426",
+      "detail": "path=C:\\Users\\wangz\\Downloads\\119.pdf, sha=AE310705B235339B73987C6E2DBD31439C50F78ADD364D5593302A9733D83A5B, size=469674",
       "name": "canonical_pdf_metadata_available",
       "passed": true
     },
     {
-      "detail": "paper_sha=317D3156519D8E5062DCB23FF6EE487175ECD3F7B2B81268DB194359F8433B60, canonical_sha=317D3156519D8E5062DCB23FF6EE487175ECD3F7B2B81268DB194359F8433B60",
+      "detail": "paper_sha=AE310705B235339B73987C6E2DBD31439C50F78ADD364D5593302A9733D83A5B, canonical_sha=AE310705B235339B73987C6E2DBD31439C50F78ADD364D5593302A9733D83A5B",
       "name": "paper_pdf_matches_canonical",
       "passed": true
     },
@@ -136,12 +136,12 @@
       "passed": true
     },
     {
-      "detail": "render_video_ready=False, render_backend='cpu', shader_pack='minimal', last_stages=['import_start', 'import_start', 'close_done', 'close_done'], envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: render preflight exceeded 30 seconds after progress stage import_start (last progress stage: import_start); OpenCabinetDrawer-v1: render preflight exceeded 30 seconds after progress stage import_start (last progress stage: import_start); OpenCabinetDoor-v1: render preflight exceeded 30 seconds after progress stage close_done (last progress stage: close_done); PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done)']",
+      "detail": "render_video_ready=False, render_backend='cpu', shader_pack='minimal', last_stages=['close_done', 'close_done', 'close_done', 'close_done'], envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done)']",
       "name": "maniskill_render_video_preflight_visible",
       "passed": true
     },
     {
-      "detail": "classes=['render_timeout', 'vulkan_descriptor_pool_exhaustion'], remediation=6",
+      "detail": "classes=['vulkan_descriptor_pool_exhaustion'], remediation=5",
       "name": "renderer_failure_classifier_visible",
       "passed": true
     },
@@ -206,7 +206,12 @@
       "passed": true
     },
     {
-      "detail": "release_hash='5CF7C6E592517ECC40371074F6341C489BCAB11E5358E6BA053CB3AD241B5929', local_model_release_ready=True, external_evidence_ready=False",
+      "detail": "signatures=2210, frontiers=1667, corr=0.9574193753223077, breach_delta=-0.08288240682870371",
+      "name": "failure_memory_adaptation_visible",
+      "passed": true
+    },
+    {
+      "detail": "release_hash='546D8DA38D310FBB51EBFC15C41DFD7A9058EC1631EA60019501378FD487A57D', local_model_release_ready=True, external_evidence_ready=False",
       "name": "local_model_release_visible",
       "passed": true
     },
@@ -261,7 +266,7 @@
       "passed": true
     },
     {
-      "detail": "sha=317D3156519D8E5062DCB23FF6EE487175ECD3F7B2B81268DB194359F8433B60, size=467426, missing_sha=[], missing_size=[]",
+      "detail": "sha=AE310705B235339B73987C6E2DBD31439C50F78ADD364D5593302A9733D83A5B, size=469674, missing_sha=[], missing_size=[]",
       "name": "public_pdf_metadata_matches_canonical_artifact",
       "passed": true
     }

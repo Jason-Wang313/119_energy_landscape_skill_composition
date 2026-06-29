@@ -21,7 +21,7 @@
       "passed": true
     },
     {
-      "detail": "commit='4d077d82da1c0fc8811285e22f3a2504cea7e2a4'",
+      "detail": "commit='a93abb937260db146e97adbb4b68f4b814ed6b0d'",
       "name": "repo_commit_reported",
       "passed": true
     },
@@ -143,41 +143,49 @@
   "primary_route_missing_packages": [],
   "repo": {
     "branch": "codex/paper119-submission-hardening",
-    "commit": "4d077d82da1c0fc8811285e22f3a2504cea7e2a4",
+    "commit": "a93abb937260db146e97adbb4b68f4b814ed6b0d",
     "dirty_status_lines": [
       " M .github/workflows/paper119-validation.yml",
+      " M .gitignore",
       " M README.md",
       " M child_status.md",
       " M docs/claim_evidence_ledger.json",
+      " M docs/experiment_rigor_checklist.md",
       " M docs/final_audit.md",
+      " M docs/haonan_yilun_outreach_package.md",
+      " M docs/iclr_main_gate.md",
+      " M docs/local_model_release.md",
       " M docs/paper119_terminal_audit_20260623.md",
       " M docs/reproducibility_checklist.md",
+      " M docs/reviewer_response_packet.md",
       " M docs/submission_readiness_audit_v5.md",
       " M docs/submission_readiness_decision.md",
       " M docs/submission_version_log.md",
+      " M external_validation/fidelity_acceptance_draft.json",
+      " M external_validation/fidelity_acceptance_draft.md",
+      " M external_validation/local_dry_run/configs/cable_route_insert.json",
+      " M external_validation/local_dry_run/configs/door_open_navigation.json",
+      " M external_validation/local_dry_run/configs/drawer_to_pick_transfer.json",
+      " M external_validation/local_dry_run/configs/peg_place_regrasp.json",
+      " M external_validation/local_dry_run/logs/cable_route_insert.jsonl",
+      " M external_validation/local_dry_run/logs/door_open_navigation.jsonl",
+      " M external_validation/local_dry_run/logs/drawer_to_pick_transfer.jsonl",
+      " M external_validation/local_dry_run/logs/peg_place_regrasp.jsonl",
+      " M external_validation/local_dry_run/manifest.json",
+      " D external_validation/local_dry_run/videos/cable_route_insert/placeholder_not_external_evidence.mp4",
+      " D external_validation/local_dry_run/videos/door_open_navigation/placeholder_not_external_evidence.mp4",
+      " D external_validation/local_dry_run/videos/drawer_to_pick_transfer/placeholder_not_external_evidence.mp4",
+      " D external_validation/local_dry_run/videos/peg_place_regrasp/placeholder_not_external_evidence.mp4",
+      " M external_validation/render_machine_qualification_packet.md",
+      " M outreach/paper119_four_page_preview.pdf",
+      " M outreach/paper119_four_page_preview.tex",
+      " M outreach/paper119_one_page_memo.pdf",
+      " M outreach/paper119_one_page_memo.tex",
       " M paper/main.pdf",
       " M paper/main.tex",
       " M results/camera_ready_design_audit.json",
       " M results/camera_ready_design_audit.md",
-      " M results/external_platform_probe.json",
-      " M results/external_platform_probe.md",
-      " M results/maniskill_env_smoke_probe.json",
-      " M results/presentation_quality_audit.json",
-      " M results/presentation_quality_audit.md",
-      " M results/submission_readiness_gap_audit.json",
-      " M results/submission_readiness_gap_audit.md",
-      " M results/visible_contribution_audit.json",
-      " M results/visible_contribution_audit.md",
-      " M scripts/audit_submission_readiness_gap.py",
-      " M scripts/audit_visible_contribution.py",
-      " M scripts/build_submission_artifacts.ps1",
-      " M scripts/generate_manuscript.py",
-      " M scripts/validate_submission_artifacts.py",
-      "?? docs/local_model_release.md",
-      "?? results/local_model_release_audit.json",
-      "?? results/local_model_release_audit.md",
-      "?? results/local_model_release_manifest.json",
-      "?? scripts/build_local_model_release.py"
+      " M results/exte"
     ],
     "git_commands": {
       "rev_parse_branch": {
@@ -201,7 +209,7 @@
         ],
         "returncode": 0,
         "stderr": "",
-        "stdout": "4d077d82da1c0fc8811285e22f3a2504cea7e2a4\n"
+        "stdout": "a93abb937260db146e97adbb4b68f4b814ed6b0d\n"
       },
       "status_short": {
         "available": true,
@@ -212,7 +220,7 @@
         ],
         "returncode": 0,
         "stderr": "",
-        "stdout": " M .github/workflows/paper119-validation.yml\n M README.md\n M child_status.md\n M docs/claim_evidence_ledger.json\n M docs/final_audit.md\n M docs/paper119_terminal_audit_20260623.md\n M docs/reproducibility_checklist.md\n M docs/submission_readiness_audit_v5.md\n M docs/submission_readiness_decision.md\n M docs/submission_version_log.md\n M paper/main.pdf\n M paper/main.tex\n M results/camera_ready_design_audit.json\n M results/camera_ready_design_audit.md\n M results/external_platform_probe.json\n M results/external_platform_probe.md\n M results/maniskill_env_smoke_probe.json\n M results/presentation_quality_audit.json\n M results/presentation_quality_audit.md\n M results/submission_readiness_gap_audit.json\n M results/submission_readiness_gap_audit.md\n M results/visible_contribution_audit.json\n M results/visible_contribution_audit.md\n M scripts/audit_submission_readiness_gap.py\n M scripts/audit_visible_contribution.py\n M scripts/build_submission_artifacts.ps1\n M scripts/generate_manuscript.py\n M scripts/validate_submission_artifacts.py\n?? docs/local_model_release.md\n?? results/local_model_release_audit.json\n?? results/local_model_release_audit.md\n?? results/local_model_release_manifest.json\n?? scripts/build_local_model_release.py\n"
+        "stdout": " M .github/workflows/paper119-validation.yml\n M .gitignore\n M README.md\n M child_status.md\n M docs/claim_evidence_ledger.json\n M docs/experiment_rigor_checklist.md\n M docs/final_audit.md\n M docs/haonan_yilun_outreach_package.md\n M docs/iclr_main_gate.md\n M docs/local_model_release.md\n M docs/paper119_terminal_audit_20260623.md\n M docs/reproducibility_checklist.md\n M docs/reviewer_response_packet.md\n M docs/submission_readiness_audit_v5.md\n M docs/submission_readiness_decision.md\n M docs/submission_version_log.md\n M external_validation/fidelity_acceptance_draft.json\n M external_validation/fidelity_acceptance_draft.md\n M external_validation/local_dry_run/configs/cable_route_insert.json\n M external_validation/local_dry_run/configs/door_open_navigation.json\n M external_validation/local_dry_run/configs/drawer_to_pick_transfer.json\n M external_validation/local_dry_run/configs/peg_place_regrasp.json\n M external_validation/local_dry_run/logs/cable_route_insert.jsonl\n M external_validation/local_dry_run/logs/door_open_navigation.jsonl\n M external_validation/local_dry_run/logs/drawer_to_pick_transfer.jsonl\n M external_validation/local_dry_run/logs/peg_place_regrasp.jsonl\n M external_validation/local_dry_run/manifest.json\n D external_validation/local_dry_run/videos/cable_route_insert/placeholder_not_external_evidence.mp4\n D external_validation/local_dry_run/videos/door_open_navigation/placeholder_not_external_evidence.mp4\n D external_validation/local_dry_run/videos/drawer_to_pick_transfer/placeholder_not_external_evidence.mp4\n D external_validation/local_dry_run/videos/peg_place_regrasp/placeholder_not_external_evidence.mp4\n M external_validation/render_machine_qualification_packet.md\n M outreach/paper119_four_page_preview.pdf\n M outreach/paper119_four_page_preview.tex\n M outreach/paper119_one_page_memo.pdf\n M outreach/paper119_one_page_memo.tex\n M paper/main.pdf\n M paper/main.tex\n M results/camera_ready_design_audit.json\n M results/camera_ready_design_audit.md\n M results/exte"
       }
     }
   },
@@ -266,9 +274,9 @@
       "sha256": "57C8C99918AF4480A1ABF1118B5FF38F738E0CAFF23B36D8376F40B18A4FC9FD"
     },
     "external_validation/runner/real_collection_runner.py": {
-      "bytes": 15097,
+      "bytes": 29149,
       "exists": true,
-      "sha256": "E18DDE573F0269B387FADD3E3BC6BCCC4620A685000281D15FD50E8E184FB071"
+      "sha256": "3C35D3CDC8EF3A54E518242D371BF95E5C554BC656DA536D7DD01B0040CAB133"
     }
   },
   "version": "external_platform_probe_v1"

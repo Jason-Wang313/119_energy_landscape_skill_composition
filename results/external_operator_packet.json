@@ -52,7 +52,7 @@
       "passed": true
     },
     {
-      "detail": "render_video_ready=False, envs=4, failure_classes=['render_timeout', 'vulkan_descriptor_pool_exhaustion']",
+      "detail": "render_video_ready=False, envs=4, failure_classes=['vulkan_descriptor_pool_exhaustion']",
       "name": "render_video_preflight_recorded_but_not_evidence",
       "passed": true
     },
@@ -802,11 +802,11 @@
     "audit_path": "results/maniskill_render_machine_qualification.json",
     "blocking_missing": [
       "render_video_ready is false in results/maniskill_render_video_preflight_audit.json",
-      "PegInsertionSide-v1 has no render-backed MP4: render preflight exceeded 30 seconds after progress stage import_start",
+      "PegInsertionSide-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
       "PegInsertionSide-v1 did not write a renderer-backed MP4",
-      "OpenCabinetDrawer-v1 has no render-backed MP4: render preflight exceeded 30 seconds after progress stage import_start",
+      "OpenCabinetDrawer-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
       "OpenCabinetDrawer-v1 did not write a renderer-backed MP4",
-      "OpenCabinetDoor-v1 has no render-backed MP4: render preflight exceeded 30 seconds after progress stage close_done",
+      "OpenCabinetDoor-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
       "OpenCabinetDoor-v1 did not write a renderer-backed MP4",
       "PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
       "PullCubeTool-v1 did not write a renderer-backed MP4",
@@ -824,7 +824,7 @@
     "audit_md_path": "results/maniskill_render_video_preflight_audit.md",
     "audit_path": "results/maniskill_render_video_preflight_audit.json",
     "blocking_missing": [
-      "render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: render preflight exceeded 30 seconds after progress stage import_start (last progress stage: import_start); OpenCabinetDrawer-v1: render preflight exceeded 30 seconds after progress stage import_start (last progress stage: import_start); OpenCabinetDoor-v1: render preflight exceeded 30 seconds after progress stage close_done (last progress stage: close_done); PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done)"
+      "render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done)"
     ],
     "build_command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4",
     "env_count": 4,
@@ -834,20 +834,18 @@
       "Record Python, ManiSkill, SAPIEN, GPU/Vulkan, render backend, shader pack, and driver provenance with scripts\\probe_external_platform.py before fidelity acceptance.",
       "Treat vk::Device::allocateDescriptorSetsUnique/ErrorOutOfPoolMemory as a renderer-resource blocker for this machine, not as rollout evidence failure.",
       "Retest one primary environment at a time with explicit renderer profiles before official collection: cpu/minimal, gpu/minimal, and sapien_cuda/minimal.",
-      "Use a machine whose SAPIEN/Vulkan renderer can capture RGB frames for all four primary task families before promoting fidelity acceptance.",
-      "Increase --timeout-seconds only after confirming the renderer is making progress and output directories remain quarantined."
+      "Use a machine whose SAPIEN/Vulkan renderer can capture RGB frames for all four primary task families before promoting fidelity acceptance."
     ],
     "render_ready_env_count": 0,
     "render_video_ready": false,
     "renderer_failure_classes": [
-      "render_timeout",
       "vulkan_descriptor_pool_exhaustion"
     ],
     "renderer_profile_retest_commands": [
-      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 30 --max-envs 1 --width 64 --height 64 --render-backend cpu --shader-pack minimal",
-      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 30 --max-envs 1 --width 64 --height 64 --render-backend gpu --shader-pack minimal",
-      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 30 --max-envs 1 --width 64 --height 64 --render-backend sapien_cuda --shader-pack minimal",
-      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 30 --max-envs 4 --width 64 --height 64 --render-backend cpu --shader-pack minimal"
+      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend cpu --shader-pack minimal",
+      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend gpu --shader-pack minimal",
+      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend sapien_cuda --shader-pack minimal",
+      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4 --width 64 --height 64 --render-backend cpu --shader-pack minimal"
     ],
     "strict_external_evidence_ready": false
   },
