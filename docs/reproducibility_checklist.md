@@ -54,6 +54,7 @@
 - External operator packet builder: `scripts/build_external_operator_packet.py`
 - External operator handoff bundle builder: `scripts/build_external_operator_handoff_bundle.py`
 - External adapter scaffold guard self-test: `scripts/self_test_external_adapter_scaffold_guard.py`
+  - Durable report: `results/external_adapter_scaffold_guard_self_test.md`
 - External evidence validator: `scripts/audit_external_evidence.py`
 - External execution readiness validator: `scripts/audit_external_execution_readiness.py`
 - External rollout metric validator: `scripts/validate_external_rollouts.py`
@@ -190,6 +191,8 @@
   - `results/external_baseline_contract_audit.md`
   - `results/external_adapter_scaffold_audit.json`
   - `results/external_adapter_scaffold_audit.md`
+  - `results/external_adapter_scaffold_guard_self_test.json`
+  - `results/external_adapter_scaffold_guard_self_test.md`
   - `results/external_reference_adapter_audit.json`
   - `results/external_reference_adapter_audit.md`
   - `results/external_local_dry_run_metrics.json`

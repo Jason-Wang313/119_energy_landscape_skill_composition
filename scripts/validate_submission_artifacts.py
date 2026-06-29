@@ -1530,6 +1530,42 @@ def main():
     for path in required_adapter_scaffold_files:
         if not path.exists():
             fail(f"missing external adapter scaffold artifact: {path}")
+    scaffold_guard_self_test_path = RESULTS / "external_adapter_scaffold_guard_self_test.json"
+    scaffold_guard_self_test_md_path = RESULTS / "external_adapter_scaffold_guard_self_test.md"
+    for path in (
+        ROOT / "scripts" / "self_test_external_adapter_scaffold_guard.py",
+        scaffold_guard_self_test_path,
+        scaffold_guard_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external adapter scaffold guard self-test artifact: {path}")
+    scaffold_guard_self_test = json.loads(scaffold_guard_self_test_path.read_text(encoding="utf-8"))
+    if scaffold_guard_self_test.get("version") != "external_adapter_scaffold_guard_self_test_v1":
+        fail("external adapter scaffold guard self-test version mismatch")
+    if scaffold_guard_self_test.get("passed") is not True:
+        fail("external adapter scaffold guard self-test did not pass")
+    if scaffold_guard_self_test.get("not_external_evidence") is not True:
+        fail("external adapter scaffold guard self-test must declare that it is not evidence")
+    if scaffold_guard_self_test.get("scaffold_directory_detected") is not True:
+        fail("external adapter scaffold guard self-test must detect scaffold directories")
+    if scaffold_guard_self_test.get("scaffold_template_detected") is not True:
+        fail("external adapter scaffold guard self-test must detect scaffold templates")
+    if scaffold_guard_self_test.get("ordinary_adapter_falsely_rejected") is not False:
+        fail("external adapter scaffold guard self-test must not reject ordinary replacement adapters")
+    if scaffold_guard_self_test.get("temporary_adapter_file_removed") is not True:
+        fail("external adapter scaffold guard self-test must remove temporary adapter files")
+    if scaffold_guard_self_test.get("real_adapter_reports_untouched") is not True:
+        fail("external adapter scaffold guard self-test must leave real adapter reports untouched")
+    scaffold_guard_checks = {check.get("name"): check.get("passed") for check in scaffold_guard_self_test.get("checks", [])}
+    for required_check in (
+        "scaffold_directory_detected",
+        "scaffold_template_detected",
+        "ordinary_replacement_adapter_not_flagged",
+        "temporary_adapter_file_removed",
+        "real_adapter_reports_untouched",
+    ):
+        if scaffold_guard_checks.get(required_check) is not True:
+            fail(f"external adapter scaffold guard self-test missing passing check: {required_check}")
 
     reference_adapter_path = RESULTS / "external_reference_adapter_audit.json"
     if not reference_adapter_path.exists():

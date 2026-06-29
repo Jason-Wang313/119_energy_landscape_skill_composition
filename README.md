@@ -165,7 +165,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External reference adapter audit: `results/external_reference_adapter_audit.md`
 - External local dry-run manifest: `external_validation/local_dry_run/manifest.json`
 - External local dry-run metrics: `results/external_local_dry_run_metrics.md`
-- External adapter scaffold guard self-test: `scripts/self_test_external_adapter_scaffold_guard.py`
+- External adapter scaffold guard self-test: `results/external_adapter_scaffold_guard_self_test.md` proves scaffold-only adapter directories/templates are rejected while ordinary replacement adapter files are not falsely rejected; it is not evidence.
 - External adapter contract audit: `results/external_adapter_contract_audit.md`
 - Strict external adapter evidence audit: `results/external_adapter_contract_evidence_audit.md`
 - External adapter evidence self-test: `results/external_adapter_evidence_self_test.md`

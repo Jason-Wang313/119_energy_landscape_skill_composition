@@ -1,0 +1,51 @@
+{
+  "checks": [
+    {
+      "detail": "path=external_validation/baselines/barrier_certified_energy_composer_v5",
+      "name": "scaffold_directory_detected",
+      "passed": true
+    },
+    {
+      "detail": "path=external_validation/baselines/barrier_certified_energy_composer_v5/adapter_template.py",
+      "name": "scaffold_template_detected",
+      "passed": true
+    },
+    {
+      "detail": "temporary ordinary adapter file was not classified as scaffold-only",
+      "name": "ordinary_replacement_adapter_not_flagged",
+      "passed": true
+    },
+    {
+      "detail": "temporary ordinary adapter file was removed after self-test",
+      "name": "temporary_adapter_file_removed",
+      "passed": true
+    },
+    {
+      "detail": "before={'results/external_adapter_scaffold_audit.json': '92a41ebf2dee4066d5d294c8420492d6e4b934a1f1b601ad4cb8f90390ac2c4a', 'results/external_adapter_scaffold_audit.md': 'f7f2a7e3738a610c9b878a36280bc507ec26d972dc0d0edc01f77d2107681dc0', 'results/external_adapter_contract_evidence_audit.json': 'ae830cd8e98d58b508d5044b140d4ebd84513916d5d6f9faa92a7e8d51bc6609', 'results/external_adapter_contract_evidence_audit.md': 'bdf0f369017209f5b1caa0cdce5c935a3954ec83fca12cad1998a08621b0fd88'}, after={'results/external_adapter_scaffold_audit.json': '92a41ebf2dee4066d5d294c8420492d6e4b934a1f1b601ad4cb8f90390ac2c4a', 'results/external_adapter_scaffold_audit.md': 'f7f2a7e3738a610c9b878a36280bc507ec26d972dc0d0edc01f77d2107681dc0', 'results/external_adapter_contract_evidence_audit.json': 'ae830cd8e98d58b508d5044b140d4ebd84513916d5d6f9faa92a7e8d51bc6609', 'results/external_adapter_contract_evidence_audit.md': 'bdf0f369017209f5b1caa0cdce5c935a3954ec83fca12cad1998a08621b0fd88'}",
+      "name": "real_adapter_reports_untouched",
+      "passed": true
+    }
+  ],
+  "not_external_evidence": true,
+  "ordinary_adapter_falsely_rejected": false,
+  "passed": true,
+  "real_adapter_reports_untouched": true,
+  "real_report_digests_after": {
+    "results/external_adapter_contract_evidence_audit.json": "ae830cd8e98d58b508d5044b140d4ebd84513916d5d6f9faa92a7e8d51bc6609",
+    "results/external_adapter_contract_evidence_audit.md": "bdf0f369017209f5b1caa0cdce5c935a3954ec83fca12cad1998a08621b0fd88",
+    "results/external_adapter_scaffold_audit.json": "92a41ebf2dee4066d5d294c8420492d6e4b934a1f1b601ad4cb8f90390ac2c4a",
+    "results/external_adapter_scaffold_audit.md": "f7f2a7e3738a610c9b878a36280bc507ec26d972dc0d0edc01f77d2107681dc0"
+  },
+  "real_report_digests_before": {
+    "results/external_adapter_contract_evidence_audit.json": "ae830cd8e98d58b508d5044b140d4ebd84513916d5d6f9faa92a7e8d51bc6609",
+    "results/external_adapter_contract_evidence_audit.md": "bdf0f369017209f5b1caa0cdce5c935a3954ec83fca12cad1998a08621b0fd88",
+    "results/external_adapter_scaffold_audit.json": "92a41ebf2dee4066d5d294c8420492d6e4b934a1f1b601ad4cb8f90390ac2c4a",
+    "results/external_adapter_scaffold_audit.md": "f7f2a7e3738a610c9b878a36280bc507ec26d972dc0d0edc01f77d2107681dc0"
+  },
+  "scaffold_directory": "external_validation/baselines/barrier_certified_energy_composer_v5",
+  "scaffold_directory_detected": true,
+  "scaffold_file": "external_validation/baselines/barrier_certified_energy_composer_v5/adapter_template.py",
+  "scaffold_template_detected": true,
+  "temporary_adapter_file_removed": true,
+  "version": "external_adapter_scaffold_guard_self_test_v1"
+}

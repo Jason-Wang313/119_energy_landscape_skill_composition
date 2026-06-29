@@ -95,6 +95,7 @@ def main() -> int:
     postcollection_consistency = read_json(RESULTS / "external_postcollection_seal_consistency_audit.json")
     postcollection_consistency_self_test = read_json(RESULTS / "external_postcollection_seal_consistency_self_test.json")
     method_implementation = read_json(RESULTS / "external_method_implementation_audit.json")
+    adapter_scaffold_guard_self_test = read_json(RESULTS / "external_adapter_scaffold_guard_self_test.json")
     adapter_evidence_self_test = read_json(RESULTS / "external_adapter_evidence_self_test.json")
     materialization = read_json(RESULTS / "external_config_materialization_plan.json")
     planner_policy = read_json(RESULTS / "planner_edge_policy_audit.json")
@@ -1188,6 +1189,36 @@ def main() -> int:
         ),
     )
     adapter_evidence_self_checks = {check.get("name"): check.get("passed") for check in adapter_evidence_self_test.get("checks", [])}
+    scaffold_guard_self_checks = {
+        check.get("name"): check.get("passed") for check in adapter_scaffold_guard_self_test.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "adapter_scaffold_guard_self_test_visible",
+        adapter_scaffold_guard_self_test.get("version") == "external_adapter_scaffold_guard_self_test_v1"
+        and adapter_scaffold_guard_self_test.get("passed") is True
+        and adapter_scaffold_guard_self_test.get("not_external_evidence") is True
+        and adapter_scaffold_guard_self_test.get("scaffold_directory_detected") is True
+        and adapter_scaffold_guard_self_test.get("scaffold_template_detected") is True
+        and adapter_scaffold_guard_self_test.get("ordinary_adapter_falsely_rejected") is False
+        and adapter_scaffold_guard_self_test.get("temporary_adapter_file_removed") is True
+        and adapter_scaffold_guard_self_test.get("real_adapter_reports_untouched") is True
+        and scaffold_guard_self_checks.get("scaffold_directory_detected") is True
+        and scaffold_guard_self_checks.get("scaffold_template_detected") is True
+        and scaffold_guard_self_checks.get("ordinary_replacement_adapter_not_flagged") is True
+        and scaffold_guard_self_checks.get("temporary_adapter_file_removed") is True
+        and scaffold_guard_self_checks.get("real_adapter_reports_untouched") is True
+        and (RESULTS / "external_adapter_scaffold_guard_self_test.md").exists()
+        and "results/external_adapter_scaffold_guard_self_test.md" in texts["README"]
+        and "results/external_adapter_scaffold_guard_self_test.md" in texts["final_audit"]
+        and "results/external_adapter_scaffold_guard_self_test.md" in texts["reproducibility"],
+        (
+            f"scaffold_dir={adapter_scaffold_guard_self_test.get('scaffold_directory_detected')!r}, "
+            f"scaffold_template={adapter_scaffold_guard_self_test.get('scaffold_template_detected')!r}, "
+            f"ordinary_false_positive={adapter_scaffold_guard_self_test.get('ordinary_adapter_falsely_rejected')!r}, "
+            f"real_untouched={adapter_scaffold_guard_self_test.get('real_adapter_reports_untouched')!r}"
+        ),
+    )
     add_check(
         checks,
         "strict_reference_adapter_rejection_gate_visible",
@@ -1920,7 +1951,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the failure-memory adaptation audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the strict MP4 video evidence gate, the strict full-method coverage gate, the strict rollout sample-count gate, the strict paired-panel gate, the strict rollout uniqueness gate, confidence-gated external rollout statistics, the final rollout confidence summary gate, the strict task-config hash gate, the strict policy/config hash gate, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the External precollection freeze receipt, the External precollection freeze receipt self-test, the External postcollection evidence seal, the External postcollection evidence seal self-test, the External postcollection seal consistency gate, the External postcollection seal consistency self-test, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the strict fidelity acceptance provenance gate, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, atomic official evidence promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, render resource sweep, ManiSkill render machine qualification packet, render failure remediation packet, ManiSkill pilot runtime liveness audit, reset-timeout triage sidecar, and backend reset substage markers, the external method implementation packet, adapter acceptance fixtures, the reference-adapter provenance catalog, the method manifest cutover checklist, the strict reference-adapter rejection gate, the strict independent method provenance gate, the strict checkpoint/config artifact gate, the strict fairness-contract binding gate, the manifest assembly checklist, the External manifest builder self-test, the External rollout validator self-test, the External full-pipeline evidence self-test, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the failure-memory adaptation audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the strict MP4 video evidence gate, the strict full-method coverage gate, the strict rollout sample-count gate, the strict paired-panel gate, the strict rollout uniqueness gate, confidence-gated external rollout statistics, the final rollout confidence summary gate, the strict task-config hash gate, the strict policy/config hash gate, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the External precollection freeze receipt, the External precollection freeze receipt self-test, the External postcollection evidence seal, the External postcollection evidence seal self-test, the External postcollection seal consistency gate, the External postcollection seal consistency self-test, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the strict fidelity acceptance provenance gate, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, atomic official evidence promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, render resource sweep, ManiSkill render machine qualification packet, render failure remediation packet, ManiSkill pilot runtime liveness audit, reset-timeout triage sidecar, and backend reset substage markers, the external method implementation packet, adapter acceptance fixtures, the reference-adapter provenance catalog, the method manifest cutover checklist, the External adapter scaffold guard self-test, the strict reference-adapter rejection gate, the strict independent method provenance gate, the strict checkpoint/config artifact gate, the strict fairness-contract binding gate, the manifest assembly checklist, the External manifest builder self-test, the External rollout validator self-test, the External full-pipeline evidence self-test, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

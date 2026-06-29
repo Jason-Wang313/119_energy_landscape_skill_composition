@@ -252,6 +252,11 @@
       "passed": true
     },
     {
+      "detail": "scaffold_dir=True, scaffold_template=True, ordinary_false_positive=False, real_untouched=True",
+      "name": "adapter_scaffold_guard_self_test_visible",
+      "passed": true
+    },
+    {
       "detail": "reference_adapter_evidence_ready=False, leaky_provenance_ready=False, implementation_hash_only_ready=False, fairness_mismatch_ready=False, check=True",
       "name": "strict_reference_adapter_rejection_gate_visible",
       "passed": true
