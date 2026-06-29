@@ -99,7 +99,7 @@
     "timestep_seconds": "Probe-observed sim_timestep=0.01, control_timestep=0.05; OPERATOR_VERIFY_TIMESTEP_SECONDS_BEFORE_ACCEPTANCE"
   },
   "prefilled_hashes": {
-    "backend_module_sha256": "3479C8AEA42FC8BCDFF30B8108AD70733136945748F02785A18100FAAEF3A255",
+    "backend_module_sha256": "B02E244CF41FBABA7CC1382CED8B2F9701E015E7D1E9679805A006694355783F",
     "skill_library_hash": "62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1",
     "task_config_hashes": {
       "cable_route_insert": "8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E",
@@ -278,8 +278,8 @@
   "provenance": {
     "artifact_hash_policy": "sha256",
     "backend_module": "external_validation/runner/maniskill_reference_backend.py",
-    "backend_module_hash": "3479C8AEA42FC8BCDFF30B8108AD70733136945748F02785A18100FAAEF3A255",
-    "code_commit": "c08399bf94f01560ddc3daa0ee37bb1cc0fe22db",
+    "backend_module_hash": "B02E244CF41FBABA7CC1382CED8B2F9701E015E7D1E9679805A006694355783F",
+    "code_commit": "65ba836165c4c34afca1a9625cfa65b4808b91ac",
     "date_locked": "DRAFT_NOT_LOCKED",
     "fidelity_metadata_probe_path": "results/maniskill_fidelity_metadata_probe.json",
     "fidelity_metadata_probe_ready": true,
@@ -326,31 +326,7 @@
     "reference_collection_preflight_blocking": [
       "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"
     ],
-    "repo_dirty_status_lines": [
-      "M external_validation/fidelity_acceptance_draft.json",
-      " M external_validation/fidelity_acceptance_draft.md",
-      " M results/external_acquisition_packet.json",
-      " M results/external_acquisition_packet.md",
-      " M results/external_execution_readiness_audit.json",
-      " M results/external_execution_readiness_audit.md",
-      " M results/external_fidelity_acceptance_draft_audit.json",
-      " M results/external_fidelity_acceptance_draft_audit.md",
-      " M results/external_operator_handoff_bundle.json",
-      " M results/external_operator_handoff_bundle.md",
-      " M results/external_operator_packet.json",
-      " M results/external_operator_packet.md",
-      " M results/fidelity_acceptance_materialization_plan.json",
-      " M results/fidelity_acceptance_materialization_plan.md",
-      " M results/visible_contribution_audit.json",
-      " M results/visible_contribution_audit.md",
-      " M scripts/audit_external_execution_readiness.py",
-      " M scripts/audit_visible_contribution.py",
-      " M scripts/build_external_acquisition_packet.py",
-      " M scripts/build_external_fidelity_acceptance_draft.py",
-      " M scripts/build_external_operator_packet.py",
-      " M scripts/materialize_fidelity_acceptance.py",
-      " M scripts/validate_submission_artifacts.py"
-    ],
+    "repo_dirty_status_lines": [],
     "skill_library_hash": "62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1",
     "strict_fidelity_metadata_ready": true
   },
