@@ -60,6 +60,7 @@ def contains_all(text: str, terms: list[str]) -> tuple[bool, list[str]]:
 def main() -> int:
     RESULTS.mkdir(exist_ok=True)
     summary = read_json(RESULTS / "submission_readiness_gap_audit.json")
+    collection_readiness = read_json(RESULTS / "external_collection_readiness_audit.json")
     operator = read_json(RESULTS / "external_operator_packet.json")
     handoff = read_json(RESULTS / "external_operator_handoff_bundle.json")
     analysis = read_json(RESULTS / "external_analysis_plan_audit.json")
@@ -156,6 +157,34 @@ def main() -> int:
         (
             f"start_state={operator.get('start_state')!r}, "
             f"blocking_missing_count={operator.get('blocking_missing_count')!r}"
+        ),
+    )
+    collection_reference_route = collection_readiness.get("tracked_reference_route", {}) or {}
+    collection_reference_blockers = collection_reference_route.get("blocking_missing", []) or []
+    collection_reference_checks = {check.get("name"): check.get("passed") for check in collection_reference_route.get("checks", []) or []}
+    add_check(
+        checks,
+        "collection_readiness_tracked_reference_route_visible",
+        collection_readiness.get("passed") is True
+        and collection_readiness.get("not_external_evidence") is True
+        and collection_readiness.get("collection_ready") is False
+        and collection_reference_route.get("not_external_evidence") is True
+        and "maniskill_reference_backend.py" in str(collection_reference_route.get("backend_module", ""))
+        and collection_reference_route.get("run_id") == "maniskill_sapien_reference_preflight_protocol_v1"
+        and collection_reference_route.get("collection_ready") is False
+        and collection_reference_route.get("strict_external_evidence_ready") is False
+        and int(collection_reference_route.get("blocking_missing_count", 99) or 99) == 1
+        and len(collection_reference_blockers) == 1
+        and "fidelity_acceptance_ready" in collection_reference_blockers[0]
+        and collection_reference_checks.get("reference_backend_contract_ready") is True
+        and collection_reference_checks.get("reference_task_configs_ready") is True
+        and collection_reference_checks.get("reference_fidelity_acceptance_ready") is False
+        and "audit_external_collection_readiness.py --strict" in str(collection_reference_route.get("pre_collection_gate_command", ""))
+        and "real_collection_runner.py" in str(collection_reference_route.get("collection_command_after_fidelity_acceptance", "")),
+        (
+            f"backend={collection_reference_route.get('backend_module')!r}, "
+            f"run_id={collection_reference_route.get('run_id')!r}, "
+            f"blocking={collection_reference_blockers!r}"
         ),
     )
     reference_route = operator.get("tracked_maniskill_reference_route", {}) or {}

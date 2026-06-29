@@ -351,6 +351,11 @@
       "passed": true
     },
     {
+      "detail": "backend='external_validation\\\\runner\\\\maniskill_reference_backend.py', run_id='maniskill_sapien_reference_preflight_protocol_v1', blocking=[\"reference_fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'\"]",
+      "name": "external_collection_readiness_tracked_reference_route",
+      "passed": true
+    },
+    {
       "detail": "passed",
       "name": "maniskill_reference_collection_preflight_ready",
       "passed": true

@@ -1358,6 +1358,31 @@ def main():
             fail(f"external collection readiness should currently fail closed on {required_blocker}")
     if collection_readiness_checks.get("real_task_configs_ready") is not True and collection_readiness_checks.get("real_task_configs_ready") is not False:
         fail("external collection readiness must explicitly audit real_task_configs_ready")
+    collection_reference_route = collection_readiness.get("tracked_reference_route", {}) or {}
+    collection_reference_blockers = collection_reference_route.get("blocking_missing", []) or []
+    collection_reference_checks = {check.get("name"): check.get("passed") for check in collection_reference_route.get("checks", [])}
+    if collection_reference_route.get("not_external_evidence") is not True:
+        fail("external collection readiness tracked reference route must be marked non-evidence")
+    if "maniskill_reference_backend.py" not in str(collection_reference_route.get("backend_module", "")):
+        fail("external collection readiness tracked reference route must name the ManiSkill backend")
+    if collection_reference_route.get("run_id") != "maniskill_sapien_reference_preflight_protocol_v1":
+        fail("external collection readiness tracked reference route must use the locked reference run id")
+    if collection_reference_route.get("collection_ready") is not False:
+        fail("external collection readiness tracked reference route must preserve collection_ready=false until fidelity acceptance")
+    if collection_reference_route.get("strict_external_evidence_ready") is not False:
+        fail("external collection readiness tracked reference route must not claim strict evidence readiness")
+    if int(collection_reference_route.get("blocking_missing_count", 99) or 99) != 1 or len(collection_reference_blockers) != 1 or "fidelity_acceptance_ready" not in collection_reference_blockers[0]:
+        fail("external collection readiness tracked reference route must show fidelity acceptance as the single route blocker")
+    if collection_reference_checks.get("reference_backend_contract_ready") is not True:
+        fail("external collection readiness tracked reference route must audit reference backend contract readiness")
+    if collection_reference_checks.get("reference_task_configs_ready") is not True:
+        fail("external collection readiness tracked reference route must audit prepared task config readiness")
+    if collection_reference_checks.get("reference_fidelity_acceptance_ready") is not False:
+        fail("external collection readiness tracked reference route must keep fidelity acceptance fail-closed")
+    if "audit_external_collection_readiness.py --strict" not in str(collection_reference_route.get("pre_collection_gate_command", "")) or "--unsealed-alias-map" not in str(collection_reference_route.get("pre_collection_gate_command", "")):
+        fail("external collection readiness tracked reference route must include the strict pre-collection gate command")
+    if "real_collection_runner.py" not in str(collection_reference_route.get("collection_command_after_fidelity_acceptance", "")) or "maniskill_reference_backend.py" not in str(collection_reference_route.get("collection_command_after_fidelity_acceptance", "")):
+        fail("external collection readiness tracked reference route must include the concrete reference collection command")
     if not (RESULTS / "external_collection_readiness_audit.md").exists():
         fail("missing results/external_collection_readiness_audit.md")
 
@@ -3000,6 +3025,7 @@ def main():
         "external_collection_readiness_not_evidence",
         "external_collection_readiness_fail_closed",
         "external_collection_readiness_packet_shape",
+        "external_collection_readiness_tracked_reference_route",
         "maniskill_reference_collection_preflight_ready",
         "maniskill_reference_collection_preflight_reaches_fidelity_gate",
         "external_pairing_integrity_audit_ready",
@@ -4115,6 +4141,7 @@ def main():
     for required_check in (
         "readiness_gap_state_visible",
         "operator_packet_no_go_visible",
+        "collection_readiness_tracked_reference_route_visible",
         "analysis_plan_visible",
         "platform_onboarding_visible",
         "fidelity_provenance_packet_visible",

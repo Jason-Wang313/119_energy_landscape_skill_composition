@@ -11,6 +11,7 @@ This audit checks that the public-facing contribution docs describe the current 
 - `pass` `paper_pdf_matches_canonical`: paper_sha=AE310705B235339B73987C6E2DBD31439C50F78ADD364D5593302A9733D83A5B, canonical_sha=AE310705B235339B73987C6E2DBD31439C50F78ADD364D5593302A9733D83A5B
 - `pass` `readiness_gap_state_visible`: objective_complete=False, satisfied=17, blocking=4
 - `pass` `operator_packet_no_go_visible`: start_state='DO_NOT_COLLECT_YET', blocking_missing_count=4
+- `pass` `collection_readiness_tracked_reference_route_visible`: backend='external_validation\\runner\\maniskill_reference_backend.py', run_id='maniskill_sapien_reference_preflight_protocol_v1', blocking=["reference_fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
 - `pass` `operator_packet_tracked_reference_route_visible`: backend='external_validation\\runner\\maniskill_reference_backend.py', run_id='maniskill_sapien_reference_preflight_protocol_v1', blocking=["fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
 - `pass` `operator_handoff_bundle_visible`: files=281, forbidden=[], start_state='DO_NOT_COLLECT_YET'
 - `pass` `external_runbook_route_gates_visible`: validation_command_count=44, route_gates=True, gate_order=True

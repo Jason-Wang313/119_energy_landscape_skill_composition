@@ -692,6 +692,30 @@ def main() -> int:
         and readiness_checks.get("output_logs_empty_or_force") is True,
         f"readiness_checks={readiness_checks}",
     )
+    collection_reference_route = collection_readiness.get("tracked_reference_route", {}) or {}
+    collection_reference_blockers = collection_reference_route.get("blocking_missing", []) or []
+    collection_reference_checks = {check.get("name"): check.get("passed") for check in collection_reference_route.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_collection_readiness_tracked_reference_route",
+        collection_reference_route.get("not_external_evidence") is True
+        and "maniskill_reference_backend.py" in str(collection_reference_route.get("backend_module", ""))
+        and collection_reference_route.get("run_id") == "maniskill_sapien_reference_preflight_protocol_v1"
+        and collection_reference_route.get("collection_ready") is False
+        and collection_reference_route.get("strict_external_evidence_ready") is False
+        and int(collection_reference_route.get("blocking_missing_count", 0) or 0) == 1
+        and any("fidelity_acceptance_ready" in str(item) for item in collection_reference_blockers)
+        and collection_reference_checks.get("reference_backend_contract_ready") is True
+        and collection_reference_checks.get("reference_task_configs_ready") is True
+        and collection_reference_checks.get("reference_fidelity_acceptance_ready") is False
+        and "audit_external_collection_readiness.py --strict" in str(collection_reference_route.get("pre_collection_gate_command", ""))
+        and "real_collection_runner.py" in str(collection_reference_route.get("collection_command_after_fidelity_acceptance", "")),
+        (
+            f"backend={collection_reference_route.get('backend_module')!r}, "
+            f"run_id={collection_reference_route.get('run_id')!r}, "
+            f"blocking={collection_reference_blockers!r}"
+        ),
+    )
 
     reference_preflight_ok, reference_preflight, reference_preflight_detail = passed_json(
         RESULTS / "maniskill_reference_collection_preflight_audit.json",

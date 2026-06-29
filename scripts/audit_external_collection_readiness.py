@@ -33,6 +33,8 @@ DEFAULT_VIDEO_DIR = EXTERNAL / "videos"
 DEFAULT_FIDELITY_AUDIT = RESULTS / "external_fidelity_acceptance_audit.json"
 DEFAULT_RUNNER = RUNNER_DIR / "real_collection_runner.py"
 DEFAULT_SCHEMA = EXTERNAL / "log_schema_v1.json"
+REFERENCE_BACKEND = RUNNER_DIR / "maniskill_reference_backend.py"
+REFERENCE_RUN_ID = "maniskill_sapien_reference_preflight_protocol_v1"
 OUT_JSON = RESULTS / "external_collection_readiness_audit.json"
 OUT_MD = RESULTS / "external_collection_readiness_audit.md"
 
@@ -71,6 +73,10 @@ def rel(path: Path) -> str:
         return path.resolve().relative_to(ROOT.resolve()).as_posix()
     except ValueError:
         return str(path)
+
+
+def win_rel(path: Path) -> str:
+    return rel(path).replace("/", "\\")
 
 
 def add_check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str) -> None:
@@ -196,6 +202,81 @@ def nonempty_logs(output_log_dir: Path) -> list[Path]:
     return sorted(path for path in output_log_dir.glob("*.jsonl") if path.is_file() and path.stat().st_size > 0)
 
 
+def collection_command(backend_module: str, run_id: str) -> str:
+    return (
+        "python external_validation\\runner\\real_collection_runner.py "
+        f"--backend-module {backend_module} --task-config-dir external_validation\\configs "
+        "--output-log-dir external_validation\\logs --video-dir external_validation\\videos "
+        f"--run-id {run_id} --unsealed-alias-map"
+    )
+
+
+def pre_collection_gate_command(backend_module: str, run_id: str) -> str:
+    return (
+        "python scripts\\audit_external_collection_readiness.py --strict "
+        f"--backend-module {backend_module} --task-config-dir external_validation\\configs "
+        f"--run-id {run_id} --unsealed-alias-map"
+    )
+
+
+def build_reference_route(
+    *,
+    fidelity: dict[str, Any],
+    config_blockers: list[str],
+    existing_logs: list[Path],
+    runner: Path,
+    schema: Path,
+    video_dir: Path,
+) -> dict[str, Any]:
+    backend_module = win_rel(REFERENCE_BACKEND)
+    backend_blockers = inspect_backend(str(REFERENCE_BACKEND))
+    checks: list[dict[str, Any]] = []
+    add_check(checks, "reference_runner_exists", runner.exists(), rel(runner))
+    add_check(checks, "reference_schema_exists", schema.exists(), rel(schema))
+    add_check(checks, "reference_backend_module_exists", REFERENCE_BACKEND.exists(), rel(REFERENCE_BACKEND))
+    add_check(
+        checks,
+        "reference_backend_contract_ready",
+        not backend_blockers,
+        "; ".join(backend_blockers) if backend_blockers else "backend contract and provenance passed",
+    )
+    add_check(
+        checks,
+        "reference_task_configs_ready",
+        not config_blockers,
+        "; ".join(config_blockers[:8]) if config_blockers else "prepared task configs pass preflight inspection",
+    )
+    add_check(
+        checks,
+        "reference_fidelity_acceptance_ready",
+        fidelity.get("acceptance_ready") is True,
+        f"acceptance_ready={fidelity.get('acceptance_ready')!r}, readiness_state={fidelity.get('readiness_state')!r}",
+    )
+    add_check(checks, "reference_alias_unsealing_explicit", True, "tracked reference command includes --unsealed-alias-map")
+    add_check(checks, "reference_run_id_specific", True, f"run_id={REFERENCE_RUN_ID!r}")
+    add_check(checks, "reference_output_logs_empty_or_force", not existing_logs, f"existing_nonempty_logs={[rel(path) for path in existing_logs[:8]]}")
+    add_check(checks, "reference_video_dir_parent_exists", video_dir.exists() or video_dir.parent.exists(), rel(video_dir))
+
+    blockers = [f"{check['name']}: {check['detail']}" for check in checks if not check["passed"]]
+    return {
+        "not_external_evidence": True,
+        "backend_module": backend_module,
+        "run_id": REFERENCE_RUN_ID,
+        "collection_ready": not blockers,
+        "strict_external_evidence_ready": False,
+        "blocking_missing_count": len(blockers),
+        "blocking_missing": blockers,
+        "pre_collection_gate_command": pre_collection_gate_command(backend_module, REFERENCE_RUN_ID),
+        "collection_command_after_fidelity_acceptance": collection_command(backend_module, REFERENCE_RUN_ID),
+        "audit_command": "python scripts\\audit_maniskill_reference_collection_preflight.py",
+        "evidence_boundary": (
+            "This tracked route is a concrete pre-collection path only; it is not external evidence "
+            "until independent fidelity acceptance, official logs/videos, a manifest, and strict evidence gates pass."
+        ),
+        "checks": checks,
+    }
+
+
 def build_payload(args: argparse.Namespace) -> dict[str, Any]:
     rows, row_errors = load_rows(args.operator_sheet)
     aliases, alias_errors = alias_methods(args.alias_map)
@@ -208,6 +289,14 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         config_blockers.extend(inspect_config(args.task_config_dir / f"{task}.json"))
     backend_blockers = inspect_backend(args.backend_module)
     existing_logs = nonempty_logs(args.output_log_dir)
+    tracked_reference_route = build_reference_route(
+        fidelity=fidelity,
+        config_blockers=config_blockers,
+        existing_logs=existing_logs,
+        runner=args.runner,
+        schema=args.schema,
+        video_dir=args.video_dir,
+    )
 
     checks: list[dict[str, Any]] = []
     add_check(checks, "runner_exists", args.runner.exists(), rel(args.runner))
@@ -247,6 +336,7 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         "blocking_missing_count": len(blockers),
         "blocking_missing": blockers,
         "checks": checks,
+        "tracked_reference_route": tracked_reference_route,
         "strict_collection_command": (
             "python external_validation\\runner\\real_collection_runner.py "
             "--backend-module <module_or_path> --task-config-dir external_validation\\configs "
@@ -288,9 +378,39 @@ def write_outputs(payload: dict[str, Any]) -> None:
         payload["strict_collection_command"],
         "```",
         "",
-        "## Blocking Missing",
+        "## Tracked Reference Route",
+        "",
+        "This non-evidence route fills the backend, config directory, run id, and alias-unsealing arguments for the repository ManiSkill reference backend. It remains blocked until fidelity acceptance and the later manifest/log/video evidence gates pass.",
+        "",
+        f"- Backend module: `{payload['tracked_reference_route']['backend_module']}`",
+        f"- Run id: `{payload['tracked_reference_route']['run_id']}`",
+        f"- Collection ready: `{str(payload['tracked_reference_route']['collection_ready']).lower()}`",
+        f"- Blocking missing items: `{payload['tracked_reference_route']['blocking_missing_count']}`",
+        "",
+        "Reference pre-collection gate:",
+        "",
+        "```powershell",
+        payload["tracked_reference_route"]["pre_collection_gate_command"],
+        "```",
+        "",
+        "Reference collection command after fidelity acceptance:",
+        "",
+        "```powershell",
+        payload["tracked_reference_route"]["collection_command_after_fidelity_acceptance"],
+        "```",
+        "",
+        "Reference-route blockers:",
         "",
     ]
+    for blocker in payload["tracked_reference_route"]["blocking_missing"] or ["none"]:
+        lines.append(f"- {blocker}")
+    lines.extend(
+        [
+        "",
+        "## Blocking Missing",
+        "",
+        ]
+    )
     if payload["blocking_missing"]:
         for blocker in payload["blocking_missing"][:100]:
             lines.append(f"- {blocker}")

@@ -16,6 +16,31 @@ This audit is a pre-collection gate for real robot or accepted high-fidelity sim
 python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id <specific_run_id> --unsealed-alias-map
 ```
 
+## Tracked Reference Route
+
+This non-evidence route fills the backend, config directory, run id, and alias-unsealing arguments for the repository ManiSkill reference backend. It remains blocked until fidelity acceptance and the later manifest/log/video evidence gates pass.
+
+- Backend module: `external_validation\runner\maniskill_reference_backend.py`
+- Run id: `maniskill_sapien_reference_preflight_protocol_v1`
+- Collection ready: `false`
+- Blocking missing items: `1`
+
+Reference pre-collection gate:
+
+```powershell
+python scripts\audit_external_collection_readiness.py --strict --backend-module external_validation\runner\maniskill_reference_backend.py --task-config-dir external_validation\configs --run-id maniskill_sapien_reference_preflight_protocol_v1 --unsealed-alias-map
+```
+
+Reference collection command after fidelity acceptance:
+
+```powershell
+python external_validation\runner\real_collection_runner.py --backend-module external_validation\runner\maniskill_reference_backend.py --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id maniskill_sapien_reference_preflight_protocol_v1 --unsealed-alias-map
+```
+
+Reference-route blockers:
+
+- reference_fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'
+
 ## Blocking Missing
 
 - backend_module_ready: --backend-module is required before actual collection

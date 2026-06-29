@@ -106,6 +106,7 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_collection_readiness_not_evidence`: not_external_evidence=True
 - `pass` `external_collection_readiness_fail_closed`: collection_ready=False, readiness_state='PREPARE_BACKEND_CONFIGS_AND_FIDELITY', blocking_missing_count=4
 - `pass` `external_collection_readiness_packet_shape`: readiness_checks={'runner_exists': True, 'schema_exists': True, 'operator_sheet_exists': True, 'operator_sheet_columns': True, 'operator_sheet_row_budget': True, 'alias_map_exists': True, 'alias_map_complete': True, 'backend_module_ready': False, 'task_config_dir_exists': True, 'real_task_configs_ready': True, 'fidelity_acceptance_ready': False, 'alias_unsealing_explicit': False, 'run_id_specific': False, 'output_logs_empty_or_force': True, 'video_dir_parent_exists': True}
+- `pass` `external_collection_readiness_tracked_reference_route`: backend='external_validation\\runner\\maniskill_reference_backend.py', run_id='maniskill_sapien_reference_preflight_protocol_v1', blocking=["reference_fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
 - `pass` `maniskill_reference_collection_preflight_ready`: passed
 - `pass` `maniskill_reference_collection_preflight_reaches_fidelity_gate`: contract_ready=True, collection_ready=False, blocking=["fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
 - `pass` `external_pairing_integrity_audit_ready`: passed
