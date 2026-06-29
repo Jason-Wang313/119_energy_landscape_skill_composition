@@ -132,6 +132,11 @@
       "passed": true
     },
     {
+      "detail": "synthetic_ready=True, reference_ready=True, blockers=[]",
+      "name": "external_collection_preflight_self_test_visible",
+      "passed": true
+    },
+    {
       "detail": "records_written=2, schema_errors=[]",
       "name": "runner_backend_probe_visible",
       "passed": true

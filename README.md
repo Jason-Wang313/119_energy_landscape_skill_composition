@@ -136,7 +136,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External backend contract audit: `results/external_backend_contract_audit.md`
 - External backend contract self-test: `results/external_backend_contract_self_test.md`
 - External collection readiness audit: `results/external_collection_readiness_audit.md`
-- External collection preflight self-test: `scripts/self_test_external_collection_preflight.py` checks a temporary complete preflight fixture only; it is not evidence.
+- External collection preflight self-test: `scripts/self_test_external_collection_preflight.py` checks a temporary complete preflight fixture and proves the tracked ManiSkill reference route becomes collection-ready once a temporary accepted-fidelity audit is supplied; it is not evidence.
 - External task config schema: `external_validation/config_schema_v1.json`
 - External real-config intake directory: `external_validation/configs/README.md`
 - External config materialization plan: `results/external_config_materialization_plan.md`

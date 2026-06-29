@@ -16,6 +16,8 @@ RESULTS = ROOT / "results"
 EXTERNAL = ROOT / "external_validation"
 OUT_JSON = RESULTS / "external_collection_preflight_self_test.json"
 OUT_MD = RESULTS / "external_collection_preflight_self_test.md"
+REFERENCE_BACKEND = EXTERNAL / "runner" / "maniskill_reference_backend.py"
+REFERENCE_RUN_ID = "maniskill_sapien_reference_preflight_protocol_v1"
 
 TASKS = [
     "peg_place_regrasp",
@@ -221,6 +223,24 @@ def make_args(tmp: Path, backend_path: Path, operator_sheet: Path, alias_map: Pa
     )
 
 
+def make_reference_args(tmp: Path, fidelity_audit: Path) -> Namespace:
+    return Namespace(
+        backend_module=str(REFERENCE_BACKEND),
+        operator_sheet=EXTERNAL / "blinded_operator_sheet.csv",
+        alias_map=EXTERNAL / "method_alias_map.json",
+        task_config_dir=EXTERNAL / "configs",
+        output_log_dir=tmp / "reference_logs",
+        video_dir=tmp / "reference_videos",
+        fidelity_audit=fidelity_audit,
+        runner=EXTERNAL / "runner" / "real_collection_runner.py",
+        schema=EXTERNAL / "log_schema_v1.json",
+        run_id=REFERENCE_RUN_ID,
+        unsealed_alias_map=True,
+        force=False,
+        strict=True,
+    )
+
+
 def write_report(payload: dict[str, Any]) -> None:
     RESULTS.mkdir(exist_ok=True)
     OUT_JSON.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -230,6 +250,7 @@ def write_report(payload: dict[str, Any]) -> None:
         f"Passed: `{str(payload['passed']).lower()}`.",
         "Not evidence: `true`.",
         f"Synthetic collection ready: `{str(payload['synthetic_collection_ready']).lower()}`.",
+        f"Reference route ready after synthetic fidelity: `{str(payload['reference_route_collection_ready']).lower()}`.",
         f"Synthetic row count: `{payload['row_count']}`.",
         "",
         "This self-test builds a temporary complete collection-preflight fixture and calls the collection readiness audit without writing the real readiness report. It proves the strict preflight gate can turn green when backend, configs, fidelity acceptance, aliases, logs, video directory, and run id are complete. It is not external validation evidence.",
@@ -263,6 +284,8 @@ def main() -> int:
 
         args = make_args(tmp, backend_path, operator_sheet, alias_map, config_dir, fidelity_audit)
         payload = readiness.build_payload(args)
+        reference_args = make_reference_args(tmp, fidelity_audit)
+        reference_payload = readiness.build_payload(reference_args)
 
         readiness_report_after = file_digest(real_readiness_report)
         readiness_report_untouched = readiness_report_before == readiness_report_after
@@ -303,12 +326,43 @@ def main() -> int:
                 "detail": "self-test uses build_payload only and leaves results/external_collection_readiness_audit.json unchanged",
             }
         )
+        reference_checks = {check.get("name"): check.get("passed") for check in reference_payload.get("checks", [])}
+        checks.append(
+            {
+                "name": "reference_route_collection_ready_after_synthetic_fidelity_acceptance",
+                "passed": reference_payload.get("collection_ready") is True and not reference_payload.get("blocking_missing"),
+                "detail": (
+                    f"collection_ready={reference_payload.get('collection_ready')!r}, "
+                    f"blockers={reference_payload.get('blocking_missing')!r}"
+                ),
+            }
+        )
+        checks.append(
+            {
+                "name": "reference_route_core_checks_pass_after_synthetic_fidelity_acceptance",
+                "passed": all(
+                    reference_checks.get(required_check) is True
+                    for required_check in (
+                        "backend_module_ready",
+                        "real_task_configs_ready",
+                        "fidelity_acceptance_ready",
+                        "alias_unsealing_explicit",
+                        "run_id_specific",
+                        "output_logs_empty_or_force",
+                    )
+                ),
+                "detail": f"reference_checks={reference_checks}",
+            }
+        )
 
         report = {
             "version": "external_collection_preflight_self_test_v1",
             "passed": all(check["passed"] for check in checks),
             "not_external_evidence": True,
             "synthetic_collection_ready": payload.get("collection_ready") is True,
+            "reference_route_collection_ready": reference_payload.get("collection_ready") is True,
+            "reference_route_run_id": REFERENCE_RUN_ID,
+            "reference_route_blocking_missing": list(reference_payload.get("blocking_missing", []) or []),
             "row_count": payload.get("row_count", 0),
             "task_families": payload.get("task_families", []),
             "alias_count": payload.get("alias_count", 0),
@@ -319,7 +373,8 @@ def main() -> int:
     print(
         "External collection preflight self-test: "
         f"{'PASS' if report['passed'] else 'FAIL'}; "
-        f"collection_ready={report['synthetic_collection_ready']}; rows={report['row_count']}"
+        f"collection_ready={report['synthetic_collection_ready']}; "
+        f"reference_ready={report['reference_route_collection_ready']}; rows={report['row_count']}"
     )
     print(f"Wrote {OUT_JSON}")
     print(f"Wrote {OUT_MD}")

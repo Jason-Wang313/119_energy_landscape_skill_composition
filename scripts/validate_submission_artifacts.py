@@ -2991,6 +2991,12 @@ def main():
         fail("external collection preflight self-test must declare that it is not evidence")
     if collection_preflight_self_test.get("synthetic_collection_ready") is not True:
         fail("external collection preflight self-test should reach collection_ready=true on the temporary fixture")
+    if collection_preflight_self_test.get("reference_route_collection_ready") is not True:
+        fail("external collection preflight self-test should make the tracked reference route collection-ready after temporary accepted fidelity")
+    if collection_preflight_self_test.get("reference_route_run_id") != "maniskill_sapien_reference_preflight_protocol_v1":
+        fail("external collection preflight self-test used the wrong tracked reference run id")
+    if collection_preflight_self_test.get("reference_route_blocking_missing"):
+        fail("external collection preflight self-test reference route still reports blockers after temporary accepted fidelity")
     if int(collection_preflight_self_test.get("row_count", 0) or 0) < 1440:
         fail("external collection preflight self-test has too few synthetic rows")
     collection_preflight_checks = {check.get("name"): check.get("passed") for check in collection_preflight_self_test.get("checks", [])}
@@ -3004,6 +3010,8 @@ def main():
         "synthetic_run_id_specific",
         "synthetic_output_logs_empty_or_force",
         "real_readiness_report_not_overwritten",
+        "reference_route_collection_ready_after_synthetic_fidelity_acceptance",
+        "reference_route_core_checks_pass_after_synthetic_fidelity_acceptance",
     ):
         if collection_preflight_checks.get(required_check) is not True:
             fail(f"external collection preflight self-test missing passing check: {required_check}")
@@ -5478,6 +5486,7 @@ def main():
         "fidelity_provenance_packet_visible",
         "backend_integration_packet_visible",
         "maniskill_reference_collection_preflight_visible",
+        "external_collection_preflight_self_test_visible",
         "maniskill_fidelity_metadata_probe_visible",
         "runner_backend_probe_visible",
         "config_manifest_packet_visible",

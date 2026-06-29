@@ -79,6 +79,7 @@ def main() -> int:
     backend_integration = read_json(RESULTS / "external_backend_integration_audit.json")
     maniskill_backend = read_json(RESULTS / "maniskill_backend_readiness_audit.json")
     reference_preflight = read_json(RESULTS / "maniskill_reference_collection_preflight_audit.json")
+    collection_preflight_self_test = read_json(RESULTS / "external_collection_preflight_self_test.json")
     runner_probe = read_json(RESULTS / "external_runner_backend_self_test.json")
     pilot_smoke = read_json(RESULTS / "external_pilot_smoke_packet_audit.json")
     pilot_runtime = read_json(RESULTS / "maniskill_pilot_runtime_liveness_audit.json")
@@ -552,6 +553,32 @@ def main() -> int:
             f"contract_ready={reference_preflight.get('reference_backend_contract_ready')!r}, "
             f"collection_ready={reference_preflight.get('collection_ready')!r}, "
             f"blocking={reference_preflight.get('collection_blocking_missing')!r}"
+        ),
+    )
+    collection_preflight_self_checks = {
+        check.get("name"): check.get("passed") for check in collection_preflight_self_test.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "external_collection_preflight_self_test_visible",
+        collection_preflight_self_test.get("version") == "external_collection_preflight_self_test_v1"
+        and collection_preflight_self_test.get("passed") is True
+        and collection_preflight_self_test.get("not_external_evidence") is True
+        and collection_preflight_self_test.get("synthetic_collection_ready") is True
+        and collection_preflight_self_test.get("reference_route_collection_ready") is True
+        and collection_preflight_self_test.get("reference_route_run_id") == "maniskill_sapien_reference_preflight_protocol_v1"
+        and not collection_preflight_self_test.get("reference_route_blocking_missing")
+        and collection_preflight_self_checks.get("reference_route_collection_ready_after_synthetic_fidelity_acceptance") is True
+        and collection_preflight_self_checks.get("reference_route_core_checks_pass_after_synthetic_fidelity_acceptance") is True
+        and (ROOT / "scripts" / "self_test_external_collection_preflight.py").exists()
+        and (RESULTS / "external_collection_preflight_self_test.md").exists()
+        and "External collection preflight self-test" in texts["README"]
+        and "External collection preflight self-test" in texts["final_audit"]
+        and "External collection preflight self-test" in texts["readiness_audit"],
+        (
+            f"synthetic_ready={collection_preflight_self_test.get('synthetic_collection_ready')!r}, "
+            f"reference_ready={collection_preflight_self_test.get('reference_route_collection_ready')!r}, "
+            f"blockers={collection_preflight_self_test.get('reference_route_blocking_missing')!r}"
         ),
     )
     runner_probe_checks = {check.get("name"): check.get("passed") for check in runner_probe.get("checks", []) or []}
@@ -1564,6 +1591,7 @@ def main() -> int:
             "External backend integration packet",
             "ManiSkill reference backend readiness audit",
             "ManiSkill reference collection preflight audit",
+            "External collection preflight self-test",
             "MP4 writer path",
             "state-shaped arrays cannot masquerade as render videos",
             "explicit render-backend/shader controls",
@@ -1646,6 +1674,7 @@ def main() -> int:
             "External backend integration packet",
             "ManiSkill reference backend readiness audit",
             "ManiSkill reference collection preflight audit",
+            "External collection preflight self-test",
             "MP4 writer path",
             "state-shaped arrays cannot masquerade as render videos",
             "explicit render-backend/shader controls",
@@ -1729,6 +1758,7 @@ def main() -> int:
             "external backend integration packet",
             "ManiSkill reference backend readiness audit",
             "ManiSkill reference collection preflight audit",
+            "External collection preflight self-test",
             "MP4 writer path",
             "state-shaped arrays cannot masquerade as render videos",
             "explicit render-backend/shader controls",
@@ -1813,6 +1843,7 @@ def main() -> int:
             "External backend integration packet",
             "ManiSkill reference backend readiness audit",
             "ManiSkill reference collection preflight audit",
+            "External collection preflight self-test",
             "MP4 writer path",
             "state-shaped arrays cannot masquerade as render videos",
             "explicit render-backend/shader controls",
@@ -1992,6 +2023,7 @@ def main() -> int:
             "external backend integration packet",
             "ManiSkill reference backend readiness audit",
             "ManiSkill reference collection preflight audit",
+            "External collection preflight self-test",
             "MP4 writer path",
             "state-shaped arrays cannot masquerade as render videos",
             "explicit render-backend/shader controls",
@@ -2148,7 +2180,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the failure-memory adaptation audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the strict MP4 video evidence gate, the strict full-method coverage gate, the strict rollout sample-count gate, the strict paired-panel gate, the strict rollout uniqueness gate, confidence-gated external rollout statistics, the final rollout confidence summary gate, the strict task-config hash gate, the strict policy/config hash gate, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the External precollection freeze receipt, the External precollection freeze receipt self-test, the External postcollection evidence seal, the External postcollection evidence seal self-test, the External postcollection seal consistency gate, the External postcollection seal consistency self-test, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the strict fidelity acceptance provenance gate, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, atomic official evidence promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, render resource sweep, ManiSkill render machine qualification packet, ManiSkill render machine qualification self-test, render failure remediation packet, ManiSkill pilot runtime liveness audit, reset-timeout triage sidecar, and backend reset substage markers, the external method implementation packet, External method config materialization, adapter acceptance fixtures, the reference-adapter provenance catalog, the method manifest cutover checklist, the External adapter scaffold guard self-test, the strict reference-adapter rejection gate, the strict independent method provenance gate, the strict checkpoint/config artifact gate, the strict fairness-contract binding gate, the manifest assembly checklist, the External manifest builder self-test, the External rollout validator self-test, the External full-pipeline evidence self-test, the no-go operator packet, the External collection job packet, the External collection machine bootstrap, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the failure-memory adaptation audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the strict MP4 video evidence gate, the strict full-method coverage gate, the strict rollout sample-count gate, the strict paired-panel gate, the strict rollout uniqueness gate, confidence-gated external rollout statistics, the final rollout confidence summary gate, the strict task-config hash gate, the strict policy/config hash gate, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the External precollection freeze receipt, the External precollection freeze receipt self-test, the External postcollection evidence seal, the External postcollection evidence seal self-test, the External postcollection seal consistency gate, the External postcollection seal consistency self-test, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the strict fidelity acceptance provenance gate, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the External collection preflight self-test with tracked reference-route readiness after accepted fidelity, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, atomic official evidence promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, render resource sweep, ManiSkill render machine qualification packet, ManiSkill render machine qualification self-test, render failure remediation packet, ManiSkill pilot runtime liveness audit, reset-timeout triage sidecar, and backend reset substage markers, the external method implementation packet, External method config materialization, adapter acceptance fixtures, the reference-adapter provenance catalog, the method manifest cutover checklist, the External adapter scaffold guard self-test, the strict reference-adapter rejection gate, the strict independent method provenance gate, the strict checkpoint/config artifact gate, the strict fairness-contract binding gate, the manifest assembly checklist, the External manifest builder self-test, the External rollout validator self-test, the External full-pipeline evidence self-test, the no-go operator packet, the External collection job packet, the External collection machine bootstrap, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

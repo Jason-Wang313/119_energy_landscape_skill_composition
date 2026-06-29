@@ -77,7 +77,7 @@
 - External postcollection seal consistency self-test: `scripts/self_test_external_postcollection_seal_consistency.py`
 - External release package self-test: `scripts/self_test_external_release_package.py`
 - External pairing integrity self-test: `scripts/self_test_external_pairing_integrity.py`
-- External collection preflight self-test: `scripts/self_test_external_collection_preflight.py`
+- External collection preflight self-test: `scripts/self_test_external_collection_preflight.py` verifies the temporary complete fixture and the tracked ManiSkill reference route after temporary accepted fidelity.
 - External runner backend-path self-test: `scripts/self_test_external_runner_backend.py`
 - External full-pipeline evidence self-test: `scripts/self_test_external_evidence_pipeline.py`
   - Durable report: `results/external_evidence_pipeline_self_test.md`
