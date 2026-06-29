@@ -3459,6 +3459,56 @@ def main():
     if "tampered release artifact hash test did not fail" not in evidence_pipeline_self_test_text:
         fail("external evidence pipeline self-test must reject tampered release artifact hashes in the final evidence audit")
 
+    evidence_pipeline_self_test_path = RESULTS / "external_evidence_pipeline_self_test.json"
+    evidence_pipeline_self_test_md_path = RESULTS / "external_evidence_pipeline_self_test.md"
+    for path in (
+        ROOT / "scripts" / "self_test_external_evidence_pipeline.py",
+        evidence_pipeline_self_test_path,
+        evidence_pipeline_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external evidence pipeline self-test artifact: {path}")
+    evidence_pipeline_self_test = json.loads(evidence_pipeline_self_test_path.read_text(encoding="utf-8"))
+    if evidence_pipeline_self_test.get("version") != "external_evidence_pipeline_self_test_v1":
+        fail("external evidence pipeline self-test version mismatch")
+    if evidence_pipeline_self_test.get("passed") is not True:
+        fail("external evidence pipeline self-test did not pass")
+    if evidence_pipeline_self_test.get("not_external_evidence") is not True:
+        fail("external evidence pipeline self-test must declare that it is not evidence")
+    if evidence_pipeline_self_test.get("strict_external_evidence_ready") is not False:
+        fail("external evidence pipeline self-test must keep strict external evidence false")
+    if evidence_pipeline_self_test.get("synthetic_submission_ready") is not True:
+        fail("external evidence pipeline self-test should make a temporary complete package submission-ready")
+    if int(evidence_pipeline_self_test.get("synthetic_record_count", 0) or 0) < 1440:
+        fail("external evidence pipeline self-test has too few synthetic rollout records")
+    if int(evidence_pipeline_self_test.get("synthetic_task_count", 0) or 0) < 4:
+        fail("external evidence pipeline self-test has too few synthetic task families")
+    if int(evidence_pipeline_self_test.get("synthetic_method_count", 0) or 0) < 12:
+        fail("external evidence pipeline self-test has too few synthetic methods")
+    if evidence_pipeline_self_test.get("synthetic_confidence_gates_passed") is not True:
+        fail("external evidence pipeline self-test must pass synthetic confidence gates")
+    if evidence_pipeline_self_test.get("tampered_rollout_confidence_rejected") is not True:
+        fail("external evidence pipeline self-test must reject tampered rollout confidence summaries")
+    if evidence_pipeline_self_test.get("tampered_release_hash_rejected") is not True:
+        fail("external evidence pipeline self-test must reject tampered release hashes")
+    if evidence_pipeline_self_test.get("real_manifest_untouched") is not True:
+        fail("external evidence pipeline self-test must leave the real manifest untouched")
+    if evidence_pipeline_self_test.get("real_reports_untouched") is not True:
+        fail("external evidence pipeline self-test must leave real evidence reports untouched")
+    evidence_pipeline_self_checks = {
+        check.get("name"): check.get("passed") for check in evidence_pipeline_self_test.get("checks", [])
+    }
+    for required_check in (
+        "synthetic_complete_package_reaches_final_external_ready",
+        "synthetic_records_cover_tasks_methods_and_confidence",
+        "synthetic_component_gates_pass",
+        "tampered_rollout_confidence_summary_rejected",
+        "tampered_release_artifact_hash_rejected",
+        "real_repository_evidence_state_untouched",
+    ):
+        if evidence_pipeline_self_checks.get(required_check) is not True:
+            fail(f"external evidence pipeline self-test missing passing check: {required_check}")
+
     execution_readiness_path = RESULTS / "external_execution_readiness_audit.json"
     if not execution_readiness_path.exists():
         fail("missing results/external_execution_readiness_audit.json; run scripts/audit_external_execution_readiness.py")

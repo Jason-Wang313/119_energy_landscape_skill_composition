@@ -71,6 +71,7 @@
 - External collection preflight self-test: `scripts/self_test_external_collection_preflight.py`
 - External runner backend-path self-test: `scripts/self_test_external_runner_backend.py`
 - External full-pipeline evidence self-test: `scripts/self_test_external_evidence_pipeline.py`
+  - Durable report: `results/external_evidence_pipeline_self_test.md`
 - External rollout schema: `external_validation/log_schema_v1.json`
 - Related-work coverage matrix: `docs/related_work_coverage_matrix.md`
 - Requirements: `numpy`, `matplotlib`

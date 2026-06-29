@@ -149,6 +149,8 @@
         "scripts/self_test_external_pairing_integrity.py",
         "scripts/self_test_external_rollout_validator.py",
         "scripts/self_test_external_evidence_pipeline.py",
+        "results/external_evidence_pipeline_self_test.json",
+        "results/external_evidence_pipeline_self_test.md",
         ".github/workflows/paper119-validation.yml",
         "docs/reproducibility_checklist.md"
       ],

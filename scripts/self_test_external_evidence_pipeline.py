@@ -16,9 +16,13 @@ import validate_external_rollouts as rollout
 
 
 REAL_ROOT = Path(__file__).resolve().parents[1]
+REAL_RESULTS = REAL_ROOT / "results"
 REAL_MANIFEST = REAL_ROOT / "external_validation" / "manifest.json"
 REAL_LOG_SCHEMA = REAL_ROOT / "external_validation" / "log_schema_v1.json"
 REAL_CONFIG_SCHEMA = REAL_ROOT / "external_validation" / "config_schema_v1.json"
+OUT_JSON = REAL_RESULTS / "external_evidence_pipeline_self_test.json"
+OUT_MD = REAL_RESULTS / "external_evidence_pipeline_self_test.md"
+VERSION = "external_evidence_pipeline_self_test_v1"
 
 TASKS = [
     "peg_place_regrasp",
@@ -122,9 +126,47 @@ def file_sha(path: Path) -> str:
     return digest.hexdigest()
 
 
+def file_digest(path: Path) -> str | None:
+    if not path.exists():
+        return None
+    return file_sha(path)
+
+
 def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def add_check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str) -> None:
+    checks.append({"name": name, "passed": bool(passed), "detail": detail})
+
+
+def write_report(payload: dict[str, Any]) -> None:
+    write_json(OUT_JSON, payload)
+    lines = [
+        "# External Evidence Pipeline Self-Test",
+        "",
+        f"Passed: `{str(payload['passed']).lower()}`.",
+        "Not evidence: `true`.",
+        f"Synthetic submission ready: `{str(payload['synthetic_submission_ready']).lower()}`.",
+        f"Synthetic records: `{payload['synthetic_record_count']}`.",
+        f"Synthetic tasks: `{payload['synthetic_task_count']}`.",
+        f"Synthetic methods: `{payload['synthetic_method_count']}`.",
+        f"Confidence gates passed: `{str(payload['synthetic_confidence_gates_passed']).lower()}`.",
+        f"Tampered rollout confidence rejected: `{str(payload['tampered_rollout_confidence_rejected']).lower()}`.",
+        f"Tampered release hash rejected: `{str(payload['tampered_release_hash_rejected']).lower()}`.",
+        f"Real manifest untouched: `{str(payload['real_manifest_untouched']).lower()}`.",
+        f"Real reports untouched: `{str(payload['real_reports_untouched']).lower()}`.",
+        "",
+        "This is a tooling-only self-test. It creates a temporary manifest/config/log/video/checkpoint package, proves the final strict external-evidence audit can reach ready on that temporary package with confidence-gated rollout statistics, proves tampered rollout confidence summaries and release hashes fail, and confirms the real repository evidence state is not promoted or overwritten.",
+        "",
+        "## Checks",
+        "",
+    ]
+    for check in payload["checks"]:
+        status = "pass" if check["passed"] else "fail"
+        lines.append(f"- `{status}` `{check['name']}`: {check['detail']}")
+    OUT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def write_synthetic_mp4(path: Path) -> None:
@@ -521,6 +563,9 @@ def assert_real_manifest_untouched(before: bytes | None) -> None:
 
 def main() -> int:
     real_manifest_before = REAL_MANIFEST.read_bytes() if REAL_MANIFEST.exists() else None
+    real_manifest_digest_before = file_digest(REAL_MANIFEST)
+    real_evidence_audit_before = file_digest(REAL_RESULTS / "external_evidence_audit.json")
+    real_rollout_metrics_before = file_digest(REAL_RESULTS / "external_rollout_metrics.json")
     with tempfile.TemporaryDirectory(prefix="paper119_external_pipeline_selftest_") as tmp_name:
         root = Path(tmp_name)
         external = root / "external_validation"
@@ -778,8 +823,120 @@ def reset(reset_context):
             raise AssertionError(f"tampered release artifact hash failed for the wrong reason: {tampered_failures['release_code']}")
 
     assert_real_manifest_untouched(real_manifest_before)
-    print("External evidence pipeline self-test passed: temporary synthetic package reaches READY with confidence-gated rollout statistics, tampered rollout confidence summaries and release artifact hashes fail, and real repo evidence remains untouched.")
-    return 0
+    real_manifest_digest_after = file_digest(REAL_MANIFEST)
+    real_evidence_audit_after = file_digest(REAL_RESULTS / "external_evidence_audit.json")
+    real_rollout_metrics_after = file_digest(REAL_RESULTS / "external_rollout_metrics.json")
+
+    checks: list[dict[str, Any]] = []
+    audit_checks = {check.get("name"): check.get("passed") for check in audit.get("checks", [])}
+    tampered_rollout_rejected = (
+        tampered_rollout_audit["submission_ready"] is False
+        and "external_rollout_confidence_gates_passed" in tampered_rollout_failures
+    )
+    tampered_release_rejected = (
+        tampered_audit["submission_ready"] is False
+        and "release_code" in tampered_failures
+        and "hash_mismatches" in tampered_failures["release_code"]
+    )
+    real_manifest_untouched = real_manifest_digest_before == real_manifest_digest_after
+    real_reports_untouched = (
+        real_evidence_audit_before == real_evidence_audit_after
+        and real_rollout_metrics_before == real_rollout_metrics_after
+    )
+
+    add_check(
+        checks,
+        "synthetic_complete_package_reaches_final_external_ready",
+        audit["submission_ready"] is True
+        and not audit.get("blocking_failures")
+        and audit_checks.get("manifest_exists") is True
+        and audit_checks.get("external_fidelity_acceptance_ready") is True
+        and audit_checks.get("external_adapter_contract_evidence_passed") is True
+        and audit_checks.get("external_config_evidence_passed") is True
+        and audit_checks.get("external_rollout_metrics_passed") is True
+        and audit_checks.get("external_rollout_confidence_gates_passed") is True
+        and audit_checks.get("external_pairing_integrity_ready") is True
+        and audit_checks.get("external_release_package_ready") is True,
+        f"submission_ready={audit['submission_ready']!r}, blocking={len(audit.get('blocking_failures', []))}",
+    )
+    add_check(
+        checks,
+        "synthetic_records_cover_tasks_methods_and_confidence",
+        len(records) >= 1440
+        and len(tasks) == len(TASKS)
+        and len(methods) == len(METHODS)
+        and rollout_summary.get("statistical_confidence", {}).get("all_primary_confidence_gates_passed") is True,
+        (
+            f"records={len(records)}, tasks={len(tasks)}, methods={len(methods)}, "
+            f"confidence={rollout_summary.get('statistical_confidence', {}).get('all_primary_confidence_gates_passed')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "synthetic_component_gates_pass",
+        evidence_config_audit["passed"] is True
+        and adapter_contract_evidence["passed"] is True
+        and acceptance_ready is True
+        and pairing_result["pairing_ready"] is True
+        and release_result["release_package_ready"] is True,
+        (
+            f"config={evidence_config_audit['passed']!r}, adapter={adapter_contract_evidence['passed']!r}, "
+            f"fidelity={acceptance_ready!r}, pairing={pairing_result['pairing_ready']!r}, "
+            f"release={release_result['release_package_ready']!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "tampered_rollout_confidence_summary_rejected",
+        tampered_rollout_rejected,
+        f"failures={sorted(tampered_rollout_failures)}",
+    )
+    add_check(
+        checks,
+        "tampered_release_artifact_hash_rejected",
+        tampered_release_rejected,
+        f"release_code_failure={tampered_failures.get('release_code')!r}",
+    )
+    add_check(
+        checks,
+        "real_repository_evidence_state_untouched",
+        real_manifest_untouched and real_reports_untouched,
+        (
+            f"manifest_before={real_manifest_digest_before}, manifest_after={real_manifest_digest_after}, "
+            f"external_audit_before={real_evidence_audit_before}, external_audit_after={real_evidence_audit_after}, "
+            f"rollout_before={real_rollout_metrics_before}, rollout_after={real_rollout_metrics_after}"
+        ),
+    )
+
+    payload = {
+        "version": VERSION,
+        "passed": all(check["passed"] for check in checks),
+        "not_external_evidence": True,
+        "strict_external_evidence_ready": False,
+        "synthetic_submission_ready": audit["submission_ready"] is True,
+        "synthetic_record_count": len(records),
+        "synthetic_task_count": len(tasks),
+        "synthetic_method_count": len(methods),
+        "synthetic_confidence_gates_passed": rollout_summary.get("statistical_confidence", {}).get("all_primary_confidence_gates_passed") is True,
+        "tampered_rollout_confidence_rejected": tampered_rollout_rejected,
+        "tampered_release_hash_rejected": tampered_release_rejected,
+        "real_manifest_untouched": real_manifest_untouched,
+        "real_reports_untouched": real_reports_untouched,
+        "checks": checks,
+    }
+    write_report(payload)
+    print(
+        "External evidence pipeline self-test: "
+        f"{'PASS' if payload['passed'] else 'FAIL'}; "
+        f"synthetic_ready={payload['synthetic_submission_ready']}; "
+        f"records={payload['synthetic_record_count']}; "
+        f"confidence_rejected={payload['tampered_rollout_confidence_rejected']}; "
+        f"release_hash_rejected={payload['tampered_release_hash_rejected']}; "
+        f"real_untouched={payload['real_manifest_untouched'] and payload['real_reports_untouched']}"
+    )
+    print(f"Wrote {OUT_JSON}")
+    print(f"Wrote {OUT_MD}")
+    return 0 if payload["passed"] else 1
 
 
 if __name__ == "__main__":

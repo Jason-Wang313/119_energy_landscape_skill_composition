@@ -124,6 +124,7 @@
 - Added `scripts/self_test_external_collection_preflight.py` to test the external collection-readiness preflight on a temporary complete fixture without overwriting the real readiness report or treating the fixture as evidence.
 - Added `scripts/self_test_external_pairing_integrity.py` so paired-reset fairness is tested on temporary complete method panels while missing manifests, duplicate rows, incomplete panels, and terminal-sample mismatches remain fail-closed.
 - Added `scripts/self_test_external_evidence_pipeline.py` to test the full strict external-evidence path on a temporary synthetic manifest/config/log/video/checkpoint package without creating real repository evidence.
+- Added `results/external_evidence_pipeline_self_test.json` and `results/external_evidence_pipeline_self_test.md` so the full strict external-evidence path self-test leaves durable proof that the synthetic package reaches final readiness, tampered rollout confidence summaries and release hashes fail, and real repository evidence reports remain untouched.
 - Updated GitHub validation so the rollout-validator and full-pipeline evidence self-tests run as first-class CI steps instead of only being covered by the local build and artifact validator.
 - Fixed strict evidence-audit metric parsing so legitimate zero-valued fixed-risk breach is accepted as a number rather than treated as missing.
 - Added `docs/claim_evidence_ledger.json` and `scripts/audit_claim_boundary.py` so the package fails validation if it overclaims beyond the bounded local evidence.
