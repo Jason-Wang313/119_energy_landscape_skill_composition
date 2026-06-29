@@ -5,7 +5,7 @@ Not evidence: `true`.
 Release package ready: `false`.
 Blocking missing items: `1`.
 
-This audit verifies manifest-declared release artifacts by path and SHA256 hash, and rejects local dry-run, template, scaffold, or placeholder artifacts as evidence.
+This audit verifies manifest-declared release artifacts by path and SHA256 hash, and rejects local dry-run, template, scaffold, placeholder, staged, backup, diagnostic, or fallback log/video artifacts as evidence.
 
 ## Artifact Counts
 

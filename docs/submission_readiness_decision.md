@@ -15,7 +15,7 @@ Why strong-revise:
 - Fixed-risk audit reports coverage `0.863021`, breach `0.000302`, and gated success `0.760108` at risk budget `0.15`.
 - External reference adapters pass for all 12 methods as implementation-only harness checks, reducing future validation friction without counting as rollout evidence.
 - The adapter evidence self-test proves the strict manifest-declared implementation gate can pass on temporary real-style adapters while still rejecting missing manifests, scaffold templates, leaky provenance, and the current reference adapters through a strict reference-adapter rejection gate and strict independent method provenance gate.
-- The release-package self-test proves the hash-lock gate can pass on temporary complete artifacts while still rejecting missing manifests and local-dry-run/template/scaffold/placeholder files.
+- The release-package self-test proves the hash-lock gate can pass on temporary complete artifacts while still rejecting missing manifests, local-dry-run/template/scaffold/placeholder files, and staged/backup/diagnostic/fallback log-video artifacts through a release-package internal-artifact rejection gate.
 - The pairing-integrity self-test proves complete 1,440-record paired-reset panels can pass while duplicate method rows, incomplete panels, terminal-sample mismatches, and missing manifests fail.
 - The guarded config materialization plan is ready to write real task configs only after a platform and compute budget are supplied with `--confirm-real-platform --write`.
 - The external config manifest packet turns prepared task configs into manifest-declaration and hash-lock work orders while strict config evidence remains false.

@@ -14,6 +14,16 @@ DEFAULT_MANIFEST = EXTERNAL / "manifest.json"
 OUT_JSON = RESULTS / "external_release_package_audit.json"
 OUT_MD = RESULTS / "external_release_package_audit.md"
 ARTIFACT_TYPES = ("code", "configs", "logs", "videos", "checkpoints")
+FORBIDDEN_RELEASE_LOG_VIDEO_FRAGMENTS = {
+    "backup",
+    "diagnostic",
+    "fallback",
+    "not_external_evidence",
+    "pilot_smoke",
+    "placeholder",
+    "render_video_preflight",
+    "staging",
+}
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -95,8 +105,14 @@ def inspect_entry(kind: str, entry: dict[str, Any]) -> tuple[dict[str, Any], lis
         blockers.append("config template artifact cannot be release evidence")
     if path.name == "adapter_template.py" or "scaffold" in path.name.lower():
         blockers.append("adapter scaffold/template cannot be release evidence")
-    if kind == "videos" and ("placeholder" in normalized or "not_external_evidence" in normalized):
-        blockers.append("placeholder video cannot be release evidence")
+    if kind in {"logs", "videos"}:
+        forbidden_hits = sorted(
+            fragment
+            for fragment in FORBIDDEN_RELEASE_LOG_VIDEO_FRAGMENTS
+            if fragment in normalized or fragment in path.name.lower()
+        )
+        if forbidden_hits:
+            blockers.append(f"{kind} artifact contains forbidden non-evidence fragment(s): {forbidden_hits}")
 
     exists = path.exists()
     actual_hash = ""
@@ -195,7 +211,7 @@ def write_outputs(payload: dict[str, Any]) -> None:
         f"Release package ready: `{str(payload['release_package_ready']).lower()}`.",
         f"Blocking missing items: `{payload['blocking_missing_count']}`.",
         "",
-        "This audit verifies manifest-declared release artifacts by path and SHA256 hash, and rejects local dry-run, template, scaffold, or placeholder artifacts as evidence.",
+        "This audit verifies manifest-declared release artifacts by path and SHA256 hash, and rejects local dry-run, template, scaffold, placeholder, staged, backup, diagnostic, or fallback log/video artifacts as evidence.",
         "",
         "## Artifact Counts",
         "",

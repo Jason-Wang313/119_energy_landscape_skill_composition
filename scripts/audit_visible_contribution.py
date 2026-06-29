@@ -89,11 +89,15 @@ def main() -> int:
     materialization = read_json(RESULTS / "external_config_materialization_plan.json")
     planner_policy = read_json(RESULTS / "planner_edge_policy_audit.json")
     local_model_release = read_json(RESULTS / "local_model_release_audit.json")
+    release_package = read_json(RESULTS / "external_release_package_audit.json")
+    release_package_self_test = read_json(RESULTS / "external_release_package_self_test.json")
     reviewer_packet = read_json(RESULTS / "reviewer_response_packet_audit.json")
     ledger = read_json(DOCS / "claim_evidence_ledger.json")
     rollout_validator_text = read_text(ROOT / "scripts" / "validate_external_rollouts.py")
     rollout_self_test_text = read_text(ROOT / "scripts" / "self_test_external_rollout_validator.py")
     evidence_pipeline_self_test_text = read_text(ROOT / "scripts" / "self_test_external_evidence_pipeline.py")
+    release_audit_text = read_text(ROOT / "scripts" / "audit_external_release_package.py")
+    release_self_test_text = read_text(ROOT / "scripts" / "self_test_external_release_package.py")
     runner_text = read_text(ROOT / "external_validation" / "runner" / "real_collection_runner.py")
 
     files = {
@@ -599,6 +603,33 @@ def main() -> int:
         and "internal_runner_artifact.backup.mp4" in rollout_self_test_text
         and "write_synthetic_mp4" in evidence_pipeline_self_test_text,
         "strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths when --strict --check-video-paths is enabled",
+    )
+    release_self_checks = {check.get("name"): check.get("passed") for check in release_package_self_test.get("checks", []) or []}
+    add_check(
+        checks,
+        "release_package_internal_artifact_rejection_visible",
+        release_package.get("release_package_ready") is False
+        and release_package.get("not_external_evidence") is True
+        and release_package_self_test.get("passed") is True
+        and release_package_self_test.get("not_external_evidence") is True
+        and release_package_self_test.get("synthetic_release_package_ready") is True
+        and release_package_self_test.get("bad_release_package_ready") is False
+        and release_self_checks.get("bad_artifacts_rejected_as_release_evidence") is True
+        and "FORBIDDEN_RELEASE_LOG_VIDEO_FRAGMENTS" in release_audit_text
+        and "staging" in release_audit_text
+        and "backup" in release_audit_text
+        and "diagnostic" in release_audit_text
+        and "peg_place_regrasp.staging.jsonl" in release_self_test_text
+        and "peg_place_regrasp.backup.jsonl" in release_self_test_text
+        and "peg_place_regrasp.diagnostic.mp4" in release_self_test_text
+        and "peg_place_regrasp.fallback.mp4" in release_self_test_text
+        and "release-package internal-artifact rejection gate" in texts["README"]
+        and "release-package internal-artifact rejection gate" in texts["final_audit"]
+        and "release-package internal-artifact rejection gate" in texts["readiness_audit"],
+        (
+            f"release_package_ready={release_package.get('release_package_ready')!r}, "
+            f"bad_release_package_ready={release_package_self_test.get('bad_release_package_ready')!r}"
+        ),
     )
     add_check(
         checks,

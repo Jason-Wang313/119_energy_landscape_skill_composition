@@ -872,9 +872,29 @@ def main():
     if release_package_self_test.get("synthetic_release_package_ready") is not True:
         fail("external release package self-test should make temporary manifest-declared release artifacts ready")
     if release_package_self_test.get("bad_release_package_ready") is not False:
-        fail("external release package self-test should reject bad local-dry-run/template/scaffold/placeholder artifacts")
+        fail("external release package self-test should reject bad local-dry-run/template/scaffold/placeholder/staged/backup/diagnostic artifacts")
     if release_package_self_test.get("missing_manifest_ready") is not False:
         fail("external release package self-test should reject a missing manifest")
+    release_audit_text = (ROOT / "scripts" / "audit_external_release_package.py").read_text(encoding="utf-8")
+    release_self_test_text = (ROOT / "scripts" / "self_test_external_release_package.py").read_text(encoding="utf-8")
+    for release_guard_term in (
+        "FORBIDDEN_RELEASE_LOG_VIDEO_FRAGMENTS",
+        "staging",
+        "backup",
+        "diagnostic",
+        "fallback",
+    ):
+        if release_guard_term not in release_audit_text:
+            fail(f"external release package audit missing internal-artifact rejection term: {release_guard_term}")
+    for release_fixture in (
+        "peg_place_regrasp.staging.jsonl",
+        "peg_place_regrasp.backup.jsonl",
+        "peg_place_regrasp.diagnostic.mp4",
+        "peg_place_regrasp.fallback.mp4",
+        "peg_place_regrasp.backup.mp4",
+    ):
+        if release_fixture not in release_self_test_text:
+            fail(f"external release package self-test missing internal-artifact rejection fixture: {release_fixture}")
     release_package_self_checks = {check.get("name"): check.get("passed") for check in release_package_self_test.get("checks", [])}
     for required_check in (
         "synthetic_release_package_passes",
@@ -3915,6 +3935,7 @@ def main():
         "config_manifest_packet_visible",
         "rollout_evidence_packet_visible",
         "strict_video_evidence_gate_visible",
+        "release_package_internal_artifact_rejection_visible",
         "precollection_manifest_draft_visible",
         "method_implementation_packet_visible",
         "maniskill_pilot_runtime_liveness_visible",

@@ -101,7 +101,7 @@ def entry(path: Path) -> dict[str, str]:
     return {"path": rel(path), "sha256": sha256(path)}
 
 
-def bad_release_artifacts() -> dict[str, list[dict[str, str]]]:
+def bad_release_artifacts(tmp: Path) -> dict[str, list[dict[str, str]]]:
     scaffold = EXTERNAL / "baselines" / "barrier_certified_energy_composer_v5" / "adapter_template.py"
     template_config = EXTERNAL / "config_templates" / "peg_place_regrasp.json"
     local_log = EXTERNAL / "local_dry_run" / "logs" / "peg_place_regrasp.jsonl"
@@ -110,11 +110,24 @@ def bad_release_artifacts() -> dict[str, list[dict[str, str]]]:
     for path in (scaffold, template_config, local_log, placeholder_video, local_checkpoint):
         if not path.exists():
             raise SystemExit(f"missing expected bad release fixture: {path}")
+    internal_artifact_dir = tmp / "internal_artifacts"
+    staged_log = internal_artifact_dir / "peg_place_regrasp.staging.jsonl"
+    backup_log = internal_artifact_dir / "peg_place_regrasp.backup.jsonl"
+    diagnostic_video = internal_artifact_dir / "peg_place_regrasp.diagnostic.mp4"
+    fallback_video = internal_artifact_dir / "peg_place_regrasp.fallback.mp4"
+    backup_video = internal_artifact_dir / "peg_place_regrasp.backup.mp4"
+    staged_log.parent.mkdir(parents=True, exist_ok=True)
+    staged_log.write_text(json.dumps({"not_external_evidence": True, "kind": "staged_log"}) + "\n", encoding="utf-8")
+    backup_log.write_text(json.dumps({"not_external_evidence": True, "kind": "backup_log"}) + "\n", encoding="utf-8")
+    diagnostic_video.write_bytes((b"diagnostic release-package self-test video bytes\n" * 40))
+    fallback_video.write_bytes((b"fallback release-package self-test video bytes\n" * 40))
+    backup_video.write_bytes((b"backup release-package self-test video bytes\n" * 40))
+
     return {
         "code": [entry(scaffold)],
         "configs": [entry(template_config)],
-        "logs": [entry(local_log)],
-        "videos": [entry(placeholder_video)],
+        "logs": [entry(local_log), entry(staged_log), entry(backup_log)],
+        "videos": [entry(placeholder_video), entry(diagnostic_video), entry(fallback_video), entry(backup_video)],
         "checkpoints": [entry(local_checkpoint)],
     }
 
@@ -146,7 +159,7 @@ def write_report(payload: dict[str, Any]) -> None:
         "Not evidence: `true`.",
         f"Synthetic release package ready: `{str(payload['synthetic_release_package_ready']).lower()}`.",
         "",
-        "This self-test builds temporary manifest-declared release artifacts and exercises the external release-package hash gate directly. It proves complete synthetic artifacts can pass, missing manifests fail, local-dry-run/template/scaffold/placeholder artifacts are rejected as evidence, and the real release-package audit report is not overwritten.",
+        "This self-test builds temporary manifest-declared release artifacts and exercises the external release-package hash gate directly. It proves complete synthetic artifacts can pass, missing manifests fail, local-dry-run/template/scaffold/placeholder artifacts plus staged/backup/diagnostic log-video artifacts are rejected as evidence, and the real release-package audit report is not overwritten.",
         "",
         "## Checks",
         "",
@@ -169,7 +182,7 @@ def main() -> int:
         missing_manifest = tmp / "manifest_missing.json"
 
         write_json(complete_manifest, manifest(write_complete_artifacts(tmp)))
-        write_json(bad_manifest, manifest(bad_release_artifacts(), mark_local=True))
+        write_json(bad_manifest, manifest(bad_release_artifacts(tmp), mark_local=True))
 
         complete_audit = release_audit.build_payload(complete_manifest)
         bad_audit = release_audit.build_payload(bad_manifest)
@@ -205,7 +218,12 @@ def main() -> int:
                 "local_dry_run artifact cannot be release evidence",
                 "config template artifact cannot be release evidence",
                 "adapter scaffold/template cannot be release evidence",
-                "placeholder video cannot be release evidence",
+                "logs artifact contains forbidden non-evidence fragment",
+                "videos artifact contains forbidden non-evidence fragment",
+                "staging",
+                "backup",
+                "diagnostic",
+                "fallback",
                 "manifest is marked local_dry_run_only/not_external_evidence",
             )
         ),

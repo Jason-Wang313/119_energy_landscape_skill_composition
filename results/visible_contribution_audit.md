@@ -37,6 +37,7 @@ This audit checks that the public-facing contribution docs describe the current 
 - `pass` `config_manifest_packet_visible`: config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False
 - `pass` `rollout_evidence_packet_visible`: rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False
 - `pass` `strict_video_evidence_gate_visible`: strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths when --strict --check-video-paths is enabled
+- `pass` `release_package_internal_artifact_rejection_visible`: release_package_ready=False, bad_release_package_ready=False
 - `pass` `ablation_collection_packet_visible`: work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False
 - `pass` `evidence_intake_ledger_visible`: mapped=36/36, strict_external_evidence_ready=False
 - `pass` `precollection_manifest_draft_visible`: prepared_configs=4, method_gaps=11, rollout_gaps=8, official_manifest_exists=False
