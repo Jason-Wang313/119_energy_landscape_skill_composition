@@ -1,0 +1,128 @@
+{
+  "blocking_missing": [
+    "render_video_ready is false in results/maniskill_render_video_preflight_audit.json",
+    "PegInsertionSide-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+    "PegInsertionSide-v1 did not write a renderer-backed MP4",
+    "OpenCabinetDrawer-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+    "OpenCabinetDrawer-v1 did not write a renderer-backed MP4",
+    "OpenCabinetDoor-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+    "OpenCabinetDoor-v1 did not write a renderer-backed MP4",
+    "PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+    "PullCubeTool-v1 did not write a renderer-backed MP4",
+    "pilot runtime liveness is not ready on the selected machine",
+    "pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence",
+    "pilot runtime render_video_ready is false"
+  ],
+  "checks": [
+    {
+      "detail": "packet is a work-order artifact only",
+      "name": "render_failure_remediation_is_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "state=DO_NOT_COLLECT_RENDER_MACHINE, qualified=False",
+      "name": "remediation_inherits_fail_closed_state",
+      "passed": true
+    },
+    {
+      "detail": "pilot_runtime_ready=False, official_guard=True, render_errors=['RuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory']",
+      "name": "liveness_render_guard_failure_captured",
+      "passed": true
+    },
+    {
+      "detail": "work_orders=6",
+      "name": "work_orders_cover_required_gate_sequence",
+      "passed": true
+    },
+    {
+      "detail": "diagnostic_fallbacks=['external_validation/pilot_runtime_guard/videos/peg_place_regrasp/paper119_blind_peg_place_regrasp_r000_method_05.4D84DD563A0C.staging.mp4.diagnostic.json'], state=DO_NOT_COLLECT_RENDER_MACHINE",
+      "name": "diagnostic_fallbacks_remain_blocking_when_present",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json remains absent before real evidence",
+      "name": "no_real_manifest_written",
+      "passed": true
+    }
+  ],
+  "diagnostic_video_fallbacks": [
+    "external_validation/pilot_runtime_guard/videos/peg_place_regrasp/paper119_blind_peg_place_regrasp_r000_method_05.4D84DD563A0C.staging.mp4.diagnostic.json"
+  ],
+  "failed_checks": [],
+  "liveness_last_backend_progress_stage": "reset_scene_return",
+  "liveness_last_progress_stage": "record_video_start",
+  "liveness_render_errors": [
+    "RuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory"
+  ],
+  "not_external_evidence": true,
+  "passed": true,
+  "qualification_state": "DO_NOT_COLLECT_RENDER_MACHINE",
+  "remediation_state": "RENDER_REMEDIATION_REQUIRED",
+  "render_machine_qualified": false,
+  "renderer_failure_classes": [
+    "vulkan_descriptor_pool_exhaustion"
+  ],
+  "renderer_failure_stages": [
+    "initial_render_start"
+  ],
+  "source_artifacts": [
+    "results/external_platform_probe.json",
+    "results/maniskill_render_video_preflight_audit.json",
+    "results/maniskill_pilot_runtime_liveness_audit.json",
+    "external_validation/maniskill_task_bindings.json",
+    "results/maniskill_render_machine_qualification.json",
+    "results/maniskill_pilot_runtime_liveness_audit.json"
+  ],
+  "strict_external_evidence_ready": false,
+  "version": "maniskill_render_failure_remediation_v1",
+  "work_orders": [
+    {
+      "acceptance": "platform probe records exact collection machine, package versions, GPU/Vulkan driver, renderer backend, code commit, and config hashes",
+      "command": "python scripts\\probe_external_platform.py",
+      "id": "renderer_platform_probe",
+      "notes": "primary_envs=PegInsertionSide-v1,OpenCabinetDrawer-v1,OpenCabinetDoor-v1,PullCubeTool-v1",
+      "owner": "independent_operator",
+      "status": "blocked_until_rerun_on_collection_machine"
+    },
+    {
+      "acceptance": "all four primary task-family environments write render-backed RGB MP4 files without diagnostic fallback media",
+      "command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend <accepted_backend> --shader-pack <accepted_shader_pack> --profile-matrix --profile-matrix-max-envs 1 --timeout-diagnosis-seconds 180",
+      "id": "render_profile_matrix_retest",
+      "notes": "failure_classes=vulkan_descriptor_pool_exhaustion; failure_stages=initial_render_start",
+      "owner": "independent_operator",
+      "status": "blocked_until_render_backed_mp4_success"
+    },
+    {
+      "acceptance": "pilot_runtime_ready=true, render_video_ready=true, runner_io_ready=true, records>=1, videos>=1, and diagnostic_video_fallbacks=0",
+      "command": "python scripts\\audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 180 --max-rows 1",
+      "id": "pilot_liveness_retest",
+      "notes": "last_backend_stage=reset_scene_return; liveness_errors=RuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "owner": "independent_operator",
+      "status": "blocked_until_pilot_runtime_ready"
+    },
+    {
+      "acceptance": "diagnostic fallback sidecars, staged files, and pilot_runtime_guard outputs are absent from external_validation/manifest.json",
+      "command": "python scripts\\validate_external_rollouts.py --strict --write-results",
+      "id": "diagnostic_fallback_exclusion",
+      "notes": "fallbacks=external_validation/pilot_runtime_guard/videos/peg_place_regrasp/paper119_blind_peg_place_regrasp_r000_method_05.4D84DD563A0C.staging.mp4.diagnostic.json",
+      "owner": "jason_or_operator",
+      "status": "must_remain_enforced"
+    },
+    {
+      "acceptance": "guarded fidelity acceptance is written only after render-backed video readiness, real rollout evidence, manifest declaration, and independent signoff",
+      "command": "python scripts\\materialize_fidelity_acceptance.py --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write <operator fields>",
+      "id": "fidelity_acceptance_after_render_ready",
+      "notes": "qualification_state=DO_NOT_COLLECT_RENDER_MACHINE; blockers=12",
+      "owner": "independent_operator",
+      "status": "blocked_until_render_and_liveness_ready"
+    },
+    {
+      "acceptance": "strict collection readiness passes before official collection spends simulator or robot time",
+      "command": "python scripts\\audit_external_collection_readiness.py --strict --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --run-id <accepted_run_id> --unsealed-alias-map",
+      "id": "collection_readiness_gate",
+      "notes": "run this after render profile matrix, pilot liveness, and fidelity acceptance gates pass",
+      "owner": "jason_or_operator",
+      "status": "blocked_until_fidelity_acceptance_and_render_ready"
+    }
+  ]
+}

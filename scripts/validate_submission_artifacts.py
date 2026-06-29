@@ -2747,15 +2747,22 @@ def main():
     render_machine_path = RESULTS / "maniskill_render_machine_qualification.json"
     render_machine_md_path = RESULTS / "maniskill_render_machine_qualification.md"
     render_machine_packet_path = EXTERNAL / "render_machine_qualification_packet.md"
+    render_remediation_path = RESULTS / "maniskill_render_failure_remediation.json"
+    render_remediation_md_path = RESULTS / "maniskill_render_failure_remediation.md"
+    render_remediation_csv_path = EXTERNAL / "render_failure_remediation_work_orders.csv"
     for path in (
         ROOT / "scripts" / "build_maniskill_render_machine_qualification.py",
         render_machine_path,
         render_machine_md_path,
         render_machine_packet_path,
+        render_remediation_path,
+        render_remediation_md_path,
+        render_remediation_csv_path,
     ):
         if not path.exists():
             fail(f"missing ManiSkill render machine qualification artifact: {path}")
     render_machine = json.loads(render_machine_path.read_text(encoding="utf-8"))
+    render_remediation = json.loads(render_remediation_path.read_text(encoding="utf-8"))
     if render_machine.get("version") != "maniskill_render_machine_qualification_v1":
         fail("ManiSkill render machine qualification version mismatch")
     if render_machine.get("passed") is not True:
@@ -2774,6 +2781,33 @@ def main():
         fail("render machine qualification must list missing render-machine evidence while unqualified")
     if render_machine.get("render_machine_qualified") is False and not render_machine.get("renderer_failure_stages"):
         fail("render machine qualification must propagate renderer failure stages while unqualified")
+    if render_remediation.get("version") != "maniskill_render_failure_remediation_v1":
+        fail("ManiSkill render failure remediation version mismatch")
+    if render_remediation.get("passed") is not True:
+        fail("ManiSkill render failure remediation audit did not pass")
+    if render_remediation.get("not_external_evidence") is not True:
+        fail("ManiSkill render failure remediation must declare that it is not evidence")
+    if render_remediation.get("strict_external_evidence_ready") is not False:
+        fail("ManiSkill render failure remediation must not claim strict external evidence readiness")
+    if render_remediation.get("qualification_state") != render_machine.get("qualification_state"):
+        fail("ManiSkill render failure remediation must inherit the render-machine qualification state")
+    if render_remediation.get("remediation_state") != "RENDER_REMEDIATION_REQUIRED":
+        fail("current local renderer must keep render failure remediation required")
+    if not render_remediation.get("work_orders") or len(render_remediation.get("work_orders", [])) < 6:
+        fail("ManiSkill render failure remediation must include work orders")
+    work_order_ids = {str(item.get("id", "")) for item in render_remediation.get("work_orders", []) if isinstance(item, dict)}
+    for required_work_order in (
+        "renderer_platform_probe",
+        "render_profile_matrix_retest",
+        "pilot_liveness_retest",
+        "diagnostic_fallback_exclusion",
+        "fidelity_acceptance_after_render_ready",
+        "collection_readiness_gate",
+    ):
+        if required_work_order not in work_order_ids:
+            fail(f"ManiSkill render failure remediation missing work order: {required_work_order}")
+    if not render_remediation.get("liveness_render_errors"):
+        fail("ManiSkill render failure remediation must capture liveness render errors")
     render_machine_commands = "\n".join(render_machine.get("operator_commands", []) or [])
     for fragment in (
         "probe_external_platform.py",
@@ -2785,6 +2819,7 @@ def main():
         if fragment not in render_machine_commands:
             fail(f"render machine qualification missing operator command fragment: {fragment}")
     render_machine_checks = {check.get("name"): check.get("passed") for check in render_machine.get("checks", [])}
+    render_remediation_checks = {check.get("name"): check.get("passed") for check in render_remediation.get("checks", [])}
     for required_check in (
         "qualification_packet_is_non_evidence",
         "source_audits_loaded",
@@ -2800,6 +2835,16 @@ def main():
     ):
         if render_machine_checks.get(required_check) is not True:
             fail(f"ManiSkill render machine qualification missing passing check: {required_check}")
+    for required_check in (
+        "render_failure_remediation_is_non_evidence",
+        "remediation_inherits_fail_closed_state",
+        "liveness_render_guard_failure_captured",
+        "work_orders_cover_required_gate_sequence",
+        "diagnostic_fallbacks_remain_blocking_when_present",
+        "no_real_manifest_written",
+    ):
+        if render_remediation_checks.get(required_check) is not True:
+            fail(f"ManiSkill render failure remediation missing passing check: {required_check}")
 
     ablation_packet_path = EXTERNAL / "ablation_collection_packet.json"
     ablation_packet_md_path = EXTERNAL / "ablation_collection_packet.md"

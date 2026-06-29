@@ -67,6 +67,14 @@ python scripts\audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 60 --
 
 This writes `results/maniskill_pilot_runtime_liveness_audit.{json,md}` plus the reset-timeout triage sidecar `results/maniskill_pilot_reset_timeout_triage.{json,md}`. It launches the tracked ManiSkill reference runner in quarantined `external_validation/pilot_runtime_guard/` directories with a strict timeout. It is not evidence and does not replace the pilot-smoke packet. The current local default report is fail-closed for official collection: `pilot_runtime_ready=false`, `runner_io_ready=false`, and `render_video_ready=false`, with no promoted pilot row/video. The audit records timeout progress, the active row/config/method/env when a reset-stage timeout occurs, backend reset substage markers for import/env construction/reset/render capture localization, and, when the runner reaches video export, whether a diagnostic sidecar rejected before JSONL write was stopped by the official video guard. Use an accepted GPU/render machine or fix render-backed RGB video before official collection.
 
+Build the render failure remediation packet:
+
+```powershell
+python scripts\build_maniskill_render_machine_qualification.py
+```
+
+This writes `results/maniskill_render_failure_remediation.{json,md}` and `external_validation/render_failure_remediation_work_orders.csv` alongside the render-machine qualification packet. It converts the current render-backed-video blocker into non-evidence work orders for platform probing, renderer profile retesting, pilot liveness, diagnostic fallback exclusion, guarded fidelity acceptance, and strict collection readiness. It cannot satisfy strict evidence and must remain fail-closed until render-backed MP4s and pilot liveness pass on the accepted collection machine.
+
 The ManiSkill reference path uses explicit render-backend/shader controls. Defaults are `PAPER119_MANISKILL_RENDER_BACKEND=cpu`, `PAPER119_MANISKILL_SHADER_PACK=minimal`, `PAPER119_MANISKILL_RENDER_WIDTH=128`, and `PAPER119_MANISKILL_RENDER_HEIGHT=128`; the render-video preflight and pilot runtime liveness audit record these values so evidence videos are never confused with implicit local renderer defaults.
 
 Build the independent operator packet:

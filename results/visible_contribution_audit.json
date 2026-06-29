@@ -156,6 +156,11 @@
       "passed": true
     },
     {
+      "detail": "state='RENDER_REMEDIATION_REQUIRED', errors=['RuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory'], work_orders=['collection_readiness_gate', 'diagnostic_fallback_exclusion', 'fidelity_acceptance_after_render_ready', 'pilot_liveness_retest', 'render_profile_matrix_retest', 'renderer_platform_probe']",
+      "name": "render_failure_remediation_packet_visible",
+      "passed": true
+    },
+    {
       "detail": "config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False",
       "name": "config_manifest_packet_visible",
       "passed": true

@@ -10,6 +10,8 @@ Renderer failure stages: `['initial_render_start']`.
 
 This packet is an operator gate for the exact machine that will collect render-backed videos. It does not run collection, does not write `external_validation/manifest.json`, and does not turn diagnostic fallback videos into evidence.
 
+Render failure remediation packet: `results/maniskill_render_failure_remediation.md`.
+
 ## Required Proof Before Official Collection
 
 - `results/external_platform_probe.json` must describe the exact accepted collection machine.
@@ -29,6 +31,7 @@ This packet is an operator gate for the exact machine that will collect render-b
 - PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory
 - PullCubeTool-v1 did not write a renderer-backed MP4
 - pilot runtime liveness is not ready on the selected machine
+- pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence
 - pilot runtime render_video_ready is false
 
 ## Operator Commands
@@ -55,10 +58,10 @@ python scripts\audit_external_collection_readiness.py --strict --backend-module 
 - `pass` `source_audits_loaded`: expected_envs=['PegInsertionSide-v1', 'OpenCabinetDrawer-v1', 'OpenCabinetDoor-v1', 'PullCubeTool-v1']
 - `pass` `render_preflight_remains_non_evidence`: not_external_evidence=True, strict=False
 - `pass` `all_primary_envs_have_terminal_render_records`: records=4, expected=['PegInsertionSide-v1', 'OpenCabinetDrawer-v1', 'OpenCabinetDoor-v1', 'PullCubeTool-v1']
-- `pass` `qualification_state_matches_render_and_liveness`: state=DO_NOT_COLLECT_RENDER_MACHINE, blockers=11
+- `pass` `qualification_state_matches_render_and_liveness`: state=DO_NOT_COLLECT_RENDER_MACHINE, blockers=12
 - `pass` `current_machine_fail_closed_when_render_not_ready`: state=DO_NOT_COLLECT_RENDER_MACHINE, render_video_ready=False
 - `pass` `renderer_failure_classes_propagated`: failure_classes=['vulkan_descriptor_pool_exhaustion']
 - `pass` `renderer_failure_stages_propagated`: failure_stages=['initial_render_start']
-- `pass` `diagnostic_fallbacks_block_evidence`: diagnostic_fallbacks=0, state=DO_NOT_COLLECT_RENDER_MACHINE
+- `pass` `diagnostic_fallbacks_block_evidence`: diagnostic_fallbacks=1, state=DO_NOT_COLLECT_RENDER_MACHINE
 - `pass` `no_real_manifest_written`: external_validation/manifest.json remains absent before real evidence
 - `pass` `operator_commands_cover_platform_render_liveness_acceptance_and_collection_readiness`: operator qualification commands are present

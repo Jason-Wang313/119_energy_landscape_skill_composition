@@ -688,6 +688,43 @@ def main() -> int:
         and (EXTERNAL / "render_machine_qualification_packet.md").exists(),
         "render machine qualification packet commands and packet file are present",
     )
+    render_remediation_ok, render_remediation, render_remediation_detail = passed_json(
+        RESULTS / "maniskill_render_failure_remediation.json",
+        version="maniskill_render_failure_remediation_v1",
+    )
+    add_check(checks, "maniskill_render_failure_remediation_ready", render_remediation_ok, render_remediation_detail)
+    render_remediation_checks = {check.get("name"): check.get("passed") for check in render_remediation.get("checks", []) or []}
+    render_remediation_work_ids = {
+        str(item.get("id", ""))
+        for item in render_remediation.get("work_orders", []) or []
+        if isinstance(item, dict)
+    }
+    add_check(
+        checks,
+        "maniskill_render_failure_remediation_not_evidence",
+        render_remediation.get("not_external_evidence") is True
+        and render_remediation.get("strict_external_evidence_ready") is False
+        and render_remediation.get("remediation_state") == "RENDER_REMEDIATION_REQUIRED"
+        and render_remediation.get("qualification_state") == render_machine.get("qualification_state")
+        and bool(render_remediation.get("liveness_render_errors"))
+        and render_remediation_checks.get("render_failure_remediation_is_non_evidence") is True
+        and render_remediation_checks.get("work_orders_cover_required_gate_sequence") is True
+        and {
+            "renderer_platform_probe",
+            "render_profile_matrix_retest",
+            "pilot_liveness_retest",
+            "diagnostic_fallback_exclusion",
+            "fidelity_acceptance_after_render_ready",
+            "collection_readiness_gate",
+        }.issubset(render_remediation_work_ids)
+        and (RESULTS / "maniskill_render_failure_remediation.md").exists()
+        and (EXTERNAL / "render_failure_remediation_work_orders.csv").exists(),
+        (
+            f"state={render_remediation.get('remediation_state')!r}, "
+            f"qualification_state={render_remediation.get('qualification_state')!r}, "
+            f"work_orders={sorted(render_remediation_work_ids)}"
+        ),
+    )
 
     backend_contract_ok, backend_contract, backend_contract_detail = passed_json(
         RESULTS / "external_backend_contract_audit.json",
@@ -1392,6 +1429,8 @@ def main() -> int:
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "maniskill_pilot_runtime_liveness_audit.md",
         RESULTS / "maniskill_pilot_reset_timeout_triage.md",
+        RESULTS / "maniskill_render_failure_remediation.md",
+        EXTERNAL / "render_failure_remediation_work_orders.csv",
         DOCS / "independent_validation_protocol.md",
     ]
     missing_packet_paths = [rel(path) for path in required_packet_paths if not path.exists()]
@@ -1482,6 +1521,8 @@ def main() -> int:
         "maniskill_render_machine_qualification_ready",
         "maniskill_render_machine_qualification_not_evidence",
         "maniskill_render_machine_operator_commands",
+        "maniskill_render_failure_remediation_ready",
+        "maniskill_render_failure_remediation_not_evidence",
         "external_backend_contract_ready",
         "external_backend_contract_not_evidence",
         "external_backend_contract_fail_closed",

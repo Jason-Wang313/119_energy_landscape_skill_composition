@@ -10,6 +10,7 @@
     "PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
     "PullCubeTool-v1 did not write a renderer-backed MP4",
     "pilot runtime liveness is not ready on the selected machine",
+    "pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence",
     "pilot runtime render_video_ready is false"
   ],
   "checks": [
@@ -34,7 +35,7 @@
       "passed": true
     },
     {
-      "detail": "state=DO_NOT_COLLECT_RENDER_MACHINE, blockers=11",
+      "detail": "state=DO_NOT_COLLECT_RENDER_MACHINE, blockers=12",
       "name": "qualification_state_matches_render_and_liveness",
       "passed": true
     },
@@ -54,7 +55,7 @@
       "passed": true
     },
     {
-      "detail": "diagnostic_fallbacks=0, state=DO_NOT_COLLECT_RENDER_MACHINE",
+      "detail": "diagnostic_fallbacks=1, state=DO_NOT_COLLECT_RENDER_MACHINE",
       "name": "diagnostic_fallbacks_block_evidence",
       "passed": true
     },

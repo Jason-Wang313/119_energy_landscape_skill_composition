@@ -96,8 +96,10 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `maniskill_pilot_runtime_liveness_not_evidence`: pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, timed_out=False, records=0, videos=0, diagnostic_fallbacks=1, diagnostic_rejected=True, failure_summary='official video guard rejected diagnostic fallback sidecar before JSONL write after progress stage record_video_start'
 - `pass` `maniskill_pilot_reset_timeout_triage_ready`: status='RESET_SCENE_TIMEOUT_TRIAGE_NOT_APPLICABLE', reset_timeout=False, task='peg_place_regrasp', method='energy_compatibility_heuristic', env='PegInsertionSide-v1', backend_stage='reset_scene_return'
 - `pass` `maniskill_render_machine_qualification_ready`: passed
-- `pass` `maniskill_render_machine_qualification_not_evidence`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=11
+- `pass` `maniskill_render_machine_qualification_not_evidence`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12
 - `pass` `maniskill_render_machine_operator_commands`: render machine qualification packet commands and packet file are present
+- `pass` `maniskill_render_failure_remediation_ready`: passed
+- `pass` `maniskill_render_failure_remediation_not_evidence`: state='RENDER_REMEDIATION_REQUIRED', qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', work_orders=['collection_readiness_gate', 'diagnostic_fallback_exclusion', 'fidelity_acceptance_after_render_ready', 'pilot_liveness_retest', 'render_profile_matrix_retest', 'renderer_platform_probe']
 - `pass` `external_backend_contract_ready`: passed
 - `pass` `external_backend_contract_not_evidence`: not_external_evidence=True
 - `pass` `external_backend_contract_fail_closed`: backend_contract_harness_ready=True, actual_backend_ready=False

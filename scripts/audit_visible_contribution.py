@@ -80,6 +80,7 @@ def main() -> int:
     pilot_smoke = read_json(RESULTS / "external_pilot_smoke_packet_audit.json")
     pilot_runtime = read_json(RESULTS / "maniskill_pilot_runtime_liveness_audit.json")
     render_preflight = read_json(RESULTS / "maniskill_render_video_preflight_audit.json")
+    render_remediation = read_json(RESULTS / "maniskill_render_failure_remediation.json")
     runbook = read_json(RESULTS / "external_runbook_audit.json")
     config_manifest = read_json(RESULTS / "external_config_manifest_audit.json")
     rollout_evidence = read_json(RESULTS / "external_rollout_evidence_audit.json")
@@ -652,6 +653,39 @@ def main() -> int:
             f"remediation={len(render_preflight.get('operator_remediation', []) or [])}"
         ),
     )
+    render_remediation_checks = {check.get("name"): check.get("passed") for check in render_remediation.get("checks", []) or []}
+    render_remediation_work_ids = {
+        str(item.get("id", ""))
+        for item in render_remediation.get("work_orders", []) or []
+        if isinstance(item, dict)
+    }
+    add_check(
+        checks,
+        "render_failure_remediation_packet_visible",
+        render_remediation.get("version") == "maniskill_render_failure_remediation_v1"
+        and render_remediation.get("passed") is True
+        and render_remediation.get("not_external_evidence") is True
+        and render_remediation.get("strict_external_evidence_ready") is False
+        and render_remediation.get("remediation_state") == "RENDER_REMEDIATION_REQUIRED"
+        and bool(render_remediation.get("liveness_render_errors"))
+        and render_remediation_checks.get("render_failure_remediation_is_non_evidence") is True
+        and render_remediation_checks.get("work_orders_cover_required_gate_sequence") is True
+        and {
+            "renderer_platform_probe",
+            "render_profile_matrix_retest",
+            "pilot_liveness_retest",
+            "diagnostic_fallback_exclusion",
+            "fidelity_acceptance_after_render_ready",
+            "collection_readiness_gate",
+        }.issubset(render_remediation_work_ids)
+        and (RESULTS / "maniskill_render_failure_remediation.md").exists()
+        and (ROOT / "external_validation" / "render_failure_remediation_work_orders.csv").exists(),
+        (
+            f"state={render_remediation.get('remediation_state')!r}, "
+            f"errors={render_remediation.get('liveness_render_errors')!r}, "
+            f"work_orders={sorted(render_remediation_work_ids)}"
+        ),
+    )
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", []) or []}
     config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", []) or []}
     config_evidence_self_checks = {check.get("name"): check.get("passed") for check in config_evidence_self_test.get("checks", []) or []}
@@ -1085,6 +1119,7 @@ def main() -> int:
             "ManiSkill pilot runtime liveness audit",
             "reset-timeout triage sidecar",
             "backend reset substage markers",
+            "render failure remediation packet",
             "diagnostic sidecar rejected before JSONL write",
             "External config manifest packet",
             "External rollout evidence packet",
@@ -1153,6 +1188,7 @@ def main() -> int:
             "ManiSkill pilot runtime liveness audit",
             "reset-timeout triage sidecar",
             "backend reset substage markers",
+            "render failure remediation packet",
             "diagnostic sidecar rejected before JSONL write",
             "External config manifest packet",
             "External rollout evidence packet",
@@ -1222,6 +1258,7 @@ def main() -> int:
             "ManiSkill pilot runtime liveness audit",
             "reset-timeout triage sidecar",
             "backend reset substage markers",
+            "render failure remediation packet",
             "diagnostic sidecar rejected before JSONL write",
             "external config manifest packet",
             "external rollout evidence packet",
@@ -1292,6 +1329,7 @@ def main() -> int:
             "ManiSkill pilot runtime liveness audit",
             "reset-timeout triage sidecar",
             "backend reset substage markers",
+            "render failure remediation packet",
             "diagnostic sidecar rejected before JSONL write",
             "External config manifest packet",
             "External rollout evidence packet",
@@ -1363,6 +1401,7 @@ def main() -> int:
             "scripts/audit_maniskill_pilot_runtime_liveness.py",
             "reset-timeout triage sidecar",
             "backend reset substage markers",
+            "render failure remediation packet",
             "diagnostic sidecar rejected before JSONL write",
             "scripts/build_external_config_manifest_packet.py",
             "scripts/build_external_rollout_evidence_packet.py",
@@ -1436,6 +1475,7 @@ def main() -> int:
             "ManiSkill pilot runtime liveness audit",
             "reset-timeout triage sidecar",
             "backend reset substage markers",
+            "render failure remediation packet",
             "diagnostic sidecar rejected before JSONL write",
             "external config manifest packet",
             "external rollout evidence packet",
@@ -1487,6 +1527,7 @@ def main() -> int:
             "ManiSkill render machine qualification packet",
             "reset-timeout triage sidecar",
             "backend reset substage markers",
+            "render failure remediation packet",
             "diagnostic sidecar rejected before JSONL write",
             "External ablation collection packet",
             "External evidence intake ledger",
@@ -1548,7 +1589,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the failure-memory adaptation audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the strict MP4 video evidence gate, the strict full-method coverage gate, the strict rollout sample-count gate, the strict paired-panel gate, the strict rollout uniqueness gate, confidence-gated external rollout statistics, the final rollout confidence summary gate, the strict task-config hash gate, the strict policy/config hash gate, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the strict fidelity acceptance provenance gate, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, atomic official evidence promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, and ManiSkill render machine qualification packet, the ManiSkill pilot runtime liveness audit, reset-timeout triage sidecar, and backend reset substage markers, the external method implementation packet, adapter acceptance fixtures, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the strict independent method provenance gate, the strict checkpoint/config artifact gate, the strict fairness-contract binding gate, the manifest assembly checklist, the External manifest builder self-test, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the failure-memory adaptation audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the strict MP4 video evidence gate, the strict full-method coverage gate, the strict rollout sample-count gate, the strict paired-panel gate, the strict rollout uniqueness gate, confidence-gated external rollout statistics, the final rollout confidence summary gate, the strict task-config hash gate, the strict policy/config hash gate, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the strict fidelity acceptance provenance gate, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, atomic official evidence promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, ManiSkill render machine qualification packet, render failure remediation packet, ManiSkill pilot runtime liveness audit, reset-timeout triage sidecar, and backend reset substage markers, the external method implementation packet, adapter acceptance fixtures, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the strict independent method provenance gate, the strict checkpoint/config artifact gate, the strict fairness-contract binding gate, the manifest assembly checklist, the External manifest builder self-test, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",
