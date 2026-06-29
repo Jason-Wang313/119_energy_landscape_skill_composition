@@ -36,6 +36,11 @@
       "passed": true
     },
     {
+      "detail": "checkpoint_or_config_hash placeholders must match checkpoint_or_config_path artifacts, not implementation source hashes",
+      "name": "manifest_entry_templates_bind_hash_to_checkpoint_config_artifact",
+      "passed": true
+    },
+    {
       "detail": "implementation_provenance requires operator/lab signoff, no oracle access, no scaffold/reference use, no outcome tuning, and locked hashes",
       "name": "manifest_entry_templates_require_independent_provenance",
       "passed": true

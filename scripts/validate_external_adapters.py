@@ -425,22 +425,25 @@ def manifest_hash_errors(records: dict[str, dict[str, Any]], required_methods: l
         implementation = str(method.get("implementation", "")).strip()
         checkpoint_or_config_path = str(method.get("checkpoint_or_config_path", "")).strip()
         declared_hash = str(method.get("checkpoint_or_config_hash", "")).strip()
+        if not implementation:
+            errors.append(f"{name}: implementation path is missing")
+        if not checkpoint_or_config_path:
+            errors.append(f"{name}: checkpoint_or_config_path is missing")
+            continue
         if not is_hash(declared_hash):
             errors.append(f"{name}: checkpoint_or_config_hash is missing or not a 64-character SHA256")
             continue
-        candidate_paths = [value for value in (checkpoint_or_config_path, implementation) if value]
-        candidate_hashes: list[str] = []
-        for value in candidate_paths:
-            path = rel_path(value)
-            if path.exists():
-                try:
-                    candidate_hashes.append(sha256_path(path).lower())
-                except OSError as exc:
-                    errors.append(f"{name}: could not hash {value}: {exc}")
-        if candidate_hashes and declared_hash.lower() not in candidate_hashes:
-            errors.append(f"{name}: checkpoint_or_config_hash does not match checkpoint/config or implementation artifact")
-        elif not candidate_hashes:
-            errors.append(f"{name}: no hashable checkpoint/config or implementation artifact")
+        artifact = rel_path(checkpoint_or_config_path)
+        if not artifact.exists():
+            errors.append(f"{name}: checkpoint_or_config_path does not exist: {checkpoint_or_config_path}")
+            continue
+        try:
+            artifact_hash = sha256_path(artifact).lower()
+        except OSError as exc:
+            errors.append(f"{name}: could not hash checkpoint/config artifact {checkpoint_or_config_path}: {exc}")
+            continue
+        if declared_hash.lower() != artifact_hash:
+            errors.append(f"{name}: checkpoint_or_config_hash must match checkpoint_or_config_path artifact")
     return errors
 
 
@@ -505,12 +508,18 @@ def build_audit(*, strict: bool) -> dict[str, Any]:
             for method in required_methods
             if not str(records.get(method, {}).get("implementation", "")).strip()
         )
+        missing_checkpoint_or_config = sorted(
+            method
+            for method in required_methods
+            if not str(records.get(method, {}).get("checkpoint_or_config_path", "")).strip()
+        )
         hash_errors = manifest_hash_errors(records, required_methods)
         provenance_errors = manifest_provenance_errors(records, required_methods)
         entries = manifest_implementation_entries(records, required_methods)
     else:
         records, duplicate_methods, malformed_methods = {}, [], []
-        missing_declared, missing_implementations, hash_errors, provenance_errors = [], [], [], []
+        missing_declared, missing_implementations, missing_checkpoint_or_config = [], [], []
+        hash_errors, provenance_errors = [], []
         entries = scaffold_paths()
 
     if strict:
@@ -533,6 +542,15 @@ def build_audit(*, strict: bool) -> dict[str, Any]:
             "manifest_implementation_entries_cover_required_non_oracle_methods",
             not missing_implementations,
             f"missing_implementations={missing_implementations}",
+        )
+        add_check(
+            checks,
+            "manifest_checkpoint_or_config_artifacts_declared",
+            not missing_declared and not missing_implementations and not missing_checkpoint_or_config,
+            (
+                f"missing={missing_declared}, missing_implementations={missing_implementations}, "
+                f"missing_checkpoint_or_config={missing_checkpoint_or_config}"
+            ),
         )
         add_check(
             checks,
@@ -605,7 +623,7 @@ def write_outputs(audit: dict[str, Any]) -> None:
         f"Not evidence: `{str(audit['not_external_evidence']).lower()}`.",
         f"Adapters checked: `{audit['adapter_count']}`.",
         "",
-        "Non-strict mode validates the adapter contract harness and scaffold structure only. Strict mode validates manifest-declared real implementations and rejects scaffold/reference adapters.",
+        "Non-strict mode validates the adapter contract harness and scaffold structure only. Strict mode validates manifest-declared real implementations, rejects scaffold/reference adapters, and requires checkpoint/config hashes to match checkpoint_or_config_path artifacts rather than implementation source.",
         "",
         "## Checks",
         "",

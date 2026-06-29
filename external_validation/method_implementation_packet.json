@@ -7,6 +7,7 @@
     "using scaffold adapters as manifest-declared implementations",
     "using reference adapters as rollout evidence without real source/config/checkpoint hashes",
     "using reference adapters to bypass the strict reference-adapter rejection gate",
+    "using implementation-source hashes as checkpoint_or_config_hash without a matching checkpoint_or_config_path artifact",
     "declaring only a subset of non-oracle methods in the strict adapter manifest",
     "using policy_or_config_hash values in JSONL logs that do not match manifest-declared hashes",
     "omitting implementation_provenance or using provenance that permits oracle access, scaffold/reference adapters, proposed-code leakage for independent baselines, or post-outcome tuning",
@@ -33,7 +34,7 @@
   "oracle_method": "oracle_basin_composer",
   "oracle_role": "post_hoc_upper_bound_only_not_an_implementation_work_order",
   "purpose": "Convert the missing independent non-oracle baseline layer into per-method implementation work orders before external rollouts.",
-  "reference_adapter_policy": "Reference adapters are executable interface/provenance artifacts only. They are not independent implementation evidence; the strict reference-adapter rejection gate prevents them from satisfying strict adapter evidence without operator-supplied implementations, configs/checkpoints, manifest entries, raw logs, and matching policy_or_config_hash values.",
+  "reference_adapter_policy": "Reference adapters are executable interface/provenance artifacts only. They are not independent implementation evidence; the strict reference-adapter rejection gate prevents them from satisfying strict adapter evidence without operator-supplied implementations, checkpoint/config artifacts, manifest entries, raw logs, and matching policy_or_config_hash values.",
   "reference_adapter_provenance": [
     {
       "adapter_path": "external_validation/baselines/barrier_certified_energy_composer_v5/adapter.py",
@@ -42,7 +43,7 @@
       "common_adapter_sha256": "9FC13A8FFA1120279C68CAA335C8095D128AA5AA1E04D25355A64AA7C32C140A",
       "evidence_status": "implementation_only_not_rollout_evidence",
       "manifest_declaration_stub": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
         "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
         "implementation_provenance": {
@@ -83,7 +84,7 @@
       "common_adapter_sha256": "9FC13A8FFA1120279C68CAA335C8095D128AA5AA1E04D25355A64AA7C32C140A",
       "evidence_status": "implementation_only_not_rollout_evidence",
       "manifest_declaration_stub": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
         "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
         "implementation_provenance": {
@@ -124,7 +125,7 @@
       "common_adapter_sha256": "9FC13A8FFA1120279C68CAA335C8095D128AA5AA1E04D25355A64AA7C32C140A",
       "evidence_status": "implementation_only_not_rollout_evidence",
       "manifest_declaration_stub": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
         "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
         "implementation_provenance": {
@@ -165,7 +166,7 @@
       "common_adapter_sha256": "9FC13A8FFA1120279C68CAA335C8095D128AA5AA1E04D25355A64AA7C32C140A",
       "evidence_status": "implementation_only_not_rollout_evidence",
       "manifest_declaration_stub": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
         "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
         "implementation_provenance": {
@@ -206,7 +207,7 @@
       "common_adapter_sha256": "9FC13A8FFA1120279C68CAA335C8095D128AA5AA1E04D25355A64AA7C32C140A",
       "evidence_status": "implementation_only_not_rollout_evidence",
       "manifest_declaration_stub": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
         "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
         "implementation_provenance": {
@@ -247,7 +248,7 @@
       "common_adapter_sha256": "9FC13A8FFA1120279C68CAA335C8095D128AA5AA1E04D25355A64AA7C32C140A",
       "evidence_status": "implementation_only_not_rollout_evidence",
       "manifest_declaration_stub": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
         "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
         "implementation_provenance": {
@@ -288,7 +289,7 @@
       "common_adapter_sha256": "9FC13A8FFA1120279C68CAA335C8095D128AA5AA1E04D25355A64AA7C32C140A",
       "evidence_status": "implementation_only_not_rollout_evidence",
       "manifest_declaration_stub": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
         "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
         "implementation_provenance": {
@@ -329,7 +330,7 @@
       "common_adapter_sha256": "9FC13A8FFA1120279C68CAA335C8095D128AA5AA1E04D25355A64AA7C32C140A",
       "evidence_status": "implementation_only_not_rollout_evidence",
       "manifest_declaration_stub": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
         "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
         "implementation_provenance": {
@@ -370,7 +371,7 @@
       "common_adapter_sha256": "9FC13A8FFA1120279C68CAA335C8095D128AA5AA1E04D25355A64AA7C32C140A",
       "evidence_status": "implementation_only_not_rollout_evidence",
       "manifest_declaration_stub": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
         "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
         "implementation_provenance": {
@@ -411,7 +412,7 @@
       "common_adapter_sha256": "9FC13A8FFA1120279C68CAA335C8095D128AA5AA1E04D25355A64AA7C32C140A",
       "evidence_status": "implementation_only_not_rollout_evidence",
       "manifest_declaration_stub": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
         "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
         "implementation_provenance": {
@@ -452,7 +453,7 @@
       "common_adapter_sha256": "9FC13A8FFA1120279C68CAA335C8095D128AA5AA1E04D25355A64AA7C32C140A",
       "evidence_status": "implementation_only_not_rollout_evidence",
       "manifest_declaration_stub": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
         "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
         "implementation_provenance": {
@@ -531,7 +532,7 @@
       "independent_implementation_required": true,
       "manifest_implementation_key": "methods[barrier_certified_energy_composer_v5].implementation",
       "manifest_method_entry_template": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "external_validation/implementations/barrier_certified_energy_composer_v5/config_or_checkpoint.json",
         "implementation": "external_validation/implementations/barrier_certified_energy_composer_v5/adapter.py",
         "implementation_provenance": {
@@ -557,7 +558,7 @@
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
         "fill implementation_provenance with independent operator/lab signoff, no oracle access, no scaffold/reference adapter use, no outcome tuning, and matched skill/observation/compute conditions",
         "record implementation source hash or repository commit before rollouts start",
-        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "record checkpoint/config artifact path and matching hash before rollouts start; implementation hashes cannot substitute for checkpoint_or_config_hash",
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
@@ -613,7 +614,7 @@
       "independent_implementation_required": true,
       "manifest_implementation_key": "methods[behavior_cloned_skill_chain].implementation",
       "manifest_method_entry_template": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "external_validation/implementations/behavior_cloned_skill_chain/config_or_checkpoint.json",
         "implementation": "external_validation/implementations/behavior_cloned_skill_chain/adapter.py",
         "implementation_provenance": {
@@ -639,7 +640,7 @@
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
         "fill implementation_provenance with independent operator/lab signoff, no oracle access, no scaffold/reference adapter use, no outcome tuning, and matched skill/observation/compute conditions",
         "record implementation source hash or repository commit before rollouts start",
-        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "record checkpoint/config artifact path and matching hash before rollouts start; implementation hashes cannot substitute for checkpoint_or_config_hash",
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
@@ -695,7 +696,7 @@
       "independent_implementation_required": true,
       "manifest_implementation_key": "methods[cem_trajectory_composer].implementation",
       "manifest_method_entry_template": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "external_validation/implementations/cem_trajectory_composer/config_or_checkpoint.json",
         "implementation": "external_validation/implementations/cem_trajectory_composer/adapter.py",
         "implementation_provenance": {
@@ -721,7 +722,7 @@
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
         "fill implementation_provenance with independent operator/lab signoff, no oracle access, no scaffold/reference adapter use, no outcome tuning, and matched skill/observation/compute conditions",
         "record implementation source hash or repository commit before rollouts start",
-        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "record checkpoint/config artifact path and matching hash before rollouts start; implementation hashes cannot substitute for checkpoint_or_config_hash",
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
@@ -775,7 +776,7 @@
       "independent_implementation_required": true,
       "manifest_implementation_key": "methods[diffusion_skill_stitcher].implementation",
       "manifest_method_entry_template": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "external_validation/implementations/diffusion_skill_stitcher/config_or_checkpoint.json",
         "implementation": "external_validation/implementations/diffusion_skill_stitcher/adapter.py",
         "implementation_provenance": {
@@ -801,7 +802,7 @@
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
         "fill implementation_provenance with independent operator/lab signoff, no oracle access, no scaffold/reference adapter use, no outcome tuning, and matched skill/observation/compute conditions",
         "record implementation source hash or repository commit before rollouts start",
-        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "record checkpoint/config artifact path and matching hash before rollouts start; implementation hashes cannot substitute for checkpoint_or_config_hash",
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
@@ -855,7 +856,7 @@
       "independent_implementation_required": true,
       "manifest_implementation_key": "methods[energy_compatibility_heuristic].implementation",
       "manifest_method_entry_template": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "external_validation/implementations/energy_compatibility_heuristic/config_or_checkpoint.json",
         "implementation": "external_validation/implementations/energy_compatibility_heuristic/adapter.py",
         "implementation_provenance": {
@@ -881,7 +882,7 @@
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
         "fill implementation_provenance with independent operator/lab signoff, no oracle access, no scaffold/reference adapter use, no outcome tuning, and matched skill/observation/compute conditions",
         "record implementation source hash or repository commit before rollouts start",
-        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "record checkpoint/config artifact path and matching hash before rollouts start; implementation hashes cannot substitute for checkpoint_or_config_hash",
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
@@ -938,7 +939,7 @@
       "independent_implementation_required": true,
       "manifest_implementation_key": "methods[greedy_module_sequence].implementation",
       "manifest_method_entry_template": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "external_validation/implementations/greedy_module_sequence/config_or_checkpoint.json",
         "implementation": "external_validation/implementations/greedy_module_sequence/adapter.py",
         "implementation_provenance": {
@@ -964,7 +965,7 @@
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
         "fill implementation_provenance with independent operator/lab signoff, no oracle access, no scaffold/reference adapter use, no outcome tuning, and matched skill/observation/compute conditions",
         "record implementation source hash or repository commit before rollouts start",
-        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "record checkpoint/config artifact path and matching hash before rollouts start; implementation hashes cannot substitute for checkpoint_or_config_hash",
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
@@ -1020,7 +1021,7 @@
       "independent_implementation_required": true,
       "manifest_implementation_key": "methods[option_graph_planner].implementation",
       "manifest_method_entry_template": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "external_validation/implementations/option_graph_planner/config_or_checkpoint.json",
         "implementation": "external_validation/implementations/option_graph_planner/adapter.py",
         "implementation_provenance": {
@@ -1046,7 +1047,7 @@
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
         "fill implementation_provenance with independent operator/lab signoff, no oracle access, no scaffold/reference adapter use, no outcome tuning, and matched skill/observation/compute conditions",
         "record implementation source hash or repository commit before rollouts start",
-        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "record checkpoint/config artifact path and matching hash before rollouts start; implementation hashes cannot substitute for checkpoint_or_config_hash",
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
@@ -1101,7 +1102,7 @@
       "independent_implementation_required": true,
       "manifest_implementation_key": "methods[proposed_energy_landscape_composer_v4_1].implementation",
       "manifest_method_entry_template": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "external_validation/implementations/proposed_energy_landscape_composer_v4_1/config_or_checkpoint.json",
         "implementation": "external_validation/implementations/proposed_energy_landscape_composer_v4_1/adapter.py",
         "implementation_provenance": {
@@ -1127,7 +1128,7 @@
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
         "fill implementation_provenance with independent operator/lab signoff, no oracle access, no scaffold/reference adapter use, no outcome tuning, and matched skill/observation/compute conditions",
         "record implementation source hash or repository commit before rollouts start",
-        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "record checkpoint/config artifact path and matching hash before rollouts start; implementation hashes cannot substitute for checkpoint_or_config_hash",
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
@@ -1182,7 +1183,7 @@
       "independent_implementation_required": true,
       "manifest_implementation_key": "methods[residual_rl_composer].implementation",
       "manifest_method_entry_template": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "external_validation/implementations/residual_rl_composer/config_or_checkpoint.json",
         "implementation": "external_validation/implementations/residual_rl_composer/adapter.py",
         "implementation_provenance": {
@@ -1208,7 +1209,7 @@
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
         "fill implementation_provenance with independent operator/lab signoff, no oracle access, no scaffold/reference adapter use, no outcome tuning, and matched skill/observation/compute conditions",
         "record implementation source hash or repository commit before rollouts start",
-        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "record checkpoint/config artifact path and matching hash before rollouts start; implementation hashes cannot substitute for checkpoint_or_config_hash",
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
@@ -1263,7 +1264,7 @@
       "independent_implementation_required": true,
       "manifest_implementation_key": "methods[stable_dmp_handoff].implementation",
       "manifest_method_entry_template": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "external_validation/implementations/stable_dmp_handoff/config_or_checkpoint.json",
         "implementation": "external_validation/implementations/stable_dmp_handoff/adapter.py",
         "implementation_provenance": {
@@ -1289,7 +1290,7 @@
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
         "fill implementation_provenance with independent operator/lab signoff, no oracle access, no scaffold/reference adapter use, no outcome tuning, and matched skill/observation/compute conditions",
         "record implementation source hash or repository commit before rollouts start",
-        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "record checkpoint/config artifact path and matching hash before rollouts start; implementation hashes cannot substitute for checkpoint_or_config_hash",
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],
@@ -1344,7 +1345,7 @@
       "independent_implementation_required": true,
       "manifest_implementation_key": "methods[tamp_feasibility_screen].implementation",
       "manifest_method_entry_template": {
-        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+        "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
         "checkpoint_or_config_path": "external_validation/implementations/tamp_feasibility_screen/config_or_checkpoint.json",
         "implementation": "external_validation/implementations/tamp_feasibility_screen/adapter.py",
         "implementation_provenance": {
@@ -1370,7 +1371,7 @@
         "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
         "fill implementation_provenance with independent operator/lab signoff, no oracle access, no scaffold/reference adapter use, no outcome tuning, and matched skill/observation/compute conditions",
         "record implementation source hash or repository commit before rollouts start",
-        "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+        "record checkpoint/config artifact path and matching hash before rollouts start; implementation hashes cannot substitute for checkpoint_or_config_hash",
         "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
         "strict adapter validation must pass before any rollout logs from this method count as evidence"
       ],

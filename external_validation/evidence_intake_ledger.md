@@ -55,7 +55,7 @@ python scripts\audit_external_evidence.py --strict
 
 - `manifest_exists` -> `manifest_contract`: manifest exists, has external_validation_v1, declares log schema, route, tasks, methods, fairness flags, recomputed metrics, and release hashes
 - `external_fidelity_acceptance_ready` -> `fidelity_acceptance`: fidelity acceptance audit reports acceptance_ready=true and strict fidelity evidence true
-- `external_adapter_contract_evidence_passed` -> `methods_baselines`: strict adapter evidence audit passes; scaffolds and reference adapters are not counted as evidence
+- `external_adapter_contract_evidence_passed` -> `methods_baselines`: strict adapter evidence audit passes; scaffolds/reference adapters are not counted as evidence, and checkpoint_or_config_hash values match real checkpoint_or_config_path artifacts rather than implementation source
 - `external_config_evidence_passed` -> `task_configs`: strict config evidence audit passes with manifest-declared configs and matching hashes
 - `manifest_version` -> `manifest_contract`: manifest exists, has external_validation_v1, declares log schema, route, tasks, methods, fairness flags, recomputed metrics, and release hashes
 - `manifest_declares_log_schema` -> `manifest_contract`: manifest exists, has external_validation_v1, declares log schema, route, tasks, methods, fairness flags, recomputed metrics, and release hashes
@@ -69,8 +69,8 @@ python scripts\audit_external_evidence.py --strict
 - `episodes_per_method` -> `task_configs`: strict config evidence audit passes with manifest-declared configs and matching hashes
 - `episode_log_schema` -> `rollout_logs_videos_metrics`: external rollout metric validator passes and manifest metrics match recomputed rollout metrics
 - `task_video_dirs` -> `rollout_logs_videos_metrics`: external rollout metric validator passes and manifest metrics match recomputed rollout metrics
-- `required_methods` -> `methods_baselines`: strict adapter evidence audit passes; scaffolds and reference adapters are not counted as evidence
-- `independent_method_implementations` -> `methods_baselines`: strict adapter evidence audit passes; scaffolds and reference adapters are not counted as evidence
+- `required_methods` -> `methods_baselines`: strict adapter evidence audit passes; scaffolds/reference adapters are not counted as evidence, and checkpoint_or_config_hash values match real checkpoint_or_config_path artifacts rather than implementation source
+- `independent_method_implementations` -> `methods_baselines`: strict adapter evidence audit passes; scaffolds/reference adapters are not counted as evidence, and checkpoint_or_config_hash values match real checkpoint_or_config_path artifacts rather than implementation source
 - `external_success_margin` -> `rollout_logs_videos_metrics`: external rollout metric validator passes and manifest metrics match recomputed rollout metrics
 - `external_utility_margin` -> `rollout_logs_videos_metrics`: external rollout metric validator passes and manifest metrics match recomputed rollout metrics
 - `paired_win_rate` -> `rollout_logs_videos_metrics`: external rollout metric validator passes and manifest metrics match recomputed rollout metrics
@@ -88,7 +88,7 @@ python scripts\audit_external_evidence.py --strict
 - `release_configs` -> `pairing_release`: pairing_ready=true and release_package_ready=true under strict audits
 - `release_logs` -> `pairing_release`: pairing_ready=true and release_package_ready=true under strict audits
 - `release_videos` -> `pairing_release`: pairing_ready=true and release_package_ready=true under strict audits
-- `release_checkpoints` -> `methods_baselines`: strict adapter evidence audit passes; scaffolds and reference adapters are not counted as evidence
+- `release_checkpoints` -> `methods_baselines`: strict adapter evidence audit passes; scaffolds/reference adapters are not counted as evidence, and checkpoint_or_config_hash values match real checkpoint_or_config_path artifacts rather than implementation source
 
 ## Checks
 

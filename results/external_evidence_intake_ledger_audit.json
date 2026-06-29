@@ -132,7 +132,7 @@
     },
     {
       "closure_group": "methods_baselines",
-      "completion_test": "strict adapter evidence audit passes; scaffolds and reference adapters are not counted as evidence",
+      "completion_test": "strict adapter evidence audit passes; scaffolds/reference adapters are not counted as evidence, and checkpoint_or_config_hash values match real checkpoint_or_config_path artifacts rather than implementation source",
       "current_detail": "passed=False, adapters=0",
       "evidence_ready_now": "false",
       "failure_name": "external_adapter_contract_evidence_passed",
@@ -272,7 +272,7 @@
     },
     {
       "closure_group": "methods_baselines",
-      "completion_test": "strict adapter evidence audit passes; scaffolds and reference adapters are not counted as evidence",
+      "completion_test": "strict adapter evidence audit passes; scaffolds/reference adapters are not counted as evidence, and checkpoint_or_config_hash values match real checkpoint_or_config_path artifacts rather than implementation source",
       "current_detail": "missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'oracle_basin_composer', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen']",
       "evidence_ready_now": "false",
       "failure_name": "required_methods",
@@ -282,7 +282,7 @@
     },
     {
       "closure_group": "methods_baselines",
-      "completion_test": "strict adapter evidence audit passes; scaffolds and reference adapters are not counted as evidence",
+      "completion_test": "strict adapter evidence audit passes; scaffolds/reference adapters are not counted as evidence, and checkpoint_or_config_hash values match real checkpoint_or_config_path artifacts rather than implementation source",
       "current_detail": "missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen']",
       "evidence_ready_now": "false",
       "failure_name": "independent_method_implementations",
@@ -462,7 +462,7 @@
     },
     {
       "closure_group": "methods_baselines",
-      "completion_test": "strict adapter evidence audit passes; scaffolds and reference adapters are not counted as evidence",
+      "completion_test": "strict adapter evidence audit passes; scaffolds/reference adapters are not counted as evidence, and checkpoint_or_config_hash values match real checkpoint_or_config_path artifacts rather than implementation source",
       "current_detail": "entries=0, missing_paths=[], missing_sha256=[]",
       "evidence_ready_now": "false",
       "failure_name": "release_checkpoints",

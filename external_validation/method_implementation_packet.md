@@ -23,7 +23,7 @@ The current reference adapters are executable interface artifacts. They make the
 - Manifest declaration stub:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
@@ -60,7 +60,7 @@ The current reference adapters are executable interface artifacts. They make the
 - Manifest declaration stub:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
@@ -97,7 +97,7 @@ The current reference adapters are executable interface artifacts. They make the
 - Manifest declaration stub:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
@@ -134,7 +134,7 @@ The current reference adapters are executable interface artifacts. They make the
 - Manifest declaration stub:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
@@ -171,7 +171,7 @@ The current reference adapters are executable interface artifacts. They make the
 - Manifest declaration stub:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
@@ -208,7 +208,7 @@ The current reference adapters are executable interface artifacts. They make the
 - Manifest declaration stub:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
@@ -245,7 +245,7 @@ The current reference adapters are executable interface artifacts. They make the
 - Manifest declaration stub:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
@@ -282,7 +282,7 @@ The current reference adapters are executable interface artifacts. They make the
 - Manifest declaration stub:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
@@ -319,7 +319,7 @@ The current reference adapters are executable interface artifacts. They make the
 - Manifest declaration stub:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
@@ -356,7 +356,7 @@ The current reference adapters are executable interface artifacts. They make the
 - Manifest declaration stub:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
@@ -393,7 +393,7 @@ The current reference adapters are executable interface artifacts. They make the
 - Manifest declaration stub:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
@@ -423,6 +423,7 @@ The current reference adapters are executable interface artifacts. They make the
 - using scaffold adapters as manifest-declared implementations
 - using reference adapters as rollout evidence without real source/config/checkpoint hashes
 - using reference adapters to bypass the strict reference-adapter rejection gate
+- using implementation-source hashes as checkpoint_or_config_hash without a matching checkpoint_or_config_path artifact
 - declaring only a subset of non-oracle methods in the strict adapter manifest
 - using policy_or_config_hash values in JSONL logs that do not match manifest-declared hashes
 - omitting implementation_provenance or using provenance that permits oracle access, scaffold/reference adapters, proposed-code leakage for independent baselines, or post-outcome tuning
@@ -449,7 +450,7 @@ The current reference adapters are executable interface artifacts. They make the
 - Manifest method entry template:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "external_validation/implementations/barrier_certified_energy_composer_v5/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/barrier_certified_energy_composer_v5/adapter.py",
   "implementation_provenance": {
@@ -493,7 +494,7 @@ Forbidden advantages:
 - Manifest method entry template:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "external_validation/implementations/behavior_cloned_skill_chain/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/behavior_cloned_skill_chain/adapter.py",
   "implementation_provenance": {
@@ -538,7 +539,7 @@ Forbidden advantages:
 - Manifest method entry template:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "external_validation/implementations/cem_trajectory_composer/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/cem_trajectory_composer/adapter.py",
   "implementation_provenance": {
@@ -583,7 +584,7 @@ Forbidden advantages:
 - Manifest method entry template:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "external_validation/implementations/diffusion_skill_stitcher/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/diffusion_skill_stitcher/adapter.py",
   "implementation_provenance": {
@@ -626,7 +627,7 @@ Forbidden advantages:
 - Manifest method entry template:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "external_validation/implementations/energy_compatibility_heuristic/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/energy_compatibility_heuristic/adapter.py",
   "implementation_provenance": {
@@ -670,7 +671,7 @@ Forbidden advantages:
 - Manifest method entry template:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "external_validation/implementations/greedy_module_sequence/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/greedy_module_sequence/adapter.py",
   "implementation_provenance": {
@@ -715,7 +716,7 @@ Forbidden advantages:
 - Manifest method entry template:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "external_validation/implementations/option_graph_planner/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/option_graph_planner/adapter.py",
   "implementation_provenance": {
@@ -759,7 +760,7 @@ Forbidden advantages:
 - Manifest method entry template:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "external_validation/implementations/proposed_energy_landscape_composer_v4_1/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/proposed_energy_landscape_composer_v4_1/adapter.py",
   "implementation_provenance": {
@@ -803,7 +804,7 @@ Forbidden advantages:
 - Manifest method entry template:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "external_validation/implementations/residual_rl_composer/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/residual_rl_composer/adapter.py",
   "implementation_provenance": {
@@ -847,7 +848,7 @@ Forbidden advantages:
 - Manifest method entry template:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "external_validation/implementations/stable_dmp_handoff/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/stable_dmp_handoff/adapter.py",
   "implementation_provenance": {
@@ -891,7 +892,7 @@ Forbidden advantages:
 - Manifest method entry template:
 ```json
 {
-  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+  "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
   "checkpoint_or_config_path": "external_validation/implementations/tamp_feasibility_screen/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/tamp_feasibility_screen/adapter.py",
   "implementation_provenance": {

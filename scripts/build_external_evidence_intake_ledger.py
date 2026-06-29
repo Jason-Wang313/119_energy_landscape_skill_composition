@@ -61,7 +61,7 @@ GROUPS: dict[str, dict[str, str]] = {
         "operator_artifacts": "manifest-declared independent non-oracle implementations/configs/checkpoints with hashes and JSONL policy_or_config_hash values matching the manifest",
         "source_packet": "external_validation/method_implementation_packet.md; external_validation/method_implementation_work_orders.csv; external_validation/method_reference_provenance.csv",
         "strict_gate": "python scripts\\validate_external_adapters.py --strict; python scripts\\audit_external_evidence.py --strict",
-        "completion_test": "strict adapter evidence audit passes; scaffolds and reference adapters are not counted as evidence",
+        "completion_test": "strict adapter evidence audit passes; scaffolds/reference adapters are not counted as evidence, and checkpoint_or_config_hash values match real checkpoint_or_config_path artifacts rather than implementation source",
     },
     "ablations": {
         "operator_artifacts": "manifest-declared external ablation logs/videos for basin_overlap, barrier_height, descent_continuity, risk_calibration, and seam_repair on the same accepted configs, skill library, resets, observation interface, and compute budget",

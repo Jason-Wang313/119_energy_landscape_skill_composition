@@ -11,13 +11,18 @@
       "passed": true
     },
     {
-      "detail": "passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': False, 'manifest_implementation_entries_present': False, 'manifest_declares_all_required_non_oracle_methods': False, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': False, 'manifest_required_hashes_match_artifacts': False, 'manifest_independent_provenance_declared': False, 'adapter_results_passed': False}",
+      "detail": "passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': False, 'manifest_implementation_entries_present': False, 'manifest_declares_all_required_non_oracle_methods': False, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': False, 'manifest_checkpoint_or_config_artifacts_declared': False, 'manifest_required_hashes_match_artifacts': False, 'manifest_independent_provenance_declared': False, 'adapter_results_passed': False}",
       "name": "missing_manifest_fails_strict",
       "passed": true
     },
     {
-      "detail": "passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': True, 'manifest_implementation_entries_present': True, 'manifest_declares_all_required_non_oracle_methods': True, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': True, 'manifest_required_hashes_match_artifacts': True, 'manifest_independent_provenance_declared': False, 'adapter_results_passed': True}",
+      "detail": "passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': True, 'manifest_implementation_entries_present': True, 'manifest_declares_all_required_non_oracle_methods': True, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': True, 'manifest_checkpoint_or_config_artifacts_declared': True, 'manifest_required_hashes_match_artifacts': True, 'manifest_independent_provenance_declared': False, 'adapter_results_passed': True}",
       "name": "leaky_or_reference_provenance_fails_strict",
+      "passed": true
+    },
+    {
+      "detail": "passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': True, 'manifest_implementation_entries_present': True, 'manifest_declares_all_required_non_oracle_methods': True, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': True, 'manifest_checkpoint_or_config_artifacts_declared': False, 'manifest_required_hashes_match_artifacts': False, 'manifest_independent_provenance_declared': True, 'adapter_results_passed': True}",
+      "name": "implementation_hash_cannot_replace_checkpoint_or_config",
       "passed": true
     },
     {
@@ -31,17 +36,18 @@
       "passed": true
     },
     {
-      "detail": "before=0d26f217bbfdb41f97394f0254c131a8c19ad2f1f613264fb8636dec6b33fdbb, after=0d26f217bbfdb41f97394f0254c131a8c19ad2f1f613264fb8636dec6b33fdbb",
+      "detail": "before=76bcad615bc07c1a68227015d77c9f52b0e5c66a1d31bf1c0fe6f3b320da36d1, after=76bcad615bc07c1a68227015d77c9f52b0e5c66a1d31bf1c0fe6f3b320da36d1",
       "name": "real_adapter_evidence_report_not_overwritten",
       "passed": true
     }
   ],
+  "implementation_hash_only_ready": false,
   "leaky_provenance_ready": false,
   "missing_manifest_ready": false,
   "not_external_evidence": true,
   "passed": true,
-  "real_adapter_evidence_report_after": "0d26f217bbfdb41f97394f0254c131a8c19ad2f1f613264fb8636dec6b33fdbb",
-  "real_adapter_evidence_report_before": "0d26f217bbfdb41f97394f0254c131a8c19ad2f1f613264fb8636dec6b33fdbb",
+  "real_adapter_evidence_report_after": "76bcad615bc07c1a68227015d77c9f52b0e5c66a1d31bf1c0fe6f3b320da36d1",
+  "real_adapter_evidence_report_before": "76bcad615bc07c1a68227015d77c9f52b0e5c66a1d31bf1c0fe6f3b320da36d1",
   "reference_adapter_evidence_ready": false,
   "scaffold_adapter_evidence_ready": false,
   "synthetic_adapter_evidence_ready": true,

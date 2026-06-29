@@ -1631,12 +1631,15 @@ def main():
         fail("external adapter evidence self-test should reject a missing manifest")
     if adapter_evidence_self_test.get("leaky_provenance_ready") is not False:
         fail("external adapter evidence self-test should reject leaky or reference-adapter provenance")
+    if adapter_evidence_self_test.get("implementation_hash_only_ready") is not False:
+        fail("external adapter evidence self-test should reject implementation hashes as checkpoint/config evidence")
     adapter_evidence_self_checks = {check.get("name"): check.get("passed") for check in adapter_evidence_self_test.get("checks", [])}
     for required_check in (
         "synthetic_strict_adapters_pass",
         "synthetic_manifest_entries_cover_non_oracle_methods",
         "missing_manifest_fails_strict",
         "leaky_or_reference_provenance_fails_strict",
+        "implementation_hash_cannot_replace_checkpoint_or_config",
         "scaffold_adapters_rejected_as_strict_evidence",
         "reference_adapters_rejected_as_strict_evidence",
         "real_adapter_evidence_report_not_overwritten",
@@ -1732,6 +1735,7 @@ def main():
         "required_artifact_fields_declared",
         "required_log_fields_declared",
         "manifest_entry_templates_cover_required_hash_fields",
+        "manifest_entry_templates_bind_hash_to_checkpoint_config_artifact",
         "manifest_entry_templates_require_independent_provenance",
         "work_orders_forbid_scaffolds_and_reference_adapters",
         "policy_or_config_hash_in_logs_required",

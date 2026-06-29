@@ -43,6 +43,11 @@
       "passed": false
     },
     {
+      "detail": "missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen'], missing_implementations=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen'], missing_checkpoint_or_config=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen']",
+      "name": "manifest_checkpoint_or_config_artifacts_declared",
+      "passed": false
+    },
+    {
       "detail": "missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen'], missing_implementations=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen'], errors=[]",
       "name": "manifest_required_hashes_match_artifacts",
       "passed": false

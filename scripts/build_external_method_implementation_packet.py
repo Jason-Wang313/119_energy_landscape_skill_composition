@@ -143,7 +143,7 @@ def build_work_orders(specs: list[dict[str, Any]], log_schema: dict[str, Any]) -
                     "name": method,
                     "implementation": f"external_validation/implementations/{method}/adapter.py",
                     "checkpoint_or_config_path": f"external_validation/implementations/{method}/config_or_checkpoint.json",
-                    "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+                    "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
                     "implementation_provenance": provenance_template(method),
                 },
                 "evidence_status": "missing_manifest_declared_implementation",
@@ -160,7 +160,7 @@ def build_work_orders(specs: list[dict[str, Any]], log_schema: dict[str, Any]) -
                     "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
                     "fill implementation_provenance with independent operator/lab signoff, no oracle access, no scaffold/reference adapter use, no outcome tuning, and matched skill/observation/compute conditions",
                     "record implementation source hash or repository commit before rollouts start",
-                    "record checkpoint/config hash if the method uses learned weights, tuned parameters, demonstrations, or search settings",
+                    "record checkpoint/config artifact path and matching hash before rollouts start; implementation hashes cannot substitute for checkpoint_or_config_hash",
                     "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
                     "strict adapter validation must pass before any rollout logs from this method count as evidence",
                 ],
@@ -209,7 +209,7 @@ def collect_reference_adapter_provenance(specs: list[dict[str, Any]]) -> list[di
                     "name": method,
                     "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
                     "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
-                    "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path or implementation>",
+                    "checkpoint_or_config_hash": "<64-character SHA256 matching checkpoint_or_config_path>",
                     "implementation_provenance": provenance_template(method),
                     "interface_reference_adapter": rel(adapter),
                     "interface_reference_adapter_sha256": adapter_hash,
@@ -305,7 +305,7 @@ def build_packet(
             "Reference adapters are executable interface/provenance artifacts only. "
             "They are not independent implementation evidence; the strict reference-adapter rejection gate "
             "prevents them from satisfying strict adapter evidence "
-            "without operator-supplied implementations, configs/checkpoints, manifest entries, raw logs, "
+            "without operator-supplied implementations, checkpoint/config artifacts, manifest entries, raw logs, "
             "and matching policy_or_config_hash values."
         ),
         "reference_adapter_provenance_count": len(reference_provenance),
@@ -316,6 +316,7 @@ def build_packet(
             "using scaffold adapters as manifest-declared implementations",
             "using reference adapters as rollout evidence without real source/config/checkpoint hashes",
             "using reference adapters to bypass the strict reference-adapter rejection gate",
+            "using implementation-source hashes as checkpoint_or_config_hash without a matching checkpoint_or_config_path artifact",
             "declaring only a subset of non-oracle methods in the strict adapter manifest",
             "using policy_or_config_hash values in JSONL logs that do not match manifest-declared hashes",
             "omitting implementation_provenance or using provenance that permits oracle access, scaffold/reference adapters, proposed-code leakage for independent baselines, or post-outcome tuning",
@@ -350,6 +351,15 @@ def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_a
         and order.get("manifest_method_entry_template", {}).get("name") == order.get("method")
         and "SHA256" in str(order.get("manifest_method_entry_template", {}).get("checkpoint_or_config_hash", ""))
         for order in work_orders
+    )
+    manifest_checkpoint_config_ok = all(
+        "checkpoint_or_config_path>" in str(order.get("manifest_method_entry_template", {}).get("checkpoint_or_config_hash", ""))
+        and str(order.get("manifest_method_entry_template", {}).get("checkpoint_or_config_path", "")).strip()
+        for order in work_orders
+    ) and all(
+        "checkpoint_or_config_path>" in str((record.get("manifest_declaration_stub") or {}).get("checkpoint_or_config_hash", ""))
+        and str((record.get("manifest_declaration_stub") or {}).get("checkpoint_or_config_path", "")).strip()
+        for record in reference_provenance
     )
     provenance_template_ok = all(
         isinstance((order.get("manifest_method_entry_template") or {}).get("implementation_provenance"), dict)
@@ -439,6 +449,12 @@ def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_a
         "manifest_entry_templates_cover_required_hash_fields",
         manifest_template_ok,
         f"fields={MANIFEST_METHOD_ENTRY_FIELDS}",
+    )
+    add_check(
+        checks,
+        "manifest_entry_templates_bind_hash_to_checkpoint_config_artifact",
+        manifest_checkpoint_config_ok,
+        "checkpoint_or_config_hash placeholders must match checkpoint_or_config_path artifacts, not implementation source hashes",
     )
     add_check(
         checks,

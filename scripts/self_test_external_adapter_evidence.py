@@ -188,6 +188,16 @@ def manifest_with_leaky_provenance(adapter_paths: dict[str, Path], config_paths:
     return manifest
 
 
+def manifest_with_implementation_hash_only(adapter_paths: dict[str, Path], config_paths: dict[str, Path]) -> dict[str, Any]:
+    manifest = manifest_for_implementations(adapter_paths, config_paths)
+    for method in manifest["methods"]:
+        name = str(method.get("name", "")).strip()
+        if name in adapter_paths:
+            method["checkpoint_or_config_path"] = ""
+            method["checkpoint_or_config_hash"] = file_digest(adapter_paths[name])
+    return manifest
+
+
 def run_strict_with_manifest(manifest_path: Path) -> dict[str, Any]:
     old_manifest = adapter_audit.MANIFEST
     try:
@@ -211,7 +221,7 @@ def write_report(payload: dict[str, Any]) -> None:
         "Not evidence: `true`.",
         f"Synthetic strict adapter evidence ready: `{str(payload['synthetic_adapter_evidence_ready']).lower()}`.",
         "",
-        "This self-test builds temporary manifest-declared adapter implementations and exercises the strict external-adapter evidence gate directly. It proves complete synthetic adapters can pass, missing manifests fail, scaffold templates and reference adapters are rejected as evidence, and the real adapter evidence audit report is not overwritten.",
+        "This self-test builds temporary manifest-declared adapter implementations and exercises the strict external-adapter evidence gate directly. It proves complete synthetic adapters can pass, missing manifests fail, scaffold templates and reference adapters are rejected as evidence, implementation-source hashes cannot replace checkpoint/config artifacts, and the real adapter evidence audit report is not overwritten.",
         "",
         "## Checks",
         "",
@@ -254,22 +264,26 @@ def main() -> int:
         scaffold_manifest = tmp / "manifest_scaffolds.json"
         reference_manifest = tmp / "manifest_reference_adapters.json"
         leaky_manifest = tmp / "manifest_leaky_provenance.json"
+        implementation_hash_manifest = tmp / "manifest_implementation_hash_only.json"
         write_json(complete_manifest, manifest_for_implementations(adapter_paths, config_paths))
         write_json(scaffold_manifest, manifest_for_scaffolds())
         write_json(reference_manifest, manifest_for_reference_adapters())
         write_json(leaky_manifest, manifest_with_leaky_provenance(adapter_paths, config_paths))
+        write_json(implementation_hash_manifest, manifest_with_implementation_hash_only(adapter_paths, config_paths))
 
         complete_audit = run_strict_with_manifest(complete_manifest)
         missing_manifest_audit = run_strict_with_manifest(missing_manifest)
         scaffold_audit = run_strict_with_manifest(scaffold_manifest)
         reference_audit = run_strict_with_manifest(reference_manifest)
         leaky_audit = run_strict_with_manifest(leaky_manifest)
+        implementation_hash_audit = run_strict_with_manifest(implementation_hash_manifest)
 
     report_after = file_digest(REAL_REPORT)
 
     complete_checks = {check.get("name"): check.get("passed") for check in complete_audit.get("checks", [])}
     missing_manifest_checks = {check.get("name"): check.get("passed") for check in missing_manifest_audit.get("checks", [])}
     leaky_checks = {check.get("name"): check.get("passed") for check in leaky_audit.get("checks", [])}
+    implementation_hash_checks = {check.get("name"): check.get("passed") for check in implementation_hash_audit.get("checks", [])}
     scaffold_failed = scaffold_audit.get("failed_adapters", [])
     reference_failed = reference_audit.get("failed_adapters", [])
 
@@ -284,6 +298,7 @@ def main() -> int:
         and complete_checks.get("manifest_implementation_entries_present") is True
         and complete_checks.get("manifest_declares_all_required_non_oracle_methods") is True
         and complete_checks.get("manifest_implementation_entries_cover_required_non_oracle_methods") is True
+        and complete_checks.get("manifest_checkpoint_or_config_artifacts_declared") is True
         and complete_checks.get("manifest_required_hashes_match_artifacts") is True
         and complete_checks.get("manifest_independent_provenance_declared") is True
         and complete_checks.get("adapter_results_passed") is True,
@@ -309,6 +324,14 @@ def main() -> int:
         leaky_audit.get("passed") is False
         and leaky_checks.get("manifest_independent_provenance_declared") is False,
         f"passed={leaky_audit.get('passed')!r}, checks={leaky_checks}",
+    )
+    add_check(
+        checks,
+        "implementation_hash_cannot_replace_checkpoint_or_config",
+        implementation_hash_audit.get("passed") is False
+        and implementation_hash_checks.get("manifest_checkpoint_or_config_artifacts_declared") is False
+        and implementation_hash_checks.get("manifest_required_hashes_match_artifacts") is False,
+        f"passed={implementation_hash_audit.get('passed')!r}, checks={implementation_hash_checks}",
     )
     add_check(
         checks,
@@ -346,6 +369,7 @@ def main() -> int:
         "not_external_evidence": True,
         "synthetic_adapter_evidence_ready": complete_audit.get("passed") is True,
         "leaky_provenance_ready": leaky_audit.get("passed") is True,
+        "implementation_hash_only_ready": implementation_hash_audit.get("passed") is True,
         "scaffold_adapter_evidence_ready": scaffold_audit.get("passed") is True,
         "reference_adapter_evidence_ready": reference_audit.get("passed") is True,
         "missing_manifest_ready": missing_manifest_audit.get("passed") is True,

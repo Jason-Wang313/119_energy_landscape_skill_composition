@@ -171,18 +171,18 @@
   "included_file_count": 278,
   "included_files": [
     {
-      "bytes": 22330,
+      "bytes": 22669,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "AF2B0659F1E320F791DD178C2557AB6929DC8321D53C0E0BECE3054003244207"
+      "sha256": "152E47C414BC88206D01B6C957075902D6B5A9F36D7C10B0B4F52C8303450250"
     },
     {
-      "bytes": 11960,
+      "bytes": 12044,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/haonan_yilun_outreach_package.md",
-      "sha256": "D8421AB6338FC5D3F89F528D791FA4D2E78DF20499D405CB02F2B70E14919EBD"
+      "sha256": "9CA285406C369BDCA2174F61C06185EC2BB916983FC7AA328F4E1B4AF5722C0D"
     },
     {
       "bytes": 21628,
@@ -199,11 +199,11 @@
       "sha256": "FFC41551F2AD82490EC379631C2FC2CCB64BDAFA2DF84F96E863A727A9CEC5D1"
     },
     {
-      "bytes": 14070,
+      "bytes": 14227,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "5241F6EB25591F1B46AE764CCD9831142E336B7B2F51DE4E70AAD7972A1641AF"
+      "sha256": "853375134FFED5E1FA7E8F16BD2187D9D9C224BF9CA249C0D66D414BD34BE83F"
     },
     {
       "bytes": 32120,
@@ -899,25 +899,25 @@
       "sha256": "021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9"
     },
     {
-      "bytes": 22692,
+      "bytes": 23160,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/evidence_intake_ledger.csv",
-      "sha256": "363B6BE077E255590526949CE34E94198E6ADA5C4C77379C3FC84733611F609B"
+      "sha256": "C1251BE986485FA7F02668B0DCFE5C4EDA5A4BF7354D3498B6772B0F2D3C247D"
     },
     {
-      "bytes": 37473,
+      "bytes": 37933,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/evidence_intake_ledger.json",
-      "sha256": "3718471C3272A0A75B29555E3A32A7DE7A1C7EAE2494D90518CB57DDF3BBE306"
+      "sha256": "5D7D391BC0A1ADB9671ADE1A84C5C2503A18105317BEE0E9E8EC475D4B7795DE"
     },
     {
-      "bytes": 9506,
+      "bytes": 9966,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/evidence_intake_ledger.md",
-      "sha256": "7AFE561C61C23008F4584E5B6DDC3FC97E431CFFC58F4B13BF01CD693ADE0011"
+      "sha256": "AFE9134D806125F8D174D879D20B012ECF35E4AEAF56C504AD49918E713EA17C"
     },
     {
       "bytes": 26039,
@@ -1018,18 +1018,18 @@
       "sha256": "B56A11CB20914B2FD2649DA647F7722DE43D6B04DE3E89704A8CD3F952A4E031"
     },
     {
-      "bytes": 78869,
+      "bytes": 78948,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/method_implementation_packet.json",
-      "sha256": "2033E5AB26ED34AEF00794922CD88A68DAD92153DE000A00695A6627E3413891"
+      "sha256": "739A72EB2D3C7DB1067894A4D8E906186FB5DBD8F064A88BCE4F184A6996D15D"
     },
     {
-      "bytes": 49385,
+      "bytes": 49110,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/method_implementation_packet.md",
-      "sha256": "4D9BF57AFFE3D4849E4D4DBC657F3D63AD774D246E09E6AEB7A09D47FD83A12A"
+      "sha256": "743B29FACE09D42A0732E6291DBF3F3D7F5E3A7827C22D8243E06877CE25843F"
     },
     {
       "bytes": 9004,
@@ -1431,18 +1431,18 @@
       "sha256": "4CC337580323BADB03441EE8478DDDEF19CC9857F1B0B032264B78DB6A947DF7"
     },
     {
-      "bytes": 37473,
+      "bytes": 37933,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_evidence_intake_ledger_audit.json",
-      "sha256": "3718471C3272A0A75B29555E3A32A7DE7A1C7EAE2494D90518CB57DDF3BBE306"
+      "sha256": "5D7D391BC0A1ADB9671ADE1A84C5C2503A18105317BEE0E9E8EC475D4B7795DE"
     },
     {
-      "bytes": 9506,
+      "bytes": 9966,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_evidence_intake_ledger_audit.md",
-      "sha256": "7AFE561C61C23008F4584E5B6DDC3FC97E431CFFC58F4B13BF01CD693ADE0011"
+      "sha256": "AFE9134D806125F8D174D879D20B012ECF35E4AEAF56C504AD49918E713EA17C"
     },
     {
       "bytes": 12344,
@@ -1459,18 +1459,18 @@
       "sha256": "B68911C22003E7E03E48D7486AB58F53AD10457F0C25ABCD47A134E37A247892"
     },
     {
-      "bytes": 35887,
+      "bytes": 35961,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.json",
-      "sha256": "BABE773833F7F0C430AD3524F66001625483FF90D94167D79F78B48F5113D0C6"
+      "sha256": "7D0747917F075FEA548B98724CABBA2B8FB8238B5F2297A7B88B64D550430520"
     },
     {
-      "bytes": 27747,
+      "bytes": 27821,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.md",
-      "sha256": "8A41F2673F31DD04D5CEB4B46DF526C05CDD818A397098A3480525CEEA57A218"
+      "sha256": "80B41551500E7AB36539B1010D72424D0AFFB7F9F365C40E185C8329F6D377C1"
     },
     {
       "bytes": 7157,
@@ -1529,32 +1529,32 @@
       "sha256": "83CC75004A0B4C959D91B489A9809CEA43D95D4E81376D5D3C93C4819710D54E"
     },
     {
-      "bytes": 4659,
+      "bytes": 4919,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_method_implementation_audit.json",
-      "sha256": "934C0151A2A8807EA4F148EA9F90A5184380FE81F0E6330E30C94BE6C93C3BE3"
+      "sha256": "7D2FC14654402B7D804B804484C1365445A769BC63260DB69D9E18C299596671"
     },
     {
-      "bytes": 3428,
+      "bytes": 3626,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_method_implementation_audit.md",
-      "sha256": "584DBFB61B19C2A5FEE1CD828DA2F14A2AFDF25F65A7FD114388634A848E9901"
+      "sha256": "00B1FA80C6AD1ABF786EC65890CAAE17E44B84BD109BE4FFFA821E224C1A706B"
     },
     {
-      "bytes": 47215,
+      "bytes": 47341,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.json",
-      "sha256": "ED5BA4D8C7A8B53A72150DECA2A827D7E20403AD994C97A67C548490A3CAC192"
+      "sha256": "B980D2444540B75CDCC325DBA06F01DD81B9113C2EA67247DC0A687FB4C81744"
     },
     {
-      "bytes": 22088,
+      "bytes": 22214,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.md",
-      "sha256": "639CEFD5E34C4C76597F0D7DCFA7A4CADB0579F547FA24830C0AC82AED38D77C"
+      "sha256": "EEA00A27A668DD96B54AC082D04CB4A583D59D1FDF991F683E028EF9EF192B24"
     },
     {
       "bytes": 525,
@@ -1963,11 +1963,11 @@
       "sha256": "756C0C5B64F4F0DB6C1E45742096A2BCE03AA346C34D91A834ED196296839EB8"
     },
     {
-      "bytes": 18847,
+      "bytes": 18962,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_evidence_intake_ledger.py",
-      "sha256": "48B19BBB788E3EF52B40A1D37B6821B52ED757263AD16ED2EC71290DD00CE6CD"
+      "sha256": "6FB5B15EA46BFE8518482DEF815626E4D0E5012C2F0805100DAEB601D4FB5944"
     },
     {
       "bytes": 40250,
@@ -1991,11 +1991,11 @@
       "sha256": "FA9F3890C25B2FEA0F484520C38270BDE202F02317734563983522F3237EA09D"
     },
     {
-      "bytes": 32001,
+      "bytes": 33038,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_method_implementation_packet.py",
-      "sha256": "285FA1D44CCCBD060845DF9DD8E5272ECC2C2077D375043F0EE204811D689F62"
+      "sha256": "DC5B4B9D515991093168D1B16586581C0FE59B4FF03E18D63EDD714487A57774"
     },
     {
       "bytes": 58272,
@@ -2096,11 +2096,11 @@
       "sha256": "B1E82E117C28D2C4B5B5F4D4CCD5019D42CA375E2AF4135F56D7384D8F4B77CC"
     },
     {
-      "bytes": 26918,
+      "bytes": 27666,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/validate_external_adapters.py",
-      "sha256": "9BFEFFB4FFB84ACA64649C3F5D139317EC3040B6DC3107E07B3439620DF2B278"
+      "sha256": "84F0CBD0C8B56FFAB3D4EF08CE9921A5DDC79C4C85C112A2DCBE439257A55AF6"
     },
     {
       "bytes": 14385,

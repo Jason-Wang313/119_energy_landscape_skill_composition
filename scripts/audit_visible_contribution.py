@@ -760,6 +760,7 @@ def main() -> int:
         and method_implementation.get("strict_adapter_evidence_ready") is False
         and method_checks.get("work_orders_cover_all_missing_non_oracle_methods") is True
         and method_checks.get("manifest_entry_templates_cover_required_hash_fields") is True
+        and method_checks.get("manifest_entry_templates_bind_hash_to_checkpoint_config_artifact") is True
         and method_checks.get("manifest_entry_templates_require_independent_provenance") is True
         and method_checks.get("work_orders_forbid_scaffolds_and_reference_adapters") is True
         and method_checks.get("policy_or_config_hash_in_logs_required") is True
@@ -782,11 +783,14 @@ def main() -> int:
         and adapter_evidence_self_test.get("scaffold_adapter_evidence_ready") is False
         and adapter_evidence_self_test.get("reference_adapter_evidence_ready") is False
         and adapter_evidence_self_test.get("leaky_provenance_ready") is False
+        and adapter_evidence_self_test.get("implementation_hash_only_ready") is False
         and adapter_evidence_self_checks.get("leaky_or_reference_provenance_fails_strict") is True
+        and adapter_evidence_self_checks.get("implementation_hash_cannot_replace_checkpoint_or_config") is True
         and adapter_evidence_self_checks.get("reference_adapters_rejected_as_strict_evidence") is True,
         (
             f"reference_adapter_evidence_ready={adapter_evidence_self_test.get('reference_adapter_evidence_ready')!r}, "
             f"leaky_provenance_ready={adapter_evidence_self_test.get('leaky_provenance_ready')!r}, "
+            f"implementation_hash_only_ready={adapter_evidence_self_test.get('implementation_hash_only_ready')!r}, "
             f"check={adapter_evidence_self_checks.get('reference_adapters_rejected_as_strict_evidence')!r}"
         ),
     )
@@ -947,6 +951,7 @@ def main() -> int:
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
             "strict independent method provenance gate",
+            "strict checkpoint/config artifact gate",
             "manifest assembly checklist",
             "strict manifest promotion gate",
             "External manifest builder self-test",
@@ -1006,6 +1011,7 @@ def main() -> int:
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
             "strict independent method provenance gate",
+            "strict checkpoint/config artifact gate",
             "manifest assembly checklist",
             "strict manifest promotion gate",
             "External manifest builder self-test",
@@ -1066,6 +1072,7 @@ def main() -> int:
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
             "strict independent method provenance gate",
+            "strict checkpoint/config artifact gate",
             "manifest assembly checklist",
             "strict manifest promotion gate",
             "External manifest builder self-test",
@@ -1126,6 +1133,7 @@ def main() -> int:
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
             "strict independent method provenance gate",
+            "strict checkpoint/config artifact gate",
             "manifest assembly checklist",
             "strict manifest promotion gate",
             "External manifest builder self-test",
@@ -1188,6 +1196,7 @@ def main() -> int:
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
             "strict independent method provenance gate",
+            "strict checkpoint/config artifact gate",
             "manifest_assembly_checklist.csv",
             "manifest assembly checklist",
             "strict manifest promotion gate",
@@ -1249,6 +1258,7 @@ def main() -> int:
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
             "strict independent method provenance gate",
+            "strict checkpoint/config artifact gate",
             "manifest assembly checklist",
             "strict manifest promotion gate",
             "External manifest builder self-test",
@@ -1265,6 +1275,7 @@ def main() -> int:
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
             "strict independent method provenance gate",
+            "strict checkpoint/config artifact gate",
             "strict manifest promotion gate",
             "manifest assembly checklist",
             "do not frame Haonan as responsible for supplying the missing proof",
