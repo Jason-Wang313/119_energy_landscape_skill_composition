@@ -41,6 +41,8 @@
 - External baseline contract builder: `scripts/build_external_baseline_contract.py`
 - External method implementation packet builder: `scripts/build_external_method_implementation_packet.py`
   - Emits adapter acceptance fixtures: `external_validation/adapter_acceptance_fixtures.{json,md,csv}`
+- External method config materialization builder: `scripts/materialize_external_method_configs.py`
+  - Emits candidate method configs and hashes: `external_validation/method_config_materialization_plan.md`, `external_validation/method_config_candidates.csv`, `external_validation/method_config_candidates/*.json`, and `results/external_method_config_materialization_audit.md`
 - External adapter scaffold builder: `scripts/build_external_adapter_scaffolds.py`
 - External reference adapter builder: `scripts/build_external_reference_adapters.py`
 - External local dry-run builder: `scripts/build_external_local_dry_run.py`

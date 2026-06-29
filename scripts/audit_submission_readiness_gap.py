@@ -120,6 +120,10 @@ def main() -> int:
     operator_release = read_json(operator_release_path) if operator_release_path.exists() else {}
     method_implementation_path = RESULTS / "external_method_implementation_audit.json"
     method_implementation = read_json(method_implementation_path) if method_implementation_path.exists() else {}
+    method_config_materialization_path = RESULTS / "external_method_config_materialization_audit.json"
+    method_config_materialization = (
+        read_json(method_config_materialization_path) if method_config_materialization_path.exists() else {}
+    )
     presentation_path = RESULTS / "presentation_quality_audit.json"
     presentation = read_json(presentation_path) if presentation_path.exists() else {}
     figure_readability_path = RESULTS / "figure_readability_audit.json"
@@ -634,6 +638,10 @@ def main() -> int:
     config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", [])}
     rollout_evidence_checks = {check.get("name"): check.get("passed") for check in rollout_evidence.get("checks", [])}
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", [])}
+    method_config_checks = {
+        check.get("name"): check.get("passed")
+        for check in method_config_materialization.get("checks", []) or []
+    }
     collection_job_checks = {check.get("name"): check.get("passed") for check in collection_job.get("checks", [])}
     machine_bootstrap_checks = {check.get("name"): check.get("passed") for check in machine_bootstrap.get("checks", [])}
     operator_release_checks = {check.get("name"): check.get("passed") for check in operator_release.get("checks", [])}
@@ -679,6 +687,18 @@ def main() -> int:
         and method_implementation.get("not_external_evidence") is True
         and method_implementation.get("strict_adapter_evidence_ready") is False
         and method_checks.get("work_orders_cover_all_missing_non_oracle_methods") is True
+        and method_config_materialization.get("passed") is True
+        and method_config_materialization.get("version") == "external_method_config_materialization_audit_v1"
+        and method_config_materialization.get("not_external_evidence") is True
+        and method_config_materialization.get("strict_adapter_evidence_ready") is False
+        and method_config_materialization.get("strict_external_evidence_ready") is False
+        and int(method_config_materialization.get("candidate_config_count", 0) or 0) >= 11
+        and method_config_materialization.get("oracle_excluded") is True
+        and method_config_checks.get("candidate_configs_cover_non_oracle_methods") is True
+        and method_config_checks.get("candidate_hashes_match_written_files") is True
+        and method_config_checks.get("manifest_stubs_bind_checkpoint_config_hashes") is True
+        and method_config_checks.get("independent_implementation_still_required") is True
+        and method_config_checks.get("no_real_manifest_logs_videos_or_checkpoints_written") is True
         and handoff_bundle.get("passed") is True
         and handoff_bundle.get("version") == "external_operator_handoff_bundle_v1"
         and handoff_bundle.get("not_external_evidence") is True
@@ -691,6 +711,7 @@ def main() -> int:
         and handoff_checks.get("config_manifest_packet_included") is True
         and handoff_checks.get("rollout_evidence_packet_included") is True
         and handoff_checks.get("method_implementation_packet_included") is True
+        and handoff_checks.get("method_config_materialization_included") is True
         and handoff_checks.get("file_hashes_are_recorded") is True
         and collection_job.get("passed") is True
         and collection_job.get("version") == "external_collection_job_packet_audit_v1"
@@ -731,6 +752,7 @@ def main() -> int:
                 ROOT / "scripts" / "build_external_config_manifest_packet.py",
                 ROOT / "scripts" / "build_external_rollout_evidence_packet.py",
                 ROOT / "scripts" / "build_external_method_implementation_packet.py",
+                ROOT / "scripts" / "materialize_external_method_configs.py",
                 EXTERNAL / "backend_integration_packet.md",
                 EXTERNAL / "backend_integration_work_orders.csv",
                 EXTERNAL / "fidelity_provenance_packet.md",
@@ -741,6 +763,8 @@ def main() -> int:
                 EXTERNAL / "rollout_evidence_work_orders.csv",
                 EXTERNAL / "method_implementation_packet.md",
                 EXTERNAL / "method_implementation_work_orders.csv",
+                EXTERNAL / "method_config_materialization_plan.md",
+                EXTERNAL / "method_config_candidates.csv",
                 RESULTS / "external_acquisition_packet.json",
                 RESULTS / "external_acquisition_packet.md",
                 RESULTS / "external_backend_integration_audit.json",
@@ -753,6 +777,8 @@ def main() -> int:
                 RESULTS / "external_rollout_evidence_audit.md",
                 RESULTS / "external_method_implementation_audit.json",
                 RESULTS / "external_method_implementation_audit.md",
+                RESULTS / "external_method_config_materialization_audit.json",
+                RESULTS / "external_method_config_materialization_audit.md",
                 EXTERNAL / "collection_job_packet.json",
                 EXTERNAL / "collection_job_packet.md",
                 EXTERNAL / "collection_job_commands.ps1",
@@ -788,6 +814,7 @@ def main() -> int:
             "scripts/build_external_config_manifest_packet.py",
             "scripts/build_external_rollout_evidence_packet.py",
             "scripts/build_external_method_implementation_packet.py",
+            "scripts/materialize_external_method_configs.py",
             "external_validation/backend_integration_packet.md",
             "external_validation/backend_integration_work_orders.csv",
             "external_validation/fidelity_provenance_packet.md",
@@ -798,6 +825,8 @@ def main() -> int:
             "external_validation/rollout_evidence_work_orders.csv",
             "external_validation/method_implementation_packet.md",
             "external_validation/method_implementation_work_orders.csv",
+            "external_validation/method_config_materialization_plan.md",
+            "external_validation/method_config_candidates.csv",
             "results/external_acquisition_packet.json",
             "results/external_acquisition_packet.md",
             "results/external_backend_integration_audit.json",
@@ -810,6 +839,8 @@ def main() -> int:
             "results/external_rollout_evidence_audit.md",
             "results/external_method_implementation_audit.json",
             "results/external_method_implementation_audit.md",
+            "results/external_method_config_materialization_audit.json",
+            "results/external_method_config_materialization_audit.md",
             "external_validation/collection_job_packet.json",
             "external_validation/collection_job_packet.md",
             "external_validation/collection_job_commands.ps1",

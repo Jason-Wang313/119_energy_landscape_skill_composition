@@ -155,6 +155,7 @@ def main():
         "scripts\\build_external_local_dry_run.py",
         "scripts\\validate_external_adapters.py",
         "scripts\\build_external_method_implementation_packet.py",
+        "scripts\\materialize_external_method_configs.py",
         "scripts\\self_test_external_adapter_evidence.py",
         "scripts\\build_external_manifest.py --allow-missing",
         "scripts\\self_test_external_manifest_builder.py",
@@ -261,6 +262,7 @@ def main():
         "python scripts/self_test_fidelity_acceptance_materializer.py",
         "python scripts/build_external_backend_integration_packet.py",
         "python scripts/build_external_method_implementation_packet.py",
+        "python scripts/materialize_external_method_configs.py",
         "python scripts/build_external_acquisition_packet.py",
         "python scripts/build_external_operator_packet.py",
         "python scripts/build_external_collection_job_packet.py",
@@ -1962,6 +1964,92 @@ def main():
     ):
         if method_audit_checks.get(required_check) is not True:
             fail(f"external method implementation audit missing passing check: {required_check}")
+
+    method_config_paths = [
+        EXTERNAL / "method_config_materialization_plan.json",
+        EXTERNAL / "method_config_materialization_plan.md",
+        EXTERNAL / "method_config_candidates.csv",
+        RESULTS / "external_method_config_materialization_audit.json",
+        RESULTS / "external_method_config_materialization_audit.md",
+        ROOT / "scripts" / "materialize_external_method_configs.py",
+    ]
+    for path in method_config_paths:
+        if not path.exists():
+            fail(f"missing external method config materialization artifact: {path}")
+    method_config_plan = json.loads((EXTERNAL / "method_config_materialization_plan.json").read_text(encoding="utf-8"))
+    method_config_audit = json.loads((RESULTS / "external_method_config_materialization_audit.json").read_text(encoding="utf-8"))
+    if method_config_plan.get("version") != "external_method_config_materialization_plan_v1":
+        fail("external method config materialization plan version mismatch")
+    if method_config_audit.get("version") != "external_method_config_materialization_audit_v1":
+        fail("external method config materialization audit version mismatch")
+    for name, payload in (("plan", method_config_plan), ("audit", method_config_audit)):
+        if payload.get("passed") is not True:
+            fail(f"external method config materialization {name} did not pass")
+        if payload.get("not_external_evidence") is not True:
+            fail(f"external method config materialization {name} must declare that it is not evidence")
+        if payload.get("strict_adapter_evidence_ready") is not False:
+            fail(f"external method config materialization {name} must not claim strict adapter evidence")
+        if payload.get("strict_external_evidence_ready") is not False:
+            fail(f"external method config materialization {name} must not claim strict external evidence")
+        if int(payload.get("candidate_config_count", 0) or 0) < 11:
+            fail(f"external method config materialization {name} has too few candidate configs")
+        if payload.get("oracle_excluded") is not True:
+            fail(f"external method config materialization {name} must exclude the oracle")
+    method_config_records = method_config_plan.get("records", []) or []
+    if count_rows(EXTERNAL / "method_config_candidates.csv") != len(method_config_records):
+        fail("method config candidate CSV row count does not match plan records")
+    candidate_methods = {record.get("method") for record in method_config_records if isinstance(record, dict)}
+    if candidate_methods != work_order_methods or "oracle_basin_composer" in candidate_methods:
+        fail("external method config candidates must cover exactly the non-oracle method work orders")
+    for record in method_config_records:
+        if not isinstance(record, dict):
+            fail("method config materialization records must be objects")
+        config_path_text = str(record.get("config_path", ""))
+        config_path = ROOT / config_path_text
+        if not config_path.exists():
+            fail(f"missing method config candidate file: {config_path_text}")
+        if len(str(record.get("config_sha256", ""))) != 64:
+            fail(f"method config candidate record missing 64-character config hash: {record.get('method')}")
+        if sha256(config_path) != record.get("config_sha256"):
+            fail(f"method config candidate hash does not recompute: {config_path_text}")
+        candidate_config_payload = json.loads(config_path.read_text(encoding="utf-8"))
+        if candidate_config_payload.get("version") != "paper119_candidate_method_config_v1":
+            fail(f"method config candidate version mismatch: {config_path_text}")
+        if candidate_config_payload.get("evidence_status") != "candidate_config_not_manifest_evidence":
+            fail(f"method config candidate must remain non-evidence: {config_path_text}")
+        for key in (
+            "operator_acceptance_required",
+            "manifest_declaration_required",
+            "rollout_log_binding_required",
+        ):
+            if candidate_config_payload.get(key) is not True:
+                fail(f"method config candidate must require {key}: {config_path_text}")
+        if candidate_config_payload.get("strict_adapter_evidence_ready") is not False:
+            fail(f"method config candidate must not claim strict adapter evidence: {config_path_text}")
+        manifest_stub = record.get("manifest_stub", {}) or {}
+        if manifest_stub.get("checkpoint_or_config_path") != config_path_text:
+            fail(f"method config manifest stub path mismatch: {record.get('method')}")
+        if manifest_stub.get("checkpoint_or_config_hash") != record.get("config_sha256"):
+            fail(f"method config manifest stub hash mismatch: {record.get('method')}")
+        provenance = manifest_stub.get("implementation_provenance", {}) or {}
+        if "<operator" not in str(provenance.get("implementation_origin", "")):
+            fail(f"method config manifest stub must keep operator provenance placeholder: {record.get('method')}")
+        if provenance.get("oracle_access") is not False or provenance.get("uses_reference_adapter") is not False:
+            fail(f"method config manifest stub must forbid oracle/reference shortcuts: {record.get('method')}")
+        if provenance.get("policy_or_config_hash_locked") is not True:
+            fail(f"method config manifest stub must lock policy/config hash: {record.get('method')}")
+    method_config_checks = {check.get("name"): check.get("passed") for check in method_config_audit.get("checks", [])}
+    for required_check in (
+        "materialization_is_non_evidence",
+        "source_method_packet_ready",
+        "candidate_configs_cover_non_oracle_methods",
+        "candidate_hashes_match_written_files",
+        "manifest_stubs_bind_checkpoint_config_hashes",
+        "independent_implementation_still_required",
+        "no_real_manifest_logs_videos_or_checkpoints_written",
+    ):
+        if method_config_checks.get(required_check) is not True:
+            fail(f"external method config materialization audit missing passing check: {required_check}")
 
     manifest_builder_report_path = RESULTS / "external_manifest_builder_report.json"
     if not manifest_builder_report_path.exists():
@@ -4489,6 +4577,7 @@ def main():
         "external_collection_job_packet_included",
         "collection_machine_bootstrap_included",
         "method_implementation_packet_included",
+        "method_config_materialization_included",
         "operator_actions_cover_evidence_collection",
         "post_collection_commands_cover_strict_gates",
         "file_hashes_are_recorded",
@@ -5339,6 +5428,7 @@ def main():
         "postcollection_evidence_seal_visible",
         "postcollection_seal_consistency_gate_visible",
         "method_implementation_packet_visible",
+        "external_method_config_materialization_visible",
         "maniskill_pilot_runtime_liveness_visible",
         "materializer_guard_visible",
         "planner_edge_policy_visible",

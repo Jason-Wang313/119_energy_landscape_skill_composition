@@ -142,6 +142,7 @@ try {
         Invoke-Native python scripts\build_external_local_dry_run.py
         Invoke-Native python scripts\validate_external_adapters.py
         Invoke-Native python scripts\build_external_method_implementation_packet.py
+        Invoke-Native python scripts\materialize_external_method_configs.py
         Invoke-Native python scripts\self_test_external_adapter_evidence.py
         Invoke-Native python scripts\build_external_manifest.py --allow-missing
         Invoke-Native python scripts\self_test_external_manifest_builder.py

@@ -1,0 +1,71 @@
+{
+  "adapter_api": {
+    "initialize": "load method config/checkpoint and declare method_name, version, and hashes",
+    "log": "emit predicted risk, diagnosis, decision, repair action, policy/config hash, and timing for the episode JSONL record",
+    "propose": "given shared observation, terminal samples, skill_i, skill_j, and compute budget, return seam decision and optional repair",
+    "reset": "clear method-local state between paired resets unless the method explicitly models online memory and logs it"
+  },
+  "allowed_inputs": [
+    "task symbols",
+    "geometric scene state",
+    "shared skill library"
+  ],
+  "baseline_spec_path": "external_validation/baseline_specs/tamp_feasibility_screen.json",
+  "baseline_spec_sha256": "84C3DDFB27AB3207B9AD378F40A299051C94A43BBD73C17EF90055A2BF5A49CB",
+  "candidate_config_seed": "70DC5F23F6779E604D130EDEF80E2125FC6D5F525F1C62628CAF09CAE0E710D5",
+  "candidate_runtime_contract": {
+    "oracle_access": false,
+    "paired_resets": true,
+    "same_compute_budget": true,
+    "same_observation_interface": true,
+    "same_skill_library": true,
+    "uses_eval_outcome_tuning": false,
+    "uses_reference_adapter": false,
+    "uses_scaffold_template": false,
+    "uses_unblinded_method_identity_during_collection": false
+  },
+  "evidence_role": "independent_non_oracle_method",
+  "evidence_status": "candidate_config_not_manifest_evidence",
+  "fairness_invariants": [
+    "same skill library for every non-oracle method",
+    "same initial state, scene_id, seed, and skill pair for paired comparisons",
+    "same observation interface and no hidden state except where the platform exposes it to all methods",
+    "same compute budget or a predeclared budget measured in wall-clock time and simulator queries",
+    "same logging schema, video requirement, and policy/config hash requirement",
+    "oracle_basin_composer is reported only as a post hoc upper bound and is excluded from strongest non-oracle selection"
+  ],
+  "forbidden_advantages": [
+    "energy descent continuity",
+    "post hoc contact outcome"
+  ],
+  "manifest_declaration_required": true,
+  "method": "tamp_feasibility_screen",
+  "operator_acceptance_required": true,
+  "operator_fill_fields": {
+    "implementation": "external_validation/implementations/tamp_feasibility_screen/adapter.py",
+    "implementation_origin": "<operator/lab/repository source>",
+    "implementation_sha256_or_commit": "<operator-supplied implementation SHA256 or commit>",
+    "independent_operator_or_lab": "<independent operator or lab name>",
+    "operator_signoff_id": "<dated signoff id>"
+  },
+  "required_entrypoint": "screen_symbolic_geometric_transition",
+  "required_release_evidence": {
+    "checkpoint_or_config_path": "required when the method uses learned weights or tuned parameters",
+    "episode_log_fields": [
+      "method",
+      "policy_or_config_hash",
+      "predicted_seam_risk",
+      "decision",
+      "failure_diagnosis",
+      "success",
+      "realized_seam_breach",
+      "utility"
+    ],
+    "implementation_path_or_repository": "required for every non-oracle method",
+    "sha256_or_commit": "required for implementation, config, and checkpoint artifacts"
+  },
+  "role": "task-and-motion feasibility baseline",
+  "rollout_log_binding_required": true,
+  "strict_adapter_evidence_ready": false,
+  "version": "paper119_candidate_method_config_v1"
+}

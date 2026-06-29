@@ -42,7 +42,7 @@
       "passed": true
     },
     {
-      "detail": "files=316, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=333, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -57,7 +57,7 @@
       "passed": true
     },
     {
-      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=316, archive_written=False",
+      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=333, archive_written=False",
       "name": "external_operator_release_bundle_visible",
       "passed": true
     },
@@ -269,6 +269,11 @@
     {
       "detail": "method_implementation_packet_ready=True, strict_adapter_evidence_ready=False",
       "name": "method_implementation_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "candidate_configs=11, strict_adapter_evidence_ready=False, oracle_excluded=True",
+      "name": "external_method_config_materialization_visible",
       "passed": true
     },
     {

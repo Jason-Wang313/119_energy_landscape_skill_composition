@@ -132,6 +132,9 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
+        EXTERNAL / "method_config_materialization_plan.json",
+        EXTERNAL / "method_config_materialization_plan.md",
+        EXTERNAL / "method_config_candidates.csv",
         EXTERNAL / "method_reference_provenance.csv",
         EXTERNAL / "method_manifest_cutover_checklist.csv",
         EXTERNAL / "method_manifest_cutover_checklist.md",
@@ -187,6 +190,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_maniskill_render_machine_qualification.py",
         SCRIPTS / "build_external_collection_job_packet.py",
         SCRIPTS / "build_external_method_implementation_packet.py",
+        SCRIPTS / "materialize_external_method_configs.py",
         SCRIPTS / "materialize_external_configs.py",
         SCRIPTS / "audit_external_backend_contract.py",
         SCRIPTS / "audit_maniskill_backend_readiness.py",
@@ -264,6 +268,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_collection_job_packet_audit.md",
         RESULTS / "external_method_implementation_audit.json",
         RESULTS / "external_method_implementation_audit.md",
+        RESULTS / "external_method_config_materialization_audit.json",
+        RESULTS / "external_method_config_materialization_audit.md",
         RESULTS / "independent_validation_route_audit.json",
         RESULTS / "independent_validation_route_audit.md",
         RESULTS / "external_blind_eval_audit.json",
@@ -313,6 +319,7 @@ def build_file_manifest() -> dict[str, str]:
     add_glob(files, "config_template", EXTERNAL / "config_templates", "*.json")
     add_glob(files, "prepared_config_input", EXTERNAL / "configs", "*.json")
     add_glob(files, "baseline_spec", EXTERNAL / "baseline_specs", "*.json")
+    add_glob(files, "method_config_candidate", EXTERNAL / "method_config_candidates", "*.json")
     add_glob(files, "runner_backend_template", EXTERNAL / "runner" / "backend_templates", "*.py")
     add_glob(files, "reference_adapter", EXTERNAL / "baselines", "*/README.md")
     add_glob(files, "reference_adapter", EXTERNAL / "baselines", "*/adapter.py")
@@ -388,6 +395,10 @@ def build_payload() -> dict[str, Any]:
         "external_postcollection_seal_consistency_audit_v1",
     )
     method_implementation = require_payload(RESULTS / "external_method_implementation_audit.json", "external_method_implementation_audit_v1")
+    method_config_materialization = require_payload(
+        RESULTS / "external_method_config_materialization_audit.json",
+        "external_method_config_materialization_audit_v1",
+    )
     pilot_smoke = require_payload(RESULTS / "external_pilot_smoke_packet_audit.json", "external_pilot_smoke_packet_audit_v1")
     render_preflight = require_payload(RESULTS / "maniskill_render_video_preflight_audit.json", "maniskill_render_video_preflight_audit_v2")
     render_resource_sweep = require_payload(RESULTS / "maniskill_render_resource_sweep.json", "maniskill_render_resource_sweep_v1")
@@ -1107,6 +1118,37 @@ def build_payload() -> dict[str, Any]:
         (
             f"method_implementation_packet_ready={method_implementation.get('method_implementation_packet_ready')!r}, "
             f"strict_adapter_evidence_ready={method_implementation.get('strict_adapter_evidence_ready')!r}"
+        ),
+    )
+    method_config_checks = {
+        check.get("name"): check.get("passed")
+        for check in method_config_materialization.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "method_config_materialization_included",
+        method_config_materialization.get("passed") is True
+        and method_config_materialization.get("not_external_evidence") is True
+        and method_config_materialization.get("strict_adapter_evidence_ready") is False
+        and method_config_materialization.get("strict_external_evidence_ready") is False
+        and int(method_config_materialization.get("candidate_config_count", 0) or 0) >= 11
+        and method_config_materialization.get("oracle_excluded") is True
+        and method_config_checks.get("candidate_configs_cover_non_oracle_methods") is True
+        and method_config_checks.get("candidate_hashes_match_written_files") is True
+        and method_config_checks.get("manifest_stubs_bind_checkpoint_config_hashes") is True
+        and method_config_checks.get("independent_implementation_still_required") is True
+        and method_config_checks.get("no_real_manifest_logs_videos_or_checkpoints_written") is True
+        and "external_validation/method_config_materialization_plan.json" in paths
+        and "external_validation/method_config_materialization_plan.md" in paths
+        and "external_validation/method_config_candidates.csv" in paths
+        and "results/external_method_config_materialization_audit.json" in paths
+        and "results/external_method_config_materialization_audit.md" in paths
+        and "scripts/materialize_external_method_configs.py" in paths
+        and category_counts.get("method_config_candidate", 0) >= 11,
+        (
+            f"candidate_configs={method_config_materialization.get('candidate_config_count')!r}, "
+            f"strict_adapter_evidence_ready={method_config_materialization.get('strict_adapter_evidence_ready')!r}, "
+            f"oracle_excluded={method_config_materialization.get('oracle_excluded')!r}"
         ),
     )
     add_check(
