@@ -1457,6 +1457,10 @@ def main():
         fail("external config evidence self-test must declare that it is not evidence")
     if config_evidence_self_test.get("synthetic_config_evidence_ready") is not True:
         fail("external config evidence self-test should make temporary manifest-declared configs ready")
+    if config_evidence_self_test.get("prepared_config_fixture_ready") is not True:
+        fail("external config evidence self-test should pass strict validation with prepared configs and a temporary manifest")
+    if int(config_evidence_self_test.get("prepared_config_count", 0) or 0) < 4:
+        fail("external config evidence self-test should cover all prepared task configs")
     if config_evidence_self_test.get("stale_config_hash_ready") is not False:
         fail("external config evidence self-test should reject stale manifest config hashes")
     if config_evidence_self_test.get("template_config_evidence_ready") is not False:
@@ -1467,6 +1471,8 @@ def main():
     for required_check in (
         "synthetic_strict_configs_pass",
         "synthetic_manifest_entries_cover_tasks",
+        "prepared_task_configs_pass_strict_with_temp_manifest",
+        "prepared_task_config_methods_match_collection_tasks",
         "missing_manifest_fails_strict",
         "stale_manifest_config_hash_fails_strict",
         "template_configs_rejected_as_strict_evidence",

@@ -17,6 +17,12 @@ TMP_ROOT = ROOT / "tmp"
 OUT_JSON = RESULTS / "external_config_evidence_self_test.json"
 OUT_MD = RESULTS / "external_config_evidence_self_test.md"
 REAL_REPORT = RESULTS / "external_config_evidence_audit.json"
+TASKS = [
+    "peg_place_regrasp",
+    "drawer_to_pick_transfer",
+    "door_open_navigation",
+    "cable_route_insert",
+]
 
 
 def file_digest(path: Path) -> str | None:
@@ -40,6 +46,19 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
 
 def rel(path: Path) -> str:
     return path.relative_to(ROOT).as_posix()
+
+
+def prepared_config_paths() -> list[Path]:
+    paths: list[Path] = []
+    for task in TASKS:
+        path = EXTERNAL / "configs" / f"{task}.json"
+        if not path.exists():
+            raise SystemExit(f"missing prepared task config for self-test: {path}")
+        payload = read_json(path)
+        if payload.get("task_family") != task:
+            raise SystemExit(f"prepared task config has wrong task_family: {path}")
+        paths.append(path)
+    return paths
 
 
 def make_evidence_config(template: dict[str, Any], *, platform_name: str) -> dict[str, Any]:
@@ -118,8 +137,9 @@ def write_report(payload: dict[str, Any]) -> None:
         f"Passed: `{str(payload['passed']).lower()}`.",
         "Not evidence: `true`.",
         f"Synthetic strict config evidence ready: `{str(payload['synthetic_config_evidence_ready']).lower()}`.",
+        f"Prepared config fixture ready: `{str(payload['prepared_config_fixture_ready']).lower()}`.",
         "",
-        "This self-test builds temporary manifest-declared task configs and exercises the strict external-config evidence gate directly. It proves complete synthetic configs can pass, missing manifests fail, stale manifest config hashes fail, template configs are rejected as evidence, and the real config evidence audit report is not overwritten.",
+        "This self-test builds temporary manifest-declared task configs and exercises the strict external-config evidence gate directly. It proves complete synthetic configs can pass, the prepared task configs can bind to a temporary strict manifest with recomputed hashes, missing manifests fail, stale manifest config hashes fail, template configs are rejected as evidence, and the real config evidence audit report is not overwritten.",
         "",
         "## Checks",
         "",
@@ -147,17 +167,22 @@ def main() -> int:
             config_paths.append(target)
 
         complete_manifest = tmp / "manifest_complete.json"
+        prepared_manifest = tmp / "manifest_prepared_configs.json"
         stale_hash_manifest = tmp / "manifest_stale_hash.json"
         template_manifest = tmp / "manifest_templates.json"
         missing_manifest = tmp / "manifest_missing.json"
         complete_manifest_payload = manifest_for_configs(config_paths)
+        prepared_paths = prepared_config_paths()
+        prepared_manifest_payload = manifest_for_configs(prepared_paths)
         stale_hash_payload = json.loads(json.dumps(complete_manifest_payload))
         stale_hash_payload["tasks"][0]["config_hash"] = "0" * 64
         write_json(complete_manifest, complete_manifest_payload)
+        write_json(prepared_manifest, prepared_manifest_payload)
         write_json(stale_hash_manifest, stale_hash_payload)
         write_json(template_manifest, manifest_for_templates())
 
         complete_audit = run_strict_with_manifest(complete_manifest)
+        prepared_audit = run_strict_with_manifest(prepared_manifest)
         stale_hash_audit = run_strict_with_manifest(stale_hash_manifest)
         missing_manifest_audit = run_strict_with_manifest(missing_manifest)
         template_audit = run_strict_with_manifest(template_manifest)
@@ -165,6 +190,7 @@ def main() -> int:
     report_after = file_digest(REAL_REPORT)
 
     complete_checks = {check.get("name"): check.get("passed") for check in complete_audit.get("checks", [])}
+    prepared_checks = {check.get("name"): check.get("passed") for check in prepared_audit.get("checks", [])}
     missing_manifest_checks = {check.get("name"): check.get("passed") for check in missing_manifest_audit.get("checks", [])}
     stale_hash_errors = [
         str(error)
@@ -190,6 +216,28 @@ def main() -> int:
         {result.get("path") for result in complete_audit.get("config_results", [])}
         and int(complete_audit.get("config_count", 0) or 0) >= 4,
         f"config_count={complete_audit.get('config_count')!r}",
+    )
+    add_check(
+        checks,
+        "prepared_task_configs_pass_strict_with_temp_manifest",
+        prepared_audit.get("passed") is True
+        and prepared_audit.get("strict") is True
+        and prepared_audit.get("not_external_evidence") is False
+        and int(prepared_audit.get("config_count", 0) or 0) == len(TASKS)
+        and prepared_checks.get("manifest_exists") is True
+        and prepared_checks.get("manifest_config_entries_present") is True
+        and prepared_checks.get("configs_pass_validation") is True,
+        (
+            f"passed={prepared_audit.get('passed')!r}, "
+            f"config_count={prepared_audit.get('config_count')!r}, checks={prepared_checks}"
+        ),
+    )
+    add_check(
+        checks,
+        "prepared_task_config_methods_match_collection_tasks",
+        {read_json(path).get("task_family") for path in prepared_paths} == set(TASKS)
+        and {Path(result.get("path", "")).stem for result in prepared_audit.get("config_results", [])} == set(TASKS),
+        f"prepared_tasks={len(prepared_paths)}, config_results={len(prepared_audit.get('config_results', []))}",
     )
     add_check(
         checks,
@@ -231,6 +279,9 @@ def main() -> int:
         "passed": passed,
         "not_external_evidence": True,
         "synthetic_config_evidence_ready": complete_audit.get("passed") is True,
+        "prepared_config_fixture_ready": prepared_audit.get("passed") is True,
+        "prepared_config_count": len(prepared_paths),
+        "prepared_config_tasks": TASKS,
         "stale_config_hash_ready": stale_hash_audit.get("passed") is True,
         "template_config_evidence_ready": template_audit.get("passed") is True,
         "missing_manifest_ready": missing_manifest_audit.get("passed") is True,
@@ -241,7 +292,8 @@ def main() -> int:
     write_report(payload)
     print(
         "External config evidence self-test: "
-        f"{'PASS' if passed else 'FAIL'}; synthetic_config_evidence_ready={payload['synthetic_config_evidence_ready']}"
+        f"{'PASS' if passed else 'FAIL'}; synthetic_config_evidence_ready={payload['synthetic_config_evidence_ready']}; "
+        f"prepared_config_fixture_ready={payload['prepared_config_fixture_ready']}"
     )
     print(f"Wrote {OUT_JSON}")
     print(f"Wrote {OUT_MD}")
