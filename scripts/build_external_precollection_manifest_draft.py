@@ -19,6 +19,8 @@ DRAFT_JSON = EXTERNAL / "manifest_precollection_draft.json"
 DRAFT_MD = EXTERNAL / "manifest_precollection_draft.md"
 AUDIT_JSON = RESULTS / "external_precollection_manifest_draft_audit.json"
 AUDIT_MD = RESULTS / "external_precollection_manifest_draft_audit.md"
+METHOD_CONFIG_PLAN = EXTERNAL / "method_config_materialization_plan.json"
+METHOD_CONFIG_AUDIT = RESULTS / "external_method_config_materialization_audit.json"
 
 DRAFT_VERSION = "external_precollection_manifest_draft_v1"
 AUDIT_VERSION = "external_precollection_manifest_draft_audit_v1"
@@ -31,6 +33,7 @@ SOURCE_REPORTS = [
     RESULTS / "external_ablation_collection_audit.json",
     RESULTS / "external_evidence_intake_ledger_audit.json",
     RESULTS / "external_method_implementation_audit.json",
+    METHOD_CONFIG_AUDIT,
     RESULTS / "external_collection_readiness_audit.json",
     RESULTS / "maniskill_render_machine_qualification.json",
 ]
@@ -104,7 +107,46 @@ def config_records(template: dict[str, Any], schema: dict[str, Any]) -> tuple[li
     return draft_tasks, records
 
 
-def method_gaps(template: dict[str, Any]) -> list[dict[str, Any]]:
+def method_config_candidates() -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]:
+    plan = read_json(METHOD_CONFIG_PLAN)
+    if plan.get("version") != "external_method_config_materialization_plan_v1":
+        raise SystemExit(f"{rel(METHOD_CONFIG_PLAN)} version={plan.get('version')!r}")
+    if plan.get("not_external_evidence") is not True or plan.get("strict_adapter_evidence_ready") is not False:
+        raise SystemExit(f"{rel(METHOD_CONFIG_PLAN)} must remain non-evidence and strict_adapter_evidence_ready=false")
+    records: list[dict[str, Any]] = []
+    for record in plan.get("records", []) or []:
+        if not isinstance(record, dict):
+            continue
+        method = str(record.get("method", ""))
+        if not method or method == ORACLE_METHOD:
+            continue
+        config_path_text = str(record.get("config_path", ""))
+        config_path = rel_path(config_path_text)
+        recomputed_hash = sha256_file(config_path) if config_path.is_file() else ""
+        declared_hash = str(record.get("config_sha256", ""))
+        stub = record.get("manifest_stub", {}) or {}
+        records.append(
+            {
+                "method": method,
+                "evidence_role": record.get("evidence_role", ""),
+                "config_path": config_path_text,
+                "config_exists": config_path.is_file(),
+                "config_sha256": declared_hash,
+                "recomputed_config_sha256": recomputed_hash,
+                "config_hash_matches": bool(recomputed_hash and recomputed_hash == declared_hash),
+                "manifest_stub_checkpoint_or_config_path": stub.get("checkpoint_or_config_path", ""),
+                "manifest_stub_checkpoint_or_config_hash": stub.get("checkpoint_or_config_hash", ""),
+                "strict_adapter_evidence_ready": False,
+                "operator_acceptance_required": True,
+                "manifest_declaration_required": True,
+                "rollout_log_binding_required": True,
+                "blocking_until_real_evidence": True,
+            }
+        )
+    return records, {record["method"]: record for record in records}
+
+
+def method_gaps(template: dict[str, Any], candidate_by_method: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
     gaps: list[dict[str, Any]] = []
     for method in template.get("methods", []) or []:
         if not isinstance(method, dict):
@@ -119,6 +161,24 @@ def method_gaps(template: dict[str, Any]) -> list[dict[str, Any]]:
         checkpoint_path = rel_path(checkpoint) if checkpoint else None
         implementation_exists = bool(implementation_path and implementation_path.exists())
         checkpoint_exists = bool(checkpoint_path and checkpoint_path.exists())
+        candidate = candidate_by_method.get(name, {})
+        candidate_config_path = str(candidate.get("config_path", ""))
+        candidate_config_hash = str(candidate.get("config_sha256", ""))
+        candidate_hash_matches = candidate.get("config_hash_matches") is True
+        candidate_config_exists = candidate.get("config_exists") is True
+        candidate_available = bool(candidate_config_path and candidate_config_hash and candidate_hash_matches)
+        blocking_missing = [
+            item
+            for item, missing in (
+                ("implementation_path", not implementation_exists),
+                ("candidate_checkpoint_or_config_path", not candidate_config_exists),
+                ("candidate_checkpoint_or_config_hash", not candidate_hash_matches),
+                ("independent_operator_provenance", True),
+                ("manifest_method_declaration", True),
+                ("rollout_policy_hash_binding", True),
+            )
+            if missing
+        ]
         gaps.append(
             {
                 "method": name,
@@ -128,15 +188,15 @@ def method_gaps(template: dict[str, Any]) -> list[dict[str, Any]]:
                 "checkpoint_or_config_path": checkpoint,
                 "checkpoint_or_config_exists": checkpoint_exists,
                 "checkpoint_or_config_hash": declared_hash,
-                "blocking_missing": [
-                    item
-                    for item, missing in (
-                        ("implementation_path", not implementation_exists),
-                        ("checkpoint_or_config_path", not checkpoint_exists),
-                        ("checkpoint_or_config_hash", not bool(declared_hash)),
-                    )
-                    if missing
-                ],
+                "candidate_config_path": candidate_config_path,
+                "candidate_config_exists": candidate_config_exists,
+                "candidate_config_hash": candidate_config_hash,
+                "candidate_config_hash_matches": candidate_hash_matches,
+                "candidate_checkpoint_or_config_prefill_available": candidate_available,
+                "candidate_manifest_stub_checkpoint_or_config_path": candidate.get("manifest_stub_checkpoint_or_config_path", ""),
+                "candidate_manifest_stub_checkpoint_or_config_hash": candidate.get("manifest_stub_checkpoint_or_config_hash", ""),
+                "candidate_promotable_after_operator_acceptance": candidate_available,
+                "blocking_missing": blocking_missing,
             }
         )
     return gaps
@@ -182,7 +242,8 @@ def build_payload() -> dict[str, Any]:
     schema = read_json(SCHEMA)
     manifest_report = read_json(RESULTS / "external_manifest_builder_report.json")
     task_manifest_entries, prepared_configs = config_records(template, schema)
-    methods = method_gaps(template)
+    candidate_method_configs, candidate_by_method = method_config_candidates()
+    methods = method_gaps(template, candidate_by_method)
     rollouts = rollout_gaps(template)
     sources = source_report_records()
     blocking_rows = [
@@ -234,6 +295,12 @@ def build_payload() -> dict[str, Any]:
         "prepared_config_count": prepared_config_count,
         "task_manifest_entries_with_hashes": task_manifest_entries,
         "prepared_config_records": prepared_configs,
+        "candidate_method_config_count": sum(
+            1
+            for row in candidate_method_configs
+            if row["config_exists"] and row["config_hash_matches"] and row["method"] != ORACLE_METHOD
+        ),
+        "candidate_method_config_records": candidate_method_configs,
         "method_gap_count": missing_method_count,
         "method_gaps": methods,
         "missing_rollout_artifact_count": missing_rollout_count,
@@ -264,6 +331,7 @@ def build_payload() -> dict[str, Any]:
 def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
     checks: list[dict[str, Any]] = []
     config_records_payload = payload.get("prepared_config_records", []) or []
+    candidate_method_config_payload = payload.get("candidate_method_config_records", []) or []
     method_gaps_payload = payload.get("method_gaps", []) or []
     rollout_gaps_payload = payload.get("rollout_artifact_gaps", []) or []
     source_reports_payload = payload.get("source_reports", []) or []
@@ -273,6 +341,33 @@ def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
     add_check(checks, "draft_marked_non_evidence_and_fail_closed", payload.get("not_external_evidence") is True and payload.get("draft_only") is True and payload.get("strict_external_evidence_ready") is False and payload.get("ready_to_write_official_manifest") is False, "draft is non-evidence and cannot write the official manifest")
     add_check(checks, "official_manifest_absent", payload.get("official_manifest_exists") is False and not OFFICIAL_MANIFEST.exists(), rel(OFFICIAL_MANIFEST))
     add_check(checks, "prepared_config_hashes_prefilled", len(config_records_payload) >= 4 and all(row.get("strict_validation_passed_if_manifest_declared") is True and len(str(row.get("config_hash", ""))) == 64 for row in config_records_payload), f"configs={len(config_records_payload)}")
+    add_check(
+        checks,
+        "candidate_method_configs_prefilled",
+        len(candidate_method_config_payload) >= 11
+        and all(row.get("config_exists") is True and row.get("config_hash_matches") is True for row in candidate_method_config_payload)
+        and all(row.get("method") != ORACLE_METHOD for row in candidate_method_config_payload),
+        f"candidate_method_configs={len(candidate_method_config_payload)}",
+    )
+    add_check(
+        checks,
+        "method_gaps_bind_candidate_configs",
+        len(method_gaps_payload) >= 11
+        and all(row.get("candidate_checkpoint_or_config_prefill_available") is True for row in method_gaps_payload),
+        f"method_gaps={len(method_gaps_payload)}",
+    )
+    add_check(
+        checks,
+        "method_gaps_still_require_independent_evidence",
+        len(method_gaps_payload) >= 11
+        and all(
+            {"implementation_path", "independent_operator_provenance", "manifest_method_declaration", "rollout_policy_hash_binding"}.issubset(
+                set(row.get("blocking_missing", []) or [])
+            )
+            for row in method_gaps_payload
+        ),
+        "candidate config hashes do not replace independent implementations, provenance, manifest declaration, or rollout log binding",
+    )
     add_check(checks, "method_gaps_remain_blocking", len(method_gaps_payload) >= 11 and int(payload.get("method_gap_count", 0) or 0) >= 11, f"method_gap_count={payload.get('method_gap_count')!r}")
     add_check(checks, "rollout_artifacts_remain_blocking", len(rollout_gaps_payload) >= 8 and int(payload.get("missing_rollout_artifact_count", 0) or 0) >= 8, f"missing_rollout_artifact_count={payload.get('missing_rollout_artifact_count')!r}")
     add_check(checks, "manifest_assembly_blockers_preserved", int(payload.get("manifest_assembly_blocking_count", 0) or 0) >= 20, f"blocking={payload.get('manifest_assembly_blocking_count')!r}")
@@ -304,6 +399,7 @@ def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
         "draft_md_path": rel(DRAFT_MD),
         "task_count": payload.get("task_count"),
         "prepared_config_count": payload.get("prepared_config_count"),
+        "candidate_method_config_count": payload.get("candidate_method_config_count"),
         "method_gap_count": payload.get("method_gap_count"),
         "missing_rollout_artifact_count": payload.get("missing_rollout_artifact_count"),
         "manifest_assembly_blocking_count": payload.get("manifest_assembly_blocking_count"),
@@ -322,7 +418,7 @@ def write_draft_md(payload: dict[str, Any]) -> None:
         "Strict external evidence ready: `false`.",
         f"Official manifest exists: `{str(payload['official_manifest_exists']).lower()}`.",
         "",
-        "This draft records the manifest fields that can be safely prefilled before collection, especially prepared task-config hashes. It is not `external_validation/manifest.json`, it is not submission evidence, and it cannot promote itself to evidence without the strict cutover commands below.",
+        "This draft records the manifest fields that can be safely prefilled before collection, especially prepared task-config hashes and candidate method-config hashes. It is not `external_validation/manifest.json`, it is not submission evidence, and it cannot promote itself to evidence without the strict cutover commands below.",
         "",
         "## Prepared Task Configs",
         "",
@@ -332,9 +428,19 @@ def write_draft_md(payload: dict[str, Any]) -> None:
             f"- `{record['task_family']}`: `{record['config_path']}` "
             f"sha256 `{record['config_hash']}`; strict-if-manifest-declared `{str(record['strict_validation_passed_if_manifest_declared']).lower()}`"
         )
+    lines.extend(["", "## Candidate Method Config Prefills", ""])
+    for record in payload["candidate_method_config_records"]:
+        lines.append(
+            f"- `{record['method']}`: `{record['config_path']}` "
+            f"sha256 `{record['config_sha256']}`; operator-acceptance-required `true`; "
+            f"strict-adapter-evidence-ready `false`"
+        )
     lines.extend(["", "## Blocking Method Gaps", ""])
     for record in payload["method_gaps"]:
-        lines.append(f"- `{record['method']}`: missing `{record['blocking_missing']}`")
+        lines.append(
+            f"- `{record['method']}`: candidate config `{record['candidate_config_path']}` "
+            f"sha256 `{record['candidate_config_hash']}`; missing `{record['blocking_missing']}`"
+        )
     lines.extend(["", "## Blocking Rollout Artifacts", ""])
     for record in payload["rollout_artifact_gaps"]:
         if record["blocking_until_real_evidence"]:
@@ -381,6 +487,7 @@ def main() -> int:
         "External precollection manifest draft: "
         f"{'PASS' if audit['passed'] else 'FAIL'}; "
         f"configs={audit['prepared_config_count']}; "
+        f"method_configs={audit['candidate_method_config_count']}; "
         f"method_gaps={audit['method_gap_count']}; "
         f"rollout_gaps={audit['missing_rollout_artifact_count']}"
     )

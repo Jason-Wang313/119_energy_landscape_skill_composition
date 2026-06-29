@@ -1,4 +1,183 @@
 {
+  "candidate_method_config_count": 11,
+  "candidate_method_config_records": [
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/barrier_certified_energy_composer_v5.json",
+      "config_sha256": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872",
+      "evidence_role": "paper_method_under_test",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/barrier_certified_energy_composer_v5.json",
+      "method": "barrier_certified_energy_composer_v5",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/behavior_cloned_skill_chain.json",
+      "config_sha256": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/behavior_cloned_skill_chain.json",
+      "method": "behavior_cloned_skill_chain",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/cem_trajectory_composer.json",
+      "config_sha256": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/cem_trajectory_composer.json",
+      "method": "cem_trajectory_composer",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/diffusion_skill_stitcher.json",
+      "config_sha256": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/diffusion_skill_stitcher.json",
+      "method": "diffusion_skill_stitcher",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/energy_compatibility_heuristic.json",
+      "config_sha256": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/energy_compatibility_heuristic.json",
+      "method": "energy_compatibility_heuristic",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/greedy_module_sequence.json",
+      "config_sha256": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/greedy_module_sequence.json",
+      "method": "greedy_module_sequence",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/option_graph_planner.json",
+      "config_sha256": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/option_graph_planner.json",
+      "method": "option_graph_planner",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/proposed_energy_landscape_composer_v4_1.json",
+      "config_sha256": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3",
+      "evidence_role": "paper_predecessor_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/proposed_energy_landscape_composer_v4_1.json",
+      "method": "proposed_energy_landscape_composer_v4_1",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/residual_rl_composer.json",
+      "config_sha256": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/residual_rl_composer.json",
+      "method": "residual_rl_composer",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/stable_dmp_handoff.json",
+      "config_sha256": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/stable_dmp_handoff.json",
+      "method": "stable_dmp_handoff",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/tamp_feasibility_screen.json",
+      "config_sha256": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/tamp_feasibility_screen.json",
+      "method": "tamp_feasibility_screen",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    }
+  ],
   "claim": "A barrier-certified energy composer improves skill composition when basin overlap, barrier height, descent continuity, repair cost, and seam-risk calibration are estimable at the handoff.",
   "cutover_commands": [
     "python scripts\\build_external_precollection_manifest_draft.py",
@@ -232,9 +411,18 @@
     {
       "blocking_missing": [
         "implementation_path",
-        "checkpoint_or_config_path",
-        "checkpoint_or_config_hash"
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
       ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/greedy_module_sequence.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/greedy_module_sequence.json",
+      "candidate_promotable_after_operator_acceptance": true,
       "checkpoint_or_config_exists": false,
       "checkpoint_or_config_hash": "",
       "checkpoint_or_config_path": "",
@@ -246,9 +434,18 @@
     {
       "blocking_missing": [
         "implementation_path",
-        "checkpoint_or_config_path",
-        "checkpoint_or_config_hash"
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
       ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/behavior_cloned_skill_chain.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/behavior_cloned_skill_chain.json",
+      "candidate_promotable_after_operator_acceptance": true,
       "checkpoint_or_config_exists": false,
       "checkpoint_or_config_hash": "",
       "checkpoint_or_config_path": "",
@@ -260,9 +457,18 @@
     {
       "blocking_missing": [
         "implementation_path",
-        "checkpoint_or_config_path",
-        "checkpoint_or_config_hash"
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
       ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/option_graph_planner.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/option_graph_planner.json",
+      "candidate_promotable_after_operator_acceptance": true,
       "checkpoint_or_config_exists": false,
       "checkpoint_or_config_hash": "",
       "checkpoint_or_config_path": "",
@@ -274,9 +480,18 @@
     {
       "blocking_missing": [
         "implementation_path",
-        "checkpoint_or_config_path",
-        "checkpoint_or_config_hash"
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
       ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/tamp_feasibility_screen.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/tamp_feasibility_screen.json",
+      "candidate_promotable_after_operator_acceptance": true,
       "checkpoint_or_config_exists": false,
       "checkpoint_or_config_hash": "",
       "checkpoint_or_config_path": "",
@@ -288,9 +503,18 @@
     {
       "blocking_missing": [
         "implementation_path",
-        "checkpoint_or_config_path",
-        "checkpoint_or_config_hash"
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
       ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/stable_dmp_handoff.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/stable_dmp_handoff.json",
+      "candidate_promotable_after_operator_acceptance": true,
       "checkpoint_or_config_exists": false,
       "checkpoint_or_config_hash": "",
       "checkpoint_or_config_path": "",
@@ -302,9 +526,18 @@
     {
       "blocking_missing": [
         "implementation_path",
-        "checkpoint_or_config_path",
-        "checkpoint_or_config_hash"
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
       ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/diffusion_skill_stitcher.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/diffusion_skill_stitcher.json",
+      "candidate_promotable_after_operator_acceptance": true,
       "checkpoint_or_config_exists": false,
       "checkpoint_or_config_hash": "",
       "checkpoint_or_config_path": "",
@@ -316,9 +549,18 @@
     {
       "blocking_missing": [
         "implementation_path",
-        "checkpoint_or_config_path",
-        "checkpoint_or_config_hash"
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
       ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/cem_trajectory_composer.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/cem_trajectory_composer.json",
+      "candidate_promotable_after_operator_acceptance": true,
       "checkpoint_or_config_exists": false,
       "checkpoint_or_config_hash": "",
       "checkpoint_or_config_path": "",
@@ -330,9 +572,18 @@
     {
       "blocking_missing": [
         "implementation_path",
-        "checkpoint_or_config_path",
-        "checkpoint_or_config_hash"
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
       ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/residual_rl_composer.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/residual_rl_composer.json",
+      "candidate_promotable_after_operator_acceptance": true,
       "checkpoint_or_config_exists": false,
       "checkpoint_or_config_hash": "",
       "checkpoint_or_config_path": "",
@@ -344,9 +595,18 @@
     {
       "blocking_missing": [
         "implementation_path",
-        "checkpoint_or_config_path",
-        "checkpoint_or_config_hash"
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
       ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/energy_compatibility_heuristic.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/energy_compatibility_heuristic.json",
+      "candidate_promotable_after_operator_acceptance": true,
       "checkpoint_or_config_exists": false,
       "checkpoint_or_config_hash": "",
       "checkpoint_or_config_path": "",
@@ -358,9 +618,18 @@
     {
       "blocking_missing": [
         "implementation_path",
-        "checkpoint_or_config_path",
-        "checkpoint_or_config_hash"
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
       ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/proposed_energy_landscape_composer_v4_1.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/proposed_energy_landscape_composer_v4_1.json",
+      "candidate_promotable_after_operator_acceptance": true,
       "checkpoint_or_config_exists": false,
       "checkpoint_or_config_hash": "",
       "checkpoint_or_config_path": "",
@@ -372,9 +641,18 @@
     {
       "blocking_missing": [
         "implementation_path",
-        "checkpoint_or_config_path",
-        "checkpoint_or_config_hash"
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
       ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/barrier_certified_energy_composer_v5.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/barrier_certified_energy_composer_v5.json",
+      "candidate_promotable_after_operator_acceptance": true,
       "checkpoint_or_config_exists": false,
       "checkpoint_or_config_hash": "",
       "checkpoint_or_config_path": "",
@@ -523,6 +801,11 @@
       "exists": true,
       "path": "results/external_method_implementation_audit.json",
       "sha256": "F8AA15870753DC4E6B4F681ACEF956A4C49ADAF3A12A98C32091582474021FAC"
+    },
+    {
+      "exists": true,
+      "path": "results/external_method_config_materialization_audit.json",
+      "sha256": "5DC60C246B1C8CCF6D20F780F5D97B46E016C548EFCFDD72EE7E6925A4EDD7F2"
     },
     {
       "exists": true,

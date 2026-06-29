@@ -51,7 +51,7 @@ This audit checks that the public-facing contribution docs describe the current 
 - `pass` `release_package_internal_artifact_rejection_visible`: release_package_ready=False, bad_release_package_ready=False
 - `pass` `ablation_collection_packet_visible`: work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False
 - `pass` `evidence_intake_ledger_visible`: mapped=37/37, strict_external_evidence_ready=False
-- `pass` `precollection_manifest_draft_visible`: prepared_configs=4, method_gaps=11, rollout_gaps=8, official_manifest_exists=False
+- `pass` `precollection_manifest_draft_visible`: prepared_configs=4, method_configs=11, method_gaps=11, rollout_gaps=8, official_manifest_exists=False
 - `pass` `precollection_freeze_receipt_visible`: locked_artifacts=26, freeze_receipt_ready=False, strict_external_evidence_ready=False
 - `pass` `precollection_freeze_receipt_self_test_visible`: synthetic_ready=True, missing_backend=True, placeholder_run=True, missing_lock=True, dirty_checkout=True
 - `pass` `postcollection_evidence_seal_visible`: sealed_artifacts=11, records=0, videos=0, seal_ready=False, manifest_promotion=False

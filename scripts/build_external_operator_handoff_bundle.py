@@ -546,15 +546,20 @@ def build_payload() -> dict[str, Any]:
         and precollection_manifest.get("strict_config_evidence_ready") is False
         and precollection_manifest.get("official_manifest_exists") is False
         and int(precollection_manifest.get("prepared_config_count", 0) or 0) >= 4
+        and int(precollection_manifest.get("candidate_method_config_count", 0) or 0) >= 11
         and int(precollection_manifest.get("method_gap_count", 0) or 0) >= 11
         and int(precollection_manifest.get("missing_rollout_artifact_count", 0) or 0) >= 8
         and precollection_checks.get("draft_marked_non_evidence_and_fail_closed") is True
+        and precollection_checks.get("candidate_method_configs_prefilled") is True
+        and precollection_checks.get("method_gaps_bind_candidate_configs") is True
+        and precollection_checks.get("method_gaps_still_require_independent_evidence") is True
         and "external_validation/manifest_precollection_draft.json" in paths
         and "external_validation/manifest_precollection_draft.md" in paths
         and "results/external_precollection_manifest_draft_audit.json" in paths
         and "scripts/build_external_precollection_manifest_draft.py" in paths,
         (
             f"configs={precollection_manifest.get('prepared_config_count')!r}, "
+            f"method_configs={precollection_manifest.get('candidate_method_config_count')!r}, "
             f"method_gaps={precollection_manifest.get('method_gap_count')!r}, "
             f"rollout_gaps={precollection_manifest.get('missing_rollout_artifact_count')!r}"
         ),

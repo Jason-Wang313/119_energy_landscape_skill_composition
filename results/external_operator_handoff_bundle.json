@@ -54,7 +54,7 @@
       "passed": true
     },
     {
-      "detail": "configs=4, method_gaps=11, rollout_gaps=8",
+      "detail": "configs=4, method_configs=11, method_gaps=11, rollout_gaps=8",
       "name": "precollection_manifest_draft_included",
       "passed": true
     },
@@ -207,11 +207,11 @@
   "included_file_count": 333,
   "included_files": [
     {
-      "bytes": 30953,
+      "bytes": 31086,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "B56B46673D516F59EA92956C45380BB64FD851A4D2A74A598D217980A8CB3C92"
+      "sha256": "BC876251E87BB7047995E753955EB411158395F42CEF70CC7D1F00C3C3A6C4B4"
     },
     {
       "bytes": 14153,
@@ -239,7 +239,7 @@
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "EA9DF1C47EF9DFB69570285DB34D48448136D14FBCDABABC64DDA5A544BE59DF"
+      "sha256": "CCCC22E8A229A6E6D8D037D1A3EE082531A20833896A13A9C57876E728E094D6"
     },
     {
       "bytes": 34698,
@@ -1096,18 +1096,18 @@
       "sha256": "572827C87C44B677B5897E2215FB3741E38000A40C23AF5141AFBC923D31FAEA"
     },
     {
-      "bytes": 25296,
+      "bytes": 44237,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/manifest_precollection_draft.json",
-      "sha256": "9C258D7C091FA40B2AF9753931276D359F73CC8B03CBDBB15C4516C3A90A8B12"
+      "sha256": "1909C8172316185391056F5B672C0B484E2E42F3E1295251EC147FDA0BF6E744"
     },
     {
-      "bytes": 6171,
+      "bytes": 11427,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/manifest_precollection_draft.md",
-      "sha256": "20FC5B8747708D22E6D253FC71A96DF24A915C622A5464CEACBDB17DFB16F9FB"
+      "sha256": "E9C816F76182B011D16F9943F80538E42C14947202349AE5FCACE3276AFD07EF"
     },
     {
       "bytes": 2159,
@@ -1859,18 +1859,18 @@
       "sha256": "8A318351DC5AA27C081AB65BE30E28AA60115DA7B416076CEE74B5892754C313"
     },
     {
-      "bytes": 60685,
+      "bytes": 60762,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.json",
-      "sha256": "ABCFDB85C67C4E86763411AF713539CD01F4C1E366530E2DD07C54496C85B55E"
+      "sha256": "1950CC1BA17641AD5625AAFEE68E04AA3DEE051052C7572DCB7D5E49FC019901"
     },
     {
-      "bytes": 29020,
+      "bytes": 29107,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.md",
-      "sha256": "B8ACCE120E987875B43F89E59D2DA199CFF005C863CFA99F3908D7FBD88D0E4D"
+      "sha256": "4F1BDDD83B7E384B05CB22AF7164956CE2A71CB541ECC140E2155019E2417CEB"
     },
     {
       "bytes": 525,
@@ -1985,18 +1985,18 @@
       "sha256": "24198F84F8BDB43EC31F8EFEEDEF9BC6EEA68805CF53C9203A09BD9D1E7B592C"
     },
     {
-      "bytes": 5598,
+      "bytes": 6148,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_precollection_manifest_draft_audit.json",
-      "sha256": "17F638DFF1060FC2487FBE0062C0672EA27872BBF7D8D3ED4A3C3E8CC00A016F"
+      "sha256": "5F7C0865651B5F3AF6B0A7E3793077CF119397D7C32C766AF738928F2A10E763"
     },
     {
-      "bytes": 2035,
+      "bytes": 2359,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_precollection_manifest_draft_audit.md",
-      "sha256": "38ED44C63BDEE02AAA036FE3F56AEC224330C590AB036B4705DC949EA7BD5CA6"
+      "sha256": "8C63C4993CCB03FE653A25F37B3139BD50452E7E8C2AB0B23BE355129307120D"
     },
     {
       "bytes": 7424,
@@ -2398,11 +2398,11 @@
       "sha256": "C166221116A089779E0111AE13BDB75CC1625849486A1C116AF8534D264334AF"
     },
     {
-      "bytes": 76269,
+      "bytes": 76717,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "D70159E759C2ECB74A4593D42278B28621A1321339164D8E9CA05626BD95B315"
+      "sha256": "F3EE11549C7D4B7B0A2649FED65A0E29290216EC63F43647C4252CE9DB9B8D22"
     },
     {
       "bytes": 70465,
@@ -2440,11 +2440,11 @@
       "sha256": "47356B6AB03EECA9BEB575639DA0CB6DB33F53477759D810DBB0DA957AB2191F"
     },
     {
-      "bytes": 19589,
+      "bytes": 25761,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_precollection_manifest_draft.py",
-      "sha256": "A6BF6656C5FF649F48D322A7E1512E79BACBB4F89831E4F1BF7B330AFBD5557C"
+      "sha256": "D2DBF2C92484BDE67B0FB6141B66C158BA6975CA1F244CDACCFC563C8DD9BAEB"
     },
     {
       "bytes": 23096,

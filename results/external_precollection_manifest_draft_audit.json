@@ -1,5 +1,6 @@
 {
   "build_command": "python scripts\\build_external_precollection_manifest_draft.py",
+  "candidate_method_config_count": 11,
   "checks": [
     {
       "detail": "external_validation/manifest_precollection_draft.json",
@@ -22,6 +23,21 @@
       "passed": true
     },
     {
+      "detail": "candidate_method_configs=11",
+      "name": "candidate_method_configs_prefilled",
+      "passed": true
+    },
+    {
+      "detail": "method_gaps=11",
+      "name": "method_gaps_bind_candidate_configs",
+      "passed": true
+    },
+    {
+      "detail": "candidate config hashes do not replace independent implementations, provenance, manifest declaration, or rollout log binding",
+      "name": "method_gaps_still_require_independent_evidence",
+      "passed": true
+    },
+    {
       "detail": "method_gap_count=11",
       "name": "method_gaps_remain_blocking",
       "passed": true
@@ -37,7 +53,7 @@
       "passed": true
     },
     {
-      "detail": "sources=8",
+      "detail": "sources=9",
       "name": "source_reports_hash_listed",
       "passed": true
     },

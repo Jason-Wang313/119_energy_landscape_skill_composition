@@ -2116,6 +2116,8 @@ def main():
         fail("external precollection manifest draft must not coexist with a real manifest before collection")
     if int(precollection_draft.get("prepared_config_count", 0) or 0) < 4:
         fail("external precollection manifest draft must prefill all prepared config hashes")
+    if int(precollection_draft.get("candidate_method_config_count", 0) or 0) < 11:
+        fail("external precollection manifest draft must prefill all non-oracle candidate method config hashes")
     if int(precollection_draft.get("method_gap_count", 0) or 0) < 11:
         fail("external precollection manifest draft must preserve missing non-oracle method gaps")
     if int(precollection_draft.get("missing_rollout_artifact_count", 0) or 0) < 8:
@@ -2125,6 +2127,38 @@ def main():
     for record in precollection_draft.get("prepared_config_records", []) or []:
         if record.get("strict_validation_passed_if_manifest_declared") is not True or len(str(record.get("config_hash", ""))) != 64:
             fail(f"external precollection manifest draft has invalid prepared config record: {record}")
+    draft_candidate_records = precollection_draft.get("candidate_method_config_records", []) or []
+    draft_candidate_methods = {record.get("method") for record in draft_candidate_records if isinstance(record, dict)}
+    if draft_candidate_methods != work_order_methods or "oracle_basin_composer" in draft_candidate_methods:
+        fail("external precollection manifest draft must prefill exactly the non-oracle method config candidates")
+    for record in draft_candidate_records:
+        config_path = ROOT / str(record.get("config_path", ""))
+        if not config_path.exists():
+            fail(f"external precollection manifest draft candidate config is missing: {record}")
+        if len(str(record.get("config_sha256", ""))) != 64 or sha256(config_path) != record.get("config_sha256"):
+            fail(f"external precollection manifest draft candidate config hash does not recompute: {record}")
+        if record.get("config_hash_matches") is not True:
+            fail(f"external precollection manifest draft candidate config must record hash match: {record}")
+        if record.get("operator_acceptance_required") is not True or record.get("manifest_declaration_required") is not True:
+            fail(f"external precollection manifest draft candidate config must require operator/manifest acceptance: {record}")
+        if record.get("rollout_log_binding_required") is not True:
+            fail(f"external precollection manifest draft candidate config must require rollout log binding: {record}")
+        if record.get("strict_adapter_evidence_ready") is not False:
+            fail(f"external precollection manifest draft candidate config must keep strict adapter evidence false: {record}")
+    for record in precollection_draft.get("method_gaps", []) or []:
+        if record.get("candidate_checkpoint_or_config_prefill_available") is not True:
+            fail(f"external precollection manifest draft method gap missing candidate config prefill: {record}")
+        if len(str(record.get("candidate_config_hash", ""))) != 64:
+            fail(f"external precollection manifest draft method gap missing candidate config hash: {record}")
+        blockers = set(record.get("blocking_missing", []) or [])
+        required_blockers = {
+            "implementation_path",
+            "independent_operator_provenance",
+            "manifest_method_declaration",
+            "rollout_policy_hash_binding",
+        }
+        if not required_blockers.issubset(blockers):
+            fail(f"external precollection manifest draft method gap must preserve independent evidence blockers: {record}")
     cutover_text = "\n".join(precollection_draft.get("cutover_commands", []) or [])
     for fragment in (
         "materialize_fidelity_acceptance.py",
@@ -2156,6 +2190,9 @@ def main():
         "draft_marked_non_evidence_and_fail_closed",
         "official_manifest_absent",
         "prepared_config_hashes_prefilled",
+        "candidate_method_configs_prefilled",
+        "method_gaps_bind_candidate_configs",
+        "method_gaps_still_require_independent_evidence",
         "method_gaps_remain_blocking",
         "rollout_artifacts_remain_blocking",
         "manifest_assembly_blockers_preserved",

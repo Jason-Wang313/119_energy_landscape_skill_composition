@@ -232,8 +232,8 @@
     },
     {
       "name": "external_precollection_manifest_draft_claim",
-      "claim": "The repository provides a non-evidence External precollection manifest draft that pre-fills prepared task-config hashes, preserves method/log/video blockers, and records the guarded cutover commands required before `external_validation/manifest.json` can be written.",
-      "evidence": ["scripts/build_external_precollection_manifest_draft.py", "external_validation/manifest_precollection_draft.json", "external_validation/manifest_precollection_draft.md", "results/external_precollection_manifest_draft_audit.json", "results/external_precollection_manifest_draft_audit.md", "results/external_manifest_builder_report.json"]
+      "claim": "The repository provides a non-evidence External precollection manifest draft that pre-fills prepared task-config hashes and candidate method-config hashes, preserves independent implementation/provenance/log/video blockers, and records the guarded cutover commands required before `external_validation/manifest.json` can be written.",
+      "evidence": ["scripts/build_external_precollection_manifest_draft.py", "external_validation/manifest_precollection_draft.json", "external_validation/manifest_precollection_draft.md", "external_validation/method_config_materialization_plan.json", "external_validation/method_config_candidates.csv", "results/external_precollection_manifest_draft_audit.json", "results/external_precollection_manifest_draft_audit.md", "results/external_method_config_materialization_audit.json", "results/external_manifest_builder_report.json"]
     },
     {
       "name": "external_precollection_freeze_receipt_claim",

@@ -5,7 +5,7 @@ Not evidence: `true`.
 Strict external evidence ready: `false`.
 Bundle state: `READY_TO_SEND_OPERATOR_PACKAGE`.
 Included handoff files: `333`.
-Payload bytes: `4544640`.
+Payload bytes: `4576628`.
 Archive written: `false`.
 Archive path: `results/paper119_external_operator_release_bundle.zip`.
 Manifest CSV: `external_validation/operator_release_bundle_manifest.csv`.
