@@ -46,6 +46,19 @@ def digest(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
+def fairness_contract() -> dict[str, str]:
+    return {
+        "contract_id": "paper119_synthetic_fairness_contract_v1",
+        "skill_library_hash": digest("paper119 synthetic self-test shared skill library"),
+        "observation_interface_id": "paper119_synthetic_observation_interface_v1",
+        "observation_interface_hash": digest("paper119 synthetic self-test observation interface"),
+        "compute_budget_id": "paper119_synthetic_compute_budget_v1",
+        "compute_budget_hash": digest("paper119 synthetic self-test compute budget"),
+        "paired_reset_protocol_id": "paper119_synthetic_paired_reset_protocol_v1",
+        "paired_reset_protocol_hash": digest("paper119 synthetic self-test paired reset protocol"),
+    }
+
+
 def baseline_methods() -> list[str]:
     methods: list[str] = []
     for path in sorted((EXTERNAL / "baseline_specs").glob("*.json")):
@@ -93,7 +106,7 @@ def reset(reset_context):
     )
 
 
-def implementation_provenance_for(method: str) -> dict[str, Any]:
+def implementation_provenance_for(method: str, contract: dict[str, str]) -> dict[str, Any]:
     if method == "barrier_certified_energy_composer_v5":
         evidence_role = "paper_method_under_test"
         uses_proposed_method_code = True
@@ -108,6 +121,14 @@ def implementation_provenance_for(method: str) -> dict[str, Any]:
         "implementation_origin": "synthetic_self_test_operator_fixture",
         "independent_operator_or_lab": "paper119_synthetic_self_test_operator",
         "operator_signoff_id": f"synthetic_signoff_{method}",
+        "fairness_contract_id": contract["contract_id"],
+        "skill_library_hash": contract["skill_library_hash"],
+        "observation_interface_id": contract["observation_interface_id"],
+        "observation_interface_hash": contract["observation_interface_hash"],
+        "compute_budget_id": contract["compute_budget_id"],
+        "compute_budget_hash": contract["compute_budget_hash"],
+        "paired_reset_protocol_id": contract["paired_reset_protocol_id"],
+        "paired_reset_protocol_hash": contract["paired_reset_protocol_hash"],
         "same_skill_library": True,
         "same_observation_interface": True,
         "same_compute_budget": True,
@@ -122,16 +143,24 @@ def implementation_provenance_for(method: str) -> dict[str, Any]:
 
 
 def manifest_for_implementations(adapter_paths: dict[str, Path], config_paths: dict[str, Path]) -> dict[str, Any]:
+    contract = fairness_contract()
     return {
         "version": "paper119_external_manifest_v1",
         "route": "high_fidelity_sim",
+        "skill_library_hash": contract["skill_library_hash"],
+        "shared_skill_library": True,
+        "same_initial_states": True,
+        "same_observation_interface": True,
+        "same_compute_budget": True,
+        "paired_resets": True,
+        "fairness_contract": contract,
         "methods": [
             {
                 "name": method,
                 "implementation": rel(path),
                 "checkpoint_or_config_path": rel(config_paths[method]),
                 "checkpoint_or_config_hash": file_digest(config_paths[method]),
-                "implementation_provenance": implementation_provenance_for(method),
+                "implementation_provenance": implementation_provenance_for(method, contract),
             }
             for method, path in sorted(adapter_paths.items())
         ]
@@ -198,6 +227,26 @@ def manifest_with_implementation_hash_only(adapter_paths: dict[str, Path], confi
     return manifest
 
 
+def manifest_without_fairness_contract(adapter_paths: dict[str, Path], config_paths: dict[str, Path]) -> dict[str, Any]:
+    manifest = manifest_for_implementations(adapter_paths, config_paths)
+    manifest.pop("fairness_contract", None)
+    for method in manifest["methods"]:
+        provenance = method.get("implementation_provenance")
+        if isinstance(provenance, dict):
+            provenance.pop("fairness_contract_id", None)
+    return manifest
+
+
+def manifest_with_fairness_mismatch(adapter_paths: dict[str, Path], config_paths: dict[str, Path]) -> dict[str, Any]:
+    manifest = manifest_for_implementations(adapter_paths, config_paths)
+    for method in manifest["methods"]:
+        if method.get("name") not in {"barrier_certified_energy_composer_v5", "proposed_energy_landscape_composer_v4_1", "oracle_basin_composer"}:
+            method["implementation_provenance"]["skill_library_hash"] = digest("wrong skill library")
+            method["implementation_provenance"]["compute_budget_id"] = "wrong_compute_budget"
+            break
+    return manifest
+
+
 def run_strict_with_manifest(manifest_path: Path) -> dict[str, Any]:
     old_manifest = adapter_audit.MANIFEST
     try:
@@ -221,7 +270,7 @@ def write_report(payload: dict[str, Any]) -> None:
         "Not evidence: `true`.",
         f"Synthetic strict adapter evidence ready: `{str(payload['synthetic_adapter_evidence_ready']).lower()}`.",
         "",
-        "This self-test builds temporary manifest-declared adapter implementations and exercises the strict external-adapter evidence gate directly. It proves complete synthetic adapters can pass, missing manifests fail, scaffold templates and reference adapters are rejected as evidence, implementation-source hashes cannot replace checkpoint/config artifacts, and the real adapter evidence audit report is not overwritten.",
+        "This self-test builds temporary manifest-declared adapter implementations and exercises the strict external-adapter evidence gate directly. It proves complete synthetic adapters can pass, missing manifests fail, scaffold templates and reference adapters are rejected as evidence, implementation-source hashes cannot replace checkpoint/config artifacts, fairness-contract bindings are required, and the real adapter evidence audit report is not overwritten.",
         "",
         "## Checks",
         "",
@@ -265,11 +314,15 @@ def main() -> int:
         reference_manifest = tmp / "manifest_reference_adapters.json"
         leaky_manifest = tmp / "manifest_leaky_provenance.json"
         implementation_hash_manifest = tmp / "manifest_implementation_hash_only.json"
+        missing_fairness_manifest = tmp / "manifest_missing_fairness_contract.json"
+        fairness_mismatch_manifest = tmp / "manifest_fairness_mismatch.json"
         write_json(complete_manifest, manifest_for_implementations(adapter_paths, config_paths))
         write_json(scaffold_manifest, manifest_for_scaffolds())
         write_json(reference_manifest, manifest_for_reference_adapters())
         write_json(leaky_manifest, manifest_with_leaky_provenance(adapter_paths, config_paths))
         write_json(implementation_hash_manifest, manifest_with_implementation_hash_only(adapter_paths, config_paths))
+        write_json(missing_fairness_manifest, manifest_without_fairness_contract(adapter_paths, config_paths))
+        write_json(fairness_mismatch_manifest, manifest_with_fairness_mismatch(adapter_paths, config_paths))
 
         complete_audit = run_strict_with_manifest(complete_manifest)
         missing_manifest_audit = run_strict_with_manifest(missing_manifest)
@@ -277,6 +330,8 @@ def main() -> int:
         reference_audit = run_strict_with_manifest(reference_manifest)
         leaky_audit = run_strict_with_manifest(leaky_manifest)
         implementation_hash_audit = run_strict_with_manifest(implementation_hash_manifest)
+        missing_fairness_audit = run_strict_with_manifest(missing_fairness_manifest)
+        fairness_mismatch_audit = run_strict_with_manifest(fairness_mismatch_manifest)
 
     report_after = file_digest(REAL_REPORT)
 
@@ -284,6 +339,8 @@ def main() -> int:
     missing_manifest_checks = {check.get("name"): check.get("passed") for check in missing_manifest_audit.get("checks", [])}
     leaky_checks = {check.get("name"): check.get("passed") for check in leaky_audit.get("checks", [])}
     implementation_hash_checks = {check.get("name"): check.get("passed") for check in implementation_hash_audit.get("checks", [])}
+    missing_fairness_checks = {check.get("name"): check.get("passed") for check in missing_fairness_audit.get("checks", [])}
+    fairness_mismatch_checks = {check.get("name"): check.get("passed") for check in fairness_mismatch_audit.get("checks", [])}
     scaffold_failed = scaffold_audit.get("failed_adapters", [])
     reference_failed = reference_audit.get("failed_adapters", [])
 
@@ -301,6 +358,7 @@ def main() -> int:
         and complete_checks.get("manifest_checkpoint_or_config_artifacts_declared") is True
         and complete_checks.get("manifest_required_hashes_match_artifacts") is True
         and complete_checks.get("manifest_independent_provenance_declared") is True
+        and complete_checks.get("manifest_fairness_contract_bound_to_methods") is True
         and complete_checks.get("adapter_results_passed") is True,
         f"passed={complete_audit.get('passed')!r}, adapter_count={complete_audit.get('adapter_count')!r}",
     )
@@ -335,6 +393,19 @@ def main() -> int:
     )
     add_check(
         checks,
+        "fairness_contract_missing_or_mismatch_fails_strict",
+        missing_fairness_audit.get("passed") is False
+        and missing_fairness_checks.get("manifest_fairness_contract_bound_to_methods") is False
+        and fairness_mismatch_audit.get("passed") is False
+        and fairness_mismatch_checks.get("manifest_fairness_contract_bound_to_methods") is False,
+        (
+            f"missing_fairness_passed={missing_fairness_audit.get('passed')!r}, "
+            f"mismatch_passed={fairness_mismatch_audit.get('passed')!r}, "
+            f"missing_checks={missing_fairness_checks}, mismatch_checks={fairness_mismatch_checks}"
+        ),
+    )
+    add_check(
+        checks,
         "scaffold_adapters_rejected_as_strict_evidence",
         scaffold_audit.get("passed") is False
         and len(scaffold_failed) >= 11
@@ -364,12 +435,14 @@ def main() -> int:
 
     passed = all(check["passed"] for check in checks)
     payload = {
-        "version": "external_adapter_evidence_self_test_v1",
+        "version": "external_adapter_evidence_self_test_v2",
         "passed": passed,
         "not_external_evidence": True,
         "synthetic_adapter_evidence_ready": complete_audit.get("passed") is True,
         "leaky_provenance_ready": leaky_audit.get("passed") is True,
         "implementation_hash_only_ready": implementation_hash_audit.get("passed") is True,
+        "missing_fairness_contract_ready": missing_fairness_audit.get("passed") is True,
+        "fairness_mismatch_ready": fairness_mismatch_audit.get("passed") is True,
         "scaffold_adapter_evidence_ready": scaffold_audit.get("passed") is True,
         "reference_adapter_evidence_ready": reference_audit.get("passed") is True,
         "missing_manifest_ready": missing_manifest_audit.get("passed") is True,

@@ -259,7 +259,7 @@ Build the external method implementation packet:
 python scripts\build_external_method_implementation_packet.py
 ```
 
-This writes `external_validation/method_implementation_packet.{json,md}`, `external_validation/method_implementation_work_orders.csv`, `external_validation/adapter_acceptance_fixtures.{json,md,csv}`, and `results/external_method_implementation_audit.{json,md}`. It turns every missing non-oracle baseline implementation into a concrete work order with required source/config/checkpoint hashes, log fields, and synthetic adapter acceptance fixtures. It is not evidence and still reports strict adapter evidence as missing until real manifest-declared implementations replace the scaffolds.
+This writes `external_validation/method_implementation_packet.{json,md}`, `external_validation/method_implementation_work_orders.csv`, `external_validation/adapter_acceptance_fixtures.{json,md,csv}`, and `results/external_method_implementation_audit.{json,md}`. It turns every missing non-oracle baseline implementation into a concrete work order with required source/config/checkpoint hashes, log fields, and synthetic adapter acceptance fixtures. It is not evidence and still reports strict adapter evidence as missing until real manifest-declared implementations replace the scaffolds, provide checkpoint/config artifacts, and bind method provenance to the manifest fairness contract.
 
 Generate executable adapter scaffolds from the method specs:
 
@@ -299,7 +299,7 @@ Validate real manifest-declared adapter implementations with:
 python scripts\validate_external_adapters.py --strict
 ```
 
-Strict adapter validation currently fails until `external_validation/manifest.json` points to real non-oracle implementations that replace the scaffold templates.
+Strict adapter validation currently fails until `external_validation/manifest.json` points to real non-oracle implementations that replace the scaffold templates, declare checkpoint/config artifacts, and bind every method provenance entry to `manifest.fairness_contract` ids and hashes.
 
 Test the strict adapter-evidence gate without creating evidence:
 
@@ -307,7 +307,7 @@ Test the strict adapter-evidence gate without creating evidence:
 python scripts\self_test_external_adapter_evidence.py
 ```
 
-This writes `results/external_adapter_evidence_self_test.{json,md}`. It uses temporary manifest-declared adapters to prove the strict gate can pass when real-style implementations exist, and verifies missing manifests and scaffold templates remain fail-closed.
+This writes `results/external_adapter_evidence_self_test.{json,md}`. It uses temporary manifest-declared adapters to prove the strict gate can pass when real-style implementations exist, and verifies missing manifests, scaffold templates, reference adapters, leaky provenance, implementation-source hashes masquerading as checkpoint/config artifacts, and missing or mismatched fairness-contract bindings remain fail-closed.
 
 Use the manifest builder before strict validation. It does not fabricate evidence; in report-only mode it only scans the declared logs, videos, configs, and checkpoints and writes a readiness report:
 

@@ -36,15 +36,23 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "paper_method_under_test",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": true,
     "uses_reference_adapter": false,
@@ -73,15 +81,23 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -110,15 +126,23 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -147,15 +171,23 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -184,15 +216,23 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -221,15 +261,23 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -258,15 +306,23 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -295,15 +351,23 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "paper_predecessor_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": true,
     "uses_reference_adapter": false,
@@ -332,15 +396,23 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -369,15 +441,23 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -406,15 +486,23 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_path": "<operator-supplied real config/checkpoint path>",
   "implementation": "<operator-supplied independent implementation path, not the current reference adapter>",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -436,6 +524,7 @@ The current reference adapters are executable interface artifacts. They make the
 - declaring only a subset of non-oracle methods in the strict adapter manifest
 - using policy_or_config_hash values in JSONL logs that do not match manifest-declared hashes
 - omitting implementation_provenance or using provenance that permits oracle access, scaffold/reference adapters, proposed-code leakage for independent baselines, or post-outcome tuning
+- asserting same skill/observation/compute fairness without matching manifest.fairness_contract ids and hashes in every method provenance entry
 - dropping hard methods after viewing method identity or outcomes
 - changing compute budgets after seeing paired-reset performance
 - hand-entering manifest metrics without raw JSONL logs
@@ -454,7 +543,7 @@ The current reference adapters are executable interface artifacts. They make the
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `fairness_contract_binding`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -463,15 +552,23 @@ The current reference adapters are executable interface artifacts. They make the
   "checkpoint_or_config_path": "external_validation/implementations/barrier_certified_energy_composer_v5/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/barrier_certified_energy_composer_v5/adapter.py",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "paper_method_under_test",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": true,
     "uses_reference_adapter": false,
@@ -498,7 +595,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `fairness_contract_binding`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -507,15 +604,23 @@ Forbidden advantages:
   "checkpoint_or_config_path": "external_validation/implementations/behavior_cloned_skill_chain/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/behavior_cloned_skill_chain/adapter.py",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -543,7 +648,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `fairness_contract_binding`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -552,15 +657,23 @@ Forbidden advantages:
   "checkpoint_or_config_path": "external_validation/implementations/cem_trajectory_composer/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/cem_trajectory_composer/adapter.py",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -588,7 +701,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `fairness_contract_binding`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -597,15 +710,23 @@ Forbidden advantages:
   "checkpoint_or_config_path": "external_validation/implementations/diffusion_skill_stitcher/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/diffusion_skill_stitcher/adapter.py",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -631,7 +752,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `fairness_contract_binding`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -640,15 +761,23 @@ Forbidden advantages:
   "checkpoint_or_config_path": "external_validation/implementations/energy_compatibility_heuristic/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/energy_compatibility_heuristic/adapter.py",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -675,7 +804,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `fairness_contract_binding`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -684,15 +813,23 @@ Forbidden advantages:
   "checkpoint_or_config_path": "external_validation/implementations/greedy_module_sequence/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/greedy_module_sequence/adapter.py",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -720,7 +857,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `fairness_contract_binding`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -729,15 +866,23 @@ Forbidden advantages:
   "checkpoint_or_config_path": "external_validation/implementations/option_graph_planner/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/option_graph_planner/adapter.py",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -764,7 +909,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `fairness_contract_binding`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -773,15 +918,23 @@ Forbidden advantages:
   "checkpoint_or_config_path": "external_validation/implementations/proposed_energy_landscape_composer_v4_1/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/proposed_energy_landscape_composer_v4_1/adapter.py",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "paper_predecessor_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": true,
     "uses_reference_adapter": false,
@@ -808,7 +961,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `fairness_contract_binding`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -817,15 +970,23 @@ Forbidden advantages:
   "checkpoint_or_config_path": "external_validation/implementations/residual_rl_composer/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/residual_rl_composer/adapter.py",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -852,7 +1013,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `fairness_contract_binding`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -861,15 +1022,23 @@ Forbidden advantages:
   "checkpoint_or_config_path": "external_validation/implementations/stable_dmp_handoff/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/stable_dmp_handoff/adapter.py",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,
@@ -896,7 +1065,7 @@ Forbidden advantages:
 - Scaffold allowed as evidence: `false`
 - Reference adapter allowed as evidence: `false`
 - Policy/config hash required in logs: `true`
-- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
+- Required artifact fields: `implementation_path_or_repository`, `implementation_sha256_or_commit`, `checkpoint_or_config_path`, `checkpoint_or_config_hash`, `implementation_provenance`, `fairness_contract_binding`, `adapter_path`, `manifest_method_entry`, `policy_or_config_hash_in_logs`
 - Required log fields: `decision`, `failure_diagnosis`, `method`, `policy_or_config_hash`, `predicted_seam_risk`, `realized_seam_breach`, `success`, `utility`
 - Manifest method entry template:
 ```json
@@ -905,15 +1074,23 @@ Forbidden advantages:
   "checkpoint_or_config_path": "external_validation/implementations/tamp_feasibility_screen/config_or_checkpoint.json",
   "implementation": "external_validation/implementations/tamp_feasibility_screen/adapter.py",
   "implementation_provenance": {
+    "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+    "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
     "evidence_role": "independent_non_oracle_method",
+    "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
     "implementation_origin": "<operator/lab/repository source for this implementation>",
     "independent_operator_or_lab": "<independent operator or lab name>",
+    "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+    "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
     "operator_signoff_id": "<signoff id or dated note>",
     "oracle_access": false,
+    "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
+    "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
     "policy_or_config_hash_locked": true,
     "same_compute_budget": true,
     "same_observation_interface": true,
     "same_skill_library": true,
+    "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
     "uses_eval_outcome_tuning": false,
     "uses_proposed_method_code": false,
     "uses_reference_adapter": false,

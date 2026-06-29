@@ -32,6 +32,7 @@ REQUIRED_ARTIFACT_FIELDS = [
     "checkpoint_or_config_path",
     "checkpoint_or_config_hash",
     "implementation_provenance",
+    "fairness_contract_binding",
     "adapter_path",
     "manifest_method_entry",
     "policy_or_config_hash_in_logs",
@@ -113,6 +114,14 @@ def provenance_template(method: str) -> dict[str, Any]:
         "implementation_origin": "<operator/lab/repository source for this implementation>",
         "independent_operator_or_lab": "<independent operator or lab name>",
         "operator_signoff_id": "<signoff id or dated note>",
+        "fairness_contract_id": "<manifest.fairness_contract.contract_id>",
+        "skill_library_hash": "<manifest.fairness_contract.skill_library_hash>",
+        "observation_interface_id": "<manifest.fairness_contract.observation_interface_id>",
+        "observation_interface_hash": "<manifest.fairness_contract.observation_interface_hash>",
+        "compute_budget_id": "<manifest.fairness_contract.compute_budget_id>",
+        "compute_budget_hash": "<manifest.fairness_contract.compute_budget_hash>",
+        "paired_reset_protocol_id": "<manifest.fairness_contract.paired_reset_protocol_id>",
+        "paired_reset_protocol_hash": "<manifest.fairness_contract.paired_reset_protocol_hash>",
         "same_skill_library": True,
         "same_observation_interface": True,
         "same_compute_budget": True,
@@ -166,6 +175,7 @@ def build_work_orders(specs: list[dict[str, Any]], log_schema: dict[str, Any]) -
                 "operator_notes": [
                     "replace scaffold/reference code only with a real implementation or wrapper owned by the external validation operator",
                     "fill implementation_provenance with independent operator/lab signoff, no oracle access, no scaffold/reference adapter use, no outcome tuning, and matched skill/observation/compute conditions",
+                    "bind implementation_provenance to manifest.fairness_contract by matching fairness_contract_id, skill_library_hash, observation_interface id/hash, compute_budget id/hash, and paired_reset protocol id/hash",
                     "record implementation source hash or repository commit before rollouts start",
                     "record checkpoint/config artifact path and matching hash before rollouts start; implementation hashes cannot substitute for checkpoint_or_config_hash",
                     "do not train, tune, or select using evaluation reset outcomes after method identity is unsealed",
@@ -488,6 +498,7 @@ def build_packet(
             "declaring only a subset of non-oracle methods in the strict adapter manifest",
             "using policy_or_config_hash values in JSONL logs that do not match manifest-declared hashes",
             "omitting implementation_provenance or using provenance that permits oracle access, scaffold/reference adapters, proposed-code leakage for independent baselines, or post-outcome tuning",
+            "asserting same skill/observation/compute fairness without matching manifest.fairness_contract ids and hashes in every method provenance entry",
             "dropping hard methods after viewing method identity or outcomes",
             "changing compute budgets after seeing paired-reset performance",
             "hand-entering manifest metrics without raw JSONL logs",
@@ -539,6 +550,19 @@ def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_a
         and (order.get("manifest_method_entry_template", {}).get("implementation_provenance") or {}).get("uses_scaffold_template") is False
         and (order.get("manifest_method_entry_template", {}).get("implementation_provenance") or {}).get("uses_reference_adapter") is False
         and (order.get("manifest_method_entry_template", {}).get("implementation_provenance") or {}).get("uses_eval_outcome_tuning") is False
+        for order in work_orders
+    )
+    fairness_template_ok = all(
+        {
+            "fairness_contract_id",
+            "skill_library_hash",
+            "observation_interface_id",
+            "observation_interface_hash",
+            "compute_budget_id",
+            "compute_budget_hash",
+            "paired_reset_protocol_id",
+            "paired_reset_protocol_hash",
+        }.issubset(set(((order.get("manifest_method_entry_template") or {}).get("implementation_provenance") or {}).keys()))
         for order in work_orders
     )
     scaffold_policy_ok = all(
@@ -658,6 +682,12 @@ def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_a
         "manifest_entry_templates_require_independent_provenance",
         provenance_template_ok,
         "implementation_provenance requires operator/lab signoff, no oracle access, no scaffold/reference use, no outcome tuning, and locked hashes",
+    )
+    add_check(
+        checks,
+        "manifest_entry_templates_bind_fairness_contract",
+        fairness_template_ok,
+        "implementation_provenance must match manifest.fairness_contract ids and hashes for skill library, observation interface, compute budget, and paired resets",
     )
     add_check(
         checks,

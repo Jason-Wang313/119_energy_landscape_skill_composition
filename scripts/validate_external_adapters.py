@@ -43,6 +43,35 @@ REQUIRED_PROVENANCE_FALSE_FIELDS = (
     "uses_eval_outcome_tuning",
     "uses_unblinded_method_identity_during_collection",
 )
+REQUIRED_MANIFEST_FAIRNESS_TRUE_FIELDS = (
+    "shared_skill_library",
+    "same_initial_states",
+    "same_observation_interface",
+    "same_compute_budget",
+    "paired_resets",
+)
+REQUIRED_FAIRNESS_CONTRACT_TEXT_FIELDS = (
+    "contract_id",
+    "observation_interface_id",
+    "compute_budget_id",
+    "paired_reset_protocol_id",
+)
+REQUIRED_FAIRNESS_CONTRACT_HASH_FIELDS = (
+    "skill_library_hash",
+    "observation_interface_hash",
+    "compute_budget_hash",
+    "paired_reset_protocol_hash",
+)
+FAIRNESS_PROVENANCE_MATCH_FIELDS = {
+    "fairness_contract_id": "contract_id",
+    "skill_library_hash": "skill_library_hash",
+    "observation_interface_id": "observation_interface_id",
+    "observation_interface_hash": "observation_interface_hash",
+    "compute_budget_id": "compute_budget_id",
+    "compute_budget_hash": "compute_budget_hash",
+    "paired_reset_protocol_id": "paired_reset_protocol_id",
+    "paired_reset_protocol_hash": "paired_reset_protocol_hash",
+}
 
 
 def digest(value: str) -> str:
@@ -382,10 +411,15 @@ def required_non_oracle_methods(spec_methods: list[str]) -> list[str]:
     return sorted(method for method in spec_methods if method not in NON_ORACLE_EXCLUDED)
 
 
-def manifest_method_records() -> tuple[dict[str, dict[str, Any]], list[str], list[str]]:
+def manifest_payload() -> dict[str, Any]:
     if not MANIFEST.exists():
+        return {}
+    return read_json(MANIFEST)
+
+
+def manifest_method_records(manifest: dict[str, Any]) -> tuple[dict[str, dict[str, Any]], list[str], list[str]]:
+    if not manifest:
         return {}, [], []
-    manifest = read_json(MANIFEST)
     methods = manifest.get("methods", [])
     if not isinstance(methods, list):
         return {}, [], ["manifest.methods is not a list"]
@@ -480,6 +514,60 @@ def manifest_provenance_errors(records: dict[str, dict[str, Any]], required_meth
     return errors
 
 
+def manifest_fairness_contract_errors(
+    manifest: dict[str, Any],
+    records: dict[str, dict[str, Any]],
+    required_methods: list[str],
+) -> list[str]:
+    errors: list[str] = []
+    if not manifest:
+        return ["external_validation/manifest.json is missing"]
+
+    for field in REQUIRED_MANIFEST_FAIRNESS_TRUE_FIELDS:
+        if manifest.get(field) is not True:
+            errors.append(f"manifest.{field} must be true")
+
+    manifest_skill_hash = str(manifest.get("skill_library_hash", "")).strip()
+    if not is_hash(manifest_skill_hash):
+        errors.append("manifest.skill_library_hash must be a 64-character SHA256")
+
+    contract = manifest.get("fairness_contract")
+    if not isinstance(contract, dict):
+        return errors + ["manifest.fairness_contract object is missing"]
+
+    for field in REQUIRED_FAIRNESS_CONTRACT_TEXT_FIELDS:
+        if is_placeholder_text(contract.get(field)):
+            errors.append(f"manifest.fairness_contract.{field} is missing or placeholder")
+    for field in REQUIRED_FAIRNESS_CONTRACT_HASH_FIELDS:
+        if not is_hash(contract.get(field)):
+            errors.append(f"manifest.fairness_contract.{field} must be a 64-character SHA256")
+
+    contract_skill_hash = str(contract.get("skill_library_hash", "")).strip()
+    if is_hash(manifest_skill_hash) and contract_skill_hash.lower() != manifest_skill_hash.lower():
+        errors.append("manifest.fairness_contract.skill_library_hash must match manifest.skill_library_hash")
+
+    expected_values = {
+        provenance_field: str(contract.get(contract_field, "")).strip()
+        for provenance_field, contract_field in FAIRNESS_PROVENANCE_MATCH_FIELDS.items()
+    }
+    for name in required_methods:
+        method = records.get(name)
+        if not method:
+            continue
+        provenance = method.get("implementation_provenance")
+        if not isinstance(provenance, dict):
+            continue
+        for provenance_field, contract_field in FAIRNESS_PROVENANCE_MATCH_FIELDS.items():
+            expected = expected_values[provenance_field]
+            observed = str(provenance.get(provenance_field, "")).strip()
+            if observed != expected:
+                errors.append(
+                    f"{name}: implementation_provenance.{provenance_field} must match "
+                    f"manifest.fairness_contract.{contract_field}"
+                )
+    return errors
+
+
 def scaffold_paths() -> list[tuple[str, Path, None]]:
     paths = []
     for method in baseline_spec_methods():
@@ -501,7 +589,8 @@ def build_audit(*, strict: bool) -> dict[str, Any]:
     add_check(checks, "log_schema_exists", LOG_SCHEMA.exists(), str(LOG_SCHEMA))
 
     if strict:
-        records, duplicate_methods, malformed_methods = manifest_method_records()
+        manifest = manifest_payload()
+        records, duplicate_methods, malformed_methods = manifest_method_records(manifest)
         missing_declared = sorted(set(required_methods) - set(records))
         missing_implementations = sorted(
             method
@@ -515,11 +604,12 @@ def build_audit(*, strict: bool) -> dict[str, Any]:
         )
         hash_errors = manifest_hash_errors(records, required_methods)
         provenance_errors = manifest_provenance_errors(records, required_methods)
+        fairness_errors = manifest_fairness_contract_errors(manifest, records, required_methods)
         entries = manifest_implementation_entries(records, required_methods)
     else:
-        records, duplicate_methods, malformed_methods = {}, [], []
+        manifest, records, duplicate_methods, malformed_methods = {}, {}, [], []
         missing_declared, missing_implementations, missing_checkpoint_or_config = [], [], []
-        hash_errors, provenance_errors = [], []
+        hash_errors, provenance_errors, fairness_errors = [], [], []
         entries = scaffold_paths()
 
     if strict:
@@ -564,6 +654,12 @@ def build_audit(*, strict: bool) -> dict[str, Any]:
             not missing_declared and not missing_implementations and not provenance_errors,
             f"missing={missing_declared}, missing_implementations={missing_implementations}, errors={provenance_errors[:8]}",
         )
+        add_check(
+            checks,
+            "manifest_fairness_contract_bound_to_methods",
+            not missing_declared and not missing_implementations and not fairness_errors,
+            f"missing={missing_declared}, missing_implementations={missing_implementations}, errors={fairness_errors[:8]}",
+        )
     else:
         add_check(checks, "scaffold_entries_present", len(entries) >= 11, f"entries={len(entries)}")
 
@@ -599,7 +695,7 @@ def build_audit(*, strict: bool) -> dict[str, Any]:
 
     passed = all(check["passed"] for check in checks)
     return {
-        "version": "external_adapter_contract_evidence_audit_v1" if strict else "external_adapter_contract_audit_v1",
+        "version": "external_adapter_contract_evidence_audit_v2" if strict else "external_adapter_contract_audit_v1",
         "strict": strict,
         "not_external_evidence": not strict,
         "passed": passed,

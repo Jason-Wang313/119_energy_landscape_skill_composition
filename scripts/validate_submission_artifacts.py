@@ -1670,7 +1670,7 @@ def main():
     if not (ROOT / "scripts" / "self_test_external_adapter_evidence.py").exists():
         fail("missing scripts/self_test_external_adapter_evidence.py")
     adapter_evidence_self_test = json.loads(adapter_evidence_self_test_path.read_text(encoding="utf-8"))
-    if adapter_evidence_self_test.get("version") != "external_adapter_evidence_self_test_v1":
+    if adapter_evidence_self_test.get("version") != "external_adapter_evidence_self_test_v2":
         fail("external adapter evidence self-test version mismatch")
     if adapter_evidence_self_test.get("passed") is not True:
         fail("external adapter evidence self-test did not pass")
@@ -1688,6 +1688,10 @@ def main():
         fail("external adapter evidence self-test should reject leaky or reference-adapter provenance")
     if adapter_evidence_self_test.get("implementation_hash_only_ready") is not False:
         fail("external adapter evidence self-test should reject implementation hashes as checkpoint/config evidence")
+    if adapter_evidence_self_test.get("missing_fairness_contract_ready") is not False:
+        fail("external adapter evidence self-test should reject manifests missing fairness-contract bindings")
+    if adapter_evidence_self_test.get("fairness_mismatch_ready") is not False:
+        fail("external adapter evidence self-test should reject mismatched per-method fairness-contract bindings")
     adapter_evidence_self_checks = {check.get("name"): check.get("passed") for check in adapter_evidence_self_test.get("checks", [])}
     for required_check in (
         "synthetic_strict_adapters_pass",
@@ -1695,6 +1699,7 @@ def main():
         "missing_manifest_fails_strict",
         "leaky_or_reference_provenance_fails_strict",
         "implementation_hash_cannot_replace_checkpoint_or_config",
+        "fairness_contract_missing_or_mismatch_fails_strict",
         "scaffold_adapters_rejected_as_strict_evidence",
         "reference_adapters_rejected_as_strict_evidence",
         "real_adapter_evidence_report_not_overwritten",
@@ -1832,6 +1837,7 @@ def main():
         "manifest_entry_templates_cover_required_hash_fields",
         "manifest_entry_templates_bind_hash_to_checkpoint_config_artifact",
         "manifest_entry_templates_require_independent_provenance",
+        "manifest_entry_templates_bind_fairness_contract",
         "work_orders_forbid_scaffolds_and_reference_adapters",
         "policy_or_config_hash_in_logs_required",
         "adapter_acceptance_fixtures_cover_non_oracle_methods",

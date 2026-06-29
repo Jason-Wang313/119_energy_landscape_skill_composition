@@ -58,7 +58,9 @@ BASELINE_SUCCESS_CUTOFFS = {
 FIXED_RISK_BUDGET = 0.15
 
 
-def implementation_provenance_for(method: str) -> dict[str, Any]:
+def implementation_provenance_for(method: str, fairness_contract: dict[str, str] | None = None) -> dict[str, Any]:
+    if fairness_contract is None:
+        fairness_contract = synthetic_fairness_contract()
     if method == rollout.PRIMARY_METHOD:
         evidence_role = "paper_method_under_test"
         uses_proposed_method_code = True
@@ -74,6 +76,14 @@ def implementation_provenance_for(method: str) -> dict[str, Any]:
         "implementation_origin": "synthetic_full_pipeline_self_test_fixture",
         "independent_operator_or_lab": "paper119_synthetic_full_pipeline_operator",
         "operator_signoff_id": f"synthetic_full_pipeline_signoff_{method}",
+        "fairness_contract_id": fairness_contract["contract_id"],
+        "skill_library_hash": fairness_contract["skill_library_hash"],
+        "observation_interface_id": fairness_contract["observation_interface_id"],
+        "observation_interface_hash": fairness_contract["observation_interface_hash"],
+        "compute_budget_id": fairness_contract["compute_budget_id"],
+        "compute_budget_hash": fairness_contract["compute_budget_hash"],
+        "paired_reset_protocol_id": fairness_contract["paired_reset_protocol_id"],
+        "paired_reset_protocol_hash": fairness_contract["paired_reset_protocol_hash"],
         "same_skill_library": True,
         "same_observation_interface": True,
         "same_compute_budget": True,
@@ -89,6 +99,19 @@ def implementation_provenance_for(method: str) -> dict[str, Any]:
 
 def digest_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+
+def synthetic_fairness_contract(skill_library_hash: str | None = None) -> dict[str, str]:
+    return {
+        "contract_id": "paper119_synthetic_full_pipeline_fairness_contract_v1",
+        "skill_library_hash": skill_library_hash or digest_text("synthetic skill library"),
+        "observation_interface_id": "paper119_synthetic_full_pipeline_observation_interface_v1",
+        "observation_interface_hash": digest_text("synthetic full pipeline observation interface"),
+        "compute_budget_id": "paper119_synthetic_full_pipeline_compute_budget_v1",
+        "compute_budget_hash": digest_text("synthetic full pipeline compute budget"),
+        "paired_reset_protocol_id": "paper119_synthetic_full_pipeline_paired_reset_protocol_v1",
+        "paired_reset_protocol_hash": digest_text("synthetic full pipeline paired reset protocol"),
+    }
 
 
 def file_sha(path: Path) -> str:
@@ -160,6 +183,11 @@ def make_fidelity_acceptance() -> dict[str, Any]:
     return {
         "version": "paper119_fidelity_acceptance_v1",
         "not_external_evidence": True,
+        "acceptance_ready": True,
+        "strict_fidelity_evidence_ready": False,
+        "strict_external_evidence_ready": False,
+        "materialized_by": "scripts/materialize_fidelity_acceptance.py",
+        "materialized_from_draft_path": "external_validation/fidelity_acceptance_draft.json",
         "route": "high_fidelity_sim",
         "purpose": "Temporary synthetic self-test fixture for the Paper 119 external fidelity acceptance gate.",
         "platform": {
@@ -206,10 +234,12 @@ def make_fidelity_acceptance() -> dict[str, Any]:
             "operator_name_or_lab": "synthetic-self-test",
             "operator_not_target_collaborator": True,
             "date_locked": "2026-06-27",
-            "code_commit": "synthetic-fixture",
+            "code_commit": "a" * 40,
             "skill_library_hash": digest_text("synthetic skill library"),
             "manifest_path": "external_validation/manifest.json",
             "artifact_hash_policy": "sha256",
+            "manifest_declaration_confirmed_by_operator": True,
+            "real_rollout_evidence_confirmed_by_operator": True,
         },
         "acceptance_gates": [
             {
@@ -292,7 +322,13 @@ def make_record(root: Path, task: str, scene_index: int, method: str, video_path
     }
 
 
-def write_baseline_artifacts(root: Path, external: Path) -> tuple[list[dict[str, Any]], list[dict[str, str]], list[dict[str, str]], dict[str, str]]:
+def write_baseline_artifacts(
+    root: Path,
+    external: Path,
+    fairness_contract: dict[str, str] | None = None,
+) -> tuple[list[dict[str, Any]], list[dict[str, str]], list[dict[str, str]], dict[str, str]]:
+    if fairness_contract is None:
+        fairness_contract = synthetic_fairness_contract()
     methods: list[dict[str, Any]] = []
     code_release: list[dict[str, str]] = []
     checkpoint_release: list[dict[str, str]] = []
@@ -308,7 +344,7 @@ def write_baseline_artifacts(root: Path, external: Path) -> tuple[list[dict[str,
         method_entry["checkpoint_or_config_path"] = rel(root, checkpoint)
         method_entry["checkpoint_or_config_hash"] = checkpoint_hash
         if method != rollout.ORACLE_METHOD:
-            method_entry["implementation_provenance"] = implementation_provenance_for(method)
+            method_entry["implementation_provenance"] = implementation_provenance_for(method, fairness_contract)
         checkpoint_release.append({"path": rel(root, checkpoint), "sha256": checkpoint_hash})
 
         if method != rollout.ORACLE_METHOD:
@@ -502,7 +538,8 @@ def main() -> int:
         write_json(external / "fidelity_acceptance.json", make_fidelity_acceptance())
         (scripts / "validate_external_rollouts.py").write_text("# temporary self-test sentinel\n", encoding="utf-8")
 
-        methods, code_release, checkpoint_release, policy_hashes = write_baseline_artifacts(root, external)
+        fairness_contract = synthetic_fairness_contract()
+        methods, code_release, checkpoint_release, policy_hashes = write_baseline_artifacts(root, external, fairness_contract)
         tasks, config_release, log_release, video_release = write_task_artifacts(root, external, policy_hashes)
 
         manifest: dict[str, Any] = {
@@ -511,13 +548,14 @@ def main() -> int:
             "log_schema": "external_validation/log_schema_v1.json",
             "route": "high_fidelity_sim",
             "code_commit": "synthetic-fixture",
-            "skill_library_hash": digest_text("synthetic skill library"),
+            "skill_library_hash": fairness_contract["skill_library_hash"],
             "fidelity_acceptance_path": "external_validation/fidelity_acceptance.json",
             "shared_skill_library": True,
             "same_initial_states": True,
             "same_observation_interface": True,
             "same_compute_budget": True,
             "paired_resets": True,
+            "fairness_contract": fairness_contract,
             "tasks": tasks,
             "methods": methods,
             "ablations": {

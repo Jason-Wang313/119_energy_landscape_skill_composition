@@ -21,7 +21,7 @@
       "passed": true
     },
     {
-      "detail": "required_artifact_fields=['implementation_path_or_repository', 'implementation_sha256_or_commit', 'checkpoint_or_config_path', 'checkpoint_or_config_hash', 'implementation_provenance', 'adapter_path', 'manifest_method_entry', 'policy_or_config_hash_in_logs']",
+      "detail": "required_artifact_fields=['implementation_path_or_repository', 'implementation_sha256_or_commit', 'checkpoint_or_config_path', 'checkpoint_or_config_hash', 'implementation_provenance', 'fairness_contract_binding', 'adapter_path', 'manifest_method_entry', 'policy_or_config_hash_in_logs']",
       "name": "required_artifact_fields_declared",
       "passed": true
     },
@@ -43,6 +43,11 @@
     {
       "detail": "implementation_provenance requires operator/lab signoff, no oracle access, no scaffold/reference use, no outcome tuning, and locked hashes",
       "name": "manifest_entry_templates_require_independent_provenance",
+      "passed": true
+    },
+    {
+      "detail": "implementation_provenance must match manifest.fairness_contract ids and hashes for skill library, observation interface, compute budget, and paired resets",
+      "name": "manifest_entry_templates_bind_fairness_contract",
       "passed": true
     },
     {

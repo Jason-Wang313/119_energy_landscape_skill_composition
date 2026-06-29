@@ -65,7 +65,9 @@ def rel(root: Path, path: Path) -> str:
 
 
 def build_template(root: Path, external: Path) -> dict[str, Any]:
-    methods, _, _, policy_hashes = fixture.write_baseline_artifacts(root, external)
+    skill_library_hash = fixture.digest_text("manifest builder self-test skill library")
+    fairness_contract = fixture.synthetic_fairness_contract(skill_library_hash)
+    methods, _, _, policy_hashes = fixture.write_baseline_artifacts(root, external, fairness_contract)
     tasks, _, _, _ = fixture.write_task_artifacts(root, external, policy_hashes)
     return {
         "version": "external_validation_v1",
@@ -73,13 +75,14 @@ def build_template(root: Path, external: Path) -> dict[str, Any]:
         "log_schema": "external_validation/log_schema_v1.json",
         "route": "high_fidelity_sim",
         "code_commit": "manifest-builder-self-test",
-        "skill_library_hash": fixture.digest_text("manifest builder self-test skill library"),
+        "skill_library_hash": skill_library_hash,
         "fidelity_acceptance_path": "external_validation/fidelity_acceptance.json",
         "shared_skill_library": True,
         "same_initial_states": True,
         "same_observation_interface": True,
         "same_compute_budget": True,
         "paired_resets": True,
+        "fairness_contract": fairness_contract,
         "tasks": tasks,
         "methods": methods,
         "ablations": {

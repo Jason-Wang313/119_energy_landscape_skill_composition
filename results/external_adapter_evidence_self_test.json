@@ -11,18 +11,23 @@
       "passed": true
     },
     {
-      "detail": "passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': False, 'manifest_implementation_entries_present': False, 'manifest_declares_all_required_non_oracle_methods': False, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': False, 'manifest_checkpoint_or_config_artifacts_declared': False, 'manifest_required_hashes_match_artifacts': False, 'manifest_independent_provenance_declared': False, 'adapter_results_passed': False}",
+      "detail": "passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': False, 'manifest_implementation_entries_present': False, 'manifest_declares_all_required_non_oracle_methods': False, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': False, 'manifest_checkpoint_or_config_artifacts_declared': False, 'manifest_required_hashes_match_artifacts': False, 'manifest_independent_provenance_declared': False, 'manifest_fairness_contract_bound_to_methods': False, 'adapter_results_passed': False}",
       "name": "missing_manifest_fails_strict",
       "passed": true
     },
     {
-      "detail": "passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': True, 'manifest_implementation_entries_present': True, 'manifest_declares_all_required_non_oracle_methods': True, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': True, 'manifest_checkpoint_or_config_artifacts_declared': True, 'manifest_required_hashes_match_artifacts': True, 'manifest_independent_provenance_declared': False, 'adapter_results_passed': True}",
+      "detail": "passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': True, 'manifest_implementation_entries_present': True, 'manifest_declares_all_required_non_oracle_methods': True, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': True, 'manifest_checkpoint_or_config_artifacts_declared': True, 'manifest_required_hashes_match_artifacts': True, 'manifest_independent_provenance_declared': False, 'manifest_fairness_contract_bound_to_methods': True, 'adapter_results_passed': True}",
       "name": "leaky_or_reference_provenance_fails_strict",
       "passed": true
     },
     {
-      "detail": "passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': True, 'manifest_implementation_entries_present': True, 'manifest_declares_all_required_non_oracle_methods': True, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': True, 'manifest_checkpoint_or_config_artifacts_declared': False, 'manifest_required_hashes_match_artifacts': False, 'manifest_independent_provenance_declared': True, 'adapter_results_passed': True}",
+      "detail": "passed=False, checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': True, 'manifest_implementation_entries_present': True, 'manifest_declares_all_required_non_oracle_methods': True, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': True, 'manifest_checkpoint_or_config_artifacts_declared': False, 'manifest_required_hashes_match_artifacts': False, 'manifest_independent_provenance_declared': True, 'manifest_fairness_contract_bound_to_methods': True, 'adapter_results_passed': True}",
       "name": "implementation_hash_cannot_replace_checkpoint_or_config",
+      "passed": true
+    },
+    {
+      "detail": "missing_fairness_passed=False, mismatch_passed=False, missing_checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': True, 'manifest_implementation_entries_present': True, 'manifest_declares_all_required_non_oracle_methods': True, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': True, 'manifest_checkpoint_or_config_artifacts_declared': True, 'manifest_required_hashes_match_artifacts': True, 'manifest_independent_provenance_declared': True, 'manifest_fairness_contract_bound_to_methods': False, 'adapter_results_passed': True}, mismatch_checks={'baseline_specs_present': True, 'contract_self_test_passed': True, 'log_schema_exists': True, 'manifest_exists': True, 'manifest_implementation_entries_present': True, 'manifest_declares_all_required_non_oracle_methods': True, 'manifest_has_no_duplicate_or_malformed_non_oracle_methods': True, 'manifest_implementation_entries_cover_required_non_oracle_methods': True, 'manifest_checkpoint_or_config_artifacts_declared': True, 'manifest_required_hashes_match_artifacts': True, 'manifest_independent_provenance_declared': True, 'manifest_fairness_contract_bound_to_methods': False, 'adapter_results_passed': True}",
+      "name": "fairness_contract_missing_or_mismatch_fails_strict",
       "passed": true
     },
     {
@@ -36,20 +41,22 @@
       "passed": true
     },
     {
-      "detail": "before=76bcad615bc07c1a68227015d77c9f52b0e5c66a1d31bf1c0fe6f3b320da36d1, after=76bcad615bc07c1a68227015d77c9f52b0e5c66a1d31bf1c0fe6f3b320da36d1",
+      "detail": "before=ae830cd8e98d58b508d5044b140d4ebd84513916d5d6f9faa92a7e8d51bc6609, after=ae830cd8e98d58b508d5044b140d4ebd84513916d5d6f9faa92a7e8d51bc6609",
       "name": "real_adapter_evidence_report_not_overwritten",
       "passed": true
     }
   ],
+  "fairness_mismatch_ready": false,
   "implementation_hash_only_ready": false,
   "leaky_provenance_ready": false,
+  "missing_fairness_contract_ready": false,
   "missing_manifest_ready": false,
   "not_external_evidence": true,
   "passed": true,
-  "real_adapter_evidence_report_after": "76bcad615bc07c1a68227015d77c9f52b0e5c66a1d31bf1c0fe6f3b320da36d1",
-  "real_adapter_evidence_report_before": "76bcad615bc07c1a68227015d77c9f52b0e5c66a1d31bf1c0fe6f3b320da36d1",
+  "real_adapter_evidence_report_after": "ae830cd8e98d58b508d5044b140d4ebd84513916d5d6f9faa92a7e8d51bc6609",
+  "real_adapter_evidence_report_before": "ae830cd8e98d58b508d5044b140d4ebd84513916d5d6f9faa92a7e8d51bc6609",
   "reference_adapter_evidence_ready": false,
   "scaffold_adapter_evidence_ready": false,
   "synthetic_adapter_evidence_ready": true,
-  "version": "external_adapter_evidence_self_test_v1"
+  "version": "external_adapter_evidence_self_test_v2"
 }
