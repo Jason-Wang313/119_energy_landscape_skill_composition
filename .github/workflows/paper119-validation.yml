@@ -127,6 +127,9 @@ jobs:
       - name: Build ManiSkill render machine qualification
         run: python scripts/build_maniskill_render_machine_qualification.py
 
+      - name: Self-test ManiSkill render machine qualification
+        run: python scripts/self_test_maniskill_render_machine_qualification.py
+
       - name: Build external platform onboarding
         run: python scripts/build_external_platform_onboarding.py
 

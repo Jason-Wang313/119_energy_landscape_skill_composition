@@ -48,6 +48,8 @@
 - External manifest builder: `scripts/build_external_manifest.py`
 - External manifest builder self-test: `scripts/self_test_external_manifest_builder.py`
 - ManiSkill render machine qualification packet: `scripts/build_maniskill_render_machine_qualification.py`
+- ManiSkill render machine qualification self-test: `scripts/self_test_maniskill_render_machine_qualification.py`
+  - Durable report: `results/maniskill_render_machine_qualification_self_test.md`
 - External release package validator: `scripts/audit_external_release_package.py`
 - External evidence preflight validator: `scripts/audit_external_evidence_preflight.py`
 - External evidence acquisition packet builder: `scripts/build_external_acquisition_packet.py`
@@ -183,6 +185,12 @@
   - `results/external_collection_readiness_audit.md`
   - `results/maniskill_reference_collection_preflight_audit.json`
   - `results/maniskill_reference_collection_preflight_audit.md`
+  - `results/maniskill_render_machine_qualification.json`
+  - `results/maniskill_render_machine_qualification.md`
+  - `results/maniskill_render_machine_qualification_self_test.json`
+  - `results/maniskill_render_machine_qualification_self_test.md`
+  - `results/maniskill_render_failure_remediation.json`
+  - `results/maniskill_render_failure_remediation.md`
   - `results/external_config_template_audit.json`
   - `results/external_config_template_audit.md`
   - `results/external_config_evidence_audit.json`

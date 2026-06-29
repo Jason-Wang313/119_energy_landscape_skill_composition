@@ -134,6 +134,7 @@ def main():
         "scripts\\audit_maniskill_render_video_preflight.py",
         "scripts\\audit_maniskill_pilot_runtime_liveness.py",
         "scripts\\build_maniskill_render_machine_qualification.py",
+        "scripts\\self_test_maniskill_render_machine_qualification.py",
         "scripts\\validate_external_configs.py",
         "scripts\\self_test_external_config_evidence.py",
         "scripts\\materialize_external_configs.py",
@@ -229,6 +230,7 @@ def main():
         "python scripts/audit_maniskill_render_video_preflight.py",
         "python scripts/audit_maniskill_pilot_runtime_liveness.py",
         "python scripts/build_maniskill_render_machine_qualification.py",
+        "python scripts/self_test_maniskill_render_machine_qualification.py",
         "python scripts/audit_external_evidence_preflight.py",
         "python scripts/self_test_external_config_evidence.py",
         "python scripts/self_test_external_adapter_evidence.py",
@@ -3288,6 +3290,64 @@ def main():
     ):
         if render_remediation_checks.get(required_check) is not True:
             fail(f"ManiSkill render failure remediation missing passing check: {required_check}")
+
+    render_machine_self_test_path = RESULTS / "maniskill_render_machine_qualification_self_test.json"
+    render_machine_self_test_md_path = RESULTS / "maniskill_render_machine_qualification_self_test.md"
+    for path in (
+        ROOT / "scripts" / "self_test_maniskill_render_machine_qualification.py",
+        render_machine_self_test_path,
+        render_machine_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing ManiSkill render machine qualification self-test artifact: {path}")
+    render_machine_self_test = json.loads(render_machine_self_test_path.read_text(encoding="utf-8"))
+    if render_machine_self_test.get("version") != "maniskill_render_machine_qualification_self_test_v1":
+        fail("ManiSkill render machine qualification self-test version mismatch")
+    if render_machine_self_test.get("passed") is not True:
+        fail("ManiSkill render machine qualification self-test did not pass")
+    if render_machine_self_test.get("not_external_evidence") is not True:
+        fail("ManiSkill render machine qualification self-test must declare that it is not evidence")
+    if render_machine_self_test.get("strict_external_evidence_ready") is not False:
+        fail("ManiSkill render machine qualification self-test must not claim strict evidence readiness")
+    if render_machine_self_test.get("synthetic_ready_state") != "QUALIFIED_FOR_RENDER_BACKED_PILOT":
+        fail("ManiSkill render machine qualification self-test must prove a complete synthetic render/liveness fixture can qualify")
+    if render_machine_self_test.get("synthetic_fail_closed_state") != "DO_NOT_COLLECT_RENDER_MACHINE":
+        fail("ManiSkill render machine qualification self-test must prove render failures fail closed")
+    if render_machine_self_test.get("missing_env_rejected") is not True:
+        fail("ManiSkill render machine qualification self-test must reject missing environment render records")
+    if render_machine_self_test.get("diagnostic_fallback_rejected") is not True:
+        fail("ManiSkill render machine qualification self-test must reject diagnostic fallback media")
+    if render_machine_self_test.get("ready_remediation_state") != "RENDER_REMEDIATION_READY":
+        fail("ManiSkill render machine qualification self-test must prove ready remediation state")
+    if render_machine_self_test.get("failed_remediation_state") != "RENDER_REMEDIATION_REQUIRED":
+        fail("ManiSkill render machine qualification self-test must prove failed remediation state")
+    if render_machine_self_test.get("real_reports_untouched") is not True:
+        fail("ManiSkill render machine qualification self-test must leave real render-machine reports untouched")
+    self_required_work_orders = set(render_machine_self_test.get("required_work_orders", []) or [])
+    for required_work_order in (
+        "renderer_platform_probe",
+        "render_profile_matrix_retest",
+        "pilot_liveness_retest",
+        "diagnostic_fallback_exclusion",
+        "fidelity_acceptance_after_render_ready",
+        "collection_readiness_gate",
+    ):
+        if required_work_order not in self_required_work_orders:
+            fail(f"ManiSkill render machine qualification self-test missing work order: {required_work_order}")
+    render_machine_self_checks = {
+        check.get("name"): check.get("passed") for check in render_machine_self_test.get("checks", [])
+    }
+    for required_check in (
+        "synthetic_ready_machine_qualifies",
+        "synthetic_ready_remediation_is_ready",
+        "render_failure_fails_closed",
+        "failure_remediation_work_orders_cover_gate_sequence",
+        "missing_environment_record_fails_closed",
+        "diagnostic_fallback_blocks_qualification",
+        "real_render_machine_reports_not_overwritten",
+    ):
+        if render_machine_self_checks.get(required_check) is not True:
+            fail(f"ManiSkill render machine qualification self-test missing passing check: {required_check}")
 
     ablation_packet_path = EXTERNAL / "ablation_collection_packet.json"
     ablation_packet_md_path = EXTERNAL / "ablation_collection_packet.md"
