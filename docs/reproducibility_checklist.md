@@ -81,6 +81,7 @@
 - External runner backend-path self-test: `scripts/self_test_external_runner_backend.py`
 - External full-pipeline evidence self-test: `scripts/self_test_external_evidence_pipeline.py`
   - Durable report: `results/external_evidence_pipeline_self_test.md`
+  - Binds the prepared task configs and tracked candidate method configs into a temporary complete package without promoting them to evidence.
 - External rollout schema: `external_validation/log_schema_v1.json`
 - Related-work coverage matrix: `docs/related_work_coverage_matrix.md`
 - Requirements: `numpy`, `matplotlib`

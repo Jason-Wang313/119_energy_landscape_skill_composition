@@ -17,6 +17,7 @@ import validate_external_rollouts as rollout
 
 REAL_ROOT = Path(__file__).resolve().parents[1]
 REAL_RESULTS = REAL_ROOT / "results"
+REAL_EXTERNAL = REAL_ROOT / "external_validation"
 REAL_MANIFEST = REAL_ROOT / "external_validation" / "manifest.json"
 REAL_LOG_SCHEMA = REAL_ROOT / "external_validation" / "log_schema_v1.json"
 REAL_CONFIG_SCHEMA = REAL_ROOT / "external_validation" / "config_schema_v1.json"
@@ -152,13 +153,15 @@ def write_report(payload: dict[str, Any]) -> None:
         f"Synthetic records: `{payload['synthetic_record_count']}`.",
         f"Synthetic tasks: `{payload['synthetic_task_count']}`.",
         f"Synthetic methods: `{payload['synthetic_method_count']}`.",
+        f"Prepared task configs bound: `{str(payload['prepared_task_configs_bound']).lower()}`.",
+        f"Tracked candidate method configs bound: `{str(payload['tracked_candidate_method_configs_bound']).lower()}`.",
         f"Confidence gates passed: `{str(payload['synthetic_confidence_gates_passed']).lower()}`.",
         f"Tampered rollout confidence rejected: `{str(payload['tampered_rollout_confidence_rejected']).lower()}`.",
         f"Tampered release hash rejected: `{str(payload['tampered_release_hash_rejected']).lower()}`.",
         f"Real manifest untouched: `{str(payload['real_manifest_untouched']).lower()}`.",
         f"Real reports untouched: `{str(payload['real_reports_untouched']).lower()}`.",
         "",
-        "This is a tooling-only self-test. It creates a temporary manifest/config/log/video/checkpoint package, proves the final strict external-evidence audit can reach ready on that temporary package with confidence-gated rollout statistics, proves tampered rollout confidence summaries and release hashes fail, and confirms the real repository evidence state is not promoted or overwritten.",
+        "This is a tooling-only self-test. It creates a temporary manifest/config/log/video/checkpoint package, binds the prepared task configs and tracked candidate method configs into that temporary package, proves the final strict external-evidence audit can reach ready on that temporary package with confidence-gated rollout statistics, proves tampered rollout confidence summaries and release hashes fail, and confirms the real repository evidence state is not promoted or overwritten.",
         "",
         "## Checks",
         "",
@@ -178,6 +181,42 @@ def write_synthetic_mp4(path: Path) -> None:
 
 def rel(root: Path, path: Path) -> str:
     return path.relative_to(root).as_posix()
+
+
+def scene_id_for_config(task_config: dict[str, Any], task: str, scene_index: int) -> str:
+    template = str((task_config.get("reset_protocol", {}) or {}).get("scene_id_template", "")).strip()
+    if template:
+        try:
+            return template.format(index=scene_index)
+        except (IndexError, KeyError, ValueError):
+            pass
+    return f"{task}_scene_{scene_index:03d}"
+
+
+def copy_prepared_task_config(external: Path, task: str) -> tuple[Path, dict[str, Any]]:
+    source = REAL_EXTERNAL / "configs" / f"{task}.json"
+    if not source.exists():
+        raise AssertionError(f"missing prepared task config: {source}")
+    target = external / "configs" / source.name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+    payload = json.loads(target.read_text(encoding="utf-8"))
+    if payload.get("task_family") != task:
+        raise AssertionError(f"prepared config task mismatch for {task}: {source}")
+    return target, payload
+
+
+def copy_candidate_method_config(external: Path, method: str) -> Path:
+    source = REAL_EXTERNAL / "method_config_candidates" / f"{method}.json"
+    if not source.exists():
+        raise AssertionError(f"missing candidate method config: {source}")
+    target = external / "method_config_candidates" / source.name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+    payload = json.loads(target.read_text(encoding="utf-8"))
+    if payload.get("method") != method:
+        raise AssertionError(f"candidate method config mismatch for {method}: {source}")
+    return target
 
 
 def make_config(task: str, *, version: str, template: bool) -> dict[str, Any]:
@@ -329,30 +368,38 @@ def method_outcome(method: str, scene_index: int) -> tuple[bool, float]:
     return success, 0.65 if success else 0.20
 
 
-def make_record(root: Path, task: str, scene_index: int, method: str, video_path: Path, policy_hashes: dict[str, str]) -> dict[str, Any]:
+def make_record(
+    root: Path,
+    task: str,
+    scene_index: int,
+    method: str,
+    video_path: Path,
+    policy_hashes: dict[str, str],
+    task_config: dict[str, Any],
+) -> dict[str, Any]:
     success, utility = method_outcome(method, scene_index)
     primary = method == rollout.PRIMARY_METHOD
     oracle = method == rollout.ORACLE_METHOD
-    scene_id = f"{task}_scene_{scene_index:03d}"
+    scene_id = scene_id_for_config(task_config, task, scene_index)
     diagnosis = "none" if success else "basin_miss"
     return {
         "run_id": "synthetic_full_pipeline_self_test_only",
         "task_family": task,
-        "platform_type": "high_fidelity_sim",
-        "platform_name": "TemporaryHighFidelitySim-v0",
+        "platform_type": task_config["platform_type"],
+        "platform_name": task_config["platform_name"],
         "scene_id": scene_id,
         "episode_index": scene_index,
         "seed": scene_index,
         "method": method,
-        "skill_i": f"{task}_source_skill",
-        "skill_j": f"{task}_target_skill",
+        "skill_i": task_config["skill_i"],
+        "skill_j": task_config["skill_j"],
         "initial_state_hash": digest_text(f"{task}:{scene_index}:initial"),
         "terminal_sample_set_hash": digest_text(f"{task}:{scene_index}:terminal"),
         "basin_estimate": 0.92 if primary or oracle else 0.62,
         "barrier_score": 0.05 if primary or oracle else 0.35,
         "descent_continuity_score": 0.94 if primary or oracle else 0.58,
         "predicted_seam_risk": 0.04 if primary or oracle else 0.24,
-        "fixed_risk_budget": FIXED_RISK_BUDGET,
+        "fixed_risk_budget": float(task_config.get("fixed_risk_budget", FIXED_RISK_BUDGET)),
         "decision": "accept" if success else "transition",
         "failure_diagnosis": diagnosis,
         "repair_action": "none" if success else "bridge_reseed",
@@ -381,9 +428,15 @@ def write_baseline_artifacts(
     policy_hashes: dict[str, str] = {}
     for method in METHODS:
         method_entry: dict[str, Any] = {"name": method}
-        checkpoint = external / "checkpoints" / f"{method}.sha256"
-        checkpoint.parent.mkdir(parents=True, exist_ok=True)
-        checkpoint.write_text(json.dumps({"method": method, "synthetic_self_test_only": True}, sort_keys=True) + "\n", encoding="utf-8")
+        if method == rollout.ORACLE_METHOD:
+            checkpoint = external / "checkpoints" / f"{method}.sha256"
+            checkpoint.parent.mkdir(parents=True, exist_ok=True)
+            checkpoint.write_text(
+                json.dumps({"method": method, "synthetic_self_test_only": True}, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+        else:
+            checkpoint = copy_candidate_method_config(external, method)
         checkpoint_hash = file_sha(checkpoint)
         policy_hashes[method] = checkpoint_hash
         method_entry["checkpoint"] = rel(root, checkpoint)
@@ -438,8 +491,7 @@ def write_task_artifacts(root: Path, external: Path, policy_hashes: dict[str, st
     tasks: list[dict[str, Any]] = []
     schema = json.loads(REAL_CONFIG_SCHEMA.read_text(encoding="utf-8"))
     for task in TASKS:
-        config_path = external / "configs" / f"{task}.json"
-        write_json(config_path, make_config(task, version=schema["evidence_version"], template=False))
+        config_path, task_config = copy_prepared_task_config(external, task)
         config_release.append({"path": rel(root, config_path), "sha256": file_sha(config_path)})
 
         template_path = external / "config_templates" / f"{task}.json"
@@ -454,7 +506,7 @@ def write_task_artifacts(root: Path, external: Path, policy_hashes: dict[str, st
                 for method in METHODS:
                     video_path = video_dir / f"{scene_index:03d}_{method}.mp4"
                     write_synthetic_mp4(video_path)
-                    record = make_record(root, task, scene_index, method, video_path, policy_hashes)
+                    record = make_record(root, task, scene_index, method, video_path, policy_hashes, task_config)
                     handle.write(json.dumps(record, sort_keys=True) + "\n")
                     if scene_index == 0 and method in {rollout.PRIMARY_METHOD, "proposed_energy_landscape_composer_v4_1", rollout.ORACLE_METHOD}:
                         video_release.append({"path": rel(root, video_path), "sha256": file_sha(video_path)})
@@ -462,11 +514,11 @@ def write_task_artifacts(root: Path, external: Path, policy_hashes: dict[str, st
         tasks.append(
             {
                 "task_family": task,
-                "platform_type": "high_fidelity_sim",
-                "platform_name": "TemporaryHighFidelitySim-v0",
+                "platform_type": task_config["platform_type"],
+                "platform_name": task_config["platform_name"],
                 "episodes_per_method": 30,
-                "skill_i": f"{task}_source_skill",
-                "skill_j": f"{task}_target_skill",
+                "skill_i": task_config["skill_i"],
+                "skill_j": task_config["skill_j"],
                 "config_path": rel(root, config_path),
                 "config_hash": file_sha(config_path),
                 "log_jsonl": rel(root, log_path),
@@ -847,6 +899,19 @@ def reset(reset_context):
         real_evidence_audit_before == real_evidence_audit_after
         and real_rollout_metrics_before == real_rollout_metrics_after
     )
+    prepared_task_configs_bound = all(
+        str(task.get("config_hash", "")).lower()
+        == file_sha(REAL_EXTERNAL / "configs" / f"{task.get('task_family')}.json").lower()
+        for task in tasks
+    )
+    tracked_candidate_method_configs_bound = all(
+        (
+            method.get("name") == rollout.ORACLE_METHOD
+            or str(method.get("checkpoint_or_config_hash", "")).lower()
+            == file_sha(REAL_EXTERNAL / "method_config_candidates" / f"{method.get('name')}.json").lower()
+        )
+        for method in methods
+    )
 
     add_check(
         checks,
@@ -874,6 +939,18 @@ def reset(reset_context):
             f"records={len(records)}, tasks={len(tasks)}, methods={len(methods)}, "
             f"confidence={rollout_summary.get('statistical_confidence', {}).get('all_primary_confidence_gates_passed')!r}"
         ),
+    )
+    add_check(
+        checks,
+        "prepared_task_configs_bound_in_full_pipeline_fixture",
+        prepared_task_configs_bound,
+        f"tasks={len(tasks)}, prepared_tasks={len(TASKS)}",
+    )
+    add_check(
+        checks,
+        "tracked_candidate_method_configs_bound_in_full_pipeline_fixture",
+        tracked_candidate_method_configs_bound,
+        f"methods={len(methods)}, tracked_non_oracle_methods={len(METHODS) - 1}",
     )
     add_check(
         checks,
@@ -921,6 +998,8 @@ def reset(reset_context):
         "synthetic_record_count": len(records),
         "synthetic_task_count": len(tasks),
         "synthetic_method_count": len(methods),
+        "prepared_task_configs_bound": prepared_task_configs_bound,
+        "tracked_candidate_method_configs_bound": tracked_candidate_method_configs_bound,
         "synthetic_confidence_gates_passed": rollout_summary.get("statistical_confidence", {}).get("all_primary_confidence_gates_passed") is True,
         "tampered_rollout_confidence_rejected": tampered_rollout_rejected,
         "tampered_release_hash_rejected": tampered_release_rejected,
@@ -934,6 +1013,8 @@ def reset(reset_context):
         f"{'PASS' if payload['passed'] else 'FAIL'}; "
         f"synthetic_ready={payload['synthetic_submission_ready']}; "
         f"records={payload['synthetic_record_count']}; "
+        f"prepared_configs={payload['prepared_task_configs_bound']}; "
+        f"candidate_configs={payload['tracked_candidate_method_configs_bound']}; "
         f"confidence_rejected={payload['tampered_rollout_confidence_rejected']}; "
         f"release_hash_rejected={payload['tampered_release_hash_rejected']}; "
         f"real_untouched={payload['real_manifest_untouched'] and payload['real_reports_untouched']}"

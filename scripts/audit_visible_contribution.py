@@ -1036,6 +1036,8 @@ def main() -> int:
         and int(evidence_pipeline_self_test.get("synthetic_record_count", 0) or 0) >= 1440
         and int(evidence_pipeline_self_test.get("synthetic_task_count", 0) or 0) >= 4
         and int(evidence_pipeline_self_test.get("synthetic_method_count", 0) or 0) >= 12
+        and evidence_pipeline_self_test.get("prepared_task_configs_bound") is True
+        and evidence_pipeline_self_test.get("tracked_candidate_method_configs_bound") is True
         and evidence_pipeline_self_test.get("synthetic_confidence_gates_passed") is True
         and evidence_pipeline_self_test.get("tampered_rollout_confidence_rejected") is True
         and evidence_pipeline_self_test.get("tampered_release_hash_rejected") is True
@@ -1043,15 +1045,23 @@ def main() -> int:
         and evidence_pipeline_self_test.get("real_reports_untouched") is True
         and evidence_pipeline_self_checks.get("synthetic_complete_package_reaches_final_external_ready") is True
         and evidence_pipeline_self_checks.get("synthetic_records_cover_tasks_methods_and_confidence") is True
+        and evidence_pipeline_self_checks.get("prepared_task_configs_bound_in_full_pipeline_fixture") is True
+        and evidence_pipeline_self_checks.get("tracked_candidate_method_configs_bound_in_full_pipeline_fixture") is True
         and evidence_pipeline_self_checks.get("synthetic_component_gates_pass") is True
         and evidence_pipeline_self_checks.get("tampered_rollout_confidence_summary_rejected") is True
         and evidence_pipeline_self_checks.get("tampered_release_artifact_hash_rejected") is True
         and evidence_pipeline_self_checks.get("real_repository_evidence_state_untouched") is True
+        and "prepared task configs and tracked candidate method configs" in texts["README"]
+        and "prepared task configs and tracked candidate method configs" in texts["final_audit"]
+        and "prepared task configs and tracked candidate method configs" in texts["readiness_audit"]
+        and "prepared task configs and tracked candidate method configs" in texts["readiness_decision"]
         and (ROOT / "scripts" / "self_test_external_evidence_pipeline.py").exists()
         and (RESULTS / "external_evidence_pipeline_self_test.md").exists(),
         (
             f"synthetic_ready={evidence_pipeline_self_test.get('synthetic_submission_ready')!r}, "
             f"records={evidence_pipeline_self_test.get('synthetic_record_count')!r}, "
+            f"prepared_configs={evidence_pipeline_self_test.get('prepared_task_configs_bound')!r}, "
+            f"candidate_configs={evidence_pipeline_self_test.get('tracked_candidate_method_configs_bound')!r}, "
             f"confidence_rejected={evidence_pipeline_self_test.get('tampered_rollout_confidence_rejected')!r}, "
             f"release_rejected={evidence_pipeline_self_test.get('tampered_release_hash_rejected')!r}, "
             f"real_untouched={evidence_pipeline_self_test.get('real_manifest_untouched')!r}/"
@@ -2198,6 +2208,7 @@ def main() -> int:
         "Not evidence: `true`.",
         "",
         "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the failure-memory adaptation audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the strict MP4 video evidence gate, the strict full-method coverage gate, the strict rollout sample-count gate, the strict paired-panel gate, the strict rollout uniqueness gate, confidence-gated external rollout statistics, the final rollout confidence summary gate, the strict task-config hash gate, the strict policy/config hash gate, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the External precollection freeze receipt, the External precollection freeze receipt self-test, the External postcollection evidence seal, the External postcollection evidence seal self-test, the External postcollection seal consistency gate, the External postcollection seal consistency self-test, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the strict fidelity acceptance provenance gate, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the External collection preflight self-test with tracked reference-route readiness after accepted fidelity, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, atomic official evidence promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, render resource sweep, ManiSkill render machine qualification packet, ManiSkill render machine qualification self-test, render failure remediation packet, ManiSkill pilot runtime liveness audit, reset-timeout triage sidecar, and backend reset substage markers, the external method implementation packet, External method config materialization, prepared task-config binding in the config evidence self-test, tracked candidate method-config binding in the adapter evidence self-test, adapter acceptance fixtures, the reference-adapter provenance catalog, the method manifest cutover checklist, the External adapter scaffold guard self-test, the strict reference-adapter rejection gate, the strict independent method provenance gate, the strict checkpoint/config artifact gate, the strict fairness-contract binding gate, the manifest assembly checklist, the External manifest builder self-test, the External rollout validator self-test, the External full-pipeline evidence self-test, the no-go operator packet, the External collection job packet, the External collection machine bootstrap, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "The External full-pipeline evidence self-test also documents prepared task-config and tracked candidate method-config binding inside the temporary fixture.",
         "",
         "## Checks",
         "",

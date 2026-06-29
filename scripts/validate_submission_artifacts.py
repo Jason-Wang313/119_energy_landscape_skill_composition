@@ -3798,6 +3798,10 @@ def main():
         fail("external evidence pipeline self-test has too few synthetic task families")
     if int(evidence_pipeline_self_test.get("synthetic_method_count", 0) or 0) < 12:
         fail("external evidence pipeline self-test has too few synthetic methods")
+    if evidence_pipeline_self_test.get("prepared_task_configs_bound") is not True:
+        fail("external evidence pipeline self-test must bind prepared task configs")
+    if evidence_pipeline_self_test.get("tracked_candidate_method_configs_bound") is not True:
+        fail("external evidence pipeline self-test must bind tracked candidate method configs")
     if evidence_pipeline_self_test.get("synthetic_confidence_gates_passed") is not True:
         fail("external evidence pipeline self-test must pass synthetic confidence gates")
     if evidence_pipeline_self_test.get("tampered_rollout_confidence_rejected") is not True:
@@ -3814,6 +3818,8 @@ def main():
     for required_check in (
         "synthetic_complete_package_reaches_final_external_ready",
         "synthetic_records_cover_tasks_methods_and_confidence",
+        "prepared_task_configs_bound_in_full_pipeline_fixture",
+        "tracked_candidate_method_configs_bound_in_full_pipeline_fixture",
         "synthetic_component_gates_pass",
         "tampered_rollout_confidence_summary_rejected",
         "tampered_release_artifact_hash_rejected",

@@ -197,7 +197,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External pairing integrity self-test: `results/external_pairing_integrity_self_test.md`
 - External rollout validator self-test: `results/external_rollout_validator_self_test.md` proves the strict raw-log metric, confidence, paired-panel, task-config, method-hash, and MP4 evidence gates on temporary fixtures only; it is not evidence.
 - External collection preflight self-test report: `results/external_collection_preflight_self_test.md`
-- External full-pipeline evidence self-test: `results/external_evidence_pipeline_self_test.md` checks a temporary synthetic package only, including tampered rollout confidence-summary and release-hash rejection; it is not evidence.
+- External full-pipeline evidence self-test: `results/external_evidence_pipeline_self_test.md` checks a temporary complete package only, binds the prepared task configs and tracked candidate method configs into that package, and verifies tampered rollout confidence-summary and release-hash rejection; it is not evidence.
 - GitHub CI directly runs the backend, fidelity, precollection freeze receipt, postcollection evidence seal, postcollection seal consistency, config, adapter, release-package, pairing-integrity, rollout-validator, collection-preflight, runner-backend, and full-pipeline evidence self-tests.
 - External evidence audit: `results/external_evidence_audit.md`
 - External rollout metrics audit: `results/external_rollout_metrics.md`

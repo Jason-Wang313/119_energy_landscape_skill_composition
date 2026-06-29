@@ -217,7 +217,7 @@
       "passed": true
     },
     {
-      "detail": "synthetic_ready=True, records=1440, confidence_rejected=True, release_rejected=True, real_untouched=True/True",
+      "detail": "synthetic_ready=True, records=1440, prepared_configs=True, candidate_configs=True, confidence_rejected=True, release_rejected=True, real_untouched=True/True",
       "name": "external_evidence_pipeline_self_test_visible",
       "passed": true
     },
