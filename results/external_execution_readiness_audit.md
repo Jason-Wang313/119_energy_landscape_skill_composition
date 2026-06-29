@@ -85,7 +85,7 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_runner_harness_fail_closed`: actual_execution_ready=False
 - `pass` `external_runner_backend_probe_ready`: passed
 - `pass` `external_runner_backend_probe_not_evidence`: not_external_evidence=True, records_written=2, schema_errors=[]
-- `pass` `external_runner_backend_probe_exercises_actual_runner_path`: checks={'runner_actual_path_exits_zero': True, 'temporary_records_written': True, 'temporary_records_schema_valid': True, 'temporary_videos_written': True, 'real_manifest_untouched': True}
+- `pass` `external_runner_backend_probe_exercises_actual_runner_path`: checks={'runner_actual_path_exits_zero': True, 'temporary_records_written': True, 'temporary_records_schema_valid': True, 'temporary_videos_written': True, 'diagnostic_fallback_video_rejected_before_jsonl_write': True, 'real_manifest_untouched': True}
 - `pass` `external_pilot_smoke_audit_ready`: passed
 - `pass` `external_pilot_smoke_not_evidence`: not_external_evidence=True, pilot_smoke_ready=False, strict_evidence_ready=False
 - `pass` `external_pilot_smoke_packet_ready`: passed

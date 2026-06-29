@@ -90,9 +90,28 @@ def main() -> int:
         "expected_video_path",
         "terminal_sample_set_hash",
         "policy_or_config_hash",
+        "validate_official_video",
+        "MIN_OFFICIAL_VIDEO_BYTES",
+        ".diagnostic.json",
+        "ftyp",
     ]
     missing_runner_terms = [term for term in required_runner_terms if term not in runner]
     add_check(checks, "runner_references_required_contracts", not missing_runner_terms, f"missing_terms={missing_runner_terms}")
+    official_video_guard_terms = [
+        "validate_official_video",
+        "expected_target",
+        "official video directory",
+        "diagnostic fallback video sidecar",
+        "MIN_OFFICIAL_VIDEO_BYTES",
+        "ftyp",
+    ]
+    missing_video_guard_terms = [term for term in official_video_guard_terms if term not in runner]
+    add_check(
+        checks,
+        "runner_rejects_diagnostic_or_non_mp4_videos_before_jsonl_write",
+        not missing_video_guard_terms,
+        f"missing_terms={missing_video_guard_terms}",
+    )
     add_check(checks, "runner_does_not_write_manifest", "manifest.json" not in runner.lower(), "runner writes JSONL/video only; manifest remains separate")
 
     template_texts = [read(path) for path in sorted((RUNNER / "backend_templates").glob("*_backend.py"))]
@@ -140,7 +159,7 @@ def main() -> int:
             "non-template backend module",
             "strict real configs in external_validation/configs",
             "intentional alias unsealing at execution time",
-            "real video exports and JSONL logs",
+            "official MP4-like videos without diagnostic sidecars plus real JSONL logs",
             "manifest-declared hashes and strict evidence audits",
         ],
         "checks": checks,

@@ -285,6 +285,8 @@ Actual collection command after the strict gate passes:
 python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id <specific_run_id> --unsealed-alias-map
 ```
 
+Official video write guard: the runner refuses diagnostic fallback sidecars, non-MP4-like files, undersized files, out-of-dir paths, or unexpected returned video paths before any official JSONL row is written.
+
 Post-collection strict gates:
 
 - `python scripts\build_external_manifest.py --write --check-video-paths`

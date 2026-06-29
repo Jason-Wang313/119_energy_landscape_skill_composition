@@ -31,10 +31,17 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
-def backend_module_text() -> str:
-    return r'''
+def backend_module_text(*, diagnostic_video_fallback: bool = False) -> str:
+    sidecar_block = ""
+    if diagnostic_video_fallback:
+        sidecar_block = '''
+        sidecar = target_path.with_suffix(target_path.suffix + ".diagnostic.json")
+        sidecar.write_text('{"diagnostic_video_fallback": true, "not_external_evidence": true}\\n', encoding="utf-8")
+'''
+    return (r'''
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
@@ -110,7 +117,9 @@ class Backend(ExternalCollectionBackend):
 
     def record_video(self, target_path: Path) -> str:
         target_path.parent.mkdir(parents=True, exist_ok=True)
-        target_path.write_bytes((b"synthetic runner backend self-test video\n") * 32)
+        header = b"\x00\x00\x00\x18ftypisom\x00\x00\x02\x00isomiso2mp41"
+        target_path.write_bytes(header + (b"synthetic runner backend self-test video\n" * 32))
+__SIDECAR_BLOCK__
         self.last_video_path = target_path
         return str(target_path)
 
@@ -120,7 +129,7 @@ class Backend(ExternalCollectionBackend):
 
 def create_backend() -> Backend:
     return Backend()
-'''.lstrip()
+'''.replace("__SIDECAR_BLOCK__", sidecar_block).lstrip())
 
 
 def make_config() -> dict[str, Any]:
@@ -254,6 +263,8 @@ def main() -> int:
     records_written = 0
     runner_returncode = 1
     runner_output = ""
+    diagnostic_runner_returncode = 0
+    diagnostic_runner_output = ""
 
     with tempfile.TemporaryDirectory(prefix="paper119_runner_backend_selftest_") as tmp_name:
         tmp = Path(tmp_name)
@@ -303,6 +314,58 @@ def main() -> int:
         checks.append({"name": "temporary_records_schema_valid", "passed": not schema_errors, "detail": f"errors={schema_errors[:3]}"})
         checks.append({"name": "temporary_videos_written", "passed": len(list(video_dir.glob(f'{TASK}/*.mp4'))) == 2, "detail": f"videos={len(list(video_dir.glob(f'{TASK}/*.mp4')))}"})
 
+    with tempfile.TemporaryDirectory(prefix="paper119_runner_diagnostic_video_selftest_") as tmp_name:
+        tmp = Path(tmp_name)
+        backend_path = tmp / "diagnostic_backend.py"
+        operator_sheet = tmp / "operator_sheet.csv"
+        alias_map = tmp / "method_alias_map.json"
+        config_dir = tmp / "configs"
+        log_dir = tmp / "logs"
+        video_dir = tmp / "videos"
+        backend_path.write_text(backend_module_text(diagnostic_video_fallback=True), encoding="utf-8")
+        write_operator_sheet(operator_sheet)
+        write_json(alias_map, {"aliases": [{"alias": "M001", "method": METHOD}]})
+        write_json(config_dir / f"{TASK}.json", make_config())
+
+        command = [
+            sys.executable,
+            str(RUNNER),
+            "--backend-module",
+            str(backend_path),
+            "--operator-sheet",
+            str(operator_sheet),
+            "--alias-map",
+            str(alias_map),
+            "--task-config-dir",
+            str(config_dir),
+            "--output-log-dir",
+            str(log_dir),
+            "--video-dir",
+            str(video_dir),
+            "--run-id",
+            RUN_ID,
+            "--unsealed-alias-map",
+            "--max-rows",
+            "1",
+            "--force",
+        ]
+        proc = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, encoding="utf-8", errors="replace")
+        diagnostic_runner_returncode = proc.returncode
+        diagnostic_runner_output = proc.stdout + proc.stderr
+        log_path = log_dir / f"{TASK}.jsonl"
+        diagnostic_records = 0
+        if log_path.exists():
+            diagnostic_records = sum(1 for line in log_path.read_text(encoding="utf-8").splitlines() if line.strip())
+        checks.append(
+            {
+                "name": "diagnostic_fallback_video_rejected_before_jsonl_write",
+                "passed": diagnostic_runner_returncode != 0
+                and "diagnostic fallback video sidecar" in diagnostic_runner_output
+                and diagnostic_records == 0,
+                "detail": f"returncode={diagnostic_runner_returncode}, records={diagnostic_records}, output={diagnostic_runner_output[:240]}",
+            }
+        )
+
     manifest_untouched = (
         (manifest_before is None and not real_manifest.exists())
         or (manifest_before is not None and real_manifest.exists() and real_manifest.read_bytes() == manifest_before)
@@ -315,6 +378,7 @@ def main() -> int:
         "passed": passed,
         "not_external_evidence": True,
         "runner_returncode": runner_returncode,
+        "diagnostic_runner_returncode": diagnostic_runner_returncode,
         "records_written": records_written,
         "schema_errors": schema_errors,
         "checks": checks,

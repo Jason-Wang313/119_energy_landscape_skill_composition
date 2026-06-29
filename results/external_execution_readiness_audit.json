@@ -246,7 +246,7 @@
       "passed": true
     },
     {
-      "detail": "checks={'runner_actual_path_exits_zero': True, 'temporary_records_written': True, 'temporary_records_schema_valid': True, 'temporary_videos_written': True, 'real_manifest_untouched': True}",
+      "detail": "checks={'runner_actual_path_exits_zero': True, 'temporary_records_written': True, 'temporary_records_schema_valid': True, 'temporary_videos_written': True, 'diagnostic_fallback_video_rejected_before_jsonl_write': True, 'real_manifest_untouched': True}",
       "name": "external_runner_backend_probe_exercises_actual_runner_path",
       "passed": true
     },

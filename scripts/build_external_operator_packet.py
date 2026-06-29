@@ -908,6 +908,8 @@ def write_md(payload: dict[str, Any]) -> None:
             payload["strict_collection_command"],
             "```",
             "",
+            "Official video write guard: the runner refuses diagnostic fallback sidecars, non-MP4-like files, undersized files, out-of-dir paths, or unexpected returned video paths before any official JSONL row is written.",
+            "",
             "Post-collection strict gates:",
             "",
         ]

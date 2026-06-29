@@ -111,6 +111,11 @@
       "passed": true
     },
     {
+      "detail": "runner refuses diagnostic/non-MP4/undersized/out-of-dir videos before official JSONL writes",
+      "name": "official_video_write_guard_visible",
+      "passed": true
+    },
+    {
       "detail": "pilot_smoke_packet_ready=True, strict_evidence_ready=False",
       "name": "pilot_smoke_packet_visible",
       "passed": true

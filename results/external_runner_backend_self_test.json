@@ -21,11 +21,17 @@
       "passed": true
     },
     {
+      "detail": "returncode=1, records=0, output=backend produced diagnostic fallback video sidecar, which cannot be official evidence: C:\\Users\\wangz\\AppData\\Local\\Temp\\paper119_runner_diagnostic_video_selftest_lgpbkw_w\\videos\\peg_place_regrasp\\000_barrier_certified_energy_composer_v5.mp",
+      "name": "diagnostic_fallback_video_rejected_before_jsonl_write",
+      "passed": true
+    },
+    {
       "detail": "external_validation/manifest.json unchanged or absent",
       "name": "real_manifest_untouched",
       "passed": true
     }
   ],
+  "diagnostic_runner_returncode": 1,
   "not_external_evidence": true,
   "passed": true,
   "records_written": 2,

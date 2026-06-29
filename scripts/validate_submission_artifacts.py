@@ -1019,10 +1019,20 @@ def main():
         "backend_contract_fail_closed",
         "runner_dry_run_passes_without_writes",
         "runner_rejects_template_backend_for_actual_collection",
+        "runner_rejects_diagnostic_or_non_mp4_videos_before_jsonl_write",
         "no_real_manifest_written",
     ):
         if runner_checks.get(required_check) is not True:
             fail(f"external runner harness audit missing passing check: {required_check}")
+    runner_text = (EXTERNAL / "runner" / "real_collection_runner.py").read_text(encoding="utf-8")
+    for required_term in (
+        "validate_official_video",
+        "MIN_OFFICIAL_VIDEO_BYTES",
+        "diagnostic fallback video sidecar",
+        "ftyp",
+    ):
+        if required_term not in runner_text:
+            fail(f"external runner missing official video write guard term: {required_term}")
     for path in (
         EXTERNAL / "runner" / "README.md",
         EXTERNAL / "runner" / "backend_contract.py",
@@ -2278,6 +2288,7 @@ def main():
         "temporary_records_written",
         "temporary_records_schema_valid",
         "temporary_videos_written",
+        "diagnostic_fallback_video_rejected_before_jsonl_write",
         "real_manifest_untouched",
     ):
         if runner_backend_checks.get(required_check) is not True:

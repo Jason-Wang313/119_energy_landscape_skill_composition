@@ -55,6 +55,7 @@ Actual collection requires all of the following:
 - intentional alias unsealing with `--unsealed-alias-map`;
 - empty output JSONL logs unless `--force` is explicitly used;
 - backend video export to `external_validation/videos`;
+- the official video write guard rejecting returned paths that are outside the requested target, non-`.mp4`, undersized, non-MP4-like, or accompanied by a diagnostic fallback sidecar before any JSONL row is written;
 - a passing strict collection-readiness audit before the run starts;
 - a later manifest build plus strict `validate_external_rollouts.py --strict --check-video-paths` and `audit_external_evidence.py --strict`.
 

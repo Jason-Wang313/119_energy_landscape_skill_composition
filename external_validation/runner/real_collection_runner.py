@@ -29,6 +29,7 @@ DEFAULT_CONFIG_DIR = EXTERNAL / "configs"
 DEFAULT_TEMPLATE_CONFIG_DIR = EXTERNAL / "config_templates"
 DEFAULT_OUTPUT_LOG_DIR = EXTERNAL / "logs"
 DEFAULT_VIDEO_DIR = EXTERNAL / "videos"
+MIN_OFFICIAL_VIDEO_BYTES = 512
 
 REQUIRED_RECORD_FIELDS = (
     "run_id",
@@ -178,6 +179,41 @@ def relative_video_path(path_text: str) -> str:
     return path.as_posix()
 
 
+def is_under(path: Path, parent: Path) -> bool:
+    try:
+        path.resolve().relative_to(parent.resolve())
+        return True
+    except ValueError:
+        return False
+
+
+def resolve_returned_path(path_text: str) -> Path:
+    path = Path(path_text)
+    return path if path.is_absolute() else ROOT / path
+
+
+def validate_official_video(video_path: str, *, expected_target: Path, video_dir: Path) -> None:
+    path = resolve_returned_path(video_path)
+    if path.resolve() != expected_target.resolve():
+        fail(f"backend returned unexpected video path: got {path}, expected {expected_target}")
+    if not is_under(path, video_dir):
+        fail(f"backend video path is outside the official video directory: {path}")
+    if path.suffix.lower() != ".mp4":
+        fail(f"backend video path must end in .mp4: {path}")
+    if not path.exists() or not path.is_file():
+        fail(f"backend did not write expected video file: {path}")
+    diagnostic_sidecar = Path(str(path) + ".diagnostic.json")
+    if diagnostic_sidecar.exists():
+        fail(f"backend produced diagnostic fallback video sidecar, which cannot be official evidence: {diagnostic_sidecar}")
+    size = path.stat().st_size
+    if size < MIN_OFFICIAL_VIDEO_BYTES:
+        fail(f"backend video is too small for official evidence: {size} bytes at {path}")
+    with path.open("rb") as handle:
+        header = handle.read(16)
+    if len(header) < 12 or header[4:8] != b"ftyp":
+        fail(f"backend video is not MP4-like evidence with an ftyp box: {path}")
+
+
 def build_record(
     *,
     row: dict[str, str],
@@ -323,6 +359,7 @@ def run_collection(args: argparse.Namespace) -> int:
         target_video = args.video_dir / task_family / Path(row["expected_video_path"]).name
         target_video.parent.mkdir(parents=True, exist_ok=True)
         video_path = backend.record_video(target_video)
+        validate_official_video(video_path, expected_target=target_video, video_dir=args.video_dir)
         policy_hash = str(proposal.get("policy_or_config_hash") or backend.policy_or_config_hash(method_name))
         record = build_record(
             row=row,

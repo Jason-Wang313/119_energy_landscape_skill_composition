@@ -251,7 +251,10 @@ def main() -> int:
             "evidence": ["results/submission_readiness_gap_audit.json", "docs/submission_readiness_audit_v5.md", "results/external_acquisition_packet.md"],
             "local_fact": (
                 f"Readiness remains {gap['satisfied_requirements']}/"
-                f"{gap['satisfied_requirements'] + gap['missing_requirements']} with {gap['blocking_missing_requirements']} blocking external gaps."
+                f"{gap['satisfied_requirements'] + gap['missing_requirements']} with {gap['blocking_missing_requirements']} blocking external gaps. "
+                "The official video write guard rejects diagnostic fallback, non-MP4-like, undersized, out-of-dir, or unexpected "
+                "videos before the actual collection runner writes official JSONL rows, but this remains tooling hardening rather "
+                "than external validation."
             ),
             "allowed_claim": "The local package is stronger and more reviewer-ready, but not independently complete.",
             "remaining_gate": "Close all four blocking external requirements before claiming independent main-conference readiness.",

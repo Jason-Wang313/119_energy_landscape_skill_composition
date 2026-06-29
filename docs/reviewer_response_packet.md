@@ -209,7 +209,7 @@ Evidence:
 
 Response: Agree. The correct current decision is STRONG_REVISE; the packet exists to make the remaining proof layer concrete.
 
-Current local fact: Readiness remains 17/21 with 4 blocking external gaps.
+Current local fact: Readiness remains 17/21 with 4 blocking external gaps. The official video write guard rejects diagnostic fallback, non-MP4-like, undersized, out-of-dir, or unexpected videos before the actual collection runner writes official JSONL rows, but this remains tooling hardening rather than external validation.
 
 Allowed claim: The local package is stronger and more reviewer-ready, but not independently complete.
 
