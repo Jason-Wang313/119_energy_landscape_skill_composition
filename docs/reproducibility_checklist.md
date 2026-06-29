@@ -63,6 +63,7 @@
 - External config evidence self-test: `scripts/self_test_external_config_evidence.py`
 - External adapter evidence self-test: `scripts/self_test_external_adapter_evidence.py`
 - External fidelity acceptance self-test: `scripts/self_test_external_fidelity_acceptance.py`
+- External postcollection seal consistency self-test: `scripts/self_test_external_postcollection_seal_consistency.py`
 - External release package self-test: `scripts/self_test_external_release_package.py`
 - External pairing integrity self-test: `scripts/self_test_external_pairing_integrity.py`
 - External collection preflight self-test: `scripts/self_test_external_collection_preflight.py`

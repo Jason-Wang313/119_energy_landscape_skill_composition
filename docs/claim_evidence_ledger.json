@@ -231,6 +231,11 @@
       "evidence": ["scripts/audit_external_postcollection_seal_consistency.py", "results/external_postcollection_seal_consistency_audit.json", "results/external_postcollection_seal_consistency_audit.md", "external_validation/postcollection_evidence_seal.json", "external_validation/postcollection_evidence_seal.csv"]
     },
     {
+      "name": "external_postcollection_seal_consistency_self_test_claim",
+      "claim": "The repository self-tests the External postcollection seal consistency gate on a temporary complete sealed fixture while proving hash drift and unsealed official artifacts fail without overwriting the real consistency report.",
+      "evidence": ["scripts/self_test_external_postcollection_seal_consistency.py", "results/external_postcollection_seal_consistency_self_test.json", "results/external_postcollection_seal_consistency_self_test.md", "scripts/audit_external_postcollection_seal_consistency.py"]
+    },
+    {
       "name": "external_operator_packet_claim",
       "claim": "The repository provides a generated non-evidence operator packet with a go/no-go state, backend qualification gate, generic pre-collection blockers, a tracked ManiSkill reference route that reaches the single fidelity-acceptance blocker, a fidelity-metadata probe summary, exact collection commands, and post-collection strict gates for an independent validation operator.",
       "evidence": ["scripts/build_external_operator_packet.py", "results/external_operator_packet.json", "results/external_operator_packet.md", "results/external_backend_contract_audit.json", "results/external_collection_readiness_audit.json", "results/maniskill_reference_collection_preflight_audit.json", "results/maniskill_fidelity_metadata_probe.json", "results/external_acquisition_packet.json"]

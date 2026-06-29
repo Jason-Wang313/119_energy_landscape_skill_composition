@@ -145,6 +145,7 @@ def main():
         "scripts\\build_external_precollection_freeze_receipt.py",
         "scripts\\build_external_postcollection_evidence_seal.py",
         "scripts\\audit_external_postcollection_seal_consistency.py",
+        "scripts\\self_test_external_postcollection_seal_consistency.py",
         "scripts\\build_external_baseline_contract.py",
         "scripts\\build_external_adapter_scaffolds.py",
         "scripts\\build_external_reference_adapters.py",
@@ -238,6 +239,7 @@ def main():
         "python scripts/build_external_precollection_freeze_receipt.py",
         "python scripts/build_external_postcollection_evidence_seal.py",
         "python scripts/audit_external_postcollection_seal_consistency.py",
+        "python scripts/self_test_external_postcollection_seal_consistency.py",
         "python scripts/build_external_analysis_plan.py",
         "python scripts/probe_external_platform.py",
         "python scripts/probe_maniskill_task_bindings.py",
@@ -2195,6 +2197,45 @@ def main():
     ):
         if consistency_checks.get(required_check) is not True:
             fail(f"external postcollection seal consistency audit missing passing check: {required_check}")
+
+    postcollection_consistency_self_test_path = RESULTS / "external_postcollection_seal_consistency_self_test.json"
+    postcollection_consistency_self_test_md_path = RESULTS / "external_postcollection_seal_consistency_self_test.md"
+    for path in (
+        ROOT / "scripts" / "self_test_external_postcollection_seal_consistency.py",
+        postcollection_consistency_self_test_path,
+        postcollection_consistency_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external postcollection seal consistency self-test artifact: {path}")
+    postcollection_consistency_self_test = json.loads(postcollection_consistency_self_test_path.read_text(encoding="utf-8"))
+    if postcollection_consistency_self_test.get("version") != "external_postcollection_seal_consistency_self_test_v1":
+        fail("external postcollection seal consistency self-test version mismatch")
+    if postcollection_consistency_self_test.get("passed") is not True:
+        fail("external postcollection seal consistency self-test did not pass")
+    if postcollection_consistency_self_test.get("not_external_evidence") is not True:
+        fail("external postcollection seal consistency self-test must declare that it is not evidence")
+    if postcollection_consistency_self_test.get("synthetic_consistency_ready") is not True:
+        fail("external postcollection seal consistency self-test should make a temporary sealed fixture ready")
+    if postcollection_consistency_self_test.get("drift_rejected") is not True:
+        fail("external postcollection seal consistency self-test should reject hash drift")
+    if postcollection_consistency_self_test.get("unsealed_official_artifact_rejected") is not True:
+        fail("external postcollection seal consistency self-test should reject unsealed official artifacts")
+    if postcollection_consistency_self_test.get("real_report_untouched") is not True:
+        fail("external postcollection seal consistency self-test should not overwrite the real consistency report")
+    postcollection_self_checks = {
+        check.get("name"): check.get("passed") for check in postcollection_consistency_self_test.get("checks", [])
+    }
+    for required_check in (
+        "synthetic_ready_seal_consistency_passes",
+        "synthetic_ready_checks_cover_hashes_counts_and_order",
+        "hash_drift_rejected",
+        "hash_drift_fails_recompute_and_promotion_checks",
+        "unsealed_official_artifact_rejected",
+        "unsealed_artifact_fails_official_artifact_check",
+        "real_consistency_report_not_overwritten",
+    ):
+        if postcollection_self_checks.get(required_check) is not True:
+            fail(f"external postcollection seal consistency self-test missing passing check: {required_check}")
 
     preflight_path = RESULTS / "external_evidence_preflight.json"
     if not preflight_path.exists():

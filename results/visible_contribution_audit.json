@@ -221,6 +221,11 @@
       "passed": true
     },
     {
+      "detail": "synthetic_ready=True, drift_rejected=True, extra_rejected=True",
+      "name": "postcollection_seal_consistency_self_test_visible",
+      "passed": true
+    },
+    {
       "detail": "method_implementation_packet_ready=True, strict_adapter_evidence_ready=False",
       "name": "method_implementation_packet_visible",
       "passed": true

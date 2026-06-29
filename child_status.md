@@ -22,6 +22,8 @@ external postcollection evidence seal: `external_validation/postcollection_evide
 
 external postcollection seal consistency gate: `results/external_postcollection_seal_consistency_audit.md` now recomputes sealed raw-log, video, config, precollection, and metadata hashes before manifest promotion while remaining non-evidence.
 
+external postcollection seal consistency self-test: `results/external_postcollection_seal_consistency_self_test.md` now proves the gate can pass on a temporary complete sealed fixture while hash drift and unsealed official artifacts fail without overwriting the real report.
+
 adapter acceptance fixtures: `external_validation/adapter_acceptance_fixtures.md` now provides non-evidence synthetic API/log-field smoke fixtures for all non-oracle method implementations before strict rollout collection.
 method manifest cutover checklist: `external_validation/method_manifest_cutover_checklist.md` maps every non-oracle method to required `manifest.methods[]` fields, checkpoint/config hashes, implementation provenance, fairness-contract bindings, and JSONL `policy_or_config_hash` matching before strict adapter evidence can pass.
 

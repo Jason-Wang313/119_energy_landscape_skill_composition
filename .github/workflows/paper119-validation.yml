@@ -178,6 +178,9 @@ jobs:
       - name: Audit external postcollection seal consistency
         run: python scripts/audit_external_postcollection_seal_consistency.py
 
+      - name: Self-test external postcollection seal consistency
+        run: python scripts/self_test_external_postcollection_seal_consistency.py
+
       - name: Build external acquisition packet
         run: python scripts/build_external_acquisition_packet.py
 

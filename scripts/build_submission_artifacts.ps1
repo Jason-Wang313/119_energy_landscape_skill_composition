@@ -157,6 +157,7 @@ try {
         Invoke-Native python scripts\build_external_precollection_freeze_receipt.py
         Invoke-Native python scripts\build_external_postcollection_evidence_seal.py
         Invoke-Native python scripts\audit_external_postcollection_seal_consistency.py
+        Invoke-Native python scripts\self_test_external_postcollection_seal_consistency.py
         Invoke-Native python scripts\build_external_acquisition_packet.py
         Invoke-Native python scripts\build_external_operator_packet.py
         Invoke-Native python scripts\build_external_operator_handoff_bundle.py
