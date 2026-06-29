@@ -1484,14 +1484,14 @@
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.json",
-      "sha256": "4CED9CAB800420EA9BF96BC50DFA7F54B4FF7C242919A1DF9A2C141567431418"
+      "sha256": "C5AA02D9E40DB6325AA9A33D7D669E560F8CA06B6AE164220E034FE8D5C8B0AB"
     },
     {
       "bytes": 28613,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.md",
-      "sha256": "A240EBAE3E6E5FEA3C4E0DC9FB6B62E91BD85FB2E4913B1BDEF22C93AA23D76F"
+      "sha256": "9EE508D439A099FD62B6FB91BD58ED20A67658DF693246E984C4A06333742A46"
     },
     {
       "bytes": 7157,
@@ -1564,18 +1564,18 @@
       "sha256": "13D39DA4B6B6A25FD652D107FF06B3C7E1B99322E6AB50FB5E81E67990456E4C"
     },
     {
-      "bytes": 49512,
+      "bytes": 48004,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.json",
-      "sha256": "36D1BCD898DC4648BF831DA7E1E6710142E439AE7989EAD68C80BCC7E1ACC9CD"
+      "sha256": "4B0A980777BD19763D57E52445E9903BA22DF315B91299CEFA2F776204ADABFC"
     },
     {
-      "bytes": 22558,
+      "bytes": 22582,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.md",
-      "sha256": "4234FB8D87B247E5F6B29569DB2B5C4D5FC27ED7D0ED2BEFCF83B9375929A4D0"
+      "sha256": "5125AB57A2042AB0C193D4DEC2D92D42E5092AEC6F815F926AE48AB6A0C3818C"
     },
     {
       "bytes": 525,
@@ -1732,18 +1732,18 @@
       "sha256": "1920465D2991DE966CBEFF7C2C4C708A197B801F4FDB08435E18D4EC009D2B7A"
     },
     {
-      "bytes": 9375,
+      "bytes": 7920,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/fidelity_acceptance_materialization_plan.json",
-      "sha256": "BA629CBE7F7DF843BB7590ECECF983BD135DA8D07838E1634676085F888CAE84"
+      "sha256": "22E5559D08693D2BF4DD64FE63850654770F0C14FDAB7A122C4E4238F9808784"
     },
     {
-      "bytes": 5749,
+      "bytes": 5882,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/fidelity_acceptance_materialization_plan.md",
-      "sha256": "E765FD58E426D4320DE43D338A814849D40664EC49C345251529103B1BED3151"
+      "sha256": "7D734E98E6C363ECCA905687DB745B7CA156E89AB2A2D32B75555214E61A5748"
     },
     {
       "bytes": 8182,
@@ -2026,11 +2026,11 @@
       "sha256": "C5C62B21A78CDA3D817572C70E0277312404795101EC32BA1166375C31C69581"
     },
     {
-      "bytes": 50229,
+      "bytes": 50253,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_packet.py",
-      "sha256": "C104A44BFE2114B3F8F6438F4FADFA3E86FAE57B15A32E1CACA328F91FE2AF1A"
+      "sha256": "F7345BF6B4416BE27FA543BA40004D40F722B275EA5D3F394B65A6F016857664"
     },
     {
       "bytes": 11266,
@@ -2075,11 +2075,11 @@
       "sha256": "EA207DCFDCCC9593CBFEC993C22D3EDA8F493124D1EBEB6A240D793C4AC80A25"
     },
     {
-      "bytes": 22132,
+      "bytes": 22267,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/materialize_fidelity_acceptance.py",
-      "sha256": "CBD19D0D5FC6FF51BC20BEAC69E35423B3E1A06EE09F1037B77890CF032F80B0"
+      "sha256": "F3EE3CA9F6B78C880DF111DBEEFA114BC0857E23753EFDE53C2B419003848CCB"
     },
     {
       "bytes": 14122,

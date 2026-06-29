@@ -73,9 +73,9 @@ The materializer is the guarded promotion path from the draft to `external_valid
 - Strict fidelity evidence ready: `false`
 - Missing operator text fields: `12`
 - Missing confirmation flags: `5`
-- Current checkout commit: `c08399bf94f01560ddc3daa0ee37bb1cc0fe22db`
-- Current skill-library hash: `62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1`
-- Current checkout clean: `false`
+- Plan-generation checkout commit: `d7a4310a3a4ea9fd70a4b0b9912a9d141ddf2014`
+- Plan-generation skill-library hash: `62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1`
+- Plan-generation checkout clean: `false`
 
 Dry-run plan command:
 
