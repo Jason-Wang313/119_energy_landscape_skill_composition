@@ -12,7 +12,7 @@ This audit checks the fail-closed runner used to collect future external JSONL l
 - `non-template backend module`
 - `strict real configs in external_validation/configs`
 - `intentional alias unsealing at execution time`
-- `official MP4-like videos without diagnostic sidecars plus schema-valid real JSONL logs`
+- `official MP4-like videos without diagnostic sidecars plus schema-valid real JSONL logs promoted only after batch success`
 - `manifest-declared hashes and strict evidence audits`
 
 ## Checks
@@ -24,6 +24,7 @@ This audit checks the fail-closed runner used to collect future external JSONL l
 - `pass` `runner_references_required_contracts`: missing_terms=[]
 - `pass` `runner_rejects_diagnostic_or_non_mp4_videos_before_jsonl_write`: missing_terms=[]
 - `pass` `runner_rejects_schema_invalid_records_before_jsonl_write`: missing_terms=[]
+- `pass` `runner_promotes_jsonl_only_after_batch_success`: missing_terms=[]
 - `pass` `runner_does_not_write_manifest`: runner writes JSONL/video only; manifest remains separate
 - `pass` `backend_templates_count`: templates=4
 - `pass` `backend_templates_are_template_only`: all route templates are fail-closed

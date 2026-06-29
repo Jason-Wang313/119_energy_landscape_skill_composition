@@ -121,6 +121,11 @@
       "passed": true
     },
     {
+      "detail": "runner preserves official JSONL logs when a selected batch fails before promotion",
+      "name": "atomic_official_jsonl_promotion_visible",
+      "passed": true
+    },
+    {
       "detail": "pilot_smoke_packet_ready=True, strict_evidence_ready=False",
       "name": "pilot_smoke_packet_visible",
       "passed": true

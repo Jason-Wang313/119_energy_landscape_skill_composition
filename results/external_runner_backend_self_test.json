@@ -21,13 +21,18 @@
       "passed": true
     },
     {
-      "detail": "returncode=1, records=0, output=backend produced diagnostic fallback video sidecar, which cannot be official evidence: C:\\Users\\wangz\\AppData\\Local\\Temp\\paper119_runner_diagnostic_video_selftest_40wem3yt\\videos\\peg_place_regrasp\\000_barrier_certified_energy_composer_v5.mp",
+      "detail": "returncode=1, records=0, output=backend produced diagnostic fallback video sidecar, which cannot be official evidence: C:\\Users\\wangz\\AppData\\Local\\Temp\\paper119_runner_diagnostic_video_selftest_c0efsub5\\videos\\peg_place_regrasp\\000_barrier_certified_energy_composer_v5.mp",
       "name": "diagnostic_fallback_video_rejected_before_jsonl_write",
       "passed": true
     },
     {
       "detail": "returncode=1, records=0, output=runner refused schema-invalid official JSONL record before write: peg_place_regrasp:0:barrier_certified_energy_composer_v5: decision='bad_schema_decision' not in ['accept', 'repair', 'probe', 'abstain', 'transition']\n",
       "name": "schema_invalid_record_rejected_before_jsonl_write",
+      "passed": true
+    },
+    {
+      "detail": "returncode=1, log_preserved=True, output=Traceback (most recent call last):\n  File \"C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\runner\\real_collection_runner.py\", line 503, in <module>\n    raise SystemExit(main())\n ",
+      "name": "partial_batch_failure_preserves_official_jsonl",
       "passed": true
     },
     {
@@ -39,6 +44,7 @@
   "diagnostic_runner_returncode": 1,
   "invalid_schema_runner_returncode": 1,
   "not_external_evidence": true,
+  "partial_failure_runner_returncode": 1,
   "passed": true,
   "records_written": 2,
   "runner_returncode": 0,

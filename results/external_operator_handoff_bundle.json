@@ -171,18 +171,18 @@
   "included_file_count": 278,
   "included_files": [
     {
-      "bytes": 21000,
+      "bytes": 21094,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "2F1F270796D44F33BF466980F4F8602935FC880C366DCF2F98280BB47F6A5ED1"
+      "sha256": "0346BD16890909220BF10B026B7C603058D3B353B7E1E908BD8A577CEE463BDD"
     },
     {
-      "bytes": 11888,
+      "bytes": 11954,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/haonan_yilun_outreach_package.md",
-      "sha256": "E630D5E6EF68345740B964BC2950A2809178886B0AFF9145326521CD6C05B6B6"
+      "sha256": "47934137579BA98E4B783C0E374F327080331F4CE21F075B5265285207F9A8D4"
     },
     {
       "bytes": 21628,
@@ -199,11 +199,11 @@
       "sha256": "FFC41551F2AD82490EC379631C2FC2CCB64BDAFA2DF84F96E863A727A9CEC5D1"
     },
     {
-      "bytes": 11747,
+      "bytes": 11917,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "D0694877BF8F2FBDD05DC69B260C0488047A0C6D46B4CA11787A58BB42EA7AE0"
+      "sha256": "85484B5159C501AC25495CA81EC634037A5D8282E594D65E1CAA7B8287F03CEB"
     },
     {
       "bytes": 32120,
@@ -1130,11 +1130,11 @@
       "sha256": "C20FE327337FA1FC2988744B8DE9419F67BEBF4F4D0B10FDA2EB2BAD4CAAC642"
     },
     {
-      "bytes": 4497,
+      "bytes": 4662,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/runner/README.md",
-      "sha256": "1045245785EB5864A1B61AFF7C42B372EBDECFCA29819F8D847273AE17C1AF84"
+      "sha256": "6BD6FDA141D2576ADC6A193BF3B79E46D8BA356C5B26ED569DC5CA1506235D79"
     },
     {
       "bytes": 3269,
@@ -1186,11 +1186,11 @@
       "sha256": "3479C8AEA42FC8BCDFF30B8108AD70733136945748F02785A18100FAAEF3A255"
     },
     {
-      "bytes": 18152,
+      "bytes": 20562,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/runner/real_collection_runner.py",
-      "sha256": "FD47204443430AF3E0AADFF8831D1AFB6F06A268B564DD52E9308E4F7953006C"
+      "sha256": "16F02E1D2A982388521227E34BAF67E3F6E37BF74B7F28FEF7F0840D387C3523"
     },
     {
       "bytes": 6430,
@@ -1459,18 +1459,18 @@
       "sha256": "B68911C22003E7E03E48D7486AB58F53AD10457F0C25ABCD47A134E37A247892"
     },
     {
-      "bytes": 35786,
+      "bytes": 35842,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.json",
-      "sha256": "4F9AC1BAFB5EBDEF024860DD50705FDA089D992173BAACB8C255D068CE65CBD3"
+      "sha256": "E366EF2083927BEFE4A2060D96EC91754618DA70EC0BEDBAC2D2ADECE1BFD51F"
     },
     {
-      "bytes": 27646,
+      "bytes": 27702,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.md",
-      "sha256": "EE9AC03884E3FEE77DCE6C28DF93F0425C8FB4287AD12B1262FCABF0D4210664"
+      "sha256": "FD3660E59C163CC800D0BA0D05B631FB40F56122BA1644AA70A8485927DD065C"
     },
     {
       "bytes": 7157,
@@ -1550,11 +1550,11 @@
       "sha256": "6A3C56BD020401EFD98A0D254FF4CA9135AF67D9A1C4799AEC57C9C5E5CEDC07"
     },
     {
-      "bytes": 21875,
+      "bytes": 22045,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.md",
-      "sha256": "6C023B12EDD89F6BA119ACEBCFD4C7A8CF7450774E5183837D025D463B014606"
+      "sha256": "320D311A5F722C9C02C22D8F2C8AAABE7D28A024EDB71FA02FCA123EA42021D5"
     },
     {
       "bytes": 525,
@@ -1697,18 +1697,18 @@
       "sha256": "5478B809892B1809CB8EB98CBC694EBE4A78438C8BE7D5614C0AF6CAA04A04C6"
     },
     {
-      "bytes": 2974,
+      "bytes": 3147,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_runner_harness_audit.json",
-      "sha256": "7C77FA88322D80D3D78413D1E5D1AA6942E82A0F1D99EF5383756D1DC9DFD6CC"
+      "sha256": "DE5027E24F0AF5CCBB67A529EE04AB788F7734E5138A0FF68536FCC5F617E2C9"
     },
     {
-      "bytes": 2112,
+      "bytes": 2223,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_runner_harness_audit.md",
-      "sha256": "A4D9808A6FA626097D52E7C6B083C2362C2EF3310172FBE94191D070173CE07F"
+      "sha256": "18E175A2DEA875F483F795800550D84A24A28391ED651205F8CDDA5E6B08810E"
     },
     {
       "bytes": 6746,
@@ -2005,11 +2005,11 @@
       "sha256": "274D832E84248F001B0964CDF671EEA98D7FE5B8333789D1173780CBDFEF2297"
     },
     {
-      "bytes": 49384,
+      "bytes": 49568,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_packet.py",
-      "sha256": "204B27C73CD2131E9D4666FBED50D4A0370E1DA2858743570F623738BAC6D2BD"
+      "sha256": "C84C5E15649E4B73856E313D9C3F00E84365EC9552281E2DF47DD4E637EFEE16"
     },
     {
       "bytes": 11266,

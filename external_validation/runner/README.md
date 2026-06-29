@@ -57,6 +57,7 @@ Actual collection requires all of the following:
 - backend video export to `external_validation/videos`;
 - the official video write guard rejecting returned paths that are outside the requested target, non-`.mp4`, undersized, non-MP4-like, or accompanied by a diagnostic fallback sidecar before any JSONL row is written;
 - the official JSONL write guard rejecting schema-invalid rollout records with the same strict rollout validator used after manifest assembly;
+- atomic official JSONL promotion, so official logs are replaced only after the selected batch succeeds and failed batches preserve the previous official log state;
 - a passing strict collection-readiness audit before the run starts;
 - a later manifest build plus strict `validate_external_rollouts.py --strict --check-video-paths` and `audit_external_evidence.py --strict`.
 

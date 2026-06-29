@@ -287,6 +287,7 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 
 Official video write guard: the runner refuses diagnostic fallback sidecars, non-MP4-like files, undersized files, out-of-dir paths, or unexpected returned video paths before any official JSONL row is written.
 Official JSONL write guard: the runner calls the strict rollout-record validator with video-path checks and refuses schema-invalid records before append.
+atomic official JSONL promotion: selected-batch rows are staged and official logs are replaced only after the batch succeeds, preserving prior official logs on failure.
 
 Post-collection strict gates:
 

@@ -93,8 +93,14 @@ def main() -> int:
         "validate_official_video",
         "validate_official_record",
         "validate_external_rollouts",
+        "promote_pending_logs",
+        "stage_log_path",
+        "backup_log_path",
+        "pending_log_lines",
         "MIN_OFFICIAL_VIDEO_BYTES",
         ".diagnostic.json",
+        ".staging",
+        ".backup",
         "ftyp",
     ]
     missing_runner_terms = [term for term in required_runner_terms if term not in runner]
@@ -126,6 +132,22 @@ def main() -> int:
         "runner_rejects_schema_invalid_records_before_jsonl_write",
         not missing_jsonl_guard_terms,
         f"missing_terms={missing_jsonl_guard_terms}",
+    )
+    jsonl_promotion_terms = [
+        "promote_pending_logs",
+        "stage_log_path",
+        "backup_log_path",
+        "pending_log_lines",
+        ".staging",
+        ".backup",
+        ".replace(log_path)",
+    ]
+    missing_promotion_terms = [term for term in jsonl_promotion_terms if term not in runner]
+    add_check(
+        checks,
+        "runner_promotes_jsonl_only_after_batch_success",
+        not missing_promotion_terms,
+        f"missing_terms={missing_promotion_terms}",
     )
     add_check(checks, "runner_does_not_write_manifest", "manifest.json" not in runner.lower(), "runner writes JSONL/video only; manifest remains separate")
 
@@ -174,7 +196,7 @@ def main() -> int:
             "non-template backend module",
             "strict real configs in external_validation/configs",
             "intentional alias unsealing at execution time",
-            "official MP4-like videos without diagnostic sidecars plus schema-valid real JSONL logs",
+            "official MP4-like videos without diagnostic sidecars plus schema-valid real JSONL logs promoted only after batch success",
             "manifest-declared hashes and strict evidence audits",
         ],
         "checks": checks,

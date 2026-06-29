@@ -31,7 +31,12 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
-def backend_module_text(*, diagnostic_video_fallback: bool = False, schema_invalid_record: bool = False) -> str:
+def backend_module_text(
+    *,
+    diagnostic_video_fallback: bool = False,
+    schema_invalid_record: bool = False,
+    fail_after_first_record: bool = False,
+) -> str:
     sidecar_block = ""
     if diagnostic_video_fallback:
         sidecar_block = '''
@@ -39,6 +44,12 @@ def backend_module_text(*, diagnostic_video_fallback: bool = False, schema_inval
         sidecar.write_text('{"diagnostic_video_fallback": true, "not_external_evidence": true}\\n', encoding="utf-8")
 '''
     decision_value = "bad_schema_decision" if schema_invalid_record else "accept"
+    failure_block = ""
+    if fail_after_first_record:
+        failure_block = '''
+        if int(request["row"]["episode_index"]) >= 1:
+            raise RuntimeError("synthetic backend failure after first valid row")
+'''
     return (r'''
 from __future__ import annotations
 
@@ -106,6 +117,7 @@ class Backend(ExternalCollectionBackend):
         }
 
     def execute_skill_pair(self, request: dict[str, Any]) -> dict[str, Any]:
+__FAILURE_BLOCK__
         return {
             "success": True,
             "seam_failure": False,
@@ -130,7 +142,7 @@ __SIDECAR_BLOCK__
 
 def create_backend() -> Backend:
     return Backend()
-'''.replace("__SIDECAR_BLOCK__", sidecar_block).replace("__DECISION_VALUE__", decision_value).lstrip())
+'''.replace("__SIDECAR_BLOCK__", sidecar_block).replace("__FAILURE_BLOCK__", failure_block).replace("__DECISION_VALUE__", decision_value).lstrip())
 
 
 def make_config() -> dict[str, Any]:
@@ -251,7 +263,8 @@ def write_report(payload: dict[str, Any]) -> None:
     ]
     for check in payload["checks"]:
         status = "pass" if check["passed"] else "fail"
-        lines.append(f"- `{status}` `{check['name']}`: {check['detail']}")
+        detail = " ".join(str(check["detail"]).split())
+        lines.append(f"- `{status}` `{check['name']}`: {detail}")
     OUT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -268,6 +281,8 @@ def main() -> int:
     diagnostic_runner_output = ""
     invalid_schema_runner_returncode = 0
     invalid_schema_runner_output = ""
+    partial_failure_runner_returncode = 0
+    partial_failure_runner_output = ""
 
     with tempfile.TemporaryDirectory(prefix="paper119_runner_backend_selftest_") as tmp_name:
         tmp = Path(tmp_name)
@@ -421,6 +436,59 @@ def main() -> int:
             }
         )
 
+    with tempfile.TemporaryDirectory(prefix="paper119_runner_partial_failure_selftest_") as tmp_name:
+        tmp = Path(tmp_name)
+        backend_path = tmp / "partial_failure_backend.py"
+        operator_sheet = tmp / "operator_sheet.csv"
+        alias_map = tmp / "method_alias_map.json"
+        config_dir = tmp / "configs"
+        log_dir = tmp / "logs"
+        video_dir = tmp / "videos"
+        backend_path.write_text(backend_module_text(fail_after_first_record=True), encoding="utf-8")
+        write_operator_sheet(operator_sheet)
+        write_json(alias_map, {"aliases": [{"alias": "M001", "method": METHOD}]})
+        write_json(config_dir / f"{TASK}.json", make_config())
+        log_path = log_dir / f"{TASK}.jsonl"
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        sentinel = '{"preexisting_official_log": true}\n'
+        log_path.write_text(sentinel, encoding="utf-8")
+
+        command = [
+            sys.executable,
+            str(RUNNER),
+            "--backend-module",
+            str(backend_path),
+            "--operator-sheet",
+            str(operator_sheet),
+            "--alias-map",
+            str(alias_map),
+            "--task-config-dir",
+            str(config_dir),
+            "--output-log-dir",
+            str(log_dir),
+            "--video-dir",
+            str(video_dir),
+            "--run-id",
+            RUN_ID,
+            "--unsealed-alias-map",
+            "--max-rows",
+            "2",
+            "--force",
+        ]
+        proc = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, encoding="utf-8", errors="replace")
+        partial_failure_runner_returncode = proc.returncode
+        partial_failure_runner_output = proc.stdout + proc.stderr
+        after_failure_log = log_path.read_text(encoding="utf-8") if log_path.exists() else ""
+        checks.append(
+            {
+                "name": "partial_batch_failure_preserves_official_jsonl",
+                "passed": partial_failure_runner_returncode != 0
+                and "synthetic backend failure after first valid row" in partial_failure_runner_output
+                and after_failure_log == sentinel,
+                "detail": f"returncode={partial_failure_runner_returncode}, log_preserved={after_failure_log == sentinel}, output={partial_failure_runner_output[:240]}",
+            }
+        )
+
     manifest_untouched = (
         (manifest_before is None and not real_manifest.exists())
         or (manifest_before is not None and real_manifest.exists() and real_manifest.read_bytes() == manifest_before)
@@ -435,6 +503,7 @@ def main() -> int:
         "runner_returncode": runner_returncode,
         "diagnostic_runner_returncode": diagnostic_runner_returncode,
         "invalid_schema_runner_returncode": invalid_schema_runner_returncode,
+        "partial_failure_runner_returncode": partial_failure_runner_returncode,
         "records_written": records_written,
         "schema_errors": schema_errors,
         "checks": checks,

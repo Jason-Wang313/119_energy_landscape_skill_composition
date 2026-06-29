@@ -240,6 +240,67 @@ def validate_official_record(
         fail("runner refused schema-invalid official JSONL record before write: " + "; ".join(errors[:5]))
 
 
+def stage_log_path(log_path: Path, run_id: str) -> Path:
+    token = sha256_json({"run_id": run_id, "log_path": log_path.as_posix()})[:12]
+    return log_path.with_name(f"{log_path.name}.{token}.staging")
+
+
+def backup_log_path(log_path: Path, run_id: str) -> Path:
+    token = sha256_json({"run_id": run_id, "log_path": log_path.as_posix()})[:12]
+    return log_path.with_name(f"{log_path.name}.{token}.backup")
+
+
+def promote_pending_logs(pending_log_lines: dict[Path, list[str]], *, run_id: str) -> int:
+    staged_paths: list[Path] = []
+    backups: list[tuple[Path, Path, bool]] = []
+    promoted_paths: list[Path] = []
+    try:
+        for log_path, lines in sorted(pending_log_lines.items()):
+            log_path.parent.mkdir(parents=True, exist_ok=True)
+            staged_path = stage_log_path(log_path, run_id)
+            if staged_path.exists():
+                staged_path.unlink()
+            staged_path.write_text("".join(lines), encoding="utf-8")
+            staged_paths.append(staged_path)
+        for log_path in sorted(pending_log_lines):
+            backup_path = backup_log_path(log_path, run_id)
+            if backup_path.exists():
+                backup_path.unlink()
+            had_original = log_path.exists()
+            if had_original:
+                log_path.replace(backup_path)
+            backups.append((log_path, backup_path, had_original))
+            stage_log_path(log_path, run_id).replace(log_path)
+            promoted_paths.append(log_path)
+    except OSError as exc:
+        for log_path in reversed(promoted_paths):
+            try:
+                if log_path.exists():
+                    log_path.unlink()
+            except OSError:
+                pass
+        for log_path, backup_path, had_original in reversed(backups):
+            try:
+                if had_original and backup_path.exists():
+                    backup_path.replace(log_path)
+            except OSError:
+                pass
+        for staged_path in staged_paths:
+            try:
+                if staged_path.exists():
+                    staged_path.unlink()
+            except OSError:
+                pass
+        fail(f"failed to promote staged official JSONL logs: {exc}")
+    for _, backup_path, _ in backups:
+        try:
+            if backup_path.exists():
+                backup_path.unlink()
+        except OSError:
+            pass
+    return sum(len(lines) for lines in pending_log_lines.values())
+
+
 def build_record(
     *,
     row: dict[str, str],
@@ -343,11 +404,9 @@ def run_collection(args: argparse.Namespace) -> int:
         fail(f"refusing to append to existing output logs without --force: {existing[:3]}")
     for path in output_paths:
         path.parent.mkdir(parents=True, exist_ok=True)
-        if args.force and path.exists():
-            path.write_text("", encoding="utf-8")
 
     config_cache: dict[str, dict[str, Any]] = {}
-    written = 0
+    pending_log_lines: dict[Path, list[str]] = {}
     for row in rows:
         task_family = row["task_family"]
         config = config_cache.get(task_family)
@@ -412,10 +471,9 @@ def run_collection(args: argparse.Namespace) -> int:
             manifest_video_dirs=manifest_video_dirs,
         )
         log_path = args.output_log_dir / f"{task_family}.jsonl"
-        with log_path.open("a", encoding="utf-8") as handle:
-            handle.write(json.dumps(record, sort_keys=True) + "\n")
-        written += 1
+        pending_log_lines.setdefault(log_path, []).append(json.dumps(record, sort_keys=True) + "\n")
 
+    written = promote_pending_logs(pending_log_lines, run_id=args.run_id)
     print(f"External collection runner wrote {written} JSONL records. Not validated until manifest and strict audits pass.")
     return 0
 

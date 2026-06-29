@@ -407,6 +407,7 @@ def main() -> int:
         and runner_probe_checks.get("temporary_videos_written") is True
         and runner_probe_checks.get("diagnostic_fallback_video_rejected_before_jsonl_write") is True
         and runner_probe_checks.get("schema_invalid_record_rejected_before_jsonl_write") is True
+        and runner_probe_checks.get("partial_batch_failure_preserves_official_jsonl") is True
         and runner_probe_checks.get("real_manifest_untouched") is True,
         (
             f"records_written={runner_probe.get('records_written')!r}, "
@@ -431,6 +432,16 @@ def main() -> int:
         and "schema-invalid official JSONL record" in runner_text
         and runner_probe_checks.get("schema_invalid_record_rejected_before_jsonl_write") is True,
         "runner refuses schema-invalid rollout records before official JSONL writes",
+    )
+    add_check(
+        checks,
+        "atomic_official_jsonl_promotion_visible",
+        "promote_pending_logs" in runner_text
+        and "stage_log_path" in runner_text
+        and "backup_log_path" in runner_text
+        and "pending_log_lines" in runner_text
+        and runner_probe_checks.get("partial_batch_failure_preserves_official_jsonl") is True,
+        "runner preserves official JSONL logs when a selected batch fails before promotion",
     )
     pilot_smoke_checks = {check.get("name"): check.get("passed") for check in pilot_smoke.get("checks", []) or []}
     add_check(
@@ -804,6 +815,7 @@ def main() -> int:
             "External runner backend probe self-test",
             "official video write guard",
             "official JSONL write guard",
+            "atomic official JSONL promotion",
             "External pilot smoke packet",
             "ManiSkill render-video preflight",
             "ManiSkill render machine qualification packet",
@@ -853,6 +865,7 @@ def main() -> int:
             "External runner backend probe self-test",
             "official video write guard",
             "official JSONL write guard",
+            "atomic official JSONL promotion",
             "External pilot smoke packet",
             "ManiSkill render-video preflight",
             "ManiSkill render machine qualification packet",
@@ -903,6 +916,7 @@ def main() -> int:
             "external runner backend probe self-test",
             "official video write guard",
             "official JSONL write guard",
+            "atomic official JSONL promotion",
             "external pilot smoke packet",
             "ManiSkill render-video preflight",
             "ManiSkill render machine qualification packet",
@@ -953,6 +967,7 @@ def main() -> int:
             "External runner backend probe self-test",
             "official video write guard",
             "official JSONL write guard",
+            "atomic official JSONL promotion",
             "External pilot smoke packet",
             "ManiSkill render-video preflight",
             "ManiSkill render machine qualification packet",
@@ -1003,6 +1018,7 @@ def main() -> int:
             "scripts/self_test_external_runner_backend.py",
             "official video write guard",
             "official JSONL write guard",
+            "atomic official JSONL promotion",
             "scripts/build_external_pilot_smoke_packet.py",
             "scripts/audit_external_pilot_smoke.py",
             "scripts/audit_maniskill_render_video_preflight.py",
@@ -1056,6 +1072,7 @@ def main() -> int:
             "external runner backend probe self-test",
             "official video write guard",
             "official JSONL write guard",
+            "atomic official JSONL promotion",
             "external pilot smoke packet",
             "ManiSkill render-video preflight",
             "ManiSkill render machine qualification packet",
@@ -1104,6 +1121,7 @@ def main() -> int:
             "strict MP4 video evidence gate",
             "official video write guard",
             "official JSONL write guard",
+            "atomic official JSONL promotion",
         ],
         "reviewer": [
             "Not evidence: `true`.",
@@ -1114,6 +1132,7 @@ def main() -> int:
             "Close all four blocking external requirements",
             "official video write guard",
             "official JSONL write guard",
+            "atomic official JSONL promotion",
         ],
     }
     for name, terms in required_terms_by_file.items():
@@ -1153,7 +1172,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, and ManiSkill render machine qualification packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the manifest assembly checklist, the External manifest builder self-test, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, atomic official JSONL promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, and ManiSkill render machine qualification packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the manifest assembly checklist, the External manifest builder self-test, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",
