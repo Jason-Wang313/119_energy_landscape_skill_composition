@@ -21,8 +21,13 @@
       "passed": true
     },
     {
-      "detail": "returncode=1, records=0, output=backend produced diagnostic fallback video sidecar, which cannot be official evidence: C:\\Users\\wangz\\AppData\\Local\\Temp\\paper119_runner_diagnostic_video_selftest_lgpbkw_w\\videos\\peg_place_regrasp\\000_barrier_certified_energy_composer_v5.mp",
+      "detail": "returncode=1, records=0, output=backend produced diagnostic fallback video sidecar, which cannot be official evidence: C:\\Users\\wangz\\AppData\\Local\\Temp\\paper119_runner_diagnostic_video_selftest_40wem3yt\\videos\\peg_place_regrasp\\000_barrier_certified_energy_composer_v5.mp",
       "name": "diagnostic_fallback_video_rejected_before_jsonl_write",
+      "passed": true
+    },
+    {
+      "detail": "returncode=1, records=0, output=runner refused schema-invalid official JSONL record before write: peg_place_regrasp:0:barrier_certified_energy_composer_v5: decision='bad_schema_decision' not in ['accept', 'repair', 'probe', 'abstain', 'transition']\n",
+      "name": "schema_invalid_record_rejected_before_jsonl_write",
       "passed": true
     },
     {
@@ -32,6 +37,7 @@
     }
   ],
   "diagnostic_runner_returncode": 1,
+  "invalid_schema_runner_returncode": 1,
   "not_external_evidence": true,
   "passed": true,
   "records_written": 2,

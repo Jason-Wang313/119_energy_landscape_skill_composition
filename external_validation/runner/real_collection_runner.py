@@ -14,12 +14,16 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 EXTERNAL = ROOT / "external_validation"
 RUNNER_DIR = EXTERNAL / "runner"
+SCRIPTS_DIR = ROOT / "scripts"
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 if str(RUNNER_DIR) not in sys.path:
     sys.path.insert(0, str(RUNNER_DIR))
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
 
 from backend_contract import sha256_json, validate_backend_object  # noqa: E402
+import validate_external_rollouts as rollout_validator  # noqa: E402
 
 
 DEFAULT_OPERATOR_SHEET = EXTERNAL / "blinded_operator_sheet.csv"
@@ -214,6 +218,28 @@ def validate_official_video(video_path: str, *, expected_target: Path, video_dir
         fail(f"backend video is not MP4-like evidence with an ftyp box: {path}")
 
 
+def validate_official_record(
+    record: dict[str, Any],
+    *,
+    schema: dict[str, Any],
+    manifest_methods: set[str],
+    manifest_tasks: set[str],
+    manifest_video_dirs: dict[str, Path],
+) -> None:
+    errors = rollout_validator.validate_record(
+        record,
+        line_id=f"{record.get('task_family', '<unknown>')}:{record.get('episode_index', '<unknown>')}:{record.get('method', '<unknown>')}",
+        schema=schema,
+        manifest_methods=manifest_methods,
+        manifest_tasks=manifest_tasks,
+        check_video_paths=True,
+        manifest_video_dirs=manifest_video_dirs,
+        strict_video_evidence=True,
+    )
+    if errors:
+        fail("runner refused schema-invalid official JSONL record before write: " + "; ".join(errors[:5]))
+
+
 def build_record(
     *,
     row: dict[str, str],
@@ -299,6 +325,10 @@ def run_collection(args: argparse.Namespace) -> int:
     if alias_map is None:
         fail("actual collection requires --unsealed-alias-map so aliases are intentionally resolved")
 
+    schema = read_json(args.schema)
+    manifest_methods = set(alias_map.values())
+    manifest_tasks = {row["task_family"] for row in rows}
+    manifest_video_dirs = {task: args.video_dir / task for task in manifest_tasks}
     backend = create_backend(args.backend_module)
     backend_errors = validate_backend_object(backend)
     if backend_errors:
@@ -373,6 +403,13 @@ def run_collection(args: argparse.Namespace) -> int:
             outcome=outcome,
             video_path=video_path,
             policy_hash=policy_hash,
+        )
+        validate_official_record(
+            record,
+            schema=schema,
+            manifest_methods=manifest_methods,
+            manifest_tasks=manifest_tasks,
+            manifest_video_dirs=manifest_video_dirs,
         )
         log_path = args.output_log_dir / f"{task_family}.jsonl"
         with log_path.open("a", encoding="utf-8") as handle:

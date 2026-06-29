@@ -116,6 +116,11 @@
       "passed": true
     },
     {
+      "detail": "runner refuses schema-invalid rollout records before official JSONL writes",
+      "name": "official_jsonl_write_guard_visible",
+      "passed": true
+    },
+    {
       "detail": "pilot_smoke_packet_ready=True, strict_evidence_ready=False",
       "name": "pilot_smoke_packet_visible",
       "passed": true

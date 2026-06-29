@@ -1020,6 +1020,7 @@ def main():
         "runner_dry_run_passes_without_writes",
         "runner_rejects_template_backend_for_actual_collection",
         "runner_rejects_diagnostic_or_non_mp4_videos_before_jsonl_write",
+        "runner_rejects_schema_invalid_records_before_jsonl_write",
         "no_real_manifest_written",
     ):
         if runner_checks.get(required_check) is not True:
@@ -1030,9 +1031,12 @@ def main():
         "MIN_OFFICIAL_VIDEO_BYTES",
         "diagnostic fallback video sidecar",
         "ftyp",
+        "validate_official_record",
+        "validate_external_rollouts",
+        "schema-invalid official JSONL record",
     ):
         if required_term not in runner_text:
-            fail(f"external runner missing official video write guard term: {required_term}")
+            fail(f"external runner missing official evidence write guard term: {required_term}")
     for path in (
         EXTERNAL / "runner" / "README.md",
         EXTERNAL / "runner" / "backend_contract.py",
@@ -2289,6 +2293,7 @@ def main():
         "temporary_records_schema_valid",
         "temporary_videos_written",
         "diagnostic_fallback_video_rejected_before_jsonl_write",
+        "schema_invalid_record_rejected_before_jsonl_write",
         "real_manifest_untouched",
     ):
         if runner_backend_checks.get(required_check) is not True:

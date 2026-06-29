@@ -31,13 +31,14 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
-def backend_module_text(*, diagnostic_video_fallback: bool = False) -> str:
+def backend_module_text(*, diagnostic_video_fallback: bool = False, schema_invalid_record: bool = False) -> str:
     sidecar_block = ""
     if diagnostic_video_fallback:
         sidecar_block = '''
         sidecar = target_path.with_suffix(target_path.suffix + ".diagnostic.json")
         sidecar.write_text('{"diagnostic_video_fallback": true, "not_external_evidence": true}\\n', encoding="utf-8")
 '''
+    decision_value = "bad_schema_decision" if schema_invalid_record else "accept"
     return (r'''
 from __future__ import annotations
 
@@ -98,7 +99,7 @@ class Backend(ExternalCollectionBackend):
             "barrier_score": 0.08,
             "descent_continuity_score": 0.91,
             "predicted_seam_risk": 0.05,
-            "decision": "accept",
+            "decision": "__DECISION_VALUE__",
             "failure_diagnosis": "none",
             "repair_action": "none",
             "policy_or_config_hash": self.policy_or_config_hash(method_name),
@@ -129,7 +130,7 @@ __SIDECAR_BLOCK__
 
 def create_backend() -> Backend:
     return Backend()
-'''.replace("__SIDECAR_BLOCK__", sidecar_block).lstrip())
+'''.replace("__SIDECAR_BLOCK__", sidecar_block).replace("__DECISION_VALUE__", decision_value).lstrip())
 
 
 def make_config() -> dict[str, Any]:
@@ -265,6 +266,8 @@ def main() -> int:
     runner_output = ""
     diagnostic_runner_returncode = 0
     diagnostic_runner_output = ""
+    invalid_schema_runner_returncode = 0
+    invalid_schema_runner_output = ""
 
     with tempfile.TemporaryDirectory(prefix="paper119_runner_backend_selftest_") as tmp_name:
         tmp = Path(tmp_name)
@@ -366,6 +369,58 @@ def main() -> int:
             }
         )
 
+    with tempfile.TemporaryDirectory(prefix="paper119_runner_schema_invalid_selftest_") as tmp_name:
+        tmp = Path(tmp_name)
+        backend_path = tmp / "schema_invalid_backend.py"
+        operator_sheet = tmp / "operator_sheet.csv"
+        alias_map = tmp / "method_alias_map.json"
+        config_dir = tmp / "configs"
+        log_dir = tmp / "logs"
+        video_dir = tmp / "videos"
+        backend_path.write_text(backend_module_text(schema_invalid_record=True), encoding="utf-8")
+        write_operator_sheet(operator_sheet)
+        write_json(alias_map, {"aliases": [{"alias": "M001", "method": METHOD}]})
+        write_json(config_dir / f"{TASK}.json", make_config())
+
+        command = [
+            sys.executable,
+            str(RUNNER),
+            "--backend-module",
+            str(backend_path),
+            "--operator-sheet",
+            str(operator_sheet),
+            "--alias-map",
+            str(alias_map),
+            "--task-config-dir",
+            str(config_dir),
+            "--output-log-dir",
+            str(log_dir),
+            "--video-dir",
+            str(video_dir),
+            "--run-id",
+            RUN_ID,
+            "--unsealed-alias-map",
+            "--max-rows",
+            "1",
+            "--force",
+        ]
+        proc = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, encoding="utf-8", errors="replace")
+        invalid_schema_runner_returncode = proc.returncode
+        invalid_schema_runner_output = proc.stdout + proc.stderr
+        log_path = log_dir / f"{TASK}.jsonl"
+        invalid_schema_records = 0
+        if log_path.exists():
+            invalid_schema_records = sum(1 for line in log_path.read_text(encoding="utf-8").splitlines() if line.strip())
+        checks.append(
+            {
+                "name": "schema_invalid_record_rejected_before_jsonl_write",
+                "passed": invalid_schema_runner_returncode != 0
+                and "schema-invalid official JSONL record before write" in invalid_schema_runner_output
+                and invalid_schema_records == 0,
+                "detail": f"returncode={invalid_schema_runner_returncode}, records={invalid_schema_records}, output={invalid_schema_runner_output[:240]}",
+            }
+        )
+
     manifest_untouched = (
         (manifest_before is None and not real_manifest.exists())
         or (manifest_before is not None and real_manifest.exists() and real_manifest.read_bytes() == manifest_before)
@@ -379,6 +434,7 @@ def main() -> int:
         "not_external_evidence": True,
         "runner_returncode": runner_returncode,
         "diagnostic_runner_returncode": diagnostic_runner_returncode,
+        "invalid_schema_runner_returncode": invalid_schema_runner_returncode,
         "records_written": records_written,
         "schema_errors": schema_errors,
         "checks": checks,

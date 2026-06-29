@@ -253,8 +253,8 @@ def main() -> int:
                 f"Readiness remains {gap['satisfied_requirements']}/"
                 f"{gap['satisfied_requirements'] + gap['missing_requirements']} with {gap['blocking_missing_requirements']} blocking external gaps. "
                 "The official video write guard rejects diagnostic fallback, non-MP4-like, undersized, out-of-dir, or unexpected "
-                "videos before the actual collection runner writes official JSONL rows, but this remains tooling hardening rather "
-                "than external validation."
+                "videos, and the official JSONL write guard rejects schema-invalid rollout records before the actual collection "
+                "runner appends them, but these remain tooling hardening rather than external validation."
             ),
             "allowed_claim": "The local package is stronger and more reviewer-ready, but not independently complete.",
             "remaining_gate": "Close all four blocking external requirements before claiming independent main-conference readiness.",

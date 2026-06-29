@@ -91,6 +91,8 @@ def main() -> int:
         "terminal_sample_set_hash",
         "policy_or_config_hash",
         "validate_official_video",
+        "validate_official_record",
+        "validate_external_rollouts",
         "MIN_OFFICIAL_VIDEO_BYTES",
         ".diagnostic.json",
         "ftyp",
@@ -111,6 +113,19 @@ def main() -> int:
         "runner_rejects_diagnostic_or_non_mp4_videos_before_jsonl_write",
         not missing_video_guard_terms,
         f"missing_terms={missing_video_guard_terms}",
+    )
+    official_jsonl_guard_terms = [
+        "validate_official_record",
+        "validate_external_rollouts",
+        "strict_video_evidence=True",
+        "schema-invalid official JSONL record",
+    ]
+    missing_jsonl_guard_terms = [term for term in official_jsonl_guard_terms if term not in runner]
+    add_check(
+        checks,
+        "runner_rejects_schema_invalid_records_before_jsonl_write",
+        not missing_jsonl_guard_terms,
+        f"missing_terms={missing_jsonl_guard_terms}",
     )
     add_check(checks, "runner_does_not_write_manifest", "manifest.json" not in runner.lower(), "runner writes JSONL/video only; manifest remains separate")
 
@@ -159,7 +174,7 @@ def main() -> int:
             "non-template backend module",
             "strict real configs in external_validation/configs",
             "intentional alias unsealing at execution time",
-            "official MP4-like videos without diagnostic sidecars plus real JSONL logs",
+            "official MP4-like videos without diagnostic sidecars plus schema-valid real JSONL logs",
             "manifest-declared hashes and strict evidence audits",
         ],
         "checks": checks,
