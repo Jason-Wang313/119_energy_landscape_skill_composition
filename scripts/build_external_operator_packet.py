@@ -76,7 +76,7 @@ def build_payload() -> dict[str, Any]:
     )
     render_preflight = require_payload(
         RESULTS / "maniskill_render_video_preflight_audit.json",
-        "maniskill_render_video_preflight_audit_v1",
+        "maniskill_render_video_preflight_audit_v2",
     )
     render_machine = require_payload(
         RESULTS / "maniskill_render_machine_qualification.json",
@@ -504,6 +504,7 @@ def build_payload() -> dict[str, Any]:
             "render_ready_env_count": int(render_preflight.get("render_ready_env_count", 0) or 0),
             "blocking_missing": list(render_preflight.get("blocking_missing", []) or []),
             "renderer_failure_classes": list(render_preflight.get("renderer_failure_classes", []) or []),
+            "renderer_failure_stages": list(render_preflight.get("renderer_failure_stages", []) or []),
             "operator_remediation": list(render_preflight.get("operator_remediation", []) or []),
             "renderer_profile_retest_commands": list(render_preflight.get("renderer_profile_retest_commands", []) or []),
             "audit_path": "results/maniskill_render_video_preflight_audit.json",
@@ -757,6 +758,7 @@ def write_md(payload: dict[str, Any]) -> None:
             f"- Render-ready environments: `{render['render_ready_env_count']}`",
             f"- Blocking missing: `{render['blocking_missing']}`",
             f"- Renderer failure classes: `{render['renderer_failure_classes']}`",
+            f"- Renderer failure stages: `{render['renderer_failure_stages']}`",
             f"- Operator remediation items: `{len(render['operator_remediation'])}`",
             "",
             "Render preflight command:",

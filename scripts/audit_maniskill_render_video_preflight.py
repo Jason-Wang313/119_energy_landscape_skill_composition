@@ -19,7 +19,8 @@ PREFLIGHT_ROOT = EXTERNAL / "render_video_preflight"
 VIDEO_DIR = PREFLIGHT_ROOT / "videos"
 OUT_JSON = RESULTS / "maniskill_render_video_preflight_audit.json"
 OUT_MD = RESULTS / "maniskill_render_video_preflight_audit.md"
-VERSION = "maniskill_render_video_preflight_audit_v1"
+VERSION = "maniskill_render_video_preflight_audit_v2"
+CLEANUP_STAGES = {"close_start", "close_done", "close_error"}
 
 
 def rel(path: Path) -> str:
@@ -226,6 +227,28 @@ def parse_progress_stages(stdout: str) -> list[dict[str, Any]]:
     return stages
 
 
+def progress_stage_name(stage: dict[str, Any]) -> str:
+    return str(stage.get("stage", "") or "")
+
+
+def last_non_cleanup_stage(progress_stages: list[dict[str, Any]], end_index: int | None = None) -> str:
+    stages = progress_stages if end_index is None else progress_stages[:end_index]
+    for stage in reversed(stages):
+        name = progress_stage_name(stage)
+        if name and name not in CLEANUP_STAGES:
+            return name
+    return ""
+
+
+def failure_progress_stage(progress_stages: list[dict[str, Any]], timed_out: bool) -> str:
+    for index, stage in enumerate(progress_stages):
+        if progress_stage_name(stage) == "error":
+            return last_non_cleanup_stage(progress_stages, index) or "error"
+    if timed_out:
+        return last_non_cleanup_stage(progress_stages)
+    return ""
+
+
 def display_command(command: list[str]) -> str:
     if len(command) >= 4 and command[2] == "-c":
         return " ".join([*command[:3], "<render_probe_code>", *command[4:]])
@@ -279,7 +302,8 @@ def run_probe(row: dict[str, str], args: argparse.Namespace) -> dict[str, Any]:
 
     marker_payload = parse_marker(stdout) or {}
     progress_stages = parse_progress_stages(stdout)
-    last_progress_stage = str(progress_stages[-1].get("stage", "")) if progress_stages else ""
+    last_progress_stage = progress_stage_name(progress_stages[-1]) if progress_stages else ""
+    failure_stage = failure_progress_stage(progress_stages, timed_out)
     record: dict[str, Any] = {
         "task_family": task_family,
         "env_id": env_id,
@@ -290,6 +314,8 @@ def run_probe(row: dict[str, str], args: argparse.Namespace) -> dict[str, Any]:
         "stderr_tail": stderr[-2000:],
         "progress_stages": progress_stages[-40:],
         "last_progress_stage": last_progress_stage,
+        "terminal_progress_stage": last_progress_stage,
+        "failure_progress_stage": failure_stage,
         "parsed_marker": bool(marker_payload),
         "output_path": rel(target),
         "render_backend": str(args.render_backend),
@@ -300,9 +326,12 @@ def run_probe(row: dict[str, str], args: argparse.Namespace) -> dict[str, Any]:
         "not_external_evidence": True,
     }
     record.update(marker_payload)
+    record["last_progress_stage"] = last_progress_stage
+    record["terminal_progress_stage"] = last_progress_stage
+    record["failure_progress_stage"] = failure_stage
     if timed_out:
         record["error_type"] = "TimeoutExpired"
-        suffix = f" after progress stage {last_progress_stage}" if last_progress_stage else ""
+        suffix = f" after progress stage {failure_stage or last_progress_stage}" if (failure_stage or last_progress_stage) else ""
         record["error"] = f"render preflight exceeded {args.timeout_seconds} seconds{suffix}"
     if not record.get("error") and returncode not in (0, None):
         cleaned = clean_ansi(stderr)
@@ -385,8 +414,14 @@ def summarize_blocker(records: list[dict[str, Any]]) -> str:
     fragments = []
     for record in failed[:4]:
         error = str(record.get("error") or record.get("error_type") or "no render-backed MP4")
-        last_stage = str(record.get("last_progress_stage", "") or "")
-        stage_suffix = f" (last progress stage: {last_stage})" if last_stage else ""
+        failure_stage = str(record.get("failure_progress_stage", "") or "")
+        terminal_stage = str(record.get("terminal_progress_stage") or record.get("last_progress_stage") or "")
+        stage_parts = []
+        if failure_stage:
+            stage_parts.append(f"failure stage: {failure_stage}")
+        if terminal_stage and terminal_stage != failure_stage:
+            stage_parts.append(f"terminal stage: {terminal_stage}")
+        stage_suffix = f" ({', '.join(stage_parts)})" if stage_parts else ""
         fragments.append(f"{record.get('env_id')}: {error}{stage_suffix}")
     return "render-backed MP4 preflight is not ready on this machine; " + "; ".join(fragments)
 
@@ -485,6 +520,7 @@ def write_md(payload: dict[str, Any]) -> None:
             "## Renderer Failure Classifier",
             "",
             f"- Failure classes: `{payload['renderer_failure_classes']}`",
+            f"- Failure stages: `{payload.get('renderer_failure_stages', [])}`",
             f"- Operator remediation items: `{len(payload['operator_remediation'])}`",
             "",
         ]
@@ -505,7 +541,8 @@ def write_md(payload: dict[str, Any]) -> None:
             f"- `{status}` `{record.get('profile')}` / `{record.get('env_id')}`: "
             f"made_env={record.get('made_env')}, reset_ok={record.get('reset_ok')}, "
             f"render_ok={record.get('render_ok')}, mp4_ok={record.get('mp4_ok')}, "
-            f"error={error!r}, last_stage={record.get('last_progress_stage')!r}"
+            f"error={error!r}, failure_stage={record.get('failure_progress_stage')!r}, "
+            f"terminal_stage={record.get('terminal_progress_stage')!r}"
         )
     lines.extend(["", "## Environment Results", ""])
     for record in payload["env_records"]:
@@ -515,7 +552,8 @@ def write_md(payload: dict[str, Any]) -> None:
             f"- `{status}` `{record.get('task_family')}` / `{record.get('env_id')}`: "
             f"made_env={record.get('made_env')}, reset_ok={record.get('reset_ok')}, "
             f"render_ok={record.get('render_ok')}, mp4_ok={record.get('mp4_ok')}, "
-            f"error={error!r}, last_stage={record.get('last_progress_stage')!r}"
+            f"error={error!r}, failure_stage={record.get('failure_progress_stage')!r}, "
+            f"terminal_stage={record.get('terminal_progress_stage')!r}"
         )
     diagnosis_records = payload.get("timeout_diagnosis_records", []) or []
     lines.extend(["", "## Timeout Diagnosis Retest", ""])
@@ -529,7 +567,8 @@ def write_md(payload: dict[str, Any]) -> None:
             f"class={record.get('renderer_failure_class')}, made_env={record.get('made_env')}, "
             f"reset_ok={record.get('reset_ok')}, render_ok={record.get('render_ok')}, "
             f"mp4_ok={record.get('mp4_ok')}, error={error!r}, "
-            f"last_stage={record.get('last_progress_stage')!r}"
+            f"failure_stage={record.get('failure_progress_stage')!r}, "
+            f"terminal_stage={record.get('terminal_progress_stage')!r}"
         )
     lines.extend(["", "## Checks", ""])
     for check in payload["checks"]:
@@ -574,6 +613,13 @@ def main() -> int:
     failure_classes = sorted(
         {str(record.get("renderer_failure_class")) for record in all_failure_records if record.get("renderer_failure_class")}
     )
+    failure_stages = sorted(
+        {
+            str(record.get("failure_progress_stage"))
+            for record in all_failure_records
+            if not record.get("render_video_ready") and record.get("failure_progress_stage")
+        }
+    )
     operator_remediation = remediation_for_failure_classes(failure_classes)
     retest_commands = profile_retest_commands(args)
 
@@ -617,6 +663,17 @@ def main() -> int:
         "renderer_failure_class_recorded_when_not_ready",
         render_ready or bool(failure_classes),
         f"classes={failure_classes}",
+    )
+    add_check(
+        checks,
+        "renderer_failure_stage_recorded_when_not_ready",
+        render_ready
+        or all(
+            bool(record.get("failure_progress_stage"))
+            for record in records
+            if not record.get("render_video_ready")
+        ),
+        f"failure_stages={[record.get('failure_progress_stage') for record in records]}",
     )
     add_check(
         checks,
@@ -705,6 +762,7 @@ def main() -> int:
         "video_dir": rel(VIDEO_DIR),
         "blocking_missing": blocking,
         "renderer_failure_classes": failure_classes,
+        "renderer_failure_stages": failure_stages,
         "operator_remediation": operator_remediation,
         "renderer_profile_retest_commands": retest_commands,
         "env_records": records,

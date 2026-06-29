@@ -123,7 +123,7 @@
       "passed": true
     },
     {
-      "detail": "render_video_ready=False, env_count=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done)']",
+      "detail": "render_video_ready=False, env_count=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done); OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done); OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done); PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done)']",
       "name": "maniskill_render_video_preflight_included",
       "passed": true
     },
@@ -171,11 +171,11 @@
   "included_file_count": 278,
   "included_files": [
     {
-      "bytes": 24274,
+      "bytes": 24358,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "2C7C4EBCC2ADC62B6D0F3AC3AC5EC04A699B03BDFBEA5B4B053966C74CCA8712"
+      "sha256": "0A02987628D074941361E51A00B8853BD0A8A2D57BF33F4204F701A3F3C5CC81"
     },
     {
       "bytes": 12363,
@@ -199,11 +199,11 @@
       "sha256": "9CED7FEA9A3F4D19B1F59013C9446678587FB0F18A8FC3A76CCDBA93609BAEDA"
     },
     {
-      "bytes": 15315,
+      "bytes": 15344,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "D8E9D6E9AC47918C06D6BC0459B71A956F2C8F15CAC337A95EB4EEE493FE6DDD"
+      "sha256": "DD4C8BE06291AFAB39B4703D4BCDDD76014F8DB60B54948B0C1249544866257F"
     },
     {
       "bytes": 32120,
@@ -1102,11 +1102,11 @@
       "sha256": "F64B68656335697769F9E7E60F19D974CF5D36D118D94B1296A7368CF49F4C2C"
     },
     {
-      "bytes": 4808,
+      "bytes": 4950,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/render_machine_qualification_packet.md",
-      "sha256": "8C36DC0A76D4124D93B2C2F048F423B02655697EB8BD0568BB38EA37A43D9963"
+      "sha256": "DEC3361B1D11DB873CDC9979A0EB14197C20AB62F2746B43B1D8A7B2FCFB59B9"
     },
     {
       "bytes": 13301,
@@ -1249,18 +1249,18 @@
       "sha256": "50DB11390933EFA90710391C3F7EFF62333FA59EE22778D563E7C8E71E1D877B"
     },
     {
-      "bytes": 48066,
+      "bytes": 48266,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.json",
-      "sha256": "856901D23E34C6FEB8C13FED2F31120C1393465F3163C0036FFFFCDD79556ACD"
+      "sha256": "DB28F7961FD59B0D1EA8E8786FD0CF62BDF4DB35B8BFA5D7CBBA08D87B9BA434"
     },
     {
-      "bytes": 29576,
+      "bytes": 29759,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.md",
-      "sha256": "7DEEB88E53450AC124FA1A4F3742AF2AA5FFE07171EB9EAD1736FAA8A12BB0DA"
+      "sha256": "3111F087691009817CA92A12BF94B2AB2C8B3A148883D32FE63FE7C208E39D51"
     },
     {
       "bytes": 3130,
@@ -1543,18 +1543,18 @@
       "sha256": "00B1FA80C6AD1ABF786EC65890CAAE17E44B84BD109BE4FFFA821E224C1A706B"
     },
     {
-      "bytes": 47116,
+      "bytes": 47316,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.json",
-      "sha256": "D83C2B4D9C8615C1AADD33E1721B7D027EA194A19E792B16A2AC73D723A4E41F"
+      "sha256": "D5F854B3802D73FC573EB64B7B89D05BF71C13A36509E268C5BB6526CDE2EF3C"
     },
     {
-      "bytes": 22130,
+      "bytes": 22313,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.md",
-      "sha256": "ABA2DF8C83B0E1718020AACB8715FDDBE8C294A0463631C9EEA5247D73FD4ADC"
+      "sha256": "116AC522C1FE0C2E02D2E8F2A103CF7B054D81446A69A4EFAF536FA7D8E47B56"
     },
     {
       "bytes": 525,
@@ -1809,32 +1809,32 @@
       "sha256": "28691987D608EA40FA50EBD7BCA64E7240E5583DCEDFC72E729829EDDF35F942"
     },
     {
-      "bytes": 5170,
+      "bytes": 5386,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_render_machine_qualification.json",
-      "sha256": "1E20A7F52A27743C77C5F7CED64E64049CBC25196E74EFB7526FD5C5F9AED168"
+      "sha256": "4BF152A800CE2F7DCAF6404277B184E59A18792571D7814FA0F9F778D5D3F382"
     },
     {
-      "bytes": 4808,
+      "bytes": 4950,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_render_machine_qualification.md",
-      "sha256": "8C36DC0A76D4124D93B2C2F048F423B02655697EB8BD0568BB38EA37A43D9963"
+      "sha256": "DEC3361B1D11DB873CDC9979A0EB14197C20AB62F2746B43B1D8A7B2FCFB59B9"
     },
     {
-      "bytes": 59038,
+      "bytes": 60314,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_render_video_preflight_audit.json",
-      "sha256": "537FB0E6BC8DBAFA3BB2BB8AE53F5E22FFA5A65A813C360BCE66CDCC4BDF0087"
+      "sha256": "1365D912692FBF72544AA2C2980C60D2B82F242F5562354F690A0530F3E90167"
     },
     {
-      "bytes": 6814,
+      "bytes": 7582,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_render_video_preflight_audit.md",
-      "sha256": "F45F78DF724808D0F7BCEFDCA83C34CA60E72EA59B593EBE489EB80AC651B543"
+      "sha256": "033875B78831A23DC646D5DE6E76B89ED5F4F3FEBD0E8A41B0C75FE2BE822C3E"
     },
     {
       "bytes": 9710,
@@ -1921,11 +1921,11 @@
       "sha256": "A9B57E8629AF6556AF8BB31B0CD10081E1BA1BEC5FBB1178650CD587FDFFAD7B"
     },
     {
-      "bytes": 31543,
+      "bytes": 34149,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/audit_maniskill_render_video_preflight.py",
-      "sha256": "D9D37D602BF7053BE951D8A31A7F4938A594BF7EDE9868FB190BB81255552B1A"
+      "sha256": "8C1A9DC9ABD2322FB40AAA5970AB4B19ABBE5F978205D99C224A85A2AC3F9E8D"
     },
     {
       "bytes": 12835,
@@ -1935,11 +1935,11 @@
       "sha256": "D42BB90D22ACA025927A3E8CE13D84A7C7F228939707D9BBBDDB2FF6426FDF43"
     },
     {
-      "bytes": 76175,
+      "bytes": 76368,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_acquisition_packet.py",
-      "sha256": "151A49E048B860B114071B4A06CBB571F4C15824BBA1B2D733F38280699D20A9"
+      "sha256": "44E4E08F46F292E8FB6E1EE8793A426EB47F1F4902B146F94053B9879C686BE8"
     },
     {
       "bytes": 18694,
@@ -2002,14 +2002,14 @@
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "274D832E84248F001B0964CDF671EEA98D7FE5B8333789D1173780CBDFEF2297"
+      "sha256": "85430A5DF17C624D9344609182FD12E7C889D15A4A266BA04AB905821AEE0DC9"
     },
     {
-      "bytes": 49615,
+      "bytes": 49800,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_packet.py",
-      "sha256": "6CD24C5CCFEC5FFB37634477F2B85B903BB6E4B0E0AA912E7880BDBD00EF17A8"
+      "sha256": "7BA8F24DDF1AE3D7577C62DB5D62BC4E41AACC58ACC38A9CA6E324E0AE08B97D"
     },
     {
       "bytes": 11266,
@@ -2040,11 +2040,11 @@
       "sha256": "E273634CCB595A0952C81F83B65355BDCDE61596F02B6BC390A268462377C611"
     },
     {
-      "bytes": 12219,
+      "bytes": 12858,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_maniskill_render_machine_qualification.py",
-      "sha256": "4BED784C76A67619F9A61AD83EFA12E85F0F36A30061E660F0C2055F79C9FE89"
+      "sha256": "E3E6B2C1F1BC596820263A723701D0E1B65A49FECA3EAC1F2F29828558C5A038"
     },
     {
       "bytes": 12746,

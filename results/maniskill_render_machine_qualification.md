@@ -6,6 +6,7 @@ Qualification state: `DO_NOT_COLLECT_RENDER_MACHINE`.
 Render machine qualified: `false`.
 Strict external evidence ready: `false`.
 Renderer failure classes: `['vulkan_descriptor_pool_exhaustion']`.
+Renderer failure stages: `['initial_render_start']`.
 
 This packet is an operator gate for the exact machine that will collect render-backed videos. It does not run collection, does not write `external_validation/manifest.json`, and does not turn diagnostic fallback videos into evidence.
 
@@ -57,6 +58,7 @@ python scripts\audit_external_collection_readiness.py --strict --backend-module 
 - `pass` `qualification_state_matches_render_and_liveness`: state=DO_NOT_COLLECT_RENDER_MACHINE, blockers=11
 - `pass` `current_machine_fail_closed_when_render_not_ready`: state=DO_NOT_COLLECT_RENDER_MACHINE, render_video_ready=False
 - `pass` `renderer_failure_classes_propagated`: failure_classes=['vulkan_descriptor_pool_exhaustion']
+- `pass` `renderer_failure_stages_propagated`: failure_stages=['initial_render_start']
 - `pass` `diagnostic_fallbacks_block_evidence`: diagnostic_fallbacks=0, state=DO_NOT_COLLECT_RENDER_MACHINE
 - `pass` `no_real_manifest_written`: external_validation/manifest.json remains absent before real evidence
 - `pass` `operator_commands_cover_platform_render_liveness_acceptance_and_collection_readiness`: operator qualification commands are present

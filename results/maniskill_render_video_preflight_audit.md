@@ -10,11 +10,12 @@ This preflight tests whether the selected ManiSkill/SAPIEN runtime can export re
 
 ## Blocking Missing
 
-- render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done)
+- render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done); OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done); OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done); PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done)
 
 ## Renderer Failure Classifier
 
 - Failure classes: `['vulkan_descriptor_pool_exhaustion']`
+- Failure stages: `['initial_render_start']`
 - Operator remediation items: `5`
 
 - Do not use diagnostic fallback videos as external evidence; rerun this preflight on the exact accepted collection machine.
@@ -40,16 +41,16 @@ python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --
 
 ## Renderer Profile Matrix
 
-- `not_ready` `cpu/minimal` / `PegInsertionSide-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', last_stage='close_done'
-- `not_ready` `gpu/minimal` / `PegInsertionSide-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', last_stage='close_done'
-- `not_ready` `sapien_cuda/minimal` / `PegInsertionSide-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', last_stage='close_done'
+- `not_ready` `cpu/minimal` / `PegInsertionSide-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', failure_stage='initial_render_start', terminal_stage='close_done'
+- `not_ready` `gpu/minimal` / `PegInsertionSide-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', failure_stage='initial_render_start', terminal_stage='close_done'
+- `not_ready` `sapien_cuda/minimal` / `PegInsertionSide-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', failure_stage='initial_render_start', terminal_stage='close_done'
 
 ## Environment Results
 
-- `not_ready` `peg_place_regrasp` / `PegInsertionSide-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', last_stage='close_done'
-- `not_ready` `drawer_to_pick_transfer` / `OpenCabinetDrawer-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', last_stage='close_done'
-- `not_ready` `door_open_navigation` / `OpenCabinetDoor-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', last_stage='close_done'
-- `not_ready` `cable_route_insert` / `PullCubeTool-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', last_stage='close_done'
+- `not_ready` `peg_place_regrasp` / `PegInsertionSide-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', failure_stage='initial_render_start', terminal_stage='close_done'
+- `not_ready` `drawer_to_pick_transfer` / `OpenCabinetDrawer-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', failure_stage='initial_render_start', terminal_stage='close_done'
+- `not_ready` `door_open_navigation` / `OpenCabinetDoor-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', failure_stage='initial_render_start', terminal_stage='close_done'
+- `not_ready` `cable_route_insert` / `PullCubeTool-v1`: made_env=True, reset_ok=True, render_ok=False, mp4_ok=False, error='vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', failure_stage='initial_render_start', terminal_stage='close_done'
 
 ## Timeout Diagnosis Retest
 
@@ -63,8 +64,9 @@ python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --
 - `pass` `each_probe_has_terminal_status`: records=4
 - `pass` `render_progress_markers_recorded`: last_stages=['close_done', 'close_done', 'close_done', 'close_done']
 - `pass` `render_readiness_recorded_without_overclaim`: render_video_ready=False
-- `pass` `blocking_summary_present_when_not_ready`: blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done); PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (last progress stage: close_done)']
+- `pass` `blocking_summary_present_when_not_ready`: blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done); OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done); OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done); PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done)']
 - `pass` `renderer_failure_class_recorded_when_not_ready`: classes=['vulkan_descriptor_pool_exhaustion']
+- `pass` `renderer_failure_stage_recorded_when_not_ready`: failure_stages=['initial_render_start', 'initial_render_start', 'initial_render_start', 'initial_render_start']
 - `pass` `operator_remediation_present_when_not_ready`: items=5
 - `pass` `profile_retest_commands_cover_renderer_backends`: python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend cpu --shader-pack minimal
 python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend gpu --shader-pack minimal

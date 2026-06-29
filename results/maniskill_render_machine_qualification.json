@@ -49,6 +49,11 @@
       "passed": true
     },
     {
+      "detail": "failure_stages=['initial_render_start']",
+      "name": "renderer_failure_stages_propagated",
+      "passed": true
+    },
+    {
       "detail": "diagnostic_fallbacks=0, state=DO_NOT_COLLECT_RENDER_MACHINE",
       "name": "diagnostic_fallbacks_block_evidence",
       "passed": true
@@ -85,6 +90,9 @@
   "render_records_seen": 4,
   "renderer_failure_classes": [
     "vulkan_descriptor_pool_exhaustion"
+  ],
+  "renderer_failure_stages": [
+    "initial_render_start"
   ],
   "source_artifacts": [
     "results/external_platform_probe.json",

@@ -93,6 +93,13 @@ def renderer_failure_classes(preflight: dict[str, Any]) -> list[str]:
     return []
 
 
+def renderer_failure_stages(preflight: dict[str, Any]) -> list[str]:
+    stages = preflight.get("renderer_failure_stages", [])
+    if isinstance(stages, list):
+        return sorted({str(item) for item in stages if str(item).strip()})
+    return []
+
+
 def write_outputs(payload: dict[str, Any]) -> None:
     RESULTS.mkdir(exist_ok=True)
     EXTERNAL.mkdir(exist_ok=True)
@@ -107,6 +114,7 @@ def write_outputs(payload: dict[str, Any]) -> None:
         f"Render machine qualified: `{str(payload['render_machine_qualified']).lower()}`.",
         f"Strict external evidence ready: `{str(payload['strict_external_evidence_ready']).lower()}`.",
         f"Renderer failure classes: `{payload['renderer_failure_classes']}`.",
+        f"Renderer failure stages: `{payload['renderer_failure_stages']}`.",
         "",
         "This packet is an operator gate for the exact machine that will collect render-backed videos. It does not run collection, does not write `external_validation/manifest.json`, and does not turn diagnostic fallback videos into evidence.",
         "",
@@ -145,6 +153,7 @@ def main() -> int:
     records = render_records(preflight)
     state, blockers = classify_state(preflight, liveness, expected_envs)
     failure_classes = renderer_failure_classes(preflight)
+    failure_stages = renderer_failure_stages(preflight)
     checks: list[dict[str, Any]] = []
 
     add_check(checks, "qualification_packet_is_non_evidence", True, "this script writes only packet/audit files")
@@ -183,6 +192,12 @@ def main() -> int:
         "renderer_failure_classes_propagated",
         preflight.get("render_video_ready") is True or bool(failure_classes),
         f"failure_classes={failure_classes}",
+    )
+    add_check(
+        checks,
+        "renderer_failure_stages_propagated",
+        preflight.get("render_video_ready") is True or bool(failure_stages),
+        f"failure_stages={failure_stages}",
     )
     add_check(
         checks,
@@ -229,6 +244,7 @@ def main() -> int:
         "qualification_state": state,
         "render_machine_qualified": state == "QUALIFIED_FOR_RENDER_BACKED_PILOT",
         "renderer_failure_classes": failure_classes,
+        "renderer_failure_stages": failure_stages,
         "timeout_diagnosis_record_count": len(preflight.get("timeout_diagnosis_records", []) or []),
         "expected_primary_envs": expected_envs,
         "render_records_seen": len(records),

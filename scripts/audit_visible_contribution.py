@@ -525,7 +525,7 @@ def main() -> int:
     add_check(
         checks,
         "maniskill_render_video_preflight_visible",
-        render_preflight.get("version") == "maniskill_render_video_preflight_audit_v1"
+        render_preflight.get("version") == "maniskill_render_video_preflight_audit_v2"
         and render_preflight.get("passed") is True
         and render_preflight.get("not_external_evidence") is True
         and render_preflight.get("strict_external_evidence_ready") is False
@@ -540,7 +540,8 @@ def main() -> int:
             f"render_video_ready={render_preflight.get('render_video_ready')!r}, "
             f"render_backend={render_preflight.get('render_backend')!r}, "
             f"shader_pack={render_preflight.get('shader_pack')!r}, "
-            f"last_stages={[record.get('last_progress_stage') for record in render_preflight.get('env_records', []) or []]}, "
+            f"failure_stages={[record.get('failure_progress_stage') for record in render_preflight.get('env_records', []) or []]}, "
+            f"terminal_stages={[record.get('terminal_progress_stage') for record in render_preflight.get('env_records', []) or []]}, "
             f"envs={render_preflight.get('env_count')!r}, "
             f"blocking={render_preflight.get('blocking_missing')!r}"
         ),

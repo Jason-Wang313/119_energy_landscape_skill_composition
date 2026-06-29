@@ -900,7 +900,7 @@ def main() -> int:
     add_check(
         checks,
         "maniskill_render_video_preflight_recorded",
-        render_preflight.get("version") == "maniskill_render_video_preflight_audit_v1"
+        render_preflight.get("version") == "maniskill_render_video_preflight_audit_v2"
         and render_preflight.get("passed") is True
         and render_preflight.get("not_external_evidence") is True
         and render_preflight.get("strict_external_evidence_ready") is False
@@ -1267,6 +1267,7 @@ def main() -> int:
             "render_ready_env_count": int(render_preflight.get("render_ready_env_count", 0) or 0),
             "blocking_missing": list(render_preflight.get("blocking_missing", []) or []),
             "renderer_failure_classes": list(render_preflight.get("renderer_failure_classes", []) or []),
+            "renderer_failure_stages": list(render_preflight.get("renderer_failure_stages", []) or []),
             "operator_remediation": list(render_preflight.get("operator_remediation", []) or []),
             "renderer_profile_retest_commands": list(render_preflight.get("renderer_profile_retest_commands", []) or []),
             "audit_command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4",
@@ -1369,6 +1370,7 @@ def main() -> int:
             "",
             f"- Render video ready: `{str(render_summary['render_video_ready']).lower()}`",
             f"- Renderer failure classes: `{render_summary['renderer_failure_classes']}`",
+            f"- Renderer failure stages: `{render_summary['renderer_failure_stages']}`",
             f"- Operator remediation items: `{len(render_summary['operator_remediation'])}`",
             f"- Blocking missing: `{render_summary['blocking_missing']}`",
             "",

@@ -2470,7 +2470,7 @@ def main():
         if not path.exists():
             fail(f"missing ManiSkill render-video preflight artifact: {path}")
     render_preflight = json.loads(render_preflight_path.read_text(encoding="utf-8"))
-    if render_preflight.get("version") != "maniskill_render_video_preflight_audit_v1":
+    if render_preflight.get("version") != "maniskill_render_video_preflight_audit_v2":
         fail("ManiSkill render-video preflight audit version mismatch")
     if render_preflight.get("passed") is not True:
         fail("ManiSkill render-video preflight audit did not pass")
@@ -2491,12 +2491,19 @@ def main():
     for record in render_preflight.get("env_records", []) or []:
         if record.get("render_backend") != render_preflight.get("render_backend") or record.get("shader_pack") != render_preflight.get("shader_pack"):
             fail("ManiSkill render-video preflight env records must carry the audited render backend/shader pack")
+        if record.get("render_video_ready") is not True and not record.get("failure_progress_stage"):
+            fail("ManiSkill render-video preflight failed env records must carry the actual failure progress stage")
+        if not record.get("terminal_progress_stage"):
+            fail("ManiSkill render-video preflight env records must carry the terminal progress stage")
     if render_preflight.get("render_video_ready") is False and not render_preflight.get("blocking_missing"):
         fail("ManiSkill render-video preflight must explain the render-video blocker when not ready")
     if render_preflight.get("render_video_ready") is False:
         failure_classes = render_preflight.get("renderer_failure_classes", []) or []
         if not isinstance(failure_classes, list) or not failure_classes:
             fail("ManiSkill render-video preflight must classify renderer failures when not ready")
+        failure_stages = render_preflight.get("renderer_failure_stages", []) or []
+        if not isinstance(failure_stages, list) or not failure_stages:
+            fail("ManiSkill render-video preflight must summarize renderer failure stages when not ready")
         remediation = render_preflight.get("operator_remediation", []) or []
         if not isinstance(remediation, list) or len(remediation) < 2:
             fail("ManiSkill render-video preflight must include operator remediation when not ready")
@@ -2528,6 +2535,7 @@ def main():
         "render_readiness_recorded_without_overclaim",
         "blocking_summary_present_when_not_ready",
         "renderer_failure_class_recorded_when_not_ready",
+        "renderer_failure_stage_recorded_when_not_ready",
         "operator_remediation_present_when_not_ready",
         "profile_retest_commands_cover_renderer_backends",
         "profile_matrix_records_renderer_backends",
@@ -2631,6 +2639,8 @@ def main():
         fail("render machine qualification must inspect render preflight records")
     if not render_machine.get("blocking_missing"):
         fail("render machine qualification must list missing render-machine evidence while unqualified")
+    if render_machine.get("render_machine_qualified") is False and not render_machine.get("renderer_failure_stages"):
+        fail("render machine qualification must propagate renderer failure stages while unqualified")
     render_machine_commands = "\n".join(render_machine.get("operator_commands", []) or [])
     for fragment in (
         "probe_external_platform.py",
@@ -2649,6 +2659,8 @@ def main():
         "all_primary_envs_have_terminal_render_records",
         "qualification_state_matches_render_and_liveness",
         "current_machine_fail_closed_when_render_not_ready",
+        "renderer_failure_classes_propagated",
+        "renderer_failure_stages_propagated",
         "diagnostic_fallbacks_block_evidence",
         "no_real_manifest_written",
         "operator_commands_cover_platform_render_liveness_acceptance_and_collection_readiness",
