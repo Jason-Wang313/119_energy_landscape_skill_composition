@@ -2697,12 +2697,21 @@ def main():
         "FORBIDDEN_VIDEO_PATH_FRAGMENTS",
         "diagnostic fallback sidecar",
         "not MP4-like evidence",
+        "staging",
+        "backup",
         "ftyp",
     ):
         if term not in rollout_validator_text:
             fail(f"external rollout validator missing strict video evidence term: {term}")
     if "strict video fixture did not reject fake MP4" not in rollout_self_test_text:
         fail("external rollout validator self-test must reject fake text .mp4 fixtures")
+    for forbidden_fixture in (
+        "internal_runner_artifact.staging.mp4",
+        "internal_runner_artifact.backup.mp4",
+        "forbidden non-evidence fragment",
+    ):
+        if forbidden_fixture not in rollout_self_test_text:
+            fail(f"external rollout validator self-test missing staged/backup rejection fixture: {forbidden_fixture}")
     if "write_synthetic_mp4" not in evidence_pipeline_self_test_text or "strict_video_evidence=True" not in evidence_pipeline_self_test_text:
         fail("external evidence pipeline self-test must exercise strict MP4 video evidence validation")
 

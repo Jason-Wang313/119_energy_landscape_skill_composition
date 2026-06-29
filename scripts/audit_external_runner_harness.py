@@ -103,6 +103,7 @@ def main() -> int:
         "pending_log_lines",
         "pending_videos",
         "duplicate expected official video paths",
+        "check_video_paths=False",
         "MIN_OFFICIAL_VIDEO_BYTES",
         ".diagnostic.json",
         ".staging",
@@ -161,7 +162,8 @@ def main() -> int:
         "backup_video_path",
         "cleanup_staged_videos",
         "pending_videos",
-        "staged_record",
+        "prepromotion_errors",
+        "check_video_paths=False",
         ".replace(final_video)",
         "failed to promote staged official evidence artifacts",
     ]

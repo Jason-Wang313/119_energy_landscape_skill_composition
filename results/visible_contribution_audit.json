@@ -156,7 +156,7 @@
       "passed": true
     },
     {
-      "detail": "strict rollout validation rejects placeholder/diagnostic/non-MP4 video paths when --strict --check-video-paths is enabled",
+      "detail": "strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths when --strict --check-video-paths is enabled",
       "name": "strict_video_evidence_gate_visible",
       "passed": true
     },

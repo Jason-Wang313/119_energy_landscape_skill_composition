@@ -586,15 +586,17 @@ def run_collection(args: argparse.Namespace) -> int:
                 video_path=target_video.as_posix(),
                 policy_hash=policy_hash,
             )
-            staged_record = dict(record)
-            staged_record["video_path"] = relative_video_path(staged_video.as_posix())
-            validate_official_record(
-                staged_record,
+            prepromotion_errors = official_record_errors(
+                record,
                 schema=schema,
                 manifest_methods=manifest_methods,
                 manifest_tasks=manifest_tasks,
+                check_video_paths=False,
                 manifest_video_dirs=manifest_video_dirs,
+                strict_video_evidence=True,
             )
+            if prepromotion_errors:
+                fail("runner refused schema-invalid official JSONL record before write: " + "; ".join(prepromotion_errors[:5]))
             log_path = args.output_log_dir / f"{task_family}.jsonl"
             pending_records_by_log.setdefault(log_path, []).append(record)
             pending_log_lines.setdefault(log_path, []).append(json.dumps(record, sort_keys=True) + "\n")

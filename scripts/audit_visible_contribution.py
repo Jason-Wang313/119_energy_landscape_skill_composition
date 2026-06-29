@@ -590,11 +590,15 @@ def main() -> int:
         "strict_video_evidence" in rollout_validator_text
         and "MIN_STRICT_VIDEO_BYTES" in rollout_validator_text
         and "FORBIDDEN_VIDEO_PATH_FRAGMENTS" in rollout_validator_text
+        and "staging" in rollout_validator_text
+        and "backup" in rollout_validator_text
         and "ftyp" in rollout_validator_text
         and "diagnostic fallback sidecar" in rollout_validator_text
         and "strict video fixture did not reject fake MP4" in rollout_self_test_text
+        and "internal_runner_artifact.staging.mp4" in rollout_self_test_text
+        and "internal_runner_artifact.backup.mp4" in rollout_self_test_text
         and "write_synthetic_mp4" in evidence_pipeline_self_test_text,
-        "strict rollout validation rejects placeholder/diagnostic/non-MP4 video paths when --strict --check-video-paths is enabled",
+        "strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths when --strict --check-video-paths is enabled",
     )
     add_check(
         checks,

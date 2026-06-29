@@ -173,6 +173,27 @@ def main() -> int:
         if not any("not MP4-like evidence" in error for error in fake_video_errors):
             raise AssertionError(f"strict video fixture did not reject fake MP4: {fake_video_errors}")
 
+        forbidden_video_cases = {
+            "staging": video_dir / "internal_runner_artifact.staging.mp4",
+            "backup": video_dir / "internal_runner_artifact.backup.mp4",
+        }
+        for fragment, forbidden_video in forbidden_video_cases.items():
+            write_synthetic_mp4(forbidden_video)
+            forbidden_record = dict(good_video_record)
+            forbidden_record["video_path"] = str(forbidden_video)
+            forbidden_errors = rollout.validate_record(
+                forbidden_record,
+                line_id=f"synthetic_forbidden_{fragment}_video_record",
+                schema=schema,
+                manifest_methods={rollout.PRIMARY_METHOD, "greedy_module_sequence"},
+                manifest_tasks=set(summary["task_families"]),
+                check_video_paths=True,
+                manifest_video_dirs={"peg_place_regrasp": video_dir},
+                strict_video_evidence=True,
+            )
+            if not any("forbidden non-evidence fragment" in error and fragment in error for error in forbidden_errors):
+                raise AssertionError(f"strict video fixture did not reject {fragment} MP4 path: {forbidden_errors}")
+
     print("External rollout validator self-test passed: synthetic metrics recomputed and schema failure path checked.")
     return 0
 

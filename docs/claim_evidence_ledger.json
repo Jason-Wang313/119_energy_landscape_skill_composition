@@ -242,7 +242,7 @@
     },
     {
       "name": "external_strict_video_evidence_gate_claim",
-      "claim": "The repository provides a strict MP4 video evidence gate that rejects missing, placeholder, diagnostic, non-MP4-like, undersized, or out-of-manifest video paths when strict external rollout validation is enabled.",
+      "claim": "The repository provides a strict MP4 video evidence gate that rejects missing, placeholder, diagnostic, staged, backup/internal, non-MP4-like, undersized, or out-of-manifest video paths when strict external rollout validation is enabled.",
       "evidence": ["scripts/validate_external_rollouts.py", "scripts/self_test_external_rollout_validator.py", "scripts/self_test_external_evidence_pipeline.py", "results/external_rollout_metrics.json", "results/external_rollout_evidence_audit.json"]
     },
     {

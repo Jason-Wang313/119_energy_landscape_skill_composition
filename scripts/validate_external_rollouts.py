@@ -31,6 +31,8 @@ FORBIDDEN_VIDEO_PATH_FRAGMENTS = {
     "pilot_smoke",
     "placeholder_not_external_evidence",
     "render_video_preflight",
+    "staging",
+    "backup",
 }
 
 
