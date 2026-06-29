@@ -200,6 +200,55 @@ def main() -> int:
         if not any("record count" in error and "does not match episodes_per_method" in error for error in short_count_errors):
             raise AssertionError(f"short record-count test did not fail as expected: {short_count_errors}")
 
+        duplicate_panel_manifest = json.loads(json.dumps(manifest))
+        duplicate_panel_log = Path(tmp_name) / "logs" / "duplicate_paired_method.jsonl"
+        duplicate_panel_task = str(duplicate_panel_manifest["tasks"][0]["task_family"])
+        duplicate_panel_rows = [
+            make_record(duplicate_panel_task, 0, rollout.PRIMARY_METHOD, success=True, utility=1.0),
+            make_record(duplicate_panel_task, 0, "greedy_module_sequence", success=True, utility=0.79),
+            make_record(duplicate_panel_task, 0, rollout.PRIMARY_METHOD, success=True, utility=1.0),
+        ]
+        duplicate_panel_rows[2]["episode_index"] = 999
+        duplicate_panel_rows[2]["video_path"] = duplicate_panel_rows[2]["video_path"] + ".panel_duplicate"
+        duplicate_panel_log.write_text(
+            "".join(json.dumps(record, sort_keys=True) + "\n" for record in duplicate_panel_rows),
+            encoding="utf-8",
+        )
+        duplicate_panel_manifest["tasks"][0]["log_jsonl"] = str(duplicate_panel_log)
+        _, duplicate_panel_errors = rollout.load_records(
+            duplicate_panel_manifest,
+            schema,
+            check_video_paths=False,
+            max_errors=10,
+        )
+        if not any("duplicate method record within paired reset" in error for error in duplicate_panel_errors):
+            raise AssertionError(f"duplicate paired-method test did not fail as expected: {duplicate_panel_errors}")
+
+        missing_panel_manifest = json.loads(json.dumps(manifest))
+        missing_panel_log = Path(tmp_name) / "logs" / "missing_paired_method.jsonl"
+        missing_panel_task = str(missing_panel_manifest["tasks"][0]["task_family"])
+        missing_panel_rows = []
+        for scene_idx in range(30):
+            missing_panel_rows.append(
+                make_record(missing_panel_task, scene_idx, rollout.PRIMARY_METHOD, success=True, utility=1.0)
+            )
+            missing_panel_rows.append(
+                make_record(missing_panel_task, scene_idx + 100, "greedy_module_sequence", success=True, utility=0.79)
+            )
+        missing_panel_log.write_text(
+            "".join(json.dumps(record, sort_keys=True) + "\n" for record in missing_panel_rows),
+            encoding="utf-8",
+        )
+        missing_panel_manifest["tasks"][0]["log_jsonl"] = str(missing_panel_log)
+        _, missing_panel_errors = rollout.load_records(
+            missing_panel_manifest,
+            schema,
+            check_video_paths=False,
+            max_errors=20,
+        )
+        if not any("paired reset group" in error and "missing declared methods" in error for error in missing_panel_errors):
+            raise AssertionError(f"missing paired-method test did not fail as expected: {missing_panel_errors}")
+
         duplicate_identity_manifest = json.loads(json.dumps(manifest))
         duplicate_identity_log = Path(tmp_name) / "logs" / "duplicate_identity.jsonl"
         duplicate_task = str(duplicate_identity_manifest["tasks"][0]["task_family"])

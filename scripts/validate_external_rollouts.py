@@ -302,6 +302,8 @@ def load_records(
     seen_record_keys: dict[tuple[Any, ...], str] = {}
     seen_video_paths: dict[str, str] = {}
     record_counts_by_task_method: Counter[tuple[str, str]] = Counter()
+    paired_panel_lines: dict[tuple[str, tuple[Any, ...], str], str] = {}
+    paired_panel_methods: dict[tuple[str, tuple[Any, ...]], set[str]] = defaultdict(set)
     manifest_task_configs: dict[str, dict[str, Any]] = {}
     for task_family, task in manifest_task_specs.items():
         config_path_value = str(task.get("config_path", "")).strip()
@@ -382,6 +384,18 @@ def load_records(
                 method_name = str(record.get("method", ""))
                 if task_name and method_name:
                     record_counts_by_task_method[(task_name, method_name)] += 1
+                    paired_values = paired_key(record, schema)
+                    if paired_values and all(item is not None and item != "" for item in paired_values):
+                        panel_key = (task_name, paired_values)
+                        panel_method_key = (task_name, paired_values, method_name)
+                        prior_panel_line = paired_panel_lines.get(panel_method_key)
+                        if prior_panel_line:
+                            errors.append(
+                                f"{line_id}: duplicate method record within paired reset also seen at {prior_panel_line}"
+                            )
+                        else:
+                            paired_panel_lines[panel_method_key] = line_id
+                        paired_panel_methods[panel_key].add(method_name)
                 errors.extend(
                     validate_record(
                         record,
@@ -418,6 +432,32 @@ def load_records(
             if observed != episodes_per_method:
                 errors.append(
                     f"{task_family}: method={method_name!r} record count {observed} does not match episodes_per_method={episodes_per_method}"
+                )
+                if len(errors) >= max_errors:
+                    return records, errors
+        task_panel_methods = {
+            panel_key: methods
+            for panel_key, methods in paired_panel_methods.items()
+            if panel_key[0] == task_family
+        }
+        if len(task_panel_methods) != episodes_per_method:
+            errors.append(
+                f"{task_family}: paired reset group count {len(task_panel_methods)} does not match episodes_per_method={episodes_per_method}"
+            )
+            if len(errors) >= max_errors:
+                return records, errors
+        for (_task_name, panel_values), panel_methods in sorted(task_panel_methods.items(), key=lambda item: str(item[0])):
+            missing_methods = sorted(manifest_methods - panel_methods)
+            extra_methods = sorted(panel_methods - manifest_methods)
+            if missing_methods:
+                errors.append(
+                    f"{task_family}: paired reset group {panel_values!r} missing declared methods {missing_methods[:6]}"
+                )
+                if len(errors) >= max_errors:
+                    return records, errors
+            if extra_methods:
+                errors.append(
+                    f"{task_family}: paired reset group {panel_values!r} contains undeclared methods {extra_methods[:6]}"
                 )
                 if len(errors) >= max_errors:
                     return records, errors

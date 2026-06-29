@@ -67,7 +67,7 @@
     },
     {
       "name": "visible_contribution_claim",
-      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, outreach package, and reviewer response packet synchronized with the current materializer, operator packet, fidelity acceptance draft, tracked reference route, strict rollout sample-count gate, strict rollout uniqueness gate, official video write guard, official JSONL write guard, atomic official evidence promotion, reference-adapter provenance, strict reference-adapter rejection gate, outreach stance, and readiness boundary.",
+      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, outreach package, and reviewer response packet synchronized with the current materializer, operator packet, fidelity acceptance draft, tracked reference route, strict rollout sample-count gate, strict paired-panel gate, strict rollout uniqueness gate, official video write guard, official JSONL write guard, atomic official evidence promotion, reference-adapter provenance, strict reference-adapter rejection gate, outreach stance, and readiness boundary.",
       "evidence": ["scripts/audit_visible_contribution.py", "README.md", "docs/final_audit.md", "docs/submission_readiness_decision.md", "docs/submission_readiness_audit_v5.md", "docs/submission_version_log.md", "child_status.md", "docs/haonan_yilun_outreach_package.md", "docs/reviewer_response_packet.md"]
     },
     {
@@ -254,6 +254,11 @@
       "name": "external_rollout_sample_count_gate_claim",
       "claim": "The repository provides a strict rollout sample-count gate that rejects raw JSONL rollout packages when manifest-declared `episodes_per_method` is below 30 or when any task/method record count differs from the manifest declaration.",
       "evidence": ["scripts/validate_external_rollouts.py", "scripts/self_test_external_rollout_validator.py", "results/external_rollout_metrics.json", "results/external_rollout_evidence_audit.json"]
+    },
+    {
+      "name": "external_rollout_paired_panel_gate_claim",
+      "claim": "The repository provides a strict paired-panel gate that rejects raw JSONL rollout packages when a paired reset has duplicate method records or lacks any manifest-declared method.",
+      "evidence": ["scripts/validate_external_rollouts.py", "scripts/self_test_external_rollout_validator.py", "scripts/audit_external_pairing_integrity.py", "results/external_rollout_metrics.json", "results/external_pairing_integrity_audit.json"]
     },
     {
       "name": "external_task_config_hash_gate_claim",

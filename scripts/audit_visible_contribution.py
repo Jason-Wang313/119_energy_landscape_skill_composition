@@ -605,6 +605,10 @@ def main() -> int:
         and "record_counts_by_task_method" in rollout_validator_text
         and "episodes_per_method must be integer >=" in rollout_validator_text
         and "does not match episodes_per_method" in rollout_validator_text
+        and "paired_panel_lines" in rollout_validator_text
+        and "paired_panel_methods" in rollout_validator_text
+        and "duplicate method record within paired reset" in rollout_validator_text
+        and "missing declared methods" in rollout_validator_text
         and "manifest_task_configs" in rollout_validator_text
         and "config_hash does not match config_path" in rollout_validator_text
         and "skill_i must match manifest task config" in rollout_validator_text
@@ -614,6 +618,8 @@ def main() -> int:
         and "strict video fixture did not reject fake MP4" in rollout_self_test_text
         and "weak episode-count test did not fail" in rollout_self_test_text
         and "short record-count test did not fail" in rollout_self_test_text
+        and "duplicate paired-method test did not fail" in rollout_self_test_text
+        and "missing paired-method test did not fail" in rollout_self_test_text
         and "duplicate rollout identity test did not fail" in rollout_self_test_text
         and "duplicate video path test did not fail" in rollout_self_test_text
         and "stale task config hash test did not fail" in rollout_self_test_text
@@ -622,7 +628,7 @@ def main() -> int:
         and "internal_runner_artifact.staging.mp4" in rollout_self_test_text
         and "internal_runner_artifact.backup.mp4" in rollout_self_test_text
         and "write_synthetic_mp4" in evidence_pipeline_self_test_text,
-        "strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths, duplicate rows/videos, weak sample counts, stale task configs, and manifest method-hash mismatches",
+        "strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths, duplicate rows/videos, weak sample counts, mispaired method panels, stale task configs, and manifest method-hash mismatches",
     )
     release_self_checks = {check.get("name"): check.get("passed") for check in release_package_self_test.get("checks", []) or []}
     add_check(
@@ -893,6 +899,7 @@ def main() -> int:
             "External rollout evidence packet",
             "strict MP4 video evidence gate",
             "strict rollout sample-count gate",
+            "strict paired-panel gate",
             "strict rollout uniqueness gate",
             "strict task-config hash gate",
             "strict policy/config hash gate",
@@ -949,6 +956,7 @@ def main() -> int:
             "External rollout evidence packet",
             "strict MP4 video evidence gate",
             "strict rollout sample-count gate",
+            "strict paired-panel gate",
             "strict rollout uniqueness gate",
             "strict task-config hash gate",
             "strict policy/config hash gate",
@@ -1006,6 +1014,7 @@ def main() -> int:
             "external rollout evidence packet",
             "strict MP4 video evidence gate",
             "strict rollout sample-count gate",
+            "strict paired-panel gate",
             "strict rollout uniqueness gate",
             "strict task-config hash gate",
             "strict policy/config hash gate",
@@ -1063,6 +1072,7 @@ def main() -> int:
             "External rollout evidence packet",
             "strict MP4 video evidence gate",
             "strict rollout sample-count gate",
+            "strict paired-panel gate",
             "strict rollout uniqueness gate",
             "strict task-config hash gate",
             "strict policy/config hash gate",
@@ -1121,6 +1131,7 @@ def main() -> int:
             "scripts/build_external_rollout_evidence_packet.py",
             "strict MP4 video evidence gate",
             "strict rollout sample-count gate",
+            "strict paired-panel gate",
             "strict rollout uniqueness gate",
             "strict task-config hash gate",
             "strict policy/config hash gate",
@@ -1180,6 +1191,7 @@ def main() -> int:
             "external rollout evidence packet",
             "strict MP4 video evidence gate",
             "strict rollout sample-count gate",
+            "strict paired-panel gate",
             "strict rollout uniqueness gate",
             "strict task-config hash gate",
             "strict policy/config hash gate",
@@ -1274,7 +1286,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the strict MP4 video evidence gate, the strict rollout sample-count gate, the strict rollout uniqueness gate, the strict task-config hash gate, the strict policy/config hash gate, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, atomic official evidence promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, and ManiSkill render machine qualification packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the manifest assembly checklist, the External manifest builder self-test, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the strict MP4 video evidence gate, the strict rollout sample-count gate, the strict paired-panel gate, the strict rollout uniqueness gate, the strict task-config hash gate, the strict policy/config hash gate, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, atomic official evidence promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, and ManiSkill render machine qualification packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the manifest assembly checklist, the External manifest builder self-test, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",
