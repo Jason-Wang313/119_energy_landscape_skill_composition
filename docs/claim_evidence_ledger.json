@@ -162,8 +162,8 @@
     },
     {
       "name": "maniskill_render_video_preflight_claim",
-      "claim": "The repository provides a non-evidence ManiSkill render-video preflight that probes whether the tracked public-simulator runtime can export render-backed RGB MP4 files before official collection, records explicit render-backend/shader controls, failure-stage/terminal-stage progress diagnostics, a bounded timeout diagnosis retest, and a bounded renderer profile matrix, classifies the current renderer blocker with a renderer-failure classifier, and keeps strict external evidence false.",
-      "evidence": ["scripts/audit_maniskill_render_video_preflight.py", "results/maniskill_render_video_preflight_audit.json", "results/maniskill_render_video_preflight_audit.md", "results/external_acquisition_packet.json", "results/external_operator_packet.json"]
+      "claim": "The repository provides a non-evidence ManiSkill render-video preflight and render resource sweep that probe whether the tracked public-simulator runtime can export render-backed RGB MP4 files before official collection, record explicit render-backend/shader controls, failure-stage/terminal-stage progress diagnostics, a bounded timeout diagnosis retest, a bounded renderer profile matrix, and a 16x16 resource sweep, classify the current renderer blocker with a renderer-failure classifier, and keep strict external evidence false.",
+      "evidence": ["scripts/audit_maniskill_render_video_preflight.py", "scripts/audit_maniskill_render_resource_sweep.py", "results/maniskill_render_video_preflight_audit.json", "results/maniskill_render_video_preflight_audit.md", "results/maniskill_render_resource_sweep.json", "results/maniskill_render_resource_sweep.md", "external_validation/render_resource_sweep_work_orders.csv", "results/external_acquisition_packet.json", "results/external_operator_packet.json"]
     },
     {
       "name": "maniskill_render_machine_qualification_claim",
@@ -439,6 +439,7 @@
     "results/external_evidence_intake_ledger_audit.md",
     "results/external_method_implementation_audit.md",
     "results/maniskill_render_video_preflight_audit.md",
+    "results/maniskill_render_resource_sweep.md",
     "results/maniskill_pilot_runtime_liveness_audit.md",
     "results/maniskill_pilot_reset_timeout_triage.md",
     "results/external_operator_packet.md",

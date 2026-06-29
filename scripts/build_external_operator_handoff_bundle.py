@@ -113,6 +113,7 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "pilot_smoke_packet.json",
         EXTERNAL / "pilot_smoke_packet.md",
         EXTERNAL / "pilot_smoke_work_orders.csv",
+        EXTERNAL / "render_resource_sweep_work_orders.csv",
         EXTERNAL / "render_machine_qualification_packet.md",
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
@@ -161,6 +162,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "audit_external_pilot_smoke.py",
         SCRIPTS / "build_external_pilot_smoke_packet.py",
         SCRIPTS / "audit_maniskill_render_video_preflight.py",
+        SCRIPTS / "audit_maniskill_render_resource_sweep.py",
         SCRIPTS / "audit_maniskill_pilot_runtime_liveness.py",
         SCRIPTS / "build_maniskill_render_machine_qualification.py",
         SCRIPTS / "build_external_method_implementation_packet.py",
@@ -223,6 +225,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_pilot_smoke_packet_audit.md",
         RESULTS / "maniskill_render_video_preflight_audit.json",
         RESULTS / "maniskill_render_video_preflight_audit.md",
+        RESULTS / "maniskill_render_resource_sweep.json",
+        RESULTS / "maniskill_render_resource_sweep.md",
         RESULTS / "maniskill_pilot_runtime_liveness_audit.json",
         RESULTS / "maniskill_pilot_runtime_liveness_audit.md",
         RESULTS / "maniskill_render_machine_qualification.json",
@@ -343,6 +347,7 @@ def build_payload() -> dict[str, Any]:
     method_implementation = require_payload(RESULTS / "external_method_implementation_audit.json", "external_method_implementation_audit_v1")
     pilot_smoke = require_payload(RESULTS / "external_pilot_smoke_packet_audit.json", "external_pilot_smoke_packet_audit_v1")
     render_preflight = require_payload(RESULTS / "maniskill_render_video_preflight_audit.json", "maniskill_render_video_preflight_audit_v2")
+    render_resource_sweep = require_payload(RESULTS / "maniskill_render_resource_sweep.json", "maniskill_render_resource_sweep_v1")
     pilot_runtime = require_payload(RESULTS / "maniskill_pilot_runtime_liveness_audit.json", "maniskill_pilot_runtime_liveness_audit_v1")
     render_machine = require_payload(RESULTS / "maniskill_render_machine_qualification.json", "maniskill_render_machine_qualification_v1")
     precollection_manifest = require_payload(
@@ -803,6 +808,29 @@ def build_payload() -> dict[str, Any]:
             f"blocking={render_preflight.get('blocking_missing')!r}"
         ),
     )
+    render_resource_checks = {check.get("name"): check.get("passed") for check in render_resource_sweep.get("checks", []) or []}
+    add_check(
+        checks,
+        "maniskill_render_resource_sweep_included",
+        render_resource_sweep.get("passed") is True
+        and render_resource_sweep.get("not_external_evidence") is True
+        and render_resource_sweep.get("strict_external_evidence_ready") is False
+        and render_resource_sweep.get("any_render_video_ready") is False
+        and render_resource_sweep.get("descriptor_pool_failure_persists_at_minimum_resolution") is True
+        and int(render_resource_sweep.get("record_count", 0) or 0) >= 3
+        and "vulkan_descriptor_pool_exhaustion" in (render_resource_sweep.get("renderer_failure_classes", []) or [])
+        and render_resource_checks.get("resource_sweep_is_non_evidence") is True
+        and render_resource_checks.get("quarantine_paths_are_not_official_evidence") is True
+        and "scripts/audit_maniskill_render_resource_sweep.py" in paths
+        and "results/maniskill_render_resource_sweep.json" in paths
+        and "results/maniskill_render_resource_sweep.md" in paths
+        and "external_validation/render_resource_sweep_work_orders.csv" in paths,
+        (
+            f"any_ready={render_resource_sweep.get('any_render_video_ready')!r}, "
+            f"records={render_resource_sweep.get('record_count')!r}, "
+            f"classes={render_resource_sweep.get('renderer_failure_classes')!r}"
+        ),
+    )
     pilot_runtime_checks = {check.get("name"): check.get("passed") for check in pilot_runtime.get("checks", []) or []}
     pilot_runtime_records = int(pilot_runtime.get("records_observed", 0) or 0)
     pilot_runtime_videos = int(pilot_runtime.get("videos_written", 0) or 0)
@@ -931,6 +959,7 @@ def build_payload() -> dict[str, Any]:
             "method_implementation_packet",
             "pilot_smoke_packet",
             "maniskill_render_video_preflight",
+            "maniskill_render_resource_sweep",
             "maniskill_pilot_runtime_liveness",
             "real_method_implementations",
             "run_collection",
@@ -938,7 +967,7 @@ def build_payload() -> dict[str, Any]:
             "strict_rollout_recompute",
             "final_strict_gate",
         }.issubset(action_ids),
-        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'fidelity_acceptance_materializer', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'ablation_collection_packet', 'evidence_intake_ledger', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'maniskill_render_video_preflight', 'maniskill_pilot_runtime_liveness', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
+        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'fidelity_acceptance_materializer', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'ablation_collection_packet', 'evidence_intake_ledger', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'maniskill_render_video_preflight', 'maniskill_render_resource_sweep', 'maniskill_pilot_runtime_liveness', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
     )
     add_check(
         checks,
@@ -993,6 +1022,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_pilot_smoke_packet_audit.json",
             "results/external_pilot_smoke_audit.json",
             "results/maniskill_render_video_preflight_audit.json",
+            "results/maniskill_render_resource_sweep.json",
             "results/maniskill_pilot_runtime_liveness_audit.json",
             "results/external_method_implementation_audit.json",
             "results/external_precollection_manifest_draft_audit.json",

@@ -41,7 +41,7 @@
       "passed": true
     },
     {
-      "detail": "files=281, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=285, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -153,6 +153,11 @@
     {
       "detail": "classes=['vulkan_descriptor_pool_exhaustion'], remediation=5",
       "name": "renderer_failure_classifier_visible",
+      "passed": true
+    },
+    {
+      "detail": "any_ready=False, records=3, classes=['vulkan_descriptor_pool_exhaustion']",
+      "name": "render_resource_sweep_visible",
       "passed": true
     },
     {

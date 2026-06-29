@@ -57,6 +57,11 @@
       "passed": true
     },
     {
+      "detail": "any_ready=False, records=3, failure_classes=['vulkan_descriptor_pool_exhaustion']",
+      "name": "render_resource_sweep_recorded_but_not_evidence",
+      "passed": true
+    },
+    {
       "detail": "qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12",
       "name": "render_machine_qualification_recorded_but_not_evidence",
       "passed": true
@@ -571,6 +576,23 @@
     },
     {
       "artifacts": [
+        "scripts/audit_maniskill_render_resource_sweep.py",
+        "results/maniskill_render_resource_sweep.json",
+        "results/maniskill_render_resource_sweep.md",
+        "external_validation/render_resource_sweep_work_orders.csv"
+      ],
+      "closes": [
+        "bounded renderer-resource diagnosis before accepted-machine render qualification; not evidence"
+      ],
+      "commands": [
+        "python scripts\\audit_maniskill_render_resource_sweep.py --timeout-seconds 45 --max-envs 1"
+      ],
+      "id": "maniskill_render_resource_sweep",
+      "operator_input": "first primary task family, minimal render resolution, and explicit renderer profiles on the selected runtime machine",
+      "title": "Run a bounded ManiSkill render resource sweep"
+    },
+    {
+      "artifacts": [
         "external_validation/render_machine_qualification_packet.md",
         "scripts/build_maniskill_render_machine_qualification.py",
         "results/maniskill_render_machine_qualification.json",
@@ -830,6 +852,23 @@
     "render_machine_qualified": false,
     "strict_external_evidence_ready": false
   },
+  "render_resource_sweep": {
+    "any_render_video_ready": false,
+    "audit_md_path": "results/maniskill_render_resource_sweep.md",
+    "audit_path": "results/maniskill_render_resource_sweep.json",
+    "build_command": "python scripts\\audit_maniskill_render_resource_sweep.py --timeout-seconds 45 --max-envs 1",
+    "descriptor_pool_failure_persists_at_minimum_resolution": true,
+    "not_external_evidence": true,
+    "record_count": 3,
+    "renderer_failure_classes": [
+      "vulkan_descriptor_pool_exhaustion"
+    ],
+    "renderer_failure_stages": [
+      "initial_render_start"
+    ],
+    "strict_external_evidence_ready": false,
+    "work_orders_path": "external_validation/render_resource_sweep_work_orders.csv"
+  },
   "render_video_preflight": {
     "audit_md_path": "results/maniskill_render_video_preflight_audit.md",
     "audit_path": "results/maniskill_render_video_preflight_audit.json",
@@ -870,6 +909,7 @@
     "results/maniskill_env_smoke_probe.json",
     "results/maniskill_fidelity_metadata_probe.json",
     "results/maniskill_render_video_preflight_audit.json",
+    "results/maniskill_render_resource_sweep.json",
     "results/external_backend_contract_audit.json",
     "results/maniskill_backend_readiness_audit.json",
     "results/maniskill_reference_collection_preflight_audit.json",

@@ -78,6 +78,10 @@ def build_payload() -> dict[str, Any]:
         RESULTS / "maniskill_render_video_preflight_audit.json",
         "maniskill_render_video_preflight_audit_v2",
     )
+    render_resource_sweep = require_payload(
+        RESULTS / "maniskill_render_resource_sweep.json",
+        "maniskill_render_resource_sweep_v1",
+    )
     render_machine = require_payload(
         RESULTS / "maniskill_render_machine_qualification.json",
         "maniskill_render_machine_qualification_v1",
@@ -128,6 +132,7 @@ def build_payload() -> dict[str, Any]:
         "real_method_implementations",
         "pilot_smoke_packet",
         "maniskill_render_video_preflight",
+        "maniskill_render_resource_sweep",
         "maniskill_pilot_runtime_liveness",
         "maniskill_render_machine_qualification",
         "ablation_collection_packet",
@@ -251,6 +256,28 @@ def build_payload() -> dict[str, Any]:
             f"render_video_ready={render_preflight.get('render_video_ready')!r}, "
             f"envs={render_preflight.get('env_count')!r}, "
             f"failure_classes={render_preflight.get('renderer_failure_classes')!r}"
+        ),
+    )
+    render_resource_action = actions.get("maniskill_render_resource_sweep", {})
+    render_resource_commands = "\n".join(render_resource_action.get("commands", []) or [])
+    render_resource_checks = {check.get("name"): check.get("passed") for check in render_resource_sweep.get("checks", []) or []}
+    add_check(
+        checks,
+        "render_resource_sweep_recorded_but_not_evidence",
+        render_resource_sweep.get("passed") is True
+        and render_resource_sweep.get("not_external_evidence") is True
+        and render_resource_sweep.get("strict_external_evidence_ready") is False
+        and render_resource_sweep.get("any_render_video_ready") is False
+        and render_resource_sweep.get("descriptor_pool_failure_persists_at_minimum_resolution") is True
+        and int(render_resource_sweep.get("record_count", 0) or 0) >= 3
+        and "vulkan_descriptor_pool_exhaustion" in (render_resource_sweep.get("renderer_failure_classes", []) or [])
+        and render_resource_checks.get("resource_sweep_is_non_evidence") is True
+        and render_resource_checks.get("quarantine_paths_are_not_official_evidence") is True
+        and "audit_maniskill_render_resource_sweep.py" in render_resource_commands,
+        (
+            f"any_ready={render_resource_sweep.get('any_render_video_ready')!r}, "
+            f"records={render_resource_sweep.get('record_count')!r}, "
+            f"failure_classes={render_resource_sweep.get('renderer_failure_classes')!r}"
         ),
     )
     render_machine_action = actions.get("maniskill_render_machine_qualification", {})
@@ -512,6 +539,19 @@ def build_payload() -> dict[str, Any]:
             "audit_md_path": "results/maniskill_render_video_preflight_audit.md",
             "build_command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4",
         },
+        "render_resource_sweep": {
+            "not_external_evidence": True,
+            "any_render_video_ready": render_resource_sweep.get("any_render_video_ready") is True,
+            "strict_external_evidence_ready": render_resource_sweep.get("strict_external_evidence_ready") is True,
+            "record_count": int(render_resource_sweep.get("record_count", 0) or 0),
+            "descriptor_pool_failure_persists_at_minimum_resolution": render_resource_sweep.get("descriptor_pool_failure_persists_at_minimum_resolution") is True,
+            "renderer_failure_classes": list(render_resource_sweep.get("renderer_failure_classes", []) or []),
+            "renderer_failure_stages": list(render_resource_sweep.get("renderer_failure_stages", []) or []),
+            "audit_path": "results/maniskill_render_resource_sweep.json",
+            "audit_md_path": "results/maniskill_render_resource_sweep.md",
+            "work_orders_path": "external_validation/render_resource_sweep_work_orders.csv",
+            "build_command": "python scripts\\audit_maniskill_render_resource_sweep.py --timeout-seconds 45 --max-envs 1",
+        },
         "render_machine_qualification": {
             "not_external_evidence": True,
             "qualification_state": render_machine.get("qualification_state"),
@@ -584,6 +624,7 @@ def build_payload() -> dict[str, Any]:
             "results/maniskill_env_smoke_probe.json",
             "results/maniskill_fidelity_metadata_probe.json",
             "results/maniskill_render_video_preflight_audit.json",
+            "results/maniskill_render_resource_sweep.json",
             "results/external_backend_contract_audit.json",
             "results/maniskill_backend_readiness_audit.json",
             "results/maniskill_reference_collection_preflight_audit.json",
@@ -777,6 +818,31 @@ def write_md(payload: dict[str, Any]) -> None:
     )
     for command in render["renderer_profile_retest_commands"] or ["none"]:
         lines.extend(["```powershell", command, "```"])
+
+    resource = payload["render_resource_sweep"]
+    lines.extend(
+        [
+            "",
+            "## ManiSkill Render Resource Sweep",
+            "",
+            "This packet is not evidence. It retests the first primary task at minimal resolution across renderer profiles and keeps all media quarantined.",
+            "",
+            f"- Audit JSON: `{resource['audit_path']}`",
+            f"- Audit notes: `{resource['audit_md_path']}`",
+            f"- Work orders: `{resource['work_orders_path']}`",
+            f"- Any render-backed MP4 ready: `{str(resource['any_render_video_ready']).lower()}`",
+            f"- Descriptor-pool failure persists at minimum resolution: `{str(resource['descriptor_pool_failure_persists_at_minimum_resolution']).lower()}`",
+            f"- Records: `{resource['record_count']}`",
+            f"- Renderer failure classes: `{resource['renderer_failure_classes']}`",
+            f"- Renderer failure stages: `{resource['renderer_failure_stages']}`",
+            "",
+            "Resource sweep command:",
+            "",
+            "```powershell",
+            resource["build_command"],
+            "```",
+        ]
+    )
 
     render_machine = payload["render_machine_qualification"]
     lines.extend(

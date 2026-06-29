@@ -31,6 +31,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "platform_fidelity",
         "pilot_smoke_packet",
         "maniskill_render_video_preflight",
+        "maniskill_render_resource_sweep",
         "maniskill_pilot_runtime_liveness",
         "maniskill_render_machine_qualification",
         "ablation_collection_packet",
@@ -354,6 +355,20 @@ ACTION_CATALOG = {
         ],
         "closes": ["pre-collection render-backed MP4 readiness for the tracked ManiSkill route; not evidence"],
     },
+    "maniskill_render_resource_sweep": {
+        "title": "Run a bounded ManiSkill render resource sweep",
+        "operator_input": "first primary task family, minimal render resolution, and explicit renderer profiles on the selected runtime machine",
+        "artifacts": [
+            "scripts/audit_maniskill_render_resource_sweep.py",
+            "results/maniskill_render_resource_sweep.json",
+            "results/maniskill_render_resource_sweep.md",
+            "external_validation/render_resource_sweep_work_orders.csv",
+        ],
+        "commands": [
+            "python scripts\\audit_maniskill_render_resource_sweep.py --timeout-seconds 45 --max-envs 1",
+        ],
+        "closes": ["bounded renderer-resource diagnosis before accepted-machine render qualification; not evidence"],
+    },
     "maniskill_render_machine_qualification": {
         "title": "Qualify the exact render machine before official collection",
         "operator_input": "accepted collection machine with platform probe, render-backed MP4 preflight, pilot liveness, and no diagnostic fallback videos",
@@ -572,6 +587,7 @@ def main() -> int:
     method_packet_path = RESULTS / "external_method_implementation_audit.json"
     pilot_smoke_path = RESULTS / "external_pilot_smoke_packet_audit.json"
     render_preflight_path = RESULTS / "maniskill_render_video_preflight_audit.json"
+    render_resource_sweep_path = RESULTS / "maniskill_render_resource_sweep.json"
     pilot_runtime_path = RESULTS / "maniskill_pilot_runtime_liveness_audit.json"
     render_machine_path = RESULTS / "maniskill_render_machine_qualification.json"
 
@@ -599,6 +615,7 @@ def main() -> int:
     method_packet = require_json(method_packet_path)
     pilot_smoke = require_json(pilot_smoke_path)
     render_preflight = require_json(render_preflight_path)
+    render_resource_sweep = require_json(render_resource_sweep_path)
     pilot_runtime = require_json(pilot_runtime_path)
     render_machine = require_json(render_machine_path)
 
@@ -639,6 +656,7 @@ def main() -> int:
                 method_packet_path,
                 pilot_smoke_path,
                 render_preflight_path,
+                render_resource_sweep_path,
                 pilot_runtime_path,
                 render_machine_path,
             ]
@@ -668,6 +686,7 @@ def main() -> int:
                 method_packet_path,
                 pilot_smoke_path,
                 render_preflight_path,
+                render_resource_sweep_path,
                 pilot_runtime_path,
             ]
         ),
@@ -919,6 +938,29 @@ def main() -> int:
             f"render_video_ready={render_preflight.get('render_video_ready')!r}, "
             f"envs={render_preflight.get('env_count')!r}, "
             f"failure_classes={render_preflight.get('renderer_failure_classes')!r}"
+        ),
+    )
+    render_resource_sweep_checks = {check.get("name"): check.get("passed") for check in render_resource_sweep.get("checks", []) or []}
+    add_check(
+        checks,
+        "maniskill_render_resource_sweep_recorded",
+        render_resource_sweep.get("version") == "maniskill_render_resource_sweep_v1"
+        and render_resource_sweep.get("passed") is True
+        and render_resource_sweep.get("not_external_evidence") is True
+        and render_resource_sweep.get("strict_external_evidence_ready") is False
+        and int(render_resource_sweep.get("record_count", 0) or 0) >= 3
+        and render_resource_sweep.get("any_render_video_ready") is False
+        and render_resource_sweep.get("descriptor_pool_failure_persists_at_minimum_resolution") is True
+        and "vulkan_descriptor_pool_exhaustion" in (render_resource_sweep.get("renderer_failure_classes", []) or [])
+        and render_resource_sweep_checks.get("resource_sweep_is_non_evidence") is True
+        and render_resource_sweep_checks.get("quarantine_paths_are_not_official_evidence") is True
+        and (ROOT / "scripts" / "audit_maniskill_render_resource_sweep.py").exists()
+        and (RESULTS / "maniskill_render_resource_sweep.md").exists()
+        and (EXTERNAL / "render_resource_sweep_work_orders.csv").exists(),
+        (
+            f"any_ready={render_resource_sweep.get('any_render_video_ready')!r}, "
+            f"records={render_resource_sweep.get('record_count')!r}, "
+            f"classes={render_resource_sweep.get('renderer_failure_classes')!r}"
         ),
     )
     pilot_runtime_checks = {check.get("name"): check.get("passed") for check in pilot_runtime.get("checks", []) or []}
@@ -1204,6 +1246,7 @@ def main() -> int:
         "build_external_pilot_smoke_packet.py",
         "audit_external_pilot_smoke.py",
         "audit_maniskill_render_video_preflight.py",
+        "audit_maniskill_render_resource_sweep.py",
         "audit_maniskill_pilot_runtime_liveness.py",
         "build_maniskill_render_machine_qualification.py",
     ]
@@ -1270,6 +1313,7 @@ def main() -> int:
                 method_packet_path,
                 pilot_smoke_path,
                 render_preflight_path,
+                render_resource_sweep_path,
                 pilot_runtime_path,
                 render_machine_path,
             ]
@@ -1297,6 +1341,19 @@ def main() -> int:
             "audit_command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4",
             "audit_path": "results/maniskill_render_video_preflight_audit.json",
             "audit_md_path": "results/maniskill_render_video_preflight_audit.md",
+        },
+        "render_resource_sweep": {
+            "not_external_evidence": True,
+            "any_render_video_ready": render_resource_sweep.get("any_render_video_ready") is True,
+            "strict_external_evidence_ready": render_resource_sweep.get("strict_external_evidence_ready") is True,
+            "record_count": int(render_resource_sweep.get("record_count", 0) or 0),
+            "descriptor_pool_failure_persists_at_minimum_resolution": render_resource_sweep.get("descriptor_pool_failure_persists_at_minimum_resolution") is True,
+            "renderer_failure_classes": list(render_resource_sweep.get("renderer_failure_classes", []) or []),
+            "renderer_failure_stages": list(render_resource_sweep.get("renderer_failure_stages", []) or []),
+            "audit_command": "python scripts\\audit_maniskill_render_resource_sweep.py --timeout-seconds 45 --max-envs 1",
+            "audit_path": "results/maniskill_render_resource_sweep.json",
+            "audit_md_path": "results/maniskill_render_resource_sweep.md",
+            "operator_csv_path": "external_validation/render_resource_sweep_work_orders.csv",
         },
         "render_machine_qualification": {
             "not_external_evidence": True,
@@ -1404,6 +1461,21 @@ def main() -> int:
     )
     for command in render_summary["renderer_profile_retest_commands"] or ["none"]:
         lines.extend(["```powershell", command, "```"])
+
+    resource_summary = payload["render_resource_sweep"]
+    lines.extend(
+        [
+            "",
+            "## ManiSkill Render Resource Sweep",
+            "",
+            f"- Any render-backed MP4 ready: `{str(resource_summary['any_render_video_ready']).lower()}`",
+            f"- Descriptor-pool failure persists at minimum resolution: `{str(resource_summary['descriptor_pool_failure_persists_at_minimum_resolution']).lower()}`",
+            f"- Records: `{resource_summary['record_count']}`",
+            f"- Renderer failure classes: `{resource_summary['renderer_failure_classes']}`",
+            f"- Renderer failure stages: `{resource_summary['renderer_failure_stages']}`",
+            f"- Work orders: `{resource_summary['operator_csv_path']}`",
+        ]
+    )
 
     ablation_summary = payload["ablation_collection"]
     lines.extend(

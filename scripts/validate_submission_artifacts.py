@@ -2635,6 +2635,53 @@ def main():
     ):
         if render_preflight_checks.get(required_check) is not True:
             fail(f"ManiSkill render-video preflight audit missing passing check: {required_check}")
+    render_resource_path = RESULTS / "maniskill_render_resource_sweep.json"
+    render_resource_md_path = RESULTS / "maniskill_render_resource_sweep.md"
+    render_resource_csv_path = EXTERNAL / "render_resource_sweep_work_orders.csv"
+    for path in (
+        ROOT / "scripts" / "audit_maniskill_render_resource_sweep.py",
+        render_resource_path,
+        render_resource_md_path,
+        render_resource_csv_path,
+    ):
+        if not path.exists():
+            fail(f"missing ManiSkill render resource sweep artifact: {path}")
+    render_resource = json.loads(render_resource_path.read_text(encoding="utf-8"))
+    if render_resource.get("version") != "maniskill_render_resource_sweep_v1":
+        fail("ManiSkill render resource sweep version mismatch")
+    if render_resource.get("passed") is not True:
+        fail("ManiSkill render resource sweep did not pass")
+    if render_resource.get("not_external_evidence") is not True:
+        fail("ManiSkill render resource sweep must declare that it is not evidence")
+    if render_resource.get("strict_external_evidence_ready") is not False:
+        fail("ManiSkill render resource sweep must not claim strict external evidence readiness")
+    if render_resource.get("any_render_video_ready") is not False:
+        fail("current local render resource sweep should remain not ready until an accepted renderer writes MP4s")
+    if render_resource.get("descriptor_pool_failure_persists_at_minimum_resolution") is not True:
+        fail("current local render resource sweep must record descriptor-pool failure persistence at minimum resolution")
+    if int(render_resource.get("record_count", 0) or 0) < 3:
+        fail("ManiSkill render resource sweep must include at least three renderer profile attempts")
+    if "vulkan_descriptor_pool_exhaustion" not in (render_resource.get("renderer_failure_classes", []) or []):
+        fail("ManiSkill render resource sweep must preserve the Vulkan descriptor-pool failure class")
+    for record in render_resource.get("records", []) or []:
+        if record.get("not_external_evidence") is not True:
+            fail("ManiSkill render resource sweep records must be non-evidence")
+        if not str(record.get("output_path", "")).startswith("external_validation/render_resource_sweep/"):
+            fail("ManiSkill render resource sweep outputs must remain quarantined")
+        if not (record.get("timed_out") or record.get("parsed_marker")):
+            fail("ManiSkill render resource sweep records must have terminal status")
+    render_resource_checks = {check.get("name"): check.get("passed") for check in render_resource.get("checks", [])}
+    for required_check in (
+        "resource_sweep_is_non_evidence",
+        "profiles_loaded",
+        "primary_env_loaded",
+        "each_probe_has_terminal_status",
+        "quarantine_paths_are_not_official_evidence",
+        "descriptor_pool_failure_classified_or_render_ready",
+        "no_real_manifest_written",
+    ):
+        if render_resource_checks.get(required_check) is not True:
+            fail(f"ManiSkill render resource sweep missing passing check: {required_check}")
     pilot_runtime_path = RESULTS / "maniskill_pilot_runtime_liveness_audit.json"
     pilot_runtime_md_path = RESULTS / "maniskill_pilot_runtime_liveness_audit.md"
     pilot_reset_triage_path = RESULTS / "maniskill_pilot_reset_timeout_triage.json"
@@ -3121,6 +3168,8 @@ def main():
         "external_pilot_smoke_quarantine_gate",
         "maniskill_pilot_runtime_liveness_ready",
         "maniskill_pilot_runtime_liveness_not_evidence",
+        "maniskill_render_resource_sweep_ready",
+        "maniskill_render_resource_sweep_not_evidence",
         "maniskill_render_machine_qualification_ready",
         "maniskill_render_machine_qualification_not_evidence",
         "maniskill_render_machine_operator_commands",
@@ -3210,6 +3259,8 @@ def main():
         RESULTS / "external_acquisition_packet.md",
         RESULTS / "external_operator_packet.md",
         RESULTS / "external_operator_handoff_bundle.md",
+        RESULTS / "maniskill_render_resource_sweep.md",
+        EXTERNAL / "render_resource_sweep_work_orders.csv",
         RESULTS / "maniskill_render_machine_qualification.md",
         RESULTS / "external_analysis_plan_audit.md",
         RESULTS / "external_platform_onboarding_audit.md",
@@ -3289,6 +3340,21 @@ def main():
         for fragment in ("--render-backend cpu", "--render-backend gpu", "--render-backend sapien_cuda"):
             if fragment not in retest_commands:
                 fail(f"external acquisition packet missing renderer retest command fragment: {fragment}")
+    acquisition_resource = acquisition.get("render_resource_sweep", {}) or {}
+    if acquisition_resource.get("not_external_evidence") is not True:
+        fail("external acquisition packet render resource sweep must be marked non-evidence")
+    if acquisition_resource.get("any_render_video_ready") is not False:
+        fail("external acquisition packet render resource sweep must preserve current no-ready state")
+    if acquisition_resource.get("strict_external_evidence_ready") is not False:
+        fail("external acquisition packet render resource sweep must preserve strict evidence false")
+    if acquisition_resource.get("descriptor_pool_failure_persists_at_minimum_resolution") is not True:
+        fail("external acquisition packet render resource sweep must expose minimum-resolution descriptor-pool persistence")
+    if int(acquisition_resource.get("record_count", 0) or 0) < 3:
+        fail("external acquisition packet render resource sweep must expose all renderer profile attempts")
+    if "vulkan_descriptor_pool_exhaustion" not in (acquisition_resource.get("renderer_failure_classes", []) or []):
+        fail("external acquisition packet render resource sweep must expose descriptor-pool failure class")
+    if "audit_maniskill_render_resource_sweep.py" not in str(acquisition_resource.get("audit_command", "")):
+        fail("external acquisition packet render resource sweep must expose rebuild command")
     acquisition_checks = {entry.get("name"): entry.get("passed") for entry in acquisition.get("checks", [])}
     for required_check in (
         "all_missing_requirements_mapped",
@@ -3305,6 +3371,7 @@ def main():
         "maniskill_reference_collection_preflight_ready",
         "pilot_smoke_packet_ready",
         "maniskill_render_video_preflight_recorded",
+        "maniskill_render_resource_sweep_recorded",
         "method_implementation_packet_ready",
         "preflight_operator_actions_present",
         "route_independent_of_haonan",
@@ -3436,6 +3503,23 @@ def main():
         fail("external operator packet render-video preflight must point to the audit JSON")
     if "audit_maniskill_render_video_preflight.py" not in str(operator_render.get("build_command", "")):
         fail("external operator packet render-video preflight must include rebuild command")
+    operator_resource = operator_packet.get("render_resource_sweep", {}) or {}
+    if operator_resource.get("not_external_evidence") is not True:
+        fail("external operator packet render resource sweep must be marked non-evidence")
+    if operator_resource.get("any_render_video_ready") is not False:
+        fail("external operator packet render resource sweep must preserve current no-ready state")
+    if operator_resource.get("strict_external_evidence_ready") is not False:
+        fail("external operator packet render resource sweep must preserve strict evidence false")
+    if operator_resource.get("descriptor_pool_failure_persists_at_minimum_resolution") is not True:
+        fail("external operator packet render resource sweep must expose minimum-resolution descriptor-pool persistence")
+    if int(operator_resource.get("record_count", 0) or 0) < 3:
+        fail("external operator packet render resource sweep must expose all renderer profile attempts")
+    if "vulkan_descriptor_pool_exhaustion" not in (operator_resource.get("renderer_failure_classes", []) or []):
+        fail("external operator packet render resource sweep must expose descriptor-pool failure class")
+    if "maniskill_render_resource_sweep.json" not in str(operator_resource.get("audit_path", "")):
+        fail("external operator packet render resource sweep must point to the audit JSON")
+    if "audit_maniskill_render_resource_sweep.py" not in str(operator_resource.get("build_command", "")):
+        fail("external operator packet render resource sweep must include rebuild command")
     operator_actions = operator_packet.get("operator_actions", []) or []
     if len(operator_actions) < 10:
         fail("external operator packet has too few operator actions")
@@ -3480,6 +3564,12 @@ def main():
     render_preflight_commands = "\n".join(render_preflight_actions[0].get("commands", []) or [])
     if "audit_maniskill_render_video_preflight.py" not in render_preflight_commands:
         fail("external operator packet render preflight action must expose render-video preflight command")
+    render_resource_actions = [action for action in operator_actions if action.get("id") == "maniskill_render_resource_sweep"]
+    if not render_resource_actions:
+        fail("external operator packet missing maniskill_render_resource_sweep action")
+    render_resource_commands = "\n".join(render_resource_actions[0].get("commands", []) or [])
+    if "audit_maniskill_render_resource_sweep.py" not in render_resource_commands:
+        fail("external operator packet resource-sweep action must expose render resource sweep command")
     backend_integration_actions = [action for action in operator_actions if action.get("id") == "backend_integration_packet"]
     if not backend_integration_actions:
         fail("external operator packet missing backend_integration_packet action")
@@ -3675,6 +3765,7 @@ def main():
         "precollection_manifest_draft_included",
         "pilot_smoke_packet_included",
         "maniskill_render_video_preflight_included",
+        "maniskill_render_resource_sweep_included",
         "maniskill_pilot_runtime_liveness_included",
         "maniskill_render_machine_qualification_included",
         "method_implementation_packet_included",

@@ -52,7 +52,7 @@
   "acquisition_packet_ready": true,
   "checks": [
     {
-      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_probe.json, results/maniskill_task_binding_probe.json, results/maniskill_env_smoke_probe.json, results/external_platform_onboarding_audit.json, results/external_fidelity_provenance_audit.json, results/external_fidelity_acceptance_draft_audit.json, results/fidelity_acceptance_materialization_plan.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/maniskill_backend_readiness_audit.json, results/maniskill_reference_collection_preflight_audit.json, results/external_config_manifest_audit.json, results/external_rollout_evidence_audit.json, results/external_ablation_collection_audit.json, results/external_evidence_intake_ledger_audit.json, results/external_method_implementation_audit.json, results/external_pilot_smoke_packet_audit.json, results/maniskill_render_video_preflight_audit.json, results/maniskill_pilot_runtime_liveness_audit.json",
+      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_probe.json, results/maniskill_task_binding_probe.json, results/maniskill_env_smoke_probe.json, results/external_platform_onboarding_audit.json, results/external_fidelity_provenance_audit.json, results/external_fidelity_acceptance_draft_audit.json, results/fidelity_acceptance_materialization_plan.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/maniskill_backend_readiness_audit.json, results/maniskill_reference_collection_preflight_audit.json, results/external_config_manifest_audit.json, results/external_rollout_evidence_audit.json, results/external_ablation_collection_audit.json, results/external_evidence_intake_ledger_audit.json, results/external_method_implementation_audit.json, results/external_pilot_smoke_packet_audit.json, results/maniskill_render_video_preflight_audit.json, results/maniskill_render_resource_sweep.json, results/maniskill_pilot_runtime_liveness_audit.json",
       "name": "source_audits_exist",
       "passed": true
     },
@@ -137,6 +137,11 @@
       "passed": true
     },
     {
+      "detail": "any_ready=False, records=3, classes=['vulkan_descriptor_pool_exhaustion']",
+      "name": "maniskill_render_resource_sweep_recorded",
+      "passed": true
+    },
+    {
       "detail": "pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, timed_out=False, records=0, videos=0, diagnostic_fallbacks=1, failure_summary='official video guard rejected diagnostic fallback sidecar before JSONL write after progress stage record_video_start'",
       "name": "maniskill_pilot_runtime_liveness_ready",
       "passed": true
@@ -212,7 +217,7 @@
       "passed": true
     },
     {
-      "detail": "Probe the selected external platform machine Probe ManiSkill task-family bindings Smoke-test bound ManiSkill environments Probe ManiSkill/SAPIEN fidelity metadata Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Audit the repository ManiSkill/SAPIEN reference backend candidate Audit explicit reference-backend collection preflight Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Collect manifest-declared external ablations Use the evidence intake ledger to close every strict external-evidence failure Fill platform fidelity acceptance with real provenance Generate the tracked ManiSkill fidelity acceptance draft Materialize fidelity acceptance only through the guarded promotion path Run a quarantined first-panel backend smoke test Audit bounded ManiSkill pilot runtime liveness Audit ManiSkill render-backed evidence-video export Qualify the exact render machine before official collection Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
+      "detail": "Probe the selected external platform machine Probe ManiSkill task-family bindings Smoke-test bound ManiSkill environments Probe ManiSkill/SAPIEN fidelity metadata Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Audit the repository ManiSkill/SAPIEN reference backend candidate Audit explicit reference-backend collection preflight Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Collect manifest-declared external ablations Use the evidence intake ledger to close every strict external-evidence failure Fill platform fidelity acceptance with real provenance Generate the tracked ManiSkill fidelity acceptance draft Materialize fidelity acceptance only through the guarded promotion path Run a quarantined first-panel backend smoke test Audit bounded ManiSkill pilot runtime liveness Audit ManiSkill render-backed evidence-video export Run a bounded ManiSkill render resource sweep Qualify the exact render machine before official collection Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
       "name": "operator_actions_cover_collection_blockers",
       "passed": true
     },
@@ -261,6 +266,7 @@
         "platform_fidelity",
         "pilot_smoke_packet",
         "maniskill_render_video_preflight",
+        "maniskill_render_resource_sweep",
         "maniskill_pilot_runtime_liveness",
         "maniskill_render_machine_qualification",
         "ablation_collection_packet",
@@ -657,6 +663,23 @@
     },
     {
       "artifacts": [
+        "scripts/audit_maniskill_render_resource_sweep.py",
+        "results/maniskill_render_resource_sweep.json",
+        "results/maniskill_render_resource_sweep.md",
+        "external_validation/render_resource_sweep_work_orders.csv"
+      ],
+      "closes": [
+        "bounded renderer-resource diagnosis before accepted-machine render qualification; not evidence"
+      ],
+      "commands": [
+        "python scripts\\audit_maniskill_render_resource_sweep.py --timeout-seconds 45 --max-envs 1"
+      ],
+      "id": "maniskill_render_resource_sweep",
+      "operator_input": "first primary task family, minimal render resolution, and explicit renderer profiles on the selected runtime machine",
+      "title": "Run a bounded ManiSkill render resource sweep"
+    },
+    {
+      "artifacts": [
         "external_validation/render_machine_qualification_packet.md",
         "scripts/build_maniskill_render_machine_qualification.py",
         "results/maniskill_render_machine_qualification.json",
@@ -877,6 +900,23 @@
     "render_machine_qualified": false,
     "strict_external_evidence_ready": false
   },
+  "render_resource_sweep": {
+    "any_render_video_ready": false,
+    "audit_command": "python scripts\\audit_maniskill_render_resource_sweep.py --timeout-seconds 45 --max-envs 1",
+    "audit_md_path": "results/maniskill_render_resource_sweep.md",
+    "audit_path": "results/maniskill_render_resource_sweep.json",
+    "descriptor_pool_failure_persists_at_minimum_resolution": true,
+    "not_external_evidence": true,
+    "operator_csv_path": "external_validation/render_resource_sweep_work_orders.csv",
+    "record_count": 3,
+    "renderer_failure_classes": [
+      "vulkan_descriptor_pool_exhaustion"
+    ],
+    "renderer_failure_stages": [
+      "initial_render_start"
+    ],
+    "strict_external_evidence_ready": false
+  },
   "render_video_preflight": {
     "audit_command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4",
     "audit_md_path": "results/maniskill_render_video_preflight_audit.md",
@@ -933,6 +973,7 @@
     "results/external_method_implementation_audit.json",
     "results/external_pilot_smoke_packet_audit.json",
     "results/maniskill_render_video_preflight_audit.json",
+    "results/maniskill_render_resource_sweep.json",
     "results/maniskill_pilot_runtime_liveness_audit.json",
     "results/maniskill_render_machine_qualification.json"
   ],

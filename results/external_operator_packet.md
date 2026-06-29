@@ -143,6 +143,25 @@ python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --
 python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4 --width 64 --height 64 --render-backend cpu --shader-pack minimal
 ```
 
+## ManiSkill Render Resource Sweep
+
+This packet is not evidence. It retests the first primary task at minimal resolution across renderer profiles and keeps all media quarantined.
+
+- Audit JSON: `results/maniskill_render_resource_sweep.json`
+- Audit notes: `results/maniskill_render_resource_sweep.md`
+- Work orders: `external_validation/render_resource_sweep_work_orders.csv`
+- Any render-backed MP4 ready: `false`
+- Descriptor-pool failure persists at minimum resolution: `true`
+- Records: `3`
+- Renderer failure classes: `['vulkan_descriptor_pool_exhaustion']`
+- Renderer failure stages: `['initial_render_start']`
+
+Resource sweep command:
+
+```powershell
+python scripts\audit_maniskill_render_resource_sweep.py --timeout-seconds 45 --max-envs 1
+```
+
 ## ManiSkill Render Machine Qualification
 
 This packet is not evidence. It requires the exact collection machine to pass platform probing, render-backed MP4 preflight, pilot liveness, and zero diagnostic fallback videos before official collection can begin.
@@ -326,6 +345,7 @@ Post-collection strict gates:
 - `pilot_smoke_packet`: Run a quarantined first-panel backend smoke test
 - `maniskill_pilot_runtime_liveness`: Audit bounded ManiSkill pilot runtime liveness
 - `maniskill_render_video_preflight`: Audit ManiSkill render-backed evidence-video export
+- `maniskill_render_resource_sweep`: Run a bounded ManiSkill render resource sweep
 - `maniskill_render_machine_qualification`: Qualify the exact render machine before official collection
 - `fidelity_provenance_packet`: Use the fidelity provenance packet as the platform acceptance checklist
 - `alias_unseal`: Unseal method aliases only after configs, implementations, and run plan are frozen
@@ -347,6 +367,7 @@ Post-collection strict gates:
 - `pass` `fidelity_acceptance_materializer_guarded`: write_enabled=False, acceptance_write_ready=False
 - `pass` `fidelity_metadata_probe_ready_but_not_evidence`: strict_metadata_ready=True, primary_metadata_missing=[]
 - `pass` `render_video_preflight_recorded_but_not_evidence`: render_video_ready=False, envs=4, failure_classes=['vulkan_descriptor_pool_exhaustion']
+- `pass` `render_resource_sweep_recorded_but_not_evidence`: any_ready=False, records=3, failure_classes=['vulkan_descriptor_pool_exhaustion']
 - `pass` `render_machine_qualification_recorded_but_not_evidence`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12
 - `pass` `ablation_collection_packet_recorded_but_not_evidence`: work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False
 - `pass` `evidence_intake_ledger_recorded_but_not_evidence`: mapped=37/37, groups=8

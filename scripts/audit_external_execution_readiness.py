@@ -650,6 +650,32 @@ def main() -> int:
         ),
     )
 
+    render_resource_ok, render_resource, render_resource_detail = passed_json(
+        RESULTS / "maniskill_render_resource_sweep.json",
+        version="maniskill_render_resource_sweep_v1",
+    )
+    add_check(checks, "maniskill_render_resource_sweep_ready", render_resource_ok, render_resource_detail)
+    render_resource_checks = {check.get("name"): check.get("passed") for check in render_resource.get("checks", []) or []}
+    add_check(
+        checks,
+        "maniskill_render_resource_sweep_not_evidence",
+        render_resource.get("not_external_evidence") is True
+        and render_resource.get("strict_external_evidence_ready") is False
+        and render_resource.get("any_render_video_ready") is False
+        and render_resource.get("descriptor_pool_failure_persists_at_minimum_resolution") is True
+        and int(render_resource.get("record_count", 0) or 0) >= 3
+        and "vulkan_descriptor_pool_exhaustion" in (render_resource.get("renderer_failure_classes", []) or [])
+        and render_resource_checks.get("resource_sweep_is_non_evidence") is True
+        and render_resource_checks.get("quarantine_paths_are_not_official_evidence") is True
+        and (RESULTS / "maniskill_render_resource_sweep.md").exists()
+        and (EXTERNAL / "render_resource_sweep_work_orders.csv").exists(),
+        (
+            f"any_ready={render_resource.get('any_render_video_ready')!r}, "
+            f"records={render_resource.get('record_count')!r}, "
+            f"classes={render_resource.get('renderer_failure_classes')!r}"
+        ),
+    )
+
     render_machine_ok, render_machine, render_machine_detail = passed_json(
         RESULTS / "maniskill_render_machine_qualification.json",
         version="maniskill_render_machine_qualification_v1",
@@ -1429,6 +1455,8 @@ def main() -> int:
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "maniskill_pilot_runtime_liveness_audit.md",
         RESULTS / "maniskill_pilot_reset_timeout_triage.md",
+        RESULTS / "maniskill_render_resource_sweep.md",
+        EXTERNAL / "render_resource_sweep_work_orders.csv",
         RESULTS / "maniskill_render_failure_remediation.md",
         EXTERNAL / "render_failure_remediation_work_orders.csv",
         DOCS / "independent_validation_protocol.md",
@@ -1518,6 +1546,8 @@ def main() -> int:
         "maniskill_pilot_runtime_liveness_ready",
         "maniskill_pilot_runtime_liveness_not_evidence",
         "maniskill_pilot_reset_timeout_triage_ready",
+        "maniskill_render_resource_sweep_ready",
+        "maniskill_render_resource_sweep_not_evidence",
         "maniskill_render_machine_qualification_ready",
         "maniskill_render_machine_qualification_not_evidence",
         "maniskill_render_machine_operator_commands",

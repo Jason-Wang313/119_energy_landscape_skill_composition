@@ -75,6 +75,14 @@ python scripts\build_maniskill_render_machine_qualification.py
 
 This writes `results/maniskill_render_failure_remediation.{json,md}` and `external_validation/render_failure_remediation_work_orders.csv` alongside the render-machine qualification packet. It converts the current render-backed-video blocker into non-evidence work orders for platform probing, renderer profile retesting, pilot liveness, diagnostic fallback exclusion, guarded fidelity acceptance, and strict collection readiness. It cannot satisfy strict evidence and must remain fail-closed until render-backed MP4s and pilot liveness pass on the accepted collection machine.
 
+Run the bounded render resource sweep:
+
+```powershell
+python scripts\audit_maniskill_render_resource_sweep.py --timeout-seconds 45 --max-envs 1
+```
+
+This writes `results/maniskill_render_resource_sweep.{json,md}` and `external_validation/render_resource_sweep_work_orders.csv`. It is a quarantined non-evidence diagnostic that retests the first primary ManiSkill task at `16x16` across `cpu/minimal`, `gpu/minimal`, and `sapien_cuda/minimal`; the current local report shows the descriptor-pool failure persists at minimum resolution and therefore does not promote render-backed MP4 readiness.
+
 The ManiSkill reference path uses explicit render-backend/shader controls. Defaults are `PAPER119_MANISKILL_RENDER_BACKEND=cpu`, `PAPER119_MANISKILL_SHADER_PACK=minimal`, `PAPER119_MANISKILL_RENDER_WIDTH=128`, and `PAPER119_MANISKILL_RENDER_HEIGHT=128`; the render-video preflight and pilot runtime liveness audit record these values so evidence videos are never confused with implicit local renderer defaults.
 
 Build the independent operator packet:

@@ -297,6 +297,16 @@
     },
     {
       "detail": "passed",
+      "name": "maniskill_render_resource_sweep_ready",
+      "passed": true
+    },
+    {
+      "detail": "any_ready=False, records=3, classes=['vulkan_descriptor_pool_exhaustion']",
+      "name": "maniskill_render_resource_sweep_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "passed",
       "name": "maniskill_render_machine_qualification_ready",
       "passed": true
     },
@@ -611,12 +621,12 @@
       "passed": true
     },
     {
-      "detail": "missing_requirements=4, operator_actions=31",
+      "detail": "missing_requirements=4, operator_actions=32",
       "name": "external_acquisition_packet_maps_all_blockers",
       "passed": true
     },
     {
-      "detail": "checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'backend_integration_packet_ready': True, 'maniskill_reference_backend_audit_ready': True, 'maniskill_reference_collection_preflight_ready': True, 'config_manifest_packet_ready': True, 'rollout_evidence_packet_ready': True, 'ablation_collection_packet_ready': True, 'evidence_intake_ledger_ready': True, 'pilot_smoke_packet_ready': True, 'maniskill_render_video_preflight_recorded': True, 'maniskill_pilot_runtime_liveness_ready': True, 'maniskill_render_machine_qualification_ready': True, 'method_implementation_packet_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'platform_probe_ready': True, 'task_binding_probe_ready': True, 'env_smoke_probe_ready': True, 'fidelity_metadata_probe_ready': True, 'platform_onboarding_ready': True, 'fidelity_provenance_packet_ready': True, 'fidelity_acceptance_draft_ready': True, 'fidelity_acceptance_materializer_ready': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}",
+      "detail": "checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'backend_integration_packet_ready': True, 'maniskill_reference_backend_audit_ready': True, 'maniskill_reference_collection_preflight_ready': True, 'config_manifest_packet_ready': True, 'rollout_evidence_packet_ready': True, 'ablation_collection_packet_ready': True, 'evidence_intake_ledger_ready': True, 'pilot_smoke_packet_ready': True, 'maniskill_render_video_preflight_recorded': True, 'maniskill_render_resource_sweep_recorded': True, 'maniskill_pilot_runtime_liveness_ready': True, 'maniskill_render_machine_qualification_ready': True, 'method_implementation_packet_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'platform_probe_ready': True, 'task_binding_probe_ready': True, 'env_smoke_probe_ready': True, 'fidelity_metadata_probe_ready': True, 'platform_onboarding_ready': True, 'fidelity_provenance_packet_ready': True, 'fidelity_acceptance_draft_ready': True, 'fidelity_acceptance_materializer_ready': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}",
       "name": "external_acquisition_packet_backend_gate",
       "passed": true
     },
@@ -656,7 +666,7 @@
       "passed": true
     },
     {
-      "detail": "included_file_count=281, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 88, 'operator_command_source': 38, 'operator_facing_input': 66, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "included_file_count=285, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 90, 'operator_command_source': 39, 'operator_facing_input': 67, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "external_operator_handoff_bundle_hash_manifest",
       "passed": true
     },
