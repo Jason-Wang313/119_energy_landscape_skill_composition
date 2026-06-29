@@ -31,6 +31,35 @@ def write_synthetic_mp4(path: Path) -> None:
     path.write_bytes(header + payload)
 
 
+METHODS = [
+    "greedy_module_sequence",
+    "behavior_cloned_skill_chain",
+    "option_graph_planner",
+    "tamp_feasibility_screen",
+    "stable_dmp_handoff",
+    "diffusion_skill_stitcher",
+    "cem_trajectory_composer",
+    "residual_rl_composer",
+    "energy_compatibility_heuristic",
+    "proposed_energy_landscape_composer_v4_1",
+    rollout.PRIMARY_METHOD,
+    rollout.ORACLE_METHOD,
+]
+
+BASELINE_SUCCESS_CUTOFFS = {
+    "proposed_energy_landscape_composer_v4_1": 24,
+    "tamp_feasibility_screen": 21,
+    "diffusion_skill_stitcher": 20,
+    "cem_trajectory_composer": 19,
+    "residual_rl_composer": 19,
+    "energy_compatibility_heuristic": 18,
+    "option_graph_planner": 17,
+    "stable_dmp_handoff": 17,
+    "behavior_cloned_skill_chain": 16,
+    "greedy_module_sequence": 15,
+}
+
+
 def make_record(task: str, scene_idx: int, method: str, *, success: bool, utility: float) -> dict:
     return {
         "run_id": "synthetic_self_test_only",
@@ -81,10 +110,7 @@ def build_fixture(tmp: Path) -> tuple[dict, dict]:
     config_dir = tmp / "configs"
     log_dir.mkdir()
     config_dir.mkdir()
-    methods = [
-        rollout.PRIMARY_METHOD,
-        "greedy_module_sequence",
-    ]
+    methods = METHODS
     hashes = method_hashes(methods)
     manifest = {
         "tasks": [],
@@ -104,13 +130,17 @@ def build_fixture(tmp: Path) -> tuple[dict, dict]:
         log_path = log_dir / f"{task}.jsonl"
         with log_path.open("w", encoding="utf-8") as handle:
             for scene_idx in range(30):
-                proposed_success = scene_idx < 8
-                baseline_success = scene_idx < 6
-                records = [
-                    make_record(task, scene_idx, rollout.PRIMARY_METHOD, success=proposed_success, utility=1.0 if proposed_success else 0.42),
-                    make_record(task, scene_idx, "greedy_module_sequence", success=baseline_success, utility=0.79 if baseline_success else 0.30),
-                ]
-                for record in records:
+                for method in methods:
+                    if method == rollout.PRIMARY_METHOD:
+                        success = scene_idx < 28
+                        utility = 1.0 if success else 0.42
+                    elif method == rollout.ORACLE_METHOD:
+                        success = True
+                        utility = 1.05
+                    else:
+                        success = scene_idx < BASELINE_SUCCESS_CUTOFFS[method]
+                        utility = 0.79 if success else 0.30
+                    record = make_record(task, scene_idx, method, success=success, utility=utility)
                     handle.write(json.dumps(record, sort_keys=True) + "\n")
         manifest["tasks"].append(
             {
@@ -140,12 +170,12 @@ def main() -> int:
         summary = rollout.summarize(records, schema)
         checks = rollout.threshold_checks(summary, schema)
 
-        if len(records) != 240:
-            raise AssertionError(f"expected 240 synthetic records, got {len(records)}")
-        if summary["strongest_external_baseline"] != "greedy_module_sequence":
+        if len(records) != 1440:
+            raise AssertionError(f"expected 1440 synthetic records, got {len(records)}")
+        if summary["strongest_external_baseline"] != "proposed_energy_landscape_composer_v4_1":
             raise AssertionError(f"wrong strongest baseline: {summary['strongest_external_baseline']}")
-        assert_close("external_success_margin", summary["external_success_margin"], 1.0 / 15.0)
-        assert_close("external_utility_margin", summary["external_utility_margin"], 53.0 / 300.0)
+        assert_close("external_success_margin", summary["external_success_margin"], 2.0 / 15.0)
+        assert_close("external_utility_margin", summary["external_utility_margin"], 101.0 / 375.0)
         assert_close("paired_win_rate", summary["paired_win_rate"], 1.0)
         assert_close("fixed_risk_coverage", summary["fixed_risk_coverage"], 1.0)
         assert_close("fixed_risk_breach", summary["fixed_risk_breach"], 0.0)
@@ -161,12 +191,25 @@ def main() -> int:
             bad_record,
             line_id="synthetic_bad_record",
             schema=schema,
-            manifest_methods={rollout.PRIMARY_METHOD, "greedy_module_sequence"},
+            manifest_methods=set(METHODS),
             manifest_tasks=set(summary["task_families"]),
             check_video_paths=False,
         )
         if not any("missing required fields" in error and "utility" in error for error in bad_errors):
             raise AssertionError(f"missing-field test did not fail as expected: {bad_errors}")
+
+        missing_method_manifest = json.loads(json.dumps(manifest))
+        missing_method_manifest["methods"] = [
+            method for method in missing_method_manifest["methods"] if method["name"] != "greedy_module_sequence"
+        ]
+        _, missing_method_errors = rollout.load_records(
+            missing_method_manifest,
+            schema,
+            check_video_paths=False,
+            max_errors=10,
+        )
+        if not any("manifest missing required external methods" in error for error in missing_method_errors):
+            raise AssertionError(f"missing method-coverage test did not fail as expected: {missing_method_errors}")
 
         weak_episode_manifest = json.loads(json.dumps(manifest))
         weak_episode_manifest["tasks"][0]["episodes_per_method"] = 2
@@ -311,12 +354,12 @@ def main() -> int:
             stale_task_config_record,
             line_id="synthetic_stale_task_config_record",
             schema=schema,
-            manifest_methods={rollout.PRIMARY_METHOD, "greedy_module_sequence"},
+            manifest_methods=set(METHODS),
             manifest_tasks=set(summary["task_families"]),
             check_video_paths=False,
             manifest_task_specs={config_task: manifest["tasks"][0]},
             manifest_task_configs={config_task: task_config},
-            manifest_method_hashes=method_hashes([rollout.PRIMARY_METHOD, "greedy_module_sequence"]),
+            manifest_method_hashes=method_hashes(METHODS),
         )
         if not any("skill_i must match manifest task config" in error for error in stale_task_config_errors):
             raise AssertionError(f"stale task config row test did not fail as expected: {stale_task_config_errors}")
@@ -327,10 +370,10 @@ def main() -> int:
             spoofed_hash_record,
             line_id="synthetic_spoofed_policy_hash_record",
             schema=schema,
-            manifest_methods={rollout.PRIMARY_METHOD, "greedy_module_sequence"},
+            manifest_methods=set(METHODS),
             manifest_tasks=set(summary["task_families"]),
             check_video_paths=False,
-            manifest_method_hashes=method_hashes([rollout.PRIMARY_METHOD, "greedy_module_sequence"]),
+            manifest_method_hashes=method_hashes(METHODS),
         )
         if not any("policy_or_config_hash must match manifest checkpoint_or_config_hash" in error for error in spoofed_hash_errors):
             raise AssertionError(f"spoofed policy/config hash test did not fail as expected: {spoofed_hash_errors}")
@@ -344,7 +387,7 @@ def main() -> int:
             good_video_record,
             line_id="synthetic_good_video_record",
             schema=schema,
-            manifest_methods={rollout.PRIMARY_METHOD, "greedy_module_sequence"},
+            manifest_methods=set(METHODS),
             manifest_tasks=set(summary["task_families"]),
             check_video_paths=True,
             manifest_video_dirs={"peg_place_regrasp": video_dir},
@@ -361,7 +404,7 @@ def main() -> int:
             fake_video_record,
             line_id="synthetic_fake_video_record",
             schema=schema,
-            manifest_methods={rollout.PRIMARY_METHOD, "greedy_module_sequence"},
+            manifest_methods=set(METHODS),
             manifest_tasks=set(summary["task_families"]),
             check_video_paths=True,
             manifest_video_dirs={"peg_place_regrasp": video_dir},
@@ -382,7 +425,7 @@ def main() -> int:
                 forbidden_record,
                 line_id=f"synthetic_forbidden_{fragment}_video_record",
                 schema=schema,
-                manifest_methods={rollout.PRIMARY_METHOD, "greedy_module_sequence"},
+                manifest_methods=set(METHODS),
                 manifest_tasks=set(summary["task_families"]),
                 check_video_paths=True,
                 manifest_video_dirs={"peg_place_regrasp": video_dir},

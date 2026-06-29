@@ -22,6 +22,20 @@ OUT_MD = RESULTS / "external_rollout_metrics.md"
 
 PRIMARY_METHOD = "barrier_certified_energy_composer_v5"
 ORACLE_METHOD = "oracle_basin_composer"
+REQUIRED_METHODS = {
+    "greedy_module_sequence",
+    "behavior_cloned_skill_chain",
+    "option_graph_planner",
+    "tamp_feasibility_screen",
+    "stable_dmp_handoff",
+    "diffusion_skill_stitcher",
+    "cem_trajectory_composer",
+    "residual_rl_composer",
+    "energy_compatibility_heuristic",
+    "proposed_energy_landscape_composer_v4_1",
+    PRIMARY_METHOD,
+    ORACLE_METHOD,
+}
 HEX64 = re.compile(r"^[A-Fa-f0-9]{64}$")
 MIN_STRICT_VIDEO_BYTES = 512
 MIN_EPISODES_PER_METHOD = 30
@@ -299,6 +313,11 @@ def load_records(
 
     records: list[dict[str, Any]] = []
     errors: list[str] = []
+    missing_required_methods = sorted(REQUIRED_METHODS - manifest_methods)
+    if missing_required_methods:
+        errors.append(f"manifest missing required external methods {missing_required_methods[:12]}")
+        if len(errors) >= max_errors:
+            return records, errors
     seen_record_keys: dict[tuple[Any, ...], str] = {}
     seen_video_paths: dict[str, str] = {}
     record_counts_by_task_method: Counter[tuple[str, str]] = Counter()

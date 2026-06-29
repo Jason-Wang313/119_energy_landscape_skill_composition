@@ -21,6 +21,7 @@ Why strong-revise:
 - The external config manifest packet turns prepared task configs into manifest-declaration and hash-lock work orders while strict config evidence remains false.
 - The external rollout evidence packet turns the missing raw JSONL logs, videos, manifest, strict rollout recomputation, pairing, release, and final evidence gates into operator work orders while strict rollout and external evidence remain false.
 - The strict MP4 video evidence gate rejects placeholder, diagnostic, staged, backup/internal, non-MP4-like, undersized, or out-of-manifest video paths when strict rollout validation is enabled, so future external logs cannot satisfy the video layer with diagnostic media or temporary runner artifacts.
+- The strict full-method coverage gate rejects manifests that omit the primary method, oracle boundary, or any required non-oracle external baseline, so future external metrics cannot pass against a convenient subset of methods.
 - The strict rollout sample-count gate rejects manifest-declared `episodes_per_method` values below 30 and per-task/per-method record-count mismatches, so future external metrics cannot pass on thin or uneven sample panels.
 - The strict paired-panel gate rejects duplicate method records or missing manifest-declared methods within paired reset panels, so future paired comparisons cannot be formed from misaligned method runs.
 - The strict rollout uniqueness gate rejects duplicate episode identities and reused rollout video paths, so future external metrics cannot be inflated by copied rows or recycled videos.
