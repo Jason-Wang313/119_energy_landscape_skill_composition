@@ -30,7 +30,10 @@ This audit checks that every missing non-oracle method has a concrete implementa
 - `pass` `reference_manifest_stubs_not_strict_ready`: manifest stubs require operator-supplied independent implementations and hashes
 - `pass` `common_reference_adapter_hash_shared`: common_hash_count=1
 - `pass` `reference_policy_hashes_match_adapter_formula`: reference_policy_hash=sha256(paper119_reference_adapter:<method>:v1)
+- `pass` `method_manifest_cutover_checklist_covers_non_oracle_methods`: cutover_rows=11, missing=[]
+- `pass` `method_manifest_cutover_checklist_binds_manifest_fields`: cutover rows require implementation path/hash, checkpoint/config path/hash, provenance, fairness binding, and JSONL policy/config hash binding
+- `pass` `method_manifest_cutover_checklist_forbids_shortcuts`: cutover rows keep scaffold/reference adapters non-evidence and route through validate_external_adapters.py --strict
 - `pass` `strict_commands_cover_adapter_rollout_pairing_and_evidence`: commands=['python scripts\\build_external_method_implementation_packet.py', 'python scripts\\validate_external_adapters.py --strict', 'python scripts\\build_external_baseline_contract.py', 'python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict', 'python scripts\\audit_external_pairing_integrity.py --strict', 'python scripts\\audit_external_evidence.py --strict']
 - `pass` `adapter_evidence_still_missing`: adapter_evidence_passed=False
 - `pass` `no_real_implementation_files_created`: external_validation/implementations is intentionally absent until a real operator supplies implementations
-- `pass` `packet_files_written`: packet_json=True, packet_md=True, work_orders_csv=True, reference_provenance_csv=True, acceptance_fixtures_json=True
+- `pass` `packet_files_written`: packet_json=True, packet_md=True, work_orders_csv=True, reference_provenance_csv=True, acceptance_fixtures_json=True, method_cutover_csv=True

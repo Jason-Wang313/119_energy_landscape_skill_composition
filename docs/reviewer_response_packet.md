@@ -124,7 +124,7 @@ Evidence:
 
 Response: The local paper names the prior method and multiple baselines, but the strict external baseline contract still keeps independent non-oracle evidence as missing.
 
-Current local fact: The strict external baseline and adapter-evidence audits remain fail-closed until manifest-declared real implementations exist.
+Current local fact: The strict external baseline and adapter-evidence audits remain fail-closed until manifest-declared real implementations exist; the method manifest cutover checklist names the required `manifest.methods[]` fields, checkpoint/config hashes, implementation provenance, fairness-contract bindings, and JSONL `policy_or_config_hash` matches for every non-oracle method.
 
 Allowed claim: Local baselines are broad and audited; independent external baseline evidence is still required.
 

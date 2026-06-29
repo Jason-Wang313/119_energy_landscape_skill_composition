@@ -275,7 +275,7 @@ Build the external method implementation packet:
 python scripts\build_external_method_implementation_packet.py
 ```
 
-This writes `external_validation/method_implementation_packet.{json,md}`, `external_validation/method_implementation_work_orders.csv`, `external_validation/adapter_acceptance_fixtures.{json,md,csv}`, and `results/external_method_implementation_audit.{json,md}`. It turns every missing non-oracle baseline implementation into a concrete work order with required source/config/checkpoint hashes, log fields, and synthetic adapter acceptance fixtures. It is not evidence and still reports strict adapter evidence as missing until real manifest-declared implementations replace the scaffolds, provide checkpoint/config artifacts, and bind method provenance to the manifest fairness contract.
+This writes `external_validation/method_implementation_packet.{json,md}`, `external_validation/method_implementation_work_orders.csv`, `external_validation/adapter_acceptance_fixtures.{json,md,csv}`, `external_validation/method_manifest_cutover_checklist.{csv,md}`, and `results/external_method_implementation_audit.{json,md}`. It turns every missing non-oracle baseline implementation into a concrete work order with required source/config/checkpoint hashes, log fields, synthetic adapter acceptance fixtures, and a method manifest cutover checklist for exact `manifest.methods[]` entries. It is not evidence and still reports strict adapter evidence as missing until real manifest-declared implementations replace the scaffolds, provide checkpoint/config artifacts, and bind method provenance to the manifest fairness contract.
 
 Generate executable adapter scaffolds from the method specs:
 

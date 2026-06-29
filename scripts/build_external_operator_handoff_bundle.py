@@ -119,6 +119,8 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
         EXTERNAL / "method_reference_provenance.csv",
+        EXTERNAL / "method_manifest_cutover_checklist.csv",
+        EXTERNAL / "method_manifest_cutover_checklist.md",
         EXTERNAL / "adapter_acceptance_fixtures.json",
         EXTERNAL / "adapter_acceptance_fixtures.md",
         EXTERNAL / "adapter_acceptance_fixtures.csv",
@@ -918,6 +920,9 @@ def build_payload() -> dict[str, Any]:
         and method_checks.get("policy_or_config_hash_in_logs_required") is True
         and method_checks.get("adapter_acceptance_fixtures_cover_non_oracle_methods") is True
         and method_checks.get("adapter_acceptance_fixtures_define_contract") is True
+        and method_checks.get("method_manifest_cutover_checklist_covers_non_oracle_methods") is True
+        and method_checks.get("method_manifest_cutover_checklist_binds_manifest_fields") is True
+        and method_checks.get("method_manifest_cutover_checklist_forbids_shortcuts") is True
         and method_checks.get("work_orders_reference_acceptance_fixtures") is True
         and method_checks.get("reference_adapter_provenance_covers_non_oracle_methods") is True
         and method_checks.get("reference_adapter_hashes_recorded") is True
@@ -927,6 +932,8 @@ def build_payload() -> dict[str, Any]:
         and "external_validation/method_implementation_packet.md" in paths
         and "external_validation/method_implementation_work_orders.csv" in paths
         and "external_validation/method_reference_provenance.csv" in paths
+        and "external_validation/method_manifest_cutover_checklist.csv" in paths
+        and "external_validation/method_manifest_cutover_checklist.md" in paths
         and "external_validation/adapter_acceptance_fixtures.json" in paths
         and "external_validation/adapter_acceptance_fixtures.md" in paths
         and "external_validation/adapter_acceptance_fixtures.csv" in paths

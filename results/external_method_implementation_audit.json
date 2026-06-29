@@ -106,6 +106,21 @@
       "passed": true
     },
     {
+      "detail": "cutover_rows=11, missing=[]",
+      "name": "method_manifest_cutover_checklist_covers_non_oracle_methods",
+      "passed": true
+    },
+    {
+      "detail": "cutover rows require implementation path/hash, checkpoint/config path/hash, provenance, fairness binding, and JSONL policy/config hash binding",
+      "name": "method_manifest_cutover_checklist_binds_manifest_fields",
+      "passed": true
+    },
+    {
+      "detail": "cutover rows keep scaffold/reference adapters non-evidence and route through validate_external_adapters.py --strict",
+      "name": "method_manifest_cutover_checklist_forbids_shortcuts",
+      "passed": true
+    },
+    {
       "detail": "commands=['python scripts\\\\build_external_method_implementation_packet.py', 'python scripts\\\\validate_external_adapters.py --strict', 'python scripts\\\\build_external_baseline_contract.py', 'python scripts\\\\validate_external_rollouts.py --write-results --check-video-paths --strict', 'python scripts\\\\audit_external_pairing_integrity.py --strict', 'python scripts\\\\audit_external_evidence.py --strict']",
       "name": "strict_commands_cover_adapter_rollout_pairing_and_evidence",
       "passed": true
@@ -121,7 +136,7 @@
       "passed": true
     },
     {
-      "detail": "packet_json=True, packet_md=True, work_orders_csv=True, reference_provenance_csv=True, acceptance_fixtures_json=True",
+      "detail": "packet_json=True, packet_md=True, work_orders_csv=True, reference_provenance_csv=True, acceptance_fixtures_json=True, method_cutover_csv=True",
       "name": "packet_files_written",
       "passed": true
     }

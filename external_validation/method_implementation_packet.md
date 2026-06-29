@@ -16,6 +16,14 @@ This packet converts the missing independent baseline layer into concrete implem
 
 The fixture packet gives each independent implementation a synthetic smoke-test input and required adapter/log fields before rollout collection. Passing these fixtures does not count as external evidence; strict evidence still requires manifest-declared implementations, checkpoint/config hashes, raw JSONL logs, render-backed videos, and final strict audits.
 
+## Method Manifest Cutover Checklist (Non-Evidence)
+
+- CSV: `external_validation/method_manifest_cutover_checklist.csv`
+- Markdown: `external_validation/method_manifest_cutover_checklist.md`
+- Rows: `11`
+
+The checklist turns each method work order into the exact `manifest.methods[]` fields, fairness-contract bindings, and JSONL hash bindings that must be real before strict adapter evidence can pass.
+
 ## Reference Adapter Provenance (Non-Evidence)
 
 The current reference adapters are executable interface artifacts. They make the proposed adapter API inspectable, but they are not independent rollout evidence, cannot replace operator-supplied implementations, and are blocked by the strict reference-adapter rejection gate.

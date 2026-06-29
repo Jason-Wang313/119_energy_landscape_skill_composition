@@ -433,6 +433,8 @@ ACTION_CATALOG = {
             "external_validation/method_implementation_packet.md",
             "external_validation/method_implementation_work_orders.csv",
             "external_validation/method_reference_provenance.csv",
+            "external_validation/method_manifest_cutover_checklist.csv",
+            "external_validation/method_manifest_cutover_checklist.md",
             "external_validation/adapter_acceptance_fixtures.json",
             "external_validation/adapter_acceptance_fixtures.md",
             "external_validation/adapter_acceptance_fixtures.csv",
@@ -1050,6 +1052,9 @@ def main() -> int:
         and method_packet_checks.get("policy_or_config_hash_in_logs_required") is True
         and method_packet_checks.get("adapter_acceptance_fixtures_cover_non_oracle_methods") is True
         and method_packet_checks.get("adapter_acceptance_fixtures_define_contract") is True
+        and method_packet_checks.get("method_manifest_cutover_checklist_covers_non_oracle_methods") is True
+        and method_packet_checks.get("method_manifest_cutover_checklist_binds_manifest_fields") is True
+        and method_packet_checks.get("method_manifest_cutover_checklist_forbids_shortcuts") is True
         and method_packet_checks.get("work_orders_reference_acceptance_fixtures") is True
         and method_packet_checks.get("reference_adapter_provenance_covers_non_oracle_methods") is True
         and method_packet_checks.get("reference_adapter_hashes_recorded") is True
@@ -1059,6 +1064,8 @@ def main() -> int:
         and (EXTERNAL / "method_implementation_packet.md").exists()
         and (EXTERNAL / "method_implementation_work_orders.csv").exists()
         and (EXTERNAL / "method_reference_provenance.csv").exists()
+        and (EXTERNAL / "method_manifest_cutover_checklist.csv").exists()
+        and (EXTERNAL / "method_manifest_cutover_checklist.md").exists()
         and (EXTERNAL / "adapter_acceptance_fixtures.json").exists()
         and (EXTERNAL / "adapter_acceptance_fixtures.md").exists()
         and (EXTERNAL / "adapter_acceptance_fixtures.csv").exists(),

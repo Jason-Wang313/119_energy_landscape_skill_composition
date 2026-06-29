@@ -763,6 +763,8 @@
         "external_validation/method_implementation_packet.md",
         "external_validation/method_implementation_work_orders.csv",
         "external_validation/method_reference_provenance.csv",
+        "external_validation/method_manifest_cutover_checklist.csv",
+        "external_validation/method_manifest_cutover_checklist.md",
         "external_validation/adapter_acceptance_fixtures.json",
         "external_validation/adapter_acceptance_fixtures.md",
         "external_validation/adapter_acceptance_fixtures.csv",

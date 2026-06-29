@@ -264,6 +264,9 @@ def main() -> int:
         and method_checks.get("policy_or_config_hash_in_logs_required") is True
         and method_checks.get("adapter_acceptance_fixtures_cover_non_oracle_methods") is True
         and method_checks.get("adapter_acceptance_fixtures_define_contract") is True
+        and method_checks.get("method_manifest_cutover_checklist_covers_non_oracle_methods") is True
+        and method_checks.get("method_manifest_cutover_checklist_binds_manifest_fields") is True
+        and method_checks.get("method_manifest_cutover_checklist_forbids_shortcuts") is True
         and method_checks.get("work_orders_reference_acceptance_fixtures") is True
         and method_checks.get("reference_adapter_provenance_covers_non_oracle_methods") is True
         and method_checks.get("reference_adapter_hashes_recorded") is True
@@ -279,11 +282,13 @@ def main() -> int:
         and (EXTERNAL / "method_implementation_packet.md").exists()
         and (EXTERNAL / "method_implementation_work_orders.csv").exists()
         and (EXTERNAL / "method_reference_provenance.csv").exists()
+        and (EXTERNAL / "method_manifest_cutover_checklist.csv").exists()
+        and (EXTERNAL / "method_manifest_cutover_checklist.md").exists()
         and (EXTERNAL / "adapter_acceptance_fixtures.json").exists()
         and (EXTERNAL / "adapter_acceptance_fixtures.md").exists()
         and (EXTERNAL / "adapter_acceptance_fixtures.csv").exists()
         and (ROOT / "scripts" / "build_external_method_implementation_packet.py").exists(),
-        "method packet, work orders, adapter fixtures, reference provenance, builder, and strict command order are present",
+        "method packet, work orders, adapter fixtures, manifest cutover checklist, reference provenance, builder, and strict command order are present",
     )
 
     fidelity_ok, fidelity, fidelity_detail = passed_json(
@@ -1423,6 +1428,8 @@ def main() -> int:
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
         EXTERNAL / "method_reference_provenance.csv",
+        EXTERNAL / "method_manifest_cutover_checklist.csv",
+        EXTERNAL / "method_manifest_cutover_checklist.md",
         EXTERNAL / "adapter_acceptance_fixtures.json",
         EXTERNAL / "adapter_acceptance_fixtures.md",
         EXTERNAL / "adapter_acceptance_fixtures.csv",

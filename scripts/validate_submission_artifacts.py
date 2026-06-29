@@ -1717,6 +1717,8 @@ def main():
         EXTERNAL / "adapter_acceptance_fixtures.json",
         EXTERNAL / "adapter_acceptance_fixtures.md",
         EXTERNAL / "adapter_acceptance_fixtures.csv",
+        EXTERNAL / "method_manifest_cutover_checklist.csv",
+        EXTERNAL / "method_manifest_cutover_checklist.md",
         RESULTS / "external_method_implementation_audit.json",
         RESULTS / "external_method_implementation_audit.md",
         ROOT / "scripts" / "build_external_method_implementation_packet.py",
@@ -1743,6 +1745,12 @@ def main():
         fail("external method implementation packet has too few adapter acceptance fixtures")
     if method_packet.get("adapter_acceptance_fixtures_json") != "external_validation/adapter_acceptance_fixtures.json":
         fail("external method implementation packet should point to adapter_acceptance_fixtures.json")
+    if method_packet.get("method_manifest_cutover_checklist_csv") != "external_validation/method_manifest_cutover_checklist.csv":
+        fail("external method implementation packet should point to method_manifest_cutover_checklist.csv")
+    if method_packet.get("method_manifest_cutover_checklist_md") != "external_validation/method_manifest_cutover_checklist.md":
+        fail("external method implementation packet should point to method_manifest_cutover_checklist.md")
+    if int(method_packet.get("method_manifest_cutover_checklist_count", 0) or 0) < 11:
+        fail("external method implementation packet has too few method cutover checklist rows")
     fixture_packet = json.loads((EXTERNAL / "adapter_acceptance_fixtures.json").read_text(encoding="utf-8"))
     if fixture_packet.get("version") != "adapter_acceptance_fixtures_v1":
         fail("adapter acceptance fixture packet version mismatch")
@@ -1806,6 +1814,42 @@ def main():
             fail("external method work orders must reference adapter_acceptance_fixtures.json")
         if not order.get("adapter_acceptance_fixture_id"):
             fail("external method work orders must reference an adapter acceptance fixture id")
+    cutover_rows = method_packet.get("method_manifest_cutover_checklist", []) or []
+    if len(cutover_rows) < 11:
+        fail("method manifest cutover checklist must cover all non-oracle methods")
+    if count_rows(EXTERNAL / "method_manifest_cutover_checklist.csv") != len(cutover_rows):
+        fail("method manifest cutover checklist CSV row count does not match packet")
+    cutover_methods = {row.get("method") for row in cutover_rows if isinstance(row, dict)}
+    if "oracle_basin_composer" in cutover_methods:
+        fail("method manifest cutover checklist must not include the oracle method")
+    if not work_order_methods.issubset(cutover_methods):
+        fail("method manifest cutover checklist missing work-order methods")
+    required_cutover_fields = {"name", "implementation", "checkpoint_or_config_path", "checkpoint_or_config_hash", "implementation_provenance"}
+    for row in cutover_rows:
+        if not isinstance(row, dict):
+            fail("method manifest cutover checklist rows must be objects")
+        if not required_cutover_fields.issubset(set(str(row.get("required_manifest_fields", "")).split(";"))):
+            fail("method manifest cutover checklist rows must declare manifest method fields")
+        for key in (
+            "implementation_required",
+            "implementation_sha_or_commit_required",
+            "checkpoint_or_config_path_required",
+            "checkpoint_or_config_hash_required",
+            "implementation_provenance_required",
+            "fairness_contract_binding_required",
+            "policy_or_config_hash_log_binding_required",
+            "blocking_until_real_evidence",
+        ):
+            if row.get(key) is not True:
+                fail(f"method manifest cutover checklist row must require {key}")
+        if row.get("scaffold_allowed_as_evidence") is not False or row.get("reference_adapter_allowed_as_evidence") is not False:
+            fail("method manifest cutover checklist must forbid scaffold/reference evidence shortcuts")
+        if "validate_external_adapters.py --strict" not in str(row.get("strict_gate", "")):
+            fail("method manifest cutover checklist must point to strict adapter validation")
+        if not str(row.get("manifest_methods_key", "")).startswith("methods["):
+            fail("method manifest cutover checklist must point to manifest methods entries")
+        if len(str(row.get("interface_reference_adapter_sha256", ""))) != 64:
+            fail("method manifest cutover checklist must preserve interface reference adapter hashes")
     method_command_text = "\n".join(method_packet.get("strict_acceptance_commands", []) or [])
     for fragment in (
         "build_external_method_implementation_packet.py",
@@ -1849,6 +1893,9 @@ def main():
         "reference_manifest_stubs_not_strict_ready",
         "common_reference_adapter_hash_shared",
         "reference_policy_hashes_match_adapter_formula",
+        "method_manifest_cutover_checklist_covers_non_oracle_methods",
+        "method_manifest_cutover_checklist_binds_manifest_fields",
+        "method_manifest_cutover_checklist_forbids_shortcuts",
         "strict_commands_cover_adapter_rollout_pairing_and_evidence",
         "adapter_evidence_still_missing",
         "no_real_implementation_files_created",
@@ -3294,6 +3341,8 @@ def main():
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
         EXTERNAL / "method_reference_provenance.csv",
+        EXTERNAL / "method_manifest_cutover_checklist.csv",
+        EXTERNAL / "method_manifest_cutover_checklist.md",
         EXTERNAL / "manifest_assembly_checklist.csv",
         EXTERNAL / "manifest_precollection_draft.json",
         EXTERNAL / "manifest_precollection_draft.md",

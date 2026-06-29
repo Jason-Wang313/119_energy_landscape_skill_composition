@@ -19,6 +19,8 @@ REFERENCE_PROVENANCE_CSV = EXTERNAL / "method_reference_provenance.csv"
 ACCEPTANCE_FIXTURES_JSON = EXTERNAL / "adapter_acceptance_fixtures.json"
 ACCEPTANCE_FIXTURES_MD = EXTERNAL / "adapter_acceptance_fixtures.md"
 ACCEPTANCE_FIXTURES_CSV = EXTERNAL / "adapter_acceptance_fixtures.csv"
+METHOD_CUTOVER_CSV = EXTERNAL / "method_manifest_cutover_checklist.csv"
+METHOD_CUTOVER_MD = EXTERNAL / "method_manifest_cutover_checklist.md"
 AUDIT_JSON = RESULTS / "external_method_implementation_audit.json"
 AUDIT_MD = RESULTS / "external_method_implementation_audit.md"
 
@@ -449,11 +451,131 @@ def write_acceptance_fixtures_md(packet: dict[str, Any]) -> None:
     ACCEPTANCE_FIXTURES_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def build_method_cutover_rows(work_orders: list[dict[str, Any]], reference_provenance: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    reference_by_method = {record.get("method"): record for record in reference_provenance}
+    rows: list[dict[str, Any]] = []
+    for order in work_orders:
+        method = str(order["method"])
+        template = order.get("manifest_method_entry_template", {}) or {}
+        provenance = template.get("implementation_provenance", {}) or {}
+        reference = reference_by_method.get(method, {}) or {}
+        rows.append(
+            {
+                "method": method,
+                "evidence_role": provenance.get("evidence_role", ""),
+                "manifest_methods_key": f"methods[{method}]",
+                "required_manifest_fields": ";".join(MANIFEST_METHOD_ENTRY_FIELDS),
+                "implementation_required": True,
+                "implementation_sha_or_commit_required": True,
+                "checkpoint_or_config_path_required": True,
+                "checkpoint_or_config_hash_required": True,
+                "implementation_provenance_required": True,
+                "fairness_contract_binding_required": True,
+                "policy_or_config_hash_log_binding_required": True,
+                "adapter_acceptance_fixture_id": order.get("adapter_acceptance_fixture_id", ""),
+                "adapter_acceptance_fixture_path": order.get("adapter_acceptance_fixture_path", ""),
+                "interface_reference_adapter": reference.get("adapter_path", ""),
+                "interface_reference_adapter_sha256": reference.get("adapter_sha256", ""),
+                "scaffold_allowed_as_evidence": False,
+                "reference_adapter_allowed_as_evidence": False,
+                "strict_gate": "python scripts\\validate_external_adapters.py --strict",
+                "blocking_until_real_evidence": True,
+                "operator_action": (
+                    "replace placeholders with operator-supplied implementation, checkpoint/config artifact, "
+                    "hashes, provenance signoff, fairness-contract bindings, and JSONL policy_or_config_hash matches"
+                ),
+            }
+        )
+    return rows
+
+
+def write_method_cutover_csv(rows: list[dict[str, Any]]) -> None:
+    fieldnames = [
+        "method",
+        "evidence_role",
+        "manifest_methods_key",
+        "required_manifest_fields",
+        "implementation_required",
+        "implementation_sha_or_commit_required",
+        "checkpoint_or_config_path_required",
+        "checkpoint_or_config_hash_required",
+        "implementation_provenance_required",
+        "fairness_contract_binding_required",
+        "policy_or_config_hash_log_binding_required",
+        "adapter_acceptance_fixture_id",
+        "adapter_acceptance_fixture_path",
+        "interface_reference_adapter",
+        "interface_reference_adapter_sha256",
+        "scaffold_allowed_as_evidence",
+        "reference_adapter_allowed_as_evidence",
+        "strict_gate",
+        "blocking_until_real_evidence",
+        "operator_action",
+    ]
+    with METHOD_CUTOVER_CSV.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def write_method_cutover_md(rows: list[dict[str, Any]]) -> None:
+    lines = [
+        "# Method Manifest Cutover Checklist",
+        "",
+        "Not evidence: `true`.",
+        "Strict adapter evidence ready: `false`.",
+        f"Method rows: `{len(rows)}`.",
+        "",
+        "This checklist is the operator-facing bridge from non-evidence method work orders to real `manifest.methods[]` entries. It does not provide implementations, checkpoints, configs, rollout logs, videos, or adapter evidence. It exists so the independent operator cannot half-declare a method before strict adapter validation.",
+        "",
+        "## Required Cutover Fields",
+        "",
+    ]
+    for field in MANIFEST_METHOD_ENTRY_FIELDS:
+        lines.append(f"- `{field}`")
+    lines.extend(
+        [
+            "- `implementation_sha256_or_commit`",
+            "- fairness-contract ids/hashes for skill library, observation interface, compute budget, and paired-reset protocol",
+            "- JSONL `policy_or_config_hash` values matching `checkpoint_or_config_hash`",
+            "",
+            "## Method Rows",
+            "",
+            "| Method | Role | Manifest key | Fixture | Reference interface | Strict gate |",
+            "|---|---|---|---|---|---|",
+        ]
+    )
+    for row in rows:
+        lines.append(
+            "| "
+            f"`{row['method']}` | "
+            f"`{row['evidence_role']}` | "
+            f"`{row['manifest_methods_key']}` | "
+            f"`{row['adapter_acceptance_fixture_id']}` | "
+            f"`{row['interface_reference_adapter']}` | "
+            f"`{row['strict_gate']}` |"
+        )
+    lines.extend(
+        [
+            "",
+            "## Evidence Boundary",
+            "",
+            "- Reference adapters and scaffold templates are interface aids only; they are forbidden as strict external evidence.",
+            "- `checkpoint_or_config_hash` must hash the declared checkpoint/config artifact, not merely the implementation source.",
+            "- Every method provenance block must bind to the same manifest fairness contract before rollout logs count.",
+            "- This checklist remains blocking until real operator-supplied implementations and manifest-declared hashes pass `python scripts\\validate_external_adapters.py --strict`.",
+            "",
+        ]
+    )
+    METHOD_CUTOVER_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def build_packet(
     specs: list[dict[str, Any]],
     work_orders: list[dict[str, Any]],
     reference_provenance: list[dict[str, Any]],
     acceptance_fixtures: dict[str, Any],
+    method_cutover_rows: list[dict[str, Any]],
     baseline_audit: dict[str, Any],
     adapter_evidence: dict[str, Any],
 ) -> dict[str, Any]:
@@ -489,6 +611,10 @@ def build_packet(
         "adapter_acceptance_fixtures_json": rel(ACCEPTANCE_FIXTURES_JSON),
         "adapter_acceptance_fixtures_md": rel(ACCEPTANCE_FIXTURES_MD),
         "adapter_acceptance_fixtures_csv": rel(ACCEPTANCE_FIXTURES_CSV),
+        "method_manifest_cutover_checklist_count": len(method_cutover_rows),
+        "method_manifest_cutover_checklist_csv": rel(METHOD_CUTOVER_CSV),
+        "method_manifest_cutover_checklist_md": rel(METHOD_CUTOVER_MD),
+        "method_manifest_cutover_checklist": method_cutover_rows,
         "strict_acceptance_commands": STRICT_ACCEPTANCE_COMMANDS,
         "forbidden_evidence_shortcuts": [
             "using scaffold adapters as manifest-declared implementations",
@@ -622,6 +748,32 @@ def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_a
     reference_policy_hashes_ok = all(
         record.get("reference_policy_hash") == stable_hash(f"paper119_reference_adapter:{record.get('method')}:v1")
         for record in reference_provenance
+    )
+    method_cutover_rows = packet.get("method_manifest_cutover_checklist", []) or []
+    method_cutover_methods = {row.get("method") for row in method_cutover_rows if isinstance(row, dict)}
+    method_cutover_fields_ok = all(
+        isinstance(row, dict)
+        and set(MANIFEST_METHOD_ENTRY_FIELDS).issubset(set(str(row.get("required_manifest_fields", "")).split(";")))
+        and row.get("implementation_required") is True
+        and row.get("implementation_sha_or_commit_required") is True
+        and row.get("checkpoint_or_config_path_required") is True
+        and row.get("checkpoint_or_config_hash_required") is True
+        and row.get("implementation_provenance_required") is True
+        and row.get("fairness_contract_binding_required") is True
+        and row.get("policy_or_config_hash_log_binding_required") is True
+        and str(row.get("manifest_methods_key", "")).startswith("methods[")
+        and str(row.get("adapter_acceptance_fixture_id", "")) in acceptance_fixture_ids
+        for row in method_cutover_rows
+    )
+    method_cutover_boundaries_ok = all(
+        isinstance(row, dict)
+        and row.get("blocking_until_real_evidence") is True
+        and row.get("scaffold_allowed_as_evidence") is False
+        and row.get("reference_adapter_allowed_as_evidence") is False
+        and "validate_external_adapters.py --strict" in str(row.get("strict_gate", ""))
+        and str(row.get("interface_reference_adapter", "")).startswith("external_validation/baselines/")
+        and len(str(row.get("interface_reference_adapter_sha256", ""))) == 64
+        for row in method_cutover_rows
     )
 
     add_check(
@@ -758,6 +910,28 @@ def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_a
     )
     add_check(
         checks,
+        "method_manifest_cutover_checklist_covers_non_oracle_methods",
+        len(method_cutover_rows) >= 11
+        and non_oracle_method_names.issubset(method_cutover_methods)
+        and ORACLE_METHOD not in method_cutover_methods
+        and METHOD_CUTOVER_CSV.exists()
+        and METHOD_CUTOVER_MD.exists(),
+        f"cutover_rows={len(method_cutover_rows)}, missing={sorted(non_oracle_method_names - method_cutover_methods)}",
+    )
+    add_check(
+        checks,
+        "method_manifest_cutover_checklist_binds_manifest_fields",
+        method_cutover_fields_ok,
+        "cutover rows require implementation path/hash, checkpoint/config path/hash, provenance, fairness binding, and JSONL policy/config hash binding",
+    )
+    add_check(
+        checks,
+        "method_manifest_cutover_checklist_forbids_shortcuts",
+        method_cutover_boundaries_ok,
+        "cutover rows keep scaffold/reference adapters non-evidence and route through validate_external_adapters.py --strict",
+    )
+    add_check(
+        checks,
         "strict_commands_cover_adapter_rollout_pairing_and_evidence",
         all(
             fragment in command_text
@@ -791,11 +965,14 @@ def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_a
         and REFERENCE_PROVENANCE_CSV.exists()
         and ACCEPTANCE_FIXTURES_JSON.exists()
         and ACCEPTANCE_FIXTURES_MD.exists()
-        and ACCEPTANCE_FIXTURES_CSV.exists(),
+        and ACCEPTANCE_FIXTURES_CSV.exists()
+        and METHOD_CUTOVER_CSV.exists()
+        and METHOD_CUTOVER_MD.exists(),
         (
             f"packet_json={PACKET_JSON.exists()}, packet_md={PACKET_MD.exists()}, "
             f"work_orders_csv={WORK_ORDERS_CSV.exists()}, reference_provenance_csv={REFERENCE_PROVENANCE_CSV.exists()}, "
-            f"acceptance_fixtures_json={ACCEPTANCE_FIXTURES_JSON.exists()}"
+            f"acceptance_fixtures_json={ACCEPTANCE_FIXTURES_JSON.exists()}, "
+            f"method_cutover_csv={METHOD_CUTOVER_CSV.exists()}"
         ),
     )
 
@@ -831,6 +1008,14 @@ def write_packet_md(packet: dict[str, Any]) -> None:
         f"- CSV: `{packet['adapter_acceptance_fixtures_csv']}`",
         "",
         "The fixture packet gives each independent implementation a synthetic smoke-test input and required adapter/log fields before rollout collection. Passing these fixtures does not count as external evidence; strict evidence still requires manifest-declared implementations, checkpoint/config hashes, raw JSONL logs, render-backed videos, and final strict audits.",
+        "",
+        "## Method Manifest Cutover Checklist (Non-Evidence)",
+        "",
+        f"- CSV: `{packet['method_manifest_cutover_checklist_csv']}`",
+        f"- Markdown: `{packet['method_manifest_cutover_checklist_md']}`",
+        f"- Rows: `{packet['method_manifest_cutover_checklist_count']}`",
+        "",
+        "The checklist turns each method work order into the exact `manifest.methods[]` fields, fairness-contract bindings, and JSONL hash bindings that must be real before strict adapter evidence can pass.",
         "",
         "## Reference Adapter Provenance (Non-Evidence)",
         "",
@@ -927,12 +1112,15 @@ def main() -> int:
     work_orders = build_work_orders(specs, log_schema)
     reference_provenance = collect_reference_adapter_provenance(specs)
     acceptance_fixtures = build_acceptance_fixtures(specs, log_schema)
+    method_cutover_rows = build_method_cutover_rows(work_orders, reference_provenance)
     write_work_orders_csv(work_orders)
     write_reference_provenance_csv(reference_provenance)
     ACCEPTANCE_FIXTURES_JSON.write_text(json.dumps(acceptance_fixtures, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_acceptance_fixtures_csv(acceptance_fixtures)
     write_acceptance_fixtures_md(acceptance_fixtures)
-    packet = build_packet(specs, work_orders, reference_provenance, acceptance_fixtures, baseline_audit, adapter_evidence)
+    write_method_cutover_csv(method_cutover_rows)
+    write_method_cutover_md(method_cutover_rows)
+    packet = build_packet(specs, work_orders, reference_provenance, acceptance_fixtures, method_cutover_rows, baseline_audit, adapter_evidence)
     PACKET_JSON.write_text(json.dumps(packet, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_packet_md(packet)
     audit = audit_packet(packet, specs, baseline_audit, adapter_evidence)
@@ -951,6 +1139,8 @@ def main() -> int:
     print(f"Wrote {ACCEPTANCE_FIXTURES_JSON}")
     print(f"Wrote {ACCEPTANCE_FIXTURES_MD}")
     print(f"Wrote {ACCEPTANCE_FIXTURES_CSV}")
+    print(f"Wrote {METHOD_CUTOVER_CSV}")
+    print(f"Wrote {METHOD_CUTOVER_MD}")
     print(f"Wrote {AUDIT_JSON}")
     print(f"Wrote {AUDIT_MD}")
     return 0 if audit["passed"] else 1

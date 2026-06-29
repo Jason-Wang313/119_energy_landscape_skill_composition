@@ -938,6 +938,9 @@ def main() -> int:
         and method_checks.get("policy_or_config_hash_in_logs_required") is True
         and method_checks.get("adapter_acceptance_fixtures_cover_non_oracle_methods") is True
         and method_checks.get("adapter_acceptance_fixtures_define_contract") is True
+        and method_checks.get("method_manifest_cutover_checklist_covers_non_oracle_methods") is True
+        and method_checks.get("method_manifest_cutover_checklist_binds_manifest_fields") is True
+        and method_checks.get("method_manifest_cutover_checklist_forbids_shortcuts") is True
         and method_checks.get("work_orders_reference_acceptance_fixtures") is True
         and method_checks.get("reference_adapter_provenance_covers_non_oracle_methods") is True
         and method_checks.get("reference_adapter_hashes_recorded") is True
@@ -1161,6 +1164,7 @@ def main() -> int:
             "External precollection manifest draft",
             "External method implementation packet",
             "reference-adapter provenance catalog",
+            "method manifest cutover checklist",
             "strict reference-adapter rejection gate",
             "strict independent method provenance gate",
             "strict checkpoint/config artifact gate",
@@ -1231,6 +1235,7 @@ def main() -> int:
             "External precollection manifest draft",
             "External method implementation packet",
             "reference-adapter provenance catalog",
+            "method manifest cutover checklist",
             "strict reference-adapter rejection gate",
             "strict independent method provenance gate",
             "strict checkpoint/config artifact gate",
@@ -1303,6 +1308,7 @@ def main() -> int:
             "external method implementation packet",
             "adapter acceptance fixtures",
             "reference-adapter provenance catalog",
+            "method manifest cutover checklist",
             "strict reference-adapter rejection gate",
             "strict independent method provenance gate",
             "strict checkpoint/config artifact gate",
@@ -1374,6 +1380,7 @@ def main() -> int:
             "External precollection manifest draft",
             "External method implementation packet",
             "reference-adapter provenance catalog",
+            "method manifest cutover checklist",
             "strict reference-adapter rejection gate",
             "strict independent method provenance gate",
             "strict checkpoint/config artifact gate",
@@ -1449,8 +1456,10 @@ def main() -> int:
             "scripts/build_external_method_implementation_packet.py",
             "adapter_acceptance_fixtures.json",
             "method_reference_provenance.csv",
+            "method_manifest_cutover_checklist.csv",
             "adapter acceptance fixtures",
             "reference-adapter provenance catalog",
+            "method manifest cutover checklist",
             "strict reference-adapter rejection gate",
             "strict independent method provenance gate",
             "strict checkpoint/config artifact gate",
@@ -1524,6 +1533,7 @@ def main() -> int:
             "external method implementation packet",
             "adapter acceptance fixtures",
             "reference-adapter provenance catalog",
+            "method manifest cutover checklist",
             "strict reference-adapter rejection gate",
             "strict independent method provenance gate",
             "strict checkpoint/config artifact gate",
@@ -1542,6 +1552,7 @@ def main() -> int:
             "ManiSkill fidelity metadata probe",
             "fidelity acceptance materializer",
             "reference-adapter provenance catalog",
+            "method manifest cutover checklist",
             "strict reference-adapter rejection gate",
             "strict independent method provenance gate",
             "strict checkpoint/config artifact gate",
@@ -1621,7 +1632,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the failure-memory adaptation audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the strict MP4 video evidence gate, the strict full-method coverage gate, the strict rollout sample-count gate, the strict paired-panel gate, the strict rollout uniqueness gate, confidence-gated external rollout statistics, the final rollout confidence summary gate, the strict task-config hash gate, the strict policy/config hash gate, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the strict fidelity acceptance provenance gate, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, atomic official evidence promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, render resource sweep, ManiSkill render machine qualification packet, render failure remediation packet, ManiSkill pilot runtime liveness audit, reset-timeout triage sidecar, and backend reset substage markers, the external method implementation packet, adapter acceptance fixtures, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the strict independent method provenance gate, the strict checkpoint/config artifact gate, the strict fairness-contract binding gate, the manifest assembly checklist, the External manifest builder self-test, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the failure-memory adaptation audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the strict MP4 video evidence gate, the strict full-method coverage gate, the strict rollout sample-count gate, the strict paired-panel gate, the strict rollout uniqueness gate, confidence-gated external rollout statistics, the final rollout confidence summary gate, the strict task-config hash gate, the strict policy/config hash gate, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the strict fidelity acceptance provenance gate, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, atomic official evidence promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, render resource sweep, ManiSkill render machine qualification packet, render failure remediation packet, ManiSkill pilot runtime liveness audit, reset-timeout triage sidecar, and backend reset substage markers, the external method implementation packet, adapter acceptance fixtures, the reference-adapter provenance catalog, the method manifest cutover checklist, the strict reference-adapter rejection gate, the strict independent method provenance gate, the strict checkpoint/config artifact gate, the strict fairness-contract binding gate, the manifest assembly checklist, the External manifest builder self-test, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",
