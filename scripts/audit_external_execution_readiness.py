@@ -1310,6 +1310,53 @@ def main() -> int:
         f"commands={len(postcollection_seal.get('strict_command_sequence', []) or [])}",
     )
 
+    consistency_ok, postcollection_consistency, consistency_detail = passed_json(
+        RESULTS / "external_postcollection_seal_consistency_audit.json",
+        version="external_postcollection_seal_consistency_audit_v1",
+    )
+    add_check(checks, "external_postcollection_seal_consistency_gate_ready", consistency_ok, consistency_detail)
+    consistency_checks = {
+        check.get("name"): check.get("passed")
+        for check in postcollection_consistency.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "external_postcollection_seal_consistency_not_evidence",
+        postcollection_consistency.get("not_external_evidence") is True
+        and postcollection_consistency.get("strict_external_evidence_ready") is False
+        and postcollection_consistency.get("seal_consistency_ready") is False
+        and postcollection_consistency.get("ready_for_manifest_promotion") is False
+        and consistency_checks.get("consistency_gate_is_non_evidence_and_fail_closed") is True,
+        (
+            f"seal_consistency_ready={postcollection_consistency.get('seal_consistency_ready')!r}, "
+            f"ready_for_manifest_promotion={postcollection_consistency.get('ready_for_manifest_promotion')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "external_postcollection_seal_consistency_hash_recompute",
+        int(postcollection_consistency.get("matched_hash_count", 0) or 0) >= 8
+        and not postcollection_consistency.get("mismatched_hashes")
+        and not postcollection_consistency.get("extra_official_artifacts")
+        and int(postcollection_consistency.get("current_jsonl_record_count", 0) or 0) == 0
+        and int(postcollection_consistency.get("current_rollout_video_count", 0) or 0) == 0
+        and consistency_checks.get("sealed_hashes_recompute_without_drift") is True
+        and consistency_checks.get("no_unsealed_official_artifacts_before_manifest_promotion") is True,
+        (
+            f"matched={postcollection_consistency.get('matched_hash_count')!r}, "
+            f"records={postcollection_consistency.get('current_jsonl_record_count')!r}, "
+            f"videos={postcollection_consistency.get('current_rollout_video_count')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "external_postcollection_seal_consistency_gate_order",
+        consistency_checks.get("strict_sequence_places_consistency_after_seal_before_manifest") is True
+        and consistency_checks.get("consistency_gate_references_rollout_pairing_release_final_gates") is True
+        and "audit_external_postcollection_seal_consistency.py" in "\n".join(postcollection_consistency.get("strict_command_sequence", []) or []),
+        f"commands={len(postcollection_consistency.get('strict_command_sequence', []) or [])}",
+    )
+
     preflight_path = RESULTS / "external_evidence_preflight.json"
     preflight_ok, preflight, preflight_detail = passed_json(
         preflight_path,
@@ -1494,6 +1541,7 @@ def main() -> int:
         EXTERNAL / "postcollection_evidence_seal.json",
         EXTERNAL / "postcollection_evidence_seal.md",
         EXTERNAL / "postcollection_evidence_seal.csv",
+        RESULTS / "external_postcollection_seal_consistency_audit.md",
         EXTERNAL / "log_schema_v1.json",
         EXTERNAL / "statistical_analysis_plan.json",
         EXTERNAL / "statistical_analysis_plan.md",
@@ -1707,6 +1755,10 @@ def main() -> int:
         "external_postcollection_evidence_seal_not_evidence",
         "external_postcollection_evidence_seal_hash_inventory",
         "external_postcollection_evidence_seal_gate_order",
+        "external_postcollection_seal_consistency_gate_ready",
+        "external_postcollection_seal_consistency_not_evidence",
+        "external_postcollection_seal_consistency_hash_recompute",
+        "external_postcollection_seal_consistency_gate_order",
         "external_evidence_preflight_ready",
         "external_evidence_preflight_not_evidence",
         "external_evidence_preflight_fail_closed",
@@ -1756,6 +1808,7 @@ def main() -> int:
             "completed evidence intake ledger rows for all current strict external-evidence failures",
             "completed precollection freeze receipt with real backend, specific run id, independent operator identity, clean checkout, and unsealed alias map before collection",
             "completed postcollection evidence seal with raw JSONL/video hashes before manifest promotion",
+            "completed postcollection seal consistency audit with matching raw evidence hashes before manifest promotion",
             "manifest-declared videos",
             "official manifest promotion from the precollection draft after real evidence is collected",
             "manifest-declared independent non-oracle adapter implementations",

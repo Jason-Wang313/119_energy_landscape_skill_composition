@@ -169,7 +169,7 @@ Must document:
 4. Materialize external_validation/fidelity_acceptance.json only through scripts\materialize_fidelity_acceptance.py after independent operator signoff and real evidence confirmations.
 5. Run strict collection readiness with a specific immutable run id and explicit alias unsealing.
 6. Collect the full 1,440-record blinded paired-reset panel only after strict readiness passes.
-7. Build the manifest and run strict rollout, pairing, release-package, and evidence audits from raw logs.
+7. Seal the collected logs/videos, run the seal-consistency audit, then build the manifest and run strict rollout, pairing, release-package, and evidence audits from raw logs.
 
 ## Strict Commands
 
@@ -184,6 +184,8 @@ Must document:
 - `python scripts\audit_external_fidelity_acceptance.py --strict`
 - `python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map`
 - `python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id <specific_run_id> --unsealed-alias-map`
+- `python scripts\build_external_postcollection_evidence_seal.py`
+- `python scripts\audit_external_postcollection_seal_consistency.py`
 - `python scripts\build_external_manifest.py --write --check-video-paths`
 - `python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict`
 - `python scripts\audit_external_pairing_integrity.py --strict`

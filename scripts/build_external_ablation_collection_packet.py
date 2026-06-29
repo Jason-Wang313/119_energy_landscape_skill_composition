@@ -56,6 +56,8 @@ STRICT_COMMANDS = [
     r"python scripts\build_external_ablation_collection_packet.py",
     r"python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map",
     r"python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id <specific_run_id> --unsealed-alias-map",
+    r"python scripts\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+    r"python scripts\audit_external_postcollection_seal_consistency.py",
     r"python scripts\build_external_manifest.py --write --check-video-paths",
     r"python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict",
     r"python scripts\audit_external_evidence.py --strict",
@@ -246,6 +248,8 @@ def main() -> int:
             term in command_text
             for term in (
                 "real_collection_runner.py",
+                "build_external_postcollection_evidence_seal.py",
+                "audit_external_postcollection_seal_consistency.py",
                 "build_external_manifest.py",
                 "validate_external_rollouts.py",
                 "audit_external_evidence.py",

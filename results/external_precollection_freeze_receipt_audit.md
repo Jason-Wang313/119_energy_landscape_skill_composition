@@ -15,13 +15,28 @@ This audit checks that the precollection freeze receipt hash-locks the operator 
 - `pass` `prepared_task_configs_hashed`: config_count=4
 - `pass` `backend_module_still_operator_supplied`: backend_module=''
 - `pass` `run_identity_still_operator_supplied`: run_id='paper119_external_validation_run', unsealed_alias_map=False
-- `pass` `checkout_and_skill_hash_recorded`: commit='396097036997844e64a0c4a08d3365d65ac8b94d', skill_hash='F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802'
+- `pass` `checkout_and_skill_hash_recorded`: commit='13d626b157dd66dc363241546235e036c3a92438', skill_hash='F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802'
 - `pass` `strict_sequence_places_receipt_before_collection`: python scripts\audit_external_fidelity_acceptance.py --strict
 python scripts\validate_external_configs.py --strict
 python scripts\validate_external_adapters.py --strict
 python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id paper119_external_validation_run --unsealed-alias-map
 python scripts\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map
 python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id paper119_external_validation_run --unsealed-alias-map
+python scripts\build_external_postcollection_evidence_seal.py
+python scripts\audit_external_postcollection_seal_consistency.py
+python scripts\build_external_manifest.py --write --check-video-paths
+python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict
+python scripts\audit_external_pairing_integrity.py --strict
+python scripts\audit_external_release_package.py --strict
+python scripts\audit_external_evidence.py --strict
+- `pass` `strict_sequence_places_seal_consistency_before_manifest`: python scripts\audit_external_fidelity_acceptance.py --strict
+python scripts\validate_external_configs.py --strict
+python scripts\validate_external_adapters.py --strict
+python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id paper119_external_validation_run --unsealed-alias-map
+python scripts\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map
+python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id paper119_external_validation_run --unsealed-alias-map
+python scripts\build_external_postcollection_evidence_seal.py
+python scripts\audit_external_postcollection_seal_consistency.py
 python scripts\build_external_manifest.py --write --check-video-paths
 python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict
 python scripts\audit_external_pairing_integrity.py --strict
@@ -33,6 +48,8 @@ python scripts\validate_external_adapters.py --strict
 python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id paper119_external_validation_run --unsealed-alias-map
 python scripts\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map
 python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id paper119_external_validation_run --unsealed-alias-map
+python scripts\build_external_postcollection_evidence_seal.py
+python scripts\audit_external_postcollection_seal_consistency.py
 python scripts\build_external_manifest.py --write --check-video-paths
 python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict
 python scripts\audit_external_pairing_integrity.py --strict

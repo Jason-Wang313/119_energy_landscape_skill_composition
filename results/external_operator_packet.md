@@ -265,6 +265,25 @@ Operator regeneration command:
 python scripts\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>
 ```
 
+## External Postcollection Seal Consistency Gate
+
+This gate is not evidence. It recomputes the postcollection seal hashes and rejects manifest promotion if raw logs, videos, configs, or operator metadata drift after sealing.
+
+- Audit JSON: `results/external_postcollection_seal_consistency_audit.json`
+- Audit notes: `results/external_postcollection_seal_consistency_audit.md`
+- Matched hashes: `11`
+- JSONL records: `0`
+- Rollout videos: `0`
+- Seal consistency ready: `false`
+- Ready for manifest promotion: `false`
+- Strict external evidence ready: `false`
+
+Operator regeneration command:
+
+```powershell
+python scripts\audit_external_postcollection_seal_consistency.py
+```
+
 ## External Precollection Manifest Draft
 
 This draft is not evidence. It pre-fills the task-config hashes and cutover command spine that are safe before collection, while keeping `external_validation/manifest.json` absent and every strict evidence gate false.
@@ -311,6 +330,9 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 ```
 ```powershell
 python scripts\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>
+```
+```powershell
+python scripts\audit_external_postcollection_seal_consistency.py
 ```
 ```powershell
 python scripts\build_external_manifest.py --write --check-video-paths
@@ -372,12 +394,20 @@ Postcollection evidence seal before manifest promotion:
 python scripts\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>
 ```
 
+Postcollection seal consistency gate before manifest promotion:
+
+```powershell
+python scripts\audit_external_postcollection_seal_consistency.py
+```
+
 Official video write guard: the runner refuses diagnostic fallback sidecars, non-MP4-like files, undersized files, out-of-dir paths, or unexpected returned video paths before any official JSONL row is written.
 Official JSONL write guard: the runner calls the strict rollout-record validator with video-path checks and refuses schema-invalid records before append.
 atomic official evidence promotion: selected-batch videos are staged as `.staging.mp4`, and official videos/logs are replaced together only after the batch succeeds, preserving prior official videos/logs on failure.
 
 Post-collection strict gates:
 
+- `python scripts\build_external_postcollection_evidence_seal.py`
+- `python scripts\audit_external_postcollection_seal_consistency.py`
 - `python scripts\build_external_manifest.py --write --check-video-paths`
 - `python scripts\audit_external_release_package.py --strict`
 - `python scripts\audit_external_fidelity_acceptance.py --strict`
@@ -405,6 +435,7 @@ Post-collection strict gates:
 - `evidence_intake_ledger`: Use the evidence intake ledger to close every strict external-evidence failure
 - `precollection_freeze_receipt`: Freeze precollection hashes before official rollout collection
 - `postcollection_evidence_seal`: Seal raw postcollection logs and videos before manifest promotion
+- `postcollection_seal_consistency_gate`: Recompute the postcollection seal before manifest promotion
 - `platform_fidelity`: Fill platform fidelity acceptance with real provenance
 - `fidelity_acceptance_draft`: Generate the tracked ManiSkill fidelity acceptance draft
 - `fidelity_acceptance_materializer`: Materialize fidelity acceptance only through the guarded promotion path
@@ -439,6 +470,7 @@ Post-collection strict gates:
 - `pass` `evidence_intake_ledger_recorded_but_not_evidence`: mapped=37/37, groups=8
 - `pass` `precollection_freeze_receipt_recorded_but_not_evidence`: locked_artifacts=26, freeze_receipt_ready=False
 - `pass` `postcollection_evidence_seal_recorded_but_not_evidence`: sealed_artifacts=11, records=0, videos=0, seal_ready=False
+- `pass` `postcollection_seal_consistency_recorded_but_not_evidence`: matched=11, records=0, videos=0, consistency_ready=False
 - `pass` `precollection_manifest_draft_ready_but_not_evidence`: configs=4, method_gaps=11, rollout_gaps=8, official_manifest_exists=False
 - `pass` `operator_actions_cover_start_to_finish`: missing=[]
 - `pass` `operator_action_titles_present`: missing_titles=[]
@@ -447,6 +479,6 @@ Post-collection strict gates:
 - `pass` `backend_action_runs_contract_before_readiness`: python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --alias-map external_validation\method_alias_map.json
 python scripts\audit_external_collection_readiness.py --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map
 - `pass` `strict_collection_command_is_explicit`: python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id <specific_run_id> --unsealed-alias-map
-- `pass` `post_collection_gates_cover_evidence`: commands=8
+- `pass` `post_collection_gates_cover_evidence`: commands=10
 - `pass` `no_real_manifest_written`: external_validation/manifest.json absent before real evidence
 - `pass` `packet_artifacts_exist`: runbook, runner, blinded sheet, alias map, precollection freeze receipt, platform checklist, and config schema

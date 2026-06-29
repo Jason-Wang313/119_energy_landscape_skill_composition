@@ -135,6 +135,7 @@ def strict_command_sequence(args: argparse.Namespace) -> list[str]:
         r"python scripts\build_external_postcollection_evidence_seal.py --backend-module "
         f"{backend} --run-id {run_id} --operator-id <operator_or_lab> "
         r"--collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+        r"python scripts\audit_external_postcollection_seal_consistency.py",
         r"python scripts\build_external_manifest.py --write --check-video-paths",
         r"python scripts\validate_external_configs.py --strict",
         r"python scripts\validate_external_adapters.py --strict",
@@ -243,25 +244,29 @@ def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
         "seal_is_non_evidence_and_fail_closed",
         payload.get("not_external_evidence") is True
         and payload.get("strict_external_evidence_ready") is False
-        and payload.get("postcollection_seal_ready") is False,
+        and payload.get("ready_for_manifest_promotion") == payload.get("postcollection_seal_ready"),
         (
             f"not_external_evidence={payload.get('not_external_evidence')!r}, "
             f"strict_external_evidence_ready={payload.get('strict_external_evidence_ready')!r}, "
-            f"postcollection_seal_ready={payload.get('postcollection_seal_ready')!r}"
+            f"postcollection_seal_ready={payload.get('postcollection_seal_ready')!r}, "
+            f"ready_for_manifest_promotion={payload.get('ready_for_manifest_promotion')!r}"
         ),
     )
     add_check(
         checks,
         "precollection_freeze_loaded_but_not_real_ready",
-        payload.get("precollection_freeze_ready") is False,
+        payload.get("precollection_freeze_ready") is False or payload.get("postcollection_seal_ready") is True,
         f"precollection_freeze_ready={payload.get('precollection_freeze_ready')!r}",
     )
     add_check(
         checks,
         "raw_logs_and_videos_absent_before_collection",
-        int(payload.get("jsonl_log_count", 0) or 0) == 0
-        and int(payload.get("jsonl_record_count", 0) or 0) == 0
-        and int(payload.get("rollout_video_count", 0) or 0) == 0,
+        (
+            int(payload.get("jsonl_log_count", 0) or 0) == 0
+            and int(payload.get("jsonl_record_count", 0) or 0) == 0
+            and int(payload.get("rollout_video_count", 0) or 0) == 0
+        )
+        or payload.get("postcollection_seal_ready") is True,
         (
             f"logs={payload.get('jsonl_log_count')!r}, "
             f"records={payload.get('jsonl_record_count')!r}, "
@@ -271,10 +276,18 @@ def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
     add_check(
         checks,
         "operator_metadata_still_required",
-        not payload.get("operator_id")
-        and not payload.get("collection_machine")
-        and not payload.get("date_sealed")
-        and payload.get("run_id") == PLACEHOLDER_RUN_ID,
+        (
+            not payload.get("operator_id")
+            and not payload.get("collection_machine")
+            and not payload.get("date_sealed")
+            and payload.get("run_id") == PLACEHOLDER_RUN_ID
+        )
+        or (
+            bool(payload.get("operator_id"))
+            and bool(payload.get("collection_machine"))
+            and bool(payload.get("date_sealed"))
+            and payload.get("run_id") != PLACEHOLDER_RUN_ID
+        ),
         (
             f"operator={payload.get('operator_id')!r}, "
             f"machine={payload.get('collection_machine')!r}, "
@@ -297,9 +310,19 @@ def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
         "strict_sequence_places_seal_after_collection_before_manifest",
         "real_collection_runner.py" in command_text
         and "build_external_postcollection_evidence_seal.py" in command_text
+        and "audit_external_postcollection_seal_consistency.py" in command_text
         and "build_external_manifest.py --write --check-video-paths" in command_text
         and command_text.find("real_collection_runner.py") < command_text.find("build_external_postcollection_evidence_seal.py")
-        and command_text.find("build_external_postcollection_evidence_seal.py") < command_text.find("build_external_manifest.py --write --check-video-paths"),
+        and command_text.find("build_external_postcollection_evidence_seal.py") < command_text.find("audit_external_postcollection_seal_consistency.py")
+        and command_text.find("audit_external_postcollection_seal_consistency.py") < command_text.find("build_external_manifest.py --write --check-video-paths"),
+        command_text,
+    )
+    add_check(
+        checks,
+        "seal_references_consistency_gate_before_manifest",
+        "audit_external_postcollection_seal_consistency.py" in command_text
+        and command_text.find("build_external_postcollection_evidence_seal.py") < command_text.find("audit_external_postcollection_seal_consistency.py")
+        and command_text.find("audit_external_postcollection_seal_consistency.py") < command_text.find("build_external_manifest.py --write --check-video-paths"),
         command_text,
     )
     add_check(

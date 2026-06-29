@@ -3,8 +3,8 @@
   "category_counts": {
     "baseline_spec": 12,
     "config_template": 4,
-    "generated_non_evidence_report": 94,
-    "operator_command_source": 41,
+    "generated_non_evidence_report": 96,
+    "operator_command_source": 42,
     "operator_facing_input": 75,
     "prepared_config_input": 4,
     "reference_adapter": 60,
@@ -48,7 +48,7 @@
       "passed": true
     },
     {
-      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 94, 'operator_command_source': 41, 'operator_facing_input': 75, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 96, 'operator_command_source': 42, 'operator_facing_input': 75, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "handoff_has_task_config_and_baseline_assets",
       "passed": true
     },
@@ -128,6 +128,11 @@
       "passed": true
     },
     {
+      "detail": "matched=11, records=0, videos=0, consistency_ready=False",
+      "name": "postcollection_seal_consistency_gate_included",
+      "passed": true
+    },
+    {
       "detail": "pilot_smoke_packet_ready=True, strict_evidence_ready=False",
       "name": "pilot_smoke_packet_included",
       "passed": true
@@ -163,12 +168,12 @@
       "passed": true
     },
     {
-      "detail": "commands=8",
+      "detail": "commands=10",
       "name": "post_collection_commands_cover_strict_gates",
       "passed": true
     },
     {
-      "detail": "hashed_files=299",
+      "detail": "hashed_files=302",
       "name": "file_hashes_are_recorded",
       "passed": true
     }
@@ -183,21 +188,21 @@
     "placeholder_not_external_evidence"
   ],
   "handoff_bundle_ready": true,
-  "included_file_count": 299,
+  "included_file_count": 302,
   "included_files": [
     {
-      "bytes": 27702,
+      "bytes": 27811,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "BE847C868650719DD4715449444053492AB81C281CFB83769D7002DBA131E19B"
+      "sha256": "BAAA59D02659797B18702A0EC1236E23685AF334628754459F82DE169AD04456"
     },
     {
-      "bytes": 13504,
+      "bytes": 13602,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/haonan_yilun_outreach_package.md",
-      "sha256": "BE5827771C317DC63E8E0281D2195CAE1D30A6C3AD2C03469CFEA0AF60AA754E"
+      "sha256": "93DA9DD69AD195BB1847C4AC6A791BBB1DACFF7157658535038DA2F420E7128A"
     },
     {
       "bytes": 21796,
@@ -214,11 +219,11 @@
       "sha256": "DEDF3B7295DEA1D19D9D8DDABDB7E875CE2BC7456C93AAED2C48D62796D07AC7"
     },
     {
-      "bytes": 17115,
+      "bytes": 17316,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "B70675B1E0F43D539E310481FA8E72DBB9A23F7F93D3247C7951160BC125DBF3"
+      "sha256": "895CF4B8EDC2EB106E3A783A19E96A49D06157B16E3C4A30B381A19A7648113B"
     },
     {
       "bytes": 34698,
@@ -228,25 +233,25 @@
       "sha256": "5E0E6D9D7D06DC4AB8F664ACC65BEEAEE65799B48D82753722812C08BBFB261B"
     },
     {
-      "bytes": 4898,
+      "bytes": 5212,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/ablation_collection_packet.json",
-      "sha256": "EAEC723467F3669301D277745002BA52E52D6308D73FE45C80E48D72AECA110D"
+      "sha256": "93E9ED0730D12385B9C02230FC10B0469D4EEDCE85EFA58FF83ADB6D0FE6E0EA"
     },
     {
-      "bytes": 3357,
+      "bytes": 3695,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/ablation_collection_packet.md",
-      "sha256": "50DB11390933EFA90710391C3F7EFF62333FA59EE22778D563E7C8E71E1D877B"
+      "sha256": "BBA79EF72B352B4799A1EE7322BC1A20A0E996F71C9CCB8DF2F98307B455ED99"
     },
     {
-      "bytes": 6653,
+      "bytes": 8153,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/ablation_collection_work_orders.csv",
-      "sha256": "EF3D0848B8132E3B4009354E23785BD44DAE2AFC8EE66E3EC8732267A6E9387A"
+      "sha256": "B441B51BAA4DA00DEC488C05E11EF8D381DF1B2D742024936691A12B16CBB1B7"
     },
     {
       "bytes": 6081,
@@ -270,25 +275,25 @@
       "sha256": "EE98FFB8E3767687273702ABAD34E29AF5ECDCF5A67C17A545657CCB11AB2EF0"
     },
     {
-      "bytes": 8780,
+      "bytes": 9078,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/backend_integration_packet.json",
-      "sha256": "16DABB38BE7289B2F0162776F007690559AD3A439CD350FFBEB0F639409DD2FE"
+      "sha256": "8581FAD2CF3865FBCB78A8F796FC70195830DA8771053556F9C5BB147718E303"
     },
     {
-      "bytes": 5380,
+      "bytes": 5517,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/backend_integration_packet.md",
-      "sha256": "B116851BC510B18DFF01E4ECF626EA0F05C5ECFDE29648B8F58A5BA0D22A18A4"
+      "sha256": "4253E6578CD2C0EE2C3906484A6ABFB8DEE168F54A5C4F7441867C80E33201A0"
     },
     {
-      "bytes": 3369,
+      "bytes": 3496,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/backend_integration_work_orders.csv",
-      "sha256": "4EE6D3336C44A04576A2720BEA35A664613A907B33E771952FDBBFB64DFDACE3"
+      "sha256": "A7A4D24FE4AB850B63AFD1719C2642A30E2D029BD8260C298A0BFC43F18E346D"
     },
     {
       "bytes": 2583,
@@ -837,11 +842,11 @@
       "sha256": "BAAF6BC6B7BFA0DAD346498D8C7FACEE413FD2A0844E5F833A519BBAD4BEEBF5"
     },
     {
-      "bytes": 5872,
+      "bytes": 5942,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/collection_runbook.md",
-      "sha256": "1B638609726AD7D7F2A62672D9ACA65027D16D26847A33CCB206BE595A36F1B0"
+      "sha256": "728A4D84B20D20D6D290A15E60F5833721BD5CFB1CBFE7B291CAD0954DDEC978"
     },
     {
       "bytes": 10400,
@@ -935,25 +940,25 @@
       "sha256": "021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9"
     },
     {
-      "bytes": 24251,
+      "bytes": 27242,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/evidence_intake_ledger.csv",
-      "sha256": "D3AC6811574F004B1E61C7F89507D9FC7B6DC235CC8F6152B9E6A259FB67FD19"
+      "sha256": "FC1257013B9B99A429281358FF84C786F7BC7055428F99F3B39D639F2DED766C"
     },
     {
-      "bytes": 39764,
+      "bytes": 43346,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/evidence_intake_ledger.json",
-      "sha256": "026AAF947FDE52A9BDF6902CC63B6F23FC55F7A58A045A462C19D9ADC098BE73"
+      "sha256": "7A604C84240C9815486D4B606B9F3DD0D10AB2B2F2115252FE9246E3BFE64136"
     },
     {
-      "bytes": 10666,
+      "bytes": 10752,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/evidence_intake_ledger.md",
-      "sha256": "AE01307873E96C479BC5FF27991BE5924032FA64F8C9AC12B67E06DFE01C1550"
+      "sha256": "179FA088F5BF95363BD6D67B0DABF6344D04727F460E8412FD9489356DD6D6D6"
     },
     {
       "bytes": 24448,
@@ -1026,18 +1031,18 @@
       "sha256": "572827C87C44B677B5897E2215FB3741E38000A40C23AF5141AFBC923D31FAEA"
     },
     {
-      "bytes": 25147,
+      "bytes": 25221,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/manifest_precollection_draft.json",
-      "sha256": "8B8E9DED2328D4A971FB0ED47F058A322842088546CAC3E9B9206CAA61015AAF"
+      "sha256": "9DCA5F051F75B24D6EC93D43365C4C337FB43A1E44C09266277BC793285BC7E8"
     },
     {
-      "bytes": 5998,
+      "bytes": 6084,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/manifest_precollection_draft.md",
-      "sha256": "8F73778E3DB775EFF8532439D6655E899F21434FF7E6C42DBF03B856981DF994"
+      "sha256": "DFE37C9B80FD1A4E5335549F02F076E5BD399A44647B6071AC92AEE84FD58489"
     },
     {
       "bytes": 2159,
@@ -1124,18 +1129,18 @@
       "sha256": "5F18D7641041AD7B7F9AD394AFE8A4CB7ADE880E2A0B6ECBA4A7F568DD821F3E"
     },
     {
-      "bytes": 13337,
+      "bytes": 13551,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/platform_onboarding_packet.json",
-      "sha256": "B274B3B3119EF0DBD1B4E9B9FAD55C3CF9646A9BC224876845741A9086297590"
+      "sha256": "15B1BAEEFB61E9F61323A97A53824F2CB30D38B3E6BA306172E91BDA0DB6830F"
     },
     {
-      "bytes": 10459,
+      "bytes": 10665,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/platform_onboarding_packet.md",
-      "sha256": "FF7709CBF3A3D9B33B80D8E567A1F94FED14B168F1EB7D0D920C1EDC893916E4"
+      "sha256": "31C722578A8E846E0C1609B2840030CCAFBFE3F1153C346006DD13A57199ADA5"
     },
     {
       "bytes": 3275,
@@ -1149,42 +1154,42 @@
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/postcollection_evidence_seal.csv",
-      "sha256": "FF6831CFB6E7438A88BD0A24DC1006291D49C47AAD9A86CCBF5DCC3D41CCE5CE"
+      "sha256": "50913DC4FCC61ED0F56C0411138064E1B4AFB2ECB1039718C20D09CBF60C5960"
     },
     {
-      "bytes": 6510,
+      "bytes": 6584,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/postcollection_evidence_seal.json",
-      "sha256": "E4FE67C0AF1A97AE3A4EA8D373E8ABB8E9D9EF77138D38239DF92204EFE83AF2"
+      "sha256": "B0A9726DA964D6E926B2C479C0CE644EBA767B48DB278E0840B03011E75DAF1B"
     },
     {
-      "bytes": 4569,
+      "bytes": 4655,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/postcollection_evidence_seal.md",
-      "sha256": "9B2851F62C06A712D83A8CEC21E21A0D708FE632C192DB638249C577FBCAC3CD"
+      "sha256": "A6A33F2A0A5E2DA06743653280A793CFFDB59B77D240BECB25B5C747A63A45B6"
     },
     {
       "bytes": 3913,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/precollection_freeze_receipt.csv",
-      "sha256": "B5B5E7EEB72C646C4CCCED6C34131804807B622D148A454A360362A04F6B2B6B"
+      "sha256": "1F6F8114F6BC48D000DE4977C63293C6840B86A8F722D0C865E416BE10971F7B"
     },
     {
-      "bytes": 14163,
+      "bytes": 16067,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/precollection_freeze_receipt.json",
-      "sha256": "7DAA68CE6E02224089A09D800930C9A397F4001757EFBD64A7C678D005F19880"
+      "sha256": "79652FE2B6AA0578D370257AC9043F87EB55CAE3504E5629C63CFCAF0B9246D3"
     },
     {
-      "bytes": 6431,
+      "bytes": 6600,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/precollection_freeze_receipt.md",
-      "sha256": "81CD2EB59C9C769D4EB0E1BC57A79A86F37D7D1CFF62A909D02894C29438E171"
+      "sha256": "393A0539452E2AE7C937D63835F06957E3CCB852B87AEFFC4D017995A5A1A7A9"
     },
     {
       "bytes": 3098,
@@ -1208,25 +1213,25 @@
       "sha256": "E14EF76A1BB322CCC7B48AADBA04121672C44714D2D3B466C046A053497370AC"
     },
     {
-      "bytes": 13301,
+      "bytes": 13937,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/rollout_evidence_packet.json",
-      "sha256": "82AA510C884F7BA399C4707ADD453DE2A45FCD262EADDFEEE56C862A4371E2FC"
+      "sha256": "90E5146448F7D9CFAC24742E123DFBA91A6F00A1B3C4937D54B10E28FFA03E79"
     },
     {
-      "bytes": 4592,
+      "bytes": 4898,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/rollout_evidence_packet.md",
-      "sha256": "279BC7FD9051008289B7D15E3EB59D59DB1815F0B8AA73003094008533AF2A5F"
+      "sha256": "A22D860C7AC83F885D68926F1CFD976F2E8D747BFAC1D6A433AE7817B1220CC2"
     },
     {
-      "bytes": 4513,
+      "bytes": 4811,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/rollout_evidence_work_orders.csv",
-      "sha256": "C20FE327337FA1FC2988744B8DE9419F67BEBF4F4D0B10FDA2EB2BAD4CAAC642"
+      "sha256": "7EE1DB977ABE2C371E0892342BCE0589582E9FDE47AA8E101F32AB9DB4245125"
     },
     {
       "bytes": 4725,
@@ -1334,32 +1339,32 @@
       "sha256": "357F6A44637AD1D55E6E98775B60640FE0E7C0A32FE0C1707FC5863C00D3CDB9"
     },
     {
-      "bytes": 4897,
+      "bytes": 5211,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_ablation_collection_audit.json",
-      "sha256": "3AD97C00DCBB9DFAD1EE0DBB4805503DE0F55190672372A5E0474D94E34B2CA6"
+      "sha256": "42DBE738EC9F7787C52F7A50B456BEEFA872ACECD813E66CA5855608684E4679"
     },
     {
-      "bytes": 3357,
+      "bytes": 3695,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_ablation_collection_audit.md",
-      "sha256": "50DB11390933EFA90710391C3F7EFF62333FA59EE22778D563E7C8E71E1D877B"
+      "sha256": "BBA79EF72B352B4799A1EE7322BC1A20A0E996F71C9CCB8DF2F98307B455ED99"
     },
     {
-      "bytes": 55874,
+      "bytes": 59232,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.json",
-      "sha256": "46B5A885DC78D831D6F629FE8DC4EDC3927F9CFD2234D50EEDCA9C954917B4AD"
+      "sha256": "1231BAE41D990AFFCD403C4833DA57873820242F77789E3C7B5FC4D93A391EC6"
     },
     {
-      "bytes": 33983,
+      "bytes": 36155,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.md",
-      "sha256": "992D7A22EAC3068931CE030563EF08AB156197AB990C2683C3F8C42A9858D6AC"
+      "sha256": "F546B93AD02650F5B0A285747DE296C0DD0B126B718D50F94F2CE8C7AB6F5922"
     },
     {
       "bytes": 3130,
@@ -1418,18 +1423,18 @@
       "sha256": "F92AE6D33D05582267F4D1F11D0886F6510B396E98A96C38C082043A8315601B"
     },
     {
-      "bytes": 4055,
+      "bytes": 4194,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_backend_integration_audit.json",
-      "sha256": "E1065972C68B0463D9E0DC234C4A7BA5A7C0D8F94A259A031CE0840C2C8CB4FB"
+      "sha256": "6D985329EDAB8BAAD99EBACF4F45A1263DD0E115F6FBD9A08209A0B13C1C3294"
     },
     {
-      "bytes": 3352,
+      "bytes": 3487,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_backend_integration_audit.md",
-      "sha256": "BECF783C0C359AFFB01595162EFA704914CC300A0AAD4DB8B15E2CF4F34F1AA2"
+      "sha256": "76B8CC5C8BD05A99798DC03B3EAD866D649858DBE34735EC4E4CA8F704D52614"
     },
     {
       "bytes": 5254,
@@ -1460,25 +1465,25 @@
       "sha256": "9EC804D278A6BEBB749B193C799210EEC6894349742C2D4363E877BF8D4A5B96"
     },
     {
-      "bytes": 147833,
+      "bytes": 147907,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_collection_plan.json",
-      "sha256": "F59127DBB3DC9CEDA642174591CEEE9715C14DE8F05A4D55234DD249AD2C9553"
+      "sha256": "499A6C1E503727DAEEBF2F22BDE5EDB9E89A5D58A47071AF4E6685D283D2ECEC"
     },
     {
-      "bytes": 6217,
+      "bytes": 6287,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_collection_plan.md",
-      "sha256": "036AAC3CD070CAEC9A1C8EC4AAC3D195FD772FC30DE0DCA1770B2EEA3AEC90C6"
+      "sha256": "0C336204F3A25C6A9385F4B4349488BC99550F57317F8C6F22AF6BB14785EE6F"
     },
     {
-      "bytes": 7980,
+      "bytes": 8125,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_collection_readiness_audit.json",
-      "sha256": "74168764841A1FF414AC673994CBA4FD724DF7A20C17A364A761B21D94E636EE"
+      "sha256": "8AC215A38BD0E7BBF44A20C547A4ED43CDD76960DCE679ADAF46B24D8C02422E"
     },
     {
       "bytes": 4059,
@@ -1530,18 +1535,18 @@
       "sha256": "4CC337580323BADB03441EE8478DDDEF19CC9857F1B0B032264B78DB6A947DF7"
     },
     {
-      "bytes": 39764,
+      "bytes": 43346,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_evidence_intake_ledger_audit.json",
-      "sha256": "026AAF947FDE52A9BDF6902CC63B6F23FC55F7A58A045A462C19D9ADC098BE73"
+      "sha256": "7A604C84240C9815486D4B606B9F3DD0D10AB2B2F2115252FE9246E3BFE64136"
     },
     {
-      "bytes": 10666,
+      "bytes": 10752,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_evidence_intake_ledger_audit.md",
-      "sha256": "AE01307873E96C479BC5FF27991BE5924032FA64F8C9AC12B67E06DFE01C1550"
+      "sha256": "179FA088F5BF95363BD6D67B0DABF6344D04727F460E8412FD9489356DD6D6D6"
     },
     {
       "bytes": 12344,
@@ -1558,18 +1563,18 @@
       "sha256": "B68911C22003E7E03E48D7486AB58F53AD10457F0C25ABCD47A134E37A247892"
     },
     {
-      "bytes": 39764,
+      "bytes": 40572,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.json",
-      "sha256": "CE6D8A03EC238F5B56659DAF32C55B477F9E2077F4E36E3E22E47C8FDEA1ECE7"
+      "sha256": "5D9B53A2D58E1DEA423DA253960681F785B5079C6DA0D67761110F9F63E586F9"
     },
     {
-      "bytes": 30870,
+      "bytes": 31427,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.md",
-      "sha256": "8C98A925852009235A656A0142413EE3DBE4BA9D255F8F487BCB6DE8F2B3CF2B"
+      "sha256": "19A2203B64DDE41766A712A1A82FFC1EC9B9FA973E41092D036F9468E76132B2"
     },
     {
       "bytes": 9050,
@@ -1642,18 +1647,18 @@
       "sha256": "8A318351DC5AA27C081AB65BE30E28AA60115DA7B416076CEE74B5892754C313"
     },
     {
-      "bytes": 57157,
+      "bytes": 60685,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.json",
-      "sha256": "ACF93640FF51B8920FF781CBF9C41D85755671DC32466BC550C8947C06928405"
+      "sha256": "ABCFDB85C67C4E86763411AF713539CD01F4C1E366530E2DD07C54496C85B55E"
     },
     {
-      "bytes": 27715,
+      "bytes": 29020,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.md",
-      "sha256": "E34A8BF4B6D2F60D3E1C8B3A194568B2050718A32A495E28BD8A3C854058F70D"
+      "sha256": "B8ACCE120E987875B43F89E59D2DA199CFF005C863CFA99F3908D7FBD88D0E4D"
     },
     {
       "bytes": 525,
@@ -1698,18 +1703,18 @@
       "sha256": "684869BB5A12AB93D254C35B90856DEAD3BC8CA512ACC68DEF4D78F2CAFE39DA"
     },
     {
-      "bytes": 8196,
+      "bytes": 8651,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_platform_onboarding_audit.json",
-      "sha256": "C6660F4A749D41E0AB4FB07589526249EF12A0339FA54170648461BFECAF38D7"
+      "sha256": "589D10B28568271935FC5641332088E66F56C15651725030EA680C65064AC45D"
     },
     {
-      "bytes": 6381,
+      "bytes": 6712,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_platform_onboarding_audit.md",
-      "sha256": "4F6DE951424279045E153C48055277689AF5FCE6FA12112C9B9743A6C796C748"
+      "sha256": "17CB000711FF8B08691DB0455B5C5CFF0592B474CCF99F2BD1B07C49A067C6D3"
     },
     {
       "bytes": 13741,
@@ -1726,46 +1731,60 @@
       "sha256": "3ED7CB9D15B83408733665AC1B46492F1EABD342A8A59E61D754B2E56E0ADBA4"
     },
     {
-      "bytes": 6820,
+      "bytes": 8720,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_postcollection_evidence_seal_audit.json",
-      "sha256": "99A79458675FD51CDB103E2797AB316874445DCEF984DFC51843D9C2A704BF7B"
+      "sha256": "D0F4D0ED189B831F0477CC0D61FA7A7E3C541B711852B25FCD12CA7FD721CFA7"
     },
     {
-      "bytes": 4256,
+      "bytes": 6001,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_postcollection_evidence_seal_audit.md",
-      "sha256": "31400F58F4D8D658D1D165D696BE30FC50548FE47E49D8AAA36DCF81C2B19008"
+      "sha256": "23960959EF57EB7619E71EAABB078911B95D04D172C6D8A70F74537D666F526A"
     },
     {
-      "bytes": 8692,
+      "bytes": 7173,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_postcollection_seal_consistency_audit.json",
+      "sha256": "91D1C2818F2F135D642077A778C1DDA98565224068060732B86D08A998C99789"
+    },
+    {
+      "bytes": 6445,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_postcollection_seal_consistency_audit.md",
+      "sha256": "6168B8A8BAFE5B0A81E1FB6B96B7AB9907C987D9AA74C66F8BDDADD5090B6DE2"
+    },
+    {
+      "bytes": 10627,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_precollection_freeze_receipt_audit.json",
-      "sha256": "A54C0A66A79BB4C76968BB77DD62B37CD806744CD937B7659F9A9CE5BD787EBF"
+      "sha256": "300EDC4D0C9347188165BC9A9DC0A1B2B30A5213DE2DABEF872B12FCBE7D3138"
     },
     {
-      "bytes": 6263,
+      "bytes": 7969,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_precollection_freeze_receipt_audit.md",
-      "sha256": "39E3FC5472FB1C8EDFCE2916524F074030A0159867F1C5ED2B8D2B4690028DA4"
+      "sha256": "60CC30DB019684116170590D8F769C881B0637147A55D25A87DFEFD5DC642512"
     },
     {
-      "bytes": 5252,
+      "bytes": 5523,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_precollection_manifest_draft_audit.json",
-      "sha256": "BEFA82AC6DF3AA0CD5A13AA61D7AB1CB2D6C32BBBDC9482BB5213DFB3A8B5FC9"
+      "sha256": "18834932AA03A87F822E5B6377B34F2AD07A3FCA7D6C199A30FC020900142529"
     },
     {
-      "bytes": 1900,
+      "bytes": 2035,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_precollection_manifest_draft_audit.md",
-      "sha256": "5B131DD0D96DBA4F87E3F2524C4C9A202739D6DA079B95F882C095F10DBF1EF1"
+      "sha256": "38ED44C63BDEE02AAA036FE3F56AEC224330C590AB036B4705DC949EA7BD5CA6"
     },
     {
       "bytes": 7424,
@@ -1796,32 +1815,32 @@
       "sha256": "891E153CCAF9A412318D6D224EE16156CD16222A56CE143662337D4B08BE8751"
     },
     {
-      "bytes": 3381,
+      "bytes": 3681,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_rollout_evidence_audit.json",
-      "sha256": "4FFA079B4C7A67B4FC2F6E400D3FA70D1DC3101A4070FC15754FF9FC122B305F"
+      "sha256": "46E851EEDF315D592F1DF5BFF09FEE9FB328CF47E9B7E7511B5E9A2AC976B03A"
     },
     {
-      "bytes": 2566,
+      "bytes": 2864,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_rollout_evidence_audit.md",
-      "sha256": "89FE156606AD8BCE8B3174FA4A02DF006D5BD8E1A593E82636C00D115EF9FF86"
+      "sha256": "4B1F04F3BE6024753737B613769EA2DD15F1AEC7172F028555456A9598D91800"
     },
     {
-      "bytes": 3911,
+      "bytes": 4028,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_runbook_audit.json",
-      "sha256": "AD18F4AFE6C88299ACEED59CBEBE61D6E7C5D310A221FA5BD50EECF0269B87F3"
+      "sha256": "43902C49CC5F56F717A42A6F52E0F28926C98EC512F85DCF30172B5E4C0E7DE8"
     },
     {
-      "bytes": 2173,
+      "bytes": 2232,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_runbook_audit.md",
-      "sha256": "4214CEAF44E2494D7958B3C713EEE823570DD04E71AF29E461E446E326459159"
+      "sha256": "8C7754CC5E121EF88D0240010A2A595B64E78819E757BE237D8024F353AA814C"
     },
     {
       "bytes": 3277,
@@ -1999,11 +2018,11 @@
       "sha256": "6A2A65A7AA73B04C438AFF9B85115589397D8DDF3496A93632E7A178D7230E4C"
     },
     {
-      "bytes": 21719,
+      "bytes": 21878,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/audit_external_collection_readiness.py",
-      "sha256": "DD177776C790032A193AC9D9B39B57CD55D4A2799BE669861AA02F3937C1DAF3"
+      "sha256": "748684CAD3D389F6A7971E1EB686FF6D1F3751E003B6E94391C3D6222C59A1F7"
     },
     {
       "bytes": 29377,
@@ -2032,6 +2051,13 @@
       "exists": true,
       "path": "scripts/audit_external_pilot_smoke.py",
       "sha256": "13BB2E31C5E8331D1C53B5E060E399FEB83C520FC83AF91FA350FC591D417C25"
+    },
+    {
+      "bytes": 18353,
+      "category": "operator_command_source",
+      "exists": true,
+      "path": "scripts/audit_external_postcollection_seal_consistency.py",
+      "sha256": "9FF4097A5E16801B827C02CF780436754D2228F914A465FBA1B5B4C0D1B50BF9"
     },
     {
       "bytes": 10688,
@@ -2076,18 +2102,18 @@
       "sha256": "8C1A9DC9ABD2322FB40AAA5970AB4B19ABBE5F978205D99C224A85A2AC3F9E8D"
     },
     {
-      "bytes": 12835,
+      "bytes": 13282,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_ablation_collection_packet.py",
-      "sha256": "D42BB90D22ACA025927A3E8CE13D84A7C7F228939707D9BBBDDB2FF6426FDF43"
+      "sha256": "9EBCC4A29A134B7E73E1FE5722916F66CF1F89C24E78CB6FA5EEA922A77B0382"
     },
     {
-      "bytes": 92097,
+      "bytes": 97687,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_acquisition_packet.py",
-      "sha256": "483B25459A10523954BD7CCAA267A83194AC2048B8361CC340ECF05857CE00D7"
+      "sha256": "8CC50AC60ADC74B5A1ACF99F0B25A7FC5F1C177C7CF33C6DE2BDC3F94A8E7A68"
     },
     {
       "bytes": 18694,
@@ -2097,11 +2123,11 @@
       "sha256": "27C516ABD36E7B7FF1B3F11E712E5C7E18FE7F6FCFA672090BF28AE67E078CA7"
     },
     {
-      "bytes": 19894,
+      "bytes": 20172,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_backend_integration_packet.py",
-      "sha256": "9BB1413B2D478C383C0F77FB32D83F645B6B506EF65B8F6DB6A6FA760D22DAAA"
+      "sha256": "8BCA04F29A5F058AD4A5EE786FBF26F7E11136081BD1B11994FDF1DE3AACC506"
     },
     {
       "bytes": 20797,
@@ -2111,11 +2137,11 @@
       "sha256": "756C0C5B64F4F0DB6C1E45742096A2BCE03AA346C34D91A834ED196296839EB8"
     },
     {
-      "bytes": 19672,
+      "bytes": 20286,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_evidence_intake_ledger.py",
-      "sha256": "79EE8BCC9105F98CF2807F685017BD44ED51E462D23ACE168D3101FCCABF5637"
+      "sha256": "251BD92A8CE575E55AB497A53255FA1238607E5894F19FC88A1CBF8765EFC767"
     },
     {
       "bytes": 40385,
@@ -2146,18 +2172,18 @@
       "sha256": "C166221116A089779E0111AE13BDB75CC1625849486A1C116AF8534D264334AF"
     },
     {
-      "bytes": 67004,
+      "bytes": 69475,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "63A3D353F70A1002516E81FED88BF8A0771B50FB0F5EE49BF95187043F34E172"
+      "sha256": "32379092D86F35BC485EAEE2CCD1BE0BEFAB6E32548B33CBEA6D1CD61F156307"
     },
     {
-      "bytes": 65214,
+      "bytes": 70465,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_packet.py",
-      "sha256": "7EA474E54763A1D7AD7ED94945FF3A5172593C6D30F7BFB54B9118EE4F825555"
+      "sha256": "45ABB974A162AA6F9B604AC4E24E270A05F6BCF96C1CFFC63003205289C58AED"
     },
     {
       "bytes": 11266,
@@ -2167,39 +2193,39 @@
       "sha256": "F3A2D24716D7DCE1D337453137191E821E1F81ADBAA8ABF446C2446E489C00CE"
     },
     {
-      "bytes": 31790,
+      "bytes": 32121,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_platform_onboarding.py",
-      "sha256": "671A747E75A90369A6DBF89537119FD649E4501EC02F0D860B13E06355748414"
+      "sha256": "D84758E7F6F4F6B74454F18C94AA32325D65EE20B1F456BB6F37E6F3A38DA9FD"
     },
     {
-      "bytes": 20912,
+      "bytes": 22280,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_postcollection_evidence_seal.py",
-      "sha256": "D2CD1A3546208C2B7ED5319094BDAECF25A3BD83D0967CA76FCDBF6EF1CD2261"
+      "sha256": "B608377416DBF26842358294D7BC6CE239C3BF37571BD22EAF986788878087C9"
     },
     {
-      "bytes": 18720,
+      "bytes": 19870,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_precollection_freeze_receipt.py",
-      "sha256": "5EC511DA0BF7ED16FD8A5EC9755268E77B1BC17FC5FA1B3618A85B13900228CB"
+      "sha256": "578BD7FFEA76594DC62C76CA20AB6E34B36E0FE41BE26C0B858172717DD39A0D"
     },
     {
-      "bytes": 19373,
+      "bytes": 19511,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_precollection_manifest_draft.py",
-      "sha256": "5DBDE2E55BF492668BF84AB60860B3FCB27B27B2DDBB85C4D34F16AD89DA8DFB"
+      "sha256": "C66BECDA9BADC08515D5B94846A87B9F194A5C02AFD892F5230A6B30311D1D24"
     },
     {
-      "bytes": 22665,
+      "bytes": 23096,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_rollout_evidence_packet.py",
-      "sha256": "E273634CCB595A0952C81F83B65355BDCDE61596F02B6BC390A268462377C611"
+      "sha256": "08C85AA06AA704107282CAF145AD000F5C76EC307B1B85B86341C529706A9575"
     },
     {
       "bytes": 25498,
@@ -2466,6 +2492,7 @@
       ],
       "commands": [
         "python scripts\\build_external_config_manifest_packet.py",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
         "python scripts\\build_external_manifest.py --write --check-video-paths",
         "python scripts\\validate_external_configs.py --strict"
       ],
@@ -2505,6 +2532,8 @@
       ],
       "commands": [
         "python scripts\\build_external_ablation_collection_packet.py",
+        "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
         "python scripts\\build_external_manifest.py --write --check-video-paths",
         "python scripts\\audit_external_evidence.py --strict"
       ],
@@ -2526,6 +2555,7 @@
       ],
       "commands": [
         "python scripts\\build_external_evidence_intake_ledger.py",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
         "python scripts\\build_external_manifest.py --write --check-video-paths",
         "python scripts\\audit_external_evidence.py --strict"
       ],
@@ -2564,11 +2594,29 @@
       "commands": [
         "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
         "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
         "python scripts\\build_external_manifest.py --write --check-video-paths"
       ],
       "id": "postcollection_evidence_seal",
       "operator_input": "specific backend module, run id, operator id, collection machine, seal date, completed JSONL logs, rollout videos, and prepared configs after official collection",
       "title": "Seal raw postcollection logs and videos before manifest promotion"
+    },
+    {
+      "artifacts": [
+        "results/external_postcollection_seal_consistency_audit.json",
+        "results/external_postcollection_seal_consistency_audit.md"
+      ],
+      "closes": [
+        "manifest promotion from a different raw-log/video/config set than the one sealed after collection"
+      ],
+      "commands": [
+        "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
+        "python scripts\\build_external_manifest.py --write --check-video-paths"
+      ],
+      "id": "postcollection_seal_consistency_gate",
+      "operator_input": "completed postcollection seal plus unchanged raw JSONL logs, rollout videos, prepared configs, and no official manifest written yet",
+      "title": "Recompute the postcollection seal before manifest promotion"
     },
     {
       "artifacts": [
@@ -2716,6 +2764,7 @@
       "commands": [
         "python scripts\\build_external_fidelity_provenance_packet.py",
         "python scripts\\audit_external_fidelity_acceptance.py --strict",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
         "python scripts\\build_external_manifest.py --write --check-video-paths"
       ],
       "id": "fidelity_provenance_packet",
@@ -2820,6 +2869,8 @@
         "Manifest-declared real task configs replace non-evidence templates"
       ],
       "commands": [
+        "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
         "python scripts\\build_external_manifest.py --write --check-video-paths",
         "python scripts\\audit_external_release_package.py --strict"
       ],
@@ -2878,6 +2929,8 @@
   ],
   "passed": true,
   "post_collection_strict_commands": [
+    "python scripts\\build_external_postcollection_evidence_seal.py",
+    "python scripts\\audit_external_postcollection_seal_consistency.py",
     "python scripts\\build_external_manifest.py --write --check-video-paths",
     "python scripts\\audit_external_release_package.py --strict",
     "python scripts\\audit_external_fidelity_acceptance.py --strict",
@@ -2887,6 +2940,7 @@
     "python scripts\\audit_external_pairing_integrity.py --strict",
     "python scripts\\audit_external_evidence.py --strict"
   ],
+  "postcollection_consistency_command": "python scripts\\audit_external_postcollection_seal_consistency.py",
   "postcollection_seal_command": "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
   "pre_collection_gate_command": "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
   "precollection_freeze_command": "python scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
@@ -2911,6 +2965,7 @@
     "results/external_method_implementation_audit.json",
     "results/external_precollection_freeze_receipt_audit.json",
     "results/external_postcollection_evidence_seal_audit.json",
+    "results/external_postcollection_seal_consistency_audit.json",
     "results/external_precollection_manifest_draft_audit.json",
     "results/external_evidence_preflight.json",
     "results/external_release_package_audit.json",

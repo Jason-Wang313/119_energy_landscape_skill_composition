@@ -52,7 +52,7 @@
   "acquisition_packet_ready": true,
   "checks": [
     {
-      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_probe.json, results/maniskill_task_binding_probe.json, results/maniskill_env_smoke_probe.json, results/external_platform_onboarding_audit.json, results/external_fidelity_provenance_audit.json, results/external_fidelity_acceptance_draft_audit.json, results/fidelity_acceptance_materialization_plan.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/maniskill_backend_readiness_audit.json, results/maniskill_reference_collection_preflight_audit.json, results/external_config_manifest_audit.json, results/external_rollout_evidence_audit.json, results/external_ablation_collection_audit.json, results/external_evidence_intake_ledger_audit.json, results/external_precollection_freeze_receipt_audit.json, results/external_postcollection_evidence_seal_audit.json, results/external_method_implementation_audit.json, results/external_pilot_smoke_packet_audit.json, results/maniskill_render_video_preflight_audit.json, results/maniskill_render_resource_sweep.json, results/maniskill_pilot_runtime_liveness_audit.json",
+      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_probe.json, results/maniskill_task_binding_probe.json, results/maniskill_env_smoke_probe.json, results/external_platform_onboarding_audit.json, results/external_fidelity_provenance_audit.json, results/external_fidelity_acceptance_draft_audit.json, results/fidelity_acceptance_materialization_plan.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/maniskill_backend_readiness_audit.json, results/maniskill_reference_collection_preflight_audit.json, results/external_config_manifest_audit.json, results/external_rollout_evidence_audit.json, results/external_ablation_collection_audit.json, results/external_evidence_intake_ledger_audit.json, results/external_precollection_freeze_receipt_audit.json, results/external_postcollection_evidence_seal_audit.json, results/external_postcollection_seal_consistency_audit.json, results/external_method_implementation_audit.json, results/external_pilot_smoke_packet_audit.json, results/maniskill_render_video_preflight_audit.json, results/maniskill_render_resource_sweep.json, results/maniskill_pilot_runtime_liveness_audit.json",
       "name": "source_audits_exist",
       "passed": true
     },
@@ -134,6 +134,11 @@
     {
       "detail": "sealed_artifacts=11, records=0, videos=0, seal_ready=False",
       "name": "postcollection_evidence_seal_ready",
+      "passed": true
+    },
+    {
+      "detail": "matched=11, records=0, videos=0, consistency_ready=False",
+      "name": "postcollection_seal_consistency_gate_ready",
       "passed": true
     },
     {
@@ -227,7 +232,7 @@
       "passed": true
     },
     {
-      "detail": "Probe the selected external platform machine Probe ManiSkill task-family bindings Smoke-test bound ManiSkill environments Probe ManiSkill/SAPIEN fidelity metadata Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Audit the repository ManiSkill/SAPIEN reference backend candidate Audit explicit reference-backend collection preflight Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Collect manifest-declared external ablations Use the evidence intake ledger to close every strict external-evidence failure Freeze precollection hashes before official rollout collection Seal raw postcollection logs and videos before manifest promotion Fill platform fidelity acceptance with real provenance Generate the tracked ManiSkill fidelity acceptance draft Materialize fidelity acceptance only through the guarded promotion path Run a quarantined first-panel backend smoke test Audit bounded ManiSkill pilot runtime liveness Audit ManiSkill render-backed evidence-video export Run a bounded ManiSkill render resource sweep Qualify the exact render machine before official collection Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
+      "detail": "Probe the selected external platform machine Probe ManiSkill task-family bindings Smoke-test bound ManiSkill environments Probe ManiSkill/SAPIEN fidelity metadata Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Audit the repository ManiSkill/SAPIEN reference backend candidate Audit explicit reference-backend collection preflight Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Collect manifest-declared external ablations Use the evidence intake ledger to close every strict external-evidence failure Freeze precollection hashes before official rollout collection Seal raw postcollection logs and videos before manifest promotion Recompute the postcollection seal before manifest promotion Fill platform fidelity acceptance with real provenance Generate the tracked ManiSkill fidelity acceptance draft Materialize fidelity acceptance only through the guarded promotion path Run a quarantined first-panel backend smoke test Audit bounded ManiSkill pilot runtime liveness Audit ManiSkill render-backed evidence-video export Run a bounded ManiSkill render resource sweep Qualify the exact render machine before official collection Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
       "name": "operator_actions_cover_collection_blockers",
       "passed": true
     },
@@ -284,6 +289,7 @@
         "precollection_freeze_receipt",
         "run_collection",
         "postcollection_evidence_seal",
+        "postcollection_seal_consistency_gate",
         "manifest_and_release"
       ],
       "requirement": "Independent real-robot or accepted high-fidelity external validation evidence"
@@ -297,6 +303,7 @@
         "precollection_freeze_receipt",
         "run_collection",
         "postcollection_evidence_seal",
+        "postcollection_seal_consistency_gate",
         "strict_rollout_recompute"
       ],
       "requirement": "External rollout metrics recomputed from raw JSONL logs"
@@ -309,6 +316,7 @@
         "precollection_freeze_receipt",
         "real_task_configs",
         "postcollection_evidence_seal",
+        "postcollection_seal_consistency_gate",
         "manifest_and_release"
       ],
       "requirement": "Manifest-declared real task configs replace non-evidence templates"
@@ -321,6 +329,7 @@
         "precollection_freeze_receipt",
         "real_method_implementations",
         "postcollection_evidence_seal",
+        "postcollection_seal_consistency_gate",
         "strict_adapter_evidence"
       ],
       "requirement": "Manifest-declared independent non-oracle baseline evidence and fairness contract"
@@ -512,6 +521,7 @@
       ],
       "commands": [
         "python scripts\\build_external_config_manifest_packet.py",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
         "python scripts\\build_external_manifest.py --write --check-video-paths",
         "python scripts\\validate_external_configs.py --strict"
       ],
@@ -551,6 +561,8 @@
       ],
       "commands": [
         "python scripts\\build_external_ablation_collection_packet.py",
+        "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
         "python scripts\\build_external_manifest.py --write --check-video-paths",
         "python scripts\\audit_external_evidence.py --strict"
       ],
@@ -572,6 +584,7 @@
       ],
       "commands": [
         "python scripts\\build_external_evidence_intake_ledger.py",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
         "python scripts\\build_external_manifest.py --write --check-video-paths",
         "python scripts\\audit_external_evidence.py --strict"
       ],
@@ -610,11 +623,29 @@
       "commands": [
         "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
         "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
         "python scripts\\build_external_manifest.py --write --check-video-paths"
       ],
       "id": "postcollection_evidence_seal",
       "operator_input": "specific backend module, run id, operator id, collection machine, seal date, completed JSONL logs, rollout videos, and prepared configs after official collection",
       "title": "Seal raw postcollection logs and videos before manifest promotion"
+    },
+    {
+      "artifacts": [
+        "results/external_postcollection_seal_consistency_audit.json",
+        "results/external_postcollection_seal_consistency_audit.md"
+      ],
+      "closes": [
+        "manifest promotion from a different raw-log/video/config set than the one sealed after collection"
+      ],
+      "commands": [
+        "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
+        "python scripts\\build_external_manifest.py --write --check-video-paths"
+      ],
+      "id": "postcollection_seal_consistency_gate",
+      "operator_input": "completed postcollection seal plus unchanged raw JSONL logs, rollout videos, prepared configs, and no official manifest written yet",
+      "title": "Recompute the postcollection seal before manifest promotion"
     },
     {
       "artifacts": [
@@ -762,6 +793,7 @@
       "commands": [
         "python scripts\\build_external_fidelity_provenance_packet.py",
         "python scripts\\audit_external_fidelity_acceptance.py --strict",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
         "python scripts\\build_external_manifest.py --write --check-video-paths"
       ],
       "id": "fidelity_provenance_packet",
@@ -866,6 +898,8 @@
         "Manifest-declared real task configs replace non-evidence templates"
       ],
       "commands": [
+        "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
         "python scripts\\build_external_manifest.py --write --check-video-paths",
         "python scripts\\audit_external_release_package.py --strict"
       ],
@@ -924,6 +958,8 @@
   ],
   "passed": true,
   "post_collection_strict_commands": [
+    "python scripts\\build_external_postcollection_evidence_seal.py",
+    "python scripts\\audit_external_postcollection_seal_consistency.py",
     "python scripts\\build_external_manifest.py --write --check-video-paths",
     "python scripts\\audit_external_release_package.py --strict",
     "python scripts\\audit_external_fidelity_acceptance.py --strict",
@@ -946,6 +982,20 @@
     "ready_for_manifest_promotion": false,
     "rollout_video_count": 0,
     "sealed_artifact_count": 11,
+    "strict_external_evidence_ready": false
+  },
+  "postcollection_seal_consistency_gate": {
+    "audit_command": "python scripts\\audit_external_postcollection_seal_consistency.py",
+    "audit_md_path": "results/external_postcollection_seal_consistency_audit.md",
+    "audit_path": "results/external_postcollection_seal_consistency_audit.json",
+    "current_jsonl_record_count": 0,
+    "current_rollout_video_count": 0,
+    "extra_official_artifacts": [],
+    "matched_hash_count": 11,
+    "mismatched_hashes": [],
+    "not_external_evidence": true,
+    "ready_for_manifest_promotion": false,
+    "seal_consistency_ready": false,
     "strict_external_evidence_ready": false
   },
   "precollection_freeze_receipt": {
@@ -1058,6 +1108,7 @@
     "results/external_evidence_intake_ledger_audit.json",
     "results/external_precollection_freeze_receipt_audit.json",
     "results/external_postcollection_evidence_seal_audit.json",
+    "results/external_postcollection_seal_consistency_audit.json",
     "results/external_method_implementation_audit.json",
     "results/external_pilot_smoke_packet_audit.json",
     "results/maniskill_render_video_preflight_audit.json",

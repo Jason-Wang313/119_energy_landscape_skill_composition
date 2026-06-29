@@ -22,6 +22,7 @@ This audit checks that the precollection manifest draft is useful for an operato
 - `pass` `cutover_command_contains_build_external_precollection_freeze_receipt`: build_external_precollection_freeze_receipt.py
 - `pass` `cutover_command_contains_real_collection_runner`: real_collection_runner.py
 - `pass` `cutover_command_contains_build_external_postcollection_evidence_seal`: build_external_postcollection_evidence_seal.py
+- `pass` `cutover_command_contains_audit_external_postcollection_seal_consistency`: audit_external_postcollection_seal_consistency.py
 - `pass` `cutover_command_contains_build_external_manifest`: build_external_manifest.py --write --check-video-paths
 - `pass` `cutover_command_contains_validate_external_rollouts`: validate_external_rollouts.py --write-results --check-video-paths --strict
 - `pass` `cutover_command_contains_audit_external_evidence`: audit_external_evidence.py --strict

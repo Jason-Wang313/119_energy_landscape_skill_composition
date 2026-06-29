@@ -1,0 +1,86 @@
+{
+  "checks": [
+    {
+      "detail": "seal_version='external_postcollection_evidence_seal_v1', audit_version='external_postcollection_evidence_seal_audit_v1', audit_passed=True",
+      "name": "postcollection_seal_artifacts_loaded",
+      "passed": true
+    },
+    {
+      "detail": "seal_ready=False, consistency_ready=False, strict_external_evidence=False",
+      "name": "consistency_gate_is_non_evidence_and_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "matched=11, mismatched=[], missing=[], unexpected=[]",
+      "name": "sealed_hashes_recompute_without_drift",
+      "passed": true
+    },
+    {
+      "detail": "extra=[], invalid_logs=[], invalid_videos=[]",
+      "name": "no_unsealed_official_artifacts_before_manifest_promotion",
+      "passed": true
+    },
+    {
+      "detail": "seal_ready=False, seal_manifest_ready=False, consistency_ready=False",
+      "name": "manifest_promotion_requires_ready_seal_and_consistency",
+      "passed": true
+    },
+    {
+      "detail": "expected=1440, records=0, videos=0, invalid_json=0",
+      "name": "current_counts_match_default_or_ready_state",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json absent before manifest promotion",
+      "name": "no_real_manifest_written_before_seal_consistency",
+      "passed": true
+    },
+    {
+      "detail": "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map\npython scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map\npython external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map\npython scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>\npython scripts\\audit_external_postcollection_seal_consistency.py\npython scripts\\build_external_manifest.py --write --check-video-paths\npython scripts\\validate_external_configs.py --strict\npython scripts\\validate_external_adapters.py --strict\npython scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict\npython scripts\\audit_external_pairing_integrity.py --strict\npython scripts\\audit_external_release_package.py --strict\npython scripts\\audit_external_evidence.py --strict",
+      "name": "strict_sequence_places_consistency_after_seal_before_manifest",
+      "passed": true
+    },
+    {
+      "detail": "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map\npython scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map\npython external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map\npython scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>\npython scripts\\audit_external_postcollection_seal_consistency.py\npython scripts\\build_external_manifest.py --write --check-video-paths\npython scripts\\validate_external_configs.py --strict\npython scripts\\validate_external_adapters.py --strict\npython scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict\npython scripts\\audit_external_pairing_integrity.py --strict\npython scripts\\audit_external_release_package.py --strict\npython scripts\\audit_external_evidence.py --strict",
+      "name": "consistency_gate_references_rollout_pairing_release_final_gates",
+      "passed": true
+    }
+  ],
+  "current_invalid_json_line_count": 0,
+  "current_jsonl_log_count": 0,
+  "current_jsonl_record_count": 0,
+  "current_prepared_config_count": 4,
+  "current_rollout_video_count": 0,
+  "expected_records": 1440,
+  "extra_official_artifacts": [],
+  "invalid_log_artifacts": [],
+  "invalid_video_artifacts": [],
+  "matched_hash_count": 11,
+  "mismatched_hashes": [],
+  "missing_sealed_paths": [],
+  "not_external_evidence": true,
+  "operator_regeneration_command": "python scripts\\audit_external_postcollection_seal_consistency.py",
+  "passed": true,
+  "postcollection_seal_ready": false,
+  "ready_for_manifest_promotion": false,
+  "seal_audit_path": "results/external_postcollection_evidence_seal_audit.json",
+  "seal_consistency_ready": false,
+  "seal_path": "external_validation/postcollection_evidence_seal.json",
+  "strict_command_sequence": [
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
+    "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+    "python scripts\\audit_external_postcollection_seal_consistency.py",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\validate_external_adapters.py --strict",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "strict_external_evidence_ready": false,
+  "unexpectedly_present_paths": [],
+  "version": "external_postcollection_seal_consistency_audit_v1"
+}

@@ -9,6 +9,7 @@
     "python scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
     "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
     "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+    "python scripts\\audit_external_postcollection_seal_consistency.py",
     "python scripts\\build_external_manifest.py --write --check-video-paths",
     "python scripts\\validate_external_configs.py --strict",
     "python scripts\\validate_external_adapters.py --strict",
@@ -505,17 +506,17 @@
     {
       "exists": true,
       "path": "results/external_rollout_evidence_audit.json",
-      "sha256": "4FFA079B4C7A67B4FC2F6E400D3FA70D1DC3101A4070FC15754FF9FC122B305F"
+      "sha256": "46E851EEDF315D592F1DF5BFF09FEE9FB328CF47E9B7E7511B5E9A2AC976B03A"
     },
     {
       "exists": true,
       "path": "results/external_ablation_collection_audit.json",
-      "sha256": "3AD97C00DCBB9DFAD1EE0DBB4805503DE0F55190672372A5E0474D94E34B2CA6"
+      "sha256": "42DBE738EC9F7787C52F7A50B456BEEFA872ACECD813E66CA5855608684E4679"
     },
     {
       "exists": true,
       "path": "results/external_evidence_intake_ledger_audit.json",
-      "sha256": "026AAF947FDE52A9BDF6902CC63B6F23FC55F7A58A045A462C19D9ADC098BE73"
+      "sha256": "7A604C84240C9815486D4B606B9F3DD0D10AB2B2F2115252FE9246E3BFE64136"
     },
     {
       "exists": true,
@@ -525,7 +526,7 @@
     {
       "exists": true,
       "path": "results/external_collection_readiness_audit.json",
-      "sha256": "74168764841A1FF414AC673994CBA4FD724DF7A20C17A364A761B21D94E636EE"
+      "sha256": "8AC215A38BD0E7BBF44A20C547A4ED43CDD76960DCE679ADAF46B24D8C02422E"
     },
     {
       "exists": true,

@@ -42,6 +42,9 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 python scripts\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>
 ```
 ```powershell
+python scripts\audit_external_postcollection_seal_consistency.py
+```
+```powershell
 python scripts\build_external_manifest.py --write --check-video-paths
 ```
 ```powershell

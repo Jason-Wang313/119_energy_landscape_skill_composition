@@ -39,6 +39,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "precollection_freeze_receipt",
         "run_collection",
         "postcollection_evidence_seal",
+        "postcollection_seal_consistency_gate",
         "manifest_and_release",
     ],
     "External rollout metrics recomputed from raw JSONL logs": [
@@ -48,6 +49,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "precollection_freeze_receipt",
         "run_collection",
         "postcollection_evidence_seal",
+        "postcollection_seal_consistency_gate",
         "strict_rollout_recompute",
     ],
     "Manifest-declared real task configs replace non-evidence templates": [
@@ -56,6 +58,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "precollection_freeze_receipt",
         "real_task_configs",
         "postcollection_evidence_seal",
+        "postcollection_seal_consistency_gate",
         "manifest_and_release",
     ],
     "Manifest-declared independent non-oracle baseline evidence and fairness contract": [
@@ -64,6 +67,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "precollection_freeze_receipt",
         "real_method_implementations",
         "postcollection_evidence_seal",
+        "postcollection_seal_consistency_gate",
         "strict_adapter_evidence",
     ],
 }
@@ -223,6 +227,7 @@ ACTION_CATALOG = {
         ],
         "commands": [
             "python scripts\\build_external_config_manifest_packet.py",
+            "python scripts\\audit_external_postcollection_seal_consistency.py",
             "python scripts\\build_external_manifest.py --write --check-video-paths",
             "python scripts\\validate_external_configs.py --strict",
         ],
@@ -257,6 +262,8 @@ ACTION_CATALOG = {
         ],
         "commands": [
             "python scripts\\build_external_ablation_collection_packet.py",
+            "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+            "python scripts\\audit_external_postcollection_seal_consistency.py",
             "python scripts\\build_external_manifest.py --write --check-video-paths",
             "python scripts\\audit_external_evidence.py --strict",
         ],
@@ -275,6 +282,7 @@ ACTION_CATALOG = {
         ],
         "commands": [
             "python scripts\\build_external_evidence_intake_ledger.py",
+            "python scripts\\audit_external_postcollection_seal_consistency.py",
             "python scripts\\build_external_manifest.py --write --check-video-paths",
             "python scripts\\audit_external_evidence.py --strict",
         ],
@@ -314,10 +322,27 @@ ACTION_CATALOG = {
         "commands": [
             "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
             "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+            "python scripts\\audit_external_postcollection_seal_consistency.py",
             "python scripts\\build_external_manifest.py --write --check-video-paths",
         ],
         "closes": [
             "postcollection drift between raw JSONL logs, rollout videos, configs, operator metadata, precollection receipt, and manifest promotion",
+        ],
+    },
+    "postcollection_seal_consistency_gate": {
+        "title": "Recompute the postcollection seal before manifest promotion",
+        "operator_input": "completed postcollection seal plus unchanged raw JSONL logs, rollout videos, prepared configs, and no official manifest written yet",
+        "artifacts": [
+            "results/external_postcollection_seal_consistency_audit.json",
+            "results/external_postcollection_seal_consistency_audit.md",
+        ],
+        "commands": [
+            "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+            "python scripts\\audit_external_postcollection_seal_consistency.py",
+            "python scripts\\build_external_manifest.py --write --check-video-paths",
+        ],
+        "closes": [
+            "manifest promotion from a different raw-log/video/config set than the one sealed after collection",
         ],
     },
     "platform_fidelity": {
@@ -437,6 +462,7 @@ ACTION_CATALOG = {
         "commands": [
             "python scripts\\build_external_fidelity_provenance_packet.py",
             "python scripts\\audit_external_fidelity_acceptance.py --strict",
+            "python scripts\\audit_external_postcollection_seal_consistency.py",
             "python scripts\\build_external_manifest.py --write --check-video-paths",
         ],
         "closes": ["Independent real-robot or accepted high-fidelity external validation evidence"],
@@ -516,6 +542,8 @@ ACTION_CATALOG = {
             "results/external_manifest_builder_report.json",
         ],
         "commands": [
+            "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+            "python scripts\\audit_external_postcollection_seal_consistency.py",
             "python scripts\\build_external_manifest.py --write --check-video-paths",
             "python scripts\\audit_external_release_package.py --strict",
         ],
@@ -631,6 +659,7 @@ def main() -> int:
     evidence_intake_path = RESULTS / "external_evidence_intake_ledger_audit.json"
     precollection_freeze_path = RESULTS / "external_precollection_freeze_receipt_audit.json"
     postcollection_seal_path = RESULTS / "external_postcollection_evidence_seal_audit.json"
+    postcollection_consistency_path = RESULTS / "external_postcollection_seal_consistency_audit.json"
     method_packet_path = RESULTS / "external_method_implementation_audit.json"
     pilot_smoke_path = RESULTS / "external_pilot_smoke_packet_audit.json"
     render_preflight_path = RESULTS / "maniskill_render_video_preflight_audit.json"
@@ -661,6 +690,7 @@ def main() -> int:
     evidence_intake = require_json(evidence_intake_path)
     precollection_freeze = require_json(precollection_freeze_path)
     postcollection_seal = require_json(postcollection_seal_path)
+    postcollection_consistency = require_json(postcollection_consistency_path)
     method_packet = require_json(method_packet_path)
     pilot_smoke = require_json(pilot_smoke_path)
     render_preflight = require_json(render_preflight_path)
@@ -704,6 +734,7 @@ def main() -> int:
                 evidence_intake_path,
                 precollection_freeze_path,
                 postcollection_seal_path,
+                postcollection_consistency_path,
                 method_packet_path,
                 pilot_smoke_path,
                 render_preflight_path,
@@ -736,6 +767,7 @@ def main() -> int:
                 evidence_intake_path,
                 precollection_freeze_path,
                 postcollection_seal_path,
+                postcollection_consistency_path,
                 method_packet_path,
                 pilot_smoke_path,
                 render_preflight_path,
@@ -996,6 +1028,30 @@ def main() -> int:
             f"records={postcollection_seal.get('jsonl_record_count')!r}, "
             f"videos={postcollection_seal.get('rollout_video_count')!r}, "
             f"seal_ready={postcollection_seal.get('postcollection_seal_ready')!r}"
+        ),
+    )
+    consistency_checks = {check.get("name"): check.get("passed") for check in postcollection_consistency.get("checks", []) or []}
+    add_check(
+        checks,
+        "postcollection_seal_consistency_gate_ready",
+        postcollection_consistency.get("passed") is True
+        and postcollection_consistency.get("not_external_evidence") is True
+        and postcollection_consistency.get("strict_external_evidence_ready") is False
+        and postcollection_consistency.get("seal_consistency_ready") is False
+        and postcollection_consistency.get("ready_for_manifest_promotion") is False
+        and int(postcollection_consistency.get("current_jsonl_record_count", 0) or 0) == 0
+        and int(postcollection_consistency.get("current_rollout_video_count", 0) or 0) == 0
+        and not postcollection_consistency.get("mismatched_hashes")
+        and not postcollection_consistency.get("extra_official_artifacts")
+        and consistency_checks.get("sealed_hashes_recompute_without_drift") is True
+        and consistency_checks.get("no_unsealed_official_artifacts_before_manifest_promotion") is True
+        and consistency_checks.get("strict_sequence_places_consistency_after_seal_before_manifest") is True
+        and (RESULTS / "external_postcollection_seal_consistency_audit.md").exists(),
+        (
+            f"matched={postcollection_consistency.get('matched_hash_count')!r}, "
+            f"records={postcollection_consistency.get('current_jsonl_record_count')!r}, "
+            f"videos={postcollection_consistency.get('current_rollout_video_count')!r}, "
+            f"consistency_ready={postcollection_consistency.get('seal_consistency_ready')!r}"
         ),
     )
     pilot_smoke_checks = {check.get("name"): check.get("passed") for check in pilot_smoke.get("checks", []) or []}
@@ -1338,6 +1394,7 @@ def main() -> int:
         "build_external_evidence_intake_ledger.py",
         "build_external_precollection_freeze_receipt.py",
         "build_external_postcollection_evidence_seal.py",
+        "audit_external_postcollection_seal_consistency.py",
         "build_external_fidelity_provenance_packet.py",
         "build_external_fidelity_acceptance_draft.py",
         "materialize_fidelity_acceptance.py",
@@ -1416,6 +1473,7 @@ def main() -> int:
                 evidence_intake_path,
                 precollection_freeze_path,
                 postcollection_seal_path,
+                postcollection_consistency_path,
                 method_packet_path,
                 pilot_smoke_path,
                 render_preflight_path,
@@ -1524,6 +1582,20 @@ def main() -> int:
             "audit_md_path": "results/external_postcollection_evidence_seal_audit.md",
             "operator_packet_path": "external_validation/postcollection_evidence_seal.md",
             "operator_csv_path": "external_validation/postcollection_evidence_seal.csv",
+        },
+        "postcollection_seal_consistency_gate": {
+            "not_external_evidence": True,
+            "strict_external_evidence_ready": postcollection_consistency.get("strict_external_evidence_ready") is True,
+            "seal_consistency_ready": postcollection_consistency.get("seal_consistency_ready") is True,
+            "ready_for_manifest_promotion": postcollection_consistency.get("ready_for_manifest_promotion") is True,
+            "matched_hash_count": int(postcollection_consistency.get("matched_hash_count", 0) or 0),
+            "current_jsonl_record_count": int(postcollection_consistency.get("current_jsonl_record_count", 0) or 0),
+            "current_rollout_video_count": int(postcollection_consistency.get("current_rollout_video_count", 0) or 0),
+            "mismatched_hashes": list(postcollection_consistency.get("mismatched_hashes", []) or []),
+            "extra_official_artifacts": list(postcollection_consistency.get("extra_official_artifacts", []) or []),
+            "audit_command": "python scripts\\audit_external_postcollection_seal_consistency.py",
+            "audit_path": "results/external_postcollection_seal_consistency_audit.json",
+            "audit_md_path": "results/external_postcollection_seal_consistency_audit.md",
         },
         "collection_blockers": collection_blockers,
         "operator_actions": actions,

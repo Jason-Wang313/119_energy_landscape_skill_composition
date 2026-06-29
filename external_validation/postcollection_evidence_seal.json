@@ -31,12 +31,12 @@
   "run_id": "paper119_external_validation_run",
   "seal_artifacts": [
     {
-      "bytes": 14163,
+      "bytes": 16067,
       "exists": true,
       "path": "external_validation/precollection_freeze_receipt.json",
       "required_for_real_seal": true,
       "role": "precollection_freeze_receipt",
-      "sha256": "7DAA68CE6E02224089A09D800930C9A397F4001757EFBD64A7C678D005F19880"
+      "sha256": "79652FE2B6AA0578D370257AC9043F87EB55CAE3504E5629C63CFCAF0B9246D3"
     },
     {
       "bytes": 710130,
@@ -79,12 +79,12 @@
       "sha256": "7F6A5967DE10AC5A49200726082D0600A3EF70984B94DC414A35AA90BD97CCAC"
     },
     {
-      "bytes": 25147,
+      "bytes": 25221,
       "exists": true,
       "path": "external_validation/manifest_precollection_draft.json",
       "required_for_real_seal": true,
       "role": "precollection_manifest_draft",
-      "sha256": "8B8E9DED2328D4A971FB0ED47F058A322842088546CAC3E9B9206CAA61015AAF"
+      "sha256": "9DCA5F051F75B24D6EC93D43365C4C337FB43A1E44C09266277BC793285BC7E8"
     },
     {
       "bytes": 2034,
@@ -125,6 +125,7 @@
     "python scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id paper119_external_validation_run --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
     "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id paper119_external_validation_run --unsealed-alias-map",
     "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id paper119_external_validation_run --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+    "python scripts\\audit_external_postcollection_seal_consistency.py",
     "python scripts\\build_external_manifest.py --write --check-video-paths",
     "python scripts\\validate_external_configs.py --strict",
     "python scripts\\validate_external_adapters.py --strict",

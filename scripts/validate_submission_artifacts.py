@@ -144,6 +144,7 @@ def main():
         "scripts\\build_external_precollection_manifest_draft.py",
         "scripts\\build_external_precollection_freeze_receipt.py",
         "scripts\\build_external_postcollection_evidence_seal.py",
+        "scripts\\audit_external_postcollection_seal_consistency.py",
         "scripts\\build_external_baseline_contract.py",
         "scripts\\build_external_adapter_scaffolds.py",
         "scripts\\build_external_reference_adapters.py",
@@ -236,6 +237,7 @@ def main():
         "python scripts/build_external_precollection_manifest_draft.py",
         "python scripts/build_external_precollection_freeze_receipt.py",
         "python scripts/build_external_postcollection_evidence_seal.py",
+        "python scripts/audit_external_postcollection_seal_consistency.py",
         "python scripts/build_external_analysis_plan.py",
         "python scripts/probe_external_platform.py",
         "python scripts/probe_maniskill_task_bindings.py",
@@ -364,6 +366,7 @@ def main():
         "build_external_evidence_intake_ledger.py",
         "build_external_precollection_freeze_receipt.py",
         "build_external_postcollection_evidence_seal.py",
+        "audit_external_postcollection_seal_consistency.py",
         "materialize_external_configs.py --platform-type high_fidelity_sim",
         "real_collection_runner.py --backend-module <module_or_path>",
         "audit_external_evidence_preflight.py",
@@ -1991,6 +1994,7 @@ def main():
         "build_external_precollection_freeze_receipt.py",
         "real_collection_runner.py",
         "build_external_postcollection_evidence_seal.py",
+        "audit_external_postcollection_seal_consistency.py",
         "build_external_manifest.py --write --check-video-paths",
         "validate_external_rollouts.py --write-results --check-video-paths --strict",
         "audit_external_evidence.py --strict",
@@ -2113,9 +2117,10 @@ def main():
     if (
         "real_collection_runner.py" not in postcollection_sequence
         or "build_external_postcollection_evidence_seal.py" not in postcollection_sequence
+        or "audit_external_postcollection_seal_consistency.py" not in postcollection_sequence
         or "build_external_manifest.py --write --check-video-paths" not in postcollection_sequence
     ):
-        fail("external postcollection evidence seal must include collection, seal, and manifest-promotion commands")
+        fail("external postcollection evidence seal must include collection, seal, consistency, and manifest-promotion commands")
     if postcollection_seal_audit.get("version") != "external_postcollection_evidence_seal_audit_v1":
         fail("external postcollection evidence seal audit version mismatch")
     if postcollection_seal_audit.get("passed") is not True:
@@ -2140,12 +2145,56 @@ def main():
         "operator_metadata_still_required",
         "hash_inventory_written_for_precollection_inputs",
         "strict_sequence_places_seal_after_collection_before_manifest",
+        "seal_references_consistency_gate_before_manifest",
         "seal_references_rollout_pairing_release_final_gates",
         "strict_evidence_gates_still_false",
         "no_real_manifest_written",
     ):
         if postcollection_checks.get(required_check) is not True:
             fail(f"external postcollection evidence seal audit missing passing check: {required_check}")
+
+    postcollection_consistency_path = RESULTS / "external_postcollection_seal_consistency_audit.json"
+    postcollection_consistency_md_path = RESULTS / "external_postcollection_seal_consistency_audit.md"
+    for path in (
+        ROOT / "scripts" / "audit_external_postcollection_seal_consistency.py",
+        postcollection_consistency_path,
+        postcollection_consistency_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external postcollection seal consistency artifact: {path}")
+    postcollection_consistency = json.loads(postcollection_consistency_path.read_text(encoding="utf-8"))
+    if postcollection_consistency.get("version") != "external_postcollection_seal_consistency_audit_v1":
+        fail("external postcollection seal consistency audit version mismatch")
+    if postcollection_consistency.get("passed") is not True:
+        fail("external postcollection seal consistency audit did not pass")
+    if postcollection_consistency.get("not_external_evidence") is not True:
+        fail("external postcollection seal consistency audit must declare that it is not evidence")
+    if (
+        postcollection_consistency.get("strict_external_evidence_ready") is not False
+        or postcollection_consistency.get("seal_consistency_ready") is not False
+        or postcollection_consistency.get("ready_for_manifest_promotion") is not False
+    ):
+        fail("external postcollection seal consistency audit must keep strict evidence and manifest promotion false by default")
+    if int(postcollection_consistency.get("matched_hash_count", 0) or 0) < 8:
+        fail("external postcollection seal consistency audit recomputes too few hashes")
+    if postcollection_consistency.get("mismatched_hashes") or postcollection_consistency.get("extra_official_artifacts"):
+        fail("external postcollection seal consistency audit found unexpected hash drift or unsealed official artifacts")
+    if int(postcollection_consistency.get("current_jsonl_record_count", 0) or 0) != 0 or int(postcollection_consistency.get("current_rollout_video_count", 0) or 0) != 0:
+        fail("external postcollection seal consistency audit must remain default fail-closed before real logs/videos")
+    consistency_checks = {check.get("name"): check.get("passed") for check in postcollection_consistency.get("checks", [])}
+    for required_check in (
+        "postcollection_seal_artifacts_loaded",
+        "consistency_gate_is_non_evidence_and_fail_closed",
+        "sealed_hashes_recompute_without_drift",
+        "no_unsealed_official_artifacts_before_manifest_promotion",
+        "manifest_promotion_requires_ready_seal_and_consistency",
+        "current_counts_match_default_or_ready_state",
+        "no_real_manifest_written_before_seal_consistency",
+        "strict_sequence_places_consistency_after_seal_before_manifest",
+        "consistency_gate_references_rollout_pairing_release_final_gates",
+    ):
+        if consistency_checks.get(required_check) is not True:
+            fail(f"external postcollection seal consistency audit missing passing check: {required_check}")
 
     preflight_path = RESULTS / "external_evidence_preflight.json"
     if not preflight_path.exists():
@@ -3384,6 +3433,10 @@ def main():
         "external_postcollection_evidence_seal_not_evidence",
         "external_postcollection_evidence_seal_hash_inventory",
         "external_postcollection_evidence_seal_gate_order",
+        "external_postcollection_seal_consistency_gate_ready",
+        "external_postcollection_seal_consistency_not_evidence",
+        "external_postcollection_seal_consistency_hash_recompute",
+        "external_postcollection_seal_consistency_gate_order",
         "external_acquisition_packet_ready",
         "external_acquisition_packet_not_evidence",
         "external_acquisition_packet_maps_all_blockers",
@@ -3485,6 +3538,7 @@ def main():
         EXTERNAL / "postcollection_evidence_seal.json",
         EXTERNAL / "postcollection_evidence_seal.md",
         EXTERNAL / "postcollection_evidence_seal.csv",
+        RESULTS / "external_postcollection_seal_consistency_audit.md",
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
@@ -3566,6 +3620,7 @@ def main():
         "evidence_intake_ledger_ready",
         "precollection_freeze_receipt_ready",
         "postcollection_evidence_seal_ready",
+        "postcollection_seal_consistency_gate_ready",
         "backend_contract_gate_ready",
         "backend_integration_packet_ready",
         "maniskill_reference_backend_audit_ready",
@@ -3632,6 +3687,23 @@ def main():
         fail("external acquisition packet postcollection seal summary must point to the seal markdown")
     if "build_external_postcollection_evidence_seal.py" not in str(acquisition_seal.get("audit_command", "")):
         fail("external acquisition packet postcollection seal summary must include rebuild command")
+    acquisition_consistency = acquisition.get("postcollection_seal_consistency_gate", {}) or {}
+    if acquisition_consistency.get("not_external_evidence") is not True:
+        fail("external acquisition packet postcollection consistency summary must be marked non-evidence")
+    if acquisition_consistency.get("strict_external_evidence_ready") is not False:
+        fail("external acquisition packet postcollection consistency summary must keep strict evidence false")
+    if acquisition_consistency.get("seal_consistency_ready") is not False:
+        fail("external acquisition packet postcollection consistency summary must keep consistency readiness false before real logs/videos")
+    if acquisition_consistency.get("ready_for_manifest_promotion") is not False:
+        fail("external acquisition packet postcollection consistency summary must keep manifest promotion false before real logs/videos")
+    if int(acquisition_consistency.get("matched_hash_count", 0) or 0) < 8:
+        fail("external acquisition packet postcollection consistency summary recomputes too few hashes")
+    if int(acquisition_consistency.get("current_jsonl_record_count", 0) or 0) != 0 or int(acquisition_consistency.get("current_rollout_video_count", 0) or 0) != 0:
+        fail("external acquisition packet postcollection consistency summary must remain fail-closed by default")
+    if acquisition_consistency.get("mismatched_hashes") or acquisition_consistency.get("extra_official_artifacts"):
+        fail("external acquisition packet postcollection consistency summary must not report drift by default")
+    if "audit_external_postcollection_seal_consistency.py" not in str(acquisition_consistency.get("audit_command", "")):
+        fail("external acquisition packet postcollection consistency summary must include audit command")
 
     operator_packet_path = RESULTS / "external_operator_packet.json"
     if not operator_packet_path.exists():
@@ -3941,6 +4013,29 @@ def main():
     seal_action_commands = "\n".join(seal_actions[0].get("commands", []) or [])
     if "build_external_postcollection_evidence_seal.py" not in seal_action_commands:
         fail("external operator packet postcollection seal action must rebuild the seal")
+    operator_consistency = operator_packet.get("postcollection_seal_consistency_gate", {}) or {}
+    if operator_consistency.get("not_external_evidence") is not True:
+        fail("external operator packet postcollection consistency summary must be marked non-evidence")
+    if operator_consistency.get("strict_external_evidence_ready") is not False:
+        fail("external operator packet postcollection consistency summary must keep strict evidence false")
+    if operator_consistency.get("seal_consistency_ready") is not False:
+        fail("external operator packet postcollection consistency summary must keep consistency readiness false before real logs/videos")
+    if operator_consistency.get("ready_for_manifest_promotion") is not False:
+        fail("external operator packet postcollection consistency summary must keep manifest promotion false before real logs/videos")
+    if int(operator_consistency.get("matched_hash_count", 0) or 0) < 8:
+        fail("external operator packet postcollection consistency summary recomputes too few hashes")
+    if int(operator_consistency.get("current_jsonl_record_count", 0) or 0) != 0 or int(operator_consistency.get("current_rollout_video_count", 0) or 0) != 0:
+        fail("external operator packet postcollection consistency summary must remain fail-closed by default")
+    if operator_consistency.get("mismatched_hashes") or operator_consistency.get("extra_official_artifacts"):
+        fail("external operator packet postcollection consistency summary must not report drift by default")
+    if "audit_external_postcollection_seal_consistency.py" not in str(operator_consistency.get("audit_command", "")):
+        fail("external operator packet postcollection consistency summary must include audit command")
+    consistency_actions = [action for action in operator_actions if action.get("id") == "postcollection_seal_consistency_gate"]
+    if not consistency_actions:
+        fail("external operator packet missing postcollection_seal_consistency_gate action")
+    consistency_action_commands = "\n".join(consistency_actions[0].get("commands", []) or [])
+    if "audit_external_postcollection_seal_consistency.py" not in consistency_action_commands:
+        fail("external operator packet postcollection consistency action must run the consistency gate")
     operator_precollection = operator_packet.get("precollection_manifest_draft", {}) or {}
     if operator_precollection.get("not_external_evidence") is not True:
         fail("external operator packet precollection manifest draft summary must be marked non-evidence")
@@ -3966,6 +4061,7 @@ def main():
     if (
         "build_external_precollection_freeze_receipt.py" not in precollection_cutover
         or "build_external_postcollection_evidence_seal.py" not in precollection_cutover
+        or "audit_external_postcollection_seal_consistency.py" not in precollection_cutover
         or "build_external_manifest.py --write --check-video-paths" not in precollection_cutover
         or "audit_external_evidence.py --strict" not in precollection_cutover
     ):
@@ -3986,6 +4082,8 @@ def main():
         fail("external operator packet missing actual collection command")
     if "build_external_postcollection_evidence_seal.py" not in operator_packet.get("postcollection_seal_command", ""):
         fail("external operator packet missing postcollection seal command")
+    if "audit_external_postcollection_seal_consistency.py" not in operator_packet.get("postcollection_consistency_command", ""):
+        fail("external operator packet missing postcollection consistency command")
     post_commands = operator_packet.get("post_collection_strict_commands", []) or []
     for command_fragment in ("validate_external_rollouts.py", "audit_external_pairing_integrity.py", "audit_external_evidence.py"):
         if not any(command_fragment in command for command in post_commands):
@@ -4047,6 +4145,7 @@ def main():
         "precollection_manifest_draft_included",
         "precollection_freeze_receipt_included",
         "postcollection_evidence_seal_included",
+        "postcollection_seal_consistency_gate_included",
         "pilot_smoke_packet_included",
         "maniskill_render_video_preflight_included",
         "maniskill_render_resource_sweep_included",
@@ -4686,6 +4785,7 @@ def main():
         "precollection_manifest_draft_visible",
         "precollection_freeze_receipt_visible",
         "postcollection_evidence_seal_visible",
+        "postcollection_seal_consistency_gate_visible",
         "method_implementation_packet_visible",
         "maniskill_pilot_runtime_liveness_visible",
         "materializer_guard_visible",

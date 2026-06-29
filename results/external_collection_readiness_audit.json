@@ -92,6 +92,8 @@
   "output_log_dir": "external_validation/logs",
   "passed": true,
   "post_collection_strict_commands": [
+    "python scripts\\build_external_postcollection_evidence_seal.py",
+    "python scripts\\audit_external_postcollection_seal_consistency.py",
     "python scripts\\build_external_manifest.py --write --check-video-paths",
     "python scripts\\audit_external_release_package.py --strict",
     "python scripts\\audit_external_fidelity_acceptance.py --strict",

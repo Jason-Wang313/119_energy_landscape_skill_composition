@@ -27,6 +27,7 @@ STRICT_COMMANDS = [
     r"python scripts\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
     r"python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id <specific_run_id> --unsealed-alias-map",
     r"python scripts\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+    r"python scripts\audit_external_postcollection_seal_consistency.py",
     r"python scripts\build_external_manifest.py --write --check-video-paths",
     r"python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict",
     r"python scripts\audit_external_pairing_integrity.py --strict",
@@ -38,7 +39,7 @@ GROUPS: dict[str, dict[str, str]] = {
     "manifest_contract": {
         "operator_artifacts": "external_validation/manifest.json with version, route, schema, shared-skill/reset/observation/compute flags, task/method declarations, metrics, and release artifacts",
         "source_packet": "external_validation/manifest_assembly_checklist.csv",
-        "strict_gate": "python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\audit_external_evidence.py --strict",
+        "strict_gate": "python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\audit_external_evidence.py --strict",
         "completion_test": "manifest exists, has external_validation_v1, declares log schema, route, tasks, methods, fairness flags, recomputed metrics, and release hashes",
     },
     "fidelity_acceptance": {
@@ -50,13 +51,13 @@ GROUPS: dict[str, dict[str, str]] = {
     "task_configs": {
         "operator_artifacts": "external_validation/configs/<task_family>.json consumed by the accepted backend, with config_hash declared in external_validation/manifest.json",
         "source_packet": "external_validation/config_manifest_packet.md; external_validation/config_manifest_work_orders.csv",
-        "strict_gate": "python scripts\\materialize_external_configs.py ... --confirm-real-platform --write; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_configs.py --strict",
+        "strict_gate": "python scripts\\materialize_external_configs.py ... --confirm-real-platform --write; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_configs.py --strict",
         "completion_test": "strict config evidence audit passes with manifest-declared configs and matching hashes",
     },
     "rollout_logs_videos_metrics": {
         "operator_artifacts": "manifest-declared external_validation/logs/*.jsonl, external_validation/videos/<task_family>/ files, and metrics recomputed from raw JSONL logs",
         "source_packet": "external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv",
-        "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
         "completion_test": "external rollout metric validator passes and manifest metrics match recomputed rollout metrics",
     },
     "methods_baselines": {
@@ -68,7 +69,7 @@ GROUPS: dict[str, dict[str, str]] = {
     "ablations": {
         "operator_artifacts": "manifest-declared external ablation logs/videos for basin_overlap, barrier_height, descent_continuity, risk_calibration, and seam_repair on the same accepted configs, skill library, resets, observation interface, and compute budget",
         "source_packet": "external_validation/ablation_collection_packet.md; external_validation/ablation_collection_work_orders.csv",
-        "strict_gate": "python scripts\\build_external_ablation_collection_packet.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\audit_external_evidence.py --strict",
+        "strict_gate": "python scripts\\build_external_ablation_collection_packet.py; python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\audit_external_evidence.py --strict",
         "completion_test": "external evidence audit reports all five manifest.ablations.* flags true with manifest-declared external ablation evidence",
     },
     "pairing_release": {
@@ -307,6 +308,7 @@ def main() -> int:
                 "build_external_precollection_freeze_receipt.py",
                 "real_collection_runner.py",
                 "build_external_postcollection_evidence_seal.py",
+                "audit_external_postcollection_seal_consistency.py",
                 "build_external_manifest.py --write --check-video-paths",
                 "validate_external_rollouts.py --write-results --check-video-paths --strict",
                 "audit_external_pairing_integrity.py --strict",

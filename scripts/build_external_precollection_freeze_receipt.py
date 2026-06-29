@@ -153,6 +153,8 @@ def strict_command_sequence(args: argparse.Namespace) -> list[str]:
         rf"python scripts\audit_external_collection_readiness.py --strict --backend-module {backend} --task-config-dir external_validation\configs --run-id {run_id} --unsealed-alias-map",
         operator_command(args),
         rf"python external_validation\runner\real_collection_runner.py --backend-module {backend} --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id {run_id} --unsealed-alias-map",
+        r"python scripts\build_external_postcollection_evidence_seal.py",
+        r"python scripts\audit_external_postcollection_seal_consistency.py",
         r"python scripts\build_external_manifest.py --write --check-video-paths",
         r"python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict",
         r"python scripts\audit_external_pairing_integrity.py --strict",
@@ -307,11 +309,25 @@ def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
     )
     add_check(
         checks,
+        "strict_sequence_places_seal_consistency_before_manifest",
+        "real_collection_runner.py" in command_text
+        and "build_external_postcollection_evidence_seal.py" in command_text
+        and "audit_external_postcollection_seal_consistency.py" in command_text
+        and "build_external_manifest.py --write --check-video-paths" in command_text
+        and command_text.find("real_collection_runner.py") < command_text.find("build_external_postcollection_evidence_seal.py")
+        and command_text.find("build_external_postcollection_evidence_seal.py") < command_text.find("audit_external_postcollection_seal_consistency.py")
+        and command_text.find("audit_external_postcollection_seal_consistency.py") < command_text.find("build_external_manifest.py --write --check-video-paths"),
+        command_text,
+    )
+    add_check(
+        checks,
         "receipt_references_manifest_rollout_release_final_gates",
         all(
             fragment in command_text
             for fragment in (
                 "build_external_manifest.py --write --check-video-paths",
+                "build_external_postcollection_evidence_seal.py",
+                "audit_external_postcollection_seal_consistency.py",
                 "validate_external_rollouts.py --write-results --check-video-paths --strict",
                 "audit_external_release_package.py --strict",
                 "audit_external_evidence.py --strict",

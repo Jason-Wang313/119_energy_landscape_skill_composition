@@ -169,6 +169,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_evidence_intake_ledger.py",
         SCRIPTS / "build_external_precollection_freeze_receipt.py",
         SCRIPTS / "build_external_postcollection_evidence_seal.py",
+        SCRIPTS / "audit_external_postcollection_seal_consistency.py",
         SCRIPTS / "audit_external_pilot_smoke.py",
         SCRIPTS / "build_external_pilot_smoke_packet.py",
         SCRIPTS / "audit_maniskill_render_video_preflight.py",
@@ -233,6 +234,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_precollection_freeze_receipt_audit.md",
         RESULTS / "external_postcollection_evidence_seal_audit.json",
         RESULTS / "external_postcollection_evidence_seal_audit.md",
+        RESULTS / "external_postcollection_seal_consistency_audit.json",
+        RESULTS / "external_postcollection_seal_consistency_audit.md",
         RESULTS / "external_pilot_smoke_audit.json",
         RESULTS / "external_pilot_smoke_audit.md",
         RESULTS / "external_pilot_smoke_packet_audit.json",
@@ -365,6 +368,10 @@ def build_payload() -> dict[str, Any]:
     postcollection_seal = require_payload(
         RESULTS / "external_postcollection_evidence_seal_audit.json",
         "external_postcollection_evidence_seal_audit_v1",
+    )
+    postcollection_consistency = require_payload(
+        RESULTS / "external_postcollection_seal_consistency_audit.json",
+        "external_postcollection_seal_consistency_audit_v1",
     )
     method_implementation = require_payload(RESULTS / "external_method_implementation_audit.json", "external_method_implementation_audit_v1")
     pilot_smoke = require_payload(RESULTS / "external_pilot_smoke_packet_audit.json", "external_pilot_smoke_packet_audit_v1")
@@ -836,6 +843,29 @@ def build_payload() -> dict[str, Any]:
             f"seal_ready={postcollection_seal.get('postcollection_seal_ready')!r}"
         ),
     )
+    consistency_checks = {check.get("name"): check.get("passed") for check in postcollection_consistency.get("checks", []) or []}
+    add_check(
+        checks,
+        "postcollection_seal_consistency_gate_included",
+        postcollection_consistency.get("passed") is True
+        and postcollection_consistency.get("not_external_evidence") is True
+        and postcollection_consistency.get("strict_external_evidence_ready") is False
+        and postcollection_consistency.get("seal_consistency_ready") is False
+        and postcollection_consistency.get("ready_for_manifest_promotion") is False
+        and int(postcollection_consistency.get("current_jsonl_record_count", 0) or 0) == 0
+        and int(postcollection_consistency.get("current_rollout_video_count", 0) or 0) == 0
+        and consistency_checks.get("sealed_hashes_recompute_without_drift") is True
+        and consistency_checks.get("strict_sequence_places_consistency_after_seal_before_manifest") is True
+        and "results/external_postcollection_seal_consistency_audit.json" in paths
+        and "results/external_postcollection_seal_consistency_audit.md" in paths
+        and "scripts/audit_external_postcollection_seal_consistency.py" in paths,
+        (
+            f"matched={postcollection_consistency.get('matched_hash_count')!r}, "
+            f"records={postcollection_consistency.get('current_jsonl_record_count')!r}, "
+            f"videos={postcollection_consistency.get('current_rollout_video_count')!r}, "
+            f"consistency_ready={postcollection_consistency.get('seal_consistency_ready')!r}"
+        ),
+    )
     pilot_smoke_checks = {check.get("name"): check.get("passed") for check in pilot_smoke.get("checks", []) or []}
     add_check(
         checks,
@@ -1030,6 +1060,7 @@ def build_payload() -> dict[str, Any]:
             "evidence_intake_ledger",
             "precollection_freeze_receipt",
             "postcollection_evidence_seal",
+            "postcollection_seal_consistency_gate",
             "backend_module",
             "real_task_configs",
             "platform_fidelity",
@@ -1044,7 +1075,7 @@ def build_payload() -> dict[str, Any]:
             "strict_rollout_recompute",
             "final_strict_gate",
         }.issubset(action_ids),
-        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'fidelity_acceptance_materializer', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'ablation_collection_packet', 'evidence_intake_ledger', 'precollection_freeze_receipt', 'postcollection_evidence_seal', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'maniskill_render_video_preflight', 'maniskill_render_resource_sweep', 'maniskill_pilot_runtime_liveness', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
+        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'fidelity_acceptance_materializer', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'ablation_collection_packet', 'evidence_intake_ledger', 'precollection_freeze_receipt', 'postcollection_evidence_seal', 'postcollection_seal_consistency_gate', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'maniskill_render_video_preflight', 'maniskill_render_resource_sweep', 'maniskill_pilot_runtime_liveness', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
     )
     add_check(
         checks,
@@ -1082,6 +1113,7 @@ def build_payload() -> dict[str, Any]:
         "pre_collection_gate_command": operator.get("pre_collection_gate_command", ""),
         "precollection_freeze_command": operator.get("precollection_freeze_command", ""),
         "postcollection_seal_command": operator.get("postcollection_seal_command", ""),
+        "postcollection_consistency_command": operator.get("postcollection_consistency_command", ""),
         "backend_contract_gate_command": operator.get("backend_contract_gate_command", ""),
         "strict_collection_command": operator.get("strict_collection_command", ""),
         "post_collection_strict_commands": post_commands,
@@ -1106,6 +1138,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_method_implementation_audit.json",
             "results/external_precollection_freeze_receipt_audit.json",
             "results/external_postcollection_evidence_seal_audit.json",
+            "results/external_postcollection_seal_consistency_audit.json",
             "results/external_precollection_manifest_draft_audit.json",
             "results/external_evidence_preflight.json",
             "results/external_release_package_audit.json",
@@ -1158,6 +1191,12 @@ def write_md(payload: dict[str, Any]) -> None:
         "",
         "```powershell",
         payload["postcollection_seal_command"],
+        "```",
+        "",
+        "Postcollection seal consistency gate before manifest promotion:",
+        "",
+        "```powershell",
+        payload["postcollection_consistency_command"],
         "```",
         "",
         "Post-collection strict gates:",

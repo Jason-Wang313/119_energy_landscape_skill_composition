@@ -355,6 +355,8 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         ),
         "precollection_freeze_command": precollection_freeze_command("<module_or_path>", "<specific_run_id>"),
         "post_collection_strict_commands": [
+            r"python scripts\build_external_postcollection_evidence_seal.py",
+            r"python scripts\audit_external_postcollection_seal_consistency.py",
             r"python scripts\build_external_manifest.py --write --check-video-paths",
             r"python scripts\audit_external_release_package.py --strict",
             r"python scripts\audit_external_fidelity_acceptance.py --strict",
