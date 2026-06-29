@@ -2658,10 +2658,19 @@ def main():
         and pilot_runtime_videos == 0
         and pilot_runtime_fallbacks == 0
     )
-    if not (pilot_runtime_diagnostic_io or pilot_runtime_unavailable):
+    pilot_runtime_diagnostic_rejected = (
+        pilot_runtime.get("runner_io_ready") is False
+        and pilot_runtime_records == 0
+        and pilot_runtime_fallbacks >= 1
+        and pilot_runtime.get("diagnostic_sidecar_rejected_before_jsonl_write") is True
+        and pilot_runtime.get("official_video_guard_blocked_diagnostic_fallback") is True
+        and pilot_runtime.get("diagnostic_sidecar_paths_quarantined") is True
+    )
+    if not (pilot_runtime_diagnostic_io or pilot_runtime_unavailable or pilot_runtime_diagnostic_rejected):
         fail(
             "ManiSkill pilot runtime liveness audit must either record a quarantined diagnostic "
-            "non-evidence row/video or fail closed with zero rows/videos when the runtime is unavailable"
+            "non-evidence row/video, fail closed with zero rows/videos when the runtime is unavailable, "
+            "or record official guard rejection of a diagnostic sidecar before JSONL write"
         )
     if not str(pilot_runtime.get("failure_summary", "")).strip():
         fail("ManiSkill pilot runtime liveness audit must record a failure summary")
@@ -2674,6 +2683,8 @@ def main():
         "timeout_or_result_recorded_as_readiness_state",
         "ready_requires_schema_valid_records_and_videos",
         "runner_io_ready_allows_only_quarantined_diagnostic_fallback",
+        "official_guard_rejects_diagnostic_before_jsonl_write",
+        "diagnostic_rejection_paths_are_quarantined",
         "diagnostic_fallback_does_not_mark_render_ready",
         "no_real_manifest_written",
     ):

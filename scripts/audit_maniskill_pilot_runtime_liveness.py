@@ -116,6 +116,41 @@ def diagnostic_sidecars(video_dir: Path) -> list[Path]:
     return sorted(video_dir.rglob("*.mp4.diagnostic.json"))
 
 
+def normalize_reported_sidecar(raw_path: str) -> str:
+    cleaned = clean_ansi(raw_path).strip().strip("\"'")
+    if not cleaned:
+        return ""
+    path = Path(cleaned)
+    try:
+        return rel(path)
+    except Exception:
+        return cleaned.replace("\\", "/")
+
+
+def extract_reported_diagnostic_sidecars(stderr: str) -> list[str]:
+    pattern = re.compile(
+        r"diagnostic fallback video sidecar, which cannot be official evidence:\s*(?P<path>.+?\.mp4\.diagnostic\.json)"
+    )
+    paths: list[str] = []
+    for match in pattern.finditer(clean_ansi(stderr)):
+        reported = normalize_reported_sidecar(match.group("path"))
+        if reported and reported not in paths:
+            paths.append(reported)
+    return paths
+
+
+def merge_diagnostic_sidecars(filesystem_sidecars: list[Path], reported_sidecars: list[str]) -> list[str]:
+    merged: list[str] = []
+    for sidecar in filesystem_sidecars:
+        rendered = rel(sidecar)
+        if rendered not in merged:
+            merged.append(rendered)
+    for sidecar in reported_sidecars:
+        if sidecar not in merged:
+            merged.append(sidecar)
+    return merged
+
+
 def clean_ansi(text: str) -> str:
     return re.sub(r"\x1b\[[0-9;]*m", "", text)
 
@@ -152,7 +187,11 @@ def summarize_failure(
     videos: int,
     diagnostic_fallbacks: int,
     last_progress_stage: str,
+    diagnostic_sidecar_rejected_before_jsonl_write: bool,
 ) -> str:
+    if diagnostic_sidecar_rejected_before_jsonl_write:
+        stage = last_progress_stage or "record_video_start"
+        return f"official video guard rejected diagnostic fallback sidecar before JSONL write after progress stage {stage}"
     if records and videos and returncode == 0 and not timed_out and diagnostic_fallbacks:
         return "runner wrote quarantined schema-valid row/video using diagnostic non-evidence video fallback; render-backed video remains unavailable"
     if records and videos and returncode == 0 and not timed_out:
@@ -238,7 +277,27 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
             )
         )
     videos_written = count_videos(GUARD_VIDEO_DIR)
-    diagnostic_fallback_paths = diagnostic_sidecars(GUARD_VIDEO_DIR)
+    diagnostic_fallback_path_files = diagnostic_sidecars(GUARD_VIDEO_DIR)
+    reported_diagnostic_sidecars = extract_reported_diagnostic_sidecars(stderr)
+    diagnostic_fallback_paths = merge_diagnostic_sidecars(diagnostic_fallback_path_files, reported_diagnostic_sidecars)
+    record_video_stage_seen = any(
+        str(stage.get("stage", "")) == "record_video_start" for stage in progress_stages
+    )
+    diagnostic_sidecar_rejected_before_jsonl_write = (
+        not timed_out
+        and returncode not in (None, 0)
+        and len(records) == 0
+        and bool(reported_diagnostic_sidecars)
+        and record_video_stage_seen
+        and "cannot be official evidence" in clean_ansi(stderr)
+    )
+    official_video_guard_blocked_diagnostic_fallback = (
+        diagnostic_sidecar_rejected_before_jsonl_write
+        and "diagnostic fallback video sidecar" in clean_ansi(stderr)
+    )
+    diagnostic_sidecar_paths_quarantined = all(
+        path.startswith("external_validation/pilot_runtime_guard/") for path in diagnostic_fallback_paths
+    )
     failure_summary = summarize_failure(
         timed_out=timed_out,
         returncode=returncode,
@@ -247,6 +306,7 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
         videos=videos_written,
         diagnostic_fallbacks=len(diagnostic_fallback_paths),
         last_progress_stage=last_progress_stage,
+        diagnostic_sidecar_rejected_before_jsonl_write=diagnostic_sidecar_rejected_before_jsonl_write,
     )
     runner_io_ready = (
         not timed_out
@@ -270,7 +330,12 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
         "failure_summary": failure_summary,
         "schema_errors": schema_errors,
         "log_files": [rel(path) for path in log_paths],
-        "diagnostic_video_fallbacks": [rel(path) for path in diagnostic_fallback_paths],
+        "diagnostic_video_fallbacks": diagnostic_fallback_paths,
+        "diagnostic_video_fallback_files": [rel(path) for path in diagnostic_fallback_path_files],
+        "reported_diagnostic_sidecars": reported_diagnostic_sidecars,
+        "diagnostic_sidecar_rejected_before_jsonl_write": diagnostic_sidecar_rejected_before_jsonl_write,
+        "official_video_guard_blocked_diagnostic_fallback": official_video_guard_blocked_diagnostic_fallback,
+        "diagnostic_sidecar_paths_quarantined": diagnostic_sidecar_paths_quarantined,
         "runner_io_ready": runner_io_ready,
         "render_video_ready": render_video_ready,
         "pilot_runtime_ready": pilot_runtime_ready,
@@ -351,6 +416,40 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
     )
     add_check(
         checks,
+        "official_guard_rejects_diagnostic_before_jsonl_write",
+        (
+            not result["diagnostic_sidecar_rejected_before_jsonl_write"]
+            or (
+                result["official_video_guard_blocked_diagnostic_fallback"] is True
+                and result["runner_io_ready"] is False
+                and result["records_observed"] == 0
+                and result["returncode"] not in (None, 0)
+                and any(
+                    str(stage.get("stage", "")) == "record_video_start"
+                    for stage in result["collection_progress_stages"]
+                )
+            )
+        ),
+        (
+            f"diagnostic_sidecar_rejected_before_jsonl_write="
+            f"{result['diagnostic_sidecar_rejected_before_jsonl_write']}, "
+            f"records={result['records_observed']}, returncode={result['returncode']}"
+        ),
+    )
+    add_check(
+        checks,
+        "diagnostic_rejection_paths_are_quarantined",
+        (
+            not result["diagnostic_video_fallbacks"]
+            or result["diagnostic_sidecar_paths_quarantined"] is True
+        ),
+        (
+            f"diagnostic_sidecar_paths_quarantined={result['diagnostic_sidecar_paths_quarantined']}, "
+            f"diagnostic_fallbacks={len(result['diagnostic_video_fallbacks'])}"
+        ),
+    )
+    add_check(
+        checks,
         "diagnostic_fallback_does_not_mark_render_ready",
         (not result["diagnostic_video_fallbacks"] and result["render_video_ready"] == result["pilot_runtime_ready"])
         or (bool(result["diagnostic_video_fallbacks"]) and result["render_video_ready"] is False and result["pilot_runtime_ready"] is False),
@@ -374,6 +473,12 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
                 "bounded ManiSkill reference runner produced a quarantined schema-valid pilot row/video only by using "
                 "a diagnostic non-evidence video fallback; render-backed RGB video remains unavailable, so use an "
                 "accepted GPU/render machine or fix the renderer before official collection"
+            )
+        elif result["diagnostic_sidecar_rejected_before_jsonl_write"]:
+            blocking_missing.append(
+                "bounded ManiSkill reference runner reached record_video_start, but the official video guard rejected "
+                "the diagnostic fallback sidecar before any JSONL row could be written; render-backed RGB video remains "
+                "unavailable, so use an accepted GPU/render machine or fix the renderer before official collection"
             )
         else:
             blocking_missing.append(
@@ -408,6 +513,11 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         "schema_errors": result["schema_errors"],
         "log_files": result["log_files"],
         "diagnostic_video_fallbacks": result["diagnostic_video_fallbacks"],
+        "diagnostic_video_fallback_files": result["diagnostic_video_fallback_files"],
+        "reported_diagnostic_sidecars": result["reported_diagnostic_sidecars"],
+        "diagnostic_sidecar_rejected_before_jsonl_write": result["diagnostic_sidecar_rejected_before_jsonl_write"],
+        "official_video_guard_blocked_diagnostic_fallback": result["official_video_guard_blocked_diagnostic_fallback"],
+        "diagnostic_sidecar_paths_quarantined": result["diagnostic_sidecar_paths_quarantined"],
         "blocking_missing": blocking_missing,
         "command": " ".join(result["command"]),
         "stdout_tail": result["stdout_tail"],
@@ -435,6 +545,8 @@ def write_outputs(payload: dict[str, Any]) -> None:
         f"Records observed: `{payload['records_observed']}`.",
         f"Videos written: `{payload['videos_written']}`.",
         f"Diagnostic video fallbacks: `{len(payload['diagnostic_video_fallbacks'])}`.",
+        f"Diagnostic sidecar rejected before JSONL write: `{str(payload['diagnostic_sidecar_rejected_before_jsonl_write']).lower()}`.",
+        f"Official video guard blocked diagnostic fallback: `{str(payload['official_video_guard_blocked_diagnostic_fallback']).lower()}`.",
         f"Failure summary: `{payload['failure_summary']}`.",
         f"Last progress stage: `{payload['last_progress_stage'] or 'none'}`.",
         "",
@@ -462,6 +574,10 @@ def write_outputs(payload: dict[str, Any]) -> None:
         lines.extend(["", "## Schema Errors", ""])
         for error in payload["schema_errors"][:50]:
             lines.append(f"- {error}")
+    if payload["diagnostic_video_fallbacks"]:
+        lines.extend(["", "## Diagnostic Sidecars", ""])
+        for sidecar in payload["diagnostic_video_fallbacks"][:20]:
+            lines.append(f"- `{sidecar}`")
     lines.extend(["", "## Collection Progress", ""])
     if payload["collection_progress_stages"]:
         for stage in payload["collection_progress_stages"][-20:]:

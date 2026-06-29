@@ -59,7 +59,7 @@ Current local fact: The readiness audit reports 17/21 requirements satisfied and
 
 Allowed claim: The current paper is locally strong but not ready for deployment-level claims or final main-conference submission claims.
 
-Remaining gate: Real robot or accepted high-fidelity manifest/log/video/checkpoint evidence must pass strict audits.
+Remaining gate: Real robot or accepted high-fidelity manifest/log/video/checkpoint evidence must pass strict audits. The pilot liveness layer is non-evidence: it records timeout progress and whether a diagnostic sidecar rejected before JSONL write was stopped by the official video guard before any official row can be written.
 
 Outreach use: Do not ask Haonan to supply the missing proof; ask for fit/falsification advice and possible collaboration.
 

@@ -9,12 +9,14 @@ Readiness state: `PILOT_RUNTIME_NOT_READY`.
 Render backend: `cpu`.
 Shader pack: `minimal`.
 Render size: `128x128`.
-Timed out: `false`.
+Timed out: `true`.
 Records observed: `0`.
 Videos written: `0`.
 Diagnostic video fallbacks: `0`.
-Failure summary: `runner exited with returncode 1 after progress stage record_video_start before producing the required pilot record/video`.
-Last progress stage: `record_video_start`.
+Diagnostic sidecar rejected before JSONL write: `false`.
+Official video guard blocked diagnostic fallback: `false`.
+Failure summary: `runner timed out after progress stage reset_scene_start before producing the required pilot record/video`.
+Last progress stage: `reset_scene_start`.
 
 This bounded liveness audit launches the tracked ManiSkill reference runner in a subprocess against quarantined `pilot_runtime_guard` directories. It is not rollout evidence and cannot satisfy the external evidence gate; it only prevents a slow CPU/render backend from silently blocking an official collection attempt.
 
@@ -26,17 +28,19 @@ C:\Users\wangz\AppData\Local\Programs\Python\Python310\python.exe -u external_va
 
 ## Blocking Missing
 
-- bounded ManiSkill reference runner did not produce a complete schema-valid pilot row/video on this machine; runner exited with returncode 1 after progress stage record_video_start before producing the required pilot record/video; use an accepted GPU/render machine or fix the backend before official collection
+- bounded ManiSkill reference runner did not produce a complete schema-valid pilot row/video on this machine; runner timed out after progress stage reset_scene_start before producing the required pilot record/video; use an accepted GPU/render machine or fix the backend before official collection
 
 ## Checks
 
 - `pass` `runtime_guard_is_non_evidence`: the guard writes only a liveness report and quarantined pilot_runtime_guard outputs
 - `pass` `quarantine_paths_are_not_official_evidence`: log_dir=external_validation/pilot_runtime_guard/logs, video_dir=external_validation/pilot_runtime_guard/videos
-- `pass` `bounded_runner_subprocess_exercised`: timeout_seconds=60, timed_out=False, returncode=1
-- `pass` `collection_progress_markers_recorded`: last_progress_stage='record_video_start'
+- `pass` `bounded_runner_subprocess_exercised`: timeout_seconds=60, timed_out=True, returncode=None
+- `pass` `collection_progress_markers_recorded`: last_progress_stage='reset_scene_start'
 - `pass` `timeout_or_result_recorded_as_readiness_state`: pilot_runtime_ready=False
 - `pass` `ready_requires_schema_valid_records_and_videos`: records=0, videos=0, schema_errors=0
 - `pass` `runner_io_ready_allows_only_quarantined_diagnostic_fallback`: runner_io_ready=False, diagnostic_fallbacks=0
+- `pass` `official_guard_rejects_diagnostic_before_jsonl_write`: diagnostic_sidecar_rejected_before_jsonl_write=False, records=0, returncode=None
+- `pass` `diagnostic_rejection_paths_are_quarantined`: diagnostic_sidecar_paths_quarantined=True, diagnostic_fallbacks=0
 - `pass` `diagnostic_fallback_does_not_mark_render_ready`: render_video_ready=False, pilot_runtime_ready=False, diagnostic_fallbacks=0
 - `pass` `no_real_manifest_written`: external_validation/manifest.json remains absent
 
@@ -51,13 +55,3 @@ C:\Users\wangz\AppData\Local\Programs\Python\Python310\python.exe -u external_va
 - `load_task_config_start`: {'row_index': 1, 'stage': 'load_task_config_start', 'task_family': 'peg_place_regrasp'}
 - `load_task_config_done`: {'row_index': 1, 'stage': 'load_task_config_done', 'task_family': 'peg_place_regrasp'}
 - `reset_scene_start`: {'method': 'energy_compatibility_heuristic', 'row_index': 1, 'stage': 'reset_scene_start', 'task_family': 'peg_place_regrasp'}
-- `reset_scene_done`: {'method': 'energy_compatibility_heuristic', 'row_index': 1, 'stage': 'reset_scene_done', 'task_family': 'peg_place_regrasp'}
-- `capture_observation_start`: {'method': 'energy_compatibility_heuristic', 'row_index': 1, 'stage': 'capture_observation_start', 'task_family': 'peg_place_regrasp'}
-- `capture_observation_done`: {'method': 'energy_compatibility_heuristic', 'row_index': 1, 'stage': 'capture_observation_done', 'task_family': 'peg_place_regrasp'}
-- `terminal_samples_start`: {'method': 'energy_compatibility_heuristic', 'row_index': 1, 'stage': 'terminal_samples_start', 'task_family': 'peg_place_regrasp'}
-- `terminal_samples_done`: {'method': 'energy_compatibility_heuristic', 'row_index': 1, 'samples': 8, 'stage': 'terminal_samples_done', 'task_family': 'peg_place_regrasp'}
-- `run_method_start`: {'method': 'energy_compatibility_heuristic', 'row_index': 1, 'stage': 'run_method_start', 'task_family': 'peg_place_regrasp'}
-- `run_method_done`: {'method': 'energy_compatibility_heuristic', 'row_index': 1, 'stage': 'run_method_done', 'task_family': 'peg_place_regrasp'}
-- `execute_skill_pair_start`: {'method': 'energy_compatibility_heuristic', 'row_index': 1, 'stage': 'execute_skill_pair_start', 'task_family': 'peg_place_regrasp'}
-- `execute_skill_pair_done`: {'method': 'energy_compatibility_heuristic', 'row_index': 1, 'stage': 'execute_skill_pair_done', 'task_family': 'peg_place_regrasp'}
-- `record_video_start`: {'method': 'energy_compatibility_heuristic', 'row_index': 1, 'stage': 'record_video_start', 'task_family': 'peg_place_regrasp'}

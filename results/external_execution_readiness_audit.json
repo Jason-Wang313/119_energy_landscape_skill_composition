@@ -286,7 +286,7 @@
       "passed": true
     },
     {
-      "detail": "pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, timed_out=False, records=0, videos=0, diagnostic_fallbacks=0, failure_summary='runner exited with returncode 1 after progress stage record_video_start before producing the required pilot record/video'",
+      "detail": "pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, timed_out=True, records=0, videos=0, diagnostic_fallbacks=0, diagnostic_rejected=False, failure_summary='runner timed out after progress stage reset_scene_start before producing the required pilot record/video'",
       "name": "maniskill_pilot_runtime_liveness_not_evidence",
       "passed": true
     },

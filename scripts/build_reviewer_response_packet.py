@@ -122,7 +122,11 @@ def main() -> int:
                 f"{gap['blocking_missing_requirements']} blocking external gaps."
             ),
             "allowed_claim": "The current paper is locally strong but not ready for deployment-level claims or final main-conference submission claims.",
-            "remaining_gate": "Real robot or accepted high-fidelity manifest/log/video/checkpoint evidence must pass strict audits.",
+            "remaining_gate": (
+                "Real robot or accepted high-fidelity manifest/log/video/checkpoint evidence must pass strict audits. "
+                "The pilot liveness layer is non-evidence: it records timeout progress and whether a diagnostic sidecar "
+                "rejected before JSONL write was stopped by the official video guard before any official row can be written."
+            ),
             "outreach_use": "Do not ask Haonan to supply the missing proof; ask for fit/falsification advice and possible collaboration.",
         },
         {

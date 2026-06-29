@@ -583,11 +583,21 @@ def main() -> int:
         and pilot_runtime_videos == 0
         and pilot_runtime_fallbacks == 0
     )
+    pilot_runtime_diagnostic_rejected = (
+        pilot_runtime.get("runner_io_ready") is False
+        and pilot_runtime_records == 0
+        and pilot_runtime_fallbacks >= 1
+        and pilot_runtime.get("diagnostic_sidecar_rejected_before_jsonl_write") is True
+        and pilot_runtime.get("official_video_guard_blocked_diagnostic_fallback") is True
+        and pilot_runtime.get("diagnostic_sidecar_paths_quarantined") is True
+        and pilot_runtime_checks.get("official_guard_rejects_diagnostic_before_jsonl_write") is True
+        and pilot_runtime_checks.get("diagnostic_rejection_paths_are_quarantined") is True
+    )
     add_check(
         checks,
         "maniskill_pilot_runtime_liveness_not_evidence",
         pilot_runtime_basic
-        and (pilot_runtime_diagnostic_io or pilot_runtime_unavailable),
+        and (pilot_runtime_diagnostic_io or pilot_runtime_unavailable or pilot_runtime_diagnostic_rejected),
         (
             f"pilot_runtime_ready={pilot_runtime.get('pilot_runtime_ready')!r}, "
             f"runner_io_ready={pilot_runtime.get('runner_io_ready')!r}, "
@@ -596,6 +606,7 @@ def main() -> int:
             f"records={pilot_runtime_records!r}, "
             f"videos={pilot_runtime_videos!r}, "
             f"diagnostic_fallbacks={pilot_runtime_fallbacks}, "
+            f"diagnostic_rejected={pilot_runtime.get('diagnostic_sidecar_rejected_before_jsonl_write')!r}, "
             f"failure_summary={pilot_runtime.get('failure_summary')!r}"
         ),
     )
