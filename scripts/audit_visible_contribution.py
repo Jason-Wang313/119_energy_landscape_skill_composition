@@ -597,12 +597,15 @@ def main() -> int:
         and "staging" in rollout_validator_text
         and "backup" in rollout_validator_text
         and "ftyp" in rollout_validator_text
+        and "manifest_method_hashes" in rollout_validator_text
+        and "policy_or_config_hash must match manifest checkpoint_or_config_hash" in rollout_validator_text
         and "diagnostic fallback sidecar" in rollout_validator_text
         and "strict video fixture did not reject fake MP4" in rollout_self_test_text
+        and "spoofed policy/config hash test did not fail" in rollout_self_test_text
         and "internal_runner_artifact.staging.mp4" in rollout_self_test_text
         and "internal_runner_artifact.backup.mp4" in rollout_self_test_text
         and "write_synthetic_mp4" in evidence_pipeline_self_test_text,
-        "strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths when --strict --check-video-paths is enabled",
+        "strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths and manifest method-hash mismatches",
     )
     release_self_checks = {check.get("name"): check.get("passed") for check in release_package_self_test.get("checks", []) or []}
     add_check(
@@ -872,6 +875,7 @@ def main() -> int:
             "External config manifest packet",
             "External rollout evidence packet",
             "strict MP4 video evidence gate",
+            "strict policy/config hash gate",
             "empty-video-directory",
             "non-MP4-like",
             "External ablation collection packet",
@@ -924,6 +928,7 @@ def main() -> int:
             "External config manifest packet",
             "External rollout evidence packet",
             "strict MP4 video evidence gate",
+            "strict policy/config hash gate",
             "empty video directories",
             "non-MP4-like video artifacts",
             "External ablation collection packet",
@@ -977,6 +982,7 @@ def main() -> int:
             "external config manifest packet",
             "external rollout evidence packet",
             "strict MP4 video evidence gate",
+            "strict policy/config hash gate",
             "empty video directories",
             "non-MP4-like video artifacts",
             "external ablation collection packet",
@@ -1030,6 +1036,7 @@ def main() -> int:
             "External config manifest packet",
             "External rollout evidence packet",
             "strict MP4 video evidence gate",
+            "strict policy/config hash gate",
             "empty video directories",
             "non-MP4-like video artifacts",
             "External ablation collection packet",
@@ -1084,6 +1091,7 @@ def main() -> int:
             "scripts/build_external_config_manifest_packet.py",
             "scripts/build_external_rollout_evidence_packet.py",
             "strict MP4 video evidence gate",
+            "strict policy/config hash gate",
             "empty video directories",
             "non-MP4-like video artifacts",
             "scripts/build_external_ablation_collection_packet.py",
@@ -1139,6 +1147,7 @@ def main() -> int:
             "external config manifest packet",
             "external rollout evidence packet",
             "strict MP4 video evidence gate",
+            "strict policy/config hash gate",
             "empty-video-directory",
             "non-MP4-like",
             "external ablation collection packet",
@@ -1230,7 +1239,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, atomic official evidence promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, and ManiSkill render machine qualification packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the manifest assembly checklist, the External manifest builder self-test, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the strict MP4 video evidence gate, the strict policy/config hash gate, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, atomic official evidence promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, and ManiSkill render machine qualification packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the manifest assembly checklist, the External manifest builder self-test, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

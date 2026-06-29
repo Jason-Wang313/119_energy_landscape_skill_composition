@@ -12,6 +12,8 @@ Paper 119 is a local bridge toward an adaptive physical world/action model for s
 
 Reviewer response packet: `docs/reviewer_response_packet.md` maps hostile reviewer objections to exact local evidence, allowed claims, remaining gates, and one-paper Haonan/Yilun outreach guidance while preserving the `STRONG_REVISE` boundary.
 
+Latest evidence-integrity hardening: a strict policy/config hash gate now rejects raw JSONL rollout rows whose `policy_or_config_hash` disagrees with the manifest-declared method `checkpoint_or_config_hash`.
+
 ## Evidence Snapshot
 
 - Design: 6 task families x 8 seam regimes x 5 deployment splits x 12 methods x 10 paired seeds, with 230,400 main episode cells.

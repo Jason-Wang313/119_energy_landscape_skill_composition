@@ -57,6 +57,10 @@ def make_record(task: str, scene_idx: int, method: str, *, success: bool, utilit
     }
 
 
+def method_hashes(methods: list[str]) -> dict[str, str]:
+    return {method: digest(f"{method}:config") for method in methods}
+
+
 def build_fixture(tmp: Path) -> tuple[dict, dict]:
     schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
     tasks = [
@@ -71,9 +75,10 @@ def build_fixture(tmp: Path) -> tuple[dict, dict]:
         rollout.PRIMARY_METHOD,
         "greedy_module_sequence",
     ]
+    hashes = method_hashes(methods)
     manifest = {
         "tasks": [],
-        "methods": [{"name": method} for method in methods],
+        "methods": [{"name": method, "checkpoint_or_config_hash": hashes[method]} for method in methods],
     }
     for task in tasks:
         log_path = log_dir / f"{task}.jsonl"
@@ -137,6 +142,20 @@ def main() -> int:
         )
         if not any("missing required fields" in error and "utility" in error for error in bad_errors):
             raise AssertionError(f"missing-field test did not fail as expected: {bad_errors}")
+
+        spoofed_hash_record = dict(records[0])
+        spoofed_hash_record["policy_or_config_hash"] = digest("spoofed:policy")
+        spoofed_hash_errors = rollout.validate_record(
+            spoofed_hash_record,
+            line_id="synthetic_spoofed_policy_hash_record",
+            schema=schema,
+            manifest_methods={rollout.PRIMARY_METHOD, "greedy_module_sequence"},
+            manifest_tasks=set(summary["task_families"]),
+            check_video_paths=False,
+            manifest_method_hashes=method_hashes([rollout.PRIMARY_METHOD, "greedy_module_sequence"]),
+        )
+        if not any("policy_or_config_hash must match manifest checkpoint_or_config_hash" in error for error in spoofed_hash_errors):
+            raise AssertionError(f"spoofed policy/config hash test did not fail as expected: {spoofed_hash_errors}")
 
         video_dir = Path(tmp_name) / "videos" / "peg_place_regrasp"
         good_video = video_dir / "good_render_backed_fixture.mp4"

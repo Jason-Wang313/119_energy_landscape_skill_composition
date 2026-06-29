@@ -141,6 +141,7 @@ def validate_record(
     manifest_tasks: set[str],
     check_video_paths: bool,
     manifest_video_dirs: dict[str, Path] | None = None,
+    manifest_method_hashes: dict[str, str] | None = None,
     strict_video_evidence: bool = False,
 ) -> list[str]:
     errors: list[str] = []
@@ -201,6 +202,18 @@ def validate_record(
         errors.append(f"{line_id}: task_family={record.get('task_family')!r} not declared in manifest")
     if record.get("method") not in manifest_methods:
         errors.append(f"{line_id}: method={record.get('method')!r} not declared in manifest")
+    method_name = str(record.get("method", ""))
+    declared_policy_hash = (manifest_method_hashes or {}).get(method_name, "")
+    record_policy_hash = str(record.get("policy_or_config_hash", ""))
+    if declared_policy_hash:
+        if not HEX64.fullmatch(declared_policy_hash):
+            errors.append(
+                f"{line_id}: manifest checkpoint_or_config_hash for method={method_name!r} must be 64-character SHA256"
+            )
+        elif record_policy_hash.lower() != declared_policy_hash.lower():
+            errors.append(
+                f"{line_id}: policy_or_config_hash must match manifest checkpoint_or_config_hash for method={method_name!r}"
+            )
 
     if check_video_paths:
         video_path = str(record.get("video_path", ""))
@@ -232,6 +245,13 @@ def load_records(
     methods = methods if isinstance(methods, list) else []
     manifest_tasks = {str(task.get("task_family", "")) for task in tasks if isinstance(task, dict)}
     manifest_methods = {str(method.get("name", "")) for method in methods if isinstance(method, dict)}
+    manifest_method_hashes = {
+        str(method.get("name", "")): str(method.get("checkpoint_or_config_hash", "")).strip()
+        for method in methods
+        if isinstance(method, dict)
+        and str(method.get("name", ""))
+        and str(method.get("checkpoint_or_config_hash", "")).strip()
+    }
     manifest_video_dirs = {
         str(task.get("task_family", "")): rel_path(str(task.get("video_dir", "")))
         for task in tasks
@@ -279,6 +299,7 @@ def load_records(
                         manifest_tasks=manifest_tasks,
                         check_video_paths=check_video_paths,
                         manifest_video_dirs=manifest_video_dirs,
+                        manifest_method_hashes=manifest_method_hashes,
                         strict_video_evidence=strict_video_evidence,
                     )
                 )

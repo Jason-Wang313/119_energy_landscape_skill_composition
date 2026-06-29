@@ -2722,6 +2722,8 @@ def main():
         "FORBIDDEN_VIDEO_PATH_FRAGMENTS",
         "diagnostic fallback sidecar",
         "not MP4-like evidence",
+        "manifest_method_hashes",
+        "policy_or_config_hash must match manifest checkpoint_or_config_hash",
         "staging",
         "backup",
         "ftyp",
@@ -2734,6 +2736,7 @@ def main():
         "internal_runner_artifact.staging.mp4",
         "internal_runner_artifact.backup.mp4",
         "forbidden non-evidence fragment",
+        "spoofed policy/config hash test did not fail",
     ):
         if forbidden_fixture not in rollout_self_test_text:
             fail(f"external rollout validator self-test missing staged/backup rejection fixture: {forbidden_fixture}")
