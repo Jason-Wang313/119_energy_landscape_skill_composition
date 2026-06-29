@@ -3798,6 +3798,7 @@ def main():
     size_text = f"PDF size: `{DOWNLOADS_PDF.stat().st_size}` bytes."
     public_digest_files = [
         ROOT / "README.md",
+        ROOT / "child_status.md",
         DOCS / "final_audit.md",
         DOCS / "submission_readiness_audit_v5.md",
         DOCS / "paper119_terminal_audit_20260623.md",
@@ -3806,8 +3807,10 @@ def main():
         text = path.read_text(encoding="utf-8")
         if digest not in text:
             fail(f"public PDF SHA256 is stale or missing in {path}")
-    for path in (ROOT / "README.md", DOCS / "final_audit.md", DOCS / "submission_readiness_audit_v5.md"):
-        if size_text not in path.read_text(encoding="utf-8"):
+    size_text_plain = f"PDF size: {DOWNLOADS_PDF.stat().st_size} bytes"
+    for path in (ROOT / "README.md", ROOT / "child_status.md", DOCS / "final_audit.md", DOCS / "submission_readiness_audit_v5.md"):
+        text = path.read_text(encoding="utf-8")
+        if size_text not in text and size_text_plain not in text:
             fail(f"public PDF size is stale or missing in {path}")
     print(f"Paper 119 validation passed. SHA256={digest} pages={pages}")
 

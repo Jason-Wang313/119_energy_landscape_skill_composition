@@ -11,6 +11,16 @@
   },
   "checks": [
     {
+      "detail": "path=C:\\Users\\wangz\\Downloads\\119.pdf, sha=0793D4A8BCD6817DE1D8490441639696EA01026CC0AD152A8E38709CC121CD92, size=467205",
+      "name": "canonical_pdf_metadata_available",
+      "passed": true
+    },
+    {
+      "detail": "paper_sha=0793D4A8BCD6817DE1D8490441639696EA01026CC0AD152A8E38709CC121CD92, canonical_sha=0793D4A8BCD6817DE1D8490441639696EA01026CC0AD152A8E38709CC121CD92",
+      "name": "paper_pdf_matches_canonical",
+      "passed": true
+    },
+    {
       "detail": "objective_complete=False, satisfied=17, blocking=4",
       "name": "readiness_gap_state_visible",
       "passed": true
@@ -213,6 +223,11 @@
     {
       "detail": "missing=[]",
       "name": "reviewer_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "sha=0793D4A8BCD6817DE1D8490441639696EA01026CC0AD152A8E38709CC121CD92, size=467205, missing_sha=[], missing_size=[]",
+      "name": "public_pdf_metadata_matches_canonical_artifact",
       "passed": true
     }
   ],

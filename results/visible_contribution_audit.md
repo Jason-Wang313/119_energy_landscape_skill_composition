@@ -7,6 +7,8 @@ This audit checks that the public-facing contribution docs describe the current 
 
 ## Checks
 
+- `pass` `canonical_pdf_metadata_available`: path=C:\Users\wangz\Downloads\119.pdf, sha=0793D4A8BCD6817DE1D8490441639696EA01026CC0AD152A8E38709CC121CD92, size=467205
+- `pass` `paper_pdf_matches_canonical`: paper_sha=0793D4A8BCD6817DE1D8490441639696EA01026CC0AD152A8E38709CC121CD92, canonical_sha=0793D4A8BCD6817DE1D8490441639696EA01026CC0AD152A8E38709CC121CD92
 - `pass` `readiness_gap_state_visible`: objective_complete=False, satisfied=17, blocking=4
 - `pass` `operator_packet_no_go_visible`: start_state='DO_NOT_COLLECT_YET', blocking_missing_count=4
 - `pass` `operator_packet_tracked_reference_route_visible`: backend='external_validation\\runner\\maniskill_reference_backend.py', run_id='maniskill_sapien_reference_preflight_protocol_v1', blocking=["fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
@@ -48,3 +50,4 @@ This audit checks that the public-facing contribution docs describe the current 
 - `pass` `child_status_current_visible_contribution_terms`: missing=[]
 - `pass` `outreach_current_visible_contribution_terms`: missing=[]
 - `pass` `reviewer_current_visible_contribution_terms`: missing=[]
+- `pass` `public_pdf_metadata_matches_canonical_artifact`: sha=0793D4A8BCD6817DE1D8490441639696EA01026CC0AD152A8E38709CC121CD92, size=467205, missing_sha=[], missing_size=[]

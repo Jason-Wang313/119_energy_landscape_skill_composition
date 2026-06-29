@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -10,6 +12,15 @@ DOCS = ROOT / "docs"
 RESULTS = ROOT / "results"
 OUT_JSON = RESULTS / "visible_contribution_audit.json"
 OUT_MD = RESULTS / "visible_contribution_audit.md"
+PAPER_PDF = ROOT / "paper" / "main.pdf"
+
+
+def configured_path(env_name: str, default: str) -> Path:
+    path = Path(os.environ.get(env_name, default))
+    return path if path.is_absolute() else ROOT / path
+
+
+CANONICAL_PDF = configured_path("PAPER119_CANONICAL_PDF", "C:/Users/wangz/Downloads/119.pdf")
 
 
 def read_text(path: Path) -> str:
@@ -23,6 +34,14 @@ def read_json(path: Path) -> dict[str, Any]:
         return json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
         raise SystemExit(f"invalid JSON in {path}: {exc}") from exc
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest().upper()
 
 
 def rel(path: Path) -> str:
@@ -83,8 +102,24 @@ def main() -> int:
         "reviewer": DOCS / "reviewer_response_packet.md",
     }
     texts = {name: read_text(path) for name, path in files.items()}
+    canonical_pdf_exists = CANONICAL_PDF.exists()
+    canonical_pdf_sha = sha256(CANONICAL_PDF) if canonical_pdf_exists else ""
+    canonical_pdf_size = CANONICAL_PDF.stat().st_size if canonical_pdf_exists else 0
+    paper_pdf_sha = sha256(PAPER_PDF) if PAPER_PDF.exists() else ""
 
     checks: list[dict[str, Any]] = []
+    add_check(
+        checks,
+        "canonical_pdf_metadata_available",
+        canonical_pdf_exists and len(canonical_pdf_sha) == 64 and canonical_pdf_size > 100_000,
+        f"path={CANONICAL_PDF}, sha={canonical_pdf_sha or '<missing>'}, size={canonical_pdf_size}",
+    )
+    add_check(
+        checks,
+        "paper_pdf_matches_canonical",
+        PAPER_PDF.exists() and canonical_pdf_exists and paper_pdf_sha == canonical_pdf_sha,
+        f"paper_sha={paper_pdf_sha or '<missing>'}, canonical_sha={canonical_pdf_sha or '<missing>'}",
+    )
     add_check(
         checks,
         "readiness_gap_state_visible",
@@ -966,6 +1001,22 @@ def main() -> int:
     for name, terms in required_terms_by_file.items():
         ok, missing = contains_all(texts[name], terms)
         add_check(checks, f"{name}_current_visible_contribution_terms", ok, f"missing={missing}")
+
+    pdf_metadata_files = ("README", "final_audit", "readiness_audit", "child_status")
+    missing_sha_files = [name for name in pdf_metadata_files if canonical_pdf_sha not in texts[name]]
+    size_variants = [
+        f"PDF size: `{canonical_pdf_size}` bytes.",
+        f"PDF size: {canonical_pdf_size} bytes",
+    ]
+    missing_size_files = [
+        name for name in pdf_metadata_files if not any(size_text in texts[name] for size_text in size_variants)
+    ]
+    add_check(
+        checks,
+        "public_pdf_metadata_matches_canonical_artifact",
+        canonical_pdf_exists and not missing_sha_files and not missing_size_files,
+        f"sha={canonical_pdf_sha or '<missing>'}, size={canonical_pdf_size}, missing_sha={missing_sha_files}, missing_size={missing_size_files}",
+    )
 
     passed = all(check["passed"] for check in checks)
     payload = {
