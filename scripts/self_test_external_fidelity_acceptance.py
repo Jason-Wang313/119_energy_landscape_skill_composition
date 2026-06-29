@@ -53,7 +53,13 @@ def synthetic_acceptance_payload() -> dict[str, Any]:
     return {
         "version": fidelity.EVIDENCE_VERSION,
         "not_external_evidence": True,
+        "strict_fidelity_evidence_ready": False,
+        "strict_external_evidence_ready": False,
+        "acceptance_ready": True,
         "template_only": False,
+        "draft_only": False,
+        "materialized_by": "scripts/materialize_fidelity_acceptance.py",
+        "materialized_from_draft_path": "external_validation/fidelity_acceptance_draft.json",
         "route": "high_fidelity_sim",
         "purpose": "Temporary synthetic self-test fixture for the Paper 119 external fidelity acceptance gate.",
         "platform": {
@@ -91,9 +97,12 @@ def synthetic_acceptance_payload() -> dict[str, Any]:
             "operator_name_or_lab": "Synthetic Fidelity Acceptance Self-Test Lab",
             "operator_not_target_collaborator": True,
             "date_locked": "2026-06-27",
-            "code_commit": "synthetic-fidelity-self-test",
+            "code_commit": "a" * 40,
             "skill_library_hash": digest_text("paper119 synthetic fidelity skill library"),
+            "manifest_path": "external_validation/manifest.json",
             "artifact_hash_policy": "sha256",
+            "manifest_declaration_confirmed_by_operator": True,
+            "real_rollout_evidence_confirmed_by_operator": True,
         },
         "acceptance_gates": [
             {"name": "platform_provenance_complete", "status": "passed"},
@@ -139,7 +148,7 @@ def write_report(payload: dict[str, Any]) -> None:
         "Not evidence: `true`.",
         f"Synthetic acceptance ready: `{str(payload['synthetic_acceptance_ready']).lower()}`.",
         "",
-        "This self-test builds a temporary high-fidelity acceptance fixture and exercises the platform/provenance acceptance gate directly. It proves the strict-ready path can pass for a complete synthetic fixture, that the template/default path remains fail-closed, and that the real fidelity audit report is not overwritten.",
+        "This self-test builds a temporary high-fidelity acceptance fixture and exercises the platform/provenance acceptance gate directly. It proves the strict-ready path and strict fidelity acceptance provenance gate can pass for a complete synthetic fixture, that the template/default path remains fail-closed, and that the real fidelity audit report is not overwritten.",
         "",
         "## Checks",
         "",
@@ -211,12 +220,50 @@ def main() -> int:
     )
     add_check(
         checks,
+        "synthetic_strict_provenance_guards",
+        evidence.get("real_acceptance_declares_ready") is True
+        and evidence.get("not_draft_only") is True
+        and evidence.get("strict_readiness_remains_external_to_acceptance") is True
+        and evidence.get("date_locked_iso_like") is True
+        and evidence.get("code_commit_sha40") is True
+        and evidence.get("operator_confirmation_booleans_true") is True
+        and evidence.get("materialized_by_guarded_path") is True,
+        (
+            f"ready={evidence.get('real_acceptance_declares_ready')!r}, "
+            f"not_draft={evidence.get('not_draft_only')!r}, "
+            f"strict_external={evidence.get('strict_readiness_remains_external_to_acceptance')!r}, "
+            f"date={evidence.get('date_locked_iso_like')!r}, "
+            f"commit={evidence.get('code_commit_sha40')!r}, "
+            f"confirmations={evidence.get('operator_confirmation_booleans_true')!r}, "
+            f"materialized={evidence.get('materialized_by_guarded_path')!r}"
+        ),
+    )
+    add_check(
+        checks,
         "template_acceptance_fails_strict_evidence",
         template_ready is False
         and template_evidence.get("manifest_exists") is False
         and template_evidence.get("real_acceptance_file_exists") is False
         and template_evidence.get("not_template_only") is False,
         f"template_ready={template_ready!r}",
+    )
+    add_check(
+        checks,
+        "template_strict_provenance_guards_fail_closed",
+        template_evidence.get("real_acceptance_declares_ready") is False
+        and template_evidence.get("strict_readiness_remains_external_to_acceptance") is False
+        and template_evidence.get("date_locked_iso_like") is False
+        and template_evidence.get("code_commit_sha40") is False
+        and template_evidence.get("operator_confirmation_booleans_true") is False
+        and template_evidence.get("materialized_by_guarded_path") is False,
+        (
+            f"ready={template_evidence.get('real_acceptance_declares_ready')!r}, "
+            f"strict_external={template_evidence.get('strict_readiness_remains_external_to_acceptance')!r}, "
+            f"date={template_evidence.get('date_locked_iso_like')!r}, "
+            f"commit={template_evidence.get('code_commit_sha40')!r}, "
+            f"confirmations={template_evidence.get('operator_confirmation_booleans_true')!r}, "
+            f"materialized={template_evidence.get('materialized_by_guarded_path')!r}"
+        ),
     )
     add_check(
         checks,

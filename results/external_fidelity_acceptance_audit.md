@@ -6,7 +6,7 @@ Acceptance ready: `false`.
 Readiness state: `COLLECT_PLATFORM_PROVENANCE`.
 Source: `external_validation/fidelity_acceptance_template.json`.
 Manifest exists: `false`.
-Blocking missing items: `14`.
+Blocking missing items: `20`.
 
 This audit defines the platform/provenance standard for real-robot or accepted high-fidelity simulator validation. It is not rollout evidence and does not replace strict JSONL, video, config, checkpoint, or baseline evidence.
 
@@ -16,15 +16,21 @@ This audit defines the platform/provenance standard for real-robot or accepted h
 - manifest_declares_acceptance_path: source_kind=template
 - real_acceptance_file_exists: external_validation/fidelity_acceptance_template.json
 - real_acceptance_version: version='paper119_fidelity_acceptance_template_v1', expected='paper119_fidelity_acceptance_v1'
+- real_acceptance_declares_ready: acceptance_ready=None
 - not_template_only: template_only=True
+- strict_readiness_remains_external_to_acceptance: not_external_evidence=True, strict_fidelity_evidence_ready=None, strict_external_evidence_ready=None
 - route_matches_manifest: acceptance_route='high_fidelity_sim', manifest_route=''
 - route_has_enough_task_families: route='high_fidelity_sim', counts={'real_robot': 0, 'high_fidelity_sim': 0}
 - platform_values_filled: placeholder_fields=['asset_sources', 'contact_solver', 'physics_engine', 'platform_name', 'platform_version', 'robot_model_source', 'substeps_per_control_step', 'timestep_seconds']
 - qualification_text_filled: weak_or_placeholder=['contact_dynamics_justification', 'known_limitations', 'operator_independence_statement', 'paired_reset_replay_test', 'real_or_benchmark_calibration_basis']
 - operator_independence_declared: operator_not_target_collaborator=True
 - date_locked_filled: date_locked='FILL_AFTER_PLATFORM_SELECTION'
+- date_locked_iso_like: date_locked='FILL_AFTER_PLATFORM_SELECTION'
 - code_commit_filled: code_commit=''
+- code_commit_sha40: code_commit=''
 - skill_library_hash_valid: skill_library_hash must be 64-character SHA256
+- operator_confirmation_booleans_true: manifest_declaration_confirmed_by_operator=None, real_rollout_evidence_confirmed_by_operator=None
+- materialized_by_guarded_path: materialized_by=None, materialized_from_draft_path=None
 - all_acceptance_gates_passed: unpassed=['platform_provenance_complete', 'paired_reset_replay_verified', 'contact_failure_observable', 'non_oracle_methods_fair', 'raw_logs_drive_metrics']
 
 ## Contract Checks
@@ -45,7 +51,10 @@ This audit defines the platform/provenance standard for real-robot or accepted h
 - `fail` `manifest_declares_acceptance_path`: source_kind=template
 - `fail` `real_acceptance_file_exists`: external_validation/fidelity_acceptance_template.json
 - `fail` `real_acceptance_version`: version='paper119_fidelity_acceptance_template_v1', expected='paper119_fidelity_acceptance_v1'
+- `fail` `real_acceptance_declares_ready`: acceptance_ready=None
 - `fail` `not_template_only`: template_only=True
+- `pass` `not_draft_only`: draft_only=None
+- `fail` `strict_readiness_remains_external_to_acceptance`: not_external_evidence=True, strict_fidelity_evidence_ready=None, strict_external_evidence_ready=None
 - `fail` `route_matches_manifest`: acceptance_route='high_fidelity_sim', manifest_route=''
 - `fail` `route_has_enough_task_families`: route='high_fidelity_sim', counts={'real_robot': 0, 'high_fidelity_sim': 0}
 - `fail` `platform_values_filled`: placeholder_fields=['asset_sources', 'contact_solver', 'physics_engine', 'platform_name', 'platform_version', 'robot_model_source', 'substeps_per_control_step', 'timestep_seconds']
@@ -57,15 +66,19 @@ This audit defines the platform/provenance standard for real-robot or accepted h
 - `pass` `task_fidelity_details_filled`: weak_tasks=[]
 - `fail` `operator_independence_declared`: operator_not_target_collaborator=True
 - `fail` `date_locked_filled`: date_locked='FILL_AFTER_PLATFORM_SELECTION'
+- `fail` `date_locked_iso_like`: date_locked='FILL_AFTER_PLATFORM_SELECTION'
 - `fail` `code_commit_filled`: code_commit=''
+- `fail` `code_commit_sha40`: code_commit=''
 - `fail` `skill_library_hash_valid`: skill_library_hash must be 64-character SHA256
 - `pass` `artifact_hash_policy_sha256`: artifact_hash_policy='sha256'
+- `fail` `operator_confirmation_booleans_true`: manifest_declaration_confirmed_by_operator=None, real_rollout_evidence_confirmed_by_operator=None
+- `fail` `materialized_by_guarded_path`: materialized_by=None, materialized_from_draft_path=None
 - `fail` `all_acceptance_gates_passed`: unpassed=['platform_provenance_complete', 'paired_reset_replay_verified', 'contact_failure_observable', 'non_oracle_methods_fair', 'raw_logs_drive_metrics']
 
 ## Operator Next Actions
 
 - Select an external robot or accepted high-fidelity simulator before collecting rollouts.
-- Copy fidelity_acceptance_template.json to external_validation/fidelity_acceptance.json and change the version to paper119_fidelity_acceptance_v1.
-- Fill platform physics/contact details, paired-reset replay evidence, operator independence, real/benchmark calibration basis, code commit, and skill-library hash.
+- Use scripts/materialize_fidelity_acceptance.py with independent-operator signoff, real platform details, render-backed video confirmation, real rollout confirmation, manifest declaration confirmation, a SHA40 collection commit, and the current skill-library SHA256 to write external_validation/fidelity_acceptance.json.
+- Fill platform physics/contact details, paired-reset replay evidence, operator independence, real/benchmark calibration basis, code commit, skill-library hash, and operator confirmation booleans through the guarded materializer.
 - Declare fidelity_acceptance_path in external_validation/manifest.json before strict external evidence validation.
 - Run audit_external_fidelity_acceptance.py --strict before counting any high-fidelity route as external evidence.

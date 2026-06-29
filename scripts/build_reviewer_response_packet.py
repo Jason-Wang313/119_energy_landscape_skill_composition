@@ -124,6 +124,10 @@ def main() -> int:
             "allowed_claim": "The current paper is locally strong but not ready for deployment-level claims or final main-conference submission claims.",
             "remaining_gate": (
                 "Real robot or accepted high-fidelity manifest/log/video/checkpoint evidence must pass strict audits. "
+                "The strict fidelity acceptance provenance gate rejects acceptance files unless they come from guarded "
+                "materialization, declare acceptance_ready=true, carry a SHA40 collection commit, carry an ISO-like lock "
+                "date, include operator confirmation booleans, and keep strict evidence flags false until manifest-backed "
+                "logs/videos pass. "
                 "The pilot liveness layer is non-evidence: it records timeout progress and whether a diagnostic sidecar "
                 "rejected before JSONL write was stopped by the official video guard before any official row can be written."
             ),

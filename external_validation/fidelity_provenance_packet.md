@@ -7,7 +7,7 @@ Strict external evidence ready: `false`.
 Platform probe ready: `true`.
 Primary route install ready in latest probe: `true`.
 Latest probe missing packages: `[]`.
-Blocking missing items: `14`.
+Blocking missing items: `20`.
 
 This packet is a non-evidence work-order layer for platform fidelity and provenance. It exists so an independent operator can fill the real acceptance file before any robot or high-fidelity simulator rollout counts as evidence.
 

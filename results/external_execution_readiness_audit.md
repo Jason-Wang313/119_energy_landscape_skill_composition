@@ -65,7 +65,7 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_method_implementation_gate_order`: method packet, work orders, adapter fixtures, reference provenance, builder, and strict command order are present
 - `pass` `fidelity_acceptance_contract_ready`: passed
 - `pass` `fidelity_acceptance_not_evidence`: not_external_evidence=True
-- `pass` `fidelity_acceptance_fail_closed`: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE', blocking_missing_count=14
+- `pass` `fidelity_acceptance_fail_closed`: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE', blocking_missing_count=20
 - `pass` `fidelity_acceptance_task_coverage`: core external task-fidelity rows are declared in the acceptance template
 - `pass` `external_fidelity_provenance_packet_ready`: passed
 - `pass` `external_fidelity_provenance_not_evidence`: not_external_evidence=True, fidelity_provenance_packet_ready=True, strict_fidelity_evidence_ready=False, strict_external_evidence_ready=False

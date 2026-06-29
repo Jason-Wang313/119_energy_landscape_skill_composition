@@ -1,6 +1,6 @@
 {
   "acceptance_ready": false,
-  "blocking_missing_count": 14,
+  "blocking_missing_count": 20,
   "checks": [
     {
       "detail": "not_external_evidence=True, strict_fidelity_evidence_ready=False, strict_external_evidence_ready=False",
@@ -8,7 +8,7 @@
       "passed": true
     },
     {
-      "detail": "acceptance_ready=False, blocking_missing_count=14",
+      "detail": "acceptance_ready=False, blocking_missing_count=20",
       "name": "fidelity_acceptance_contract_ready_but_not_evidence",
       "passed": true
     },

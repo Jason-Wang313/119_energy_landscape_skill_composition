@@ -146,7 +146,7 @@
       "passed": true
     },
     {
-      "detail": "acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE', blocking_missing_count=14",
+      "detail": "acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE', blocking_missing_count=20",
       "name": "fidelity_acceptance_fail_closed",
       "passed": true
     },

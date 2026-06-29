@@ -774,6 +774,18 @@ def main():
         fail("external fidelity acceptance audit should identify the missing real manifest")
     if not any(check.get("name") == "task_fidelity_covers_core_tasks" and check.get("passed") is True for check in fidelity_acceptance.get("contract_checks", [])):
         fail("external fidelity acceptance contract must cover the core external task families")
+    fidelity_evidence_checks = {check.get("name"): check.get("passed") for check in fidelity_acceptance.get("evidence_checks", [])}
+    for required_missing_check in (
+        "real_acceptance_declares_ready",
+        "not_draft_only",
+        "strict_readiness_remains_external_to_acceptance",
+        "date_locked_iso_like",
+        "code_commit_sha40",
+        "operator_confirmation_booleans_true",
+        "materialized_by_guarded_path",
+    ):
+        if required_missing_check not in fidelity_evidence_checks:
+            fail(f"external fidelity acceptance audit missing evidence check: {required_missing_check}")
     if not (EXTERNAL / "fidelity_acceptance_template.json").exists():
         fail("missing external_validation/fidelity_acceptance_template.json")
     if not (RESULTS / "external_fidelity_acceptance_audit.md").exists():
@@ -800,7 +812,9 @@ def main():
         "synthetic_strict_acceptance_ready",
         "synthetic_route_task_count",
         "synthetic_platform_modalities",
+        "synthetic_strict_provenance_guards",
         "template_acceptance_fails_strict_evidence",
+        "template_strict_provenance_guards_fail_closed",
         "real_fidelity_report_not_overwritten",
     ):
         if fidelity_acceptance_self_checks.get(required_check) is not True:

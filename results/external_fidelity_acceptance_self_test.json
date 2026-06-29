@@ -16,20 +16,30 @@
       "passed": true
     },
     {
+      "detail": "ready=True, not_draft=True, strict_external=True, date=True, commit=True, confirmations=True, materialized=True",
+      "name": "synthetic_strict_provenance_guards",
+      "passed": true
+    },
+    {
       "detail": "template_ready=False",
       "name": "template_acceptance_fails_strict_evidence",
       "passed": true
     },
     {
-      "detail": "before=bdcb4a5bb6b441b3426803a5f18eba003528818fbe3a303a324d95b9a20732f0, after=bdcb4a5bb6b441b3426803a5f18eba003528818fbe3a303a324d95b9a20732f0",
+      "detail": "ready=False, strict_external=False, date=False, commit=False, confirmations=False, materialized=False",
+      "name": "template_strict_provenance_guards_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "before=116ea1404535839c89a77cae231ac696bc92989ac204a7d2ec9e1d3ec545d9cb, after=116ea1404535839c89a77cae231ac696bc92989ac204a7d2ec9e1d3ec545d9cb",
       "name": "real_fidelity_report_not_overwritten",
       "passed": true
     }
   ],
   "not_external_evidence": true,
   "passed": true,
-  "real_fidelity_report_after": "bdcb4a5bb6b441b3426803a5f18eba003528818fbe3a303a324d95b9a20732f0",
-  "real_fidelity_report_before": "bdcb4a5bb6b441b3426803a5f18eba003528818fbe3a303a324d95b9a20732f0",
+  "real_fidelity_report_after": "116ea1404535839c89a77cae231ac696bc92989ac204a7d2ec9e1d3ec545d9cb",
+  "real_fidelity_report_before": "116ea1404535839c89a77cae231ac696bc92989ac204a7d2ec9e1d3ec545d9cb",
   "synthetic_acceptance_ready": true,
   "template_acceptance_ready": false,
   "version": "external_fidelity_acceptance_self_test_v1"

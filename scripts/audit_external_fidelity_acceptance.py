@@ -26,6 +26,7 @@ PLACEHOLDER_VALUES = {
     "FILL_AFTER_PLATFORM_SELECTION",
     "REPLACE_WITH_SOURCE_SKILL",
     "REPLACE_WITH_TARGET_SKILL",
+    "DRAFT_NOT_LOCKED",
 }
 REQUIRED_TASKS = {
     "peg_place_regrasp",
@@ -87,9 +88,23 @@ def has_sha(value: Any) -> bool:
     return isinstance(value, str) and bool(re.fullmatch(r"[A-Fa-f0-9]{64}", value))
 
 
+def has_commit_sha(value: Any) -> bool:
+    return isinstance(value, str) and bool(re.fullmatch(r"[A-Fa-f0-9]{40}", value.strip()))
+
+
+def has_iso_date(value: Any) -> bool:
+    return isinstance(value, str) and bool(re.fullmatch(r"\d{4}-\d{2}-\d{2}(?:[T ][0-9:.+\-Z]+)?", value.strip()))
+
+
 def is_placeholder(value: Any) -> bool:
     if isinstance(value, str):
-        return value.strip() in PLACEHOLDER_VALUES
+        stripped = value.strip()
+        return (
+            stripped in PLACEHOLDER_VALUES
+            or "FILL_AFTER" in stripped
+            or "OPERATOR_VERIFY" in stripped
+            or stripped.startswith("DRAFT_")
+        )
     if isinstance(value, list):
         return any(is_placeholder(item) for item in value)
     if isinstance(value, dict):
@@ -194,9 +209,33 @@ def audit_evidence(payload: dict[str, Any], source: Path, manifest: dict[str, An
     add_check(checks, "real_acceptance_version", payload.get("version") == EVIDENCE_VERSION, f"version={payload.get('version')!r}, expected={EVIDENCE_VERSION!r}")
     add_check(
         checks,
+        "real_acceptance_declares_ready",
+        payload.get("acceptance_ready") is True,
+        f"acceptance_ready={payload.get('acceptance_ready')!r}",
+    )
+    add_check(
+        checks,
         "not_template_only",
         payload.get("template_only") is not True,
         f"template_only={payload.get('template_only')!r}",
+    )
+    add_check(
+        checks,
+        "not_draft_only",
+        payload.get("draft_only") is not True,
+        f"draft_only={payload.get('draft_only')!r}",
+    )
+    add_check(
+        checks,
+        "strict_readiness_remains_external_to_acceptance",
+        payload.get("not_external_evidence") is True
+        and payload.get("strict_fidelity_evidence_ready") is False
+        and payload.get("strict_external_evidence_ready") is False,
+        (
+            f"not_external_evidence={payload.get('not_external_evidence')!r}, "
+            f"strict_fidelity_evidence_ready={payload.get('strict_fidelity_evidence_ready')!r}, "
+            f"strict_external_evidence_ready={payload.get('strict_external_evidence_ready')!r}"
+        ),
     )
     route = str(payload.get("route", ""))
     manifest_route = str(manifest.get("route", "")) if manifest_exists else ""
@@ -259,9 +298,33 @@ def audit_evidence(payload: dict[str, Any], source: Path, manifest: dict[str, An
         f"operator_not_target_collaborator={provenance.get('operator_not_target_collaborator')!r}",
     )
     add_check(checks, "date_locked_filled", not is_placeholder(provenance.get("date_locked")), f"date_locked={provenance.get('date_locked')!r}")
+    add_check(checks, "date_locked_iso_like", has_iso_date(provenance.get("date_locked")), f"date_locked={provenance.get('date_locked')!r}")
     add_check(checks, "code_commit_filled", has_nonempty_text(provenance.get("code_commit"), min_len=7), f"code_commit={provenance.get('code_commit')!r}")
+    add_check(checks, "code_commit_sha40", has_commit_sha(provenance.get("code_commit")), f"code_commit={provenance.get('code_commit')!r}")
     add_check(checks, "skill_library_hash_valid", has_sha(provenance.get("skill_library_hash")), "skill_library_hash must be 64-character SHA256")
     add_check(checks, "artifact_hash_policy_sha256", provenance.get("artifact_hash_policy") == "sha256", f"artifact_hash_policy={provenance.get('artifact_hash_policy')!r}")
+    add_check(
+        checks,
+        "operator_confirmation_booleans_true",
+        provenance.get("manifest_declaration_confirmed_by_operator") is True
+        and provenance.get("real_rollout_evidence_confirmed_by_operator") is True,
+        (
+            f"manifest_declaration_confirmed_by_operator="
+            f"{provenance.get('manifest_declaration_confirmed_by_operator')!r}, "
+            f"real_rollout_evidence_confirmed_by_operator="
+            f"{provenance.get('real_rollout_evidence_confirmed_by_operator')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "materialized_by_guarded_path",
+        payload.get("materialized_by") == "scripts/materialize_fidelity_acceptance.py"
+        and payload.get("materialized_from_draft_path") == "external_validation/fidelity_acceptance_draft.json",
+        (
+            f"materialized_by={payload.get('materialized_by')!r}, "
+            f"materialized_from_draft_path={payload.get('materialized_from_draft_path')!r}"
+        ),
+    )
 
     gates = payload.get("acceptance_gates", [])
     gates = gates if isinstance(gates, list) else []
@@ -353,8 +416,8 @@ def main() -> int:
         "evidence_checks": evidence_checks,
         "operator_next_actions": [
             "Select an external robot or accepted high-fidelity simulator before collecting rollouts.",
-            "Copy fidelity_acceptance_template.json to external_validation/fidelity_acceptance.json and change the version to paper119_fidelity_acceptance_v1.",
-            "Fill platform physics/contact details, paired-reset replay evidence, operator independence, real/benchmark calibration basis, code commit, and skill-library hash.",
+            "Use scripts/materialize_fidelity_acceptance.py with independent-operator signoff, real platform details, render-backed video confirmation, real rollout confirmation, manifest declaration confirmation, a SHA40 collection commit, and the current skill-library SHA256 to write external_validation/fidelity_acceptance.json.",
+            "Fill platform physics/contact details, paired-reset replay evidence, operator independence, real/benchmark calibration basis, code commit, skill-library hash, and operator confirmation booleans through the guarded materializer.",
             "Declare fidelity_acceptance_path in external_validation/manifest.json before strict external evidence validation.",
             "Run audit_external_fidelity_acceptance.py --strict before counting any high-fidelity route as external evidence.",
         ],

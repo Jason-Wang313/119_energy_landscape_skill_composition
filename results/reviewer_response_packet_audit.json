@@ -102,7 +102,7 @@
       "id": "synthetic_local_evidence",
       "local_fact": "The readiness audit reports 17/21 requirements satisfied and 4 blocking external gaps.",
       "outreach_use": "Do not ask Haonan to supply the missing proof; ask for fit/falsification advice and possible collaboration.",
-      "remaining_gate": "Real robot or accepted high-fidelity manifest/log/video/checkpoint evidence must pass strict audits. The pilot liveness layer is non-evidence: it records timeout progress and whether a diagnostic sidecar rejected before JSONL write was stopped by the official video guard before any official row can be written.",
+      "remaining_gate": "Real robot or accepted high-fidelity manifest/log/video/checkpoint evidence must pass strict audits. The strict fidelity acceptance provenance gate rejects acceptance files unless they come from guarded materialization, declare acceptance_ready=true, carry a SHA40 collection commit, carry an ISO-like lock date, include operator confirmation booleans, and keep strict evidence flags false until manifest-backed logs/videos pass. The pilot liveness layer is non-evidence: it records timeout progress and whether a diagnostic sidecar rejected before JSONL write was stopped by the official video guard before any official row can be written.",
       "response": "Agree. The correct answer is not to deny the weakness; it is to show the exact external evidence gate and the independent operator packet already prepared to close it.",
       "reviewer_objection": "The evidence is local/synthetic and may not transfer to hardware."
     },

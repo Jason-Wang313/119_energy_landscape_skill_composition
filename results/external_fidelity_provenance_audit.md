@@ -4,14 +4,14 @@ Passed: `true`.
 Not evidence: `true`.
 Fidelity provenance packet ready: `true`.
 Strict fidelity evidence ready: `false`.
-Blocking missing items: `14`.
+Blocking missing items: `20`.
 
 This audit checks that the platform fidelity/provenance packet is complete as an operator checklist while strict fidelity and external evidence gates remain fail-closed.
 
 ## Checks
 
 - `pass` `packet_is_non_evidence_and_fail_closed`: not_external_evidence=True, strict_fidelity_evidence_ready=False, strict_external_evidence_ready=False
-- `pass` `fidelity_acceptance_contract_ready_but_not_evidence`: acceptance_ready=False, blocking_missing_count=14
+- `pass` `fidelity_acceptance_contract_ready_but_not_evidence`: acceptance_ready=False, blocking_missing_count=20
 - `pass` `platform_onboarding_packet_ready`: platform_onboarding_ready=True, strict_evidence_ready=False
 - `pass` `external_platform_probe_ready`: primary_route_install_ready=True, missing=[]
 - `pass` `independent_route_and_collection_still_fail_closed`: primary_route='maniskill_sapien_primary', collection_ready=False
