@@ -14,7 +14,7 @@ This receipt freezes precollection inputs only. It is not a manifest, rollout lo
 - Operator id: `<operator_or_lab>`
 - Collection machine: `<machine_or_robot_platform>`
 - Date locked: `<YYYY-MM-DD>`
-- Code commit: `fe85f791220562c93b0ffe5c64b907fc5be1d6e4`
+- Code commit: `d9d7a93d829effca0338e739edafa7b3e21d0d03`
 - Skill-library hash: `F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802`
 - Candidate method configs hash-locked: `11`
 - Method-config hash lock ready: `true`
@@ -74,25 +74,25 @@ python scripts\audit_external_evidence.py --strict
 
 - `core_precollection_artifact` `external_validation/blinded_operator_sheet.csv` `BAAF6BC6B7BFA0DAD346498D8C7FACEE413FD2A0844E5F833A519BBAD4BEEBF5`
 - `core_precollection_artifact` `external_validation/method_alias_map.json` `B56A11CB20914B2FD2649DA647F7722DE43D6B04DE3E89704A8CD3F952A4E031`
-- `core_precollection_artifact` `external_validation/manifest_precollection_draft.json` `1909C8172316185391056F5B672C0B484E2E42F3E1295251EC147FDA0BF6E744`
-- `core_precollection_artifact` `external_validation/manifest_precollection_draft.md` `E9C816F76182B011D16F9943F80538E42C14947202349AE5FCACE3276AFD07EF`
+- `core_precollection_artifact` `external_validation/manifest_precollection_draft.json` `0CEA5A80DCAB8942D78F110C16BF7032AA62BBFC120DA7DCFAC5C42F2551AC2D`
+- `core_precollection_artifact` `external_validation/manifest_precollection_draft.md` `0DB9BB55D0E70B38E9C96321298309A9C54977E6B137258EF6FA2C0DF8879B43`
 - `core_precollection_artifact` `external_validation/manifest_template.json` `158757454025E628D3E63FA9019C0454F4E3E4FEB28A6104A465252F67B25066`
 - `core_precollection_artifact` `external_validation/log_schema_v1.json` `BF2194D543F83448F03BBD9ADB5310C9BDE7313228EA876BE7FE75CD788A4917`
 - `core_precollection_artifact` `external_validation/statistical_analysis_plan.json` `CADC94E4F3A6A3898B99151C79BD437EB8D997A9F488BD673D205A70420CD65E`
-- `core_precollection_artifact` `external_validation/evidence_intake_ledger.json` `7A604C84240C9815486D4B606B9F3DD0D10AB2B2F2115252FE9246E3BFE64136`
-- `core_precollection_artifact` `external_validation/evidence_intake_ledger.md` `179FA088F5BF95363BD6D67B0DABF6344D04727F460E8412FD9489356DD6D6D6`
-- `core_precollection_artifact` `external_validation/evidence_intake_ledger.csv` `FC1257013B9B99A429281358FF84C786F7BC7055428F99F3B39D639F2DED766C`
+- `core_precollection_artifact` `external_validation/evidence_intake_ledger.json` `A34133E4B58D01490A3D0D0786E7A5FE52352F7F645D16EC657B2D519D6A6DBE`
+- `core_precollection_artifact` `external_validation/evidence_intake_ledger.md` `FA9C782BB76805252EF226F7FD3B4977D8A36B84C0BA59094D0E92CD50A2FF89`
+- `core_precollection_artifact` `external_validation/evidence_intake_ledger.csv` `92CE1249896D06559B8C6199716A841A8F08ED883222B1C617325E07D9826D71`
 - `core_precollection_artifact` `external_validation/method_manifest_cutover_checklist.csv` `A7C212C2F99ABFE921D5C5128446E1DE908996C5B789D9BFF6F2B5DA926DF899`
 - `core_precollection_artifact` `external_validation/method_manifest_cutover_checklist.md` `D21F7033199CA20BA8610BAC8777E385EC1790FBF2A447B25EF1D12883942765`
 - `core_precollection_artifact` `external_validation/runner/backend_contract.py` `724802B452269859B9F9686942CC9788A078B907EDD32EC9C857CF5A1427801A`
 - `core_precollection_artifact` `external_validation/runner/real_collection_runner.py` `3C35D3CDC8EF3A54E518242D371BF95E5C554BC656DA536D7DD01B0040CAB133`
 - `core_precollection_artifact` `results/external_collection_readiness_audit.json` `8AC215A38BD0E7BBF44A20C547A4ED43CDD76960DCE679ADAF46B24D8C02422E`
-- `core_precollection_artifact` `results/external_fidelity_acceptance_audit.json` `44A74216804348A545706B23ACBF66F5F2BB12ACDB66C4A98C4101C3C3334582`
-- `core_precollection_artifact` `results/fidelity_acceptance_materialization_plan.json` `34BD54AE4371667A6BCFCC6478477961037E36B8C2AF05C5B4D5B9B729445B8A`
+- `core_precollection_artifact` `results/external_fidelity_acceptance_audit.json` `23846A8DFE65737A9EFB04A4231D05ADE15749DAED64DE6AFE5F466F941AA3C5`
+- `core_precollection_artifact` `results/fidelity_acceptance_materialization_plan.json` `6A7D96A5F604DB5FAD8283FC5418CC97DB11C365637EB2CF1F9211C9FD527479`
 - `core_precollection_artifact` `results/external_config_manifest_audit.json` `71888C39980962B4AAE8E67DC2338CEB8F2DBA603BC85DF0BF6B50BE7720EF92`
 - `core_precollection_artifact` `results/external_method_implementation_audit.json` `F8AA15870753DC4E6B4F681ACEF956A4C49ADAF3A12A98C32091582474021FAC`
-- `core_precollection_artifact` `results/external_evidence_intake_ledger_audit.json` `7A604C84240C9815486D4B606B9F3DD0D10AB2B2F2115252FE9246E3BFE64136`
-- `core_precollection_artifact` `results/external_precollection_manifest_draft_audit.json` `5F7C0865651B5F3AF6B0A7E3793077CF119397D7C32C766AF738928F2A10E763`
+- `core_precollection_artifact` `results/external_evidence_intake_ledger_audit.json` `A34133E4B58D01490A3D0D0786E7A5FE52352F7F645D16EC657B2D519D6A6DBE`
+- `core_precollection_artifact` `results/external_precollection_manifest_draft_audit.json` `07EE4E9808332F06F3161609A98533A848963DA41D0312F7147AF7FDEC465D42`
 - `prepared_task_config` `external_validation/configs/cable_route_insert.json` `8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E`
 - `prepared_task_config` `external_validation/configs/door_open_navigation.json` `13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61`
 - `prepared_task_config` `external_validation/configs/drawer_to_pick_transfer.json` `1288223014CB9D9285E4249B2FA607FFC16EBEE20B6F44E0241B63E88233E471`

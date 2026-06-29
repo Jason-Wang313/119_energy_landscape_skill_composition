@@ -790,13 +790,13 @@ def main():
     if fidelity_acceptance.get("not_external_evidence") is not True:
         fail("external fidelity acceptance audit must declare that it is not rollout evidence")
     if fidelity_acceptance.get("acceptance_ready") is not False:
-        fail("external fidelity acceptance must not be ready before a real platform acceptance file and manifest exist")
+        fail("external fidelity acceptance must not be ready before a real platform acceptance file exists")
     if fidelity_acceptance.get("readiness_state") != "COLLECT_PLATFORM_PROVENANCE":
         fail("external fidelity acceptance should currently require platform provenance collection")
     if int(fidelity_acceptance.get("blocking_missing_count", 0)) < 10:
         fail("external fidelity acceptance audit should expose missing platform/provenance items")
-    if not any("manifest_exists" in str(item) for item in fidelity_acceptance.get("blocking_missing", [])):
-        fail("external fidelity acceptance audit should identify the missing real manifest")
+    if any("manifest_exists" in str(item) for item in fidelity_acceptance.get("blocking_missing", [])):
+        fail("external fidelity acceptance audit must not require the official manifest before precollection acceptance")
     if not any(check.get("name") == "task_fidelity_covers_core_tasks" and check.get("passed") is True for check in fidelity_acceptance.get("contract_checks", [])):
         fail("external fidelity acceptance contract must cover the core external task families")
     fidelity_evidence_checks = {check.get("name"): check.get("passed") for check in fidelity_acceptance.get("evidence_checks", [])}
@@ -806,7 +806,8 @@ def main():
         "strict_readiness_remains_external_to_acceptance",
         "date_locked_iso_like",
         "code_commit_sha40",
-        "operator_confirmation_booleans_true",
+        "precollection_confirmation_booleans_true",
+        "postcollection_evidence_deferred_until_manifest",
         "materialized_by_guarded_path",
     ):
         if required_missing_check not in fidelity_evidence_checks:
@@ -4256,12 +4257,13 @@ def main():
         "--confirm-real-platform",
         "--confirm-independent-operator",
         "--confirm-render-backed-videos",
-        "--confirm-real-rollout-evidence",
-        "--confirm-manifest-declaration",
         "--write",
     ):
         if fragment not in materializer_command:
             fail(f"external operator packet fidelity materializer command missing fragment: {fragment}")
+    for forbidden_fragment in ("--confirm-real-rollout-evidence", "--confirm-manifest-declaration"):
+        if forbidden_fragment in materializer_command:
+            fail(f"external operator packet fidelity materializer command must defer postcollection flag: {forbidden_fragment}")
     if operator_materializer.get("plan_path") != "results/fidelity_acceptance_materialization_plan.json":
         fail("external operator packet fidelity materializer must point to the materialization plan JSON")
     operator_render = operator_packet.get("render_video_preflight", {}) or {}
@@ -5123,12 +5125,13 @@ def main():
         "--confirm-real-platform",
         "--confirm-independent-operator",
         "--confirm-render-backed-videos",
-        "--confirm-real-rollout-evidence",
-        "--confirm-manifest-declaration",
         "--write",
     ):
         if fragment not in materializer_command:
             fail(f"fidelity acceptance materializer command missing fragment: {fragment}")
+    for forbidden_fragment in ("--confirm-real-rollout-evidence", "--confirm-manifest-declaration"):
+        if forbidden_fragment in materializer_command:
+            fail(f"fidelity acceptance materializer command must defer postcollection flag: {forbidden_fragment}")
     materializer_checks = {check.get("name"): check.get("passed") for check in fidelity_materialization.get("checks", [])}
     for required_check in (
         "draft_exists_and_is_draft_version",
@@ -5143,6 +5146,7 @@ def main():
         "gates_accepted_only_after_confirmations",
         "strict_evidence_remains_external_to_materializer",
         "operator_write_command_is_guarded",
+        "postcollection_evidence_deferred_until_after_collection",
     ):
         if materializer_checks.get(required_check) is not True:
             fail(f"fidelity acceptance materialization plan missing passing check: {required_check}")

@@ -55,10 +55,10 @@ The draft is not evidence and does not satisfy fidelity acceptance. It pre-fills
 - Draft notes: `external_validation/fidelity_acceptance_draft.md`
 - Draft ready: `true`
 - Acceptance ready: `false`
-- Remaining operator inputs: `10`
+- Remaining operator inputs: `9`
 - Machine-prefilled ready: `true`
 - Operator signoff ready: `false`
-- Operator signoff items: `10`
+- Operator signoff items: `9`
 
 Draft rebuild command:
 
@@ -68,7 +68,7 @@ python scripts\build_external_fidelity_acceptance_draft.py
 
 ## Fidelity Acceptance Materializer
 
-The materializer is the guarded promotion path from the draft to `external_validation/fidelity_acceptance.json`. The default run writes only a plan; the write path requires independent operator fields, real platform confirmation, render-backed evidence-video readiness, real rollout evidence, and manifest declaration.
+The materializer is the guarded promotion path from the draft to `external_validation/fidelity_acceptance.json`. The default run writes only a plan; the write path requires independent operator fields, real platform confirmation, render-backed evidence-video readiness, paired replay, and clean code/skill hashes before official collection. Real rollout evidence and manifest declaration are postcollection strict gates.
 
 - Plan JSON: `results/fidelity_acceptance_materialization_plan.json`
 - Plan notes: `results/fidelity_acceptance_materialization_plan.md`
@@ -78,10 +78,10 @@ The materializer is the guarded promotion path from the draft to `external_valid
 - Acceptance write ready: `false`
 - Strict fidelity evidence ready: `false`
 - Missing operator text fields: `12`
-- Missing confirmation flags: `5`
-- Plan-generation checkout commit: `05ad296ffe9baba14bce7ca5389a30ec39a9579e`
+- Missing confirmation flags: `3`
+- Plan-generation checkout commit: `d9d7a93d829effca0338e739edafa7b3e21d0d03`
 - Plan-generation skill-library hash: `62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1`
-- Plan-generation checkout clean: `true`
+- Plan-generation checkout clean: `false`
 
 Dry-run plan command:
 
@@ -92,7 +92,7 @@ python scripts\materialize_fidelity_acceptance.py
 Guarded write command:
 
 ```powershell
-python scripts\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write
+python scripts\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write
 ```
 
 ## ManiSkill Fidelity Metadata Probe
@@ -311,7 +311,7 @@ Draft-to-evidence cutover commands:
 python scripts\build_external_precollection_manifest_draft.py
 ```
 ```powershell
-python scripts\materialize_fidelity_acceptance.py --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --confirm-code-commit <commit> --confirm-skill-library-hash <sha256> --write
+python scripts\materialize_fidelity_acceptance.py --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --code-commit <commit> --skill-library-hash <sha256> --write <operator fields>
 ```
 ```powershell
 python scripts\audit_external_fidelity_acceptance.py --strict
@@ -463,7 +463,7 @@ Post-collection strict gates:
 - `pass` `acquisition_packet_ready`: passed=True, strict_evidence_ready=False
 - `pass` `collection_preflight_fail_closed`: collection_ready=False, blocking_missing_count=4
 - `pass` `maniskill_reference_preflight_reaches_only_fidelity_gate`: blocking=["fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
-- `pass` `fidelity_acceptance_draft_ready_but_fail_closed`: draft_ready=True, remaining_operator_inputs=10
+- `pass` `fidelity_acceptance_draft_ready_but_fail_closed`: draft_ready=True, remaining_operator_inputs=9
 - `pass` `fidelity_acceptance_materializer_guarded`: write_enabled=False, acceptance_write_ready=False
 - `pass` `fidelity_metadata_probe_ready_but_not_evidence`: strict_metadata_ready=True, primary_metadata_missing=[]
 - `pass` `render_video_preflight_recorded_but_not_evidence`: render_video_ready=False, envs=4, failure_classes=['vulkan_descriptor_pool_exhaustion']

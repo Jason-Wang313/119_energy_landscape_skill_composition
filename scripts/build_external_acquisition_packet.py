@@ -368,7 +368,7 @@ ACTION_CATALOG = {
     },
     "fidelity_acceptance_materializer": {
         "title": "Materialize fidelity acceptance only through the guarded promotion path",
-        "operator_input": "real platform provenance, independent operator signoff, render-backed evidence-video readiness, real rollout evidence, manifest declaration, current clean-checkout code commit, and current skill-library hash",
+        "operator_input": "real platform provenance, independent operator signoff, render-backed evidence-video readiness, paired replay, current clean-checkout code commit, and current skill-library hash before official collection",
         "artifacts": [
             "scripts/materialize_fidelity_acceptance.py",
             "results/fidelity_acceptance_materialization_plan.json",
@@ -377,10 +377,10 @@ ACTION_CATALOG = {
         ],
         "commands": [
             "python scripts\\materialize_fidelity_acceptance.py",
-            "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
+            "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
             "python scripts\\audit_external_fidelity_acceptance.py --strict",
         ],
-        "closes": ["guarded promotion from draft fidelity intake to manifest-declared acceptance; still not rollout evidence until strict audits pass"],
+        "closes": ["guarded promotion from draft fidelity intake to precollection acceptance; still not rollout evidence until manifest-backed strict audits pass"],
     },
     "pilot_smoke_packet": {
         "title": "Run a quarantined first-panel backend smoke test",

@@ -146,7 +146,7 @@
       "passed": true
     },
     {
-      "detail": "acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE', blocking_missing_count=20",
+      "detail": "acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE', blocking_missing_count=17",
       "name": "fidelity_acceptance_fail_closed",
       "passed": true
     },
@@ -186,7 +186,7 @@
       "passed": true
     },
     {
-      "detail": "command='python scripts\\\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write', commit='05ad296ffe9baba14bce7ca5389a30ec39a9579e', skill_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1', clean=True, dirty_count=0",
+      "detail": "command='python scripts\\\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write', commit='d9d7a93d829effca0338e739edafa7b3e21d0d03', skill_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1', clean=False, dirty_count=21",
       "name": "fidelity_acceptance_materializer_guarded",
       "passed": true
     },

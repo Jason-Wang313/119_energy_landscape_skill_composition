@@ -258,7 +258,7 @@ def build_payload() -> dict[str, Any]:
 
     cutover_commands = [
         r"python scripts\build_external_precollection_manifest_draft.py",
-        r"python scripts\materialize_fidelity_acceptance.py --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --confirm-code-commit <commit> --confirm-skill-library-hash <sha256> --write",
+        r"python scripts\materialize_fidelity_acceptance.py --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --code-commit <commit> --skill-library-hash <sha256> --write <operator fields>",
         r"python scripts\audit_external_fidelity_acceptance.py --strict",
         r"python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path>",
         r"python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map",

@@ -229,8 +229,8 @@ def build_payload() -> dict[str, Any]:
         and "--confirm-real-platform" in str(fidelity_materialization.get("operator_write_command", ""))
         and "--confirm-independent-operator" in str(fidelity_materialization.get("operator_write_command", ""))
         and "--confirm-render-backed-videos" in str(fidelity_materialization.get("operator_write_command", ""))
-        and "--confirm-real-rollout-evidence" in str(fidelity_materialization.get("operator_write_command", ""))
-        and "--confirm-manifest-declaration" in str(fidelity_materialization.get("operator_write_command", ""))
+        and "--confirm-real-rollout-evidence" not in str(fidelity_materialization.get("operator_write_command", ""))
+        and "--confirm-manifest-declaration" not in str(fidelity_materialization.get("operator_write_command", ""))
         and materializer_checks.get("operator_write_command_is_guarded") is True,
         (
             f"write_enabled={fidelity_materialization.get('write_enabled')!r}, "
@@ -915,7 +915,7 @@ def write_md(payload: dict[str, Any]) -> None:
             "",
             "## Fidelity Acceptance Materializer",
             "",
-            "The materializer is the guarded promotion path from the draft to `external_validation/fidelity_acceptance.json`. The default run writes only a plan; the write path requires independent operator fields, real platform confirmation, render-backed evidence-video readiness, real rollout evidence, and manifest declaration.",
+            "The materializer is the guarded promotion path from the draft to `external_validation/fidelity_acceptance.json`. The default run writes only a plan; the write path requires independent operator fields, real platform confirmation, render-backed evidence-video readiness, paired replay, and clean code/skill hashes before official collection. Real rollout evidence and manifest declaration are postcollection strict gates.",
             "",
             f"- Plan JSON: `{materializer['plan_path']}`",
             f"- Plan notes: `{materializer['plan_md_path']}`",

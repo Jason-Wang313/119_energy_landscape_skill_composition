@@ -37,7 +37,7 @@
       "passed": true
     },
     {
-      "detail": "draft_ready=True, remaining_operator_inputs=10",
+      "detail": "draft_ready=True, remaining_operator_inputs=9",
       "name": "fidelity_acceptance_draft_ready_but_fail_closed",
       "passed": true
     },
@@ -165,25 +165,47 @@
     "draft_ready": true,
     "machine_prefilled_ready": true,
     "not_external_evidence": true,
-    "operator_signoff_item_count": 10,
+    "operator_signoff_item_count": 9,
     "operator_signoff_ready": false,
     "real_acceptance_path": "external_validation/fidelity_acceptance.json",
-    "remaining_operator_input_count": 10,
+    "remaining_operator_input_count": 9,
     "strict_audit_command_after_promotion": "python scripts\\audit_external_fidelity_acceptance.py --strict",
     "strict_fidelity_evidence_ready": false
   },
   "fidelity_acceptance_materializer": {
     "acceptance_write_ready": false,
     "current_checkout": {
-      "clean_checkout": true,
-      "code_commit": "05ad296ffe9baba14bce7ca5389a30ec39a9579e",
-      "dirty_status_lines": [],
+      "clean_checkout": false,
+      "code_commit": "d9d7a93d829effca0338e739edafa7b3e21d0d03",
+      "dirty_status_lines": [
+        "M external_validation/fidelity_acceptance_draft.json",
+        " M external_validation/fidelity_acceptance_draft.md",
+        " M results/external_fidelity_acceptance_draft_audit.json",
+        " M results/external_fidelity_acceptance_draft_audit.md",
+        " M results/external_fidelity_acceptance_self_test.json",
+        " M results/external_fidelity_acceptance_self_test.md",
+        " M scripts/audit_external_execution_readiness.py",
+        " M scripts/audit_external_fidelity_acceptance.py",
+        " M scripts/build_external_acquisition_packet.py",
+        " M scripts/build_external_collection_job_packet.py",
+        " M scripts/build_external_evidence_intake_ledger.py",
+        " M scripts/build_external_fidelity_acceptance_draft.py",
+        " M scripts/build_external_fidelity_provenance_packet.py",
+        " M scripts/build_external_operator_packet.py",
+        " M scripts/build_external_platform_onboarding.py",
+        " M scripts/build_external_precollection_manifest_draft.py",
+        " M scripts/build_maniskill_render_machine_qualification.py",
+        " M scripts/materialize_fidelity_acceptance.py",
+        " M scripts/self_test_external_evidence_pipeline.py",
+        " M scripts/self_test_external_fidelity_acceptance.py",
+        " M scripts/validate_submission_artifacts.py"
+      ],
       "skill_library_hash": "62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1"
     },
-    "missing_confirmation_count": 5,
+    "missing_confirmation_count": 3,
     "missing_operator_text_count": 12,
     "not_external_evidence": true,
-    "operator_write_command": "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
+    "operator_write_command": "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
     "output_path": "external_validation/fidelity_acceptance.json",
     "plan_command": "python scripts\\materialize_fidelity_acceptance.py",
     "plan_md_path": "results/fidelity_acceptance_materialization_plan.md",
@@ -587,15 +609,15 @@
         "external_validation/fidelity_acceptance.json"
       ],
       "closes": [
-        "guarded promotion from draft fidelity intake to manifest-declared acceptance; still not rollout evidence until strict audits pass"
+        "guarded promotion from draft fidelity intake to precollection acceptance; still not rollout evidence until manifest-backed strict audits pass"
       ],
       "commands": [
         "python scripts\\materialize_fidelity_acceptance.py",
-        "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
+        "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
         "python scripts\\audit_external_fidelity_acceptance.py --strict"
       ],
       "id": "fidelity_acceptance_materializer",
-      "operator_input": "real platform provenance, independent operator signoff, render-backed evidence-video readiness, real rollout evidence, manifest declaration, current clean-checkout code commit, and current skill-library hash",
+      "operator_input": "real platform provenance, independent operator signoff, render-backed evidence-video readiness, paired replay, current clean-checkout code commit, and current skill-library hash before official collection",
       "title": "Materialize fidelity acceptance only through the guarded promotion path"
     },
     {
@@ -935,7 +957,7 @@
     "build_command": "python scripts\\build_external_precollection_manifest_draft.py",
     "cutover_commands": [
       "python scripts\\build_external_precollection_manifest_draft.py",
-      "python scripts\\materialize_fidelity_acceptance.py --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --confirm-code-commit <commit> --confirm-skill-library-hash <sha256> --write",
+      "python scripts\\materialize_fidelity_acceptance.py --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --code-commit <commit> --skill-library-hash <sha256> --write <operator fields>",
       "python scripts\\audit_external_fidelity_acceptance.py --strict",
       "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path>",
       "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",

@@ -40,8 +40,7 @@ REMAINING_OPERATOR_INPUTS = [
     "real_or_benchmark_calibration_basis",
     "task_binding_accept_or_replace_decision",
     "acceptance_gate_signoff",
-    "manifest_declares_fidelity_acceptance_path",
-    "real_rollout_logs_videos_and_release_hashes",
+    "render_backed_video_preflight_or_machine_qualification",
 ]
 
 MACHINE_PREFILLED_ITEMS = [
@@ -55,12 +54,12 @@ MACHINE_PREFILLED_ITEMS = [
 ]
 
 PROMOTION_COMMANDS = [
-    "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
-    "verify external_validation\\fidelity_acceptance.json has version paper119_fidelity_acceptance_v1 and no draft_only/template_only fields before manifest declaration",
-    "ensure external_validation/manifest.json declares fidelity_acceptance_path=external_validation/fidelity_acceptance.json together with real logs, videos, configs, checkpoints, and method hashes",
-    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
+    "verify external_validation\\fidelity_acceptance.json has version paper119_fidelity_acceptance_v1 and no draft_only/template_only fields before strict collection readiness",
     "python scripts\\audit_external_fidelity_acceptance.py --strict",
     "python scripts\\audit_external_collection_readiness.py --strict --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+    "after official collection and postcollection sealing, ensure external_validation/manifest.json declares fidelity_acceptance_path=external_validation/fidelity_acceptance.json together with real logs, videos, configs, checkpoints, and method hashes",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
 ]
 
 
@@ -281,15 +280,19 @@ def build_promotion_readiness(
                 "name": name,
                 "required": True,
                 "accepted": False,
-                "source": "independent_operator_or_manifest_after_real_collection",
+                "source": "independent_operator_before_collection",
             }
             for name in REMAINING_OPERATOR_INPUTS
         ],
         "operator_signoff_item_count": len(REMAINING_OPERATOR_INPUTS),
+        "postcollection_requirements": [
+            "manifest_declares_fidelity_acceptance_path",
+            "real_rollout_logs_videos_and_release_hashes",
+        ],
         "acceptance_gate_count": 5,
         "next_manual_step": (
             "Independent operator verifies/overwrites every OPERATOR_VERIFY field, "
-            "collects manifest-declared logs/videos, and only then promotes this draft."
+            "materializes fidelity acceptance, runs strict collection readiness, then collects manifest-declared logs/videos."
         ),
         "strict_promotion_gate_commands": [
             command for command in PROMOTION_COMMANDS if "audit_" in command or "validate_" in command
@@ -412,7 +415,7 @@ def build_draft() -> dict[str, Any]:
         "route": "high_fidelity_sim",
         "real_acceptance_path": REAL_ACCEPTANCE_PATH,
         "real_manifest_path": REAL_MANIFEST_PATH,
-        "purpose": "Operator-editable draft for the tracked ManiSkill/SAPIEN route. This file pre-fills reproducible provenance anchors but cannot satisfy fidelity acceptance until independently completed, renamed, manifest-declared, and strict-audited.",
+        "purpose": "Operator-editable draft for the tracked ManiSkill/SAPIEN route. This file pre-fills reproducible provenance anchors but cannot satisfy fidelity acceptance until independently completed, guarded-materialized, and strict-audited; manifest-backed rollout evidence remains a later gate.",
         "platform": platform,
         "qualification": qualification,
         "task_fidelity": task_fidelity,
@@ -608,8 +611,6 @@ def audit_draft(draft: dict[str, Any]) -> dict[str, Any]:
         and "--confirm-real-platform" in command_text
         and "--confirm-independent-operator" in command_text
         and "--confirm-render-backed-videos" in command_text
-        and "--confirm-real-rollout-evidence" in command_text
-        and "--confirm-manifest-declaration" in command_text
         and "audit_external_fidelity_acceptance.py --strict" in command_text
         and "audit_external_collection_readiness.py --strict" in command_text,
         command_text,

@@ -25,7 +25,7 @@
       "passed": true
     },
     {
-      "detail": "write=False, missing_confirmations=['confirm_real_platform', 'confirm_independent_operator', 'confirm_render_backed_videos', 'confirm_real_rollout_evidence', 'confirm_manifest_declaration']",
+      "detail": "write=False, missing_confirmations=['confirm_real_platform', 'confirm_independent_operator', 'confirm_render_backed_videos']",
       "name": "confirmation_flags_required_before_write",
       "passed": true
     },
@@ -35,17 +35,17 @@
       "passed": true
     },
     {
-      "detail": "current_commit='05ad296ffe9baba14bce7ca5389a30ec39a9579e', current_skill_library_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1'",
+      "detail": "current_commit='d9d7a93d829effca0338e739edafa7b3e21d0d03', current_skill_library_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1'",
       "name": "current_checkout_hashes_recorded",
       "passed": true
     },
     {
-      "detail": "write=False, dirty_status_count=0",
+      "detail": "write=False, dirty_status_count=21",
       "name": "write_requires_clean_checkout",
       "passed": true
     },
     {
-      "detail": "write=False, supplied_commit='', current_commit='05ad296ffe9baba14bce7ca5389a30ec39a9579e', supplied_skill_hash='', current_skill_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1'",
+      "detail": "write=False, supplied_commit='', current_commit='d9d7a93d829effca0338e739edafa7b3e21d0d03', supplied_skill_hash='', current_skill_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1'",
       "name": "write_requires_current_code_commit_and_skill_hash",
       "passed": true
     },
@@ -65,15 +65,42 @@
       "passed": true
     },
     {
-      "detail": "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
+      "detail": "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
       "name": "operator_write_command_is_guarded",
+      "passed": true
+    },
+    {
+      "detail": "fidelity acceptance is a precollection platform/provenance gate; official rollout logs and manifest declaration remain postcollection strict gates",
+      "name": "postcollection_evidence_deferred_until_after_collection",
       "passed": true
     }
   ],
   "current_checkout": {
-    "clean_checkout": true,
-    "code_commit": "05ad296ffe9baba14bce7ca5389a30ec39a9579e",
-    "dirty_status_lines": [],
+    "clean_checkout": false,
+    "code_commit": "d9d7a93d829effca0338e739edafa7b3e21d0d03",
+    "dirty_status_lines": [
+      "M external_validation/fidelity_acceptance_draft.json",
+      " M external_validation/fidelity_acceptance_draft.md",
+      " M results/external_fidelity_acceptance_draft_audit.json",
+      " M results/external_fidelity_acceptance_draft_audit.md",
+      " M results/external_fidelity_acceptance_self_test.json",
+      " M results/external_fidelity_acceptance_self_test.md",
+      " M scripts/audit_external_execution_readiness.py",
+      " M scripts/audit_external_fidelity_acceptance.py",
+      " M scripts/build_external_acquisition_packet.py",
+      " M scripts/build_external_collection_job_packet.py",
+      " M scripts/build_external_evidence_intake_ledger.py",
+      " M scripts/build_external_fidelity_acceptance_draft.py",
+      " M scripts/build_external_fidelity_provenance_packet.py",
+      " M scripts/build_external_operator_packet.py",
+      " M scripts/build_external_platform_onboarding.py",
+      " M scripts/build_external_precollection_manifest_draft.py",
+      " M scripts/build_maniskill_render_machine_qualification.py",
+      " M scripts/materialize_fidelity_acceptance.py",
+      " M scripts/self_test_external_evidence_pipeline.py",
+      " M scripts/self_test_external_fidelity_acceptance.py",
+      " M scripts/validate_submission_artifacts.py"
+    ],
     "skill_library_hash": "62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1"
   },
   "files_written": [],
@@ -82,9 +109,7 @@
   "missing_confirmations": [
     "confirm_real_platform",
     "confirm_independent_operator",
-    "confirm_render_backed_videos",
-    "confirm_real_rollout_evidence",
-    "confirm_manifest_declaration"
+    "confirm_render_backed_videos"
   ],
   "missing_operator_text": [
     "independent operator/lab identity",
@@ -101,15 +126,17 @@
     "SHA256 hash for the skill/baseline library"
   ],
   "not_external_evidence": true,
-  "operator_write_command": "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
+  "operator_write_command": "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
   "output_path": "external_validation/fidelity_acceptance.json",
   "passed": true,
+  "postcollection_evidence_requirements": [
+    "real_rollout_evidence_required_after_collection",
+    "manifest_declaration_required_after_collection"
+  ],
   "required_confirmations": [
     "confirm_real_platform",
     "confirm_independent_operator",
-    "confirm_render_backed_videos",
-    "confirm_real_rollout_evidence",
-    "confirm_manifest_declaration"
+    "confirm_render_backed_videos"
   ],
   "required_operator_arguments": {
     "acceptance_gate_signoff": "operator acceptance-gate signoff",

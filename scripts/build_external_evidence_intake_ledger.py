@@ -43,10 +43,10 @@ GROUPS: dict[str, dict[str, str]] = {
         "completion_test": "manifest exists, has external_validation_v1, declares log schema, route, tasks, methods, fairness flags, recomputed metrics, and release hashes",
     },
     "fidelity_acceptance": {
-        "operator_artifacts": "external_validation/fidelity_acceptance.json promoted from the draft with independent operator signoff, accepted platform provenance, render-backed videos, real rollout evidence, manifest declaration, commit, and skill hash",
+        "operator_artifacts": "external_validation/fidelity_acceptance.json promoted from the draft with independent operator signoff, accepted platform provenance, render-backed video readiness, paired replay, commit, and skill hash before collection; real rollout evidence and manifest declaration close postcollection gates",
         "source_packet": "external_validation/fidelity_provenance_packet.md; external_validation/fidelity_acceptance_draft.md; results/fidelity_acceptance_materialization_plan.md",
-        "strict_gate": "python scripts\\materialize_fidelity_acceptance.py ... --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write; python scripts\\audit_external_fidelity_acceptance.py --strict",
-        "completion_test": "fidelity acceptance audit reports acceptance_ready=true and strict fidelity evidence true",
+        "strict_gate": "python scripts\\materialize_fidelity_acceptance.py ... --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write; python scripts\\audit_external_fidelity_acceptance.py --strict",
+        "completion_test": "fidelity acceptance audit reports acceptance_ready=true while strict external evidence remains false until manifest-backed rollout gates pass",
     },
     "task_configs": {
         "operator_artifacts": "external_validation/configs/<task_family>.json consumed by the accepted backend, with config_hash declared in external_validation/manifest.json",

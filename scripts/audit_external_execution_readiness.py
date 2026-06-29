@@ -395,7 +395,8 @@ def main() -> int:
         and "--confirm-real-platform" in str(fidelity_materialization.get("operator_write_command", ""))
         and "--confirm-independent-operator" in str(fidelity_materialization.get("operator_write_command", ""))
         and "--confirm-render-backed-videos" in str(fidelity_materialization.get("operator_write_command", ""))
-        and "--confirm-real-rollout-evidence" in str(fidelity_materialization.get("operator_write_command", ""))
+        and "--confirm-real-rollout-evidence" not in str(fidelity_materialization.get("operator_write_command", ""))
+        and "--confirm-manifest-declaration" not in str(fidelity_materialization.get("operator_write_command", ""))
         and (ROOT / "scripts" / "materialize_fidelity_acceptance.py").exists()
         and (RESULTS / "fidelity_acceptance_materialization_plan.md").exists(),
         (

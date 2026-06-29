@@ -161,12 +161,12 @@
     }
   },
   "promotion_commands": [
-    "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
-    "verify external_validation\\fidelity_acceptance.json has version paper119_fidelity_acceptance_v1 and no draft_only/template_only fields before manifest declaration",
-    "ensure external_validation/manifest.json declares fidelity_acceptance_path=external_validation/fidelity_acceptance.json together with real logs, videos, configs, checkpoints, and method hashes",
-    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
+    "verify external_validation\\fidelity_acceptance.json has version paper119_fidelity_acceptance_v1 and no draft_only/template_only fields before strict collection readiness",
     "python scripts\\audit_external_fidelity_acceptance.py --strict",
-    "python scripts\\audit_external_collection_readiness.py --strict --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map"
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+    "after official collection and postcollection sealing, ensure external_validation/manifest.json declares fidelity_acceptance_path=external_validation/fidelity_acceptance.json together with real logs, videos, configs, checkpoints, and method hashes",
+    "python scripts\\build_external_manifest.py --write --check-video-paths"
   ],
   "promotion_readiness": {
     "acceptance_gate_count": 5,
@@ -201,72 +201,70 @@
       }
     ],
     "machine_prefilled_ready": true,
-    "next_manual_step": "Independent operator verifies/overwrites every OPERATOR_VERIFY field, collects manifest-declared logs/videos, and only then promotes this draft.",
+    "next_manual_step": "Independent operator verifies/overwrites every OPERATOR_VERIFY field, materializes fidelity acceptance, runs strict collection readiness, then collects manifest-declared logs/videos.",
     "not_external_evidence": true,
-    "operator_signoff_item_count": 10,
+    "operator_signoff_item_count": 9,
     "operator_signoff_items": [
       {
         "accepted": false,
         "name": "independent_operator_identity",
         "required": true,
-        "source": "independent_operator_or_manifest_after_real_collection"
+        "source": "independent_operator_before_collection"
       },
       {
         "accepted": false,
         "name": "accepted_external_collection_machine",
         "required": true,
-        "source": "independent_operator_or_manifest_after_real_collection"
+        "source": "independent_operator_before_collection"
       },
       {
         "accepted": false,
         "name": "contact_solver_and_friction_model",
         "required": true,
-        "source": "independent_operator_or_manifest_after_real_collection"
+        "source": "independent_operator_before_collection"
       },
       {
         "accepted": false,
         "name": "timestep_and_substeps_per_control_step",
         "required": true,
-        "source": "independent_operator_or_manifest_after_real_collection"
+        "source": "independent_operator_before_collection"
       },
       {
         "accepted": false,
         "name": "paired_reset_replay_verification",
         "required": true,
-        "source": "independent_operator_or_manifest_after_real_collection"
+        "source": "independent_operator_before_collection"
       },
       {
         "accepted": false,
         "name": "real_or_benchmark_calibration_basis",
         "required": true,
-        "source": "independent_operator_or_manifest_after_real_collection"
+        "source": "independent_operator_before_collection"
       },
       {
         "accepted": false,
         "name": "task_binding_accept_or_replace_decision",
         "required": true,
-        "source": "independent_operator_or_manifest_after_real_collection"
+        "source": "independent_operator_before_collection"
       },
       {
         "accepted": false,
         "name": "acceptance_gate_signoff",
         "required": true,
-        "source": "independent_operator_or_manifest_after_real_collection"
+        "source": "independent_operator_before_collection"
       },
       {
         "accepted": false,
-        "name": "manifest_declares_fidelity_acceptance_path",
+        "name": "render_backed_video_preflight_or_machine_qualification",
         "required": true,
-        "source": "independent_operator_or_manifest_after_real_collection"
-      },
-      {
-        "accepted": false,
-        "name": "real_rollout_logs_videos_and_release_hashes",
-        "required": true,
-        "source": "independent_operator_or_manifest_after_real_collection"
+        "source": "independent_operator_before_collection"
       }
     ],
     "operator_signoff_ready": false,
+    "postcollection_requirements": [
+      "manifest_declares_fidelity_acceptance_path",
+      "real_rollout_logs_videos_and_release_hashes"
+    ],
     "promotion_ready": false,
     "strict_promotion_gate_commands": [
       "python scripts\\audit_external_fidelity_acceptance.py --strict",
@@ -279,7 +277,7 @@
     "artifact_hash_policy": "sha256",
     "backend_module": "external_validation/runner/maniskill_reference_backend.py",
     "backend_module_hash": "B02E244CF41FBABA7CC1382CED8B2F9701E015E7D1E9679805A006694355783F",
-    "code_commit": "65ba836165c4c34afca1a9625cfa65b4808b91ac",
+    "code_commit": "d9d7a93d829effca0338e739edafa7b3e21d0d03",
     "date_locked": "DRAFT_NOT_LOCKED",
     "fidelity_metadata_probe_path": "results/maniskill_fidelity_metadata_probe.json",
     "fidelity_metadata_probe_ready": true,
@@ -326,11 +324,29 @@
     "reference_collection_preflight_blocking": [
       "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"
     ],
-    "repo_dirty_status_lines": [],
+    "repo_dirty_status_lines": [
+      "M results/external_fidelity_acceptance_self_test.json",
+      " M results/external_fidelity_acceptance_self_test.md",
+      " M scripts/audit_external_execution_readiness.py",
+      " M scripts/audit_external_fidelity_acceptance.py",
+      " M scripts/build_external_acquisition_packet.py",
+      " M scripts/build_external_collection_job_packet.py",
+      " M scripts/build_external_evidence_intake_ledger.py",
+      " M scripts/build_external_fidelity_acceptance_draft.py",
+      " M scripts/build_external_fidelity_provenance_packet.py",
+      " M scripts/build_external_operator_packet.py",
+      " M scripts/build_external_platform_onboarding.py",
+      " M scripts/build_external_precollection_manifest_draft.py",
+      " M scripts/build_maniskill_render_machine_qualification.py",
+      " M scripts/materialize_fidelity_acceptance.py",
+      " M scripts/self_test_external_evidence_pipeline.py",
+      " M scripts/self_test_external_fidelity_acceptance.py",
+      " M scripts/validate_submission_artifacts.py"
+    ],
     "skill_library_hash": "62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1",
     "strict_fidelity_metadata_ready": true
   },
-  "purpose": "Operator-editable draft for the tracked ManiSkill/SAPIEN route. This file pre-fills reproducible provenance anchors but cannot satisfy fidelity acceptance until independently completed, renamed, manifest-declared, and strict-audited.",
+  "purpose": "Operator-editable draft for the tracked ManiSkill/SAPIEN route. This file pre-fills reproducible provenance anchors but cannot satisfy fidelity acceptance until independently completed, guarded-materialized, and strict-audited; manifest-backed rollout evidence remains a later gate.",
   "qualification": {
     "contact_dynamics_justification": "DRAFT ONLY: metadata probe records ManiSkill/SAPIEN timing and backend fields, but accepted contact/friction/substep details must be written by the operator before rollouts count.",
     "deterministic_paired_resets": true,
@@ -358,8 +374,7 @@
     "real_or_benchmark_calibration_basis",
     "task_binding_accept_or_replace_decision",
     "acceptance_gate_signoff",
-    "manifest_declares_fidelity_acceptance_path",
-    "real_rollout_logs_videos_and_release_hashes"
+    "render_backed_video_preflight_or_machine_qualification"
   ],
   "route": "high_fidelity_sim",
   "source_reports": [

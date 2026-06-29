@@ -43,8 +43,11 @@ CONFIRMATION_FLAGS = [
     "confirm_real_platform",
     "confirm_independent_operator",
     "confirm_render_backed_videos",
-    "confirm_real_rollout_evidence",
-    "confirm_manifest_declaration",
+]
+
+POSTCOLLECTION_EVIDENCE_REQUIREMENTS = [
+    "real_rollout_evidence_required_after_collection",
+    "manifest_declaration_required_after_collection",
 ]
 
 
@@ -207,8 +210,12 @@ def build_acceptance_payload(draft: dict[str, Any], args: argparse.Namespace, wr
             "skill_library_hash": args.skill_library_hash.upper(),
             "manifest_path": rel(MANIFEST_JSON),
             "artifact_hash_policy": "sha256",
-            "manifest_declaration_confirmed_by_operator": bool(args.confirm_manifest_declaration),
-            "real_rollout_evidence_confirmed_by_operator": bool(args.confirm_real_rollout_evidence),
+            "real_platform_confirmed_by_operator": bool(args.confirm_real_platform),
+            "render_backed_videos_confirmed_by_operator": bool(args.confirm_render_backed_videos),
+            "manifest_declaration_required_after_collection": True,
+            "real_rollout_evidence_required_after_collection": True,
+            "manifest_declaration_confirmed_by_operator": False,
+            "real_rollout_evidence_confirmed_by_operator": False,
         }
     )
     payload["provenance"] = provenance
@@ -278,8 +285,7 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         "--code-commit <current_clean_checkout_commit_sha> "
         "--skill-library-hash <current_baselines_sha256> "
         "--confirm-real-platform --confirm-independent-operator "
-        "--confirm-render-backed-videos --confirm-real-rollout-evidence "
-        "--confirm-manifest-declaration --write"
+        "--confirm-render-backed-videos --write"
     )
 
     checks: list[dict[str, Any]] = []
@@ -365,10 +371,24 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         "--confirm-real-platform" in command
         and "--confirm-independent-operator" in command
         and "--confirm-render-backed-videos" in command
-        and "--confirm-real-rollout-evidence" in command
-        and "--confirm-manifest-declaration" in command
         and command.endswith("--write"),
         command,
+    )
+    candidate_provenance = candidate.get("provenance", {})
+    candidate_provenance = candidate_provenance if isinstance(candidate_provenance, dict) else {}
+    add_check(
+        checks,
+        "postcollection_evidence_deferred_until_after_collection",
+        candidate_provenance.get("manifest_declaration_required_after_collection") is True
+        and candidate_provenance.get("real_rollout_evidence_required_after_collection") is True
+        and candidate_provenance.get("manifest_declaration_confirmed_by_operator") is False
+        and candidate_provenance.get("real_rollout_evidence_confirmed_by_operator") is False
+        and "--confirm-real-rollout-evidence" not in command
+        and "--confirm-manifest-declaration" not in command,
+        (
+            "fidelity acceptance is a precollection platform/provenance gate; "
+            "official rollout logs and manifest declaration remain postcollection strict gates"
+        ),
     )
 
     passed = all(check["passed"] for check in checks)
@@ -397,6 +417,7 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         "missing_confirmations": missing_confirmations,
         "required_operator_arguments": TEXT_ARGUMENTS,
         "required_confirmations": CONFIRMATION_FLAGS,
+        "postcollection_evidence_requirements": POSTCOLLECTION_EVIDENCE_REQUIREMENTS,
         "current_checkout": {
             "code_commit": current_commit,
             "dirty_status_lines": current_dirty_status,

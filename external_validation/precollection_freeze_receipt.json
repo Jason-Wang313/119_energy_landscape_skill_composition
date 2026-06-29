@@ -160,28 +160,53 @@
   "collection_machine": "",
   "current_checkout": {
     "clean_checkout": false,
-    "code_commit": "fe85f791220562c93b0ffe5c64b907fc5be1d6e4",
+    "code_commit": "d9d7a93d829effca0338e739edafa7b3e21d0d03",
     "dirty_status_lines": [
-      "M README.md",
-      " M child_status.md",
-      " M docs/claim_evidence_ledger.json",
-      " M docs/final_audit.md",
-      " M docs/submission_readiness_audit_v5.md",
-      " M docs/submission_version_log.md",
-      " M external_validation/precollection_freeze_receipt.csv",
-      " M external_validation/precollection_freeze_receipt.json",
-      " M external_validation/precollection_freeze_receipt.md",
-      " M results/external_precollection_freeze_receipt_audit.json",
-      " M results/external_precollection_freeze_receipt_audit.md",
-      " M results/external_precollection_freeze_receipt_self_test.json",
-      " M results/external_precollection_freeze_receipt_self_test.md",
+      "M external_validation/evidence_intake_ledger.csv",
+      " M external_validation/evidence_intake_ledger.json",
+      " M external_validation/evidence_intake_ledger.md",
+      " M external_validation/fidelity_acceptance_draft.json",
+      " M external_validation/fidelity_acceptance_draft.md",
+      " M external_validation/fidelity_provenance_packet.json",
+      " M external_validation/fidelity_provenance_packet.md",
+      " M external_validation/fidelity_provenance_work_orders.csv",
+      " M external_validation/manifest_precollection_draft.json",
+      " M external_validation/manifest_precollection_draft.md",
+      " M external_validation/platform_onboarding_packet.json",
+      " M external_validation/platform_onboarding_packet.md",
+      " M external_validation/render_failure_remediation_work_orders.csv",
+      " M external_validation/render_machine_qualification_packet.md",
+      " M results/external_evidence_intake_ledger_audit.json",
+      " M results/external_evidence_intake_ledger_audit.md",
+      " M results/external_fidelity_acceptance_audit.json",
+      " M results/external_fidelity_acceptance_audit.md",
+      " M results/external_fidelity_acceptance_draft_audit.json",
+      " M results/external_fidelity_acceptance_draft_audit.md",
+      " M results/external_fidelity_acceptance_self_test.json",
+      " M results/external_fidelity_acceptance_self_test.md",
+      " M results/external_fidelity_provenance_audit.json",
+      " M results/external_fidelity_provenance_audit.md",
+      " M results/external_precollection_manifest_draft_audit.json",
+      " M results/fidelity_acceptance_materialization_plan.json",
+      " M results/fidelity_acceptance_materialization_plan.md",
+      " M results/maniskill_render_failure_remediation.json",
+      " M results/maniskill_render_failure_remediation.md",
+      " M results/maniskill_render_machine_qualification.json",
+      " M results/maniskill_render_machine_qualification.md",
       " M scripts/audit_external_execution_readiness.py",
-      " M scripts/audit_visible_contribution.py",
+      " M scripts/audit_external_fidelity_acceptance.py",
       " M scripts/build_external_acquisition_packet.py",
-      " M scripts/build_external_operator_handoff_bundle.py",
+      " M scripts/build_external_collection_job_packet.py",
+      " M scripts/build_external_evidence_intake_ledger.py",
+      " M scripts/build_external_fidelity_acceptance_draft.py",
+      " M scripts/build_external_fidelity_provenance_packet.py",
       " M scripts/build_external_operator_packet.py",
-      " M scripts/build_external_precollection_freeze_receipt.py",
-      " M scripts/self_test_external_precollection_freeze_receipt.py",
+      " M scripts/build_external_platform_onboarding.py",
+      " M scripts/build_external_precollection_manifest_draft.py",
+      " M scripts/build_maniskill_render_machine_qualification.py",
+      " M scripts/materialize_fidelity_acceptance.py",
+      " M scripts/self_test_external_evidence_pipeline.py",
+      " M scripts/self_test_external_fidelity_acceptance.py",
       " M scripts/validate_submission_artifacts.py"
     ],
     "skill_library_hash": "F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802"
@@ -209,14 +234,14 @@
       "path": "external_validation/manifest_precollection_draft.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "1909C8172316185391056F5B672C0B484E2E42F3E1295251EC147FDA0BF6E744"
+      "sha256": "0CEA5A80DCAB8942D78F110C16BF7032AA62BBFC120DA7DCFAC5C42F2551AC2D"
     },
     {
       "exists": true,
       "path": "external_validation/manifest_precollection_draft.md",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "E9C816F76182B011D16F9943F80538E42C14947202349AE5FCACE3276AFD07EF"
+      "sha256": "0DB9BB55D0E70B38E9C96321298309A9C54977E6B137258EF6FA2C0DF8879B43"
     },
     {
       "exists": true,
@@ -244,21 +269,21 @@
       "path": "external_validation/evidence_intake_ledger.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "7A604C84240C9815486D4B606B9F3DD0D10AB2B2F2115252FE9246E3BFE64136"
+      "sha256": "A34133E4B58D01490A3D0D0786E7A5FE52352F7F645D16EC657B2D519D6A6DBE"
     },
     {
       "exists": true,
       "path": "external_validation/evidence_intake_ledger.md",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "179FA088F5BF95363BD6D67B0DABF6344D04727F460E8412FD9489356DD6D6D6"
+      "sha256": "FA9C782BB76805252EF226F7FD3B4977D8A36B84C0BA59094D0E92CD50A2FF89"
     },
     {
       "exists": true,
       "path": "external_validation/evidence_intake_ledger.csv",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "FC1257013B9B99A429281358FF84C786F7BC7055428F99F3B39D639F2DED766C"
+      "sha256": "92CE1249896D06559B8C6199716A841A8F08ED883222B1C617325E07D9826D71"
     },
     {
       "exists": true,
@@ -300,14 +325,14 @@
       "path": "results/external_fidelity_acceptance_audit.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "44A74216804348A545706B23ACBF66F5F2BB12ACDB66C4A98C4101C3C3334582"
+      "sha256": "23846A8DFE65737A9EFB04A4231D05ADE15749DAED64DE6AFE5F466F941AA3C5"
     },
     {
       "exists": true,
       "path": "results/fidelity_acceptance_materialization_plan.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "34BD54AE4371667A6BCFCC6478477961037E36B8C2AF05C5B4D5B9B729445B8A"
+      "sha256": "6A7D96A5F604DB5FAD8283FC5418CC97DB11C365637EB2CF1F9211C9FD527479"
     },
     {
       "exists": true,
@@ -328,14 +353,14 @@
       "path": "results/external_evidence_intake_ledger_audit.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "7A604C84240C9815486D4B606B9F3DD0D10AB2B2F2115252FE9246E3BFE64136"
+      "sha256": "A34133E4B58D01490A3D0D0786E7A5FE52352F7F645D16EC657B2D519D6A6DBE"
     },
     {
       "exists": true,
       "path": "results/external_precollection_manifest_draft_audit.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "5F7C0865651B5F3AF6B0A7E3793077CF119397D7C32C766AF738928F2A10E763"
+      "sha256": "07EE4E9808332F06F3161609A98533A848963DA41D0312F7147AF7FDEC465D42"
     },
     {
       "exists": true,
@@ -508,15 +533,11 @@
     "collection_ready": false,
     "fidelity_acceptance_ready": false,
     "fidelity_blocking_missing": [
-      "manifest_exists: external_validation/manifest.json missing",
-      "manifest_declares_acceptance_path: source_kind=template",
       "real_acceptance_file_exists: external_validation/fidelity_acceptance_template.json",
       "real_acceptance_version: version='paper119_fidelity_acceptance_template_v1', expected='paper119_fidelity_acceptance_v1'",
       "real_acceptance_declares_ready: acceptance_ready=None",
       "not_template_only: template_only=True",
       "strict_readiness_remains_external_to_acceptance: not_external_evidence=True, strict_fidelity_evidence_ready=None, strict_external_evidence_ready=None",
-      "route_matches_manifest: acceptance_route='high_fidelity_sim', manifest_route=''",
-      "route_has_enough_task_families: route='high_fidelity_sim', counts={'real_robot': 0, 'high_fidelity_sim': 0}",
       "platform_values_filled: placeholder_fields=['asset_sources', 'contact_solver', 'physics_engine', 'platform_name', 'platform_version', 'robot_model_source', 'substeps_per_control_step', 'timestep_seconds']",
       "qualification_text_filled: weak_or_placeholder=['contact_dynamics_justification', 'known_limitations', 'operator_independence_statement', 'paired_reset_replay_test', 'real_or_benchmark_calibration_basis']",
       "operator_independence_declared: operator_not_target_collaborator=True",
@@ -525,7 +546,8 @@
       "code_commit_filled: code_commit=''",
       "code_commit_sha40: code_commit=''",
       "skill_library_hash_valid: skill_library_hash must be 64-character SHA256",
-      "operator_confirmation_booleans_true: manifest_declaration_confirmed_by_operator=None, real_rollout_evidence_confirmed_by_operator=None",
+      "precollection_confirmation_booleans_true: real_platform_confirmed_by_operator=None, render_backed_videos_confirmed_by_operator=None",
+      "postcollection_evidence_deferred_until_manifest: manifest_declaration_required_after_collection=None, real_rollout_evidence_required_after_collection=None, manifest_declaration_confirmed_by_operator=None, real_rollout_evidence_confirmed_by_operator=None",
       "materialized_by_guarded_path: materialized_by=None, materialized_from_draft_path=None",
       "all_acceptance_gates_passed: unpassed=['platform_provenance_complete', 'paired_reset_replay_verified', 'contact_failure_observable', 'non_oracle_methods_fair', 'raw_logs_drive_metrics']"
     ]

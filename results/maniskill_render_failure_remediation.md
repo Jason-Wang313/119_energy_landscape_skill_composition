@@ -57,8 +57,8 @@ This packet converts the current render-backed-video blocker into operator work 
 
 - Owner: `independent_operator`
 - Status: `blocked_until_render_and_liveness_ready`
-- Command: `python scripts\materialize_fidelity_acceptance.py --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write <operator fields>`
-- Acceptance: guarded fidelity acceptance is written only after render-backed video readiness, real rollout evidence, manifest declaration, and independent signoff
+- Command: `python scripts\materialize_fidelity_acceptance.py --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write <operator fields>`
+- Acceptance: guarded fidelity acceptance is written only after render-backed video readiness, platform provenance, paired replay, code/skill hashes, and independent signoff; rollout evidence and manifest declaration remain postcollection gates
 - Notes: qualification_state=DO_NOT_COLLECT_RENDER_MACHINE; blockers=12
 
 ### collection_readiness_gate

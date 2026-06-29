@@ -27,7 +27,7 @@
       "passed": true
     },
     {
-      "detail": "code_commit='65ba836165c4c34afca1a9625cfa65b4808b91ac', skill_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1', backend_hash='B02E244CF41FBABA7CC1382CED8B2F9701E015E7D1E9679805A006694355783F'",
+      "detail": "code_commit='d9d7a93d829effca0338e739edafa7b3e21d0d03', skill_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1', backend_hash='B02E244CF41FBABA7CC1382CED8B2F9701E015E7D1E9679805A006694355783F'",
       "name": "candidate_hashes_prefilled",
       "passed": true
     },
@@ -37,7 +37,7 @@
       "passed": true
     },
     {
-      "detail": "machine_prefilled_ready=True, operator_signoff_ready=False, operator_items=10",
+      "detail": "machine_prefilled_ready=True, operator_signoff_ready=False, operator_items=9",
       "name": "promotion_readiness_separates_machine_prefill_from_operator_signoff",
       "passed": true
     },
@@ -47,7 +47,7 @@
       "passed": true
     },
     {
-      "detail": "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write\nverify external_validation\\fidelity_acceptance.json has version paper119_fidelity_acceptance_v1 and no draft_only/template_only fields before manifest declaration\nensure external_validation/manifest.json declares fidelity_acceptance_path=external_validation/fidelity_acceptance.json together with real logs, videos, configs, checkpoints, and method hashes\npython scripts\\build_external_manifest.py --write --check-video-paths\npython scripts\\audit_external_fidelity_acceptance.py --strict\npython scripts\\audit_external_collection_readiness.py --strict --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+      "detail": "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write\nverify external_validation\\fidelity_acceptance.json has version paper119_fidelity_acceptance_v1 and no draft_only/template_only fields before strict collection readiness\npython scripts\\audit_external_fidelity_acceptance.py --strict\npython scripts\\audit_external_collection_readiness.py --strict --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map\nafter official collection and postcollection sealing, ensure external_validation/manifest.json declares fidelity_acceptance_path=external_validation/fidelity_acceptance.json together with real logs, videos, configs, checkpoints, and method hashes\npython scripts\\build_external_manifest.py --write --check-video-paths",
       "name": "promotion_commands_require_real_file_manifest_and_strict_audits",
       "passed": true
     },
@@ -73,12 +73,12 @@
   "failed_checks": [],
   "machine_prefilled_ready": true,
   "not_external_evidence": true,
-  "operator_signoff_item_count": 10,
+  "operator_signoff_item_count": 9,
   "operator_signoff_ready": false,
   "passed": true,
   "real_acceptance_path": "external_validation/fidelity_acceptance.json",
   "real_manifest_path": "external_validation/manifest.json",
-  "remaining_operator_input_count": 10,
+  "remaining_operator_input_count": 9,
   "strict_external_evidence_ready": false,
   "strict_fidelity_evidence_ready": false,
   "version": "external_fidelity_acceptance_draft_audit_v1"

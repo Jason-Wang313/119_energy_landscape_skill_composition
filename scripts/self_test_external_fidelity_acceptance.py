@@ -101,8 +101,12 @@ def synthetic_acceptance_payload() -> dict[str, Any]:
             "skill_library_hash": digest_text("paper119 synthetic fidelity skill library"),
             "manifest_path": "external_validation/manifest.json",
             "artifact_hash_policy": "sha256",
-            "manifest_declaration_confirmed_by_operator": True,
-            "real_rollout_evidence_confirmed_by_operator": True,
+            "real_platform_confirmed_by_operator": True,
+            "render_backed_videos_confirmed_by_operator": True,
+            "manifest_declaration_required_after_collection": True,
+            "real_rollout_evidence_required_after_collection": True,
+            "manifest_declaration_confirmed_by_operator": False,
+            "real_rollout_evidence_confirmed_by_operator": False,
         },
         "acceptance_gates": [
             {"name": "platform_provenance_complete", "status": "passed"},
@@ -208,8 +212,8 @@ def main() -> int:
     add_check(
         checks,
         "synthetic_route_task_count",
-        evidence.get("route_has_enough_task_families") is True,
-        f"route_has_enough_task_families={evidence.get('route_has_enough_task_families')!r}",
+        evidence.get("manifest_task_coverage_when_present") is True,
+        f"manifest_task_coverage_when_present={evidence.get('manifest_task_coverage_when_present')!r}",
     )
     add_check(
         checks,
@@ -226,7 +230,8 @@ def main() -> int:
         and evidence.get("strict_readiness_remains_external_to_acceptance") is True
         and evidence.get("date_locked_iso_like") is True
         and evidence.get("code_commit_sha40") is True
-        and evidence.get("operator_confirmation_booleans_true") is True
+        and evidence.get("precollection_confirmation_booleans_true") is True
+        and evidence.get("postcollection_evidence_deferred_until_manifest") is True
         and evidence.get("materialized_by_guarded_path") is True,
         (
             f"ready={evidence.get('real_acceptance_declares_ready')!r}, "
@@ -234,7 +239,8 @@ def main() -> int:
             f"strict_external={evidence.get('strict_readiness_remains_external_to_acceptance')!r}, "
             f"date={evidence.get('date_locked_iso_like')!r}, "
             f"commit={evidence.get('code_commit_sha40')!r}, "
-            f"confirmations={evidence.get('operator_confirmation_booleans_true')!r}, "
+            f"precollection_confirmations={evidence.get('precollection_confirmation_booleans_true')!r}, "
+            f"postcollection_deferred={evidence.get('postcollection_evidence_deferred_until_manifest')!r}, "
             f"materialized={evidence.get('materialized_by_guarded_path')!r}"
         ),
     )
@@ -242,7 +248,6 @@ def main() -> int:
         checks,
         "template_acceptance_fails_strict_evidence",
         template_ready is False
-        and template_evidence.get("manifest_exists") is False
         and template_evidence.get("real_acceptance_file_exists") is False
         and template_evidence.get("not_template_only") is False,
         f"template_ready={template_ready!r}",
@@ -254,14 +259,16 @@ def main() -> int:
         and template_evidence.get("strict_readiness_remains_external_to_acceptance") is False
         and template_evidence.get("date_locked_iso_like") is False
         and template_evidence.get("code_commit_sha40") is False
-        and template_evidence.get("operator_confirmation_booleans_true") is False
+        and template_evidence.get("precollection_confirmation_booleans_true") is False
+        and template_evidence.get("postcollection_evidence_deferred_until_manifest") is False
         and template_evidence.get("materialized_by_guarded_path") is False,
         (
             f"ready={template_evidence.get('real_acceptance_declares_ready')!r}, "
             f"strict_external={template_evidence.get('strict_readiness_remains_external_to_acceptance')!r}, "
             f"date={template_evidence.get('date_locked_iso_like')!r}, "
             f"commit={template_evidence.get('code_commit_sha40')!r}, "
-            f"confirmations={template_evidence.get('operator_confirmation_booleans_true')!r}, "
+            f"precollection_confirmations={template_evidence.get('precollection_confirmation_booleans_true')!r}, "
+            f"postcollection_deferred={template_evidence.get('postcollection_evidence_deferred_until_manifest')!r}, "
             f"materialized={template_evidence.get('materialized_by_guarded_path')!r}"
         ),
     )

@@ -91,11 +91,11 @@ python scripts\audit_external_backend_contract.py --strict --backend-module exte
 - Owner: `independent_operator`
 - May run now: `false`
 - Boundary: `guarded_acceptance_write`
-- Blocked until: all operator fields are real, checkout/hash guards match, and render/liveness gates pass
-- Acceptance: Independent operator acceptance is materialized only after real platform, render-backed video, real rollout, manifest, commit, and skill-library hash confirmations.
+- Blocked until: all precollection operator fields are real, checkout/hash guards match, and render/liveness gates pass
+- Acceptance: Independent operator acceptance is materialized only after real platform, render-backed video readiness, paired replay, commit, and skill-library hash confirmations; rollout logs and manifest declaration are postcollection strict gates.
 
 ```powershell
-python scripts\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write
+python scripts\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write
 ```
 
 ### 6. strict_collection_readiness

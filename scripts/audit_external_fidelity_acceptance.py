@@ -124,6 +124,8 @@ def choose_source(manifest: dict[str, Any], manifest_exists: bool) -> tuple[Path
     if manifest_exists:
         value = str(manifest.get("fidelity_acceptance_path", "")).strip()
         return (rel_path(value), "manifest") if value else (DEFAULT_ACCEPTANCE, "default")
+    if DEFAULT_ACCEPTANCE.exists():
+        return DEFAULT_ACCEPTANCE, "precollection_acceptance"
     return TEMPLATE, "template"
 
 
@@ -203,8 +205,25 @@ def audit_contract(payload: dict[str, Any], source: Path) -> list[dict[str, Any]
 
 def audit_evidence(payload: dict[str, Any], source: Path, manifest: dict[str, Any], manifest_exists: bool, source_kind: str) -> list[dict[str, Any]]:
     checks: list[dict[str, Any]] = []
-    add_check(checks, "manifest_exists", manifest_exists, "external_validation/manifest.json present" if manifest_exists else "external_validation/manifest.json missing")
-    add_check(checks, "manifest_declares_acceptance_path", bool(manifest.get("fidelity_acceptance_path")) if manifest_exists else False, f"source_kind={source_kind}")
+    manifest_acceptance_path = str(manifest.get("fidelity_acceptance_path", "")).strip() if manifest_exists else ""
+    manifest_acceptance_matches_source = False
+    if manifest_acceptance_path:
+        try:
+            manifest_acceptance_matches_source = rel_path(manifest_acceptance_path).resolve() == source.resolve()
+        except OSError:
+            manifest_acceptance_matches_source = False
+    add_check(
+        checks,
+        "manifest_declaration_not_required_before_collection",
+        not manifest_exists or bool(manifest_acceptance_path),
+        f"manifest_exists={manifest_exists!r}, source_kind={source_kind}, fidelity_acceptance_path={manifest_acceptance_path!r}",
+    )
+    add_check(
+        checks,
+        "manifest_acceptance_path_consistent_when_present",
+        not manifest_exists or manifest_acceptance_matches_source,
+        f"source={source}, manifest_fidelity_acceptance_path={manifest_acceptance_path!r}",
+    )
     add_check(checks, "real_acceptance_file_exists", source.exists() and source.name != TEMPLATE.name, rel(source) if source.exists() and source.is_relative_to(ROOT) else str(source))
     add_check(checks, "real_acceptance_version", payload.get("version") == EVIDENCE_VERSION, f"version={payload.get('version')!r}, expected={EVIDENCE_VERSION!r}")
     add_check(
@@ -240,8 +259,18 @@ def audit_evidence(payload: dict[str, Any], source: Path, manifest: dict[str, An
     route = str(payload.get("route", ""))
     manifest_route = str(manifest.get("route", "")) if manifest_exists else ""
     counts = platform_counts(manifest)
-    add_check(checks, "route_matches_manifest", manifest_exists and route == manifest_route and route in VALID_ROUTES, f"acceptance_route={route!r}, manifest_route={manifest_route!r}")
-    add_check(checks, "route_has_enough_task_families", manifest_exists and route_count_ok(route, counts), f"route={route!r}, counts={counts}")
+    add_check(
+        checks,
+        "route_matches_manifest_when_present",
+        not manifest_exists or (route == manifest_route and route in VALID_ROUTES),
+        f"acceptance_route={route!r}, manifest_route={manifest_route!r}, manifest_exists={manifest_exists!r}",
+    )
+    add_check(
+        checks,
+        "manifest_task_coverage_when_present",
+        not manifest_exists or route_count_ok(route, counts),
+        f"route={route!r}, counts={counts}, manifest_exists={manifest_exists!r}",
+    )
 
     platform = payload.get("platform", {})
     platform = platform if isinstance(platform, dict) else {}
@@ -305,10 +334,27 @@ def audit_evidence(payload: dict[str, Any], source: Path, manifest: dict[str, An
     add_check(checks, "artifact_hash_policy_sha256", provenance.get("artifact_hash_policy") == "sha256", f"artifact_hash_policy={provenance.get('artifact_hash_policy')!r}")
     add_check(
         checks,
-        "operator_confirmation_booleans_true",
-        provenance.get("manifest_declaration_confirmed_by_operator") is True
-        and provenance.get("real_rollout_evidence_confirmed_by_operator") is True,
+        "precollection_confirmation_booleans_true",
+        provenance.get("real_platform_confirmed_by_operator") is True
+        and provenance.get("render_backed_videos_confirmed_by_operator") is True,
         (
+            f"real_platform_confirmed_by_operator={provenance.get('real_platform_confirmed_by_operator')!r}, "
+            f"render_backed_videos_confirmed_by_operator="
+            f"{provenance.get('render_backed_videos_confirmed_by_operator')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "postcollection_evidence_deferred_until_manifest",
+        provenance.get("manifest_declaration_required_after_collection") is True
+        and provenance.get("real_rollout_evidence_required_after_collection") is True
+        and provenance.get("manifest_declaration_confirmed_by_operator") is not True
+        and provenance.get("real_rollout_evidence_confirmed_by_operator") is not True,
+        (
+            f"manifest_declaration_required_after_collection="
+            f"{provenance.get('manifest_declaration_required_after_collection')!r}, "
+            f"real_rollout_evidence_required_after_collection="
+            f"{provenance.get('real_rollout_evidence_required_after_collection')!r}, "
             f"manifest_declaration_confirmed_by_operator="
             f"{provenance.get('manifest_declaration_confirmed_by_operator')!r}, "
             f"real_rollout_evidence_confirmed_by_operator="
@@ -416,10 +462,10 @@ def main() -> int:
         "evidence_checks": evidence_checks,
         "operator_next_actions": [
             "Select an external robot or accepted high-fidelity simulator before collecting rollouts.",
-            "Use scripts/materialize_fidelity_acceptance.py with independent-operator signoff, real platform details, render-backed video confirmation, real rollout confirmation, manifest declaration confirmation, a SHA40 collection commit, and the current skill-library SHA256 to write external_validation/fidelity_acceptance.json.",
-            "Fill platform physics/contact details, paired-reset replay evidence, operator independence, real/benchmark calibration basis, code commit, skill-library hash, and operator confirmation booleans through the guarded materializer.",
-            "Declare fidelity_acceptance_path in external_validation/manifest.json before strict external evidence validation.",
-            "Run audit_external_fidelity_acceptance.py --strict before counting any high-fidelity route as external evidence.",
+            "Use scripts/materialize_fidelity_acceptance.py with independent-operator signoff, real platform details, render-backed video readiness, paired-reset replay evidence, a SHA40 collection commit, and the current skill-library SHA256 to write external_validation/fidelity_acceptance.json before official collection.",
+            "Fill platform physics/contact details, paired-reset replay evidence, operator independence, real/benchmark calibration basis, code commit, skill-library hash, and precollection confirmation booleans through the guarded materializer.",
+            "After official collection and postcollection sealing, declare fidelity_acceptance_path in external_validation/manifest.json together with raw logs, videos, configs, methods, and hashes.",
+            "Run audit_external_fidelity_acceptance.py --strict before collection readiness, then rely on manifest, rollout, release, pairing, adapter, config, and final evidence audits before counting any high-fidelity route as external evidence.",
         ],
     }
     OUT_JSON.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")

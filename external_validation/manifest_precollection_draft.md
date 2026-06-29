@@ -67,7 +67,7 @@ This draft records the manifest fields that can be safely prefilled before colle
 python scripts\build_external_precollection_manifest_draft.py
 ```
 ```powershell
-python scripts\materialize_fidelity_acceptance.py --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --confirm-code-commit <commit> --confirm-skill-library-hash <sha256> --write
+python scripts\materialize_fidelity_acceptance.py --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --code-commit <commit> --skill-library-hash <sha256> --write <operator fields>
 ```
 ```powershell
 python scripts\audit_external_fidelity_acceptance.py --strict

@@ -186,8 +186,8 @@ def build_remediation_work_orders(
             "id": "fidelity_acceptance_after_render_ready",
             "owner": "independent_operator",
             "status": "blocked_until_render_and_liveness_ready" if state != "QUALIFIED_FOR_RENDER_BACKED_PILOT" else "ready_to_materialize",
-            "command": "python scripts\\materialize_fidelity_acceptance.py --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write <operator fields>",
-            "acceptance": "guarded fidelity acceptance is written only after render-backed video readiness, real rollout evidence, manifest declaration, and independent signoff",
+            "command": "python scripts\\materialize_fidelity_acceptance.py --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write <operator fields>",
+            "acceptance": "guarded fidelity acceptance is written only after render-backed video readiness, platform provenance, paired replay, code/skill hashes, and independent signoff; rollout evidence and manifest declaration remain postcollection gates",
             "notes": f"qualification_state={state}; blockers={len(blockers)}",
         },
         {
@@ -456,7 +456,7 @@ def main() -> int:
         "python scripts\\probe_external_platform.py",
         "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend <accepted_backend> --shader-pack <accepted_shader_pack> --profile-matrix --profile-matrix-max-envs 1 --timeout-diagnosis-seconds 180 --timeout-diagnosis-width 64 --timeout-diagnosis-height 64",
         "python scripts\\audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 180",
-        "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
+        "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
         "python scripts\\audit_external_collection_readiness.py --strict --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --run-id <accepted_run_id> --unsealed-alias-map",
     ]
     add_check(

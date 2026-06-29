@@ -16,7 +16,7 @@ This is an operator-editable draft for the tracked ManiSkill/SAPIEN route. It pr
 - Physics engine: `SAPIEN 3.0.3 via ManiSkill`
 - Backend hash: `B02E244CF41FBABA7CC1382CED8B2F9701E015E7D1E9679805A006694355783F`
 - Candidate skill-library hash: `62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1`
-- Code commit captured in draft: `65ba836165c4c34afca1a9625cfa65b4808b91ac`
+- Code commit captured in draft: `d9d7a93d829effca0338e739edafa7b3e21d0d03`
 - Primary route install ready: `true`
 - Primary env smoke recorded: `true`
 - Primary env smoke ready: `true`
@@ -31,7 +31,7 @@ This is an operator-editable draft for the tracked ManiSkill/SAPIEN route. It pr
 - Machine-prefilled ready: `true`
 - Task metadata ready: `true`
 - Operator signoff ready: `false`
-- Operator signoff items: `10`
+- Operator signoff items: `9`
 
 Machine-prefilled items:
 
@@ -53,8 +53,7 @@ Operator signoff items:
 - `real_or_benchmark_calibration_basis`: accepted=`false`
 - `task_binding_accept_or_replace_decision`: accepted=`false`
 - `acceptance_gate_signoff`: accepted=`false`
-- `manifest_declares_fidelity_acceptance_path`: accepted=`false`
-- `real_rollout_logs_videos_and_release_hashes`: accepted=`false`
+- `render_backed_video_preflight_or_machine_qualification`: accepted=`false`
 
 ## Remaining Operator Inputs
 
@@ -66,8 +65,7 @@ Operator signoff items:
 - `real_or_benchmark_calibration_basis`
 - `task_binding_accept_or_replace_decision`
 - `acceptance_gate_signoff`
-- `manifest_declares_fidelity_acceptance_path`
-- `real_rollout_logs_videos_and_release_hashes`
+- `render_backed_video_preflight_or_machine_qualification`
 
 ## Task Bindings
 
@@ -86,9 +84,9 @@ Operator signoff items:
 
 ## Promotion Commands
 
-- `python scripts\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write`
-- `verify external_validation\fidelity_acceptance.json has version paper119_fidelity_acceptance_v1 and no draft_only/template_only fields before manifest declaration`
-- `ensure external_validation/manifest.json declares fidelity_acceptance_path=external_validation/fidelity_acceptance.json together with real logs, videos, configs, checkpoints, and method hashes`
-- `python scripts\build_external_manifest.py --write --check-video-paths`
+- `python scripts\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write`
+- `verify external_validation\fidelity_acceptance.json has version paper119_fidelity_acceptance_v1 and no draft_only/template_only fields before strict collection readiness`
 - `python scripts\audit_external_fidelity_acceptance.py --strict`
 - `python scripts\audit_external_collection_readiness.py --strict --backend-module external_validation\runner\maniskill_reference_backend.py --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map`
+- `after official collection and postcollection sealing, ensure external_validation/manifest.json declares fidelity_acceptance_path=external_validation/fidelity_acceptance.json together with real logs, videos, configs, checkpoints, and method hashes`
+- `python scripts\build_external_manifest.py --write --check-video-paths`

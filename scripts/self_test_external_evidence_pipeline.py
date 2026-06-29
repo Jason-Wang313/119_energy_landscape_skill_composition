@@ -280,8 +280,12 @@ def make_fidelity_acceptance() -> dict[str, Any]:
             "skill_library_hash": digest_text("synthetic skill library"),
             "manifest_path": "external_validation/manifest.json",
             "artifact_hash_policy": "sha256",
-            "manifest_declaration_confirmed_by_operator": True,
-            "real_rollout_evidence_confirmed_by_operator": True,
+            "real_platform_confirmed_by_operator": True,
+            "render_backed_videos_confirmed_by_operator": True,
+            "manifest_declaration_required_after_collection": True,
+            "real_rollout_evidence_required_after_collection": True,
+            "manifest_declaration_confirmed_by_operator": False,
+            "real_rollout_evidence_confirmed_by_operator": False,
         },
         "acceptance_gates": [
             {

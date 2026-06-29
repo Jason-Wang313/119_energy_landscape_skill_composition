@@ -134,12 +134,12 @@ def build_job_steps(job_state: str) -> list[dict[str, Any]]:
                 "--real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> "
                 "--acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> "
                 "--code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator "
-                "--confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write"
+                "--confirm-render-backed-videos --write"
             ),
-            acceptance="Independent operator acceptance is materialized only after real platform, render-backed video, real rollout, manifest, commit, and skill-library hash confirmations.",
+            acceptance="Independent operator acceptance is materialized only after real platform, render-backed video readiness, paired replay, commit, and skill-library hash confirmations; rollout logs and manifest declaration are postcollection strict gates.",
             may_run_now=False,
             official_evidence_boundary="guarded_acceptance_write",
-            blocked_until="all operator fields are real, checkout/hash guards match, and render/liveness gates pass",
+            blocked_until="all precollection operator fields are real, checkout/hash guards match, and render/liveness gates pass",
         ),
         make_step(
             6,
@@ -355,7 +355,7 @@ Invoke-Native python scripts\\probe_external_platform.py
 Invoke-Native python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend $AcceptedBackend --shader-pack $ShaderPack --profile-matrix --profile-matrix-max-envs 1 --timeout-diagnosis-seconds 180 --timeout-diagnosis-width 64 --timeout-diagnosis-height 64
 Invoke-Native python scripts\\audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 180
 Invoke-Native python scripts\\audit_external_backend_contract.py --strict --backend-module $BackendModule --task-config-dir $TaskConfigDir --alias-map external_validation\\method_alias_map.json
-Invoke-Native python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab $OperatorNameOrLab --accepted-collection-machine $CollectionMachine --contact-solver-and-friction-model $ContactSolverAndFrictionModel --timestep-and-substeps-per-control-step $TimestepAndSubstepsPerControlStep --paired-reset-replay-test $PairedResetReplayTest --real-or-benchmark-calibration-basis $CalibrationBasis --task-binding-decision $TaskBindingDecision --acceptance-gate-signoff $AcceptanceGateSignoff --known-limitations $KnownLimitations --date-locked $DateLocked --code-commit $CodeCommit --skill-library-hash $SkillLibraryHash --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write
+Invoke-Native python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab $OperatorNameOrLab --accepted-collection-machine $CollectionMachine --contact-solver-and-friction-model $ContactSolverAndFrictionModel --timestep-and-substeps-per-control-step $TimestepAndSubstepsPerControlStep --paired-reset-replay-test $PairedResetReplayTest --real-or-benchmark-calibration-basis $CalibrationBasis --task-binding-decision $TaskBindingDecision --acceptance-gate-signoff $AcceptanceGateSignoff --known-limitations $KnownLimitations --date-locked $DateLocked --code-commit $CodeCommit --skill-library-hash $SkillLibraryHash --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write
 Invoke-Native python scripts\\audit_external_collection_readiness.py --strict --backend-module $BackendModule --task-config-dir $TaskConfigDir --run-id $RunId --unsealed-alias-map
 Invoke-Native python scripts\\build_external_precollection_freeze_receipt.py --backend-module $BackendModule --run-id $RunId --operator-id $OperatorId --collection-machine $CollectionMachine --date-locked $DateLocked --unsealed-alias-map
 Invoke-Native python external_validation\\runner\\real_collection_runner.py --backend-module $BackendModule --task-config-dir $TaskConfigDir --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id $RunId --unsealed-alias-map
