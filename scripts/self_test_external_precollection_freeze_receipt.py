@@ -18,6 +18,19 @@ REAL_RECEIPT = ROOT / "external_validation" / "precollection_freeze_receipt.json
 REAL_AUDIT = RESULTS / "external_precollection_freeze_receipt_audit.json"
 
 VERSION = "external_precollection_freeze_receipt_self_test_v1"
+METHOD_CONFIG_FIXTURE_METHODS = [
+    "barrier_certified_energy_composer_v5",
+    "behavior_cloned_skill_chain",
+    "cem_trajectory_composer",
+    "diffusion_skill_stitcher",
+    "energy_compatibility_heuristic",
+    "greedy_module_sequence",
+    "option_graph_planner",
+    "proposed_energy_landscape_composer_v4_1",
+    "residual_rl_composer",
+    "stable_dmp_handoff",
+    "tamp_feasibility_screen",
+]
 
 
 def file_digest(path: Path) -> str | None:
@@ -28,6 +41,10 @@ def file_digest(path: Path) -> str | None:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def file_digest_upper(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest().upper()
 
 
 def write_json(path: Path, payload: dict[str, Any]) -> None:
@@ -86,6 +103,126 @@ def write_lock_file(path: Path) -> None:
         write_text(path, f"self-test lock artifact: {path.as_posix()}\n")
 
 
+def write_method_config_fixture(root: Path) -> None:
+    external = root / "external_validation"
+    results = root / "results"
+    records = []
+    csv_rows = [
+        "method,evidence_role,config_path,config_sha256,baseline_spec_path,baseline_spec_sha256,strict_gate,blocking_until_real_evidence,operator_action"
+    ]
+    for method in METHOD_CONFIG_FIXTURE_METHODS:
+        evidence_role = "paper_method_under_test" if method == "barrier_certified_energy_composer_v5" else "independent_non_oracle_method"
+        config_path = external / "method_config_candidates" / f"{method}.json"
+        rel_config_path = f"external_validation/method_config_candidates/{method}.json"
+        baseline_spec_path = external / "baseline_specs" / f"{method}.json"
+        rel_baseline_spec_path = f"external_validation/baseline_specs/{method}.json"
+        write_json(
+            baseline_spec_path,
+            {
+                "version": "paper119_baseline_spec_fixture_v1",
+                "method": method,
+                "not_external_evidence": True,
+            },
+        )
+        baseline_hash = file_digest_upper(baseline_spec_path)
+        write_json(
+            config_path,
+            {
+                "version": "paper119_candidate_method_config_v1",
+                "method": method,
+                "evidence_role": evidence_role,
+                "evidence_status": "candidate_config_not_manifest_evidence",
+                "strict_adapter_evidence_ready": False,
+                "strict_external_evidence_ready": False,
+                "operator_acceptance_required": True,
+                "manifest_declaration_required": True,
+                "rollout_log_binding_required": True,
+                "blocking_until_real_evidence": True,
+                "no_logs_videos_checkpoints_or_manifest_written": True,
+            },
+        )
+        config_hash = file_digest_upper(config_path)
+        manifest_stub = {
+            "method": method,
+            "checkpoint_or_config_path": rel_config_path,
+            "checkpoint_or_config_hash": config_hash,
+            "implementation_provenance": {
+                "implementation_origin": "<operator/lab/repository source for this implementation>",
+                "operator_signoff_id": "<signoff id or dated note>",
+                "oracle_access": False,
+                "uses_reference_adapter": False,
+                "policy_or_config_hash_locked": True,
+            },
+        }
+        records.append(
+            {
+                "method": method,
+                "evidence_role": evidence_role,
+                "config_path": rel_config_path,
+                "config_sha256": config_hash,
+                "baseline_spec_path": rel_baseline_spec_path,
+                "baseline_spec_sha256": baseline_hash,
+                "strict_gate": r"python scripts\validate_external_adapters.py --strict",
+                "blocking_until_real_evidence": True,
+                "manifest_stub": manifest_stub,
+            }
+        )
+        csv_rows.append(
+            ",".join(
+                [
+                    method,
+                    evidence_role,
+                    rel_config_path,
+                    config_hash,
+                    rel_baseline_spec_path,
+                    baseline_hash,
+                    r"python scripts\validate_external_adapters.py --strict",
+                    "True",
+                    "operator must bind this candidate hash through independent implementation and rollout logs",
+                ]
+            )
+        )
+    checks = [
+        {"name": "materialization_is_non_evidence", "passed": True, "detail": "fixture candidate configs are non-evidence"},
+        {"name": "source_method_packet_ready", "passed": True, "detail": "fixture method packet ready"},
+        {"name": "candidate_configs_cover_non_oracle_methods", "passed": True, "detail": f"records={len(records)}, oracle=False"},
+        {"name": "candidate_hashes_match_written_files", "passed": True, "detail": "all fixture hashes recompute"},
+        {"name": "manifest_stubs_bind_checkpoint_config_hashes", "passed": True, "detail": "manifest stubs bind candidate config hashes"},
+        {"name": "independent_implementation_still_required", "passed": True, "detail": "fixture still requires independent implementation"},
+        {"name": "no_real_manifest_logs_videos_or_checkpoints_written", "passed": True, "detail": "fixture writes no official evidence"},
+    ]
+    common_payload: dict[str, Any] = {
+        "candidate_config_count": len(records),
+        "candidate_config_dir": "external_validation/method_config_candidates",
+        "candidate_manifest_csv": "external_validation/method_config_candidates.csv",
+        "checks": checks,
+        "not_external_evidence": True,
+        "oracle_excluded": True,
+        "passed": True,
+        "records": records,
+        "strict_adapter_evidence_ready": False,
+        "strict_external_evidence_ready": False,
+    }
+    write_json(
+        external / "method_config_materialization_plan.json",
+        {
+            "version": "external_method_config_materialization_plan_v1",
+            **common_payload,
+        },
+    )
+    write_text(external / "method_config_materialization_plan.md", "self-test method config materialization plan\n")
+    write_text(external / "method_config_candidates.csv", "\n".join(csv_rows) + "\n")
+    write_json(
+        results / "external_method_config_materialization_audit.json",
+        {
+            "version": "external_method_config_materialization_audit_v1",
+            "failed_checks": [],
+            **common_payload,
+        },
+    )
+    write_text(results / "external_method_config_materialization_audit.md", "self-test method config materialization audit\n")
+
+
 def write_fixture(root: Path, *, remove_core_artifact: bool = False) -> Path:
     external = root / "external_validation"
     for path in core_lock_paths(root):
@@ -104,6 +241,7 @@ def write_fixture(root: Path, *, remove_core_artifact: bool = False) -> Path:
                 "paired_reset_count": 30,
             },
         )
+    write_method_config_fixture(root)
     write_text(external / "baselines" / "synthetic_method" / "adapter.py", "def initialize(config):\n    return config\n")
     backend = external / "runner" / "synthetic_backend.py"
     write_text(backend, "class Backend:\n    TEMPLATE_ONLY = False\n")
@@ -255,7 +393,8 @@ def main() -> int:
         and ready_payload.get("ready_to_collect_after_receipt") is True
         and ready_audit.get("passed") is True
         and ready_audit.get("freeze_receipt_ready") is True
-        and int(ready_audit.get("locked_artifact_count", 0) or 0) >= 25
+        and int(ready_audit.get("locked_artifact_count", 0) or 0) >= 42
+        and int(ready_audit.get("candidate_method_config_count", 0) or 0) >= 11
         and not ready_payload.get("missing_lock_paths"),
         (
             f"freeze_ready={ready_payload.get('freeze_receipt_ready')!r}, "
@@ -269,6 +408,10 @@ def main() -> int:
         ready_checks.get("receipt_is_non_evidence_and_fail_closed") is True
         and ready_checks.get("core_lock_artifacts_hashed") is True
         and ready_checks.get("prepared_task_configs_hashed") is True
+        and ready_checks.get("method_config_materialization_artifacts_hashed") is True
+        and ready_checks.get("candidate_method_configs_hashed") is True
+        and ready_checks.get("candidate_method_config_hashes_match_plan") is True
+        and ready_checks.get("candidate_method_configs_remain_non_evidence") is True
         and ready_checks.get("backend_module_still_operator_supplied") is True
         and ready_checks.get("run_identity_still_operator_supplied") is True
         and ready_checks.get("operator_metadata_still_required") is True
@@ -336,6 +479,7 @@ def main() -> int:
         "ready_summary": {
             "locked_artifact_count": ready_audit.get("locked_artifact_count"),
             "config_count": len([row for row in ready_payload.get("lock_artifacts", []) if row.get("role") == "prepared_task_config"]),
+            "candidate_method_config_count": ready_audit.get("candidate_method_config_count"),
             "code_commit": ready_payload.get("current_checkout", {}).get("code_commit"),
         },
         "checks": checks,

@@ -233,7 +233,7 @@ This receipt is not evidence. It hash-locks the operator sheet, alias map, prepa
 - CSV: `external_validation/precollection_freeze_receipt.csv`
 - Audit JSON: `results/external_precollection_freeze_receipt_audit.json`
 - Audit notes: `results/external_precollection_freeze_receipt_audit.md`
-- Locked artifacts: `26`
+- Locked artifacts: `42`
 - Freeze receipt ready: `false`
 - Strict external evidence ready: `false`
 - Missing lock paths: `['selected_backend_module']`
@@ -471,7 +471,7 @@ Post-collection strict gates:
 - `pass` `render_machine_qualification_recorded_but_not_evidence`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12
 - `pass` `ablation_collection_packet_recorded_but_not_evidence`: work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False
 - `pass` `evidence_intake_ledger_recorded_but_not_evidence`: mapped=37/37, groups=8
-- `pass` `precollection_freeze_receipt_recorded_but_not_evidence`: locked_artifacts=26, freeze_receipt_ready=False
+- `pass` `precollection_freeze_receipt_recorded_but_not_evidence`: locked_artifacts=42, candidate_method_configs=11, freeze_receipt_ready=False
 - `pass` `postcollection_evidence_seal_recorded_but_not_evidence`: sealed_artifacts=11, records=0, videos=0, seal_ready=False
 - `pass` `postcollection_seal_consistency_recorded_but_not_evidence`: matched=11, records=0, videos=0, consistency_ready=False
 - `pass` `precollection_manifest_draft_ready_but_not_evidence`: configs=4, method_gaps=11, rollout_gaps=8, official_manifest_exists=False

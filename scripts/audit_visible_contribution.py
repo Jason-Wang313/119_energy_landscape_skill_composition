@@ -1131,15 +1131,22 @@ def main() -> int:
         and precollection_freeze.get("not_external_evidence") is True
         and precollection_freeze.get("strict_external_evidence_ready") is False
         and precollection_freeze.get("freeze_receipt_ready") is False
-        and int(precollection_freeze.get("locked_artifact_count", 0) or 0) >= 25
+        and int(precollection_freeze.get("locked_artifact_count", 0) or 0) >= 42
+        and int(precollection_freeze.get("candidate_method_config_count", 0) or 0) >= 11
+        and precollection_freeze.get("method_config_hash_lock_ready") is True
         and precollection_freeze_checks.get("receipt_is_non_evidence_and_fail_closed") is True
         and precollection_freeze_checks.get("core_lock_artifacts_hashed") is True
         and precollection_freeze_checks.get("prepared_task_configs_hashed") is True
+        and precollection_freeze_checks.get("method_config_materialization_artifacts_hashed") is True
+        and precollection_freeze_checks.get("candidate_method_configs_hashed") is True
+        and precollection_freeze_checks.get("candidate_method_config_hashes_match_plan") is True
+        and precollection_freeze_checks.get("candidate_method_configs_remain_non_evidence") is True
         and precollection_freeze_checks.get("strict_sequence_places_receipt_before_collection") is True
         and (ROOT / "external_validation" / "precollection_freeze_receipt.md").exists()
         and (ROOT / "external_validation" / "precollection_freeze_receipt.csv").exists(),
         (
             f"locked_artifacts={precollection_freeze.get('locked_artifact_count')!r}, "
+            f"candidate_method_configs={precollection_freeze.get('candidate_method_config_count')!r}, "
             f"freeze_receipt_ready={precollection_freeze.get('freeze_receipt_ready')!r}, "
             f"strict_external_evidence_ready={precollection_freeze.get('strict_external_evidence_ready')!r}"
         ),

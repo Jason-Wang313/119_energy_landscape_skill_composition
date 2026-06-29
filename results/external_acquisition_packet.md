@@ -146,7 +146,7 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 - `pass` `rollout_evidence_packet_ready`: rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False
 - `pass` `ablation_collection_packet_ready`: work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False
 - `pass` `evidence_intake_ledger_ready`: mapped=37/37, groups=8
-- `pass` `precollection_freeze_receipt_ready`: locked_artifacts=26, freeze_receipt_ready=False
+- `pass` `precollection_freeze_receipt_ready`: locked_artifacts=42, candidate_method_configs=11, freeze_receipt_ready=False
 - `pass` `postcollection_evidence_seal_ready`: sealed_artifacts=11, records=0, videos=0, seal_ready=False
 - `pass` `postcollection_seal_consistency_gate_ready`: matched=11, records=0, videos=0, consistency_ready=False
 - `pass` `pilot_smoke_packet_ready`: pilot_smoke_packet_ready=True, strict_evidence_ready=False

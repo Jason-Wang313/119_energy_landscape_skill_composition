@@ -4,19 +4,24 @@ Passed: `true`.
 Not evidence: `true`.
 Freeze receipt ready: `false`.
 Strict external evidence ready: `false`.
-Locked artifacts: `26`.
+Locked artifacts: `42`.
+Candidate method configs: `11`.
 
-This audit checks that the precollection freeze receipt hash-locks the operator sheet, alias map, prepared configs, method cutover checklist, manifest draft, runner files, source audits, and current checkout before any official JSONL/video collection can count.
+This audit checks that the precollection freeze receipt hash-locks the operator sheet, alias map, prepared configs, candidate method-config hashes, method cutover checklist, manifest draft, runner files, source audits, and current checkout before any official JSONL/video collection can count.
 
 ## Checks
 
 - `pass` `receipt_is_non_evidence_and_fail_closed`: not_external_evidence=True, strict_external_evidence_ready=False, freeze_receipt_ready=False, ready_to_collect_after_receipt=False
 - `pass` `core_lock_artifacts_hashed`: core_count=21
 - `pass` `prepared_task_configs_hashed`: config_count=4
+- `pass` `method_config_materialization_artifacts_hashed`: materialization_artifact_count=5
+- `pass` `candidate_method_configs_hashed`: candidate_config_count=11
+- `pass` `candidate_method_config_hashes_match_plan`: candidate_config_count=11
+- `pass` `candidate_method_configs_remain_non_evidence`: candidate configs are hash-locked but remain non-evidence until independent implementation and rollout binding
 - `pass` `backend_module_still_operator_supplied`: backend_module=''
 - `pass` `run_identity_still_operator_supplied`: run_id='paper119_external_validation_run', unsealed_alias_map=False
 - `pass` `operator_metadata_still_required`: operator='', machine='', date=''
-- `pass` `checkout_and_skill_hash_recorded`: commit='0c92288921dc500da5326e29a99615cee1de6f37', skill_hash='F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802'
+- `pass` `checkout_and_skill_hash_recorded`: commit='fe85f791220562c93b0ffe5c64b907fc5be1d6e4', skill_hash='F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802'
 - `pass` `strict_sequence_places_receipt_before_collection`: python scripts\audit_external_fidelity_acceptance.py --strict
 python scripts\validate_external_configs.py --strict
 python scripts\validate_external_adapters.py --strict

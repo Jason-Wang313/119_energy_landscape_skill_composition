@@ -1250,11 +1250,20 @@ def main() -> int:
     add_check(
         checks,
         "external_precollection_freeze_receipt_hash_lock",
-        int(precollection_freeze.get("locked_artifact_count", 0) or 0) >= 25
+        int(precollection_freeze.get("locked_artifact_count", 0) or 0) >= 42
+        and int(precollection_freeze.get("candidate_method_config_count", 0) or 0) >= 11
+        and precollection_freeze.get("method_config_hash_lock_ready") is True
         and freeze_checks.get("core_lock_artifacts_hashed") is True
         and freeze_checks.get("prepared_task_configs_hashed") is True
+        and freeze_checks.get("method_config_materialization_artifacts_hashed") is True
+        and freeze_checks.get("candidate_method_configs_hashed") is True
+        and freeze_checks.get("candidate_method_config_hashes_match_plan") is True
+        and freeze_checks.get("candidate_method_configs_remain_non_evidence") is True
         and freeze_checks.get("checkout_and_skill_hash_recorded") is True,
-        f"locked_artifact_count={precollection_freeze.get('locked_artifact_count')!r}",
+        (
+            f"locked_artifact_count={precollection_freeze.get('locked_artifact_count')!r}, "
+            f"candidate_method_config_count={precollection_freeze.get('candidate_method_config_count')!r}"
+        ),
     )
     add_check(
         checks,

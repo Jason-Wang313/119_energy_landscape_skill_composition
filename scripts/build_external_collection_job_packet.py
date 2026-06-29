@@ -158,7 +158,7 @@ def build_job_steps(job_state: str) -> list[dict[str, Any]]:
             step_id="precollection_freeze_receipt",
             owner="independent_operator",
             command="python scripts\\build_external_precollection_freeze_receipt.py --backend-module external_validation\\runner\\maniskill_reference_backend.py --run-id <accepted_run_id> --operator-id <independent_operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
-            acceptance="Operator sheet, aliases, configs, method cutover checklist, manifest draft, runner files, and source audits are hash-locked before official collection.",
+            acceptance="Operator sheet, aliases, configs, candidate method-config hashes, method cutover checklist, manifest draft, runner files, and source audits are hash-locked before official collection.",
             may_run_now=False,
             official_evidence_boundary="precollection_hash_lock",
             blocked_until="strict collection readiness passes and operator metadata is real",

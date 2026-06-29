@@ -2226,8 +2226,12 @@ def main():
         fail("external precollection freeze receipt must stay fail-closed before real operator lock")
     if "not a manifest, rollout log" not in str(freeze_receipt.get("evidence_boundary", "")):
         fail("external precollection freeze receipt must state its evidence boundary")
-    if int(len(freeze_receipt.get("lock_artifacts", []) or [])) < 25:
+    if int(len(freeze_receipt.get("lock_artifacts", []) or [])) < 42:
         fail("external precollection freeze receipt locks too few artifacts")
+    if int(freeze_receipt.get("candidate_method_config_count", 0) or 0) < 11:
+        fail("external precollection freeze receipt must lock candidate method config hashes")
+    if freeze_receipt.get("method_config_hash_lock_ready") is not True:
+        fail("external precollection freeze receipt must report method config hash lock ready")
     if "build_external_precollection_freeze_receipt.py" not in "\n".join(freeze_receipt.get("strict_command_sequence", []) or []):
         fail("external precollection freeze receipt must include itself in the strict command sequence")
     if freeze_audit.get("version") != "external_precollection_freeze_receipt_audit_v1":
@@ -2238,13 +2242,21 @@ def main():
         fail("external precollection freeze receipt audit must declare that it is not evidence")
     if freeze_audit.get("strict_external_evidence_ready") is not False or freeze_audit.get("freeze_receipt_ready") is not False:
         fail("external precollection freeze receipt audit must keep strict evidence and receipt readiness false")
-    if int(freeze_audit.get("locked_artifact_count", 0) or 0) < 25:
+    if int(freeze_audit.get("locked_artifact_count", 0) or 0) < 42:
         fail("external precollection freeze receipt audit locks too few artifacts")
+    if int(freeze_audit.get("candidate_method_config_count", 0) or 0) < 11:
+        fail("external precollection freeze receipt audit must lock candidate method config hashes")
+    if freeze_audit.get("method_config_hash_lock_ready") is not True:
+        fail("external precollection freeze receipt audit must report method config hash lock ready")
     freeze_checks = {check.get("name"): check.get("passed") for check in freeze_audit.get("checks", [])}
     for required_check in (
         "receipt_is_non_evidence_and_fail_closed",
         "core_lock_artifacts_hashed",
         "prepared_task_configs_hashed",
+        "method_config_materialization_artifacts_hashed",
+        "candidate_method_configs_hashed",
+        "candidate_method_config_hashes_match_plan",
+        "candidate_method_configs_remain_non_evidence",
         "backend_module_still_operator_supplied",
         "run_identity_still_operator_supplied",
         "operator_metadata_still_required",
@@ -4124,8 +4136,12 @@ def main():
         fail("external acquisition packet freeze receipt summary must keep strict evidence false")
     if acquisition_freeze.get("freeze_receipt_ready") is not False:
         fail("external acquisition packet freeze receipt summary must keep freeze readiness false before real operator lock")
-    if int(acquisition_freeze.get("locked_artifact_count", 0) or 0) < 25:
+    if int(acquisition_freeze.get("locked_artifact_count", 0) or 0) < 42:
         fail("external acquisition packet freeze receipt summary locks too few artifacts")
+    if int(acquisition_freeze.get("candidate_method_config_count", 0) or 0) < 11:
+        fail("external acquisition packet freeze receipt summary must expose candidate method config hash locks")
+    if acquisition_freeze.get("method_config_hash_lock_ready") is not True:
+        fail("external acquisition packet freeze receipt summary must report method config hash lock ready")
     if "external_validation/precollection_freeze_receipt.md" not in str(acquisition_freeze.get("operator_packet_path", "")):
         fail("external acquisition packet freeze receipt summary must point to the receipt markdown")
     if "build_external_precollection_freeze_receipt.py" not in str(acquisition_freeze.get("audit_command", "")):
@@ -4438,8 +4454,12 @@ def main():
         fail("external operator packet freeze receipt summary must keep strict evidence false")
     if operator_freeze.get("freeze_receipt_ready") is not False:
         fail("external operator packet freeze receipt summary must keep freeze readiness false before real operator lock")
-    if int(operator_freeze.get("locked_artifact_count", 0) or 0) < 25:
+    if int(operator_freeze.get("locked_artifact_count", 0) or 0) < 42:
         fail("external operator packet freeze receipt summary locks too few artifacts")
+    if int(operator_freeze.get("candidate_method_config_count", 0) or 0) < 11:
+        fail("external operator packet freeze receipt summary must expose candidate method config hash locks")
+    if operator_freeze.get("method_config_hash_lock_ready") is not True:
+        fail("external operator packet freeze receipt summary must report method config hash lock ready")
     if "external_validation/precollection_freeze_receipt.md" not in str(operator_freeze.get("packet_path", "")):
         fail("external operator packet freeze receipt summary must point to the receipt markdown")
     if "build_external_precollection_freeze_receipt.py" not in str(operator_freeze.get("build_command", "")):

@@ -1,37 +1,193 @@
 {
   "backend_module": "",
+  "candidate_method_config_count": 11,
+  "candidate_method_config_records": [
+    {
+      "actual_sha256": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/barrier_certified_energy_composer_v5.json",
+      "config_sha256": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872",
+      "evidence_role": "paper_method_under_test",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "barrier_certified_energy_composer_v5",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/behavior_cloned_skill_chain.json",
+      "config_sha256": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "behavior_cloned_skill_chain",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/cem_trajectory_composer.json",
+      "config_sha256": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "cem_trajectory_composer",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/diffusion_skill_stitcher.json",
+      "config_sha256": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "diffusion_skill_stitcher",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/energy_compatibility_heuristic.json",
+      "config_sha256": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "energy_compatibility_heuristic",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/greedy_module_sequence.json",
+      "config_sha256": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "greedy_module_sequence",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/option_graph_planner.json",
+      "config_sha256": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "option_graph_planner",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/proposed_energy_landscape_composer_v4_1.json",
+      "config_sha256": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3",
+      "evidence_role": "paper_predecessor_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "proposed_energy_landscape_composer_v4_1",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/residual_rl_composer.json",
+      "config_sha256": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "residual_rl_composer",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/stable_dmp_handoff.json",
+      "config_sha256": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "stable_dmp_handoff",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/tamp_feasibility_screen.json",
+      "config_sha256": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "tamp_feasibility_screen",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    }
+  ],
   "collection_machine": "",
   "current_checkout": {
     "clean_checkout": false,
-    "code_commit": "0c92288921dc500da5326e29a99615cee1de6f37",
+    "code_commit": "fe85f791220562c93b0ffe5c64b907fc5be1d6e4",
     "dirty_status_lines": [
-      "M .github/workflows/paper119-validation.yml",
-      " M README.md",
+      "M README.md",
       " M child_status.md",
       " M docs/claim_evidence_ledger.json",
       " M docs/final_audit.md",
-      " M docs/haonan_yilun_outreach_package.md",
-      " M docs/reproducibility_checklist.md",
       " M docs/submission_readiness_audit_v5.md",
-      " M docs/submission_readiness_decision.md",
       " M docs/submission_version_log.md",
-      " M external_validation/manifest_precollection_draft.json",
-      " M external_validation/manifest_precollection_draft.md",
-      " M results/external_precollection_manifest_draft_audit.json",
-      " M scripts/audit_submission_readiness_gap.py",
+      " M external_validation/precollection_freeze_receipt.csv",
+      " M external_validation/precollection_freeze_receipt.json",
+      " M external_validation/precollection_freeze_receipt.md",
+      " M results/external_precollection_freeze_receipt_audit.json",
+      " M results/external_precollection_freeze_receipt_audit.md",
+      " M results/external_precollection_freeze_receipt_self_test.json",
+      " M results/external_precollection_freeze_receipt_self_test.md",
+      " M scripts/audit_external_execution_readiness.py",
       " M scripts/audit_visible_contribution.py",
+      " M scripts/build_external_acquisition_packet.py",
+      " M scripts/build_external_operator_handoff_bundle.py",
+      " M scripts/build_external_operator_packet.py",
       " M scripts/build_external_precollection_freeze_receipt.py",
-      " M scripts/build_external_precollection_manifest_draft.py",
-      " M scripts/build_submission_artifacts.ps1",
-      " M scripts/validate_submission_artifacts.py",
-      "?? results/external_precollection_freeze_receipt_self_test.json",
-      "?? results/external_precollection_freeze_receipt_self_test.md",
-      "?? scripts/self_test_external_precollection_freeze_receipt.py"
+      " M scripts/self_test_external_precollection_freeze_receipt.py",
+      " M scripts/validate_submission_artifacts.py"
     ],
     "skill_library_hash": "F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802"
   },
   "date_locked": "",
-  "evidence_boundary": "This receipt freezes precollection inputs only. It is not a manifest, rollout log, video, checkpoint, metric result, or external validation evidence.",
+  "evidence_boundary": "This receipt freezes precollection inputs only. It is not a manifest, rollout log, video, checkpoint, metric result, method evidence, or external validation evidence.",
   "freeze_receipt_ready": false,
   "lock_artifacts": [
     {
@@ -53,14 +209,14 @@
       "path": "external_validation/manifest_precollection_draft.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "9C258D7C091FA40B2AF9753931276D359F73CC8B03CBDBB15C4516C3A90A8B12"
+      "sha256": "1909C8172316185391056F5B672C0B484E2E42F3E1295251EC147FDA0BF6E744"
     },
     {
       "exists": true,
       "path": "external_validation/manifest_precollection_draft.md",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "20FC5B8747708D22E6D253FC71A96DF24A915C622A5464CEACBDB17DFB16F9FB"
+      "sha256": "E9C816F76182B011D16F9943F80538E42C14947202349AE5FCACE3276AFD07EF"
     },
     {
       "exists": true,
@@ -179,7 +335,7 @@
       "path": "results/external_precollection_manifest_draft_audit.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "17F638DFF1060FC2487FBE0062C0672EA27872BBF7D8D3ED4A3C3E8CC00A016F"
+      "sha256": "5F7C0865651B5F3AF6B0A7E3793077CF119397D7C32C766AF738928F2A10E763"
     },
     {
       "exists": true,
@@ -210,6 +366,118 @@
       "sha256": "021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9"
     },
     {
+      "exists": true,
+      "path": "external_validation/method_config_materialization_plan.json",
+      "required_before_collection": true,
+      "role": "method_config_materialization_artifact",
+      "sha256": "46924247617A3D86168888FA411EA957C82C1992FB66D82BC00CB87AAE9E153F"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_materialization_plan.md",
+      "required_before_collection": true,
+      "role": "method_config_materialization_artifact",
+      "sha256": "5BB83B2C4B1601858113FD2F8F9203B469EF2BC3C9AA37880E23FBAA384A1D53"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates.csv",
+      "required_before_collection": true,
+      "role": "method_config_materialization_artifact",
+      "sha256": "BBFDEAAA8563980BCD0CDE8002DA50676B1B7F1B68A238CCC39CEEEEDCBB4EF5"
+    },
+    {
+      "exists": true,
+      "path": "results/external_method_config_materialization_audit.json",
+      "required_before_collection": true,
+      "role": "method_config_materialization_artifact",
+      "sha256": "5DC60C246B1C8CCF6D20F780F5D97B46E016C548EFCFDD72EE7E6925A4EDD7F2"
+    },
+    {
+      "exists": true,
+      "path": "results/external_method_config_materialization_audit.md",
+      "required_before_collection": true,
+      "role": "method_config_materialization_artifact",
+      "sha256": "9FE77F7B1D8976A4AA3A7A60FB26431D8733D1698EBC5CEE23C16676CBE13C7A"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/barrier_certified_energy_composer_v5.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/behavior_cloned_skill_chain.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/cem_trajectory_composer.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/diffusion_skill_stitcher.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/energy_compatibility_heuristic.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/greedy_module_sequence.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/option_graph_planner.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/proposed_energy_landscape_composer_v4_1.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/residual_rl_composer.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/stable_dmp_handoff.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/tamp_feasibility_screen.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB"
+    },
+    {
       "exists": false,
       "path": "",
       "required_before_collection": true,
@@ -217,6 +485,11 @@
       "sha256": ""
     }
   ],
+  "method_config_candidates_csv_path": "external_validation/method_config_candidates.csv",
+  "method_config_hash_lock_ready": true,
+  "method_config_materialization_artifact_count": 5,
+  "method_config_materialization_audit_path": "results/external_method_config_materialization_audit.json",
+  "method_config_materialization_plan_path": "external_validation/method_config_materialization_plan.json",
   "missing_lock_paths": [
     "selected_backend_module"
   ],

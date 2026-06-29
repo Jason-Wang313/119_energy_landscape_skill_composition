@@ -596,12 +596,12 @@
       "passed": true
     },
     {
-      "detail": "locked_artifact_count=26",
+      "detail": "locked_artifact_count=42, candidate_method_config_count=11",
       "name": "external_precollection_freeze_receipt_hash_lock",
       "passed": true
     },
     {
-      "detail": "commands=13",
+      "detail": "commands=14",
       "name": "external_precollection_freeze_receipt_gate_order",
       "passed": true
     },
@@ -726,7 +726,7 @@
       "passed": true
     },
     {
-      "detail": "included_file_count=302, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 96, 'operator_command_source': 42, 'operator_facing_input': 75, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "included_file_count=333, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 102, 'method_config_candidate': 11, 'operator_command_source': 45, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "external_operator_handoff_bundle_hash_manifest",
       "passed": true
     },

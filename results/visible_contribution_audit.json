@@ -237,7 +237,7 @@
       "passed": true
     },
     {
-      "detail": "locked_artifacts=26, freeze_receipt_ready=False, strict_external_evidence_ready=False",
+      "detail": "locked_artifacts=42, candidate_method_configs=11, freeze_receipt_ready=False, strict_external_evidence_ready=False",
       "name": "precollection_freeze_receipt_visible",
       "passed": true
     },

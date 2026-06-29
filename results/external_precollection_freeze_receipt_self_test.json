@@ -1,17 +1,17 @@
 {
   "checks": [
     {
-      "detail": "freeze_ready=True, ready_to_collect=True, locked=26, missing=[]",
+      "detail": "freeze_ready=True, ready_to_collect=True, locked=42, missing=[]",
       "name": "synthetic_complete_freeze_reaches_collection_readiness",
       "passed": true
     },
     {
-      "detail": "ready_checks={'receipt_is_non_evidence_and_fail_closed': True, 'core_lock_artifacts_hashed': True, 'prepared_task_configs_hashed': True, 'backend_module_still_operator_supplied': True, 'run_identity_still_operator_supplied': True, 'operator_metadata_still_required': True, 'checkout_and_skill_hash_recorded': True, 'strict_sequence_places_receipt_before_collection': True, 'strict_sequence_places_seal_consistency_before_manifest': True, 'receipt_references_manifest_rollout_release_final_gates': True, 'source_state_preserves_external_blockers': True, 'no_real_manifest_written': True}",
+      "detail": "ready_checks={'receipt_is_non_evidence_and_fail_closed': True, 'core_lock_artifacts_hashed': True, 'prepared_task_configs_hashed': True, 'method_config_materialization_artifacts_hashed': True, 'candidate_method_configs_hashed': True, 'candidate_method_config_hashes_match_plan': True, 'candidate_method_configs_remain_non_evidence': True, 'backend_module_still_operator_supplied': True, 'run_identity_still_operator_supplied': True, 'operator_metadata_still_required': True, 'checkout_and_skill_hash_recorded': True, 'strict_sequence_places_receipt_before_collection': True, 'strict_sequence_places_seal_consistency_before_manifest': True, 'receipt_references_manifest_rollout_release_final_gates': True, 'source_state_preserves_external_blockers': True, 'no_real_manifest_written': True}",
       "name": "synthetic_ready_checks_cover_hashes_identity_and_order",
       "passed": true
     },
     {
-      "detail": "freeze_ready=False, missing=['selected_backend_module'], checks={'receipt_is_non_evidence_and_fail_closed': True, 'core_lock_artifacts_hashed': True, 'prepared_task_configs_hashed': True, 'backend_module_still_operator_supplied': True, 'run_identity_still_operator_supplied': False, 'operator_metadata_still_required': False, 'checkout_and_skill_hash_recorded': True, 'strict_sequence_places_receipt_before_collection': True, 'strict_sequence_places_seal_consistency_before_manifest': True, 'receipt_references_manifest_rollout_release_final_gates': True, 'source_state_preserves_external_blockers': False, 'no_real_manifest_written': True}",
+      "detail": "freeze_ready=False, missing=['selected_backend_module'], checks={'receipt_is_non_evidence_and_fail_closed': True, 'core_lock_artifacts_hashed': True, 'prepared_task_configs_hashed': True, 'method_config_materialization_artifacts_hashed': True, 'candidate_method_configs_hashed': True, 'candidate_method_config_hashes_match_plan': True, 'candidate_method_configs_remain_non_evidence': True, 'backend_module_still_operator_supplied': True, 'run_identity_still_operator_supplied': False, 'operator_metadata_still_required': False, 'checkout_and_skill_hash_recorded': True, 'strict_sequence_places_receipt_before_collection': True, 'strict_sequence_places_seal_consistency_before_manifest': True, 'receipt_references_manifest_rollout_release_final_gates': True, 'source_state_preserves_external_blockers': False, 'no_real_manifest_written': True}",
       "name": "missing_backend_selection_rejected",
       "passed": true
     },
@@ -21,7 +21,7 @@
       "passed": true
     },
     {
-      "detail": "missing=['external_validation/method_manifest_cutover_checklist.md'], checks={'receipt_is_non_evidence_and_fail_closed': True, 'core_lock_artifacts_hashed': False, 'prepared_task_configs_hashed': True, 'backend_module_still_operator_supplied': False, 'run_identity_still_operator_supplied': False, 'operator_metadata_still_required': False, 'checkout_and_skill_hash_recorded': True, 'strict_sequence_places_receipt_before_collection': True, 'strict_sequence_places_seal_consistency_before_manifest': True, 'receipt_references_manifest_rollout_release_final_gates': True, 'source_state_preserves_external_blockers': False, 'no_real_manifest_written': True}",
+      "detail": "missing=['external_validation/method_manifest_cutover_checklist.md'], checks={'receipt_is_non_evidence_and_fail_closed': True, 'core_lock_artifacts_hashed': False, 'prepared_task_configs_hashed': True, 'method_config_materialization_artifacts_hashed': True, 'candidate_method_configs_hashed': True, 'candidate_method_config_hashes_match_plan': True, 'candidate_method_configs_remain_non_evidence': True, 'backend_module_still_operator_supplied': False, 'run_identity_still_operator_supplied': False, 'operator_metadata_still_required': False, 'checkout_and_skill_hash_recorded': True, 'strict_sequence_places_receipt_before_collection': True, 'strict_sequence_places_seal_consistency_before_manifest': True, 'receipt_references_manifest_rollout_release_final_gates': True, 'source_state_preserves_external_blockers': False, 'no_real_manifest_written': True}",
       "name": "missing_lock_artifact_rejected",
       "passed": true
     },
@@ -31,7 +31,7 @@
       "passed": true
     },
     {
-      "detail": "receipt_before=ba83851cbf42ca36deefe2a178a144db7ee3143396cba97e41ffc85307ac7b36, receipt_after=ba83851cbf42ca36deefe2a178a144db7ee3143396cba97e41ffc85307ac7b36, audit_before=cb82056292baf92cb0695d6ae5467c40ec3606970f455d03d384220d910a4988, audit_after=cb82056292baf92cb0695d6ae5467c40ec3606970f455d03d384220d910a4988",
+      "detail": "receipt_before=749eef27814c1616ddf2842be921d0296934b1ed41041aa9214288351e3d8a93, receipt_after=749eef27814c1616ddf2842be921d0296934b1ed41041aa9214288351e3d8a93, audit_before=44f317afe1b38cb51d39103f215507a84dbac014e6690b7dc4c8e49b6356df85, audit_after=44f317afe1b38cb51d39103f215507a84dbac014e6690b7dc4c8e49b6356df85",
       "name": "real_precollection_freeze_reports_not_overwritten",
       "passed": true
     }
@@ -43,9 +43,10 @@
   "passed": true,
   "placeholder_run_rejected": true,
   "ready_summary": {
+    "candidate_method_config_count": 11,
     "code_commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     "config_count": 4,
-    "locked_artifact_count": 26
+    "locked_artifact_count": 42
   },
   "real_reports_untouched": true,
   "strict_external_evidence_ready": false,

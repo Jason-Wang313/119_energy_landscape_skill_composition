@@ -994,15 +994,22 @@ def main() -> int:
         and precollection_freeze.get("not_external_evidence") is True
         and precollection_freeze.get("strict_external_evidence_ready") is False
         and precollection_freeze.get("freeze_receipt_ready") is False
-        and int(precollection_freeze.get("locked_artifact_count", 0) or 0) >= 25
+        and int(precollection_freeze.get("locked_artifact_count", 0) or 0) >= 42
+        and int(precollection_freeze.get("candidate_method_config_count", 0) or 0) >= 11
+        and precollection_freeze.get("method_config_hash_lock_ready") is True
         and freeze_checks.get("receipt_is_non_evidence_and_fail_closed") is True
         and freeze_checks.get("core_lock_artifacts_hashed") is True
         and freeze_checks.get("prepared_task_configs_hashed") is True
+        and freeze_checks.get("method_config_materialization_artifacts_hashed") is True
+        and freeze_checks.get("candidate_method_configs_hashed") is True
+        and freeze_checks.get("candidate_method_config_hashes_match_plan") is True
+        and freeze_checks.get("candidate_method_configs_remain_non_evidence") is True
         and freeze_checks.get("strict_sequence_places_receipt_before_collection") is True
         and (EXTERNAL / "precollection_freeze_receipt.md").exists()
         and (EXTERNAL / "precollection_freeze_receipt.csv").exists(),
         (
             f"locked_artifacts={precollection_freeze.get('locked_artifact_count')!r}, "
+            f"candidate_method_configs={precollection_freeze.get('candidate_method_config_count')!r}, "
             f"freeze_receipt_ready={precollection_freeze.get('freeze_receipt_ready')!r}"
         ),
     )
@@ -1561,6 +1568,8 @@ def main() -> int:
             "strict_external_evidence_ready": precollection_freeze.get("strict_external_evidence_ready") is True,
             "freeze_receipt_ready": precollection_freeze.get("freeze_receipt_ready") is True,
             "locked_artifact_count": int(precollection_freeze.get("locked_artifact_count", 0) or 0),
+            "candidate_method_config_count": int(precollection_freeze.get("candidate_method_config_count", 0) or 0),
+            "method_config_hash_lock_ready": precollection_freeze.get("method_config_hash_lock_ready") is True,
             "missing_lock_paths": list(precollection_freeze.get("missing_lock_paths", []) or []),
             "audit_command": "python scripts\\build_external_precollection_freeze_receipt.py",
             "audit_path": "results/external_precollection_freeze_receipt_audit.json",

@@ -118,7 +118,7 @@ python scripts\audit_external_collection_readiness.py --strict --backend-module 
 - May run now: `false`
 - Boundary: `precollection_hash_lock`
 - Blocked until: strict collection readiness passes and operator metadata is real
-- Acceptance: Operator sheet, aliases, configs, method cutover checklist, manifest draft, runner files, and source audits are hash-locked before official collection.
+- Acceptance: Operator sheet, aliases, configs, candidate method-config hashes, method cutover checklist, manifest draft, runner files, and source audits are hash-locked before official collection.
 
 ```powershell
 python scripts\build_external_precollection_freeze_receipt.py --backend-module external_validation\runner\maniskill_reference_backend.py --run-id <accepted_run_id> --operator-id <independent_operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map

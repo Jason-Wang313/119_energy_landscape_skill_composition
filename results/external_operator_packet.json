@@ -77,7 +77,7 @@
       "passed": true
     },
     {
-      "detail": "locked_artifacts=26, freeze_receipt_ready=False",
+      "detail": "locked_artifacts=42, candidate_method_configs=11, freeze_receipt_ready=False",
       "name": "precollection_freeze_receipt_recorded_but_not_evidence",
       "passed": true
     },
@@ -916,9 +916,11 @@
     "audit_md_path": "results/external_precollection_freeze_receipt_audit.md",
     "audit_path": "results/external_precollection_freeze_receipt_audit.json",
     "build_command": "python scripts\\build_external_precollection_freeze_receipt.py",
+    "candidate_method_config_count": 11,
     "csv_path": "external_validation/precollection_freeze_receipt.csv",
     "freeze_receipt_ready": false,
-    "locked_artifact_count": 26,
+    "locked_artifact_count": 42,
+    "method_config_hash_lock_ready": true,
     "missing_lock_paths": [
       "selected_backend_module"
     ],

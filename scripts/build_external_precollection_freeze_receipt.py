@@ -131,6 +131,117 @@ def config_artifacts() -> list[dict[str, Any]]:
     return rows
 
 
+def method_config_materialization_artifacts() -> list[dict[str, Any]]:
+    return [
+        locked_artifact(EXTERNAL / "method_config_materialization_plan.json", "method_config_materialization_artifact"),
+        locked_artifact(EXTERNAL / "method_config_materialization_plan.md", "method_config_materialization_artifact"),
+        locked_artifact(EXTERNAL / "method_config_candidates.csv", "method_config_materialization_artifact"),
+        locked_artifact(RESULTS / "external_method_config_materialization_audit.json", "method_config_materialization_artifact"),
+        locked_artifact(RESULTS / "external_method_config_materialization_audit.md", "method_config_materialization_artifact"),
+    ]
+
+
+def method_config_records() -> list[dict[str, Any]]:
+    plan = read_json(EXTERNAL / "method_config_materialization_plan.json")
+    records = plan.get("records", []) or []
+    return [record for record in records if isinstance(record, dict)]
+
+
+def candidate_method_config_artifacts(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    paths: list[Path] = []
+    for record in records:
+        path_text = str(record.get("config_path", "")).strip()
+        if path_text:
+            paths.append(rel_path(path_text))
+    if not paths:
+        paths = sorted((EXTERNAL / "method_config_candidates").glob("*.json"))
+    return [locked_artifact(path, "candidate_method_config") for path in sorted(set(paths), key=rel)]
+
+
+def candidate_method_config_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    rows = []
+    for record in records:
+        path_text = str(record.get("config_path", "")).strip()
+        path = rel_path(path_text) if path_text else Path()
+        exists = bool(path_text) and path.exists()
+        actual_hash = sha256_file(path) if exists else ""
+        config_payload = read_json(path) if exists else {}
+        rows.append(
+            {
+                "method": record.get("method"),
+                "evidence_role": record.get("evidence_role"),
+                "config_path": path_text,
+                "config_sha256": record.get("config_sha256", ""),
+                "actual_sha256": actual_hash,
+                "config_hash_matches": bool(actual_hash) and actual_hash == record.get("config_sha256"),
+                "evidence_status": config_payload.get("evidence_status"),
+                "strict_adapter_evidence_ready": config_payload.get("strict_adapter_evidence_ready"),
+                "operator_acceptance_required": config_payload.get("operator_acceptance_required"),
+                "manifest_declaration_required": config_payload.get("manifest_declaration_required"),
+                "rollout_log_binding_required": config_payload.get("rollout_log_binding_required"),
+                "blocking_until_real_evidence": record.get("blocking_until_real_evidence"),
+            }
+        )
+    return rows
+
+
+def method_config_lock_summary(records: list[dict[str, Any]], artifacts: list[dict[str, Any]]) -> dict[str, Any]:
+    plan = read_json(EXTERNAL / "method_config_materialization_plan.json")
+    audit = read_json(RESULTS / "external_method_config_materialization_audit.json")
+    materialization_artifacts = [row for row in artifacts if row.get("role") == "method_config_materialization_artifact"]
+    candidate_artifacts = [row for row in artifacts if row.get("role") == "candidate_method_config"]
+    candidate_records = candidate_method_config_records(records)
+    audit_checks = {check.get("name"): check.get("passed") for check in audit.get("checks", []) or [] if isinstance(check, dict)}
+    candidate_methods = {str(row.get("method")) for row in candidate_records if row.get("method")}
+    non_evidence_records = [
+        row
+        for row in candidate_records
+        if row.get("evidence_status") == "candidate_config_not_manifest_evidence"
+        and row.get("strict_adapter_evidence_ready") is False
+        and row.get("operator_acceptance_required") is True
+        and row.get("manifest_declaration_required") is True
+        and row.get("rollout_log_binding_required") is True
+        and row.get("blocking_until_real_evidence") is True
+    ]
+    hashes_match = (
+        len(candidate_records) >= 11
+        and all(row.get("config_hash_matches") is True and len(str(row.get("config_sha256", ""))) == 64 for row in candidate_records)
+    )
+    non_evidence_ready = (
+        len(non_evidence_records) == len(candidate_records)
+        and "oracle_basin_composer" not in candidate_methods
+        and plan.get("oracle_excluded") is True
+        and audit.get("oracle_excluded") is True
+        and audit.get("strict_adapter_evidence_ready") is False
+        and audit_checks.get("no_real_manifest_logs_videos_or_checkpoints_written") is True
+    )
+    materialization_ready = (
+        plan.get("passed") is True
+        and audit.get("passed") is True
+        and plan.get("not_external_evidence") is True
+        and audit.get("not_external_evidence") is True
+        and plan.get("strict_external_evidence_ready") is False
+        and audit.get("strict_external_evidence_ready") is False
+        and len(materialization_artifacts) >= 5
+        and all(row.get("exists") and len(str(row.get("sha256", ""))) == 64 for row in materialization_artifacts)
+    )
+    return {
+        "candidate_method_config_count": len(candidate_records),
+        "candidate_method_config_records": candidate_records,
+        "candidate_method_config_methods": sorted(candidate_methods),
+        "method_config_materialization_artifact_count": len(materialization_artifacts),
+        "method_config_materialization_artifacts_hashed": materialization_ready,
+        "candidate_method_config_hashes_match_plan": hashes_match,
+        "candidate_method_configs_remain_non_evidence": non_evidence_ready,
+        "method_config_hash_lock_ready": materialization_ready and hashes_match and non_evidence_ready,
+        "method_config_materialization_audit_checks": audit_checks,
+        "method_config_materialization_plan_path": rel(EXTERNAL / "method_config_materialization_plan.json"),
+        "method_config_candidates_csv_path": rel(EXTERNAL / "method_config_candidates.csv"),
+        "method_config_materialization_audit_path": rel(RESULTS / "external_method_config_materialization_audit.json"),
+        "candidate_method_config_artifact_count": len(candidate_artifacts),
+    }
+
+
 def operator_command(args: argparse.Namespace) -> str:
     return (
         "python scripts\\build_external_precollection_freeze_receipt.py "
@@ -171,8 +282,12 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
     dirty_status_lines = [line for line in run_git(["status", "--short"]).splitlines() if line.strip()]
     backend_path = rel_path(args.backend_module) if args.backend_module else None
 
+    candidate_records = method_config_records()
     lock_artifacts = [locked_artifact(path, "core_precollection_artifact") for path in CORE_LOCK_PATHS]
     lock_artifacts.extend(config_artifacts())
+    lock_artifacts.extend(method_config_materialization_artifacts())
+    lock_artifacts.extend(candidate_method_config_artifacts(candidate_records))
+    method_config_summary = method_config_lock_summary(candidate_records, lock_artifacts)
     if backend_path is not None:
         lock_artifacts.append(locked_artifact(backend_path, "selected_backend_module"))
     else:
@@ -208,6 +323,7 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         and fidelity_ready
         and collection_ready
         and checkout_clean
+        and method_config_summary["method_config_hash_lock_ready"]
     )
 
     return {
@@ -228,6 +344,13 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
             "dirty_status_lines": dirty_status_lines,
             "skill_library_hash": sha256_tree(EXTERNAL / "baselines"),
         },
+        "method_config_hash_lock_ready": method_config_summary["method_config_hash_lock_ready"],
+        "candidate_method_config_count": method_config_summary["candidate_method_config_count"],
+        "candidate_method_config_records": method_config_summary["candidate_method_config_records"],
+        "method_config_materialization_artifact_count": method_config_summary["method_config_materialization_artifact_count"],
+        "method_config_materialization_plan_path": method_config_summary["method_config_materialization_plan_path"],
+        "method_config_candidates_csv_path": method_config_summary["method_config_candidates_csv_path"],
+        "method_config_materialization_audit_path": method_config_summary["method_config_materialization_audit_path"],
         "source_state": {
             "fidelity_acceptance_ready": fidelity_ready,
             "collection_ready": collection_ready,
@@ -240,7 +363,7 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         "operator_regeneration_command": operator_command(args),
         "evidence_boundary": (
             "This receipt freezes precollection inputs only. It is not a manifest, rollout log, "
-            "video, checkpoint, metric result, or external validation evidence."
+            "video, checkpoint, metric result, method evidence, or external validation evidence."
         ),
     }
 
@@ -281,6 +404,45 @@ def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
         len(paths_by_role.get("prepared_task_config", [])) >= 4
         and all(row.get("exists") and len(str(row.get("sha256", ""))) == 64 for row in paths_by_role.get("prepared_task_config", [])),
         f"config_count={len(paths_by_role.get('prepared_task_config', []))}",
+    )
+    add_check(
+        checks,
+        "method_config_materialization_artifacts_hashed",
+        len(paths_by_role.get("method_config_materialization_artifact", [])) >= 5
+        and all(
+            row.get("exists") and len(str(row.get("sha256", ""))) == 64
+            for row in paths_by_role.get("method_config_materialization_artifact", [])
+        ),
+        f"materialization_artifact_count={len(paths_by_role.get('method_config_materialization_artifact', []))}",
+    )
+    add_check(
+        checks,
+        "candidate_method_configs_hashed",
+        len(paths_by_role.get("candidate_method_config", [])) >= 11
+        and all(row.get("exists") and len(str(row.get("sha256", ""))) == 64 for row in paths_by_role.get("candidate_method_config", [])),
+        f"candidate_config_count={len(paths_by_role.get('candidate_method_config', []))}",
+    )
+    add_check(
+        checks,
+        "candidate_method_config_hashes_match_plan",
+        payload.get("method_config_hash_lock_ready") is True
+        and payload.get("candidate_method_config_count", 0) >= 11
+        and all(row.get("config_hash_matches") is True for row in payload.get("candidate_method_config_records", []) or []),
+        f"candidate_config_count={payload.get('candidate_method_config_count')!r}",
+    )
+    add_check(
+        checks,
+        "candidate_method_configs_remain_non_evidence",
+        payload.get("method_config_hash_lock_ready") is True
+        and all(
+            row.get("evidence_status") == "candidate_config_not_manifest_evidence"
+            and row.get("strict_adapter_evidence_ready") is False
+            and row.get("operator_acceptance_required") is True
+            and row.get("manifest_declaration_required") is True
+            and row.get("rollout_log_binding_required") is True
+            for row in payload.get("candidate_method_config_records", []) or []
+        ),
+        "candidate configs are hash-locked but remain non-evidence until independent implementation and rollout binding",
     )
     add_check(
         checks,
@@ -404,6 +566,10 @@ def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
         "receipt_md_path": rel(OUT_MD),
         "receipt_csv_path": rel(OUT_CSV),
         "locked_artifact_count": len(artifacts),
+        "method_config_hash_lock_ready": payload.get("method_config_hash_lock_ready"),
+        "candidate_method_config_count": payload.get("candidate_method_config_count"),
+        "method_config_materialization_artifact_count": payload.get("method_config_materialization_artifact_count"),
+        "candidate_method_config_records": payload.get("candidate_method_config_records", []),
         "missing_lock_paths": payload.get("missing_lock_paths", []),
         "operator_regeneration_command": payload.get("operator_regeneration_command"),
         "strict_command_sequence": payload.get("strict_command_sequence", []),
@@ -440,6 +606,8 @@ def write_receipt_md(payload: dict[str, Any]) -> None:
         f"- Date locked: `{payload['date_locked'] or '<YYYY-MM-DD>'}`",
         f"- Code commit: `{payload['current_checkout']['code_commit']}`",
         f"- Skill-library hash: `{payload['current_checkout']['skill_library_hash']}`",
+        f"- Candidate method configs hash-locked: `{payload['candidate_method_config_count']}`",
+        f"- Method-config hash lock ready: `{str(payload['method_config_hash_lock_ready']).lower()}`",
         "",
         "## Operator Regeneration Command",
         "",
@@ -471,8 +639,9 @@ def write_audit_md(audit: dict[str, Any]) -> None:
         f"Freeze receipt ready: `{str(audit['freeze_receipt_ready']).lower()}`.",
         "Strict external evidence ready: `false`.",
         f"Locked artifacts: `{audit['locked_artifact_count']}`.",
+        f"Candidate method configs: `{audit['candidate_method_config_count']}`.",
         "",
-        "This audit checks that the precollection freeze receipt hash-locks the operator sheet, alias map, prepared configs, method cutover checklist, manifest draft, runner files, source audits, and current checkout before any official JSONL/video collection can count.",
+        "This audit checks that the precollection freeze receipt hash-locks the operator sheet, alias map, prepared configs, candidate method-config hashes, method cutover checklist, manifest draft, runner files, source audits, and current checkout before any official JSONL/video collection can count.",
         "",
         "## Checks",
         "",
