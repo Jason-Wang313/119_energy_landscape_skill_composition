@@ -211,6 +211,21 @@ def parse_collection_progress(stdout: str) -> list[dict[str, Any]]:
     return stages
 
 
+def parse_backend_progress(stdout: str) -> list[dict[str, Any]]:
+    marker = "PAPER119_MANISKILL_BACKEND_STAGE "
+    stages: list[dict[str, Any]] = []
+    for line in stdout.splitlines():
+        if not line.startswith(marker):
+            continue
+        try:
+            payload = json.loads(line[len(marker) :])
+        except json.JSONDecodeError:
+            continue
+        if isinstance(payload, dict):
+            stages.append(payload)
+    return stages
+
+
 def summarize_failure(
     *,
     timed_out: bool,
@@ -289,6 +304,10 @@ def reset_timeout_actions(*, task_family: str, env_id: str, method_name: str) ->
             f"for the reset-scene target {scoped_target}."
         ),
         (
+            "Use last_backend_progress_stage to decide whether the next fix belongs to import/package setup, gym.make "
+            "construction, env.reset/assets, or initial render capture."
+        ),
+        (
             "If reset still hangs, replace or rebind the task in external_validation/fidelity_acceptance.json only after "
             "independent operator signoff, then rerun collection readiness before any official rollout."
         ),
@@ -338,6 +357,8 @@ def build_reset_timeout_triage(args: argparse.Namespace, result: dict[str, Any])
         "timed_out": result["timed_out"],
         "timeout_seconds": args.timeout_seconds,
         "last_progress_stage": result["last_progress_stage"],
+        "last_backend_progress_stage": result["last_backend_progress_stage"],
+        "backend_progress_stages": result["backend_progress_stages"],
         "failure_summary": result["failure_summary"],
         "row_index": row_index,
         "method_alias": method_alias,
@@ -435,7 +456,9 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
         stdout = coerce_output(exc.stdout)
         stderr = coerce_output(exc.stderr)
     progress_stages = parse_collection_progress(stdout)
+    backend_progress_stages = parse_backend_progress(stdout)
     last_progress_stage = str(progress_stages[-1].get("stage", "")) if progress_stages else ""
+    last_backend_progress_stage = str(backend_progress_stages[-1].get("stage", "")) if backend_progress_stages else ""
     records, parse_errors, log_paths = load_records(GUARD_LOG_DIR)
     schema = read_json(EXTERNAL / "log_schema_v1.json")
     methods = load_methods()
@@ -500,7 +523,9 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
         "stdout_tail": stdout[-2000:],
         "stderr_tail": stderr[-2000:],
         "collection_progress_stages": progress_stages[-40:],
+        "backend_progress_stages": backend_progress_stages[-40:],
         "last_progress_stage": last_progress_stage,
+        "last_backend_progress_stage": last_backend_progress_stage,
         "records_observed": len(records),
         "videos_written": videos_written,
         "failure_summary": failure_summary,
@@ -552,6 +577,18 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         "collection_progress_markers_recorded",
         (not result["timed_out"]) or bool(result["last_progress_stage"]),
         f"last_progress_stage={result['last_progress_stage']!r}",
+    )
+    add_check(
+        checks,
+        "backend_reset_substage_markers_recorded",
+        (
+            not (result["timed_out"] and result["last_progress_stage"] == "reset_scene_start")
+            or bool(result["last_backend_progress_stage"])
+        ),
+        (
+            f"last_progress_stage={result['last_progress_stage']!r}, "
+            f"last_backend_progress_stage={result['last_backend_progress_stage']!r}"
+        ),
     )
     add_check(
         checks,
@@ -664,11 +701,13 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
                 and bool(reset_triage["config_hash"])
                 and bool(reset_triage["primary_env_id"])
                 and bool(reset_triage["scene_id"])
+                and bool(reset_triage["last_backend_progress_stage"])
             )
         ),
         (
             f"reset_timeout={reset_triage['reset_timeout']}, task_family={reset_triage['task_family']!r}, "
-            f"method={reset_triage['method_name']!r}, env_id={reset_triage['primary_env_id']!r}"
+            f"method={reset_triage['method_name']!r}, env_id={reset_triage['primary_env_id']!r}, "
+            f"backend_stage={reset_triage['last_backend_progress_stage']!r}"
         ),
     )
     add_check(
@@ -719,7 +758,9 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         "videos_written": result["videos_written"],
         "failure_summary": result["failure_summary"],
         "last_progress_stage": result["last_progress_stage"],
+        "last_backend_progress_stage": result["last_backend_progress_stage"],
         "collection_progress_stages": result["collection_progress_stages"],
+        "backend_progress_stages": result["backend_progress_stages"],
         "timed_out": result["timed_out"],
         "returncode": result["returncode"],
         "schema_errors": result["schema_errors"],
@@ -766,6 +807,7 @@ def write_outputs(payload: dict[str, Any]) -> None:
         f"Official video guard blocked diagnostic fallback: `{str(payload['official_video_guard_blocked_diagnostic_fallback']).lower()}`.",
         f"Failure summary: `{payload['failure_summary']}`.",
         f"Last progress stage: `{payload['last_progress_stage'] or 'none'}`.",
+        f"Last backend progress stage: `{payload['last_backend_progress_stage'] or 'none'}`.",
         f"Reset-timeout triage: `{payload['reset_timeout_triage_md']}`.",
         "",
         "This bounded liveness audit launches the tracked ManiSkill reference runner in a subprocess against quarantined `pilot_runtime_guard` directories. It is not rollout evidence and cannot satisfy the external evidence gate; it only prevents a slow CPU/render backend from silently blocking an official collection attempt.",
@@ -808,6 +850,7 @@ def write_outputs(payload: dict[str, Any]) -> None:
             f"- Scene: `{reset_triage['scene_id'] or 'unknown'}`",
             f"- Primary env: `{reset_triage['primary_env_id'] or 'unknown'}`",
             f"- Config hash: `{reset_triage['config_hash'] or 'unknown'}`",
+            f"- Last backend progress stage: `{reset_triage['last_backend_progress_stage'] or 'none'}`",
             "",
             "Operator next actions:",
         ]
@@ -817,6 +860,12 @@ def write_outputs(payload: dict[str, Any]) -> None:
     lines.extend(["", "## Collection Progress", ""])
     if payload["collection_progress_stages"]:
         for stage in payload["collection_progress_stages"][-20:]:
+            lines.append(f"- `{stage.get('stage')}`: {stage}")
+    else:
+        lines.append("- none")
+    lines.extend(["", "## Backend Progress", ""])
+    if payload["backend_progress_stages"]:
+        for stage in payload["backend_progress_stages"][-20:]:
             lines.append(f"- `{stage.get('stage')}`: {stage}")
     else:
         lines.append("- none")
@@ -845,6 +894,7 @@ def write_outputs(payload: dict[str, Any]) -> None:
         f"- Config path: `{reset_triage['config_path'] or 'unknown'}`",
         f"- Config hash: `{reset_triage['config_hash'] or 'unknown'}`",
         f"- Primary env id: `{reset_triage['primary_env_id'] or 'unknown'}`",
+        f"- Last backend progress stage: `{reset_triage['last_backend_progress_stage'] or 'none'}`",
         f"- Primary route: `{reset_triage['primary_route'] or 'unknown'}`",
         f"- Binding strength: `{reset_triage['binding_strength'] or 'unknown'}`",
         f"- Skill seam: `{reset_triage['skill_i'] or 'unknown'} -> {reset_triage['skill_j'] or 'unknown'}`",
@@ -858,6 +908,12 @@ def write_outputs(payload: dict[str, Any]) -> None:
     triage_lines.extend(["", "## Operator Next Actions", ""])
     for action in reset_triage["operator_next_actions"]:
         triage_lines.append(f"- {action}")
+    triage_lines.extend(["", "## Backend Progress", ""])
+    if reset_triage["backend_progress_stages"]:
+        for stage in reset_triage["backend_progress_stages"][-20:]:
+            triage_lines.append(f"- `{stage.get('stage')}`: {stage}")
+    else:
+        triage_lines.append("- none")
     triage_lines.extend(["", "## Evidence Boundary", "", reset_triage["evidence_boundary"]])
     TRIAGE_MD.write_text("\n".join(triage_lines) + "\n", encoding="utf-8")
 

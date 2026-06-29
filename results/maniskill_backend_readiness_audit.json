@@ -19,7 +19,7 @@
       "passed": true
     },
     {
-      "detail": "{\"backend_module_sha256\": \"3479C8AEA42FC8BCDFF30B8108AD70733136945748F02785A18100FAAEF3A255\", \"collection_enabled_by_default\": false, \"contact_solver\": \"operator_verified_by_fidelity_acceptance\", \"gymnasium_version\": \"1.2.3\", \"maniskill_version\": \"3.0.1\", \"not_external_evidence\": true, \"operating_system\": \"Windows-10-10.0.26200-SP0\", \"physics_timestep\": \"operator_verified_by_fidelity_acceptance\", \"platform_name\": \"ManiSkill-SAPIEN-reference-backend\", \"platform_type\": \"high_fidelity_sim\", \"platform_version\": \"3.0.1\", \"python_version\": \"3.10.11\", \"render_backend\": \"cpu\", \"render_height\": 128, \"render_width\": 128, \"renderer\": \"cpu\", \"sapien_version\": \"3.0.3\", \"sensor_modalities\": [\"state\", \"camera\", \"contact_or_force\"], \"shader_pack\": \"minimal\", \"torch_version\": \"2.10.0\"}",
+      "detail": "{\"backend_module_sha256\": \"B02E244CF41FBABA7CC1382CED8B2F9701E015E7D1E9679805A006694355783F\", \"collection_enabled_by_default\": false, \"contact_solver\": \"operator_verified_by_fidelity_acceptance\", \"gymnasium_version\": \"1.2.3\", \"maniskill_version\": \"3.0.1\", \"not_external_evidence\": true, \"operating_system\": \"Windows-10-10.0.26200-SP0\", \"physics_timestep\": \"operator_verified_by_fidelity_acceptance\", \"platform_name\": \"ManiSkill-SAPIEN-reference-backend\", \"platform_type\": \"high_fidelity_sim\", \"platform_version\": \"3.0.1\", \"python_version\": \"3.10.11\", \"render_backend\": \"cpu\", \"render_height\": 128, \"render_width\": 128, \"renderer\": \"cpu\", \"sapien_version\": \"3.0.3\", \"sensor_modalities\": [\"state\", \"camera\", \"contact_or_force\"], \"shader_pack\": \"minimal\", \"torch_version\": \"2.10.0\"}",
       "name": "backend_platform_provenance_complete",
       "passed": true
     },
@@ -90,7 +90,7 @@
   "official_collection_ready": false,
   "passed": true,
   "platform_provenance": {
-    "backend_module_sha256": "3479C8AEA42FC8BCDFF30B8108AD70733136945748F02785A18100FAAEF3A255",
+    "backend_module_sha256": "B02E244CF41FBABA7CC1382CED8B2F9701E015E7D1E9679805A006694355783F",
     "collection_enabled_by_default": false,
     "contact_solver": "operator_verified_by_fidelity_acceptance",
     "gymnasium_version": "1.2.3",

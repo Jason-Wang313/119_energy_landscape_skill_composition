@@ -47,6 +47,14 @@ def int_from_env(name: str, default: int) -> int:
         return default
 
 
+def emit_backend_progress(stage: str, **fields: Any) -> None:
+    if os.environ.get("PAPER119_COLLECTION_PROGRESS", "") != "1":
+        return
+    payload = {"stage": stage}
+    payload.update(fields)
+    print("PAPER119_MANISKILL_BACKEND_STAGE " + json.dumps(payload, sort_keys=True, default=str), flush=True)
+
+
 def numeric_values(value: Any, *, limit: int = 128) -> list[float]:
     values: list[float] = []
 
@@ -263,12 +271,17 @@ class Backend(ExternalCollectionBackend):
 
     def _ensure_env(self, env_id: str) -> Any:
         if self._env is not None and self._env_id == env_id:
+            emit_backend_progress("ensure_env_cached", env_id=env_id)
             return self._env
         if self._env is not None:
+            emit_backend_progress("close_previous_env_start", env_id=self._env_id or "")
             self._env.close()
+            emit_backend_progress("close_previous_env_done", env_id=self._env_id or "")
+        emit_backend_progress("import_mani_skill_start", env_id=env_id)
         import gymnasium as gym
         import mani_skill  # noqa: F401
 
+        emit_backend_progress("import_mani_skill_done", env_id=env_id)
         render_backend = os.environ.get("PAPER119_MANISKILL_RENDER_BACKEND", DEFAULT_RENDER_BACKEND)
         shader_pack = os.environ.get("PAPER119_MANISKILL_SHADER_PACK", DEFAULT_SHADER_PACK)
         width = int_from_env("PAPER119_MANISKILL_RENDER_WIDTH", DEFAULT_RENDER_WIDTH)
@@ -278,10 +291,22 @@ class Backend(ExternalCollectionBackend):
             "sensor_configs": {"width": width, "height": height, "shader_pack": shader_pack},
             "human_render_camera_configs": {"width": width, "height": height, "shader_pack": shader_pack},
         }
+        emit_backend_progress(
+            "make_env_start",
+            env_id=env_id,
+            render_backend=render_backend,
+            shader_pack=shader_pack,
+            render_width=width,
+            render_height=height,
+        )
         try:
             self._env = gym.make(env_id, obs_mode="state", render_mode="rgb_array", **render_kwargs)
         except TypeError:
+            emit_backend_progress("make_env_retry_without_render_kwargs", env_id=env_id)
             self._env = gym.make(env_id, obs_mode="state", render_mode="rgb_array")
+            emit_backend_progress("make_env_done", env_id=env_id, used_render_kwargs=False)
+        else:
+            emit_backend_progress("make_env_done", env_id=env_id, used_render_kwargs=True)
         self._env_id = env_id
         return self._env
 
@@ -305,9 +330,26 @@ class Backend(ExternalCollectionBackend):
         env_id = str(config.get("backend_task_binding", {}).get("primary_env_id", "")).strip()
         if not env_id:
             raise RuntimeError(f"cannot reset {task_family}: missing primary_env_id")
-        env = self._ensure_env(env_id)
         seed = int(row.get("seed", 0) or 0)
+        emit_backend_progress(
+            "reset_scene_begin",
+            task_family=task_family,
+            env_id=env_id,
+            scene_id=row.get("scene_id", ""),
+            seed=seed,
+        )
+        emit_backend_progress("ensure_env_start", task_family=task_family, env_id=env_id)
+        env = self._ensure_env(env_id)
+        emit_backend_progress("ensure_env_done", task_family=task_family, env_id=env_id)
+        emit_backend_progress("env_reset_start", task_family=task_family, env_id=env_id, seed=seed)
         obs, info = env.reset(seed=seed)
+        emit_backend_progress(
+            "env_reset_done",
+            task_family=task_family,
+            env_id=env_id,
+            seed=seed,
+            info_keys=sorted(str(key) for key in dict(info)),
+        )
         self._last_obs = obs
         self._last_info = dict(info)
         self._last_row = dict(row)
@@ -315,7 +357,17 @@ class Backend(ExternalCollectionBackend):
         self._video_frames = []
         self._video_render_attempted = False
         self._video_render_error = ""
+        emit_backend_progress("initial_video_frame_start", task_family=task_family, env_id=env_id)
         self._try_capture_video_frame()
+        emit_backend_progress(
+            "initial_video_frame_done",
+            task_family=task_family,
+            env_id=env_id,
+            render_attempted=self._video_render_attempted,
+            frame_count=len(self._video_frames),
+            render_error=self._video_render_error,
+        )
+        emit_backend_progress("reset_scene_return", task_family=task_family, env_id=env_id)
         return {
             "initial_state_hash": stable_digest({"env_id": env_id, "seed": seed, "obs": numeric_values(obs, limit=64)}),
             "env_id": env_id,

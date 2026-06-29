@@ -286,12 +286,12 @@
       "passed": true
     },
     {
-      "detail": "pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, timed_out=True, records=0, videos=0, diagnostic_fallbacks=0, diagnostic_rejected=False, failure_summary='runner timed out after progress stage reset_scene_start before producing the required pilot record/video'",
+      "detail": "pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, timed_out=False, records=0, videos=0, diagnostic_fallbacks=1, diagnostic_rejected=True, failure_summary='official video guard rejected diagnostic fallback sidecar before JSONL write after progress stage record_video_start'",
       "name": "maniskill_pilot_runtime_liveness_not_evidence",
       "passed": true
     },
     {
-      "detail": "status='RESET_SCENE_TIMEOUT_TRIAGE_READY', reset_timeout=True, task='peg_place_regrasp', method='energy_compatibility_heuristic', env='PegInsertionSide-v1'",
+      "detail": "status='RESET_SCENE_TIMEOUT_TRIAGE_NOT_APPLICABLE', reset_timeout=False, task='peg_place_regrasp', method='energy_compatibility_heuristic', env='PegInsertionSide-v1', backend_stage='reset_scene_return'",
       "name": "maniskill_pilot_reset_timeout_triage_ready",
       "passed": true
     },

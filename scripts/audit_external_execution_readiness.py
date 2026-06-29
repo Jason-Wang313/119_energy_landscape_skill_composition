@@ -571,6 +571,7 @@ def main() -> int:
         and pilot_runtime.get("render_video_ready") is False
         and pilot_runtime_checks.get("bounded_runner_subprocess_exercised") is True
         and pilot_runtime_checks.get("timeout_or_result_recorded_as_readiness_state") is True
+        and pilot_runtime_checks.get("backend_reset_substage_markers_recorded") is True
         and pilot_runtime_checks.get("reset_timeout_triage_is_non_evidence") is True
         and pilot_runtime_checks.get("reset_timeout_triage_context_recorded") is True
         and pilot_runtime_checks.get("reset_timeout_operator_actions_present") is True
@@ -627,6 +628,8 @@ def main() -> int:
                 and bool(str(pilot_runtime_triage.get("method_name", "")).strip())
                 and bool(str(pilot_runtime_triage.get("config_hash", "")).strip())
                 and bool(str(pilot_runtime_triage.get("primary_env_id", "")).strip())
+                and bool(str(pilot_runtime_triage.get("last_backend_progress_stage", "")).strip())
+                and bool(pilot_runtime_triage.get("backend_progress_stages"))
                 and len(pilot_runtime_triage.get("operator_next_actions", []) or []) >= 5
             )
         )
@@ -642,7 +645,8 @@ def main() -> int:
             f"reset_timeout={pilot_runtime_triage.get('reset_timeout')!r}, "
             f"task={pilot_runtime_triage.get('task_family')!r}, "
             f"method={pilot_runtime_triage.get('method_name')!r}, "
-            f"env={pilot_runtime_triage.get('primary_env_id')!r}"
+            f"env={pilot_runtime_triage.get('primary_env_id')!r}, "
+            f"backend_stage={pilot_runtime_triage.get('last_backend_progress_stage')!r}"
         ),
     )
 

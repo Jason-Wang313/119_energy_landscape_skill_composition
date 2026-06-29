@@ -2716,6 +2716,10 @@ def main():
         for required_field in ("task_family", "method_name", "method_alias", "scene_id", "config_hash", "primary_env_id"):
             if not str(pilot_reset_triage.get(required_field, "")).strip():
                 fail(f"ManiSkill pilot reset-timeout triage missing field: {required_field}")
+        if not str(pilot_reset_triage.get("last_backend_progress_stage", "")).strip():
+            fail("ManiSkill pilot reset-timeout triage must record the last backend progress stage")
+        if not pilot_reset_triage.get("backend_progress_stages"):
+            fail("ManiSkill pilot reset-timeout triage must record backend progress stages")
         if len(pilot_reset_triage.get("operator_next_actions", []) or []) < 5:
             fail("ManiSkill pilot reset-timeout triage must include operator next actions")
     pilot_runtime_checks = {check.get("name"): check.get("passed") for check in pilot_runtime.get("checks", [])}
@@ -2724,6 +2728,7 @@ def main():
         "quarantine_paths_are_not_official_evidence",
         "bounded_runner_subprocess_exercised",
         "collection_progress_markers_recorded",
+        "backend_reset_substage_markers_recorded",
         "timeout_or_result_recorded_as_readiness_state",
         "ready_requires_schema_valid_records_and_videos",
         "runner_io_ready_allows_only_quarantined_diagnostic_fallback",
