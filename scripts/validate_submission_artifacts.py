@@ -140,6 +140,7 @@ def main():
         "scripts\\build_external_rollout_evidence_packet.py",
         "scripts\\build_external_ablation_collection_packet.py",
         "scripts\\build_external_evidence_intake_ledger.py",
+        "scripts\\build_external_precollection_manifest_draft.py",
         "scripts\\build_external_baseline_contract.py",
         "scripts\\build_external_adapter_scaffolds.py",
         "scripts\\build_external_reference_adapters.py",
@@ -229,6 +230,7 @@ def main():
         "python scripts/build_external_rollout_evidence_packet.py",
         "python scripts/build_external_ablation_collection_packet.py",
         "python scripts/build_external_evidence_intake_ledger.py",
+        "python scripts/build_external_precollection_manifest_draft.py",
         "python scripts/build_external_analysis_plan.py",
         "python scripts/probe_external_platform.py",
         "python scripts/probe_maniskill_task_bindings.py",
@@ -1703,6 +1705,75 @@ def main():
     if not any(row.get("item") == "final_external_evidence_gate" and row.get("blocking_until_real_evidence") == "true" for row in assembly_rows if isinstance(row, dict)):
         fail("external manifest assembly checklist must keep the final evidence gate blocking")
 
+    precollection_draft_path = EXTERNAL / "manifest_precollection_draft.json"
+    precollection_draft_md_path = EXTERNAL / "manifest_precollection_draft.md"
+    precollection_audit_path = RESULTS / "external_precollection_manifest_draft_audit.json"
+    precollection_audit_md_path = RESULTS / "external_precollection_manifest_draft_audit.md"
+    for path in (
+        ROOT / "scripts" / "build_external_precollection_manifest_draft.py",
+        precollection_draft_path,
+        precollection_draft_md_path,
+        precollection_audit_path,
+        precollection_audit_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external precollection manifest draft artifact: {path}")
+    precollection_draft = json.loads(precollection_draft_path.read_text(encoding="utf-8"))
+    precollection_audit = json.loads(precollection_audit_path.read_text(encoding="utf-8"))
+    if precollection_draft.get("version") != "external_precollection_manifest_draft_v1":
+        fail("external precollection manifest draft version mismatch")
+    if precollection_draft.get("not_external_evidence") is not True or precollection_draft.get("draft_only") is not True:
+        fail("external precollection manifest draft must be marked draft-only non-evidence")
+    if precollection_draft.get("strict_external_evidence_ready") is not False or precollection_draft.get("ready_to_write_official_manifest") is not False:
+        fail("external precollection manifest draft must remain fail-closed")
+    if precollection_draft.get("official_manifest_exists") is not False or (EXTERNAL / "manifest.json").exists():
+        fail("external precollection manifest draft must not coexist with a real manifest before collection")
+    if int(precollection_draft.get("prepared_config_count", 0) or 0) < 4:
+        fail("external precollection manifest draft must prefill all prepared config hashes")
+    if int(precollection_draft.get("method_gap_count", 0) or 0) < 11:
+        fail("external precollection manifest draft must preserve missing non-oracle method gaps")
+    if int(precollection_draft.get("missing_rollout_artifact_count", 0) or 0) < 8:
+        fail("external precollection manifest draft must preserve missing rollout log/video gaps")
+    if int(precollection_draft.get("manifest_assembly_blocking_count", 0) or 0) < 20:
+        fail("external precollection manifest draft must preserve manifest assembly blockers")
+    for record in precollection_draft.get("prepared_config_records", []) or []:
+        if record.get("strict_validation_passed_if_manifest_declared") is not True or len(str(record.get("config_hash", ""))) != 64:
+            fail(f"external precollection manifest draft has invalid prepared config record: {record}")
+    cutover_text = "\n".join(precollection_draft.get("cutover_commands", []) or [])
+    for fragment in (
+        "materialize_fidelity_acceptance.py",
+        "audit_external_collection_readiness.py --strict",
+        "real_collection_runner.py",
+        "build_external_manifest.py --write --check-video-paths",
+        "validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "audit_external_evidence.py --strict",
+    ):
+        if fragment not in cutover_text:
+            fail(f"external precollection manifest draft missing cutover command fragment: {fragment}")
+    if precollection_audit.get("version") != "external_precollection_manifest_draft_audit_v1":
+        fail("external precollection manifest draft audit version mismatch")
+    if precollection_audit.get("passed") is not True:
+        fail("external precollection manifest draft audit did not pass")
+    if precollection_audit.get("not_external_evidence") is not True:
+        fail("external precollection manifest draft audit must declare that it is not evidence")
+    if precollection_audit.get("draft_ready") is not True:
+        fail("external precollection manifest draft audit must report draft_ready=true")
+    if precollection_audit.get("strict_external_evidence_ready") is not False or precollection_audit.get("strict_config_evidence_ready") is not False:
+        fail("external precollection manifest draft audit must preserve strict gates as false")
+    precollection_checks = {check.get("name"): check.get("passed") for check in precollection_audit.get("checks", [])}
+    for required_check in (
+        "draft_json_written_to_precollection_path",
+        "draft_marked_non_evidence_and_fail_closed",
+        "official_manifest_absent",
+        "prepared_config_hashes_prefilled",
+        "method_gaps_remain_blocking",
+        "rollout_artifacts_remain_blocking",
+        "manifest_assembly_blockers_preserved",
+        "source_reports_hash_listed",
+    ):
+        if precollection_checks.get(required_check) is not True:
+            fail(f"external precollection manifest draft audit missing passing check: {required_check}")
+
     preflight_path = RESULTS / "external_evidence_preflight.json"
     if not preflight_path.exists():
         fail("missing results/external_evidence_preflight.json; run scripts/audit_external_evidence_preflight.py")
@@ -2660,6 +2731,10 @@ def main():
         "external_pairing_integrity_not_evidence",
         "external_release_package_audit_ready",
         "external_release_package_not_evidence",
+        "external_precollection_manifest_draft_ready",
+        "external_precollection_manifest_draft_not_evidence",
+        "external_precollection_manifest_draft_config_hashes",
+        "external_precollection_manifest_draft_fail_closed",
         "external_acquisition_packet_ready",
         "external_acquisition_packet_not_evidence",
         "external_acquisition_packet_maps_all_blockers",
@@ -2758,7 +2833,10 @@ def main():
         EXTERNAL / "method_implementation_work_orders.csv",
         EXTERNAL / "method_reference_provenance.csv",
         EXTERNAL / "manifest_assembly_checklist.csv",
+        EXTERNAL / "manifest_precollection_draft.json",
+        EXTERNAL / "manifest_precollection_draft.md",
         RESULTS / "external_method_implementation_audit.md",
+        RESULTS / "external_precollection_manifest_draft_audit.md",
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.md",
         RESULTS / "external_ablation_collection_audit.md",
@@ -3082,6 +3160,30 @@ def main():
     intake_action_commands = "\n".join(intake_actions[0].get("commands", []) or [])
     if "build_external_evidence_intake_ledger.py" not in intake_action_commands:
         fail("external operator packet evidence intake action must rebuild the intake ledger")
+    operator_precollection = operator_packet.get("precollection_manifest_draft", {}) or {}
+    if operator_precollection.get("not_external_evidence") is not True:
+        fail("external operator packet precollection manifest draft summary must be marked non-evidence")
+    if operator_precollection.get("draft_ready") is not True:
+        fail("external operator packet precollection manifest draft summary must report draft_ready=true")
+    if operator_precollection.get("strict_external_evidence_ready") is not False:
+        fail("external operator packet precollection manifest draft summary must keep strict external evidence false")
+    if operator_precollection.get("strict_config_evidence_ready") is not False:
+        fail("external operator packet precollection manifest draft summary must keep strict config evidence false")
+    if operator_precollection.get("official_manifest_exists") is not False:
+        fail("external operator packet precollection manifest draft summary must keep official manifest absent")
+    if int(operator_precollection.get("prepared_config_count", 0) or 0) < 4:
+        fail("external operator packet precollection manifest draft summary must expose prepared config hashes")
+    if int(operator_precollection.get("method_gap_count", 0) or 0) < 11:
+        fail("external operator packet precollection manifest draft summary must expose method gaps")
+    if int(operator_precollection.get("missing_rollout_artifact_count", 0) or 0) < 8:
+        fail("external operator packet precollection manifest draft summary must expose rollout gaps")
+    if "external_validation/manifest_precollection_draft.json" not in str(operator_precollection.get("draft_path", "")):
+        fail("external operator packet precollection manifest draft summary must point to the draft JSON")
+    if "build_external_precollection_manifest_draft.py" not in str(operator_precollection.get("build_command", "")):
+        fail("external operator packet precollection manifest draft summary must include rebuild command")
+    precollection_cutover = "\n".join(operator_precollection.get("cutover_commands", []) or [])
+    if "build_external_manifest.py --write --check-video-paths" not in precollection_cutover or "audit_external_evidence.py --strict" not in precollection_cutover:
+        fail("external operator packet precollection manifest draft summary must include final manifest/evidence cutover commands")
     if "audit_external_collection_readiness.py --strict" not in operator_packet.get("pre_collection_gate_command", ""):
         fail("external operator packet missing strict pre-collection gate command")
     if "audit_external_backend_contract.py --strict" not in operator_packet.get("backend_contract_gate_command", ""):
@@ -3152,6 +3254,7 @@ def main():
         "rollout_evidence_packet_included",
         "ablation_collection_packet_included",
         "evidence_intake_ledger_included",
+        "precollection_manifest_draft_included",
         "pilot_smoke_packet_included",
         "maniskill_render_video_preflight_included",
         "maniskill_pilot_runtime_liveness_included",
@@ -3738,6 +3841,7 @@ def main():
         "runner_backend_probe_visible",
         "config_manifest_packet_visible",
         "rollout_evidence_packet_visible",
+        "precollection_manifest_draft_visible",
         "method_implementation_packet_visible",
         "maniskill_pilot_runtime_liveness_visible",
         "materializer_guard_visible",

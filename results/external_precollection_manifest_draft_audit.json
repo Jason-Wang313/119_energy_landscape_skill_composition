@@ -1,0 +1,104 @@
+{
+  "build_command": "python scripts\\build_external_precollection_manifest_draft.py",
+  "checks": [
+    {
+      "detail": "external_validation/manifest_precollection_draft.json",
+      "name": "draft_json_written_to_precollection_path",
+      "passed": true
+    },
+    {
+      "detail": "draft is non-evidence and cannot write the official manifest",
+      "name": "draft_marked_non_evidence_and_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json",
+      "name": "official_manifest_absent",
+      "passed": true
+    },
+    {
+      "detail": "configs=4",
+      "name": "prepared_config_hashes_prefilled",
+      "passed": true
+    },
+    {
+      "detail": "method_gap_count=11",
+      "name": "method_gaps_remain_blocking",
+      "passed": true
+    },
+    {
+      "detail": "missing_rollout_artifact_count=8",
+      "name": "rollout_artifacts_remain_blocking",
+      "passed": true
+    },
+    {
+      "detail": "blocking=28",
+      "name": "manifest_assembly_blockers_preserved",
+      "passed": true
+    },
+    {
+      "detail": "sources=8",
+      "name": "source_reports_hash_listed",
+      "passed": true
+    },
+    {
+      "detail": "materialize_fidelity_acceptance.py",
+      "name": "cutover_command_contains_materialize_fidelity_acceptance",
+      "passed": true
+    },
+    {
+      "detail": "audit_external_collection_readiness.py --strict",
+      "name": "cutover_command_contains_audit_external_collection_readiness",
+      "passed": true
+    },
+    {
+      "detail": "real_collection_runner.py",
+      "name": "cutover_command_contains_real_collection_runner",
+      "passed": true
+    },
+    {
+      "detail": "build_external_manifest.py --write --check-video-paths",
+      "name": "cutover_command_contains_build_external_manifest",
+      "passed": true
+    },
+    {
+      "detail": "validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "name": "cutover_command_contains_validate_external_rollouts",
+      "passed": true
+    },
+    {
+      "detail": "audit_external_evidence.py --strict",
+      "name": "cutover_command_contains_audit_external_evidence",
+      "passed": true
+    }
+  ],
+  "cutover_commands": [
+    "python scripts\\build_external_precollection_manifest_draft.py",
+    "python scripts\\materialize_fidelity_acceptance.py --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --confirm-code-commit <commit> --confirm-skill-library-hash <sha256> --write",
+    "python scripts\\audit_external_fidelity_acceptance.py --strict",
+    "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path>",
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+    "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\validate_external_adapters.py --strict",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "draft_md_path": "external_validation/manifest_precollection_draft.md",
+  "draft_path": "external_validation/manifest_precollection_draft.json",
+  "draft_ready": true,
+  "manifest_assembly_blocking_count": 28,
+  "method_gap_count": 11,
+  "missing_rollout_artifact_count": 8,
+  "not_external_evidence": true,
+  "official_manifest_exists": false,
+  "passed": true,
+  "prepared_config_count": 4,
+  "strict_config_evidence_ready": false,
+  "strict_external_evidence_ready": false,
+  "task_count": 4,
+  "version": "external_precollection_manifest_draft_audit_v1"
+}

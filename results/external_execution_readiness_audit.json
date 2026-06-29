@@ -527,6 +527,26 @@
     },
     {
       "detail": "passed",
+      "name": "external_precollection_manifest_draft_ready",
+      "passed": true
+    },
+    {
+      "detail": "draft_ready=True, strict_external_evidence_ready=False, official_manifest_exists=False",
+      "name": "external_precollection_manifest_draft_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "prepared_config_count=4",
+      "name": "external_precollection_manifest_draft_config_hashes",
+      "passed": true
+    },
+    {
+      "detail": "method_gaps=11, rollout_gaps=8",
+      "name": "external_precollection_manifest_draft_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "passed",
       "name": "external_evidence_preflight_ready",
       "passed": true
     },
@@ -606,7 +626,7 @@
       "passed": true
     },
     {
-      "detail": "included_file_count=273, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 86, 'operator_command_source': 37, 'operator_facing_input': 61, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "included_file_count=278, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 88, 'operator_command_source': 38, 'operator_facing_input': 63, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "external_operator_handoff_bundle_hash_manifest",
       "passed": true
     },
@@ -659,6 +679,7 @@
     "manifest-declared external ablation logs and videos for basin_overlap, barrier_height, descent_continuity, risk_calibration, and seam_repair",
     "completed evidence intake ledger rows for all current strict external-evidence failures",
     "manifest-declared videos",
+    "official manifest promotion from the precollection draft after real evidence is collected",
     "manifest-declared independent non-oracle adapter implementations",
     "completed method implementation packet work orders with source/config/checkpoint hashes",
     "non-template backend module for external_validation/runner/real_collection_runner.py",

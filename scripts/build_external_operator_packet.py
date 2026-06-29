@@ -90,6 +90,10 @@ def build_payload() -> dict[str, Any]:
         RESULTS / "external_evidence_intake_ledger_audit.json",
         "external_evidence_intake_ledger_v1",
     )
+    precollection_manifest = require_payload(
+        RESULTS / "external_precollection_manifest_draft_audit.json",
+        "external_precollection_manifest_draft_audit_v1",
+    )
     materialization = require_payload(
         RESULTS / "external_config_materialization_plan.json",
         "external_config_materialization_plan_v1",
@@ -308,6 +312,29 @@ def build_payload() -> dict[str, Any]:
             f"groups={len(evidence_intake.get('closure_groups', []) or [])}"
         ),
     )
+    precollection_checks = {check.get("name"): check.get("passed") for check in precollection_manifest.get("checks", []) or []}
+    add_check(
+        checks,
+        "precollection_manifest_draft_ready_but_not_evidence",
+        precollection_manifest.get("passed") is True
+        and precollection_manifest.get("not_external_evidence") is True
+        and precollection_manifest.get("draft_ready") is True
+        and precollection_manifest.get("strict_external_evidence_ready") is False
+        and precollection_manifest.get("strict_config_evidence_ready") is False
+        and precollection_manifest.get("official_manifest_exists") is False
+        and int(precollection_manifest.get("prepared_config_count", 0) or 0) >= 4
+        and int(precollection_manifest.get("method_gap_count", 0) or 0) >= 11
+        and int(precollection_manifest.get("missing_rollout_artifact_count", 0) or 0) >= 8
+        and precollection_checks.get("draft_marked_non_evidence_and_fail_closed") is True
+        and precollection_checks.get("prepared_config_hashes_prefilled") is True
+        and precollection_checks.get("official_manifest_absent") is True,
+        (
+            f"configs={precollection_manifest.get('prepared_config_count')!r}, "
+            f"method_gaps={precollection_manifest.get('method_gap_count')!r}, "
+            f"rollout_gaps={precollection_manifest.get('missing_rollout_artifact_count')!r}, "
+            f"official_manifest_exists={precollection_manifest.get('official_manifest_exists')!r}"
+        ),
+    )
     add_check(
         checks,
         "operator_actions_cover_start_to_finish",
@@ -520,6 +547,23 @@ def build_payload() -> dict[str, Any]:
             "audit_md_path": "results/external_evidence_intake_ledger_audit.md",
             "build_command": "python scripts\\build_external_evidence_intake_ledger.py",
         },
+        "precollection_manifest_draft": {
+            "not_external_evidence": True,
+            "draft_ready": precollection_manifest.get("draft_ready") is True,
+            "strict_external_evidence_ready": precollection_manifest.get("strict_external_evidence_ready") is True,
+            "strict_config_evidence_ready": precollection_manifest.get("strict_config_evidence_ready") is True,
+            "official_manifest_exists": precollection_manifest.get("official_manifest_exists") is True,
+            "prepared_config_count": int(precollection_manifest.get("prepared_config_count", 0) or 0),
+            "method_gap_count": int(precollection_manifest.get("method_gap_count", 0) or 0),
+            "missing_rollout_artifact_count": int(precollection_manifest.get("missing_rollout_artifact_count", 0) or 0),
+            "manifest_assembly_blocking_count": int(precollection_manifest.get("manifest_assembly_blocking_count", 0) or 0),
+            "draft_path": precollection_manifest.get("draft_path", "external_validation/manifest_precollection_draft.json"),
+            "draft_md_path": precollection_manifest.get("draft_md_path", "external_validation/manifest_precollection_draft.md"),
+            "audit_path": "results/external_precollection_manifest_draft_audit.json",
+            "audit_md_path": "results/external_precollection_manifest_draft_audit.md",
+            "build_command": precollection_manifest.get("build_command", "python scripts\\build_external_precollection_manifest_draft.py"),
+            "cutover_commands": list(precollection_manifest.get("cutover_commands", []) or []),
+        },
         "pre_collection_gate_command": (
             "python scripts\\audit_external_collection_readiness.py --strict "
             "--backend-module <module_or_path> --task-config-dir external_validation\\configs "
@@ -549,6 +593,9 @@ def build_payload() -> dict[str, Any]:
             "results/external_rollout_evidence_audit.json",
             "results/external_ablation_collection_audit.json",
             "results/external_evidence_intake_ledger_audit.json",
+            "results/external_precollection_manifest_draft_audit.json",
+            "external_validation/manifest_precollection_draft.json",
+            "external_validation/manifest_precollection_draft.md",
             "results/external_fidelity_provenance_audit.json",
             "results/external_pilot_smoke_packet_audit.json",
             "results/maniskill_pilot_runtime_liveness_audit.json",
@@ -799,6 +846,38 @@ def write_md(payload: dict[str, Any]) -> None:
             "```",
         ]
     )
+
+    precollection = payload["precollection_manifest_draft"]
+    lines.extend(
+        [
+            "",
+            "## External Precollection Manifest Draft",
+            "",
+            "This draft is not evidence. It pre-fills the task-config hashes and cutover command spine that are safe before collection, while keeping `external_validation/manifest.json` absent and every strict evidence gate false.",
+            "",
+            f"- Draft JSON: `{precollection['draft_path']}`",
+            f"- Draft notes: `{precollection['draft_md_path']}`",
+            f"- Audit JSON: `{precollection['audit_path']}`",
+            f"- Audit notes: `{precollection['audit_md_path']}`",
+            f"- Prepared config hashes: `{precollection['prepared_config_count']}`",
+            f"- Method gaps: `{precollection['method_gap_count']}`",
+            f"- Rollout log/video gaps: `{precollection['missing_rollout_artifact_count']}`",
+            f"- Manifest assembly blockers: `{precollection['manifest_assembly_blocking_count']}`",
+            f"- Official manifest exists: `{str(precollection['official_manifest_exists']).lower()}`",
+            f"- Strict external evidence ready: `{str(precollection['strict_external_evidence_ready']).lower()}`",
+            "",
+            "Draft rebuild command:",
+            "",
+            "```powershell",
+            precollection["build_command"],
+            "```",
+            "",
+            "Draft-to-evidence cutover commands:",
+            "",
+        ]
+    )
+    for command in precollection["cutover_commands"]:
+        lines.extend(["```powershell", command, "```"])
 
     lines.extend(
         [

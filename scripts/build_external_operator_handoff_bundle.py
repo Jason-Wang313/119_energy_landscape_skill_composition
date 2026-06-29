@@ -119,6 +119,8 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "method_implementation_work_orders.csv",
         EXTERNAL / "method_reference_provenance.csv",
         EXTERNAL / "manifest_assembly_checklist.csv",
+        EXTERNAL / "manifest_precollection_draft.json",
+        EXTERNAL / "manifest_precollection_draft.md",
         EXTERNAL / "config_schema_v1.json",
         EXTERNAL / "configs" / "README.md",
         EXTERNAL / "independent_validation_route.md",
@@ -167,6 +169,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "audit_external_fidelity_acceptance.py",
         SCRIPTS / "build_external_manifest.py",
         SCRIPTS / "self_test_external_manifest_builder.py",
+        SCRIPTS / "build_external_precollection_manifest_draft.py",
         SCRIPTS / "audit_external_release_package.py",
         SCRIPTS / "validate_external_configs.py",
         SCRIPTS / "validate_external_adapters.py",
@@ -259,6 +262,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_release_package_audit.md",
         RESULTS / "external_manifest_builder_self_test.json",
         RESULTS / "external_manifest_builder_self_test.md",
+        RESULTS / "external_precollection_manifest_draft_audit.json",
+        RESULTS / "external_precollection_manifest_draft_audit.md",
         RESULTS / "external_pairing_integrity_audit.json",
         RESULTS / "external_pairing_integrity_audit.md",
         RESULTS / "external_execution_readiness_audit.json",
@@ -337,6 +342,10 @@ def build_payload() -> dict[str, Any]:
     render_preflight = require_payload(RESULTS / "maniskill_render_video_preflight_audit.json", "maniskill_render_video_preflight_audit_v1")
     pilot_runtime = require_payload(RESULTS / "maniskill_pilot_runtime_liveness_audit.json", "maniskill_pilot_runtime_liveness_audit_v1")
     render_machine = require_payload(RESULTS / "maniskill_render_machine_qualification.json", "maniskill_render_machine_qualification_v1")
+    precollection_manifest = require_payload(
+        RESULTS / "external_precollection_manifest_draft_audit.json",
+        "external_precollection_manifest_draft_audit_v1",
+    )
 
     files = build_file_manifest()
     records = file_records(files)
@@ -410,6 +419,30 @@ def build_payload() -> dict[str, Any]:
         "no_real_manifest_written",
         not (EXTERNAL / "manifest.json").exists(),
         "external_validation/manifest.json absent before real evidence",
+    )
+    precollection_checks = {check.get("name"): check.get("passed") for check in precollection_manifest.get("checks", []) or []}
+    add_check(
+        checks,
+        "precollection_manifest_draft_included",
+        precollection_manifest.get("passed") is True
+        and precollection_manifest.get("not_external_evidence") is True
+        and precollection_manifest.get("draft_ready") is True
+        and precollection_manifest.get("strict_external_evidence_ready") is False
+        and precollection_manifest.get("strict_config_evidence_ready") is False
+        and precollection_manifest.get("official_manifest_exists") is False
+        and int(precollection_manifest.get("prepared_config_count", 0) or 0) >= 4
+        and int(precollection_manifest.get("method_gap_count", 0) or 0) >= 11
+        and int(precollection_manifest.get("missing_rollout_artifact_count", 0) or 0) >= 8
+        and precollection_checks.get("draft_marked_non_evidence_and_fail_closed") is True
+        and "external_validation/manifest_precollection_draft.json" in paths
+        and "external_validation/manifest_precollection_draft.md" in paths
+        and "results/external_precollection_manifest_draft_audit.json" in paths
+        and "scripts/build_external_precollection_manifest_draft.py" in paths,
+        (
+            f"configs={precollection_manifest.get('prepared_config_count')!r}, "
+            f"method_gaps={precollection_manifest.get('method_gap_count')!r}, "
+            f"rollout_gaps={precollection_manifest.get('missing_rollout_artifact_count')!r}"
+        ),
     )
     add_check(
         checks,
@@ -944,6 +977,7 @@ def build_payload() -> dict[str, Any]:
             "results/maniskill_render_video_preflight_audit.json",
             "results/maniskill_pilot_runtime_liveness_audit.json",
             "results/external_method_implementation_audit.json",
+            "results/external_precollection_manifest_draft_audit.json",
             "results/external_evidence_preflight.json",
             "results/external_release_package_audit.json",
             "results/external_pairing_integrity_audit.json",

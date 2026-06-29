@@ -1,0 +1,589 @@
+{
+  "claim": "A barrier-certified energy composer improves skill composition when basin overlap, barrier height, descent continuity, repair cost, and seam-risk calibration are estimable at the handoff.",
+  "cutover_commands": [
+    "python scripts\\build_external_precollection_manifest_draft.py",
+    "python scripts\\materialize_fidelity_acceptance.py --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --confirm-code-commit <commit> --confirm-skill-library-hash <sha256> --write",
+    "python scripts\\audit_external_fidelity_acceptance.py --strict",
+    "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path>",
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+    "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\validate_external_adapters.py --strict",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "draft_only": true,
+  "forbidden_promotion_without": [
+    "accepted fidelity acceptance file from an independent operator",
+    "manifest-declared JSONL logs and render-backed videos",
+    "manifest-declared non-oracle implementation/checkpoint hashes",
+    "release artifact hashes for code, configs, logs, videos, and checkpoints",
+    "strict rollout, pairing, config, adapter, release, and evidence gates passing"
+  ],
+  "log_schema": "external_validation/log_schema_v1.json",
+  "manifest_assembly_blocking_count": 28,
+  "manifest_assembly_blocking_items": [
+    {
+      "current_state": "not_accepted_in_current_repo",
+      "item": "accepted_fidelity_provenance",
+      "phase": "platform_fidelity",
+      "required_path": "external_validation/fidelity_acceptance.json",
+      "strict_gate": "python scripts\\audit_external_fidelity_acceptance.py --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "code_commit_and_skill_library_hash",
+      "phase": "run_identity",
+      "required_path": "manifest.code_commit; manifest.skill_library_hash",
+      "strict_gate": "python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "peg_place_regrasp_jsonl",
+      "phase": "rollout_logs",
+      "required_path": "external_validation/logs/peg_place_regrasp.jsonl",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "peg_place_regrasp_videos",
+      "phase": "rollout_videos",
+      "required_path": "external_validation/videos/peg_place_regrasp",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "drawer_to_pick_transfer_jsonl",
+      "phase": "rollout_logs",
+      "required_path": "external_validation/logs/drawer_to_pick_transfer.jsonl",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "drawer_to_pick_transfer_videos",
+      "phase": "rollout_videos",
+      "required_path": "external_validation/videos/drawer_to_pick_transfer",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "door_open_navigation_jsonl",
+      "phase": "rollout_logs",
+      "required_path": "external_validation/logs/door_open_navigation.jsonl",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "door_open_navigation_videos",
+      "phase": "rollout_videos",
+      "required_path": "external_validation/videos/door_open_navigation",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "cable_route_insert_jsonl",
+      "phase": "rollout_logs",
+      "required_path": "external_validation/logs/cable_route_insert.jsonl",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "cable_route_insert_videos",
+      "phase": "rollout_videos",
+      "required_path": "external_validation/videos/cable_route_insert",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "greedy_module_sequence",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "behavior_cloned_skill_chain",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "option_graph_planner",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "tamp_feasibility_screen",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "stable_dmp_handoff",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "diffusion_skill_stitcher",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "cem_trajectory_composer",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "residual_rl_composer",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "energy_compatibility_heuristic",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "proposed_energy_landscape_composer_v4_1",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing",
+      "item": "barrier_certified_energy_composer_v5",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "entries=0",
+      "item": "logs",
+      "phase": "release_artifacts",
+      "required_path": "manifest.release_artifacts.logs",
+      "strict_gate": "python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "current_state": "entries=0",
+      "item": "videos",
+      "phase": "release_artifacts",
+      "required_path": "manifest.release_artifacts.videos",
+      "strict_gate": "python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "current_state": "entries=0",
+      "item": "checkpoints",
+      "phase": "release_artifacts",
+      "required_path": "manifest.release_artifacts.checkpoints",
+      "strict_gate": "python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "current_state": "records_loaded=0; schema_errors=4",
+      "item": "schema_valid_records",
+      "phase": "rollout_metrics",
+      "required_path": "manifest-declared JSONL logs",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "episodes=0; success_margin=None; utility_margin=None",
+      "item": "primary_thresholds",
+      "phase": "rollout_metrics",
+      "required_path": "manifest.metrics",
+      "strict_gate": "python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "current_state": "not_ready_without_real_manifest_logs",
+      "item": "paired_reset_integrity",
+      "phase": "final_strict_gates",
+      "required_path": "external_validation/logs/*.jsonl",
+      "strict_gate": "python scripts\\audit_external_pairing_integrity.py --strict"
+    },
+    {
+      "current_state": "warnings=11; schema_errors=4",
+      "item": "final_external_evidence_gate",
+      "phase": "final_strict_gates",
+      "required_path": "external_validation/manifest.json",
+      "strict_gate": "python scripts\\audit_external_evidence.py --strict"
+    }
+  ],
+  "method_gap_count": 11,
+  "method_gaps": [
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash"
+      ],
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "greedy_module_sequence"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash"
+      ],
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "behavior_cloned_skill_chain"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash"
+      ],
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "option_graph_planner"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash"
+      ],
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "tamp_feasibility_screen"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash"
+      ],
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "stable_dmp_handoff"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash"
+      ],
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "diffusion_skill_stitcher"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash"
+      ],
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "cem_trajectory_composer"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash"
+      ],
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "residual_rl_composer"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash"
+      ],
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "energy_compatibility_heuristic"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash"
+      ],
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "proposed_energy_landscape_composer_v4_1"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "checkpoint_or_config_path",
+        "checkpoint_or_config_hash"
+      ],
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "barrier_certified_energy_composer_v5"
+    }
+  ],
+  "missing_rollout_artifact_count": 8,
+  "not_external_evidence": true,
+  "official_manifest_absent_at_build": true,
+  "official_manifest_exists": false,
+  "official_manifest_path": "external_validation/manifest.json",
+  "precollection_manifest_draft_ready": true,
+  "prepared_config_count": 4,
+  "prepared_config_records": [
+    {
+      "config_exists": true,
+      "config_hash": "021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9",
+      "config_path": "external_validation/configs/peg_place_regrasp.json",
+      "strict_validation_passed_if_manifest_declared": true,
+      "task_family": "peg_place_regrasp",
+      "validation_errors": []
+    },
+    {
+      "config_exists": true,
+      "config_hash": "1288223014CB9D9285E4249B2FA607FFC16EBEE20B6F44E0241B63E88233E471",
+      "config_path": "external_validation/configs/drawer_to_pick_transfer.json",
+      "strict_validation_passed_if_manifest_declared": true,
+      "task_family": "drawer_to_pick_transfer",
+      "validation_errors": []
+    },
+    {
+      "config_exists": true,
+      "config_hash": "13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61",
+      "config_path": "external_validation/configs/door_open_navigation.json",
+      "strict_validation_passed_if_manifest_declared": true,
+      "task_family": "door_open_navigation",
+      "validation_errors": []
+    },
+    {
+      "config_exists": true,
+      "config_hash": "8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E",
+      "config_path": "external_validation/configs/cable_route_insert.json",
+      "strict_validation_passed_if_manifest_declared": true,
+      "task_family": "cable_route_insert",
+      "validation_errors": []
+    }
+  ],
+  "ready_to_write_official_manifest": false,
+  "rollout_artifact_gaps": [
+    {
+      "blocking_until_real_evidence": true,
+      "kind": "jsonl_log",
+      "path": "external_validation/logs/peg_place_regrasp.jsonl",
+      "present": false,
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "kind": "video_dir",
+      "path": "external_validation/videos/peg_place_regrasp",
+      "present": false,
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "kind": "jsonl_log",
+      "path": "external_validation/logs/drawer_to_pick_transfer.jsonl",
+      "present": false,
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "task_family": "drawer_to_pick_transfer"
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "kind": "video_dir",
+      "path": "external_validation/videos/drawer_to_pick_transfer",
+      "present": false,
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "task_family": "drawer_to_pick_transfer"
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "kind": "jsonl_log",
+      "path": "external_validation/logs/door_open_navigation.jsonl",
+      "present": false,
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "task_family": "door_open_navigation"
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "kind": "video_dir",
+      "path": "external_validation/videos/door_open_navigation",
+      "present": false,
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "task_family": "door_open_navigation"
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "kind": "jsonl_log",
+      "path": "external_validation/logs/cable_route_insert.jsonl",
+      "present": false,
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "task_family": "cable_route_insert"
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "kind": "video_dir",
+      "path": "external_validation/videos/cable_route_insert",
+      "present": false,
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "task_family": "cable_route_insert"
+    }
+  ],
+  "route": "high_fidelity_sim",
+  "source_reports": [
+    {
+      "exists": true,
+      "path": "results/external_manifest_builder_report.json",
+      "sha256": "48F0B28FC3F4FE80EA59755B5A2A5E97F1DDE9BC72F7781E7290FE863EB6552A"
+    },
+    {
+      "exists": true,
+      "path": "results/external_config_manifest_audit.json",
+      "sha256": "71888C39980962B4AAE8E67DC2338CEB8F2DBA603BC85DF0BF6B50BE7720EF92"
+    },
+    {
+      "exists": true,
+      "path": "results/external_rollout_evidence_audit.json",
+      "sha256": "4FFA079B4C7A67B4FC2F6E400D3FA70D1DC3101A4070FC15754FF9FC122B305F"
+    },
+    {
+      "exists": true,
+      "path": "results/external_ablation_collection_audit.json",
+      "sha256": "3AD97C00DCBB9DFAD1EE0DBB4805503DE0F55190672372A5E0474D94E34B2CA6"
+    },
+    {
+      "exists": true,
+      "path": "results/external_evidence_intake_ledger_audit.json",
+      "sha256": "3718471C3272A0A75B29555E3A32A7DE7A1C7EAE2494D90518CB57DDF3BBE306"
+    },
+    {
+      "exists": true,
+      "path": "results/external_method_implementation_audit.json",
+      "sha256": "A3A3235E819C3124BD968BD50EC8EF2AF8AFA6266845DC742B87D70C559A2CF3"
+    },
+    {
+      "exists": true,
+      "path": "results/external_collection_readiness_audit.json",
+      "sha256": "5329616DDFF9F59D1FB6C8DABA214BCDC8FC0123093953AA187990C08B28128D"
+    },
+    {
+      "exists": true,
+      "path": "results/maniskill_render_machine_qualification.json",
+      "sha256": "626D2AD7E3B58FF961D507B09BCE3F6C277BA453EB1A8A25A64BF3E79C8D5BE0"
+    }
+  ],
+  "strict_config_evidence_ready": false,
+  "strict_external_evidence_ready": false,
+  "task_count": 4,
+  "task_manifest_entries_with_hashes": [
+    {
+      "config_hash": "021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9",
+      "config_path": "external_validation/configs/peg_place_regrasp.json",
+      "episodes_per_method": 30,
+      "log_jsonl": "external_validation/logs/peg_place_regrasp.jsonl",
+      "manifest_declared_ready_if_promoted": true,
+      "notes": "",
+      "platform_name": "",
+      "platform_type": "high_fidelity_sim",
+      "task_family": "peg_place_regrasp",
+      "video_dir": "external_validation/videos/peg_place_regrasp"
+    },
+    {
+      "config_hash": "1288223014CB9D9285E4249B2FA607FFC16EBEE20B6F44E0241B63E88233E471",
+      "config_path": "external_validation/configs/drawer_to_pick_transfer.json",
+      "episodes_per_method": 30,
+      "log_jsonl": "external_validation/logs/drawer_to_pick_transfer.jsonl",
+      "manifest_declared_ready_if_promoted": true,
+      "notes": "",
+      "platform_name": "",
+      "platform_type": "high_fidelity_sim",
+      "task_family": "drawer_to_pick_transfer",
+      "video_dir": "external_validation/videos/drawer_to_pick_transfer"
+    },
+    {
+      "config_hash": "13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61",
+      "config_path": "external_validation/configs/door_open_navigation.json",
+      "episodes_per_method": 30,
+      "log_jsonl": "external_validation/logs/door_open_navigation.jsonl",
+      "manifest_declared_ready_if_promoted": true,
+      "notes": "",
+      "platform_name": "",
+      "platform_type": "high_fidelity_sim",
+      "task_family": "door_open_navigation",
+      "video_dir": "external_validation/videos/door_open_navigation"
+    },
+    {
+      "config_hash": "8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E",
+      "config_path": "external_validation/configs/cable_route_insert.json",
+      "episodes_per_method": 30,
+      "log_jsonl": "external_validation/logs/cable_route_insert.jsonl",
+      "manifest_declared_ready_if_promoted": true,
+      "notes": "",
+      "platform_name": "",
+      "platform_type": "high_fidelity_sim",
+      "task_family": "cable_route_insert",
+      "video_dir": "external_validation/videos/cable_route_insert"
+    }
+  ],
+  "version": "external_precollection_manifest_draft_v1",
+  "would_promote_to_manifest_version": "external_validation_v1"
+}

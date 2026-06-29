@@ -206,6 +206,11 @@
       "evidence": ["scripts/self_test_external_manifest_builder.py", "results/external_manifest_builder_self_test.json", "results/external_manifest_builder_self_test.md", "scripts/build_external_manifest.py"]
     },
     {
+      "name": "external_precollection_manifest_draft_claim",
+      "claim": "The repository provides a non-evidence External precollection manifest draft that pre-fills prepared task-config hashes, preserves method/log/video blockers, and records the guarded cutover commands required before `external_validation/manifest.json` can be written.",
+      "evidence": ["scripts/build_external_precollection_manifest_draft.py", "external_validation/manifest_precollection_draft.json", "external_validation/manifest_precollection_draft.md", "results/external_precollection_manifest_draft_audit.json", "results/external_precollection_manifest_draft_audit.md", "results/external_manifest_builder_report.json"]
+    },
+    {
       "name": "external_operator_packet_claim",
       "claim": "The repository provides a generated non-evidence operator packet with a go/no-go state, backend qualification gate, generic pre-collection blockers, a tracked ManiSkill reference route that reaches the single fidelity-acceptance blocker, a fidelity-metadata probe summary, exact collection commands, and post-collection strict gates for an independent validation operator.",
       "evidence": ["scripts/build_external_operator_packet.py", "results/external_operator_packet.json", "results/external_operator_packet.md", "results/external_backend_contract_audit.json", "results/external_collection_readiness_audit.json", "results/maniskill_reference_collection_preflight_audit.json", "results/maniskill_fidelity_metadata_probe.json", "results/external_acquisition_packet.json"]

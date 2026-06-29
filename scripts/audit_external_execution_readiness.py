@@ -996,6 +996,51 @@ def main() -> int:
         ),
     )
 
+    precollection_ok, precollection_manifest, precollection_detail = passed_json(
+        RESULTS / "external_precollection_manifest_draft_audit.json",
+        version="external_precollection_manifest_draft_audit_v1",
+    )
+    add_check(checks, "external_precollection_manifest_draft_ready", precollection_ok, precollection_detail)
+    precollection_checks = {
+        check.get("name"): check.get("passed")
+        for check in precollection_manifest.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "external_precollection_manifest_draft_not_evidence",
+        precollection_manifest.get("not_external_evidence") is True
+        and precollection_manifest.get("draft_ready") is True
+        and precollection_manifest.get("strict_external_evidence_ready") is False
+        and precollection_manifest.get("strict_config_evidence_ready") is False
+        and precollection_manifest.get("official_manifest_exists") is False
+        and precollection_checks.get("draft_marked_non_evidence_and_fail_closed") is True,
+        (
+            f"draft_ready={precollection_manifest.get('draft_ready')!r}, "
+            f"strict_external_evidence_ready={precollection_manifest.get('strict_external_evidence_ready')!r}, "
+            f"official_manifest_exists={precollection_manifest.get('official_manifest_exists')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "external_precollection_manifest_draft_config_hashes",
+        int(precollection_manifest.get("prepared_config_count", 0) or 0) >= 4
+        and precollection_checks.get("prepared_config_hashes_prefilled") is True,
+        f"prepared_config_count={precollection_manifest.get('prepared_config_count')!r}",
+    )
+    add_check(
+        checks,
+        "external_precollection_manifest_draft_fail_closed",
+        int(precollection_manifest.get("method_gap_count", 0) or 0) >= 11
+        and int(precollection_manifest.get("missing_rollout_artifact_count", 0) or 0) >= 8
+        and precollection_checks.get("method_gaps_remain_blocking") is True
+        and precollection_checks.get("rollout_artifacts_remain_blocking") is True
+        and precollection_checks.get("official_manifest_absent") is True,
+        (
+            f"method_gaps={precollection_manifest.get('method_gap_count')!r}, "
+            f"rollout_gaps={precollection_manifest.get('missing_rollout_artifact_count')!r}"
+        ),
+    )
+
     preflight_path = RESULTS / "external_evidence_preflight.json"
     preflight_ok, preflight, preflight_detail = passed_json(
         preflight_path,
@@ -1172,6 +1217,8 @@ def main() -> int:
         EXTERNAL / "operator_record_sheet.csv",
         EXTERNAL / "manifest_template.json",
         EXTERNAL / "manifest_assembly_checklist.csv",
+        EXTERNAL / "manifest_precollection_draft.json",
+        EXTERNAL / "manifest_precollection_draft.md",
         EXTERNAL / "log_schema_v1.json",
         EXTERNAL / "statistical_analysis_plan.json",
         EXTERNAL / "statistical_analysis_plan.md",
@@ -1218,6 +1265,7 @@ def main() -> int:
         RESULTS / "external_rollout_evidence_audit.md",
         RESULTS / "external_ablation_collection_audit.md",
         RESULTS / "external_evidence_intake_ledger_audit.md",
+        RESULTS / "external_precollection_manifest_draft_audit.md",
         EXTERNAL / "evidence_intake_ledger.json",
         EXTERNAL / "evidence_intake_ledger.md",
         EXTERNAL / "evidence_intake_ledger.csv",
@@ -1353,6 +1401,10 @@ def main() -> int:
         "adapter_contract_not_evidence",
         "manifest_builder_report_exists",
         "manifest_builder_fail_closed",
+        "external_precollection_manifest_draft_ready",
+        "external_precollection_manifest_draft_not_evidence",
+        "external_precollection_manifest_draft_config_hashes",
+        "external_precollection_manifest_draft_fail_closed",
         "external_evidence_preflight_ready",
         "external_evidence_preflight_not_evidence",
         "external_evidence_preflight_fail_closed",
@@ -1401,6 +1453,7 @@ def main() -> int:
             "manifest-declared external ablation logs and videos for basin_overlap, barrier_height, descent_continuity, risk_calibration, and seam_repair",
             "completed evidence intake ledger rows for all current strict external-evidence failures",
             "manifest-declared videos",
+            "official manifest promotion from the precollection draft after real evidence is collected",
             "manifest-declared independent non-oracle adapter implementations",
             "completed method implementation packet work orders with source/config/checkpoint hashes",
             "non-template backend module for external_validation/runner/real_collection_runner.py",

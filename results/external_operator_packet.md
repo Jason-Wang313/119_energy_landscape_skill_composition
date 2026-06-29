@@ -196,6 +196,69 @@ Ledger rebuild command:
 python scripts\build_external_evidence_intake_ledger.py
 ```
 
+## External Precollection Manifest Draft
+
+This draft is not evidence. It pre-fills the task-config hashes and cutover command spine that are safe before collection, while keeping `external_validation/manifest.json` absent and every strict evidence gate false.
+
+- Draft JSON: `external_validation/manifest_precollection_draft.json`
+- Draft notes: `external_validation/manifest_precollection_draft.md`
+- Audit JSON: `results/external_precollection_manifest_draft_audit.json`
+- Audit notes: `results/external_precollection_manifest_draft_audit.md`
+- Prepared config hashes: `4`
+- Method gaps: `11`
+- Rollout log/video gaps: `8`
+- Manifest assembly blockers: `28`
+- Official manifest exists: `false`
+- Strict external evidence ready: `false`
+
+Draft rebuild command:
+
+```powershell
+python scripts\build_external_precollection_manifest_draft.py
+```
+
+Draft-to-evidence cutover commands:
+
+```powershell
+python scripts\build_external_precollection_manifest_draft.py
+```
+```powershell
+python scripts\materialize_fidelity_acceptance.py --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --confirm-code-commit <commit> --confirm-skill-library-hash <sha256> --write
+```
+```powershell
+python scripts\audit_external_fidelity_acceptance.py --strict
+```
+```powershell
+python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path>
+```
+```powershell
+python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map
+```
+```powershell
+python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id <specific_run_id> --unsealed-alias-map
+```
+```powershell
+python scripts\build_external_manifest.py --write --check-video-paths
+```
+```powershell
+python scripts\validate_external_configs.py --strict
+```
+```powershell
+python scripts\validate_external_adapters.py --strict
+```
+```powershell
+python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict
+```
+```powershell
+python scripts\audit_external_pairing_integrity.py --strict
+```
+```powershell
+python scripts\audit_external_release_package.py --strict
+```
+```powershell
+python scripts\audit_external_evidence.py --strict
+```
+
 ## Commands
 
 Materialize real configs after platform selection:
@@ -279,6 +342,7 @@ Post-collection strict gates:
 - `pass` `render_machine_qualification_recorded_but_not_evidence`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12
 - `pass` `ablation_collection_packet_recorded_but_not_evidence`: work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False
 - `pass` `evidence_intake_ledger_recorded_but_not_evidence`: mapped=36/36, groups=8
+- `pass` `precollection_manifest_draft_ready_but_not_evidence`: configs=4, method_gaps=11, rollout_gaps=8, official_manifest_exists=False
 - `pass` `operator_actions_cover_start_to_finish`: missing=[]
 - `pass` `operator_action_titles_present`: missing_titles=[]
 - `pass` `config_materializer_is_guarded`: write_enabled=False, task_count=4

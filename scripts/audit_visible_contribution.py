@@ -83,6 +83,7 @@ def main() -> int:
     rollout_evidence = read_json(RESULTS / "external_rollout_evidence_audit.json")
     ablation_collection = read_json(RESULTS / "external_ablation_collection_audit.json")
     evidence_intake = read_json(RESULTS / "external_evidence_intake_ledger_audit.json")
+    precollection_manifest = read_json(RESULTS / "external_precollection_manifest_draft_audit.json")
     method_implementation = read_json(RESULTS / "external_method_implementation_audit.json")
     adapter_evidence_self_test = read_json(RESULTS / "external_adapter_evidence_self_test.json")
     materialization = read_json(RESULTS / "external_config_materialization_plan.json")
@@ -575,6 +576,29 @@ def main() -> int:
             f"strict_external_evidence_ready={evidence_intake.get('strict_external_evidence_ready')!r}"
         ),
     )
+    precollection_checks = {check.get("name"): check.get("passed") for check in precollection_manifest.get("checks", []) or []}
+    add_check(
+        checks,
+        "precollection_manifest_draft_visible",
+        precollection_manifest.get("version") == "external_precollection_manifest_draft_audit_v1"
+        and precollection_manifest.get("passed") is True
+        and precollection_manifest.get("not_external_evidence") is True
+        and precollection_manifest.get("draft_ready") is True
+        and precollection_manifest.get("strict_external_evidence_ready") is False
+        and precollection_manifest.get("strict_config_evidence_ready") is False
+        and precollection_manifest.get("official_manifest_exists") is False
+        and int(precollection_manifest.get("prepared_config_count", 0) or 0) >= 4
+        and int(precollection_manifest.get("method_gap_count", 0) or 0) >= 11
+        and int(precollection_manifest.get("missing_rollout_artifact_count", 0) or 0) >= 8
+        and precollection_checks.get("draft_marked_non_evidence_and_fail_closed") is True
+        and precollection_checks.get("prepared_config_hashes_prefilled") is True,
+        (
+            f"prepared_configs={precollection_manifest.get('prepared_config_count')!r}, "
+            f"method_gaps={precollection_manifest.get('method_gap_count')!r}, "
+            f"rollout_gaps={precollection_manifest.get('missing_rollout_artifact_count')!r}, "
+            f"official_manifest_exists={precollection_manifest.get('official_manifest_exists')!r}"
+        ),
+    )
     add_check(
         checks,
         "method_implementation_packet_visible",
@@ -702,6 +726,7 @@ def main() -> int:
             "external_rollout_evidence_packet_claim",
             "external_ablation_collection_packet_claim",
             "external_evidence_intake_ledger_claim",
+            "external_precollection_manifest_draft_claim",
             "external_method_implementation_packet_claim",
             "external_method_reference_provenance_claim",
             "external_manifest_assembly_checklist_claim",
@@ -709,7 +734,7 @@ def main() -> int:
             "external_config_materialization_claim",
             "reviewer_response_packet_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'local_planner_edge_policy_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_ablation_collection_packet_claim', 'external_evidence_intake_ledger_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
+        f"missing={sorted({'local_planner_edge_policy_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_ablation_collection_packet_claim', 'external_evidence_intake_ledger_claim', 'external_precollection_manifest_draft_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -745,6 +770,7 @@ def main() -> int:
             "External rollout evidence packet",
             "External ablation collection packet",
             "External evidence intake ledger",
+            "External precollection manifest draft",
             "External method implementation packet",
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
@@ -787,6 +813,7 @@ def main() -> int:
             "External rollout evidence packet",
             "External ablation collection packet",
             "External evidence intake ledger",
+            "External precollection manifest draft",
             "External method implementation packet",
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
@@ -830,6 +857,7 @@ def main() -> int:
             "external rollout evidence packet",
             "external ablation collection packet",
             "external evidence intake ledger",
+            "external precollection manifest draft",
             "external method implementation packet",
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
@@ -873,6 +901,7 @@ def main() -> int:
             "External rollout evidence packet",
             "External ablation collection packet",
             "External evidence intake ledger",
+            "External precollection manifest draft",
             "External method implementation packet",
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
@@ -917,6 +946,7 @@ def main() -> int:
             "scripts/build_external_rollout_evidence_packet.py",
             "scripts/build_external_ablation_collection_packet.py",
             "scripts/build_external_evidence_intake_ledger.py",
+            "scripts/build_external_precollection_manifest_draft.py",
             "scripts/build_external_method_implementation_packet.py",
             "method_reference_provenance.csv",
             "reference-adapter provenance catalog",
@@ -962,6 +992,7 @@ def main() -> int:
             "external rollout evidence packet",
             "external ablation collection packet",
             "external evidence intake ledger",
+            "external precollection manifest draft",
             "external method implementation packet",
             "reference-adapter provenance catalog",
             "strict reference-adapter rejection gate",
@@ -988,6 +1019,7 @@ def main() -> int:
             "ManiSkill render machine qualification packet",
             "External ablation collection packet",
             "External evidence intake ledger",
+            "External precollection manifest draft",
         ],
         "reviewer": [
             "Not evidence: `true`.",
@@ -1035,7 +1067,7 @@ def main() -> int:
         f"Passed: `{str(passed).lower()}`.",
         "Not evidence: `true`.",
         "",
-        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the external ablation collection packet, the external evidence intake ledger, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, renderer profile matrix, and ManiSkill render machine qualification packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the manifest assembly checklist, the External manifest builder self-test, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
+        "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the external runner backend probe self-test, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, renderer profile matrix, and ManiSkill render machine qualification packet, the ManiSkill pilot runtime liveness audit, the external method implementation packet, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, the manifest assembly checklist, the External manifest builder self-test, the no-go operator packet, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "",
         "## Checks",
         "",

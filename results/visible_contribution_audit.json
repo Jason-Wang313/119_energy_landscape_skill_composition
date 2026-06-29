@@ -36,7 +36,7 @@
       "passed": true
     },
     {
-      "detail": "files=273, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=278, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -148,6 +148,11 @@
     {
       "detail": "mapped=36/36, strict_external_evidence_ready=False",
       "name": "evidence_intake_ledger_visible",
+      "passed": true
+    },
+    {
+      "detail": "prepared_configs=4, method_gaps=11, rollout_gaps=8, official_manifest_exists=False",
+      "name": "precollection_manifest_draft_visible",
       "passed": true
     },
     {
