@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import re
@@ -47,6 +48,14 @@ def read_json(path: Path) -> dict[str, Any]:
         return json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
         raise SystemExit(f"invalid JSON in {path}: {exc}") from exc
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest().upper()
 
 
 def rel_path(value: str) -> Path:
@@ -140,6 +149,8 @@ def validate_record(
     manifest_methods: set[str],
     manifest_tasks: set[str],
     check_video_paths: bool,
+    manifest_task_specs: dict[str, dict[str, Any]] | None = None,
+    manifest_task_configs: dict[str, dict[str, Any]] | None = None,
     manifest_video_dirs: dict[str, Path] | None = None,
     manifest_method_hashes: dict[str, str] | None = None,
     strict_video_evidence: bool = False,
@@ -177,10 +188,13 @@ def validate_record(
         if isinstance(value, bool) or not isinstance(value, int) or value < 0:
             errors.append(f"{line_id}: {field} must be integer >= 0")
 
+    numeric_values: dict[str, float] = {}
     for field in ("basin_estimate", "descent_continuity_score", "predicted_seam_risk", "fixed_risk_budget"):
         value = as_float(record, field, errors, line_id)
         if value is not None and not (0.0 <= value <= 1.0):
             errors.append(f"{line_id}: {field}={value} outside [0, 1]")
+        if value is not None:
+            numeric_values[field] = value
 
     barrier_score = as_float(record, "barrier_score", errors, line_id)
     if barrier_score is not None and barrier_score < 0:
@@ -202,6 +216,25 @@ def validate_record(
         errors.append(f"{line_id}: task_family={record.get('task_family')!r} not declared in manifest")
     if record.get("method") not in manifest_methods:
         errors.append(f"{line_id}: method={record.get('method')!r} not declared in manifest")
+    task_name = str(record.get("task_family", ""))
+    task_spec = (manifest_task_specs or {}).get(task_name, {})
+    for field in ("platform_type", "platform_name"):
+        declared = str(task_spec.get(field, "")).strip()
+        if declared and str(record.get(field, "")).strip() != declared:
+            errors.append(f"{line_id}: {field} must match manifest task {field} for task={task_name!r}")
+    task_config = (manifest_task_configs or {}).get(task_name, {})
+    for field in ("skill_i", "skill_j"):
+        declared = str(task_config.get(field, "")).strip()
+        if declared and str(record.get(field, "")).strip() != declared:
+            if field == "skill_i":
+                errors.append(f"{line_id}: skill_i must match manifest task config for task={task_name!r}")
+            else:
+                errors.append(f"{line_id}: skill_j must match manifest task config for task={task_name!r}")
+    if "fixed_risk_budget" in task_config and "fixed_risk_budget" in numeric_values:
+        config_budget = task_config.get("fixed_risk_budget")
+        if not isinstance(config_budget, bool) and isinstance(config_budget, (int, float)):
+            if abs(numeric_values["fixed_risk_budget"] - float(config_budget)) > 1e-12:
+                errors.append(f"{line_id}: fixed_risk_budget must match manifest task config for task={task_name!r}")
     method_name = str(record.get("method", ""))
     declared_policy_hash = (manifest_method_hashes or {}).get(method_name, "")
     record_policy_hash = str(record.get("policy_or_config_hash", ""))
@@ -244,6 +277,11 @@ def load_records(
     methods = manifest.get("methods", [])
     methods = methods if isinstance(methods, list) else []
     manifest_tasks = {str(task.get("task_family", "")) for task in tasks if isinstance(task, dict)}
+    manifest_task_specs = {
+        str(task.get("task_family", "")): task
+        for task in tasks
+        if isinstance(task, dict) and str(task.get("task_family", ""))
+    }
     manifest_methods = {str(method.get("name", "")) for method in methods if isinstance(method, dict)}
     manifest_method_hashes = {
         str(method.get("name", "")): str(method.get("checkpoint_or_config_hash", "")).strip()
@@ -260,6 +298,32 @@ def load_records(
 
     records: list[dict[str, Any]] = []
     errors: list[str] = []
+    manifest_task_configs: dict[str, dict[str, Any]] = {}
+    for task_family, task in manifest_task_specs.items():
+        config_path_value = str(task.get("config_path", "")).strip()
+        declared_config_hash = str(task.get("config_hash", "")).strip()
+        if not config_path_value and not declared_config_hash:
+            continue
+        if not config_path_value:
+            errors.append(f"{task_family}: manifest declares config_hash without config_path")
+            continue
+        config_path = rel_path(config_path_value)
+        if not config_path.exists():
+            errors.append(f"{task_family}: missing config_path {config_path_value}")
+            continue
+        actual_config_hash = sha256_file(config_path)
+        if declared_config_hash:
+            if not HEX64.fullmatch(declared_config_hash):
+                errors.append(f"{task_family}: config_hash must be 64-character SHA256")
+            elif actual_config_hash.lower() != declared_config_hash.lower():
+                errors.append(f"{task_family}: config_hash does not match config_path {config_path_value}")
+        config_payload = read_json(config_path)
+        if not isinstance(config_payload, dict):
+            errors.append(f"{task_family}: config_path must contain a JSON object")
+        else:
+            manifest_task_configs[task_family] = config_payload
+        if len(errors) >= max_errors:
+            return records, errors
     for task in tasks:
         if not isinstance(task, dict):
             errors.append("manifest task entry is not an object")
@@ -298,6 +362,8 @@ def load_records(
                         manifest_methods=manifest_methods,
                         manifest_tasks=manifest_tasks,
                         check_video_paths=check_video_paths,
+                        manifest_task_specs=manifest_task_specs,
+                        manifest_task_configs=manifest_task_configs,
                         manifest_video_dirs=manifest_video_dirs,
                         manifest_method_hashes=manifest_method_hashes,
                         strict_video_evidence=strict_video_evidence,

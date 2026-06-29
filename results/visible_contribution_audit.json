@@ -156,7 +156,7 @@
       "passed": true
     },
     {
-      "detail": "strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths and manifest method-hash mismatches",
+      "detail": "strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths, stale task configs, and manifest method-hash mismatches",
       "name": "strict_video_evidence_gate_visible",
       "passed": true
     },

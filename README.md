@@ -12,7 +12,7 @@ Paper 119 is a local bridge toward an adaptive physical world/action model for s
 
 Reviewer response packet: `docs/reviewer_response_packet.md` maps hostile reviewer objections to exact local evidence, allowed claims, remaining gates, and one-paper Haonan/Yilun outreach guidance while preserving the `STRONG_REVISE` boundary.
 
-Latest evidence-integrity hardening: a strict policy/config hash gate now rejects raw JSONL rollout rows whose `policy_or_config_hash` disagrees with the manifest-declared method `checkpoint_or_config_hash`.
+Latest evidence-integrity hardening: the strict task-config hash gate and strict policy/config hash gate now reject raw JSONL rollout rows whose task fields disagree with the manifest-declared config hash or whose `policy_or_config_hash` disagrees with the manifest-declared method `checkpoint_or_config_hash`.
 
 ## Evidence Snapshot
 

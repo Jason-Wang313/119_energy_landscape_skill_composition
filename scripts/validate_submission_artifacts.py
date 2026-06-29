@@ -2722,6 +2722,9 @@ def main():
         "FORBIDDEN_VIDEO_PATH_FRAGMENTS",
         "diagnostic fallback sidecar",
         "not MP4-like evidence",
+        "manifest_task_configs",
+        "config_hash does not match config_path",
+        "skill_i must match manifest task config",
         "manifest_method_hashes",
         "policy_or_config_hash must match manifest checkpoint_or_config_hash",
         "staging",
@@ -2736,6 +2739,8 @@ def main():
         "internal_runner_artifact.staging.mp4",
         "internal_runner_artifact.backup.mp4",
         "forbidden non-evidence fragment",
+        "stale task config hash test did not fail",
+        "stale task config row test did not fail",
         "spoofed policy/config hash test did not fail",
     ):
         if forbidden_fixture not in rollout_self_test_text:

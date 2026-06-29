@@ -16,6 +16,14 @@ def digest(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
+def file_digest(path: Path) -> str:
+    digest_obj = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest_obj.update(chunk)
+    return digest_obj.hexdigest()
+
+
 def write_synthetic_mp4(path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     header = b"\x00\x00\x00\x18ftypisom\x00\x00\x02\x00isomiso2mp41"
@@ -70,7 +78,9 @@ def build_fixture(tmp: Path) -> tuple[dict, dict]:
         "cable_route_insert",
     ]
     log_dir = tmp / "logs"
+    config_dir = tmp / "configs"
     log_dir.mkdir()
+    config_dir.mkdir()
     methods = [
         rollout.PRIMARY_METHOD,
         "greedy_module_sequence",
@@ -81,6 +91,16 @@ def build_fixture(tmp: Path) -> tuple[dict, dict]:
         "methods": [{"name": method, "checkpoint_or_config_hash": hashes[method]} for method in methods],
     }
     for task in tasks:
+        config_path = config_dir / f"{task}.json"
+        config_payload = {
+            "task_family": task,
+            "platform_type": "high_fidelity_sim",
+            "platform_name": "temporary_self_test_fixture",
+            "skill_i": f"{task}_skill_i",
+            "skill_j": f"{task}_skill_j",
+            "fixed_risk_budget": 0.15,
+        }
+        config_path.write_text(json.dumps(config_payload, sort_keys=True) + "\n", encoding="utf-8")
         log_path = log_dir / f"{task}.jsonl"
         with log_path.open("w", encoding="utf-8") as handle:
             for scene_idx in range(10):
@@ -95,7 +115,11 @@ def build_fixture(tmp: Path) -> tuple[dict, dict]:
         manifest["tasks"].append(
             {
                 "task_family": task,
+                "platform_type": "high_fidelity_sim",
+                "platform_name": "temporary_self_test_fixture",
                 "log_jsonl": str(log_path),
+                "config_path": str(config_path),
+                "config_hash": file_digest(config_path),
             }
         )
     return manifest, schema
@@ -142,6 +166,35 @@ def main() -> int:
         )
         if not any("missing required fields" in error and "utility" in error for error in bad_errors):
             raise AssertionError(f"missing-field test did not fail as expected: {bad_errors}")
+
+        stale_config_hash_manifest = json.loads(json.dumps(manifest))
+        stale_config_hash_manifest["tasks"][0]["config_hash"] = digest("stale:task_config")
+        _, stale_config_hash_errors = rollout.load_records(
+            stale_config_hash_manifest,
+            schema,
+            check_video_paths=False,
+            max_errors=10,
+        )
+        if not any("config_hash does not match config_path" in error for error in stale_config_hash_errors):
+            raise AssertionError(f"stale task config hash test did not fail as expected: {stale_config_hash_errors}")
+
+        config_task = str(records[0]["task_family"])
+        task_config = json.loads(Path(manifest["tasks"][0]["config_path"]).read_text(encoding="utf-8"))
+        stale_task_config_record = dict(records[0])
+        stale_task_config_record["skill_i"] = "stale_skill_i_from_old_task_config"
+        stale_task_config_errors = rollout.validate_record(
+            stale_task_config_record,
+            line_id="synthetic_stale_task_config_record",
+            schema=schema,
+            manifest_methods={rollout.PRIMARY_METHOD, "greedy_module_sequence"},
+            manifest_tasks=set(summary["task_families"]),
+            check_video_paths=False,
+            manifest_task_specs={config_task: manifest["tasks"][0]},
+            manifest_task_configs={config_task: task_config},
+            manifest_method_hashes=method_hashes([rollout.PRIMARY_METHOD, "greedy_module_sequence"]),
+        )
+        if not any("skill_i must match manifest task config" in error for error in stale_task_config_errors):
+            raise AssertionError(f"stale task config row test did not fail as expected: {stale_task_config_errors}")
 
         spoofed_hash_record = dict(records[0])
         spoofed_hash_record["policy_or_config_hash"] = digest("spoofed:policy")
