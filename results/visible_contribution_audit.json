@@ -141,7 +141,7 @@
       "passed": true
     },
     {
-      "detail": "pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, render_backend='cpu', shader_pack='minimal', timed_out=True, records=0, videos=0, diagnostic_fallbacks=0, diagnostic_rejected=False, last_stage='reset_scene_start', failure_summary='runner timed out after progress stage reset_scene_start before producing the required pilot record/video'",
+      "detail": "pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, render_backend='cpu', shader_pack='minimal', timed_out=True, records=0, videos=0, diagnostic_fallbacks=0, diagnostic_rejected=False, last_stage='reset_scene_start', reset_triage_status='RESET_SCENE_TIMEOUT_TRIAGE_READY', failure_summary='runner timed out after progress stage reset_scene_start before producing the required pilot record/video'",
       "name": "maniskill_pilot_runtime_liveness_visible",
       "passed": true
     },

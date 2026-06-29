@@ -17,6 +17,7 @@ Diagnostic sidecar rejected before JSONL write: `false`.
 Official video guard blocked diagnostic fallback: `false`.
 Failure summary: `runner timed out after progress stage reset_scene_start before producing the required pilot record/video`.
 Last progress stage: `reset_scene_start`.
+Reset-timeout triage: `results/maniskill_pilot_reset_timeout_triage.md`.
 
 This bounded liveness audit launches the tracked ManiSkill reference runner in a subprocess against quarantined `pilot_runtime_guard` directories. It is not rollout evidence and cannot satisfy the external evidence gate; it only prevents a slow CPU/render backend from silently blocking an official collection attempt.
 
@@ -43,6 +44,27 @@ C:\Users\wangz\AppData\Local\Programs\Python\Python310\python.exe -u external_va
 - `pass` `diagnostic_rejection_paths_are_quarantined`: diagnostic_sidecar_paths_quarantined=True, diagnostic_fallbacks=0
 - `pass` `diagnostic_fallback_does_not_mark_render_ready`: render_video_ready=False, pilot_runtime_ready=False, diagnostic_fallbacks=0
 - `pass` `no_real_manifest_written`: external_validation/manifest.json remains absent
+- `pass` `reset_timeout_triage_is_non_evidence`: triage_status=RESET_SCENE_TIMEOUT_TRIAGE_READY, strict_external_evidence_ready=False
+- `pass` `reset_timeout_triage_context_recorded`: reset_timeout=True, task_family='peg_place_regrasp', method='energy_compatibility_heuristic', env_id='PegInsertionSide-v1'
+- `pass` `reset_timeout_operator_actions_present`: reset_timeout=True, actions=6
+
+## Reset Timeout Triage
+
+- Status: `RESET_SCENE_TIMEOUT_TRIAGE_READY`
+- Reset timeout: `true`
+- Task family: `peg_place_regrasp`
+- Method: `energy_compatibility_heuristic` via alias `method_05`
+- Scene: `peg_place_regrasp_reset_000`
+- Primary env: `PegInsertionSide-v1`
+- Config hash: `A731AFA16ED0ECD963A053C84EA0421363B8340EF8EA92F87D21F6F7099E5501`
+
+Operator next actions:
+- Rerun the liveness audit on the exact candidate collection machine with the intended render backend, shader pack, and timeout, and keep outputs under external_validation/pilot_runtime_guard only.
+- Run python scripts\audit_maniskill_render_video_preflight.py --profile-matrix --timeout-diagnosis-seconds 30 before retrying official collection for peg_place_regrasp/PegInsertionSide-v1/energy_compatibility_heuristic.
+- Run python scripts\build_maniskill_render_machine_qualification.py and do not collect official evidence until the exact machine is qualified for render-backed RGB MP4 export and pilot liveness.
+- Inspect the bound task config, primary_env_id, installed ManiSkill assets, reset seed, and SAPIEN renderer logs for the reset-scene target peg_place_regrasp/PegInsertionSide-v1/energy_compatibility_heuristic.
+- If reset still hangs, replace or rebind the task in external_validation/fidelity_acceptance.json only after independent operator signoff, then rerun collection readiness before any official rollout.
+- Do not promote quarantined pilot logs, diagnostic videos, fallback sidecars, or partial reset attempts into external_validation/manifest.json.
 
 ## Collection Progress
 

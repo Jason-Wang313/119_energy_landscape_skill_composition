@@ -2637,14 +2637,19 @@ def main():
             fail(f"ManiSkill render-video preflight audit missing passing check: {required_check}")
     pilot_runtime_path = RESULTS / "maniskill_pilot_runtime_liveness_audit.json"
     pilot_runtime_md_path = RESULTS / "maniskill_pilot_runtime_liveness_audit.md"
+    pilot_reset_triage_path = RESULTS / "maniskill_pilot_reset_timeout_triage.json"
+    pilot_reset_triage_md_path = RESULTS / "maniskill_pilot_reset_timeout_triage.md"
     for path in (
         ROOT / "scripts" / "audit_maniskill_pilot_runtime_liveness.py",
         pilot_runtime_path,
         pilot_runtime_md_path,
+        pilot_reset_triage_path,
+        pilot_reset_triage_md_path,
     ):
         if not path.exists():
             fail(f"missing ManiSkill pilot runtime liveness artifact: {path}")
     pilot_runtime = json.loads(pilot_runtime_path.read_text(encoding="utf-8"))
+    pilot_reset_triage = json.loads(pilot_reset_triage_path.read_text(encoding="utf-8"))
     if pilot_runtime.get("version") != "maniskill_pilot_runtime_liveness_audit_v1":
         fail("ManiSkill pilot runtime liveness audit version mismatch")
     if pilot_runtime.get("passed") is not True:
@@ -2694,6 +2699,25 @@ def main():
         )
     if not str(pilot_runtime.get("failure_summary", "")).strip():
         fail("ManiSkill pilot runtime liveness audit must record a failure summary")
+    nested_pilot_reset_triage = pilot_runtime.get("reset_timeout_triage", {})
+    if pilot_reset_triage.get("version") != "maniskill_pilot_reset_timeout_triage_v1":
+        fail("ManiSkill pilot reset-timeout triage version mismatch")
+    if nested_pilot_reset_triage != pilot_reset_triage:
+        fail("ManiSkill pilot reset-timeout triage sidecar must match the liveness audit payload")
+    if pilot_reset_triage.get("not_external_evidence") is not True:
+        fail("ManiSkill pilot reset-timeout triage must declare that it is not evidence")
+    if pilot_reset_triage.get("strict_external_evidence_ready") is not False:
+        fail("ManiSkill pilot reset-timeout triage must not claim strict external evidence readiness")
+    if pilot_runtime.get("timed_out") is True and pilot_runtime.get("last_progress_stage") == "reset_scene_start":
+        if pilot_reset_triage.get("reset_timeout") is not True:
+            fail("ManiSkill pilot reset-timeout triage must mark reset_timeout=true for reset-scene timeouts")
+        if pilot_reset_triage.get("triage_status") != "RESET_SCENE_TIMEOUT_TRIAGE_READY":
+            fail("ManiSkill pilot reset-timeout triage must be ready for the current reset-scene timeout")
+        for required_field in ("task_family", "method_name", "method_alias", "scene_id", "config_hash", "primary_env_id"):
+            if not str(pilot_reset_triage.get(required_field, "")).strip():
+                fail(f"ManiSkill pilot reset-timeout triage missing field: {required_field}")
+        if len(pilot_reset_triage.get("operator_next_actions", []) or []) < 5:
+            fail("ManiSkill pilot reset-timeout triage must include operator next actions")
     pilot_runtime_checks = {check.get("name"): check.get("passed") for check in pilot_runtime.get("checks", [])}
     for required_check in (
         "runtime_guard_is_non_evidence",
@@ -2707,6 +2731,9 @@ def main():
         "diagnostic_rejection_paths_are_quarantined",
         "diagnostic_fallback_does_not_mark_render_ready",
         "no_real_manifest_written",
+        "reset_timeout_triage_is_non_evidence",
+        "reset_timeout_triage_context_recorded",
+        "reset_timeout_operator_actions_present",
     ):
         if pilot_runtime_checks.get(required_check) is not True:
             fail(f"ManiSkill pilot runtime liveness audit missing passing check: {required_check}")

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import os
 import re
@@ -22,6 +23,8 @@ GUARD_LOG_DIR = GUARD_ROOT / "logs"
 GUARD_VIDEO_DIR = GUARD_ROOT / "videos"
 OUT_JSON = RESULTS / "maniskill_pilot_runtime_liveness_audit.json"
 OUT_MD = RESULTS / "maniskill_pilot_runtime_liveness_audit.md"
+TRIAGE_JSON = RESULTS / "maniskill_pilot_reset_timeout_triage.json"
+TRIAGE_MD = RESULTS / "maniskill_pilot_reset_timeout_triage.md"
 
 
 def rel(path: Path) -> str:
@@ -36,6 +39,11 @@ def read_json(path: Path) -> dict[str, Any]:
         return json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
         raise SystemExit(f"invalid JSON in {path}: {exc}") from exc
+
+
+def sha256_json(payload: Any) -> str:
+    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest().upper()
 
 
 def add_check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str) -> None:
@@ -61,13 +69,25 @@ def clear_guard_outputs() -> None:
     GUARD_VIDEO_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def load_methods() -> set[str]:
+def load_alias_rows() -> dict[str, dict[str, str]]:
     payload = read_json(EXTERNAL / "method_alias_map.json")
-    methods = set()
+    aliases: dict[str, dict[str, str]] = {}
     for item in payload.get("aliases", []) or []:
-        if isinstance(item, dict) and item.get("method"):
-            methods.add(str(item["method"]))
-    return methods
+        if not isinstance(item, dict):
+            continue
+        alias = str(item.get("alias", "")).strip()
+        method = str(item.get("method", "")).strip()
+        if alias and method:
+            aliases[alias] = {
+                "alias": alias,
+                "method": method,
+                "alias_hash": str(item.get("alias_hash", "")).strip(),
+            }
+    return aliases
+
+
+def load_methods() -> set[str]:
+    return {row["method"] for row in load_alias_rows().values() if row.get("method")}
 
 
 def load_tasks() -> set[str]:
@@ -80,6 +100,19 @@ def load_tasks() -> set[str]:
                 if task:
                     tasks.add(task)
     return tasks
+
+
+def load_operator_row(row_index: int) -> dict[str, str]:
+    if row_index <= 0:
+        return {}
+    sheet = EXTERNAL / "blinded_operator_sheet.csv"
+    if not sheet.exists():
+        return {}
+    with sheet.open(newline="", encoding="utf-8") as handle:
+        for current_index, row in enumerate(csv.DictReader(handle), start=1):
+            if current_index == row_index:
+                return {str(key): str(value or "") for key, value in row.items()}
+    return {}
 
 
 def load_records(log_dir: Path) -> tuple[list[dict[str, Any]], list[str], list[Path]]:
@@ -209,6 +242,149 @@ def summarize_failure(
             return f"runner exited with returncode {returncode} after progress stage {last_progress_stage} before producing the required pilot record/video"
         return f"runner exited with returncode {returncode} before producing the required pilot record/video"
     return "runner did not produce the required pilot record/video"
+
+
+def coerce_int(value: Any) -> int:
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return 0
+
+
+def latest_progress_value(stages: list[dict[str, Any]], key: str, *, row_index: int = 0) -> str:
+    for stage in reversed(stages):
+        if row_index and coerce_int(stage.get("row_index")) not in (0, row_index):
+            continue
+        value = str(stage.get(key, "")).strip()
+        if value:
+            return value
+    return ""
+
+
+def active_row_index(stages: list[dict[str, Any]]) -> int:
+    for stage in reversed(stages):
+        row_index = coerce_int(stage.get("row_index"))
+        if row_index > 0:
+            return row_index
+    return 0
+
+
+def reset_timeout_actions(*, task_family: str, env_id: str, method_name: str) -> list[str]:
+    scoped_target = f"{task_family or '<unknown task>'}/{env_id or '<unknown env>'}/{method_name or '<unknown method>'}"
+    return [
+        (
+            "Rerun the liveness audit on the exact candidate collection machine with the intended render backend, "
+            "shader pack, and timeout, and keep outputs under external_validation/pilot_runtime_guard only."
+        ),
+        (
+            "Run python scripts\\audit_maniskill_render_video_preflight.py --profile-matrix --timeout-diagnosis-seconds 30 "
+            f"before retrying official collection for {scoped_target}."
+        ),
+        (
+            "Run python scripts\\build_maniskill_render_machine_qualification.py and do not collect official evidence "
+            "until the exact machine is qualified for render-backed RGB MP4 export and pilot liveness."
+        ),
+        (
+            "Inspect the bound task config, primary_env_id, installed ManiSkill assets, reset seed, and SAPIEN renderer logs "
+            f"for the reset-scene target {scoped_target}."
+        ),
+        (
+            "If reset still hangs, replace or rebind the task in external_validation/fidelity_acceptance.json only after "
+            "independent operator signoff, then rerun collection readiness before any official rollout."
+        ),
+        (
+            "Do not promote quarantined pilot logs, diagnostic videos, fallback sidecars, or partial reset attempts into "
+            "external_validation/manifest.json."
+        ),
+    ]
+
+
+def build_reset_timeout_triage(args: argparse.Namespace, result: dict[str, Any]) -> dict[str, Any]:
+    stages = result["collection_progress_stages"]
+    row_index = active_row_index(stages)
+    row = load_operator_row(row_index)
+    alias_rows = load_alias_rows()
+    task_family = latest_progress_value(stages, "task_family", row_index=row_index) or row.get("task_family", "")
+    method_alias = latest_progress_value(stages, "method_alias", row_index=row_index) or row.get("method_alias", "")
+    alias_row = alias_rows.get(method_alias, {})
+    method_name = latest_progress_value(stages, "method", row_index=row_index) or alias_row.get("method", "")
+    scene_id = latest_progress_value(stages, "scene_id", row_index=row_index) or row.get("scene_id", "")
+    config_path = EXTERNAL / "configs" / f"{task_family}.json"
+    config: dict[str, Any] = read_json(config_path) if task_family and config_path.exists() else {}
+    binding = config.get("backend_task_binding", {}) if isinstance(config.get("backend_task_binding"), dict) else {}
+    observation_interface = config.get("observation_interface", {}) if isinstance(config.get("observation_interface"), dict) else {}
+    compute_budget = config.get("compute_budget", {}) if isinstance(config.get("compute_budget"), dict) else {}
+    reset_protocol = config.get("reset_protocol", {}) if isinstance(config.get("reset_protocol"), dict) else {}
+    config_hash = sha256_json(config) if config else ""
+    reset_timeout = bool(result["timed_out"] and result["last_progress_stage"] == "reset_scene_start")
+    context_ready = bool(task_family and method_name and config_hash and binding.get("primary_env_id"))
+    operator_actions = reset_timeout_actions(
+        task_family=task_family,
+        env_id=str(binding.get("primary_env_id", "")).strip(),
+        method_name=method_name,
+    )
+    status = "RESET_SCENE_TIMEOUT_TRIAGE_READY" if reset_timeout and context_ready else "RESET_SCENE_TIMEOUT_TRIAGE_NOT_APPLICABLE"
+    if reset_timeout and not context_ready:
+        status = "RESET_SCENE_TIMEOUT_TRIAGE_INCOMPLETE"
+    return {
+        "version": "maniskill_pilot_reset_timeout_triage_v1",
+        "triage_status": status,
+        "reset_timeout": reset_timeout,
+        "not_external_evidence": True,
+        "strict_external_evidence_ready": False,
+        "pilot_runtime_ready": result["pilot_runtime_ready"],
+        "render_video_ready": result["render_video_ready"],
+        "runner_io_ready": result["runner_io_ready"],
+        "timed_out": result["timed_out"],
+        "timeout_seconds": args.timeout_seconds,
+        "last_progress_stage": result["last_progress_stage"],
+        "failure_summary": result["failure_summary"],
+        "row_index": row_index,
+        "method_alias": method_alias,
+        "method_alias_hash": alias_row.get("alias_hash", ""),
+        "method_name": method_name,
+        "task_family": task_family,
+        "scene_id": scene_id,
+        "seed": row.get("seed", ""),
+        "blind_run_id": row.get("blind_run_id", ""),
+        "expected_log_jsonl": row.get("expected_log_jsonl", ""),
+        "expected_video_path": row.get("expected_video_path", ""),
+        "config_path": rel(config_path) if config else "",
+        "config_hash": config_hash,
+        "primary_env_id": str(binding.get("primary_env_id", "")).strip(),
+        "primary_route": str(binding.get("primary_route", "")).strip(),
+        "binding_strength": str(binding.get("binding_strength", "")).strip(),
+        "requires_operator_fidelity_acceptance": bool(binding.get("requires_operator_fidelity_acceptance")),
+        "accepted_task_binding_ready": bool(binding.get("accepted_task_binding_ready")),
+        "skill_i": str(config.get("skill_i", "")).strip(),
+        "skill_j": str(config.get("skill_j", "")).strip(),
+        "seam_under_test": str(config.get("seam_under_test", "")).strip(),
+        "fixed_risk_budget": config.get("fixed_risk_budget", ""),
+        "paired_reset_count": config.get("paired_reset_count", ""),
+        "reset_protocol": reset_protocol,
+        "observation_interface": observation_interface,
+        "compute_budget": compute_budget,
+        "render_backend": result["render_backend"],
+        "shader_pack": result["shader_pack"],
+        "render_width": result["render_width"],
+        "render_height": result["render_height"],
+        "operator_next_actions": operator_actions,
+        "gate_commands": [
+            "python scripts\\audit_maniskill_backend_readiness.py",
+            "python scripts\\audit_maniskill_render_video_preflight.py --profile-matrix --timeout-diagnosis-seconds 30",
+            "python scripts\\build_maniskill_render_machine_qualification.py",
+            "python scripts\\audit_maniskill_reference_collection_preflight.py",
+            (
+                "python scripts\\audit_external_collection_readiness.py --backend-module "
+                "external_validation\\runner\\maniskill_reference_backend.py --unsealed-alias-map "
+                "--run-id maniskill_sapien_reference_preflight_protocol_v1"
+            ),
+        ],
+        "evidence_boundary": (
+            "This triage report is a pre-collection work order only. It cannot satisfy strict external evidence, "
+            "cannot write external_validation/manifest.json, and cannot promote quarantined pilot outputs."
+        ),
+    }
 
 
 def run_guard(args: argparse.Namespace) -> dict[str, Any]:
@@ -348,6 +524,7 @@ def run_guard(args: argparse.Namespace) -> dict[str, Any]:
 
 def build_payload(args: argparse.Namespace) -> dict[str, Any]:
     result = run_guard(args)
+    reset_triage = build_reset_timeout_triage(args, result)
     checks: list[dict[str, Any]] = []
     add_check(
         checks,
@@ -465,6 +642,41 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         not (EXTERNAL / "manifest.json").exists(),
         "external_validation/manifest.json remains absent",
     )
+    add_check(
+        checks,
+        "reset_timeout_triage_is_non_evidence",
+        reset_triage["not_external_evidence"] is True
+        and reset_triage["strict_external_evidence_ready"] is False
+        and not (EXTERNAL / "manifest.json").exists(),
+        (
+            f"triage_status={reset_triage['triage_status']}, "
+            f"strict_external_evidence_ready={reset_triage['strict_external_evidence_ready']}"
+        ),
+    )
+    add_check(
+        checks,
+        "reset_timeout_triage_context_recorded",
+        (
+            not reset_triage["reset_timeout"]
+            or (
+                bool(reset_triage["task_family"])
+                and bool(reset_triage["method_name"])
+                and bool(reset_triage["config_hash"])
+                and bool(reset_triage["primary_env_id"])
+                and bool(reset_triage["scene_id"])
+            )
+        ),
+        (
+            f"reset_timeout={reset_triage['reset_timeout']}, task_family={reset_triage['task_family']!r}, "
+            f"method={reset_triage['method_name']!r}, env_id={reset_triage['primary_env_id']!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "reset_timeout_operator_actions_present",
+        (not reset_triage["reset_timeout"]) or len(reset_triage["operator_next_actions"]) >= 5,
+        f"reset_timeout={reset_triage['reset_timeout']}, actions={len(reset_triage['operator_next_actions'])}",
+    )
     passed = all(check["passed"] for check in checks)
     blocking_missing = []
     if not result["pilot_runtime_ready"]:
@@ -518,6 +730,9 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
         "diagnostic_sidecar_rejected_before_jsonl_write": result["diagnostic_sidecar_rejected_before_jsonl_write"],
         "official_video_guard_blocked_diagnostic_fallback": result["official_video_guard_blocked_diagnostic_fallback"],
         "diagnostic_sidecar_paths_quarantined": result["diagnostic_sidecar_paths_quarantined"],
+        "reset_timeout_triage": reset_triage,
+        "reset_timeout_triage_json": rel(TRIAGE_JSON),
+        "reset_timeout_triage_md": rel(TRIAGE_MD),
         "blocking_missing": blocking_missing,
         "command": " ".join(result["command"]),
         "stdout_tail": result["stdout_tail"],
@@ -529,6 +744,8 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
 def write_outputs(payload: dict[str, Any]) -> None:
     RESULTS.mkdir(exist_ok=True)
     OUT_JSON.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    reset_triage = payload["reset_timeout_triage"]
+    TRIAGE_JSON.write_text(json.dumps(reset_triage, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     lines = [
         "# ManiSkill Pilot Runtime Liveness Audit",
         "",
@@ -549,6 +766,7 @@ def write_outputs(payload: dict[str, Any]) -> None:
         f"Official video guard blocked diagnostic fallback: `{str(payload['official_video_guard_blocked_diagnostic_fallback']).lower()}`.",
         f"Failure summary: `{payload['failure_summary']}`.",
         f"Last progress stage: `{payload['last_progress_stage'] or 'none'}`.",
+        f"Reset-timeout triage: `{payload['reset_timeout_triage_md']}`.",
         "",
         "This bounded liveness audit launches the tracked ManiSkill reference runner in a subprocess against quarantined `pilot_runtime_guard` directories. It is not rollout evidence and cannot satisfy the external evidence gate; it only prevents a slow CPU/render backend from silently blocking an official collection attempt.",
         "",
@@ -578,6 +796,24 @@ def write_outputs(payload: dict[str, Any]) -> None:
         lines.extend(["", "## Diagnostic Sidecars", ""])
         for sidecar in payload["diagnostic_video_fallbacks"][:20]:
             lines.append(f"- `{sidecar}`")
+    lines.extend(
+        [
+            "",
+            "## Reset Timeout Triage",
+            "",
+            f"- Status: `{reset_triage['triage_status']}`",
+            f"- Reset timeout: `{str(reset_triage['reset_timeout']).lower()}`",
+            f"- Task family: `{reset_triage['task_family'] or 'unknown'}`",
+            f"- Method: `{reset_triage['method_name'] or 'unknown'}` via alias `{reset_triage['method_alias'] or 'unknown'}`",
+            f"- Scene: `{reset_triage['scene_id'] or 'unknown'}`",
+            f"- Primary env: `{reset_triage['primary_env_id'] or 'unknown'}`",
+            f"- Config hash: `{reset_triage['config_hash'] or 'unknown'}`",
+            "",
+            "Operator next actions:",
+        ]
+    )
+    for action in reset_triage["operator_next_actions"]:
+        lines.append(f"- {action}")
     lines.extend(["", "## Collection Progress", ""])
     if payload["collection_progress_stages"]:
         for stage in payload["collection_progress_stages"][-20:]:
@@ -585,6 +821,45 @@ def write_outputs(payload: dict[str, Any]) -> None:
     else:
         lines.append("- none")
     OUT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    triage_lines = [
+        "# ManiSkill Pilot Reset Timeout Triage",
+        "",
+        f"Status: `{reset_triage['triage_status']}`.",
+        "Not evidence: `true`.",
+        f"Strict external evidence ready: `{str(reset_triage['strict_external_evidence_ready']).lower()}`.",
+        f"Reset timeout: `{str(reset_triage['reset_timeout']).lower()}`.",
+        f"Failure summary: `{reset_triage['failure_summary']}`.",
+        "",
+        "## Active Row",
+        "",
+        f"- Row index: `{reset_triage['row_index']}`",
+        f"- Task family: `{reset_triage['task_family'] or 'unknown'}`",
+        f"- Scene: `{reset_triage['scene_id'] or 'unknown'}`",
+        f"- Seed: `{reset_triage['seed'] or 'unknown'}`",
+        f"- Blind run id: `{reset_triage['blind_run_id'] or 'unknown'}`",
+        f"- Method alias: `{reset_triage['method_alias'] or 'unknown'}`",
+        f"- Method: `{reset_triage['method_name'] or 'unknown'}`",
+        "",
+        "## Bound Config",
+        "",
+        f"- Config path: `{reset_triage['config_path'] or 'unknown'}`",
+        f"- Config hash: `{reset_triage['config_hash'] or 'unknown'}`",
+        f"- Primary env id: `{reset_triage['primary_env_id'] or 'unknown'}`",
+        f"- Primary route: `{reset_triage['primary_route'] or 'unknown'}`",
+        f"- Binding strength: `{reset_triage['binding_strength'] or 'unknown'}`",
+        f"- Skill seam: `{reset_triage['skill_i'] or 'unknown'} -> {reset_triage['skill_j'] or 'unknown'}`",
+        f"- Seam under test: `{reset_triage['seam_under_test'] or 'unknown'}`",
+        "",
+        "## Gate Commands",
+        "",
+    ]
+    for command in reset_triage["gate_commands"]:
+        triage_lines.append(f"- `{command}`")
+    triage_lines.extend(["", "## Operator Next Actions", ""])
+    for action in reset_triage["operator_next_actions"]:
+        triage_lines.append(f"- {action}")
+    triage_lines.extend(["", "## Evidence Boundary", "", reset_triage["evidence_boundary"]])
+    TRIAGE_MD.write_text("\n".join(triage_lines) + "\n", encoding="utf-8")
 
 
 def main() -> int:
@@ -608,6 +883,8 @@ def main() -> int:
     )
     print(f"Wrote {OUT_JSON}")
     print(f"Wrote {OUT_MD}")
+    print(f"Wrote {TRIAGE_JSON}")
+    print(f"Wrote {TRIAGE_MD}")
     return 0 if payload["passed"] else 1
 
 

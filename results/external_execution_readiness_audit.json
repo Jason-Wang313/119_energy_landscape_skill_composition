@@ -291,6 +291,11 @@
       "passed": true
     },
     {
+      "detail": "status='RESET_SCENE_TIMEOUT_TRIAGE_READY', reset_timeout=True, task='peg_place_regrasp', method='energy_compatibility_heuristic', env='PegInsertionSide-v1'",
+      "name": "maniskill_pilot_reset_timeout_triage_ready",
+      "passed": true
+    },
+    {
       "detail": "passed",
       "name": "maniskill_render_machine_qualification_ready",
       "passed": true

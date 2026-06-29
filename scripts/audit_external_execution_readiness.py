@@ -560,6 +560,7 @@ def main() -> int:
     )
     add_check(checks, "maniskill_pilot_runtime_liveness_ready", pilot_runtime_ok, pilot_runtime_detail)
     pilot_runtime_checks = {check.get("name"): check.get("passed") for check in pilot_runtime.get("checks", []) or []}
+    pilot_runtime_triage = pilot_runtime.get("reset_timeout_triage", {})
     pilot_runtime_records = int(pilot_runtime.get("records_observed", 0) or 0)
     pilot_runtime_videos = int(pilot_runtime.get("videos_written", 0) or 0)
     pilot_runtime_fallbacks = len(pilot_runtime.get("diagnostic_video_fallbacks", []) or [])
@@ -570,6 +571,9 @@ def main() -> int:
         and pilot_runtime.get("render_video_ready") is False
         and pilot_runtime_checks.get("bounded_runner_subprocess_exercised") is True
         and pilot_runtime_checks.get("timeout_or_result_recorded_as_readiness_state") is True
+        and pilot_runtime_checks.get("reset_timeout_triage_is_non_evidence") is True
+        and pilot_runtime_checks.get("reset_timeout_triage_context_recorded") is True
+        and pilot_runtime_checks.get("reset_timeout_operator_actions_present") is True
     )
     pilot_runtime_diagnostic_io = (
         pilot_runtime.get("runner_io_ready") is True
@@ -608,6 +612,37 @@ def main() -> int:
             f"diagnostic_fallbacks={pilot_runtime_fallbacks}, "
             f"diagnostic_rejected={pilot_runtime.get('diagnostic_sidecar_rejected_before_jsonl_write')!r}, "
             f"failure_summary={pilot_runtime.get('failure_summary')!r}"
+        ),
+    )
+    pilot_reset_triage_ready = (
+        pilot_runtime_triage.get("version") == "maniskill_pilot_reset_timeout_triage_v1"
+        and pilot_runtime_triage.get("not_external_evidence") is True
+        and pilot_runtime_triage.get("strict_external_evidence_ready") is False
+        and (
+            pilot_runtime.get("last_progress_stage") != "reset_scene_start"
+            or (
+                pilot_runtime_triage.get("reset_timeout") is True
+                and pilot_runtime_triage.get("triage_status") == "RESET_SCENE_TIMEOUT_TRIAGE_READY"
+                and bool(str(pilot_runtime_triage.get("task_family", "")).strip())
+                and bool(str(pilot_runtime_triage.get("method_name", "")).strip())
+                and bool(str(pilot_runtime_triage.get("config_hash", "")).strip())
+                and bool(str(pilot_runtime_triage.get("primary_env_id", "")).strip())
+                and len(pilot_runtime_triage.get("operator_next_actions", []) or []) >= 5
+            )
+        )
+        and (RESULTS / "maniskill_pilot_reset_timeout_triage.json").exists()
+        and (RESULTS / "maniskill_pilot_reset_timeout_triage.md").exists()
+    )
+    add_check(
+        checks,
+        "maniskill_pilot_reset_timeout_triage_ready",
+        pilot_reset_triage_ready,
+        (
+            f"status={pilot_runtime_triage.get('triage_status')!r}, "
+            f"reset_timeout={pilot_runtime_triage.get('reset_timeout')!r}, "
+            f"task={pilot_runtime_triage.get('task_family')!r}, "
+            f"method={pilot_runtime_triage.get('method_name')!r}, "
+            f"env={pilot_runtime_triage.get('primary_env_id')!r}"
         ),
     )
 
@@ -1352,6 +1387,7 @@ def main() -> int:
         EXTERNAL / "evidence_intake_ledger.csv",
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "maniskill_pilot_runtime_liveness_audit.md",
+        RESULTS / "maniskill_pilot_reset_timeout_triage.md",
         DOCS / "independent_validation_protocol.md",
     ]
     missing_packet_paths = [rel(path) for path in required_packet_paths if not path.exists()]
@@ -1438,6 +1474,7 @@ def main() -> int:
         "external_runner_backend_probe_exercises_actual_runner_path",
         "maniskill_pilot_runtime_liveness_ready",
         "maniskill_pilot_runtime_liveness_not_evidence",
+        "maniskill_pilot_reset_timeout_triage_ready",
         "maniskill_render_machine_qualification_ready",
         "maniskill_render_machine_qualification_not_evidence",
         "maniskill_render_machine_operator_commands",
