@@ -401,6 +401,31 @@ def main() -> int:
             f"dirty_count={len(materializer_checkout.get('dirty_status_lines', []) or [])}"
         ),
     )
+    materializer_self_ok, materializer_self, materializer_self_detail = passed_json(
+        RESULTS / "fidelity_acceptance_materializer_self_test.json",
+        version="fidelity_acceptance_materializer_self_test_v1",
+    )
+    materializer_self_checks = {check.get("name"): check.get("passed") for check in materializer_self.get("checks", []) or []}
+    add_check(
+        checks,
+        "fidelity_acceptance_materializer_self_test_ready",
+        materializer_self_ok
+        and materializer_self.get("not_external_evidence") is True
+        and (ROOT / "scripts" / "self_test_fidelity_acceptance_materializer.py").exists()
+        and (RESULTS / "fidelity_acceptance_materializer_self_test.md").exists(),
+        f"{materializer_self_detail}, not_external_evidence={materializer_self.get('not_external_evidence')!r}",
+    )
+    add_check(
+        checks,
+        "fidelity_acceptance_materializer_self_test_guards",
+        materializer_self_checks.get("matching_clean_checkout_writes_temp_acceptance") is True
+        and materializer_self_checks.get("stale_commit_rejected_without_temp_write") is True
+        and materializer_self_checks.get("mismatched_skill_hash_rejected_without_temp_write") is True
+        and materializer_self_checks.get("dirty_checkout_rejected_without_temp_write") is True
+        and materializer_self_checks.get("pycache_excluded_from_skill_library_hash") is True
+        and materializer_self_checks.get("real_acceptance_file_not_touched") is True,
+        f"checks={materializer_self_checks}",
+    )
 
     blind_ok, blind, blind_detail = passed_json(
         RESULTS / "external_blind_eval_audit.json",
@@ -1374,6 +1399,8 @@ def main() -> int:
         "fidelity_acceptance_materializer_ready",
         "fidelity_acceptance_materializer_not_evidence",
         "fidelity_acceptance_materializer_guarded",
+        "fidelity_acceptance_materializer_self_test_ready",
+        "fidelity_acceptance_materializer_self_test_guards",
         "independent_validation_route_ready",
         "independent_route_not_evidence",
         "independent_route_primary_covers_tasks",

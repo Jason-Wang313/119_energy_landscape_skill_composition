@@ -118,6 +118,7 @@ def main():
         "scripts\\build_external_fidelity_provenance_packet.py",
         "scripts\\build_external_fidelity_acceptance_draft.py",
         "scripts\\materialize_fidelity_acceptance.py",
+        "scripts\\self_test_fidelity_acceptance_materializer.py",
         "scripts\\audit_external_fidelity_acceptance.py",
         "scripts\\self_test_external_fidelity_acceptance.py",
         "scripts\\build_external_blind_eval_plan.py",
@@ -240,6 +241,7 @@ def main():
         "python scripts/build_external_fidelity_provenance_packet.py",
         "python scripts/build_external_fidelity_acceptance_draft.py",
         "python scripts/materialize_fidelity_acceptance.py",
+        "python scripts/self_test_fidelity_acceptance_materializer.py",
         "python scripts/build_external_backend_integration_packet.py",
         "python scripts/build_external_method_implementation_packet.py",
         "python scripts/build_external_acquisition_packet.py",
@@ -3867,6 +3869,34 @@ def main():
     ):
         if materializer_checks.get(required_check) is not True:
             fail(f"fidelity acceptance materialization plan missing passing check: {required_check}")
+
+    materializer_self_test_path = RESULTS / "fidelity_acceptance_materializer_self_test.json"
+    materializer_self_test_md_path = RESULTS / "fidelity_acceptance_materializer_self_test.md"
+    for path in (
+        ROOT / "scripts" / "self_test_fidelity_acceptance_materializer.py",
+        materializer_self_test_path,
+        materializer_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing fidelity acceptance materializer self-test artifact: {path}")
+    materializer_self_test = json.loads(materializer_self_test_path.read_text(encoding="utf-8"))
+    if materializer_self_test.get("version") != "fidelity_acceptance_materializer_self_test_v1":
+        fail("fidelity acceptance materializer self-test version mismatch")
+    if materializer_self_test.get("passed") is not True:
+        fail("fidelity acceptance materializer self-test did not pass")
+    if materializer_self_test.get("not_external_evidence") is not True:
+        fail("fidelity acceptance materializer self-test must declare non-evidence")
+    materializer_self_checks = {check.get("name"): check.get("passed") for check in materializer_self_test.get("checks", [])}
+    for required_check in (
+        "matching_clean_checkout_writes_temp_acceptance",
+        "stale_commit_rejected_without_temp_write",
+        "mismatched_skill_hash_rejected_without_temp_write",
+        "dirty_checkout_rejected_without_temp_write",
+        "pycache_excluded_from_skill_library_hash",
+        "real_acceptance_file_not_touched",
+    ):
+        if materializer_self_checks.get(required_check) is not True:
+            fail(f"fidelity acceptance materializer self-test missing passing check: {required_check}")
 
     rollout_packet_path = EXTERNAL / "rollout_evidence_packet.json"
     rollout_packet_md_path = EXTERNAL / "rollout_evidence_packet.md"

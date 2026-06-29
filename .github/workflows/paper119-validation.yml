@@ -139,6 +139,9 @@ jobs:
       - name: Plan fidelity acceptance materialization
         run: python scripts/materialize_fidelity_acceptance.py
 
+      - name: Self-test fidelity acceptance materializer
+        run: python scripts/self_test_fidelity_acceptance_materializer.py
+
       - name: Audit external release package
         run: python scripts/audit_external_release_package.py
 

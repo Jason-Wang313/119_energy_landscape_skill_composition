@@ -96,6 +96,11 @@
       "passed": true
     },
     {
+      "detail": "checks={'matching_clean_checkout_writes_temp_acceptance': True, 'stale_commit_rejected_without_temp_write': True, 'mismatched_skill_hash_rejected_without_temp_write': True, 'dirty_checkout_rejected_without_temp_write': True, 'pycache_excluded_from_skill_library_hash': True, 'real_acceptance_file_not_touched': True}",
+      "name": "fidelity_acceptance_materializer_self_test_visible",
+      "passed": true
+    },
+    {
       "detail": "backend_integration_packet_ready=True, strict_backend_ready=False",
       "name": "backend_integration_packet_visible",
       "passed": true

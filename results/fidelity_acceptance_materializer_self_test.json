@@ -1,0 +1,88 @@
+{
+  "cache_exclusion_case": {
+    "digest_after": "B2A0D85F3C34B1305AD3C1668B08704E0F10701A9AFA17BEC6B6B4486B399ECF",
+    "digest_before": "B2A0D85F3C34B1305AD3C1668B08704E0F10701A9AFA17BEC6B6B4486B399ECF",
+    "unchanged_after_pyc_mutation": true
+  },
+  "checks": [
+    {
+      "detail": "{'name': 'matching_clean_checkout', 'raised': False, 'error': '', 'output_exists': True, 'payload_passed': True, 'acceptance_write_ready': True, 'candidate_acceptance_ready': True, 'written_version': 'paper119_fidelity_acceptance_v1', 'written_acceptance_ready': True}",
+      "name": "matching_clean_checkout_writes_temp_acceptance",
+      "passed": true
+    },
+    {
+      "detail": "{'name': 'stale_commit', 'raised': True, 'error': 'refusing to write fidelity acceptance because materialization checks did not pass', 'output_exists': False, 'payload_passed': None, 'acceptance_write_ready': None, 'candidate_acceptance_ready': None, 'written_version': None, 'written_acceptance_ready': None}",
+      "name": "stale_commit_rejected_without_temp_write",
+      "passed": true
+    },
+    {
+      "detail": "{'name': 'mismatched_skill_hash', 'raised': True, 'error': 'refusing to write fidelity acceptance because materialization checks did not pass', 'output_exists': False, 'payload_passed': None, 'acceptance_write_ready': None, 'candidate_acceptance_ready': None, 'written_version': None, 'written_acceptance_ready': None}",
+      "name": "mismatched_skill_hash_rejected_without_temp_write",
+      "passed": true
+    },
+    {
+      "detail": "{'name': 'dirty_checkout', 'raised': True, 'error': 'refusing to write fidelity acceptance because materialization checks did not pass', 'output_exists': False, 'payload_passed': None, 'acceptance_write_ready': None, 'candidate_acceptance_ready': None, 'written_version': None, 'written_acceptance_ready': None}",
+      "name": "dirty_checkout_rejected_without_temp_write",
+      "passed": true
+    },
+    {
+      "detail": "{'digest_before': 'B2A0D85F3C34B1305AD3C1668B08704E0F10701A9AFA17BEC6B6B4486B399ECF', 'digest_after': 'B2A0D85F3C34B1305AD3C1668B08704E0F10701A9AFA17BEC6B6B4486B399ECF', 'unchanged_after_pyc_mutation': True}",
+      "name": "pycache_excluded_from_skill_library_hash",
+      "passed": true
+    },
+    {
+      "detail": "before=None, after=None",
+      "name": "real_acceptance_file_not_touched",
+      "passed": true
+    }
+  ],
+  "not_external_evidence": true,
+  "passed": true,
+  "real_acceptance_after": null,
+  "real_acceptance_before": null,
+  "temporary_dirty_checkout_case": {
+    "acceptance_write_ready": null,
+    "candidate_acceptance_ready": null,
+    "error": "refusing to write fidelity acceptance because materialization checks did not pass",
+    "name": "dirty_checkout",
+    "output_exists": false,
+    "payload_passed": null,
+    "raised": true,
+    "written_acceptance_ready": null,
+    "written_version": null
+  },
+  "temporary_good_case": {
+    "acceptance_write_ready": true,
+    "candidate_acceptance_ready": true,
+    "error": "",
+    "name": "matching_clean_checkout",
+    "output_exists": true,
+    "payload_passed": true,
+    "raised": false,
+    "written_acceptance_ready": true,
+    "written_version": "paper119_fidelity_acceptance_v1"
+  },
+  "temporary_mismatched_hash_case": {
+    "acceptance_write_ready": null,
+    "candidate_acceptance_ready": null,
+    "error": "refusing to write fidelity acceptance because materialization checks did not pass",
+    "name": "mismatched_skill_hash",
+    "output_exists": false,
+    "payload_passed": null,
+    "raised": true,
+    "written_acceptance_ready": null,
+    "written_version": null
+  },
+  "temporary_stale_commit_case": {
+    "acceptance_write_ready": null,
+    "candidate_acceptance_ready": null,
+    "error": "refusing to write fidelity acceptance because materialization checks did not pass",
+    "name": "stale_commit",
+    "output_exists": false,
+    "payload_passed": null,
+    "raised": true,
+    "written_acceptance_ready": null,
+    "written_version": null
+  },
+  "version": "fidelity_acceptance_materializer_self_test_v1"
+}

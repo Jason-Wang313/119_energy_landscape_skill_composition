@@ -191,6 +191,16 @@
       "passed": true
     },
     {
+      "detail": "passed, not_external_evidence=True",
+      "name": "fidelity_acceptance_materializer_self_test_ready",
+      "passed": true
+    },
+    {
+      "detail": "checks={'matching_clean_checkout_writes_temp_acceptance': True, 'stale_commit_rejected_without_temp_write': True, 'mismatched_skill_hash_rejected_without_temp_write': True, 'dirty_checkout_rejected_without_temp_write': True, 'pycache_excluded_from_skill_library_hash': True, 'real_acceptance_file_not_touched': True}",
+      "name": "fidelity_acceptance_materializer_self_test_guards",
+      "passed": true
+    },
+    {
       "detail": "passed",
       "name": "blind_eval_plan_ready",
       "passed": true
