@@ -96,6 +96,9 @@ def main() -> int:
     rollout_validator_text = read_text(ROOT / "scripts" / "validate_external_rollouts.py")
     rollout_self_test_text = read_text(ROOT / "scripts" / "self_test_external_rollout_validator.py")
     evidence_pipeline_self_test_text = read_text(ROOT / "scripts" / "self_test_external_evidence_pipeline.py")
+    config_validator_text = read_text(ROOT / "scripts" / "validate_external_configs.py")
+    config_self_test_text = read_text(ROOT / "scripts" / "self_test_external_config_evidence.py")
+    config_evidence_self_test = read_json(RESULTS / "external_config_evidence_self_test.json")
     release_audit_text = read_text(ROOT / "scripts" / "audit_external_release_package.py")
     release_self_test_text = read_text(ROOT / "scripts" / "self_test_external_release_package.py")
     runner_text = read_text(ROOT / "external_validation" / "runner" / "real_collection_runner.py")
@@ -555,6 +558,7 @@ def main() -> int:
     )
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", []) or []}
     config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", []) or []}
+    config_evidence_self_checks = {check.get("name"): check.get("passed") for check in config_evidence_self_test.get("checks", []) or []}
     rollout_evidence_checks = {check.get("name"): check.get("passed") for check in rollout_evidence.get("checks", []) or []}
     ablation_checks = {check.get("name"): check.get("passed") for check in ablation_collection.get("checks", []) or []}
     intake_checks = {check.get("name"): check.get("passed") for check in evidence_intake.get("checks", []) or []}
@@ -572,6 +576,27 @@ def main() -> int:
             f"strict_config_evidence_ready={config_manifest.get('strict_config_evidence_ready')!r}, "
             f"manifest_declared_config_ready={config_manifest.get('manifest_declared_config_ready')!r}"
         ),
+    )
+    add_check(
+        checks,
+        "strict_config_evidence_hash_gate_visible",
+        config_evidence_self_test.get("passed") is True
+        and config_evidence_self_test.get("not_external_evidence") is True
+        and config_evidence_self_test.get("synthetic_config_evidence_ready") is True
+        and config_evidence_self_test.get("stale_config_hash_ready") is False
+        and config_evidence_self_checks.get("stale_manifest_config_hash_fails_strict") is True
+        and "sha256_file" in config_validator_text
+        and "is_sha256" in config_validator_text
+        and "manifest config_hash is required for strict config evidence" in config_validator_text
+        and "manifest config_hash must be 64-character SHA256" in config_validator_text
+        and "manifest config_hash does not match config_path" in config_validator_text
+        and "stale_manifest_config_hash_fails_strict" in config_self_test_text
+        and "strict config evidence hash gate" in texts["README"]
+        and "strict config evidence hash gate" in texts["final_audit"]
+        and "strict config evidence hash gate" in texts["readiness_audit"]
+        and "strict config evidence hash gate" in texts["version_log"]
+        and "strict config evidence hash gate" in texts["child_status"],
+        "strict config validation recomputes manifest-declared task-config hashes and rejects stale config_path/config_hash pairs",
     )
     add_check(
         checks,
@@ -850,6 +875,7 @@ def main() -> int:
             "maniskill_render_video_preflight_claim",
             "maniskill_render_machine_qualification_claim",
             "external_config_manifest_packet_claim",
+            "external_config_evidence_hash_gate_claim",
             "external_rollout_evidence_packet_claim",
             "external_strict_video_evidence_gate_claim",
             "external_ablation_collection_packet_claim",
@@ -862,7 +888,7 @@ def main() -> int:
             "external_config_materialization_claim",
             "reviewer_response_packet_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'local_planner_edge_policy_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_strict_video_evidence_gate_claim', 'external_ablation_collection_packet_claim', 'external_evidence_intake_ledger_claim', 'external_precollection_manifest_draft_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
+        f"missing={sorted({'local_planner_edge_policy_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'external_config_manifest_packet_claim', 'external_config_evidence_hash_gate_claim', 'external_rollout_evidence_packet_claim', 'external_strict_video_evidence_gate_claim', 'external_ablation_collection_packet_claim', 'external_evidence_intake_ledger_claim', 'external_precollection_manifest_draft_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {

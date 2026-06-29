@@ -386,6 +386,7 @@ def write_task_artifacts(root: Path, external: Path, policy_hashes: dict[str, st
                 "skill_i": f"{task}_source_skill",
                 "skill_j": f"{task}_target_skill",
                 "config_path": rel(root, config_path),
+                "config_hash": file_sha(config_path),
                 "log_jsonl": rel(root, log_path),
                 "video_dir": rel(root, video_dir),
             }

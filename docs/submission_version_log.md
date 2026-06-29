@@ -65,6 +65,7 @@
 - Added `scripts/self_test_external_fidelity_acceptance.py` so strict platform/fidelity acceptance is tested on a temporary complete high-fidelity fixture without creating evidence.
 - Added `scripts/materialize_external_configs.py` so real task configs can be generated only through a guarded operator command after concrete platform and compute values are supplied.
 - Added `scripts/self_test_external_config_evidence.py` so strict manifest-declared task-config evidence is tested on temporary configs without creating evidence.
+- Added a strict config evidence hash gate in `scripts/validate_external_configs.py` and `scripts/self_test_external_config_evidence.py` so future manifest-declared task configs are rejected when `config_hash` is missing, malformed, or mismatched with `config_path`.
 - Added `scripts/build_external_operator_packet.py` so the independent validation path has a generated go/no-go packet with pre-collection blockers, collection commands, and post-collection strict gates.
 - Added `scripts/build_external_operator_handoff_bundle.py` so the independent validation path has a hash-listed non-evidence handoff manifest that excludes rollout logs, videos, checkpoints, local dry-run artifacts, placeholder media, and real evidence manifests.
 - Updated the acquisition and operator packets so backend selection first runs the strict backend qualification audit before collection readiness or actual collection commands.

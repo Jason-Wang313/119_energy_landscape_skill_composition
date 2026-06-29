@@ -171,11 +171,11 @@
   "included_file_count": 278,
   "included_files": [
     {
-      "bytes": 21078,
+      "bytes": 22293,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "A1A0518D6E8EF3153D9F0FFAB2D78458D61F8A402C610F466B9D1A4135813046"
+      "sha256": "0C45215C84C2C0E4DAD8FC12F92742BDFEA4B569986AEF24F75A8DD317A65C88"
     },
     {
       "bytes": 11960,
@@ -199,11 +199,11 @@
       "sha256": "FFC41551F2AD82490EC379631C2FC2CCB64BDAFA2DF84F96E863A727A9CEC5D1"
     },
     {
-      "bytes": 11949,
+      "bytes": 13732,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "DFBB065DD665706AF60A3DDED5400B7AA7833A8EFB052C31C92782BFD402ED8F"
+      "sha256": "2C11668CB1467D3959A5B9EA4CC074866215CD7ACD4413789AE62DB74CE744A7"
     },
     {
       "bytes": 32120,
@@ -994,7 +994,7 @@
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/manifest_precollection_draft.json",
-      "sha256": "0318877951C69CA0D194F813EEFAC3C9A3E86945A93765845E877E558400ED0B"
+      "sha256": "D0C750EE3D5C63EF0B892F8CF8DAD3B284114BBD073B72FA618D26E417613DCE"
     },
     {
       "bytes": 5473,
@@ -1186,11 +1186,11 @@
       "sha256": "3479C8AEA42FC8BCDFF30B8108AD70733136945748F02785A18100FAAEF3A255"
     },
     {
-      "bytes": 26046,
+      "bytes": 26180,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/runner/real_collection_runner.py",
-      "sha256": "E6E43ADA3A3121EA0F2D10E8B7D5B1F817456F9FF270A65515C872AEBE22EB44"
+      "sha256": "D1CF831EC10F81AE1C7F01790289C092A058ECDA3029C4C48A71048252E9B1B0"
     },
     {
       "bytes": 6430,
@@ -1662,11 +1662,11 @@
       "sha256": "D760B589BD12AA51882D2C99B501475A6103FCABAFCF86A6E1744F9235E91278"
     },
     {
-      "bytes": 521,
+      "bytes": 606,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_release_package_audit.md",
-      "sha256": "3AE844E453A4C34A902E906E950E7F0821B25C9DCA309DF7A957087EBB1589D6"
+      "sha256": "891E153CCAF9A412318D6D224EE16156CD16222A56CE143662337D4B08BE8751"
     },
     {
       "bytes": 3381,
@@ -1893,11 +1893,11 @@
       "sha256": "13BB2E31C5E8331D1C53B5E060E399FEB83C520FC83AF91FA350FC591D417C25"
     },
     {
-      "bytes": 9195,
+      "bytes": 10688,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/audit_external_release_package.py",
-      "sha256": "C7AAE093CBACD927A3803C328DDCD5316F5A624842FDCF8C9E30F878AD5D6804"
+      "sha256": "58C5BD8059691A70B713B286DBCB3856957AA1C1670C8280C7D835095719B603"
     },
     {
       "bytes": 9758,
@@ -1956,11 +1956,11 @@
       "sha256": "9BB1413B2D478C383C0F77FB32D83F645B6B506EF65B8F6DB6A6FA760D22DAAA"
     },
     {
-      "bytes": 20688,
+      "bytes": 20797,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_config_manifest_packet.py",
-      "sha256": "3A7C195E4C4841C3C4C368326E7A1E09E1A10DFBD27A76CE6EDF541F34C9B1E8"
+      "sha256": "756C0C5B64F4F0DB6C1E45742096A2BCE03AA346C34D91A834ED196296839EB8"
     },
     {
       "bytes": 18847,
@@ -2026,11 +2026,11 @@
       "sha256": "671A747E75A90369A6DBF89537119FD649E4501EC02F0D860B13E06355748414"
     },
     {
-      "bytes": 18655,
+      "bytes": 18750,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_precollection_manifest_draft.py",
-      "sha256": "127B92997D573022A35DE8B4EBB2C91DD677F735B450D8B3E9FAF0920D0F8989"
+      "sha256": "19CC3B876FFE5B407DA1FD967D70EB29B8202A48C33DE40E2FE2034102C230DF"
     },
     {
       "bytes": 22665,
@@ -2103,18 +2103,18 @@
       "sha256": "9BFEFFB4FFB84ACA64649C3F5D139317EC3040B6DC3107E07B3439620DF2B278"
     },
     {
-      "bytes": 13456,
+      "bytes": 14385,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/validate_external_configs.py",
-      "sha256": "E4875A2327A767BB52D09C05B31D1625CB1B888A8E9DA657CBB4FEAA0C736467"
+      "sha256": "1522E1D91E1EFBB74054528E7EF8AA65375EA0753BCE8E2FB9C5872FACF36693"
     },
     {
-      "bytes": 21212,
+      "bytes": 31531,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/validate_external_rollouts.py",
-      "sha256": "F9CF3B7DC9BC75A0AD353BFFC7CB3ECD82A56877B986D02B9BEC41DCA749F969"
+      "sha256": "69B338242BEBDE5DD726B191C5EE9059D5F63C52A3E4E610276ED5F098D829D8"
     }
   ],
   "missing_files": [],

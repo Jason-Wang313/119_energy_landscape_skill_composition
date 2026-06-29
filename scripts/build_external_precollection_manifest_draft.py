@@ -81,8 +81,10 @@ def config_records(template: dict[str, Any], schema: dict[str, Any]) -> tuple[li
         draft_task = dict(task)
         config_path = rel_path(str(task.get("config_path", "")))
         config_hash = sha256_file(config_path) if config_path.exists() else ""
+        manifest_task = dict(task)
+        manifest_task["config_hash"] = config_hash
         ok, errors = (
-            config_validator.validate_config(config_path, schema, strict=True, manifest_task=task)
+            config_validator.validate_config(config_path, schema, strict=True, manifest_task=manifest_task)
             if config_path.exists()
             else (False, ["config file missing"])
         )

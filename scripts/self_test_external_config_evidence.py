@@ -67,6 +67,7 @@ def manifest_for_configs(config_paths: list[Path]) -> dict[str, Any]:
                 "platform_type": config["platform_type"],
                 "episodes_per_method": 30,
                 "config_path": rel(path),
+                "config_hash": file_digest(path),
             }
         )
     return {
@@ -118,7 +119,7 @@ def write_report(payload: dict[str, Any]) -> None:
         "Not evidence: `true`.",
         f"Synthetic strict config evidence ready: `{str(payload['synthetic_config_evidence_ready']).lower()}`.",
         "",
-        "This self-test builds temporary manifest-declared task configs and exercises the strict external-config evidence gate directly. It proves complete synthetic configs can pass, missing manifests fail, template configs are rejected as evidence, and the real config evidence audit report is not overwritten.",
+        "This self-test builds temporary manifest-declared task configs and exercises the strict external-config evidence gate directly. It proves complete synthetic configs can pass, missing manifests fail, stale manifest config hashes fail, template configs are rejected as evidence, and the real config evidence audit report is not overwritten.",
         "",
         "## Checks",
         "",
@@ -146,12 +147,18 @@ def main() -> int:
             config_paths.append(target)
 
         complete_manifest = tmp / "manifest_complete.json"
+        stale_hash_manifest = tmp / "manifest_stale_hash.json"
         template_manifest = tmp / "manifest_templates.json"
         missing_manifest = tmp / "manifest_missing.json"
-        write_json(complete_manifest, manifest_for_configs(config_paths))
+        complete_manifest_payload = manifest_for_configs(config_paths)
+        stale_hash_payload = json.loads(json.dumps(complete_manifest_payload))
+        stale_hash_payload["tasks"][0]["config_hash"] = "0" * 64
+        write_json(complete_manifest, complete_manifest_payload)
+        write_json(stale_hash_manifest, stale_hash_payload)
         write_json(template_manifest, manifest_for_templates())
 
         complete_audit = run_strict_with_manifest(complete_manifest)
+        stale_hash_audit = run_strict_with_manifest(stale_hash_manifest)
         missing_manifest_audit = run_strict_with_manifest(missing_manifest)
         template_audit = run_strict_with_manifest(template_manifest)
 
@@ -159,6 +166,11 @@ def main() -> int:
 
     complete_checks = {check.get("name"): check.get("passed") for check in complete_audit.get("checks", [])}
     missing_manifest_checks = {check.get("name"): check.get("passed") for check in missing_manifest_audit.get("checks", [])}
+    stale_hash_errors = [
+        str(error)
+        for result in stale_hash_audit.get("failed_configs", [])
+        for error in result.get("errors", [])
+    ]
     template_failed_configs = template_audit.get("failed_configs", [])
 
     add_check(
@@ -189,6 +201,13 @@ def main() -> int:
     )
     add_check(
         checks,
+        "stale_manifest_config_hash_fails_strict",
+        stale_hash_audit.get("passed") is False
+        and any("manifest config_hash does not match config_path" in error for error in stale_hash_errors),
+        f"passed={stale_hash_audit.get('passed')!r}, errors={stale_hash_errors[:4]!r}",
+    )
+    add_check(
+        checks,
         "template_configs_rejected_as_strict_evidence",
         template_audit.get("passed") is False
         and len(template_failed_configs) >= 4
@@ -212,6 +231,7 @@ def main() -> int:
         "passed": passed,
         "not_external_evidence": True,
         "synthetic_config_evidence_ready": complete_audit.get("passed") is True,
+        "stale_config_hash_ready": stale_hash_audit.get("passed") is True,
         "template_config_evidence_ready": template_audit.get("passed") is True,
         "missing_manifest_ready": missing_manifest_audit.get("passed") is True,
         "real_config_evidence_report_before": report_before,

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 from typing import Any
@@ -16,6 +17,7 @@ TEMPLATE_OUT_JSON = RESULTS / "external_config_template_audit.json"
 TEMPLATE_OUT_MD = RESULTS / "external_config_template_audit.md"
 EVIDENCE_OUT_JSON = RESULTS / "external_config_evidence_audit.json"
 EVIDENCE_OUT_MD = RESULTS / "external_config_evidence_audit.md"
+HEX_DIGITS = set("0123456789abcdefABCDEF")
 
 
 def fail(message: str) -> None:
@@ -34,6 +36,18 @@ def read_json(path: Path) -> dict[str, Any]:
 def rel_path(value: str) -> Path:
     path = Path(value)
     return path if path.is_absolute() else ROOT / path
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def is_sha256(value: Any) -> bool:
+    return isinstance(value, str) and len(value) == 64 and all(char in HEX_DIGITS for char in value)
 
 
 def add_check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str) -> None:
@@ -158,6 +172,13 @@ def validate_config(path: Path, schema: dict[str, Any], *, strict: bool, manifes
         if contains_forbidden_placeholder(config, forbidden):
             errors.append("strict config contains template placeholder values")
         if manifest_task:
+            manifest_config_hash = manifest_task.get("config_hash")
+            if not manifest_config_hash:
+                errors.append("manifest config_hash is required for strict config evidence")
+            elif not is_sha256(manifest_config_hash):
+                errors.append("manifest config_hash must be 64-character SHA256")
+            elif sha256_file(path).lower() != str(manifest_config_hash).lower():
+                errors.append("manifest config_hash does not match config_path")
             for key in ("task_family", "platform_type"):
                 if config.get(key) != manifest_task.get(key):
                     errors.append(f"{key} mismatch: config={config.get(key)!r}, manifest={manifest_task.get(key)!r}")

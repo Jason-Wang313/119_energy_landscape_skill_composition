@@ -74,11 +74,13 @@ def config_records(schema: dict[str, Any], manifest_template: dict[str, Any]) ->
         strict_validation_passed = False
         strict_validation_errors: list[str] = ["config file missing"]
         if path.exists():
+            manifest_task = dict(task)
+            manifest_task["config_hash"] = sha256_file(path)
             strict_validation_passed, strict_validation_errors = config_validator.validate_config(
                 path,
                 schema,
                 strict=True,
-                manifest_task=task,
+                manifest_task=manifest_task,
             )
         record = {
             "task_family": task_family,

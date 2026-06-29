@@ -16,6 +16,11 @@
       "passed": true
     },
     {
+      "detail": "passed=False, errors=['manifest config_hash does not match config_path']",
+      "name": "stale_manifest_config_hash_fails_strict",
+      "passed": true
+    },
+    {
       "detail": "failed_configs=4",
       "name": "template_configs_rejected_as_strict_evidence",
       "passed": true
@@ -31,6 +36,7 @@
   "passed": true,
   "real_config_evidence_report_after": "7396c0d98cf0ec1a9eb5525fbd75b90e9615d4cb923ab480b6bfcafa45624d69",
   "real_config_evidence_report_before": "7396c0d98cf0ec1a9eb5525fbd75b90e9615d4cb923ab480b6bfcafa45624d69",
+  "stale_config_hash_ready": false,
   "synthetic_config_evidence_ready": true,
   "template_config_evidence_ready": false,
   "version": "external_config_evidence_self_test_v1"

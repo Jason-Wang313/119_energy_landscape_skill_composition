@@ -1376,6 +1376,8 @@ def main():
         fail("external config evidence self-test must declare that it is not evidence")
     if config_evidence_self_test.get("synthetic_config_evidence_ready") is not True:
         fail("external config evidence self-test should make temporary manifest-declared configs ready")
+    if config_evidence_self_test.get("stale_config_hash_ready") is not False:
+        fail("external config evidence self-test should reject stale manifest config hashes")
     if config_evidence_self_test.get("template_config_evidence_ready") is not False:
         fail("external config evidence self-test should reject templates as strict evidence")
     if config_evidence_self_test.get("missing_manifest_ready") is not False:
@@ -1385,11 +1387,25 @@ def main():
         "synthetic_strict_configs_pass",
         "synthetic_manifest_entries_cover_tasks",
         "missing_manifest_fails_strict",
+        "stale_manifest_config_hash_fails_strict",
         "template_configs_rejected_as_strict_evidence",
         "real_config_evidence_report_not_overwritten",
     ):
         if config_evidence_self_checks.get(required_check) is not True:
             fail(f"external config evidence self-test missing passing check: {required_check}")
+    config_validator_text = (ROOT / "scripts" / "validate_external_configs.py").read_text(encoding="utf-8")
+    config_self_test_text = (ROOT / "scripts" / "self_test_external_config_evidence.py").read_text(encoding="utf-8")
+    for term in (
+        "sha256_file",
+        "is_sha256",
+        "manifest config_hash is required for strict config evidence",
+        "manifest config_hash must be 64-character SHA256",
+        "manifest config_hash does not match config_path",
+    ):
+        if term not in config_validator_text:
+            fail(f"external config validator missing strict config hash term: {term}")
+    if "stale_manifest_config_hash_fails_strict" not in config_self_test_text:
+        fail("external config evidence self-test must reject stale manifest config hashes")
     if not (RESULTS / "external_config_evidence_self_test.md").exists():
         fail("missing results/external_config_evidence_self_test.md")
 

@@ -67,7 +67,7 @@
     },
     {
       "name": "visible_contribution_claim",
-      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, outreach package, and reviewer response packet synchronized with the current materializer, operator packet, fidelity acceptance draft, tracked reference route, strict full-method coverage gate, strict rollout sample-count gate, strict paired-panel gate, strict rollout uniqueness gate, official video write guard, official JSONL write guard, atomic official evidence promotion, reference-adapter provenance, strict reference-adapter rejection gate, outreach stance, and readiness boundary.",
+      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, outreach package, and reviewer response packet synchronized with the current materializer, operator packet, fidelity acceptance draft, tracked reference route, strict config evidence hash gate, strict full-method coverage gate, strict rollout sample-count gate, strict paired-panel gate, strict rollout uniqueness gate, official video write guard, official JSONL write guard, atomic official evidence promotion, reference-adapter provenance, strict reference-adapter rejection gate, outreach stance, and readiness boundary.",
       "evidence": ["scripts/audit_visible_contribution.py", "README.md", "docs/final_audit.md", "docs/submission_readiness_decision.md", "docs/submission_readiness_audit_v5.md", "docs/submission_version_log.md", "child_status.md", "docs/haonan_yilun_outreach_package.md", "docs/reviewer_response_packet.md"]
     },
     {
@@ -234,6 +234,11 @@
       "name": "external_config_manifest_packet_claim",
       "claim": "The repository provides a non-evidence config manifest packet that turns prepared task configs into manifest-declaration and hash-lock work orders while strict config evidence and manifest-declared config readiness remain false.",
       "evidence": ["scripts/build_external_config_manifest_packet.py", "external_validation/config_manifest_packet.json", "external_validation/config_manifest_packet.md", "external_validation/config_manifest_work_orders.csv", "results/external_config_manifest_audit.json", "results/external_config_manifest_audit.md", "results/external_config_materialization_plan.json", "results/external_config_evidence_audit.json"]
+    },
+    {
+      "name": "external_config_evidence_hash_gate_claim",
+      "claim": "The repository provides a strict config evidence hash gate that recomputes manifest-declared task-config hashes and rejects strict config evidence when `config_hash` is missing, malformed, or mismatched with `config_path`.",
+      "evidence": ["scripts/validate_external_configs.py", "scripts/self_test_external_config_evidence.py", "results/external_config_evidence_self_test.json", "results/external_config_evidence_self_test.md", "results/external_config_evidence_audit.json"]
     },
     {
       "name": "external_rollout_evidence_packet_claim",

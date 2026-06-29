@@ -35,6 +35,7 @@ This audit checks that the public-facing contribution docs describe the current 
 - `pass` `maniskill_render_video_preflight_visible`: render_video_ready=False, render_backend='cpu', shader_pack='minimal', envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: render preflight exceeded 30 seconds; OpenCabinetDrawer-v1: render preflight exceeded 30 seconds; OpenCabinetDoor-v1: render preflight exceeded 30 seconds; PullCubeTool-v1: render preflight exceeded 30 seconds']
 - `pass` `renderer_failure_classifier_visible`: classes=['render_timeout'], remediation=3
 - `pass` `config_manifest_packet_visible`: config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False
+- `pass` `strict_config_evidence_hash_gate_visible`: strict config validation recomputes manifest-declared task-config hashes and rejects stale config_path/config_hash pairs
 - `pass` `rollout_evidence_packet_visible`: rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False
 - `pass` `strict_video_evidence_gate_visible`: strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths, incomplete method sets, duplicate rows/videos, weak sample counts, mispaired method panels, stale task configs, and manifest method-hash mismatches
 - `pass` `release_package_internal_artifact_rejection_visible`: release_package_ready=False, bad_release_package_ready=False

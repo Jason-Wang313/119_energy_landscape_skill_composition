@@ -151,6 +151,11 @@
       "passed": true
     },
     {
+      "detail": "strict config validation recomputes manifest-declared task-config hashes and rejects stale config_path/config_hash pairs",
+      "name": "strict_config_evidence_hash_gate_visible",
+      "passed": true
+    },
+    {
       "detail": "rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False",
       "name": "rollout_evidence_packet_visible",
       "passed": true
