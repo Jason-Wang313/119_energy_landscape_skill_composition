@@ -1,0 +1,125 @@
+{
+  "checks": [
+    {
+      "detail": "records=1440, tasks=4, methods=12",
+      "name": "synthetic_records_recomputed",
+      "passed": true
+    },
+    {
+      "detail": "baseline='proposed_energy_landscape_composer_v4_1', success_margin=0.1333333333333333, utility_margin=0.2693333333333333",
+      "name": "synthetic_threshold_metrics_match_expected",
+      "passed": true
+    },
+    {
+      "detail": "version='external_statistical_confidence_v1', all_passed=True",
+      "name": "synthetic_confidence_gates_pass",
+      "passed": true
+    },
+    {
+      "detail": "failed_checks=['external_success_margin_confidence_gate: estimate=0.06666666666666667, ci95=[0.025, 0.10833333333333334], threshold=0.05, direction=greater_or_equal']",
+      "name": "weak_confidence_rejected",
+      "passed": true
+    },
+    {
+      "detail": "errors=[\"synthetic_bad_record: missing required fields ['utility']\"]",
+      "name": "schema_missing_required_field_rejected",
+      "passed": true
+    },
+    {
+      "detail": "errors=[\"manifest missing required external methods ['greedy_module_sequence']\", \"<tmp>\\\\logs\\\\peg_place_regrasp.jsonl:1: method='greedy_module_sequence' not declared in manifest\", \"<tmp>\\\\logs\\\\peg_place_regrasp.jsonl:13: method='greedy_module_sequence' not declared in manifest\", \"<tmp>\\\\logs\\\\peg_place_regrasp.jsonl:25: method='greedy_module_sequence' not declared in manifest\", \"<tmp>\\\\logs\\\\peg_place_regrasp.jsonl:37: method='greedy_module_sequence' not declared in manifest\", \"<tmp>\\\\logs\\\\peg_place_regrasp.jsonl:49: method='greedy_module_sequence' not declared in manifest\", \"<tmp>\\\\logs\\\\peg_place_regrasp.jsonl:61: method='greedy_module_sequence' not declared in manifest\", \"<tmp>\\\\logs\\\\peg_place_regrasp.jsonl:73: method='greedy_module_sequence' not declared in manifest\", \"<tmp>\\\\logs\\\\peg_place_regrasp.jsonl:85: method='greedy_module_sequence' not declared in manifest\", \"<tmp>\\\\logs\\\\peg_place_regrasp.jsonl:97: method='greedy_module_sequence' not declared in manifest\"]",
+      "name": "missing_required_method_rejected",
+      "passed": true
+    },
+    {
+      "detail": "errors=['peg_place_regrasp: episodes_per_method must be integer >= 30']",
+      "name": "weak_episode_count_rejected",
+      "passed": true
+    },
+    {
+      "detail": "errors=[\"peg_place_regrasp: method='barrier_certified_energy_composer_v5' record count 1 does not match episodes_per_method=30\", \"peg_place_regrasp: method='behavior_cloned_skill_chain' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='cem_trajectory_composer' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='diffusion_skill_stitcher' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='energy_compatibility_heuristic' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='greedy_module_sequence' record count 1 does not match episodes_per_method=30\", \"peg_place_regrasp: method='option_graph_planner' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='oracle_basin_composer' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='proposed_energy_landscape_composer_v4_1' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='residual_rl_composer' record count 0 does not match episodes_per_method=30\"]",
+      "name": "short_record_count_rejected",
+      "passed": true
+    },
+    {
+      "detail": "errors=['<tmp>\\\\logs\\\\duplicate_paired_method.jsonl:3: duplicate method record within paired reset also seen at <tmp>\\\\logs\\\\duplicate_paired_method.jsonl:1', \"peg_place_regrasp: method='barrier_certified_energy_composer_v5' record count 2 does not match episodes_per_method=30\", \"peg_place_regrasp: method='behavior_cloned_skill_chain' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='cem_trajectory_composer' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='diffusion_skill_stitcher' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='energy_compatibility_heuristic' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='greedy_module_sequence' record count 1 does not match episodes_per_method=30\", \"peg_place_regrasp: method='option_graph_planner' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='oracle_basin_composer' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='proposed_energy_landscape_composer_v4_1' record count 0 does not match episodes_per_method=30\"]",
+      "name": "duplicate_method_panel_rejected",
+      "passed": true
+    },
+    {
+      "detail": "errors=[\"peg_place_regrasp: method='behavior_cloned_skill_chain' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='cem_trajectory_composer' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='diffusion_skill_stitcher' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='energy_compatibility_heuristic' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='option_graph_planner' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='oracle_basin_composer' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='proposed_energy_landscape_composer_v4_1' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='residual_rl_composer' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='stable_dmp_handoff' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='tamp_feasibility_screen' record count 0 does not match episodes_per_method=30\", 'peg_place_regrasp: paired reset group count 60 does not match episodes_per_method=30', \"peg_place_regrasp: paired reset group ('peg_place_regrasp', 'high_fidelity_sim', 'peg_place_regrasp_scene_00', 0, 'peg_place_regrasp_skill_i', 'peg_place_regrasp_skill_j', '04e48a77076d19e711948341e62070b725d156c53ec13186cb492e02e8a91e8d') missing declared methods ['behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner']\", \"peg_place_regrasp: paired reset group ('peg_place_regrasp', 'high_fidelity_sim', 'peg_place_regrasp_scene_01', 1, 'peg_place_regrasp_skill_i', 'peg_place_regrasp_skill_j', 'bfa8a980fd443b5ed459a6411fe94cce21b58629ffba399046e87795976d18c8') missing declared methods ['behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner']\", \"peg_place_regrasp: paired reset group ('peg_place_regrasp', 'high_fidelity_sim', 'peg_place_regrasp_scene_02', 2, 'peg_place_regrasp_skill_i', 'peg_place_regrasp_skill_j', '2987fcc76ee3d7972a44d1f7c620f9b525817bc7fafa1691a733d25199c2ae6c') missing declared methods ['behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner']\", \"peg_place_regrasp: paired reset group ('peg_place_regrasp', 'high_fidelity_sim', 'peg_place_regrasp_scene_03', 3, 'peg_place_regrasp_skill_i', 'peg_place_regrasp_skill_j', 'b39cdf6dbd0407b16faf5ba966a4a3738af3eb9132819a092b13dd80bd5768a5') missing declared methods ['behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner']\", \"peg_place_regrasp: paired reset group ('peg_place_regrasp', 'high_fidelity_sim', 'peg_place_regrasp_scene_04', 4, 'peg_place_regrasp_skill_i', 'peg_place_regrasp_skill_j', '7258227e478f126c002908a3b556c313b59882d5393dd68c73564c075607ac10') missing declared methods ['behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner']\", \"peg_place_regrasp: paired reset group ('peg_place_regrasp', 'high_fidelity_sim', 'peg_place_regrasp_scene_05', 5, 'peg_place_regrasp_skill_i', 'peg_place_regrasp_skill_j', '422f00021b858d295b8406e3ecaca0f63ac6a0a4fe9a1f3c5cbc2208e592b777') missing declared methods ['behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner']\", \"peg_place_regrasp: paired reset group ('peg_place_regrasp', 'high_fidelity_sim', 'peg_place_regrasp_scene_06', 6, 'peg_place_regrasp_skill_i', 'peg_place_regrasp_skill_j', 'c1facf6ed0590d356abe9de6a71fc98ee24c323f4c5cdb37872dd86728e5b374') missing declared methods ['behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner']\", \"peg_place_regrasp: paired reset group ('peg_place_regrasp', 'high_fidelity_sim', 'peg_place_regrasp_scene_07', 7, 'peg_place_regrasp_skill_i', 'peg_place_regrasp_skill_j', 'e60d1189a989d3ae699136ff9a5012f4548eaa79e6d69c5714ee1678a457387c') missing declared methods ['behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner']\", \"peg_place_regrasp: paired reset group ('peg_place_regrasp', 'high_fidelity_sim', 'peg_place_regrasp_scene_08', 8, 'peg_place_regrasp_skill_i', 'peg_place_regrasp_skill_j', '5ae965c59216e04b26a77b1f6adbb14b43ea2fd00f6ab674e6a896cd6068e357') missing declared methods ['behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner']\"]",
+      "name": "missing_method_panel_rejected",
+      "passed": true
+    },
+    {
+      "detail": "errors=['<tmp>\\\\logs\\\\duplicate_identity.jsonl:2: duplicate rollout record identity also seen at <tmp>\\\\logs\\\\duplicate_identity.jsonl:1', '<tmp>\\\\logs\\\\duplicate_identity.jsonl:2: duplicate method record within paired reset also seen at <tmp>\\\\logs\\\\duplicate_identity.jsonl:1', \"peg_place_regrasp: method='barrier_certified_energy_composer_v5' record count 2 does not match episodes_per_method=30\", \"peg_place_regrasp: method='behavior_cloned_skill_chain' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='cem_trajectory_composer' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='diffusion_skill_stitcher' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='energy_compatibility_heuristic' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='greedy_module_sequence' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='option_graph_planner' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='oracle_basin_composer' record count 0 does not match episodes_per_method=30\"]",
+      "name": "duplicate_rollout_identity_rejected",
+      "passed": true
+    },
+    {
+      "detail": "errors=['<tmp>\\\\logs\\\\duplicate_video_path.jsonl:2: duplicate video_path also used at <tmp>\\\\logs\\\\duplicate_video_path.jsonl:1: synthetic_self_test_only/peg_place_regrasp_100_barrier_certified_energy_composer_v5.mp4', \"peg_place_regrasp: method='barrier_certified_energy_composer_v5' record count 2 does not match episodes_per_method=30\", \"peg_place_regrasp: method='behavior_cloned_skill_chain' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='cem_trajectory_composer' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='diffusion_skill_stitcher' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='energy_compatibility_heuristic' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='greedy_module_sequence' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='option_graph_planner' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='oracle_basin_composer' record count 0 does not match episodes_per_method=30\", \"peg_place_regrasp: method='proposed_energy_landscape_composer_v4_1' record count 0 does not match episodes_per_method=30\"]",
+      "name": "duplicate_video_path_rejected",
+      "passed": true
+    },
+    {
+      "detail": "errors=['peg_place_regrasp: config_hash does not match config_path <tmp>\\\\configs\\\\peg_place_regrasp.json']",
+      "name": "stale_task_config_hash_rejected",
+      "passed": true
+    },
+    {
+      "detail": "errors=[\"synthetic_stale_task_config_record: skill_i must match manifest task config for task='peg_place_regrasp'\"]",
+      "name": "stale_task_config_row_rejected",
+      "passed": true
+    },
+    {
+      "detail": "errors=[\"synthetic_spoofed_policy_hash_record: policy_or_config_hash must match manifest checkpoint_or_config_hash for method='greedy_module_sequence'\"]",
+      "name": "spoofed_policy_or_config_hash_rejected",
+      "passed": true
+    },
+    {
+      "detail": "errors=[]",
+      "name": "strict_video_fixture_accepts_mp4_like_file",
+      "passed": true
+    },
+    {
+      "detail": "errors=['synthetic_fake_video_record: strict video_path is not MP4-like evidence with an ftyp box: <tmp>\\\\videos\\\\peg_place_regrasp\\\\fake_text_payload.mp4']",
+      "name": "strict_video_fixture_rejects_fake_mp4",
+      "passed": true
+    },
+    {
+      "detail": "errors={'staging': [\"synthetic_forbidden_staging_video_record: strict video_path contains forbidden non-evidence fragment(s) ['staging']: <tmp>\\\\videos\\\\peg_place_regrasp\\\\internal_runner_artifact.staging.mp4\"], 'backup': [\"synthetic_forbidden_backup_video_record: strict video_path contains forbidden non-evidence fragment(s) ['backup']: <tmp>\\\\videos\\\\peg_place_regrasp\\\\internal_runner_artifact.backup.mp4\"]}",
+      "name": "strict_video_fixture_rejects_forbidden_fragments",
+      "passed": true
+    },
+    {
+      "detail": "before={'results/external_rollout_metrics.json': 'd5cbdf671f96ddc7f79fda887f889d216d8db388b3a06bec98b0191deb141c2a', 'results/external_rollout_metrics.md': '8ba0c33b26e448f356339150217db2a28ccd966c3a12c6319b8577f4decb78af'}, after={'results/external_rollout_metrics.json': 'd5cbdf671f96ddc7f79fda887f889d216d8db388b3a06bec98b0191deb141c2a', 'results/external_rollout_metrics.md': '8ba0c33b26e448f356339150217db2a28ccd966c3a12c6319b8577f4decb78af'}",
+      "name": "real_rollout_metrics_report_not_overwritten",
+      "passed": true
+    }
+  ],
+  "not_external_evidence": true,
+  "passed": true,
+  "real_report_digests_after": {
+    "results/external_rollout_metrics.json": "d5cbdf671f96ddc7f79fda887f889d216d8db388b3a06bec98b0191deb141c2a",
+    "results/external_rollout_metrics.md": "8ba0c33b26e448f356339150217db2a28ccd966c3a12c6319b8577f4decb78af"
+  },
+  "real_report_digests_before": {
+    "results/external_rollout_metrics.json": "d5cbdf671f96ddc7f79fda887f889d216d8db388b3a06bec98b0191deb141c2a",
+    "results/external_rollout_metrics.md": "8ba0c33b26e448f356339150217db2a28ccd966c3a12c6319b8577f4decb78af"
+  },
+  "real_rollout_reports_untouched": true,
+  "strict_video_rejections_checked": true,
+  "summary": {
+    "external_success_margin": 0.1333333333333333,
+    "external_utility_margin": 0.2693333333333333,
+    "fixed_risk_breach": 0.0,
+    "fixed_risk_coverage": 1.0,
+    "paired_win_rate": 1.0,
+    "strongest_external_baseline": "proposed_energy_landscape_composer_v4_1"
+  },
+  "synthetic_confidence_gates_passed": true,
+  "synthetic_method_count": 12,
+  "synthetic_records_loaded": 1440,
+  "synthetic_task_count": 4,
+  "version": "external_rollout_validator_self_test_v1",
+  "weak_confidence_rejected": true
+}

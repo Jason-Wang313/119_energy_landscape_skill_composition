@@ -3374,6 +3374,59 @@ def main():
 
     if not (ROOT / "scripts" / "self_test_external_rollout_validator.py").exists():
         fail("missing scripts/self_test_external_rollout_validator.py")
+    rollout_self_test_path = RESULTS / "external_rollout_validator_self_test.json"
+    rollout_self_test_md_path = RESULTS / "external_rollout_validator_self_test.md"
+    for path in (
+        rollout_self_test_path,
+        rollout_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external rollout validator self-test artifact: {path}")
+    rollout_self_test = json.loads(rollout_self_test_path.read_text(encoding="utf-8"))
+    if rollout_self_test.get("version") != "external_rollout_validator_self_test_v1":
+        fail("external rollout validator self-test version mismatch")
+    if rollout_self_test.get("passed") is not True:
+        fail("external rollout validator self-test did not pass")
+    if rollout_self_test.get("not_external_evidence") is not True:
+        fail("external rollout validator self-test must declare that it is not evidence")
+    if int(rollout_self_test.get("synthetic_records_loaded", 0) or 0) < 1440:
+        fail("external rollout validator self-test has too few synthetic rollout records")
+    if int(rollout_self_test.get("synthetic_task_count", 0) or 0) < 4:
+        fail("external rollout validator self-test has too few synthetic task families")
+    if int(rollout_self_test.get("synthetic_method_count", 0) or 0) < 12:
+        fail("external rollout validator self-test has too few synthetic methods")
+    if rollout_self_test.get("synthetic_confidence_gates_passed") is not True:
+        fail("external rollout validator self-test must pass synthetic confidence gates")
+    if rollout_self_test.get("weak_confidence_rejected") is not True:
+        fail("external rollout validator self-test must reject weak confidence bounds")
+    if rollout_self_test.get("strict_video_rejections_checked") is not True:
+        fail("external rollout validator self-test must check strict video rejections")
+    if rollout_self_test.get("real_rollout_reports_untouched") is not True:
+        fail("external rollout validator self-test must leave real rollout reports untouched")
+    rollout_self_test_checks = {check.get("name"): check.get("passed") for check in rollout_self_test.get("checks", [])}
+    for required_check in (
+        "synthetic_records_recomputed",
+        "synthetic_threshold_metrics_match_expected",
+        "synthetic_confidence_gates_pass",
+        "weak_confidence_rejected",
+        "schema_missing_required_field_rejected",
+        "missing_required_method_rejected",
+        "weak_episode_count_rejected",
+        "short_record_count_rejected",
+        "duplicate_method_panel_rejected",
+        "missing_method_panel_rejected",
+        "duplicate_rollout_identity_rejected",
+        "duplicate_video_path_rejected",
+        "stale_task_config_hash_rejected",
+        "stale_task_config_row_rejected",
+        "spoofed_policy_or_config_hash_rejected",
+        "strict_video_fixture_accepts_mp4_like_file",
+        "strict_video_fixture_rejects_fake_mp4",
+        "strict_video_fixture_rejects_forbidden_fragments",
+        "real_rollout_metrics_report_not_overwritten",
+    ):
+        if rollout_self_test_checks.get(required_check) is not True:
+            fail(f"external rollout validator self-test missing passing check: {required_check}")
     rollout_metrics = json.loads(rollout_metrics_path.read_text(encoding="utf-8"))
     rollout_summary = rollout_metrics.get("summary", {})
     if rollout_summary.get("version") != "external_rollout_metrics_v1":

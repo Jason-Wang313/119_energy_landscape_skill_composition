@@ -6,6 +6,7 @@
     "outreach": "docs/haonan_yilun_outreach_package.md",
     "readiness_audit": "docs/submission_readiness_audit_v5.md",
     "readiness_decision": "docs/submission_readiness_decision.md",
+    "reproducibility": "docs/reproducibility_checklist.md",
     "reviewer": "docs/reviewer_response_packet.md",
     "version_log": "docs/submission_version_log.md"
   },
@@ -183,6 +184,11 @@
     {
       "detail": "strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths, incomplete method sets, duplicate rows/videos, weak sample counts, mispaired method panels, stale task configs, manifest method-hash mismatches, weak confidence bounds, and missing final confidence summaries",
       "name": "strict_video_evidence_gate_visible",
+      "passed": true
+    },
+    {
+      "detail": "records=1440, confidence=True, weak_rejected=True, real_untouched=True",
+      "name": "external_rollout_validator_self_test_visible",
       "passed": true
     },
     {

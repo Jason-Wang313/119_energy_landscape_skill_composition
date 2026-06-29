@@ -59,6 +59,7 @@
 - External rollout metric validator: `scripts/validate_external_rollouts.py`
 - External pairing integrity validator: `scripts/audit_external_pairing_integrity.py`
 - External rollout validator self-test: `scripts/self_test_external_rollout_validator.py`
+  - Durable report: `results/external_rollout_validator_self_test.md`
 - External backend contract self-test: `scripts/self_test_external_backend_contract.py`
 - External config evidence self-test: `scripts/self_test_external_config_evidence.py`
 - External adapter evidence self-test: `scripts/self_test_external_adapter_evidence.py`
@@ -217,6 +218,8 @@
   - `results/external_pairing_integrity_audit.md`
   - `results/external_pairing_integrity_self_test.json`
   - `results/external_pairing_integrity_self_test.md`
+  - `results/external_rollout_validator_self_test.json`
+  - `results/external_rollout_validator_self_test.md`
   - `results/external_execution_readiness_audit.json`
   - `results/external_execution_readiness_audit.md`
   - `results/summary.json`
