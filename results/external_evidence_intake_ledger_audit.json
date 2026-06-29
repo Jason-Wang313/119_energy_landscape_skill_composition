@@ -423,7 +423,7 @@
     {
       "closure_group": "pairing_release",
       "completion_test": "pairing_ready=true and release_package_ready=true under strict audits",
-      "current_detail": "entries=0, missing_paths=[], missing_sha256=[]",
+      "current_detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
       "evidence_ready_now": "false",
       "failure_name": "release_code",
       "operator_artifacts": "complete paired-reset method panels and release_artifacts entries for code, configs, logs, videos, and checkpoints with valid SHA256 hashes",
@@ -433,7 +433,7 @@
     {
       "closure_group": "pairing_release",
       "completion_test": "pairing_ready=true and release_package_ready=true under strict audits",
-      "current_detail": "entries=0, missing_paths=[], missing_sha256=[]",
+      "current_detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
       "evidence_ready_now": "false",
       "failure_name": "release_configs",
       "operator_artifacts": "complete paired-reset method panels and release_artifacts entries for code, configs, logs, videos, and checkpoints with valid SHA256 hashes",
@@ -443,7 +443,7 @@
     {
       "closure_group": "pairing_release",
       "completion_test": "pairing_ready=true and release_package_ready=true under strict audits",
-      "current_detail": "entries=0, missing_paths=[], missing_sha256=[]",
+      "current_detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
       "evidence_ready_now": "false",
       "failure_name": "release_logs",
       "operator_artifacts": "complete paired-reset method panels and release_artifacts entries for code, configs, logs, videos, and checkpoints with valid SHA256 hashes",
@@ -453,7 +453,7 @@
     {
       "closure_group": "pairing_release",
       "completion_test": "pairing_ready=true and release_package_ready=true under strict audits",
-      "current_detail": "entries=0, missing_paths=[], missing_sha256=[]",
+      "current_detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
       "evidence_ready_now": "false",
       "failure_name": "release_videos",
       "operator_artifacts": "complete paired-reset method panels and release_artifacts entries for code, configs, logs, videos, and checkpoints with valid SHA256 hashes",
@@ -463,7 +463,7 @@
     {
       "closure_group": "methods_baselines",
       "completion_test": "strict adapter evidence audit passes; scaffolds/reference adapters are not counted as evidence, and checkpoint_or_config_hash values match real checkpoint_or_config_path artifacts rather than implementation source",
-      "current_detail": "entries=0, missing_paths=[], missing_sha256=[]",
+      "current_detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
       "evidence_ready_now": "false",
       "failure_name": "release_checkpoints",
       "operator_artifacts": "manifest-declared independent non-oracle implementations/configs/checkpoints with hashes and JSONL policy_or_config_hash values matching the manifest",

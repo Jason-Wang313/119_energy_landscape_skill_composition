@@ -704,9 +704,17 @@ def reset(reset_context):
         if audit["submission_ready"] is not True:
             failures = [f"{item['name']}: {item['detail']}" for item in audit["blocking_failures"]]
             raise AssertionError(f"synthetic full-pipeline audit did not pass: {failures}")
+        tampered_manifest = json.loads(json.dumps(manifest))
+        tampered_manifest["release_artifacts"]["code"][0]["sha256"] = "0" * 64
+        tampered_audit = evidence.audit_manifest(tampered_manifest, manifest_exists=True)
+        tampered_failures = {item["name"]: item["detail"] for item in tampered_audit["blocking_failures"]}
+        if tampered_audit["submission_ready"] is True or "release_code" not in tampered_failures:
+            raise AssertionError("tampered release artifact hash test did not fail the final external evidence audit")
+        if "hash_mismatches" not in tampered_failures["release_code"]:
+            raise AssertionError(f"tampered release artifact hash failed for the wrong reason: {tampered_failures['release_code']}")
 
     assert_real_manifest_untouched(real_manifest_before)
-    print("External evidence pipeline self-test passed: temporary synthetic package reaches READY and real repo evidence remains untouched.")
+    print("External evidence pipeline self-test passed: temporary synthetic package reaches READY, tampered release artifact hashes fail, and real repo evidence remains untouched.")
     return 0
 
 

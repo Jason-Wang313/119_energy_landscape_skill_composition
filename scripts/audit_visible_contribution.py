@@ -686,9 +686,14 @@ def main() -> int:
         and "peg_place_regrasp.fallback.mp4" in release_self_test_text
         and "empty_video_dir" in release_self_test_text
         and "video directory contains no MP4 files" in release_self_test_text
+        and "tampered release artifact hash test did not fail" in evidence_pipeline_self_test_text
+        and "hash_mismatches" in evidence_pipeline_self_test_text
         and "release-package internal-artifact rejection gate" in texts["README"]
+        and "final release artifact hash recomputation gate" in texts["README"]
         and "release-package internal-artifact rejection gate" in texts["final_audit"]
-        and "release-package internal-artifact rejection gate" in texts["readiness_audit"],
+        and "final release artifact hash recomputation gate" in texts["final_audit"]
+        and "release-package internal-artifact rejection gate" in texts["readiness_audit"]
+        and "final release artifact hash recomputation gate" in texts["readiness_audit"],
         (
             f"release_package_ready={release_package.get('release_package_ready')!r}, "
             f"bad_release_package_ready={release_package_self_test.get('bad_release_package_ready')!r}"

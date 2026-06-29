@@ -188,31 +188,31 @@
     },
     {
       "blocking": true,
-      "detail": "entries=0, missing_paths=[], missing_sha256=[]",
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
       "name": "release_code",
       "passed": false
     },
     {
       "blocking": true,
-      "detail": "entries=0, missing_paths=[], missing_sha256=[]",
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
       "name": "release_configs",
       "passed": false
     },
     {
       "blocking": true,
-      "detail": "entries=0, missing_paths=[], missing_sha256=[]",
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
       "name": "release_logs",
       "passed": false
     },
     {
       "blocking": true,
-      "detail": "entries=0, missing_paths=[], missing_sha256=[]",
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
       "name": "release_videos",
       "passed": false
     },
     {
       "blocking": true,
-      "detail": "entries=0, missing_paths=[], missing_sha256=[]",
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
       "name": "release_checkpoints",
       "passed": false
     }
@@ -592,31 +592,31 @@
     },
     {
       "blocking": true,
-      "detail": "entries=0, missing_paths=[], missing_sha256=[]",
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
       "name": "release_code",
       "passed": false
     },
     {
       "blocking": true,
-      "detail": "entries=0, missing_paths=[], missing_sha256=[]",
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
       "name": "release_configs",
       "passed": false
     },
     {
       "blocking": true,
-      "detail": "entries=0, missing_paths=[], missing_sha256=[]",
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
       "name": "release_logs",
       "passed": false
     },
     {
       "blocking": true,
-      "detail": "entries=0, missing_paths=[], missing_sha256=[]",
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
       "name": "release_videos",
       "passed": false
     },
     {
       "blocking": true,
-      "detail": "entries=0, missing_paths=[], missing_sha256=[]",
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
       "name": "release_checkpoints",
       "passed": false
     }

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -113,6 +114,28 @@ def rel_path(value: str) -> Path:
 
 def has_sha(value: Any) -> bool:
     return isinstance(value, str) and bool(re.fullmatch(r"[A-Fa-f0-9]{64}", value))
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest().upper()
+
+
+def sha256_path(path: Path) -> str:
+    if path.is_file():
+        return sha256_file(path)
+    if path.is_dir():
+        digest = hashlib.sha256()
+        for child in sorted(item for item in path.rglob("*") if item.is_file()):
+            digest.update(child.relative_to(path).as_posix().encode("utf-8"))
+            digest.update(b"\0")
+            digest.update(sha256_file(child).encode("ascii"))
+            digest.update(b"\0")
+        return digest.hexdigest().upper()
+    raise FileNotFoundError(path)
 
 
 def is_scaffold_implementation(value: Any) -> bool:
@@ -522,21 +545,44 @@ def audit_manifest(manifest: dict[str, Any], manifest_exists: bool) -> dict[str,
     for artifact_type in ("code", "configs", "logs", "videos", "checkpoints"):
         entries = release_artifacts.get(artifact_type, [])
         entries = entries if isinstance(entries, list) else []
+        malformed_entries = []
         missing_paths = []
         missing_hashes = []
-        for entry in entries:
+        hash_mismatches = []
+        hash_errors = []
+        for index, entry in enumerate(entries):
             if not isinstance(entry, dict):
+                malformed_entries.append(f"[{index}]")
                 continue
             path = str(entry.get("path", ""))
-            if not path or not rel_path(path).exists():
+            declared_hash = entry.get("sha256", "")
+            artifact_path = rel_path(path) if path else ROOT / "__missing_release_artifact__"
+            if not path or not artifact_path.exists():
                 missing_paths.append(path or "<empty>")
-            if not has_sha(entry.get("sha256", "")):
+            if not has_sha(declared_hash):
                 missing_hashes.append(path or "<empty>")
+                continue
+            if path and artifact_path.exists():
+                try:
+                    actual_hash = sha256_path(artifact_path)
+                except OSError as exc:
+                    hash_errors.append(f"{path}: {exc}")
+                    continue
+                if str(declared_hash).upper() != actual_hash:
+                    hash_mismatches.append(f"{path}: declared={str(declared_hash)[:12]}..., actual={actual_hash[:12]}...")
         add_check(
             checks,
             f"release_{artifact_type}",
-            bool(entries) and not missing_paths and not missing_hashes,
-            f"entries={len(entries)}, missing_paths={missing_paths}, missing_sha256={missing_hashes}",
+            bool(entries)
+            and not malformed_entries
+            and not missing_paths
+            and not missing_hashes
+            and not hash_mismatches
+            and not hash_errors,
+            (
+                f"entries={len(entries)}, malformed={malformed_entries}, missing_paths={missing_paths}, "
+                f"missing_sha256={missing_hashes}, hash_mismatches={hash_mismatches[:4]}, hash_errors={hash_errors[:4]}"
+            ),
         )
 
     blocking_failures = [check for check in checks if check["blocking"] and not check["passed"]]

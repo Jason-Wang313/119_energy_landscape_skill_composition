@@ -36,11 +36,11 @@ Manifest: `C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landsca
 - `oracle_reported`: oracle_reported=None
 - `oracle_boundary`: oracle_stronger_or_saturated_explained=None
 - `external_ablations`: missing=['basin_overlap', 'barrier_height', 'descent_continuity', 'risk_calibration', 'seam_repair']
-- `release_code`: entries=0, missing_paths=[], missing_sha256=[]
-- `release_configs`: entries=0, missing_paths=[], missing_sha256=[]
-- `release_logs`: entries=0, missing_paths=[], missing_sha256=[]
-- `release_videos`: entries=0, missing_paths=[], missing_sha256=[]
-- `release_checkpoints`: entries=0, missing_paths=[], missing_sha256=[]
+- `release_code`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+- `release_configs`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+- `release_logs`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+- `release_videos`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+- `release_checkpoints`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
 
 ## All Checks
 
@@ -106,8 +106,8 @@ Manifest: `C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landsca
 - `fail` `oracle_reported`: oracle_reported=None
 - `fail` `oracle_boundary`: oracle_stronger_or_saturated_explained=None
 - `fail` `external_ablations`: missing=['basin_overlap', 'barrier_height', 'descent_continuity', 'risk_calibration', 'seam_repair']
-- `fail` `release_code`: entries=0, missing_paths=[], missing_sha256=[]
-- `fail` `release_configs`: entries=0, missing_paths=[], missing_sha256=[]
-- `fail` `release_logs`: entries=0, missing_paths=[], missing_sha256=[]
-- `fail` `release_videos`: entries=0, missing_paths=[], missing_sha256=[]
-- `fail` `release_checkpoints`: entries=0, missing_paths=[], missing_sha256=[]
+- `fail` `release_code`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+- `fail` `release_configs`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+- `fail` `release_logs`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+- `fail` `release_videos`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+- `fail` `release_checkpoints`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]

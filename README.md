@@ -14,6 +14,8 @@ Reviewer response packet: `docs/reviewer_response_packet.md` maps hostile review
 
 Latest evidence-integrity hardening: the strict full-method coverage gate rejects manifests that omit required external methods, the strict rollout sample-count gate rejects underdeclared episode counts or per-task/per-method record-count mismatches, the strict paired-panel gate rejects duplicate or incomplete method panels within paired resets, the strict rollout uniqueness gate rejects duplicate episode identities or reused rollout videos, the strict config evidence hash gate rejects manifest-declared task configs when `config_hash` is missing, malformed, or mismatched with `config_path`, the strict checkpoint/config artifact gate rejects method manifests whose `checkpoint_or_config_hash` is backed only by implementation source rather than a real `checkpoint_or_config_path`, and the strict task-config hash gate and strict policy/config hash gate reject raw JSONL rollout rows whose task fields disagree with the manifest-declared config hash or whose `policy_or_config_hash` disagrees with the manifest-declared method `checkpoint_or_config_hash`.
 
+final release artifact hash recomputation gate: the final external evidence audit now recomputes SHA256 values for manifest-declared code, config, log, video, and checkpoint release artifacts, so a stale release artifact hash cannot pass even if it is SHA-shaped.
+
 ## Evidence Snapshot
 
 - Design: 6 task families x 8 seam regimes x 5 deployment splits x 12 methods x 10 paired seeds, with 230,400 main episode cells.

@@ -2792,6 +2792,8 @@ def main():
             fail(f"external rollout validator self-test missing staged/backup rejection fixture: {forbidden_fixture}")
     if "write_synthetic_mp4" not in evidence_pipeline_self_test_text or "strict_video_evidence=True" not in evidence_pipeline_self_test_text:
         fail("external evidence pipeline self-test must exercise strict MP4 video evidence validation")
+    if "tampered release artifact hash test did not fail" not in evidence_pipeline_self_test_text:
+        fail("external evidence pipeline self-test must reject tampered release artifact hashes in the final evidence audit")
 
     execution_readiness_path = RESULTS / "external_execution_readiness_audit.json"
     if not execution_readiness_path.exists():
