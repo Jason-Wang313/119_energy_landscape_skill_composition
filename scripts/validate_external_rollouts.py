@@ -5,7 +5,7 @@ import hashlib
 import json
 import math
 import re
-from collections import defaultdict
+from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean
@@ -24,6 +24,7 @@ PRIMARY_METHOD = "barrier_certified_energy_composer_v5"
 ORACLE_METHOD = "oracle_basin_composer"
 HEX64 = re.compile(r"^[A-Fa-f0-9]{64}$")
 MIN_STRICT_VIDEO_BYTES = 512
+MIN_EPISODES_PER_METHOD = 30
 FORBIDDEN_VIDEO_PATH_FRAGMENTS = {
     "diagnostic",
     "fallback",
@@ -300,6 +301,7 @@ def load_records(
     errors: list[str] = []
     seen_record_keys: dict[tuple[Any, ...], str] = {}
     seen_video_paths: dict[str, str] = {}
+    record_counts_by_task_method: Counter[tuple[str, str]] = Counter()
     manifest_task_configs: dict[str, dict[str, Any]] = {}
     for task_family, task in manifest_task_specs.items():
         config_path_value = str(task.get("config_path", "")).strip()
@@ -376,6 +378,10 @@ def load_records(
                         errors.append(f"{line_id}: duplicate video_path also used at {prior_video_line}: {video_key}")
                     else:
                         seen_video_paths[video_key] = line_id
+                task_name = str(record.get("task_family", ""))
+                method_name = str(record.get("method", ""))
+                if task_name and method_name:
+                    record_counts_by_task_method[(task_name, method_name)] += 1
                 errors.extend(
                     validate_record(
                         record,
@@ -392,6 +398,27 @@ def load_records(
                     )
                 )
                 records.append(record)
+                if len(errors) >= max_errors:
+                    return records, errors
+    for task_family, task in sorted(manifest_task_specs.items()):
+        episodes_per_method = task.get("episodes_per_method")
+        if (
+            isinstance(episodes_per_method, bool)
+            or not isinstance(episodes_per_method, int)
+            or episodes_per_method < MIN_EPISODES_PER_METHOD
+        ):
+            errors.append(
+                f"{task_family}: episodes_per_method must be integer >= {MIN_EPISODES_PER_METHOD}"
+            )
+            if len(errors) >= max_errors:
+                return records, errors
+            continue
+        for method_name in sorted(manifest_methods):
+            observed = record_counts_by_task_method.get((task_family, method_name), 0)
+            if observed != episodes_per_method:
+                errors.append(
+                    f"{task_family}: method={method_name!r} record count {observed} does not match episodes_per_method={episodes_per_method}"
+                )
                 if len(errors) >= max_errors:
                     return records, errors
     return records, errors

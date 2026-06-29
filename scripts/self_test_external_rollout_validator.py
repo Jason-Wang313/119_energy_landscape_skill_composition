@@ -103,7 +103,7 @@ def build_fixture(tmp: Path) -> tuple[dict, dict]:
         config_path.write_text(json.dumps(config_payload, sort_keys=True) + "\n", encoding="utf-8")
         log_path = log_dir / f"{task}.jsonl"
         with log_path.open("w", encoding="utf-8") as handle:
-            for scene_idx in range(10):
+            for scene_idx in range(30):
                 proposed_success = scene_idx < 8
                 baseline_success = scene_idx < 6
                 records = [
@@ -120,6 +120,7 @@ def build_fixture(tmp: Path) -> tuple[dict, dict]:
                 "log_jsonl": str(log_path),
                 "config_path": str(config_path),
                 "config_hash": file_digest(config_path),
+                "episodes_per_method": 30,
             }
         )
     return manifest, schema
@@ -139,12 +140,12 @@ def main() -> int:
         summary = rollout.summarize(records, schema)
         checks = rollout.threshold_checks(summary, schema)
 
-        if len(records) != 80:
-            raise AssertionError(f"expected 80 synthetic records, got {len(records)}")
+        if len(records) != 240:
+            raise AssertionError(f"expected 240 synthetic records, got {len(records)}")
         if summary["strongest_external_baseline"] != "greedy_module_sequence":
             raise AssertionError(f"wrong strongest baseline: {summary['strongest_external_baseline']}")
-        assert_close("external_success_margin", summary["external_success_margin"], 0.2)
-        assert_close("external_utility_margin", summary["external_utility_margin"], 0.29)
+        assert_close("external_success_margin", summary["external_success_margin"], 1.0 / 15.0)
+        assert_close("external_utility_margin", summary["external_utility_margin"], 53.0 / 300.0)
         assert_close("paired_win_rate", summary["paired_win_rate"], 1.0)
         assert_close("fixed_risk_coverage", summary["fixed_risk_coverage"], 1.0)
         assert_close("fixed_risk_breach", summary["fixed_risk_breach"], 0.0)
@@ -166,6 +167,38 @@ def main() -> int:
         )
         if not any("missing required fields" in error and "utility" in error for error in bad_errors):
             raise AssertionError(f"missing-field test did not fail as expected: {bad_errors}")
+
+        weak_episode_manifest = json.loads(json.dumps(manifest))
+        weak_episode_manifest["tasks"][0]["episodes_per_method"] = 2
+        _, weak_episode_errors = rollout.load_records(
+            weak_episode_manifest,
+            schema,
+            check_video_paths=False,
+            max_errors=10,
+        )
+        if not any("episodes_per_method must be integer >= 30" in error for error in weak_episode_errors):
+            raise AssertionError(f"weak episode-count test did not fail as expected: {weak_episode_errors}")
+
+        short_count_manifest = json.loads(json.dumps(manifest))
+        short_count_log = Path(tmp_name) / "logs" / "short_count.jsonl"
+        short_count_task = str(short_count_manifest["tasks"][0]["task_family"])
+        short_count_rows = [
+            make_record(short_count_task, 0, rollout.PRIMARY_METHOD, success=True, utility=1.0),
+            make_record(short_count_task, 0, "greedy_module_sequence", success=True, utility=0.79),
+        ]
+        short_count_log.write_text(
+            "".join(json.dumps(record, sort_keys=True) + "\n" for record in short_count_rows),
+            encoding="utf-8",
+        )
+        short_count_manifest["tasks"][0]["log_jsonl"] = str(short_count_log)
+        _, short_count_errors = rollout.load_records(
+            short_count_manifest,
+            schema,
+            check_video_paths=False,
+            max_errors=10,
+        )
+        if not any("record count" in error and "does not match episodes_per_method" in error for error in short_count_errors):
+            raise AssertionError(f"short record-count test did not fail as expected: {short_count_errors}")
 
         duplicate_identity_manifest = json.loads(json.dumps(manifest))
         duplicate_identity_log = Path(tmp_name) / "logs" / "duplicate_identity.jsonl"
