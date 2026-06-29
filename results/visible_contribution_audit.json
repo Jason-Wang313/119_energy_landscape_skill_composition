@@ -47,6 +47,11 @@
       "passed": true
     },
     {
+      "detail": "fixture_ready=True, missing_source_rejected=True, unmapped_blocker_rejected=True, manifest_rejected=True, collection_drift_rejected=True",
+      "name": "external_acquisition_packet_self_test_visible",
+      "passed": true
+    },
+    {
       "detail": "job_state='DO_NOT_START_COLLECTION_YET', steps=17, blockers=4",
       "name": "external_collection_job_packet_visible",
       "passed": true

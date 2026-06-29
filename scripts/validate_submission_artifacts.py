@@ -163,6 +163,7 @@ def main():
         "scripts\\self_test_external_release_package.py",
         "scripts\\audit_external_evidence_preflight.py",
         "scripts\\build_external_acquisition_packet.py",
+        "scripts\\self_test_external_acquisition_packet.py",
         "scripts\\build_external_operator_packet.py",
         "scripts\\build_external_collection_job_packet.py",
         "scripts\\build_external_collection_machine_bootstrap.py",
@@ -264,6 +265,7 @@ def main():
         "python scripts/build_external_method_implementation_packet.py",
         "python scripts/materialize_external_method_configs.py",
         "python scripts/build_external_acquisition_packet.py",
+        "python scripts/self_test_external_acquisition_packet.py",
         "python scripts/build_external_operator_packet.py",
         "python scripts/build_external_collection_job_packet.py",
         "python scripts/build_external_collection_machine_bootstrap.py",
@@ -4082,6 +4084,45 @@ def main():
         fail("external acquisition packet should map the four remaining blocking external requirements")
     if len(acquisition.get("operator_actions", []) or []) < 10:
         fail("external acquisition packet has too few operator actions")
+    acquisition_self_test_path = RESULTS / "external_acquisition_packet_self_test.json"
+    acquisition_self_test_md_path = RESULTS / "external_acquisition_packet_self_test.md"
+    for path in (
+        ROOT / "scripts" / "self_test_external_acquisition_packet.py",
+        acquisition_self_test_path,
+        acquisition_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external acquisition packet self-test artifact: {path}")
+    acquisition_self_test = json.loads(acquisition_self_test_path.read_text(encoding="utf-8"))
+    if acquisition_self_test.get("version") != "external_acquisition_packet_self_test_v1":
+        fail("external acquisition packet self-test version mismatch")
+    if acquisition_self_test.get("passed") is not True:
+        fail("external acquisition packet self-test did not pass")
+    if acquisition_self_test.get("not_external_evidence") is not True:
+        fail("external acquisition packet self-test must declare that it is not evidence")
+    if acquisition_self_test.get("strict_external_evidence_ready") is not False:
+        fail("external acquisition packet self-test must keep strict external evidence false")
+    for field in (
+        "temporary_fixture_ready",
+        "missing_source_rejected",
+        "unmapped_blocker_rejected",
+        "premature_manifest_rejected",
+        "collection_readiness_drift_rejected",
+        "real_outputs_untouched",
+    ):
+        if acquisition_self_test.get(field) is not True:
+            fail(f"external acquisition packet self-test field must be true: {field}")
+    acquisition_self_checks = {check.get("name"): check.get("passed") for check in acquisition_self_test.get("checks", [])}
+    for required_check in (
+        "temporary_fixture_builds_current_acquisition_packet",
+        "missing_source_report_rejected",
+        "unmapped_blocker_rejected",
+        "premature_manifest_rejected",
+        "collection_readiness_drift_rejected",
+        "real_repository_acquisition_outputs_untouched",
+    ):
+        if acquisition_self_checks.get(required_check) is not True:
+            fail(f"external acquisition packet self-test missing passing check: {required_check}")
     acquisition_render = acquisition.get("render_video_preflight", {}) or {}
     if acquisition_render.get("render_video_ready") is False:
         if not (acquisition_render.get("renderer_failure_classes", []) or []):

@@ -1,0 +1,44 @@
+{
+  "checks": [
+    {
+      "detail": "status=0, actions=35, blockers=4",
+      "name": "temporary_fixture_builds_current_acquisition_packet",
+      "passed": true
+    },
+    {
+      "detail": "status=1, source_check=False, collection_check=False",
+      "name": "missing_source_report_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, gap_check=False, mapped_check=False",
+      "name": "unmapped_blocker_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, no_manifest_check=False",
+      "name": "premature_manifest_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, collection_check=False",
+      "name": "collection_readiness_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "json_before=e979b897017d6ac8e42ec50212331a6bd599af243739889bfc06491b65c367c6, json_after=e979b897017d6ac8e42ec50212331a6bd599af243739889bfc06491b65c367c6, md_before=9bad100eecfc75c195232634de7d7eeb1bf439799b3853aedcc3549352ab9f90, md_after=9bad100eecfc75c195232634de7d7eeb1bf439799b3853aedcc3549352ab9f90",
+      "name": "real_repository_acquisition_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "collection_readiness_drift_rejected": true,
+  "missing_source_rejected": true,
+  "not_external_evidence": true,
+  "passed": true,
+  "premature_manifest_rejected": true,
+  "real_outputs_untouched": true,
+  "strict_external_evidence_ready": false,
+  "temporary_fixture_ready": true,
+  "unmapped_blocker_rejected": true,
+  "version": "external_acquisition_packet_self_test_v1"
+}

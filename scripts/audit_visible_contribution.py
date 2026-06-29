@@ -62,6 +62,7 @@ def main() -> int:
     summary = read_json(RESULTS / "submission_readiness_gap_audit.json")
     collection_readiness = read_json(RESULTS / "external_collection_readiness_audit.json")
     operator = read_json(RESULTS / "external_operator_packet.json")
+    acquisition_self_test = read_json(RESULTS / "external_acquisition_packet_self_test.json")
     handoff = read_json(RESULTS / "external_operator_handoff_bundle.json")
     collection_job = read_json(RESULTS / "external_collection_job_packet_audit.json")
     machine_bootstrap = read_json(RESULTS / "external_collection_machine_bootstrap_audit.json")
@@ -240,6 +241,40 @@ def main() -> int:
             f"files={handoff.get('included_file_count')!r}, "
             f"forbidden={handoff.get('forbidden_included_paths')!r}, "
             f"start_state={handoff.get('start_state')!r}"
+        ),
+    )
+    acquisition_self_checks = {check.get("name"): check.get("passed") for check in acquisition_self_test.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_acquisition_packet_self_test_visible",
+        acquisition_self_test.get("version") == "external_acquisition_packet_self_test_v1"
+        and acquisition_self_test.get("passed") is True
+        and acquisition_self_test.get("not_external_evidence") is True
+        and acquisition_self_test.get("strict_external_evidence_ready") is False
+        and acquisition_self_test.get("temporary_fixture_ready") is True
+        and acquisition_self_test.get("missing_source_rejected") is True
+        and acquisition_self_test.get("unmapped_blocker_rejected") is True
+        and acquisition_self_test.get("premature_manifest_rejected") is True
+        and acquisition_self_test.get("collection_readiness_drift_rejected") is True
+        and acquisition_self_test.get("real_outputs_untouched") is True
+        and acquisition_self_checks.get("temporary_fixture_builds_current_acquisition_packet") is True
+        and acquisition_self_checks.get("missing_source_report_rejected") is True
+        and acquisition_self_checks.get("unmapped_blocker_rejected") is True
+        and acquisition_self_checks.get("premature_manifest_rejected") is True
+        and acquisition_self_checks.get("collection_readiness_drift_rejected") is True
+        and acquisition_self_checks.get("real_repository_acquisition_outputs_untouched") is True
+        and (ROOT / "scripts" / "self_test_external_acquisition_packet.py").exists()
+        and (RESULTS / "external_acquisition_packet_self_test.md").exists()
+        and "External acquisition packet self-test" in texts["README"]
+        and "External acquisition packet self-test" in texts["final_audit"]
+        and "External acquisition packet self-test" in texts["readiness_audit"]
+        and "External acquisition packet self-test" in texts["reproducibility"],
+        (
+            f"fixture_ready={acquisition_self_test.get('temporary_fixture_ready')!r}, "
+            f"missing_source_rejected={acquisition_self_test.get('missing_source_rejected')!r}, "
+            f"unmapped_blocker_rejected={acquisition_self_test.get('unmapped_blocker_rejected')!r}, "
+            f"manifest_rejected={acquisition_self_test.get('premature_manifest_rejected')!r}, "
+            f"collection_drift_rejected={acquisition_self_test.get('collection_readiness_drift_rejected')!r}"
         ),
     )
     collection_job_checks = {check.get("name"): check.get("passed") for check in collection_job.get("checks", []) or []}
@@ -1584,6 +1619,7 @@ def main() -> int:
             "external_postcollection_evidence_seal_self_test_claim",
             "external_postcollection_seal_consistency_gate_claim",
             "external_postcollection_seal_consistency_self_test_claim",
+            "external_acquisition_packet_self_test_claim",
             "external_method_implementation_packet_claim",
             "external_method_config_materialization_claim",
             "external_method_reference_provenance_claim",
@@ -1592,7 +1628,7 @@ def main() -> int:
             "external_config_materialization_claim",
             "reviewer_response_packet_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'local_planner_edge_policy_claim', 'local_failure_memory_adaptation_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_operator_release_bundle_claim', 'external_collection_machine_bootstrap_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'external_collection_job_packet_claim', 'external_config_manifest_packet_claim', 'external_config_evidence_hash_gate_claim', 'external_rollout_evidence_packet_claim', 'external_strict_video_evidence_gate_claim', 'external_ablation_collection_packet_claim', 'external_evidence_intake_ledger_claim', 'external_precollection_manifest_draft_claim', 'external_precollection_freeze_receipt_claim', 'external_precollection_freeze_receipt_self_test_claim', 'external_postcollection_evidence_seal_claim', 'external_postcollection_evidence_seal_self_test_claim', 'external_postcollection_seal_consistency_gate_claim', 'external_postcollection_seal_consistency_self_test_claim', 'external_method_implementation_packet_claim', 'external_method_config_materialization_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
+        f"missing={sorted({'local_planner_edge_policy_claim', 'local_failure_memory_adaptation_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_operator_release_bundle_claim', 'external_collection_machine_bootstrap_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'external_collection_job_packet_claim', 'external_config_manifest_packet_claim', 'external_config_evidence_hash_gate_claim', 'external_rollout_evidence_packet_claim', 'external_strict_video_evidence_gate_claim', 'external_ablation_collection_packet_claim', 'external_evidence_intake_ledger_claim', 'external_precollection_manifest_draft_claim', 'external_precollection_freeze_receipt_claim', 'external_precollection_freeze_receipt_self_test_claim', 'external_postcollection_evidence_seal_claim', 'external_postcollection_evidence_seal_self_test_claim', 'external_postcollection_seal_consistency_gate_claim', 'external_postcollection_seal_consistency_self_test_claim', 'external_acquisition_packet_self_test_claim', 'external_method_implementation_packet_claim', 'external_method_config_materialization_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -1671,6 +1707,7 @@ def main() -> int:
             "strict manifest promotion gate",
             "External manifest builder self-test",
             "External full-pipeline evidence self-test",
+            "External acquisition packet self-test",
             "External operator packet",
             "External collection job packet",
             "External collection machine bootstrap",
@@ -1754,6 +1791,7 @@ def main() -> int:
             "strict manifest promotion gate",
             "External manifest builder self-test",
             "External full-pipeline evidence self-test",
+            "External acquisition packet self-test",
             "External operator packet",
             "External collection job packet",
             "External collection machine bootstrap",
@@ -1839,6 +1877,7 @@ def main() -> int:
             "strict manifest promotion gate",
             "External manifest builder self-test",
             "External full-pipeline evidence self-test",
+            "External acquisition packet self-test",
             "generated external operator packet",
             "external collection job packet",
             "external collection machine bootstrap",
@@ -1923,6 +1962,7 @@ def main() -> int:
             "strict manifest promotion gate",
             "External manifest builder self-test",
             "External full-pipeline evidence self-test",
+            "External acquisition packet self-test",
             "External operator packet",
             "External collection job packet",
             "External collection machine bootstrap",
@@ -2016,6 +2056,8 @@ def main() -> int:
             "manifest assembly checklist",
             "strict manifest promotion gate",
             "scripts/self_test_external_manifest_builder.py",
+            "scripts/self_test_external_acquisition_packet.py",
+            "External acquisition packet self-test",
             "scripts/build_external_operator_packet.py",
             "current ManiSkill route gates",
             "scripts/build_external_collection_job_packet.py",
@@ -2209,6 +2251,7 @@ def main() -> int:
         "",
         "This audit checks that the public-facing contribution docs describe the current package state: skill-seam world/action framing, the local planner-edge policy audit, the failure-memory adaptation audit, the local model release card, guarded external config materialization, the external config manifest packet, the external rollout evidence packet, the strict MP4 video evidence gate, the strict full-method coverage gate, the strict rollout sample-count gate, the strict paired-panel gate, the strict rollout uniqueness gate, confidence-gated external rollout statistics, the final rollout confidence summary gate, the strict task-config hash gate, the strict policy/config hash gate, the external ablation collection packet, the external evidence intake ledger, the External precollection manifest draft, the External precollection freeze receipt, the External precollection freeze receipt self-test, the External postcollection evidence seal, the External postcollection evidence seal self-test, the External postcollection seal consistency gate, the External postcollection seal consistency self-test, the locked external analysis plan, the external platform probe, the ManiSkill task binding probe, the ManiSkill env smoke probe, the external platform onboarding packet, the external fidelity provenance packet, the external fidelity acceptance draft, the strict fidelity acceptance provenance gate, the fidelity acceptance materializer, the external backend integration packet, the ManiSkill reference backend readiness audit with MP4 writer path, state-shaped array video guard, and explicit render-backend/shader controls, the ManiSkill reference collection preflight audit, the External collection preflight self-test with tracked reference-route readiness after accepted fidelity, the external runner backend probe self-test, the official video write guard, the official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, atomic official evidence promotion, the external pilot smoke packet, the ManiSkill render-video preflight, renderer-failure classifier, timeout diagnosis retest, renderer profile matrix, render resource sweep, ManiSkill render machine qualification packet, ManiSkill render machine qualification self-test, render failure remediation packet, ManiSkill pilot runtime liveness audit, reset-timeout triage sidecar, and backend reset substage markers, the external method implementation packet, External method config materialization, prepared task-config binding in the config evidence self-test, tracked candidate method-config binding in the adapter evidence self-test, adapter acceptance fixtures, the reference-adapter provenance catalog, the method manifest cutover checklist, the External adapter scaffold guard self-test, the strict reference-adapter rejection gate, the strict independent method provenance gate, the strict checkpoint/config artifact gate, the strict fairness-contract binding gate, the manifest assembly checklist, the External manifest builder self-test, the External rollout validator self-test, the External full-pipeline evidence self-test, the no-go operator packet, the External collection job packet, the External collection machine bootstrap, the external collection runbook route-gate audit, the no-evidence operator handoff bundle, the reviewer response packet, the Haonan/Yilun outreach stance, and the 17/21 readiness boundary.",
         "The External full-pipeline evidence self-test also documents prepared task-config and tracked candidate method-config binding inside the temporary fixture.",
+        "The External acquisition packet self-test documents acquisition-packet fail-closed behavior for missing source audits, unmapped blockers, premature manifests, and premature collection readiness.",
         "",
         "## Checks",
         "",

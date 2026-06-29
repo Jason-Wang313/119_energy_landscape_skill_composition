@@ -182,6 +182,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External release package self-test: `results/external_release_package_self_test.md`
 - External evidence preflight matrix: `results/external_evidence_preflight.md`
 - External evidence acquisition packet: `results/external_acquisition_packet.md`
+- External acquisition packet self-test: `results/external_acquisition_packet_self_test.md`
 - External operator packet: `results/external_operator_packet.md`
 - External collection job packet: `external_validation/collection_job_packet.md`
 - External collection job command spine: `external_validation/collection_job_commands.ps1`

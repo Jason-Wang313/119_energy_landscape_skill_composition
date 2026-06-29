@@ -55,6 +55,8 @@
 - External release package validator: `scripts/audit_external_release_package.py`
 - External evidence preflight validator: `scripts/audit_external_evidence_preflight.py`
 - External evidence acquisition packet builder: `scripts/build_external_acquisition_packet.py`
+- External acquisition packet self-test: `scripts/self_test_external_acquisition_packet.py`
+  - Durable report: `results/external_acquisition_packet_self_test.md`
 - External operator packet builder: `scripts/build_external_operator_packet.py`
 - External collection job packet builder: `scripts/build_external_collection_job_packet.py`
 - External collection machine bootstrap builder: `scripts/build_external_collection_machine_bootstrap.py`
@@ -227,6 +229,8 @@
   - `results/external_evidence_preflight.md`
   - `results/external_acquisition_packet.json`
   - `results/external_acquisition_packet.md`
+  - `results/external_acquisition_packet_self_test.json`
+  - `results/external_acquisition_packet_self_test.md`
   - `results/external_operator_packet.json`
   - `results/external_operator_packet.md`
   - `external_validation/collection_job_packet.json`

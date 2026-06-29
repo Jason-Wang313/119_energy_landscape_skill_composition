@@ -221,6 +221,11 @@
       "evidence": ["scripts/build_external_acquisition_packet.py", "results/external_acquisition_packet.json", "results/external_acquisition_packet.md", "results/submission_readiness_gap_audit.json", "results/external_backend_contract_audit.json"]
     },
     {
+      "name": "external_acquisition_packet_self_test_claim",
+      "claim": "The repository provides a non-evidence External acquisition packet self-test that rebuilds the packet in temporary copied workspaces, rejects missing source audits, unmapped blockers, accidental real-manifest presence, and premature collection-readiness promotion, and leaves the real acquisition packet untouched.",
+      "evidence": ["scripts/self_test_external_acquisition_packet.py", "results/external_acquisition_packet_self_test.json", "results/external_acquisition_packet_self_test.md", "scripts/build_external_acquisition_packet.py", "results/external_acquisition_packet.json", "results/external_acquisition_packet.md"]
+    },
+    {
       "name": "external_manifest_assembly_checklist_claim",
       "claim": "The repository provides a non-evidence manifest assembly checklist and strict manifest promotion gate that map each required external manifest field to the current file/hash state, blocking status, operator action, and strict gate before `external_validation/manifest.json` can be written.",
       "evidence": ["scripts/build_external_manifest.py", "external_validation/manifest_assembly_checklist.csv", "results/external_manifest_builder_report.json", "results/external_manifest_builder_report.md"]
