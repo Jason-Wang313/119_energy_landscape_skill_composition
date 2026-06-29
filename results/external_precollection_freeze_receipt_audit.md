@@ -10,17 +10,19 @@ This audit checks that the precollection freeze receipt hash-locks the operator 
 
 ## Checks
 
-- `pass` `receipt_is_non_evidence_and_fail_closed`: not_external_evidence=True, strict_external_evidence_ready=False, freeze_receipt_ready=False
+- `pass` `receipt_is_non_evidence_and_fail_closed`: not_external_evidence=True, strict_external_evidence_ready=False, freeze_receipt_ready=False, ready_to_collect_after_receipt=False
 - `pass` `core_lock_artifacts_hashed`: core_count=21
 - `pass` `prepared_task_configs_hashed`: config_count=4
 - `pass` `backend_module_still_operator_supplied`: backend_module=''
 - `pass` `run_identity_still_operator_supplied`: run_id='paper119_external_validation_run', unsealed_alias_map=False
-- `pass` `checkout_and_skill_hash_recorded`: commit='13d626b157dd66dc363241546235e036c3a92438', skill_hash='F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802'
+- `pass` `operator_metadata_still_required`: operator='', machine='', date=''
+- `pass` `checkout_and_skill_hash_recorded`: commit='0c92288921dc500da5326e29a99615cee1de6f37', skill_hash='F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802'
 - `pass` `strict_sequence_places_receipt_before_collection`: python scripts\audit_external_fidelity_acceptance.py --strict
 python scripts\validate_external_configs.py --strict
 python scripts\validate_external_adapters.py --strict
 python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id paper119_external_validation_run --unsealed-alias-map
 python scripts\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map
+python scripts\self_test_external_precollection_freeze_receipt.py
 python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id paper119_external_validation_run --unsealed-alias-map
 python scripts\build_external_postcollection_evidence_seal.py
 python scripts\audit_external_postcollection_seal_consistency.py
@@ -34,6 +36,7 @@ python scripts\validate_external_configs.py --strict
 python scripts\validate_external_adapters.py --strict
 python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id paper119_external_validation_run --unsealed-alias-map
 python scripts\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map
+python scripts\self_test_external_precollection_freeze_receipt.py
 python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id paper119_external_validation_run --unsealed-alias-map
 python scripts\build_external_postcollection_evidence_seal.py
 python scripts\audit_external_postcollection_seal_consistency.py
@@ -47,6 +50,7 @@ python scripts\validate_external_configs.py --strict
 python scripts\validate_external_adapters.py --strict
 python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id paper119_external_validation_run --unsealed-alias-map
 python scripts\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map
+python scripts\self_test_external_precollection_freeze_receipt.py
 python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id paper119_external_validation_run --unsealed-alias-map
 python scripts\build_external_postcollection_evidence_seal.py
 python scripts\audit_external_postcollection_seal_consistency.py

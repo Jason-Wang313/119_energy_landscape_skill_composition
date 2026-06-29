@@ -143,6 +143,7 @@ def main():
         "scripts\\build_external_evidence_intake_ledger.py",
         "scripts\\build_external_precollection_manifest_draft.py",
         "scripts\\build_external_precollection_freeze_receipt.py",
+        "scripts\\self_test_external_precollection_freeze_receipt.py",
         "scripts\\build_external_postcollection_evidence_seal.py",
         "scripts\\self_test_external_postcollection_evidence_seal.py",
         "scripts\\audit_external_postcollection_seal_consistency.py",
@@ -238,6 +239,7 @@ def main():
         "python scripts/build_external_evidence_intake_ledger.py",
         "python scripts/build_external_precollection_manifest_draft.py",
         "python scripts/build_external_precollection_freeze_receipt.py",
+        "python scripts/self_test_external_precollection_freeze_receipt.py",
         "python scripts/build_external_postcollection_evidence_seal.py",
         "python scripts/self_test_external_postcollection_evidence_seal.py",
         "python scripts/audit_external_postcollection_seal_consistency.py",
@@ -1996,6 +1998,7 @@ def main():
         "materialize_fidelity_acceptance.py",
         "audit_external_collection_readiness.py --strict",
         "build_external_precollection_freeze_receipt.py",
+        "self_test_external_precollection_freeze_receipt.py",
         "real_collection_runner.py",
         "build_external_postcollection_evidence_seal.py",
         "audit_external_postcollection_seal_consistency.py",
@@ -2075,6 +2078,7 @@ def main():
         "prepared_task_configs_hashed",
         "backend_module_still_operator_supplied",
         "run_identity_still_operator_supplied",
+        "operator_metadata_still_required",
         "checkout_and_skill_hash_recorded",
         "strict_sequence_places_receipt_before_collection",
         "receipt_references_manifest_rollout_release_final_gates",
@@ -2083,6 +2087,49 @@ def main():
     ):
         if freeze_checks.get(required_check) is not True:
             fail(f"external precollection freeze receipt audit missing passing check: {required_check}")
+
+    freeze_self_test_path = RESULTS / "external_precollection_freeze_receipt_self_test.json"
+    freeze_self_test_md_path = RESULTS / "external_precollection_freeze_receipt_self_test.md"
+    for path in (
+        ROOT / "scripts" / "self_test_external_precollection_freeze_receipt.py",
+        freeze_self_test_path,
+        freeze_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external precollection freeze receipt self-test artifact: {path}")
+    freeze_self_test = json.loads(freeze_self_test_path.read_text(encoding="utf-8"))
+    if freeze_self_test.get("version") != "external_precollection_freeze_receipt_self_test_v1":
+        fail("external precollection freeze receipt self-test version mismatch")
+    if freeze_self_test.get("passed") is not True:
+        fail("external precollection freeze receipt self-test did not pass")
+    if freeze_self_test.get("not_external_evidence") is not True:
+        fail("external precollection freeze receipt self-test must declare that it is not evidence")
+    if freeze_self_test.get("synthetic_freeze_ready") is not True:
+        fail("external precollection freeze receipt self-test should make a temporary complete freeze ready")
+    if freeze_self_test.get("missing_backend_rejected") is not True:
+        fail("external precollection freeze receipt self-test should reject missing backend selection")
+    if freeze_self_test.get("placeholder_run_rejected") is not True:
+        fail("external precollection freeze receipt self-test should reject placeholder run identity")
+    if freeze_self_test.get("missing_lock_artifact_rejected") is not True:
+        fail("external precollection freeze receipt self-test should reject missing lock artifacts")
+    if freeze_self_test.get("dirty_checkout_rejected") is not True:
+        fail("external precollection freeze receipt self-test should reject dirty checkout state")
+    if freeze_self_test.get("real_reports_untouched") is not True:
+        fail("external precollection freeze receipt self-test should not overwrite the real receipt reports")
+    freeze_self_checks = {
+        check.get("name"): check.get("passed") for check in freeze_self_test.get("checks", [])
+    }
+    for required_check in (
+        "synthetic_complete_freeze_reaches_collection_readiness",
+        "synthetic_ready_checks_cover_hashes_identity_and_order",
+        "missing_backend_selection_rejected",
+        "placeholder_run_identity_rejected",
+        "missing_lock_artifact_rejected",
+        "dirty_checkout_rejected",
+        "real_precollection_freeze_reports_not_overwritten",
+    ):
+        if freeze_self_checks.get(required_check) is not True:
+            fail(f"external precollection freeze receipt self-test missing passing check: {required_check}")
 
     postcollection_seal_path = EXTERNAL / "postcollection_evidence_seal.json"
     postcollection_seal_md_path = EXTERNAL / "postcollection_evidence_seal.md"

@@ -152,6 +152,7 @@ def strict_command_sequence(args: argparse.Namespace) -> list[str]:
         r"python scripts\validate_external_adapters.py --strict",
         rf"python scripts\audit_external_collection_readiness.py --strict --backend-module {backend} --task-config-dir external_validation\configs --run-id {run_id} --unsealed-alias-map",
         operator_command(args),
+        r"python scripts\self_test_external_precollection_freeze_receipt.py",
         rf"python external_validation\runner\real_collection_runner.py --backend-module {backend} --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id {run_id} --unsealed-alias-map",
         r"python scripts\build_external_postcollection_evidence_seal.py",
         r"python scripts\audit_external_postcollection_seal_consistency.py",
@@ -259,11 +260,12 @@ def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
         "receipt_is_non_evidence_and_fail_closed",
         payload.get("not_external_evidence") is True
         and payload.get("strict_external_evidence_ready") is False
-        and payload.get("freeze_receipt_ready") is False,
+        and payload.get("ready_to_collect_after_receipt") == payload.get("freeze_receipt_ready"),
         (
             f"not_external_evidence={payload.get('not_external_evidence')!r}, "
             f"strict_external_evidence_ready={payload.get('strict_external_evidence_ready')!r}, "
-            f"freeze_receipt_ready={payload.get('freeze_receipt_ready')!r}"
+            f"freeze_receipt_ready={payload.get('freeze_receipt_ready')!r}, "
+            f"ready_to_collect_after_receipt={payload.get('ready_to_collect_after_receipt')!r}"
         ),
     )
     add_check(
@@ -283,14 +285,50 @@ def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
     add_check(
         checks,
         "backend_module_still_operator_supplied",
-        not payload.get("backend_module") and paths_by_role.get("selected_backend_module", [{}])[0].get("exists") is False,
+        (
+            not payload.get("backend_module")
+            and paths_by_role.get("selected_backend_module", [{}])[0].get("exists") is False
+        )
+        or (
+            payload.get("freeze_receipt_ready") is True
+            and bool(payload.get("backend_module"))
+            and paths_by_role.get("selected_backend_module", [{}])[0].get("exists") is True
+        ),
         f"backend_module={payload.get('backend_module')!r}",
     )
     add_check(
         checks,
         "run_identity_still_operator_supplied",
-        payload.get("run_id") == PLACEHOLDER_RUN_ID and payload.get("unsealed_alias_map") is False,
+        (
+            payload.get("run_id") == PLACEHOLDER_RUN_ID
+            and payload.get("unsealed_alias_map") is False
+        )
+        or (
+            payload.get("freeze_receipt_ready") is True
+            and payload.get("run_id") != PLACEHOLDER_RUN_ID
+            and payload.get("unsealed_alias_map") is True
+        ),
         f"run_id={payload.get('run_id')!r}, unsealed_alias_map={payload.get('unsealed_alias_map')!r}",
+    )
+    add_check(
+        checks,
+        "operator_metadata_still_required",
+        (
+            not payload.get("operator_id")
+            and not payload.get("collection_machine")
+            and not payload.get("date_locked")
+        )
+        or (
+            payload.get("freeze_receipt_ready") is True
+            and bool(payload.get("operator_id"))
+            and bool(payload.get("collection_machine"))
+            and bool(payload.get("date_locked"))
+        ),
+        (
+            f"operator={payload.get('operator_id')!r}, "
+            f"machine={payload.get('collection_machine')!r}, "
+            f"date={payload.get('date_locked')!r}"
+        ),
     )
     add_check(
         checks,
@@ -303,7 +341,10 @@ def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
         checks,
         "strict_sequence_places_receipt_before_collection",
         "build_external_precollection_freeze_receipt.py" in command_text
+        and "self_test_external_precollection_freeze_receipt.py" in command_text
         and command_text.find("build_external_precollection_freeze_receipt.py") < command_text.find("real_collection_runner.py")
+        and command_text.find("build_external_precollection_freeze_receipt.py") < command_text.find("self_test_external_precollection_freeze_receipt.py")
+        and command_text.find("self_test_external_precollection_freeze_receipt.py") < command_text.find("real_collection_runner.py")
         and "audit_external_collection_readiness.py --strict" in command_text,
         command_text,
     )
@@ -338,8 +379,11 @@ def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
     add_check(
         checks,
         "source_state_preserves_external_blockers",
-        payload.get("source_state", {}).get("fidelity_acceptance_ready") is False
-        and payload.get("source_state", {}).get("collection_ready") is False,
+        (
+            payload.get("source_state", {}).get("fidelity_acceptance_ready") is False
+            and payload.get("source_state", {}).get("collection_ready") is False
+        )
+        or payload.get("freeze_receipt_ready") is True,
         str(payload.get("source_state", {})),
     )
     add_check(

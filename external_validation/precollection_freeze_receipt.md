@@ -14,7 +14,7 @@ This receipt freezes precollection inputs only. It is not a manifest, rollout lo
 - Operator id: `<operator_or_lab>`
 - Collection machine: `<machine_or_robot_platform>`
 - Date locked: `<YYYY-MM-DD>`
-- Code commit: `13d626b157dd66dc363241546235e036c3a92438`
+- Code commit: `0c92288921dc500da5326e29a99615cee1de6f37`
 - Skill-library hash: `F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802`
 
 ## Operator Regeneration Command
@@ -39,6 +39,9 @@ python scripts\audit_external_collection_readiness.py --strict --backend-module 
 ```
 ```powershell
 python scripts\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map
+```
+```powershell
+python scripts\self_test_external_precollection_freeze_receipt.py
 ```
 ```powershell
 python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id paper119_external_validation_run --unsealed-alias-map
@@ -69,8 +72,8 @@ python scripts\audit_external_evidence.py --strict
 
 - `core_precollection_artifact` `external_validation/blinded_operator_sheet.csv` `BAAF6BC6B7BFA0DAD346498D8C7FACEE413FD2A0844E5F833A519BBAD4BEEBF5`
 - `core_precollection_artifact` `external_validation/method_alias_map.json` `B56A11CB20914B2FD2649DA647F7722DE43D6B04DE3E89704A8CD3F952A4E031`
-- `core_precollection_artifact` `external_validation/manifest_precollection_draft.json` `9DCA5F051F75B24D6EC93D43365C4C337FB43A1E44C09266277BC793285BC7E8`
-- `core_precollection_artifact` `external_validation/manifest_precollection_draft.md` `DFE37C9B80FD1A4E5335549F02F076E5BD399A44647B6071AC92AEE84FD58489`
+- `core_precollection_artifact` `external_validation/manifest_precollection_draft.json` `9C258D7C091FA40B2AF9753931276D359F73CC8B03CBDBB15C4516C3A90A8B12`
+- `core_precollection_artifact` `external_validation/manifest_precollection_draft.md` `20FC5B8747708D22E6D253FC71A96DF24A915C622A5464CEACBDB17DFB16F9FB`
 - `core_precollection_artifact` `external_validation/manifest_template.json` `158757454025E628D3E63FA9019C0454F4E3E4FEB28A6104A465252F67B25066`
 - `core_precollection_artifact` `external_validation/log_schema_v1.json` `BF2194D543F83448F03BBD9ADB5310C9BDE7313228EA876BE7FE75CD788A4917`
 - `core_precollection_artifact` `external_validation/statistical_analysis_plan.json` `CADC94E4F3A6A3898B99151C79BD437EB8D997A9F488BD673D205A70420CD65E`
@@ -87,7 +90,7 @@ python scripts\audit_external_evidence.py --strict
 - `core_precollection_artifact` `results/external_config_manifest_audit.json` `71888C39980962B4AAE8E67DC2338CEB8F2DBA603BC85DF0BF6B50BE7720EF92`
 - `core_precollection_artifact` `results/external_method_implementation_audit.json` `F8AA15870753DC4E6B4F681ACEF956A4C49ADAF3A12A98C32091582474021FAC`
 - `core_precollection_artifact` `results/external_evidence_intake_ledger_audit.json` `7A604C84240C9815486D4B606B9F3DD0D10AB2B2F2115252FE9246E3BFE64136`
-- `core_precollection_artifact` `results/external_precollection_manifest_draft_audit.json` `18834932AA03A87F822E5B6377B34F2AD07A3FCA7D6C199A30FC020900142529`
+- `core_precollection_artifact` `results/external_precollection_manifest_draft_audit.json` `17F638DFF1060FC2487FBE0062C0672EA27872BBF7D8D3ED4A3C3E8CC00A016F`
 - `prepared_task_config` `external_validation/configs/cable_route_insert.json` `8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E`
 - `prepared_task_config` `external_validation/configs/door_open_navigation.json` `13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61`
 - `prepared_task_config` `external_validation/configs/drawer_to_pick_transfer.json` `1288223014CB9D9285E4249B2FA607FFC16EBEE20B6F44E0241B63E88233E471`

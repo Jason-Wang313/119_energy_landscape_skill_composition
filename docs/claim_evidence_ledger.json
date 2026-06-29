@@ -221,6 +221,11 @@
       "evidence": ["scripts/build_external_precollection_freeze_receipt.py", "external_validation/precollection_freeze_receipt.json", "external_validation/precollection_freeze_receipt.md", "external_validation/precollection_freeze_receipt.csv", "results/external_precollection_freeze_receipt_audit.json", "results/external_precollection_freeze_receipt_audit.md"]
     },
     {
+      "name": "external_precollection_freeze_receipt_self_test_claim",
+      "claim": "The repository self-tests the External precollection freeze receipt on a temporary complete backend/config/operator/run-id/clean-checkout fixture while proving missing backend selection, placeholder run identity, missing lock artifacts, and dirty checkout fail without overwriting the real receipt.",
+      "evidence": ["scripts/self_test_external_precollection_freeze_receipt.py", "results/external_precollection_freeze_receipt_self_test.json", "results/external_precollection_freeze_receipt_self_test.md", "scripts/build_external_precollection_freeze_receipt.py"]
+    },
+    {
       "name": "external_postcollection_evidence_seal_claim",
       "claim": "The repository provides a non-evidence External postcollection evidence seal that hash-locks raw JSONL logs, rollout videos, prepared configs, precollection receipt, operator metadata, and manifest-promotion inputs after official collection and before manifest writing while keeping strict external evidence false.",
       "evidence": ["scripts/build_external_postcollection_evidence_seal.py", "external_validation/postcollection_evidence_seal.json", "external_validation/postcollection_evidence_seal.md", "external_validation/postcollection_evidence_seal.csv", "results/external_postcollection_evidence_seal_audit.json", "results/external_postcollection_evidence_seal_audit.md"]

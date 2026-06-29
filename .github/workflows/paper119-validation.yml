@@ -172,6 +172,9 @@ jobs:
       - name: Build external precollection freeze receipt
         run: python scripts/build_external_precollection_freeze_receipt.py
 
+      - name: Self-test external precollection freeze receipt
+        run: python scripts/self_test_external_precollection_freeze_receipt.py
+
       - name: Build external postcollection evidence seal
         run: python scripts/build_external_postcollection_evidence_seal.py
 

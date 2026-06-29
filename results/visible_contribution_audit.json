@@ -211,6 +211,11 @@
       "passed": true
     },
     {
+      "detail": "synthetic_ready=True, missing_backend=True, placeholder_run=True, missing_lock=True, dirty_checkout=True",
+      "name": "precollection_freeze_receipt_self_test_visible",
+      "passed": true
+    },
+    {
       "detail": "sealed_artifacts=11, records=0, videos=0, seal_ready=False, manifest_promotion=False",
       "name": "postcollection_evidence_seal_visible",
       "passed": true
