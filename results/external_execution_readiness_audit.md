@@ -85,15 +85,15 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_runner_harness_fail_closed`: actual_execution_ready=False
 - `pass` `external_runner_backend_probe_ready`: passed
 - `pass` `external_runner_backend_probe_not_evidence`: not_external_evidence=True, records_written=2, schema_errors=[]
-- `pass` `external_runner_backend_probe_exercises_actual_runner_path`: checks={'runner_actual_path_exits_zero': True, 'temporary_records_written': True, 'temporary_records_schema_valid': True, 'temporary_videos_written': True, 'diagnostic_fallback_video_rejected_before_jsonl_write': True, 'schema_invalid_record_rejected_before_jsonl_write': True, 'partial_batch_failure_preserves_official_jsonl': True, 'real_manifest_untouched': True}
+- `pass` `external_runner_backend_probe_exercises_actual_runner_path`: checks={'runner_actual_path_exits_zero': True, 'temporary_records_written': True, 'temporary_records_schema_valid': True, 'temporary_videos_written': True, 'diagnostic_fallback_video_rejected_before_jsonl_write': True, 'schema_invalid_record_rejected_before_jsonl_write': True, 'partial_batch_failure_preserves_official_jsonl': True, 'partial_batch_failure_preserves_official_videos': True, 'real_manifest_untouched': True}
 - `pass` `external_pilot_smoke_audit_ready`: passed
 - `pass` `external_pilot_smoke_not_evidence`: not_external_evidence=True, pilot_smoke_ready=False, strict_evidence_ready=False
 - `pass` `external_pilot_smoke_packet_ready`: passed
 - `pass` `external_pilot_smoke_quarantine_gate`: checks={'packet_is_non_evidence_and_fail_closed': True, 'quarantine_dirs_are_separate_from_official_evidence': True, 'runner_backend_probe_already_exercises_actual_runner': True, 'pilot_commands_preserve_gate_order': True, 'pilot_audit_reports_non_evidence_state': True, 'collection_readiness_remains_official_gate': True, 'packet_files_written': True}
 - `pass` `maniskill_pilot_runtime_liveness_ready`: passed
-- `pass` `maniskill_pilot_runtime_liveness_not_evidence`: pilot_runtime_ready=False, runner_io_ready=True, render_video_ready=False, timed_out=False, records=1, videos=1, diagnostic_fallbacks=1, failure_summary='runner wrote quarantined schema-valid row/video using diagnostic non-evidence video fallback; render-backed video remains unavailable'
+- `pass` `maniskill_pilot_runtime_liveness_not_evidence`: pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, timed_out=True, records=0, videos=0, diagnostic_fallbacks=0, failure_summary='runner timed out before producing the required pilot record/video'
 - `pass` `maniskill_render_machine_qualification_ready`: passed
-- `pass` `maniskill_render_machine_qualification_not_evidence`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12
+- `pass` `maniskill_render_machine_qualification_not_evidence`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=11
 - `pass` `maniskill_render_machine_operator_commands`: render machine qualification packet commands and packet file are present
 - `pass` `external_backend_contract_ready`: passed
 - `pass` `external_backend_contract_not_evidence`: not_external_evidence=True

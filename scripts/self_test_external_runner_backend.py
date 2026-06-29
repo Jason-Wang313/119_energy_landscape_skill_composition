@@ -452,6 +452,10 @@ def main() -> int:
         log_path.parent.mkdir(parents=True, exist_ok=True)
         sentinel = '{"preexisting_official_log": true}\n'
         log_path.write_text(sentinel, encoding="utf-8")
+        video_path = video_dir / TASK / f"000_{METHOD}.mp4"
+        video_path.parent.mkdir(parents=True, exist_ok=True)
+        sentinel_video = b"\x00\x00\x00\x18ftypisom\x00\x00\x02\x00isomiso2mp41" + (b"preexisting official video\n" * 32)
+        video_path.write_bytes(sentinel_video)
 
         command = [
             sys.executable,
@@ -479,6 +483,8 @@ def main() -> int:
         partial_failure_runner_returncode = proc.returncode
         partial_failure_runner_output = proc.stdout + proc.stderr
         after_failure_log = log_path.read_text(encoding="utf-8") if log_path.exists() else ""
+        after_failure_video = video_path.read_bytes() if video_path.exists() else b""
+        staging_leftovers = sorted(path.as_posix() for path in video_dir.rglob("*staging*.mp4"))
         checks.append(
             {
                 "name": "partial_batch_failure_preserves_official_jsonl",
@@ -486,6 +492,20 @@ def main() -> int:
                 and "synthetic backend failure after first valid row" in partial_failure_runner_output
                 and after_failure_log == sentinel,
                 "detail": f"returncode={partial_failure_runner_returncode}, log_preserved={after_failure_log == sentinel}, output={partial_failure_runner_output[:240]}",
+            }
+        )
+        checks.append(
+            {
+                "name": "partial_batch_failure_preserves_official_videos",
+                "passed": partial_failure_runner_returncode != 0
+                and "synthetic backend failure after first valid row" in partial_failure_runner_output
+                and after_failure_video == sentinel_video
+                and not staging_leftovers,
+                "detail": (
+                    f"returncode={partial_failure_runner_returncode}, "
+                    f"video_preserved={after_failure_video == sentinel_video}, "
+                    f"staging_leftovers={staging_leftovers[:3]}"
+                ),
             }
         )
 

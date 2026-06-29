@@ -21,7 +21,7 @@
       "passed": true
     },
     {
-      "detail": "returncode=1, records=0, output=backend produced diagnostic fallback video sidecar, which cannot be official evidence: C:\\Users\\wangz\\AppData\\Local\\Temp\\paper119_runner_diagnostic_video_selftest_c0efsub5\\videos\\peg_place_regrasp\\000_barrier_certified_energy_composer_v5.mp",
+      "detail": "returncode=1, records=0, output=backend produced diagnostic fallback video sidecar, which cannot be official evidence: C:\\Users\\wangz\\AppData\\Local\\Temp\\paper119_runner_diagnostic_video_selftest_i6c7o82f\\videos\\peg_place_regrasp\\000_barrier_certified_energy_composer_v5.1E",
       "name": "diagnostic_fallback_video_rejected_before_jsonl_write",
       "passed": true
     },
@@ -31,8 +31,13 @@
       "passed": true
     },
     {
-      "detail": "returncode=1, log_preserved=True, output=Traceback (most recent call last):\n  File \"C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\runner\\real_collection_runner.py\", line 503, in <module>\n    raise SystemExit(main())\n ",
+      "detail": "returncode=1, log_preserved=True, output=Traceback (most recent call last):\n  File \"C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\runner\\real_collection_runner.py\", line 641, in <module>\n    raise SystemExit(main())\n ",
       "name": "partial_batch_failure_preserves_official_jsonl",
+      "passed": true
+    },
+    {
+      "detail": "returncode=1, video_preserved=True, staging_leftovers=[]",
+      "name": "partial_batch_failure_preserves_official_videos",
       "passed": true
     },
     {

@@ -121,7 +121,7 @@
       "passed": true
     },
     {
-      "detail": "runner preserves official JSONL logs when a selected batch fails before promotion",
+      "detail": "runner preserves official JSONL logs and videos when a selected batch fails before promotion",
       "name": "atomic_official_jsonl_promotion_visible",
       "passed": true
     },
@@ -131,17 +131,17 @@
       "passed": true
     },
     {
-      "detail": "pilot_runtime_ready=False, runner_io_ready=True, render_video_ready=False, render_backend='cpu', shader_pack='minimal', timed_out=False, records=1, videos=1, diagnostic_fallbacks=1, failure_summary='runner wrote quarantined schema-valid row/video using diagnostic non-evidence video fallback; render-backed video remains unavailable'",
+      "detail": "pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, render_backend='cpu', shader_pack='minimal', timed_out=True, records=0, videos=0, diagnostic_fallbacks=0, failure_summary='runner timed out before producing the required pilot record/video'",
       "name": "maniskill_pilot_runtime_liveness_visible",
       "passed": true
     },
     {
-      "detail": "render_video_ready=False, render_backend='cpu', shader_pack='minimal', envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory']",
+      "detail": "render_video_ready=False, render_backend='cpu', shader_pack='minimal', envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: render preflight exceeded 30 seconds; OpenCabinetDrawer-v1: render preflight exceeded 30 seconds; OpenCabinetDoor-v1: render preflight exceeded 30 seconds; PullCubeTool-v1: render preflight exceeded 30 seconds']",
       "name": "maniskill_render_video_preflight_visible",
       "passed": true
     },
     {
-      "detail": "classes=['vulkan_descriptor_pool_exhaustion'], remediation=5",
+      "detail": "classes=['render_timeout'], remediation=3",
       "name": "renderer_failure_classifier_visible",
       "passed": true
     },

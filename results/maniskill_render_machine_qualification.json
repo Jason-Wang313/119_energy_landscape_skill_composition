@@ -1,16 +1,15 @@
 {
   "blocking_missing": [
     "render_video_ready is false in results/maniskill_render_video_preflight_audit.json",
-    "PegInsertionSide-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+    "PegInsertionSide-v1 has no render-backed MP4: render preflight exceeded 30 seconds",
     "PegInsertionSide-v1 did not write a renderer-backed MP4",
-    "OpenCabinetDrawer-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+    "OpenCabinetDrawer-v1 has no render-backed MP4: render preflight exceeded 30 seconds",
     "OpenCabinetDrawer-v1 did not write a renderer-backed MP4",
-    "OpenCabinetDoor-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+    "OpenCabinetDoor-v1 has no render-backed MP4: render preflight exceeded 30 seconds",
     "OpenCabinetDoor-v1 did not write a renderer-backed MP4",
-    "PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+    "PullCubeTool-v1 has no render-backed MP4: render preflight exceeded 30 seconds",
     "PullCubeTool-v1 did not write a renderer-backed MP4",
     "pilot runtime liveness is not ready on the selected machine",
-    "pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence",
     "pilot runtime render_video_ready is false"
   ],
   "checks": [
@@ -35,7 +34,7 @@
       "passed": true
     },
     {
-      "detail": "state=DO_NOT_COLLECT_RENDER_MACHINE, blockers=12",
+      "detail": "state=DO_NOT_COLLECT_RENDER_MACHINE, blockers=11",
       "name": "qualification_state_matches_render_and_liveness",
       "passed": true
     },
@@ -45,12 +44,12 @@
       "passed": true
     },
     {
-      "detail": "failure_classes=['vulkan_descriptor_pool_exhaustion']",
+      "detail": "failure_classes=['render_timeout']",
       "name": "renderer_failure_classes_propagated",
       "passed": true
     },
     {
-      "detail": "diagnostic_fallbacks=1, state=DO_NOT_COLLECT_RENDER_MACHINE",
+      "detail": "diagnostic_fallbacks=0, state=DO_NOT_COLLECT_RENDER_MACHINE",
       "name": "diagnostic_fallbacks_block_evidence",
       "passed": true
     },
@@ -85,7 +84,7 @@
   "render_machine_qualified": false,
   "render_records_seen": 4,
   "renderer_failure_classes": [
-    "vulkan_descriptor_pool_exhaustion"
+    "render_timeout"
   ],
   "source_artifacts": [
     "results/external_platform_probe.json",

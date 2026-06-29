@@ -1022,6 +1022,7 @@ def main():
         "runner_rejects_diagnostic_or_non_mp4_videos_before_jsonl_write",
         "runner_rejects_schema_invalid_records_before_jsonl_write",
         "runner_promotes_jsonl_only_after_batch_success",
+        "runner_promotes_videos_and_jsonl_only_after_batch_success",
         "no_real_manifest_written",
     ):
         if runner_checks.get(required_check) is not True:
@@ -1038,7 +1039,11 @@ def main():
         "promote_pending_logs",
         "stage_log_path",
         "backup_log_path",
+        "stage_video_path",
+        "backup_video_path",
+        "promote_pending_artifacts",
         "pending_log_lines",
+        "pending_videos",
     ):
         if required_term not in runner_text:
             fail(f"external runner missing official evidence write guard term: {required_term}")
@@ -2300,6 +2305,7 @@ def main():
         "diagnostic_fallback_video_rejected_before_jsonl_write",
         "schema_invalid_record_rejected_before_jsonl_write",
         "partial_batch_failure_preserves_official_jsonl",
+        "partial_batch_failure_preserves_official_videos",
         "real_manifest_untouched",
     ):
         if runner_backend_checks.get(required_check) is not True:

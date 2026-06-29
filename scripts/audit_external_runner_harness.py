@@ -93,10 +93,16 @@ def main() -> int:
         "validate_official_video",
         "validate_official_record",
         "validate_external_rollouts",
+        "promote_pending_artifacts",
         "promote_pending_logs",
         "stage_log_path",
         "backup_log_path",
+        "stage_video_path",
+        "backup_video_path",
+        "cleanup_staged_videos",
         "pending_log_lines",
+        "pending_videos",
+        "duplicate expected official video paths",
         "MIN_OFFICIAL_VIDEO_BYTES",
         ".diagnostic.json",
         ".staging",
@@ -149,6 +155,23 @@ def main() -> int:
         not missing_promotion_terms,
         f"missing_terms={missing_promotion_terms}",
     )
+    artifact_promotion_terms = [
+        "promote_pending_artifacts",
+        "stage_video_path",
+        "backup_video_path",
+        "cleanup_staged_videos",
+        "pending_videos",
+        "staged_record",
+        ".replace(final_video)",
+        "failed to promote staged official evidence artifacts",
+    ]
+    missing_artifact_promotion_terms = [term for term in artifact_promotion_terms if term not in runner]
+    add_check(
+        checks,
+        "runner_promotes_videos_and_jsonl_only_after_batch_success",
+        not missing_artifact_promotion_terms,
+        f"missing_terms={missing_artifact_promotion_terms}",
+    )
     add_check(checks, "runner_does_not_write_manifest", "manifest.json" not in runner.lower(), "runner writes JSONL/video only; manifest remains separate")
 
     template_texts = [read(path) for path in sorted((RUNNER / "backend_templates").glob("*_backend.py"))]
@@ -196,7 +219,7 @@ def main() -> int:
             "non-template backend module",
             "strict real configs in external_validation/configs",
             "intentional alias unsealing at execution time",
-            "official MP4-like videos without diagnostic sidecars plus schema-valid real JSONL logs promoted only after batch success",
+            "official MP4-like videos and schema-valid real JSONL logs promoted together only after batch success",
             "manifest-declared hashes and strict evidence audits",
         ],
         "checks": checks,

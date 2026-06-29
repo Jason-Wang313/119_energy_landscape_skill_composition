@@ -42,6 +42,11 @@
       "passed": true
     },
     {
+      "detail": "missing_terms=[]",
+      "name": "runner_promotes_videos_and_jsonl_only_after_batch_success",
+      "passed": true
+    },
+    {
       "detail": "runner writes JSONL/video only; manifest remains separate",
       "name": "runner_does_not_write_manifest",
       "passed": true
@@ -86,7 +91,7 @@
     "non-template backend module",
     "strict real configs in external_validation/configs",
     "intentional alias unsealing at execution time",
-    "official MP4-like videos without diagnostic sidecars plus schema-valid real JSONL logs promoted only after batch success",
+    "official MP4-like videos and schema-valid real JSONL logs promoted together only after batch success",
     "manifest-declared hashes and strict evidence audits"
   ],
   "not_external_evidence": true,

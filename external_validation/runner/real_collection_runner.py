@@ -226,9 +226,8 @@ def validate_official_record(
     manifest_tasks: set[str],
     manifest_video_dirs: dict[str, Path],
 ) -> None:
-    errors = rollout_validator.validate_record(
+    errors = official_record_errors(
         record,
-        line_id=f"{record.get('task_family', '<unknown>')}:{record.get('episode_index', '<unknown>')}:{record.get('method', '<unknown>')}",
         schema=schema,
         manifest_methods=manifest_methods,
         manifest_tasks=manifest_tasks,
@@ -238,6 +237,28 @@ def validate_official_record(
     )
     if errors:
         fail("runner refused schema-invalid official JSONL record before write: " + "; ".join(errors[:5]))
+
+
+def official_record_errors(
+    record: dict[str, Any],
+    *,
+    schema: dict[str, Any],
+    manifest_methods: set[str],
+    manifest_tasks: set[str],
+    check_video_paths: bool,
+    manifest_video_dirs: dict[str, Path],
+    strict_video_evidence: bool,
+) -> list[str]:
+    return rollout_validator.validate_record(
+        record,
+        line_id=f"{record.get('task_family', '<unknown>')}:{record.get('episode_index', '<unknown>')}:{record.get('method', '<unknown>')}",
+        schema=schema,
+        manifest_methods=manifest_methods,
+        manifest_tasks=manifest_tasks,
+        check_video_paths=check_video_paths,
+        manifest_video_dirs=manifest_video_dirs,
+        strict_video_evidence=strict_video_evidence,
+    )
 
 
 def stage_log_path(log_path: Path, run_id: str) -> Path:
@@ -250,18 +271,97 @@ def backup_log_path(log_path: Path, run_id: str) -> Path:
     return log_path.with_name(f"{log_path.name}.{token}.backup")
 
 
-def promote_pending_logs(pending_log_lines: dict[Path, list[str]], *, run_id: str) -> int:
-    staged_paths: list[Path] = []
-    backups: list[tuple[Path, Path, bool]] = []
-    promoted_paths: list[Path] = []
+def stage_video_path(video_path: Path, run_id: str) -> Path:
+    token = sha256_json({"run_id": run_id, "video_path": video_path.as_posix()})[:12]
+    return video_path.with_name(f"{video_path.stem}.{token}.staging{video_path.suffix}")
+
+
+def backup_video_path(video_path: Path, run_id: str) -> Path:
+    token = sha256_json({"run_id": run_id, "video_path": video_path.as_posix()})[:12]
+    return video_path.with_name(f"{video_path.stem}.{token}.backup{video_path.suffix}")
+
+
+def cleanup_video_artifact(path: Path) -> None:
     try:
+        if path.exists():
+            path.unlink()
+    except OSError:
+        pass
+    try:
+        sidecar = Path(str(path) + ".diagnostic.json")
+        if sidecar.exists():
+            sidecar.unlink()
+    except OSError:
+        pass
+
+
+def cleanup_staged_videos(pending_videos: list[tuple[Path, Path]]) -> None:
+    for staged_video, _ in pending_videos:
+        cleanup_video_artifact(staged_video)
+
+
+def promote_pending_logs(pending_log_lines: dict[Path, list[str]], *, run_id: str) -> int:
+    return promote_pending_artifacts(
+        pending_log_lines,
+        [],
+        run_id=run_id,
+        records_by_log={},
+        schema={},
+        manifest_methods=set(),
+        manifest_tasks=set(),
+        manifest_video_dirs={},
+    )
+
+
+def promote_pending_artifacts(
+    pending_log_lines: dict[Path, list[str]],
+    pending_videos: list[tuple[Path, Path]],
+    *,
+    run_id: str,
+    records_by_log: dict[Path, list[dict[str, Any]]],
+    schema: dict[str, Any],
+    manifest_methods: set[str],
+    manifest_tasks: set[str],
+    manifest_video_dirs: dict[str, Path],
+) -> int:
+    staged_log_paths: list[Path] = []
+    log_backups: list[tuple[Path, Path, bool]] = []
+    video_backups: list[tuple[Path, Path, bool]] = []
+    promoted_logs: list[Path] = []
+    promoted_videos: list[Path] = []
+    try:
+        for staged_video, final_video in pending_videos:
+            final_video.parent.mkdir(parents=True, exist_ok=True)
+            backup_path = backup_video_path(final_video, run_id)
+            cleanup_video_artifact(backup_path)
+            had_original = final_video.exists()
+            if had_original:
+                final_video.replace(backup_path)
+            video_backups.append((final_video, backup_path, had_original))
+            staged_video.replace(final_video)
+            promoted_videos.append(final_video)
+
+        for log_path, records in sorted(records_by_log.items()):
+            for record in records:
+                errors = official_record_errors(
+                    record,
+                    schema=schema,
+                    manifest_methods=manifest_methods,
+                    manifest_tasks=manifest_tasks,
+                    check_video_paths=True,
+                    manifest_video_dirs=manifest_video_dirs,
+                    strict_video_evidence=True,
+                )
+                if errors:
+                    raise RuntimeError("runner refused schema-invalid official JSONL record before write: " + "; ".join(errors[:5]))
+
         for log_path, lines in sorted(pending_log_lines.items()):
             log_path.parent.mkdir(parents=True, exist_ok=True)
             staged_path = stage_log_path(log_path, run_id)
             if staged_path.exists():
                 staged_path.unlink()
             staged_path.write_text("".join(lines), encoding="utf-8")
-            staged_paths.append(staged_path)
+            staged_log_paths.append(staged_path)
         for log_path in sorted(pending_log_lines):
             backup_path = backup_log_path(log_path, run_id)
             if backup_path.exists():
@@ -269,30 +369,43 @@ def promote_pending_logs(pending_log_lines: dict[Path, list[str]], *, run_id: st
             had_original = log_path.exists()
             if had_original:
                 log_path.replace(backup_path)
-            backups.append((log_path, backup_path, had_original))
+            log_backups.append((log_path, backup_path, had_original))
             stage_log_path(log_path, run_id).replace(log_path)
-            promoted_paths.append(log_path)
-    except OSError as exc:
-        for log_path in reversed(promoted_paths):
+            promoted_logs.append(log_path)
+    except (OSError, RuntimeError) as exc:
+        for log_path in reversed(promoted_logs):
             try:
                 if log_path.exists():
                     log_path.unlink()
             except OSError:
                 pass
-        for log_path, backup_path, had_original in reversed(backups):
+        for log_path, backup_path, had_original in reversed(log_backups):
             try:
                 if had_original and backup_path.exists():
                     backup_path.replace(log_path)
             except OSError:
                 pass
-        for staged_path in staged_paths:
+        for video_path in reversed(promoted_videos):
+            try:
+                if video_path.exists():
+                    video_path.unlink()
+            except OSError:
+                pass
+        for video_path, backup_path, had_original in reversed(video_backups):
+            try:
+                if had_original and backup_path.exists():
+                    backup_path.replace(video_path)
+            except OSError:
+                pass
+        for staged_path in staged_log_paths:
             try:
                 if staged_path.exists():
                     staged_path.unlink()
             except OSError:
                 pass
-        fail(f"failed to promote staged official JSONL logs: {exc}")
-    for _, backup_path, _ in backups:
+        cleanup_staged_videos(pending_videos)
+        fail(f"failed to promote staged official evidence artifacts: {exc}")
+    for _, backup_path, _ in [*log_backups, *video_backups]:
         try:
             if backup_path.exists():
                 backup_path.unlink()
@@ -399,81 +512,106 @@ def run_collection(args: argparse.Namespace) -> int:
         fail("platform_provenance must return a dict")
 
     output_paths = sorted({args.output_log_dir / f"{row['task_family']}.jsonl" for row in rows})
-    existing = [path for path in output_paths if path.exists() and path.stat().st_size > 0]
-    if existing and not args.force:
-        fail(f"refusing to append to existing output logs without --force: {existing[:3]}")
+    output_video_paths = sorted({args.video_dir / row["task_family"] / Path(row["expected_video_path"]).name for row in rows})
+    if len(output_video_paths) != len(rows):
+        fail("operator sheet contains duplicate expected official video paths")
+    existing_logs = [path for path in output_paths if path.exists() and path.stat().st_size > 0]
+    existing_videos = [path for path in output_video_paths if path.exists()]
+    if (existing_logs or existing_videos) and not args.force:
+        fail(f"refusing to replace existing output artifacts without --force: logs={existing_logs[:3]}, videos={existing_videos[:3]}")
     for path in output_paths:
         path.parent.mkdir(parents=True, exist_ok=True)
 
     config_cache: dict[str, dict[str, Any]] = {}
     pending_log_lines: dict[Path, list[str]] = {}
-    for row in rows:
-        task_family = row["task_family"]
-        config = config_cache.get(task_family)
-        if config is None:
-            config = load_task_config(task_family, args.task_config_dir, dry_run=False)
-            backend.load_task_config(task_family, config)
-            config_cache[task_family] = config
-        alias = row["method_alias"]
-        if alias not in alias_map:
-            fail(f"alias {alias!r} missing from method alias map")
-        method_name = alias_map[alias]
+    pending_records_by_log: dict[Path, list[dict[str, Any]]] = {}
+    pending_videos: list[tuple[Path, Path]] = []
+    try:
+        for row in rows:
+            task_family = row["task_family"]
+            config = config_cache.get(task_family)
+            if config is None:
+                config = load_task_config(task_family, args.task_config_dir, dry_run=False)
+                backend.load_task_config(task_family, config)
+                config_cache[task_family] = config
+            alias = row["method_alias"]
+            if alias not in alias_map:
+                fail(f"alias {alias!r} missing from method alias map")
+            method_name = alias_map[alias]
 
-        reset_spec = {"row": row, "task_config": config, "provenance": provenance}
-        reset_result = backend.reset_scene(reset_spec)
-        if not isinstance(reset_result, dict):
-            fail("reset_scene must return a dict")
-        observation = backend.capture_observation()
-        if not isinstance(observation, dict):
-            fail("capture_observation must return a dict")
-        terminal_samples = backend.terminal_samples({"row": row, "config": config, "observation": observation})
-        if not isinstance(terminal_samples, list) or not terminal_samples:
-            fail("terminal_samples must return a non-empty list")
-        proposal = backend.run_method(
-            method_name,
-            {
-                "row": row,
-                "config": config,
-                "observation": observation,
-                "terminal_samples": terminal_samples,
-                "skill_i": config["skill_i"],
-                "skill_j": config["skill_j"],
-            },
-        )
-        if not isinstance(proposal, dict):
-            fail("run_method must return a dict")
-        outcome = backend.execute_skill_pair({"row": row, "config": config, "proposal": proposal})
-        if not isinstance(outcome, dict):
-            fail("execute_skill_pair must return a dict")
-        target_video = args.video_dir / task_family / Path(row["expected_video_path"]).name
-        target_video.parent.mkdir(parents=True, exist_ok=True)
-        video_path = backend.record_video(target_video)
-        validate_official_video(video_path, expected_target=target_video, video_dir=args.video_dir)
-        policy_hash = str(proposal.get("policy_or_config_hash") or backend.policy_or_config_hash(method_name))
-        record = build_record(
-            row=row,
-            run_id=args.run_id,
-            method_name=method_name,
-            config=config,
-            provenance=provenance,
-            reset_result=reset_result,
-            terminal_samples=terminal_samples,
-            proposal=proposal,
-            outcome=outcome,
-            video_path=video_path,
-            policy_hash=policy_hash,
-        )
-        validate_official_record(
-            record,
-            schema=schema,
-            manifest_methods=manifest_methods,
-            manifest_tasks=manifest_tasks,
-            manifest_video_dirs=manifest_video_dirs,
-        )
-        log_path = args.output_log_dir / f"{task_family}.jsonl"
-        pending_log_lines.setdefault(log_path, []).append(json.dumps(record, sort_keys=True) + "\n")
+            reset_spec = {"row": row, "task_config": config, "provenance": provenance}
+            reset_result = backend.reset_scene(reset_spec)
+            if not isinstance(reset_result, dict):
+                fail("reset_scene must return a dict")
+            observation = backend.capture_observation()
+            if not isinstance(observation, dict):
+                fail("capture_observation must return a dict")
+            terminal_samples = backend.terminal_samples({"row": row, "config": config, "observation": observation})
+            if not isinstance(terminal_samples, list) or not terminal_samples:
+                fail("terminal_samples must return a non-empty list")
+            proposal = backend.run_method(
+                method_name,
+                {
+                    "row": row,
+                    "config": config,
+                    "observation": observation,
+                    "terminal_samples": terminal_samples,
+                    "skill_i": config["skill_i"],
+                    "skill_j": config["skill_j"],
+                },
+            )
+            if not isinstance(proposal, dict):
+                fail("run_method must return a dict")
+            outcome = backend.execute_skill_pair({"row": row, "config": config, "proposal": proposal})
+            if not isinstance(outcome, dict):
+                fail("execute_skill_pair must return a dict")
+            target_video = args.video_dir / task_family / Path(row["expected_video_path"]).name
+            staged_video = stage_video_path(target_video, args.run_id)
+            staged_video.parent.mkdir(parents=True, exist_ok=True)
+            cleanup_video_artifact(staged_video)
+            pending_videos.append((staged_video, target_video))
+            video_path = backend.record_video(staged_video)
+            validate_official_video(video_path, expected_target=staged_video, video_dir=args.video_dir)
+            policy_hash = str(proposal.get("policy_or_config_hash") or backend.policy_or_config_hash(method_name))
+            record = build_record(
+                row=row,
+                run_id=args.run_id,
+                method_name=method_name,
+                config=config,
+                provenance=provenance,
+                reset_result=reset_result,
+                terminal_samples=terminal_samples,
+                proposal=proposal,
+                outcome=outcome,
+                video_path=target_video.as_posix(),
+                policy_hash=policy_hash,
+            )
+            staged_record = dict(record)
+            staged_record["video_path"] = relative_video_path(staged_video.as_posix())
+            validate_official_record(
+                staged_record,
+                schema=schema,
+                manifest_methods=manifest_methods,
+                manifest_tasks=manifest_tasks,
+                manifest_video_dirs=manifest_video_dirs,
+            )
+            log_path = args.output_log_dir / f"{task_family}.jsonl"
+            pending_records_by_log.setdefault(log_path, []).append(record)
+            pending_log_lines.setdefault(log_path, []).append(json.dumps(record, sort_keys=True) + "\n")
+    except BaseException:
+        cleanup_staged_videos(pending_videos)
+        raise
 
-    written = promote_pending_logs(pending_log_lines, run_id=args.run_id)
+    written = promote_pending_artifacts(
+        pending_log_lines,
+        pending_videos,
+        run_id=args.run_id,
+        records_by_log=pending_records_by_log,
+        schema=schema,
+        manifest_methods=manifest_methods,
+        manifest_tasks=manifest_tasks,
+        manifest_video_dirs=manifest_video_dirs,
+    )
     print(f"External collection runner wrote {written} JSONL records. Not validated until manifest and strict audits pass.")
     return 0
 
