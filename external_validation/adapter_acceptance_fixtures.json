@@ -1,0 +1,1122 @@
+{
+  "fixture_count": 11,
+  "fixtures": [
+    {
+      "acceptance_assertions": [
+        "adapter imports without side effects",
+        "initialize(config) returns a dict",
+        "propose(observation, terminal_samples, skill_i, skill_j, compute_budget) returns required proposal fields",
+        "predicted_seam_risk is numeric in [0, 1]",
+        "log(episode_context, proposal, outcome) returns required log fields",
+        "log.policy_or_config_hash is a 64-character SHA256 and matches the manifest-declared checkpoint_or_config_hash during strict validation",
+        "reset(reset_context) completes without raising NotImplementedError"
+      ],
+      "evidence_status": "synthetic_contract_fixture_not_rollout_evidence",
+      "fixture_id": "9f068fce6e0dbb71",
+      "fixture_sha256": "549a65e96bda998cd160e03330647f8aea10d5dfe105316b38b4879acb46d098",
+      "method": "barrier_certified_energy_composer_v5",
+      "not_external_evidence": true,
+      "required_api": [
+        "initialize",
+        "propose",
+        "log",
+        "reset"
+      ],
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "repair_action",
+        "success",
+        "utility"
+      ],
+      "required_proposal_fields": [
+        "decision",
+        "predicted_seam_risk",
+        "failure_diagnosis",
+        "repair_action"
+      ],
+      "role": "primary method",
+      "spec_file": "external_validation/baseline_specs/barrier_certified_energy_composer_v5.json",
+      "strict_evidence_boundary": "Passing this synthetic fixture is only a pre-rollout adapter smoke test. Strict evidence still requires external_validation/manifest.json, operator-supplied implementation provenance, checkpoint/config artifact hashes, raw JSONL rollout logs, render-backed videos, pairing/release audits, and audit_external_evidence.py --strict.",
+      "synthetic_inputs": {
+        "compute_budget": {
+          "simulator_query_budget": 4,
+          "wall_clock_seconds": 1.0
+        },
+        "config": {
+          "fixed_risk_budget": 0.15,
+          "method_name": "barrier_certified_energy_composer_v5",
+          "policy_or_config_hash": "5c799d470f872c005610b60a087d3e692e41db0eac34056312277b79c92c7199"
+        },
+        "observation": {
+          "contact": {
+            "force_norm": 0.4,
+            "mode": "free_to_contact"
+          },
+          "scene_id": "synthetic_scene_000",
+          "state": {
+            "gripper_pose": [
+              0.0,
+              0.1,
+              0.2
+            ],
+            "object_pose": [
+              0.2,
+              0.1,
+              0.0
+            ]
+          },
+          "task_family": "peg_place_regrasp"
+        },
+        "outcome": {
+          "composition_cost": 0.1,
+          "realized_seam_breach": false,
+          "success": true,
+          "utility": 1.0
+        },
+        "terminal_samples": [
+          {
+            "features": [
+              0.1,
+              0.2,
+              0.3
+            ],
+            "sample_id": "sample_0",
+            "state_hash": "e5dd036dfcfd14f0244e3b9b5661a8374d165e38ff7b66378b9d0f527716c587"
+          },
+          {
+            "features": [
+              0.2,
+              0.3,
+              0.4
+            ],
+            "sample_id": "sample_1",
+            "state_hash": "9245bfa0ac319439954e742c8df06465d0992057f1807204e39e12332b1c8356"
+          }
+        ]
+      },
+      "synthetic_policy_or_config_hash": "5c799d470f872c005610b60a087d3e692e41db0eac34056312277b79c92c7199"
+    },
+    {
+      "acceptance_assertions": [
+        "adapter imports without side effects",
+        "initialize(config) returns a dict",
+        "propose(observation, terminal_samples, skill_i, skill_j, compute_budget) returns required proposal fields",
+        "predicted_seam_risk is numeric in [0, 1]",
+        "log(episode_context, proposal, outcome) returns required log fields",
+        "log.policy_or_config_hash is a 64-character SHA256 and matches the manifest-declared checkpoint_or_config_hash during strict validation",
+        "reset(reset_context) completes without raising NotImplementedError"
+      ],
+      "evidence_status": "synthetic_contract_fixture_not_rollout_evidence",
+      "fixture_id": "c687049fe1e42b8e",
+      "fixture_sha256": "d6f7517903c23f2623316817e8e6dfa97e18b170d6fa601a4caa095ef19afbce",
+      "method": "behavior_cloned_skill_chain",
+      "not_external_evidence": true,
+      "required_api": [
+        "initialize",
+        "propose",
+        "log",
+        "reset"
+      ],
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "repair_action",
+        "success",
+        "utility"
+      ],
+      "required_proposal_fields": [
+        "decision",
+        "predicted_seam_risk",
+        "failure_diagnosis",
+        "repair_action"
+      ],
+      "role": "demonstration sequence baseline",
+      "spec_file": "external_validation/baseline_specs/behavior_cloned_skill_chain.json",
+      "strict_evidence_boundary": "Passing this synthetic fixture is only a pre-rollout adapter smoke test. Strict evidence still requires external_validation/manifest.json, operator-supplied implementation provenance, checkpoint/config artifact hashes, raw JSONL rollout logs, render-backed videos, pairing/release audits, and audit_external_evidence.py --strict.",
+      "synthetic_inputs": {
+        "compute_budget": {
+          "simulator_query_budget": 4,
+          "wall_clock_seconds": 1.0
+        },
+        "config": {
+          "fixed_risk_budget": 0.15,
+          "method_name": "behavior_cloned_skill_chain",
+          "policy_or_config_hash": "36502dc4db709a95739c53b890995e135c4efaf8035794e397c3fbc23b610a9a"
+        },
+        "observation": {
+          "contact": {
+            "force_norm": 0.4,
+            "mode": "free_to_contact"
+          },
+          "scene_id": "synthetic_scene_000",
+          "state": {
+            "gripper_pose": [
+              0.0,
+              0.1,
+              0.2
+            ],
+            "object_pose": [
+              0.2,
+              0.1,
+              0.0
+            ]
+          },
+          "task_family": "peg_place_regrasp"
+        },
+        "outcome": {
+          "composition_cost": 0.1,
+          "realized_seam_breach": false,
+          "success": true,
+          "utility": 1.0
+        },
+        "terminal_samples": [
+          {
+            "features": [
+              0.1,
+              0.2,
+              0.3
+            ],
+            "sample_id": "sample_0",
+            "state_hash": "e5dd036dfcfd14f0244e3b9b5661a8374d165e38ff7b66378b9d0f527716c587"
+          },
+          {
+            "features": [
+              0.2,
+              0.3,
+              0.4
+            ],
+            "sample_id": "sample_1",
+            "state_hash": "9245bfa0ac319439954e742c8df06465d0992057f1807204e39e12332b1c8356"
+          }
+        ]
+      },
+      "synthetic_policy_or_config_hash": "36502dc4db709a95739c53b890995e135c4efaf8035794e397c3fbc23b610a9a"
+    },
+    {
+      "acceptance_assertions": [
+        "adapter imports without side effects",
+        "initialize(config) returns a dict",
+        "propose(observation, terminal_samples, skill_i, skill_j, compute_budget) returns required proposal fields",
+        "predicted_seam_risk is numeric in [0, 1]",
+        "log(episode_context, proposal, outcome) returns required log fields",
+        "log.policy_or_config_hash is a 64-character SHA256 and matches the manifest-declared checkpoint_or_config_hash during strict validation",
+        "reset(reset_context) completes without raising NotImplementedError"
+      ],
+      "evidence_status": "synthetic_contract_fixture_not_rollout_evidence",
+      "fixture_id": "b304bd717f821f4f",
+      "fixture_sha256": "1d1470f584f90fcb2f371cb248ebc77712cdde7ea8bf8e322e61c8697a71793d",
+      "method": "cem_trajectory_composer",
+      "not_external_evidence": true,
+      "required_api": [
+        "initialize",
+        "propose",
+        "log",
+        "reset"
+      ],
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "repair_action",
+        "success",
+        "utility"
+      ],
+      "required_proposal_fields": [
+        "decision",
+        "predicted_seam_risk",
+        "failure_diagnosis",
+        "repair_action"
+      ],
+      "role": "trajectory-search baseline",
+      "spec_file": "external_validation/baseline_specs/cem_trajectory_composer.json",
+      "strict_evidence_boundary": "Passing this synthetic fixture is only a pre-rollout adapter smoke test. Strict evidence still requires external_validation/manifest.json, operator-supplied implementation provenance, checkpoint/config artifact hashes, raw JSONL rollout logs, render-backed videos, pairing/release audits, and audit_external_evidence.py --strict.",
+      "synthetic_inputs": {
+        "compute_budget": {
+          "simulator_query_budget": 4,
+          "wall_clock_seconds": 1.0
+        },
+        "config": {
+          "fixed_risk_budget": 0.15,
+          "method_name": "cem_trajectory_composer",
+          "policy_or_config_hash": "d8f8118febac98ba4d6da164ae25a3daf9069cb384753521208e84a23df3bd52"
+        },
+        "observation": {
+          "contact": {
+            "force_norm": 0.4,
+            "mode": "free_to_contact"
+          },
+          "scene_id": "synthetic_scene_000",
+          "state": {
+            "gripper_pose": [
+              0.0,
+              0.1,
+              0.2
+            ],
+            "object_pose": [
+              0.2,
+              0.1,
+              0.0
+            ]
+          },
+          "task_family": "peg_place_regrasp"
+        },
+        "outcome": {
+          "composition_cost": 0.1,
+          "realized_seam_breach": false,
+          "success": true,
+          "utility": 1.0
+        },
+        "terminal_samples": [
+          {
+            "features": [
+              0.1,
+              0.2,
+              0.3
+            ],
+            "sample_id": "sample_0",
+            "state_hash": "e5dd036dfcfd14f0244e3b9b5661a8374d165e38ff7b66378b9d0f527716c587"
+          },
+          {
+            "features": [
+              0.2,
+              0.3,
+              0.4
+            ],
+            "sample_id": "sample_1",
+            "state_hash": "9245bfa0ac319439954e742c8df06465d0992057f1807204e39e12332b1c8356"
+          }
+        ]
+      },
+      "synthetic_policy_or_config_hash": "d8f8118febac98ba4d6da164ae25a3daf9069cb384753521208e84a23df3bd52"
+    },
+    {
+      "acceptance_assertions": [
+        "adapter imports without side effects",
+        "initialize(config) returns a dict",
+        "propose(observation, terminal_samples, skill_i, skill_j, compute_budget) returns required proposal fields",
+        "predicted_seam_risk is numeric in [0, 1]",
+        "log(episode_context, proposal, outcome) returns required log fields",
+        "log.policy_or_config_hash is a 64-character SHA256 and matches the manifest-declared checkpoint_or_config_hash during strict validation",
+        "reset(reset_context) completes without raising NotImplementedError"
+      ],
+      "evidence_status": "synthetic_contract_fixture_not_rollout_evidence",
+      "fixture_id": "bf46e7a5a2ec8070",
+      "fixture_sha256": "c7470c879eecf7e6777b2c3b7788853c7b380be50c3e6664ebbe358b44675de9",
+      "method": "diffusion_skill_stitcher",
+      "not_external_evidence": true,
+      "required_api": [
+        "initialize",
+        "propose",
+        "log",
+        "reset"
+      ],
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "repair_action",
+        "success",
+        "utility"
+      ],
+      "required_proposal_fields": [
+        "decision",
+        "predicted_seam_risk",
+        "failure_diagnosis",
+        "repair_action"
+      ],
+      "role": "generative handoff sampler baseline",
+      "spec_file": "external_validation/baseline_specs/diffusion_skill_stitcher.json",
+      "strict_evidence_boundary": "Passing this synthetic fixture is only a pre-rollout adapter smoke test. Strict evidence still requires external_validation/manifest.json, operator-supplied implementation provenance, checkpoint/config artifact hashes, raw JSONL rollout logs, render-backed videos, pairing/release audits, and audit_external_evidence.py --strict.",
+      "synthetic_inputs": {
+        "compute_budget": {
+          "simulator_query_budget": 4,
+          "wall_clock_seconds": 1.0
+        },
+        "config": {
+          "fixed_risk_budget": 0.15,
+          "method_name": "diffusion_skill_stitcher",
+          "policy_or_config_hash": "e84371081b26c1396a7b4909e1c10cd5d9acf2069e4600bf84ce9e28a315457d"
+        },
+        "observation": {
+          "contact": {
+            "force_norm": 0.4,
+            "mode": "free_to_contact"
+          },
+          "scene_id": "synthetic_scene_000",
+          "state": {
+            "gripper_pose": [
+              0.0,
+              0.1,
+              0.2
+            ],
+            "object_pose": [
+              0.2,
+              0.1,
+              0.0
+            ]
+          },
+          "task_family": "peg_place_regrasp"
+        },
+        "outcome": {
+          "composition_cost": 0.1,
+          "realized_seam_breach": false,
+          "success": true,
+          "utility": 1.0
+        },
+        "terminal_samples": [
+          {
+            "features": [
+              0.1,
+              0.2,
+              0.3
+            ],
+            "sample_id": "sample_0",
+            "state_hash": "e5dd036dfcfd14f0244e3b9b5661a8374d165e38ff7b66378b9d0f527716c587"
+          },
+          {
+            "features": [
+              0.2,
+              0.3,
+              0.4
+            ],
+            "sample_id": "sample_1",
+            "state_hash": "9245bfa0ac319439954e742c8df06465d0992057f1807204e39e12332b1c8356"
+          }
+        ]
+      },
+      "synthetic_policy_or_config_hash": "e84371081b26c1396a7b4909e1c10cd5d9acf2069e4600bf84ce9e28a315457d"
+    },
+    {
+      "acceptance_assertions": [
+        "adapter imports without side effects",
+        "initialize(config) returns a dict",
+        "propose(observation, terminal_samples, skill_i, skill_j, compute_budget) returns required proposal fields",
+        "predicted_seam_risk is numeric in [0, 1]",
+        "log(episode_context, proposal, outcome) returns required log fields",
+        "log.policy_or_config_hash is a 64-character SHA256 and matches the manifest-declared checkpoint_or_config_hash during strict validation",
+        "reset(reset_context) completes without raising NotImplementedError"
+      ],
+      "evidence_status": "synthetic_contract_fixture_not_rollout_evidence",
+      "fixture_id": "dbe9b3013a79b75c",
+      "fixture_sha256": "2f0478bcd755bfa6a4351806015e8d88b5b12666e72f5c9dbfb3266d9fec3481",
+      "method": "energy_compatibility_heuristic",
+      "not_external_evidence": true,
+      "required_api": [
+        "initialize",
+        "propose",
+        "log",
+        "reset"
+      ],
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "repair_action",
+        "success",
+        "utility"
+      ],
+      "required_proposal_fields": [
+        "decision",
+        "predicted_seam_risk",
+        "failure_diagnosis",
+        "repair_action"
+      ],
+      "role": "non-certified energy heuristic baseline",
+      "spec_file": "external_validation/baseline_specs/energy_compatibility_heuristic.json",
+      "strict_evidence_boundary": "Passing this synthetic fixture is only a pre-rollout adapter smoke test. Strict evidence still requires external_validation/manifest.json, operator-supplied implementation provenance, checkpoint/config artifact hashes, raw JSONL rollout logs, render-backed videos, pairing/release audits, and audit_external_evidence.py --strict.",
+      "synthetic_inputs": {
+        "compute_budget": {
+          "simulator_query_budget": 4,
+          "wall_clock_seconds": 1.0
+        },
+        "config": {
+          "fixed_risk_budget": 0.15,
+          "method_name": "energy_compatibility_heuristic",
+          "policy_or_config_hash": "a825621f3d9611a92cf354f602ec7ecd63e4ef5afebaf9490e77ae4d0e9f03e4"
+        },
+        "observation": {
+          "contact": {
+            "force_norm": 0.4,
+            "mode": "free_to_contact"
+          },
+          "scene_id": "synthetic_scene_000",
+          "state": {
+            "gripper_pose": [
+              0.0,
+              0.1,
+              0.2
+            ],
+            "object_pose": [
+              0.2,
+              0.1,
+              0.0
+            ]
+          },
+          "task_family": "peg_place_regrasp"
+        },
+        "outcome": {
+          "composition_cost": 0.1,
+          "realized_seam_breach": false,
+          "success": true,
+          "utility": 1.0
+        },
+        "terminal_samples": [
+          {
+            "features": [
+              0.1,
+              0.2,
+              0.3
+            ],
+            "sample_id": "sample_0",
+            "state_hash": "e5dd036dfcfd14f0244e3b9b5661a8374d165e38ff7b66378b9d0f527716c587"
+          },
+          {
+            "features": [
+              0.2,
+              0.3,
+              0.4
+            ],
+            "sample_id": "sample_1",
+            "state_hash": "9245bfa0ac319439954e742c8df06465d0992057f1807204e39e12332b1c8356"
+          }
+        ]
+      },
+      "synthetic_policy_or_config_hash": "a825621f3d9611a92cf354f602ec7ecd63e4ef5afebaf9490e77ae4d0e9f03e4"
+    },
+    {
+      "acceptance_assertions": [
+        "adapter imports without side effects",
+        "initialize(config) returns a dict",
+        "propose(observation, terminal_samples, skill_i, skill_j, compute_budget) returns required proposal fields",
+        "predicted_seam_risk is numeric in [0, 1]",
+        "log(episode_context, proposal, outcome) returns required log fields",
+        "log.policy_or_config_hash is a 64-character SHA256 and matches the manifest-declared checkpoint_or_config_hash during strict validation",
+        "reset(reset_context) completes without raising NotImplementedError"
+      ],
+      "evidence_status": "synthetic_contract_fixture_not_rollout_evidence",
+      "fixture_id": "ab38043ad3a079bd",
+      "fixture_sha256": "ec7a556b3545a33a07c695965f4d1389d9e81af61309ce42ea6239ffd8812338",
+      "method": "greedy_module_sequence",
+      "not_external_evidence": true,
+      "required_api": [
+        "initialize",
+        "propose",
+        "log",
+        "reset"
+      ],
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "repair_action",
+        "success",
+        "utility"
+      ],
+      "required_proposal_fields": [
+        "decision",
+        "predicted_seam_risk",
+        "failure_diagnosis",
+        "repair_action"
+      ],
+      "role": "open-loop skill graph baseline",
+      "spec_file": "external_validation/baseline_specs/greedy_module_sequence.json",
+      "strict_evidence_boundary": "Passing this synthetic fixture is only a pre-rollout adapter smoke test. Strict evidence still requires external_validation/manifest.json, operator-supplied implementation provenance, checkpoint/config artifact hashes, raw JSONL rollout logs, render-backed videos, pairing/release audits, and audit_external_evidence.py --strict.",
+      "synthetic_inputs": {
+        "compute_budget": {
+          "simulator_query_budget": 4,
+          "wall_clock_seconds": 1.0
+        },
+        "config": {
+          "fixed_risk_budget": 0.15,
+          "method_name": "greedy_module_sequence",
+          "policy_or_config_hash": "e70341dab0fe0c55d9334f24194363d842d7cd47f5bc911dfc468193159bd165"
+        },
+        "observation": {
+          "contact": {
+            "force_norm": 0.4,
+            "mode": "free_to_contact"
+          },
+          "scene_id": "synthetic_scene_000",
+          "state": {
+            "gripper_pose": [
+              0.0,
+              0.1,
+              0.2
+            ],
+            "object_pose": [
+              0.2,
+              0.1,
+              0.0
+            ]
+          },
+          "task_family": "peg_place_regrasp"
+        },
+        "outcome": {
+          "composition_cost": 0.1,
+          "realized_seam_breach": false,
+          "success": true,
+          "utility": 1.0
+        },
+        "terminal_samples": [
+          {
+            "features": [
+              0.1,
+              0.2,
+              0.3
+            ],
+            "sample_id": "sample_0",
+            "state_hash": "e5dd036dfcfd14f0244e3b9b5661a8374d165e38ff7b66378b9d0f527716c587"
+          },
+          {
+            "features": [
+              0.2,
+              0.3,
+              0.4
+            ],
+            "sample_id": "sample_1",
+            "state_hash": "9245bfa0ac319439954e742c8df06465d0992057f1807204e39e12332b1c8356"
+          }
+        ]
+      },
+      "synthetic_policy_or_config_hash": "e70341dab0fe0c55d9334f24194363d842d7cd47f5bc911dfc468193159bd165"
+    },
+    {
+      "acceptance_assertions": [
+        "adapter imports without side effects",
+        "initialize(config) returns a dict",
+        "propose(observation, terminal_samples, skill_i, skill_j, compute_budget) returns required proposal fields",
+        "predicted_seam_risk is numeric in [0, 1]",
+        "log(episode_context, proposal, outcome) returns required log fields",
+        "log.policy_or_config_hash is a 64-character SHA256 and matches the manifest-declared checkpoint_or_config_hash during strict validation",
+        "reset(reset_context) completes without raising NotImplementedError"
+      ],
+      "evidence_status": "synthetic_contract_fixture_not_rollout_evidence",
+      "fixture_id": "695ef6cf59f11a37",
+      "fixture_sha256": "410db4e7c6cc110c5a703e3dafa8e96e7307788ffaa4c832e8de4fbcbb01ccd1",
+      "method": "option_graph_planner",
+      "not_external_evidence": true,
+      "required_api": [
+        "initialize",
+        "propose",
+        "log",
+        "reset"
+      ],
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "repair_action",
+        "success",
+        "utility"
+      ],
+      "required_proposal_fields": [
+        "decision",
+        "predicted_seam_risk",
+        "failure_diagnosis",
+        "repair_action"
+      ],
+      "role": "temporal-abstraction planning baseline",
+      "spec_file": "external_validation/baseline_specs/option_graph_planner.json",
+      "strict_evidence_boundary": "Passing this synthetic fixture is only a pre-rollout adapter smoke test. Strict evidence still requires external_validation/manifest.json, operator-supplied implementation provenance, checkpoint/config artifact hashes, raw JSONL rollout logs, render-backed videos, pairing/release audits, and audit_external_evidence.py --strict.",
+      "synthetic_inputs": {
+        "compute_budget": {
+          "simulator_query_budget": 4,
+          "wall_clock_seconds": 1.0
+        },
+        "config": {
+          "fixed_risk_budget": 0.15,
+          "method_name": "option_graph_planner",
+          "policy_or_config_hash": "74aac2f748ba562a8875c06493033b3f43d3d008cbf36976873b62ec6b493534"
+        },
+        "observation": {
+          "contact": {
+            "force_norm": 0.4,
+            "mode": "free_to_contact"
+          },
+          "scene_id": "synthetic_scene_000",
+          "state": {
+            "gripper_pose": [
+              0.0,
+              0.1,
+              0.2
+            ],
+            "object_pose": [
+              0.2,
+              0.1,
+              0.0
+            ]
+          },
+          "task_family": "peg_place_regrasp"
+        },
+        "outcome": {
+          "composition_cost": 0.1,
+          "realized_seam_breach": false,
+          "success": true,
+          "utility": 1.0
+        },
+        "terminal_samples": [
+          {
+            "features": [
+              0.1,
+              0.2,
+              0.3
+            ],
+            "sample_id": "sample_0",
+            "state_hash": "e5dd036dfcfd14f0244e3b9b5661a8374d165e38ff7b66378b9d0f527716c587"
+          },
+          {
+            "features": [
+              0.2,
+              0.3,
+              0.4
+            ],
+            "sample_id": "sample_1",
+            "state_hash": "9245bfa0ac319439954e742c8df06465d0992057f1807204e39e12332b1c8356"
+          }
+        ]
+      },
+      "synthetic_policy_or_config_hash": "74aac2f748ba562a8875c06493033b3f43d3d008cbf36976873b62ec6b493534"
+    },
+    {
+      "acceptance_assertions": [
+        "adapter imports without side effects",
+        "initialize(config) returns a dict",
+        "propose(observation, terminal_samples, skill_i, skill_j, compute_budget) returns required proposal fields",
+        "predicted_seam_risk is numeric in [0, 1]",
+        "log(episode_context, proposal, outcome) returns required log fields",
+        "log.policy_or_config_hash is a 64-character SHA256 and matches the manifest-declared checkpoint_or_config_hash during strict validation",
+        "reset(reset_context) completes without raising NotImplementedError"
+      ],
+      "evidence_status": "synthetic_contract_fixture_not_rollout_evidence",
+      "fixture_id": "8d47d553b0e71c72",
+      "fixture_sha256": "9f095d066d4edeb70f9ab5f215c6b6c37df10691fa41c0c32c196d344936ee69",
+      "method": "proposed_energy_landscape_composer_v4_1",
+      "not_external_evidence": true,
+      "required_api": [
+        "initialize",
+        "propose",
+        "log",
+        "reset"
+      ],
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "repair_action",
+        "success",
+        "utility"
+      ],
+      "required_proposal_fields": [
+        "decision",
+        "predicted_seam_risk",
+        "failure_diagnosis",
+        "repair_action"
+      ],
+      "role": "previous proposed method baseline",
+      "spec_file": "external_validation/baseline_specs/proposed_energy_landscape_composer_v4_1.json",
+      "strict_evidence_boundary": "Passing this synthetic fixture is only a pre-rollout adapter smoke test. Strict evidence still requires external_validation/manifest.json, operator-supplied implementation provenance, checkpoint/config artifact hashes, raw JSONL rollout logs, render-backed videos, pairing/release audits, and audit_external_evidence.py --strict.",
+      "synthetic_inputs": {
+        "compute_budget": {
+          "simulator_query_budget": 4,
+          "wall_clock_seconds": 1.0
+        },
+        "config": {
+          "fixed_risk_budget": 0.15,
+          "method_name": "proposed_energy_landscape_composer_v4_1",
+          "policy_or_config_hash": "efae6646486f6f3cb1d8820034d8623df478e93537e8eb57a63555f69317536a"
+        },
+        "observation": {
+          "contact": {
+            "force_norm": 0.4,
+            "mode": "free_to_contact"
+          },
+          "scene_id": "synthetic_scene_000",
+          "state": {
+            "gripper_pose": [
+              0.0,
+              0.1,
+              0.2
+            ],
+            "object_pose": [
+              0.2,
+              0.1,
+              0.0
+            ]
+          },
+          "task_family": "peg_place_regrasp"
+        },
+        "outcome": {
+          "composition_cost": 0.1,
+          "realized_seam_breach": false,
+          "success": true,
+          "utility": 1.0
+        },
+        "terminal_samples": [
+          {
+            "features": [
+              0.1,
+              0.2,
+              0.3
+            ],
+            "sample_id": "sample_0",
+            "state_hash": "e5dd036dfcfd14f0244e3b9b5661a8374d165e38ff7b66378b9d0f527716c587"
+          },
+          {
+            "features": [
+              0.2,
+              0.3,
+              0.4
+            ],
+            "sample_id": "sample_1",
+            "state_hash": "9245bfa0ac319439954e742c8df06465d0992057f1807204e39e12332b1c8356"
+          }
+        ]
+      },
+      "synthetic_policy_or_config_hash": "efae6646486f6f3cb1d8820034d8623df478e93537e8eb57a63555f69317536a"
+    },
+    {
+      "acceptance_assertions": [
+        "adapter imports without side effects",
+        "initialize(config) returns a dict",
+        "propose(observation, terminal_samples, skill_i, skill_j, compute_budget) returns required proposal fields",
+        "predicted_seam_risk is numeric in [0, 1]",
+        "log(episode_context, proposal, outcome) returns required log fields",
+        "log.policy_or_config_hash is a 64-character SHA256 and matches the manifest-declared checkpoint_or_config_hash during strict validation",
+        "reset(reset_context) completes without raising NotImplementedError"
+      ],
+      "evidence_status": "synthetic_contract_fixture_not_rollout_evidence",
+      "fixture_id": "046a1b0e8e104c7c",
+      "fixture_sha256": "c471d77e6bdcc21dfbfbf1ebb5f933f6d57ccbec5c26c0ccbacba780955e893c",
+      "method": "residual_rl_composer",
+      "not_external_evidence": true,
+      "required_api": [
+        "initialize",
+        "propose",
+        "log",
+        "reset"
+      ],
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "repair_action",
+        "success",
+        "utility"
+      ],
+      "required_proposal_fields": [
+        "decision",
+        "predicted_seam_risk",
+        "failure_diagnosis",
+        "repair_action"
+      ],
+      "role": "learned residual repair baseline",
+      "spec_file": "external_validation/baseline_specs/residual_rl_composer.json",
+      "strict_evidence_boundary": "Passing this synthetic fixture is only a pre-rollout adapter smoke test. Strict evidence still requires external_validation/manifest.json, operator-supplied implementation provenance, checkpoint/config artifact hashes, raw JSONL rollout logs, render-backed videos, pairing/release audits, and audit_external_evidence.py --strict.",
+      "synthetic_inputs": {
+        "compute_budget": {
+          "simulator_query_budget": 4,
+          "wall_clock_seconds": 1.0
+        },
+        "config": {
+          "fixed_risk_budget": 0.15,
+          "method_name": "residual_rl_composer",
+          "policy_or_config_hash": "d0754f7f472b9fafbb9f9c466cffcb67acdf0ec2c42c044150fc3a49cfa67ed8"
+        },
+        "observation": {
+          "contact": {
+            "force_norm": 0.4,
+            "mode": "free_to_contact"
+          },
+          "scene_id": "synthetic_scene_000",
+          "state": {
+            "gripper_pose": [
+              0.0,
+              0.1,
+              0.2
+            ],
+            "object_pose": [
+              0.2,
+              0.1,
+              0.0
+            ]
+          },
+          "task_family": "peg_place_regrasp"
+        },
+        "outcome": {
+          "composition_cost": 0.1,
+          "realized_seam_breach": false,
+          "success": true,
+          "utility": 1.0
+        },
+        "terminal_samples": [
+          {
+            "features": [
+              0.1,
+              0.2,
+              0.3
+            ],
+            "sample_id": "sample_0",
+            "state_hash": "e5dd036dfcfd14f0244e3b9b5661a8374d165e38ff7b66378b9d0f527716c587"
+          },
+          {
+            "features": [
+              0.2,
+              0.3,
+              0.4
+            ],
+            "sample_id": "sample_1",
+            "state_hash": "9245bfa0ac319439954e742c8df06465d0992057f1807204e39e12332b1c8356"
+          }
+        ]
+      },
+      "synthetic_policy_or_config_hash": "d0754f7f472b9fafbb9f9c466cffcb67acdf0ec2c42c044150fc3a49cfa67ed8"
+    },
+    {
+      "acceptance_assertions": [
+        "adapter imports without side effects",
+        "initialize(config) returns a dict",
+        "propose(observation, terminal_samples, skill_i, skill_j, compute_budget) returns required proposal fields",
+        "predicted_seam_risk is numeric in [0, 1]",
+        "log(episode_context, proposal, outcome) returns required log fields",
+        "log.policy_or_config_hash is a 64-character SHA256 and matches the manifest-declared checkpoint_or_config_hash during strict validation",
+        "reset(reset_context) completes without raising NotImplementedError"
+      ],
+      "evidence_status": "synthetic_contract_fixture_not_rollout_evidence",
+      "fixture_id": "b205384dad3b50bc",
+      "fixture_sha256": "849d65c6acfd228726521e74a7aaa4873ba3aa27b50ce53f3cb2c99bc2b44030",
+      "method": "stable_dmp_handoff",
+      "not_external_evidence": true,
+      "required_api": [
+        "initialize",
+        "propose",
+        "log",
+        "reset"
+      ],
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "repair_action",
+        "success",
+        "utility"
+      ],
+      "required_proposal_fields": [
+        "decision",
+        "predicted_seam_risk",
+        "failure_diagnosis",
+        "repair_action"
+      ],
+      "role": "stable dynamics handoff baseline",
+      "spec_file": "external_validation/baseline_specs/stable_dmp_handoff.json",
+      "strict_evidence_boundary": "Passing this synthetic fixture is only a pre-rollout adapter smoke test. Strict evidence still requires external_validation/manifest.json, operator-supplied implementation provenance, checkpoint/config artifact hashes, raw JSONL rollout logs, render-backed videos, pairing/release audits, and audit_external_evidence.py --strict.",
+      "synthetic_inputs": {
+        "compute_budget": {
+          "simulator_query_budget": 4,
+          "wall_clock_seconds": 1.0
+        },
+        "config": {
+          "fixed_risk_budget": 0.15,
+          "method_name": "stable_dmp_handoff",
+          "policy_or_config_hash": "70d5ce10dc8723195b17f22941f033cae042ea5658aca46168be50496a8d0784"
+        },
+        "observation": {
+          "contact": {
+            "force_norm": 0.4,
+            "mode": "free_to_contact"
+          },
+          "scene_id": "synthetic_scene_000",
+          "state": {
+            "gripper_pose": [
+              0.0,
+              0.1,
+              0.2
+            ],
+            "object_pose": [
+              0.2,
+              0.1,
+              0.0
+            ]
+          },
+          "task_family": "peg_place_regrasp"
+        },
+        "outcome": {
+          "composition_cost": 0.1,
+          "realized_seam_breach": false,
+          "success": true,
+          "utility": 1.0
+        },
+        "terminal_samples": [
+          {
+            "features": [
+              0.1,
+              0.2,
+              0.3
+            ],
+            "sample_id": "sample_0",
+            "state_hash": "e5dd036dfcfd14f0244e3b9b5661a8374d165e38ff7b66378b9d0f527716c587"
+          },
+          {
+            "features": [
+              0.2,
+              0.3,
+              0.4
+            ],
+            "sample_id": "sample_1",
+            "state_hash": "9245bfa0ac319439954e742c8df06465d0992057f1807204e39e12332b1c8356"
+          }
+        ]
+      },
+      "synthetic_policy_or_config_hash": "70d5ce10dc8723195b17f22941f033cae042ea5658aca46168be50496a8d0784"
+    },
+    {
+      "acceptance_assertions": [
+        "adapter imports without side effects",
+        "initialize(config) returns a dict",
+        "propose(observation, terminal_samples, skill_i, skill_j, compute_budget) returns required proposal fields",
+        "predicted_seam_risk is numeric in [0, 1]",
+        "log(episode_context, proposal, outcome) returns required log fields",
+        "log.policy_or_config_hash is a 64-character SHA256 and matches the manifest-declared checkpoint_or_config_hash during strict validation",
+        "reset(reset_context) completes without raising NotImplementedError"
+      ],
+      "evidence_status": "synthetic_contract_fixture_not_rollout_evidence",
+      "fixture_id": "33476b661e28219b",
+      "fixture_sha256": "8668882e21de76ce264b282571f8711923eded56e2b44cc8e00ca25c6c26a868",
+      "method": "tamp_feasibility_screen",
+      "not_external_evidence": true,
+      "required_api": [
+        "initialize",
+        "propose",
+        "log",
+        "reset"
+      ],
+      "required_log_fields": [
+        "decision",
+        "failure_diagnosis",
+        "method",
+        "policy_or_config_hash",
+        "predicted_seam_risk",
+        "realized_seam_breach",
+        "repair_action",
+        "success",
+        "utility"
+      ],
+      "required_proposal_fields": [
+        "decision",
+        "predicted_seam_risk",
+        "failure_diagnosis",
+        "repair_action"
+      ],
+      "role": "task-and-motion feasibility baseline",
+      "spec_file": "external_validation/baseline_specs/tamp_feasibility_screen.json",
+      "strict_evidence_boundary": "Passing this synthetic fixture is only a pre-rollout adapter smoke test. Strict evidence still requires external_validation/manifest.json, operator-supplied implementation provenance, checkpoint/config artifact hashes, raw JSONL rollout logs, render-backed videos, pairing/release audits, and audit_external_evidence.py --strict.",
+      "synthetic_inputs": {
+        "compute_budget": {
+          "simulator_query_budget": 4,
+          "wall_clock_seconds": 1.0
+        },
+        "config": {
+          "fixed_risk_budget": 0.15,
+          "method_name": "tamp_feasibility_screen",
+          "policy_or_config_hash": "69b7403ed24794ade7449afede0768a417840e1af5e3a5c82a8390073cbb0e4f"
+        },
+        "observation": {
+          "contact": {
+            "force_norm": 0.4,
+            "mode": "free_to_contact"
+          },
+          "scene_id": "synthetic_scene_000",
+          "state": {
+            "gripper_pose": [
+              0.0,
+              0.1,
+              0.2
+            ],
+            "object_pose": [
+              0.2,
+              0.1,
+              0.0
+            ]
+          },
+          "task_family": "peg_place_regrasp"
+        },
+        "outcome": {
+          "composition_cost": 0.1,
+          "realized_seam_breach": false,
+          "success": true,
+          "utility": 1.0
+        },
+        "terminal_samples": [
+          {
+            "features": [
+              0.1,
+              0.2,
+              0.3
+            ],
+            "sample_id": "sample_0",
+            "state_hash": "e5dd036dfcfd14f0244e3b9b5661a8374d165e38ff7b66378b9d0f527716c587"
+          },
+          {
+            "features": [
+              0.2,
+              0.3,
+              0.4
+            ],
+            "sample_id": "sample_1",
+            "state_hash": "9245bfa0ac319439954e742c8df06465d0992057f1807204e39e12332b1c8356"
+          }
+        ]
+      },
+      "synthetic_policy_or_config_hash": "69b7403ed24794ade7449afede0768a417840e1af5e3a5c82a8390073cbb0e4f"
+    }
+  ],
+  "not_external_evidence": true,
+  "required_api": [
+    "initialize",
+    "propose",
+    "log",
+    "reset"
+  ],
+  "required_proposal_fields": [
+    "decision",
+    "predicted_seam_risk",
+    "failure_diagnosis",
+    "repair_action"
+  ],
+  "source_packet": "external_validation/method_implementation_packet.json",
+  "source_validator": "scripts/validate_external_adapters.py",
+  "strict_adapter_evidence_ready": false,
+  "version": "adapter_acceptance_fixtures_v1"
+}

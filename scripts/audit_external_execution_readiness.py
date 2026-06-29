@@ -262,6 +262,9 @@ def main() -> int:
         and method_checks.get("manifest_entry_templates_cover_required_hash_fields") is True
         and method_checks.get("work_orders_forbid_scaffolds_and_reference_adapters") is True
         and method_checks.get("policy_or_config_hash_in_logs_required") is True
+        and method_checks.get("adapter_acceptance_fixtures_cover_non_oracle_methods") is True
+        and method_checks.get("adapter_acceptance_fixtures_define_contract") is True
+        and method_checks.get("work_orders_reference_acceptance_fixtures") is True
         and method_checks.get("reference_adapter_provenance_covers_non_oracle_methods") is True
         and method_checks.get("reference_adapter_hashes_recorded") is True
         and method_checks.get("reference_adapters_marked_non_evidence") is True
@@ -276,8 +279,11 @@ def main() -> int:
         and (EXTERNAL / "method_implementation_packet.md").exists()
         and (EXTERNAL / "method_implementation_work_orders.csv").exists()
         and (EXTERNAL / "method_reference_provenance.csv").exists()
+        and (EXTERNAL / "adapter_acceptance_fixtures.json").exists()
+        and (EXTERNAL / "adapter_acceptance_fixtures.md").exists()
+        and (EXTERNAL / "adapter_acceptance_fixtures.csv").exists()
         and (ROOT / "scripts" / "build_external_method_implementation_packet.py").exists(),
-        "method packet, work orders, reference provenance, builder, and strict command order are present",
+        "method packet, work orders, adapter fixtures, reference provenance, builder, and strict command order are present",
     )
 
     fidelity_ok, fidelity, fidelity_detail = passed_json(
@@ -1243,6 +1249,9 @@ def main() -> int:
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
         EXTERNAL / "method_reference_provenance.csv",
+        EXTERNAL / "adapter_acceptance_fixtures.json",
+        EXTERNAL / "adapter_acceptance_fixtures.md",
+        EXTERNAL / "adapter_acceptance_fixtures.csv",
         EXTERNAL / "platform_qualification_checklist.md",
         EXTERNAL / "independent_validation_route.md",
         EXTERNAL / "independent_validation_route_matrix.csv",

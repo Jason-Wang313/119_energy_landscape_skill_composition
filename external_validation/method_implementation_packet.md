@@ -3,9 +3,18 @@
 Not evidence: `true`.
 Non-oracle method work orders: `11`.
 Reference adapter provenance records: `11`.
+Adapter acceptance fixtures: `11`.
 Strict adapter evidence ready: `false`.
 
 This packet converts the missing independent baseline layer into concrete implementation work orders. It does not provide real implementations, checkpoints, configs, logs, videos, or manifest evidence.
+
+## Adapter Acceptance Fixtures (Non-Evidence)
+
+- JSON: `external_validation/adapter_acceptance_fixtures.json`
+- Markdown: `external_validation/adapter_acceptance_fixtures.md`
+- CSV: `external_validation/adapter_acceptance_fixtures.csv`
+
+The fixture packet gives each independent implementation a synthetic smoke-test input and required adapter/log fields before rollout collection. Passing these fixtures does not count as external evidence; strict evidence still requires manifest-declared implementations, checkpoint/config hashes, raw JSONL logs, render-backed videos, and final strict audits.
 
 ## Reference Adapter Provenance (Non-Evidence)
 

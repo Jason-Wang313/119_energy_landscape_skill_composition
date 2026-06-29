@@ -1,4 +1,8 @@
 {
+  "adapter_acceptance_fixture_count": 11,
+  "adapter_acceptance_fixtures_csv": "external_validation/adapter_acceptance_fixtures.csv",
+  "adapter_acceptance_fixtures_json": "external_validation/adapter_acceptance_fixtures.json",
+  "adapter_acceptance_fixtures_md": "external_validation/adapter_acceptance_fixtures.md",
   "adapter_evidence_state": {
     "adapter_count": 0,
     "strict_adapter_audit_passed": false
@@ -517,6 +521,8 @@
         "python scripts\\audit_external_pairing_integrity.py --strict",
         "python scripts\\audit_external_evidence.py --strict"
       ],
+      "adapter_acceptance_fixture_id": "9f068fce6e0dbb71",
+      "adapter_acceptance_fixture_path": "external_validation/adapter_acceptance_fixtures.json",
       "allowed_inputs": [
         "terminal samples",
         "basin posterior",
@@ -600,6 +606,8 @@
         "python scripts\\audit_external_pairing_integrity.py --strict",
         "python scripts\\audit_external_evidence.py --strict"
       ],
+      "adapter_acceptance_fixture_id": "c687049fe1e42b8e",
+      "adapter_acceptance_fixture_path": "external_validation/adapter_acceptance_fixtures.json",
       "allowed_inputs": [
         "demonstration policy or checkpoint",
         "current observation",
@@ -682,6 +690,8 @@
         "python scripts\\audit_external_pairing_integrity.py --strict",
         "python scripts\\audit_external_evidence.py --strict"
       ],
+      "adapter_acceptance_fixture_id": "b304bd717f821f4f",
+      "adapter_acceptance_fixture_path": "external_validation/adapter_acceptance_fixtures.json",
       "allowed_inputs": [
         "same rollout/simulation budget",
         "current observation",
@@ -764,6 +774,8 @@
         "python scripts\\audit_external_pairing_integrity.py --strict",
         "python scripts\\audit_external_evidence.py --strict"
       ],
+      "adapter_acceptance_fixture_id": "bf46e7a5a2ec8070",
+      "adapter_acceptance_fixture_path": "external_validation/adapter_acceptance_fixtures.json",
       "allowed_inputs": [
         "diffusion/generative model checkpoint",
         "current observation",
@@ -844,6 +856,8 @@
         "python scripts\\audit_external_pairing_integrity.py --strict",
         "python scripts\\audit_external_evidence.py --strict"
       ],
+      "adapter_acceptance_fixture_id": "dbe9b3013a79b75c",
+      "adapter_acceptance_fixture_path": "external_validation/adapter_acceptance_fixtures.json",
       "allowed_inputs": [
         "same energy estimates available to all non-oracle methods",
         "current observation"
@@ -924,6 +938,8 @@
         "python scripts\\audit_external_pairing_integrity.py --strict",
         "python scripts\\audit_external_evidence.py --strict"
       ],
+      "adapter_acceptance_fixture_id": "ab38043ad3a079bd",
+      "adapter_acceptance_fixture_path": "external_validation/adapter_acceptance_fixtures.json",
       "allowed_inputs": [
         "skill library",
         "current observation",
@@ -1007,6 +1023,8 @@
         "python scripts\\audit_external_pairing_integrity.py --strict",
         "python scripts\\audit_external_evidence.py --strict"
       ],
+      "adapter_acceptance_fixture_id": "695ef6cf59f11a37",
+      "adapter_acceptance_fixture_path": "external_validation/adapter_acceptance_fixtures.json",
       "allowed_inputs": [
         "option graph",
         "current observation",
@@ -1089,6 +1107,8 @@
         "python scripts\\audit_external_pairing_integrity.py --strict",
         "python scripts\\audit_external_evidence.py --strict"
       ],
+      "adapter_acceptance_fixture_id": "8d47d553b0e71c72",
+      "adapter_acceptance_fixture_path": "external_validation/adapter_acceptance_fixtures.json",
       "allowed_inputs": [
         "same energy estimates",
         "current observation",
@@ -1170,6 +1190,8 @@
         "python scripts\\audit_external_pairing_integrity.py --strict",
         "python scripts\\audit_external_evidence.py --strict"
       ],
+      "adapter_acceptance_fixture_id": "046a1b0e8e104c7c",
+      "adapter_acceptance_fixture_path": "external_validation/adapter_acceptance_fixtures.json",
       "allowed_inputs": [
         "residual policy checkpoint",
         "current observation",
@@ -1251,6 +1273,8 @@
         "python scripts\\audit_external_pairing_integrity.py --strict",
         "python scripts\\audit_external_evidence.py --strict"
       ],
+      "adapter_acceptance_fixture_id": "b205384dad3b50bc",
+      "adapter_acceptance_fixture_path": "external_validation/adapter_acceptance_fixtures.json",
       "allowed_inputs": [
         "DMP or stable dynamics parameters",
         "current observation",
@@ -1332,6 +1356,8 @@
         "python scripts\\audit_external_pairing_integrity.py --strict",
         "python scripts\\audit_external_evidence.py --strict"
       ],
+      "adapter_acceptance_fixture_id": "33476b661e28219b",
+      "adapter_acceptance_fixture_path": "external_validation/adapter_acceptance_fixtures.json",
       "allowed_inputs": [
         "task symbols",
         "geometric scene state",

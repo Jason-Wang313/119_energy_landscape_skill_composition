@@ -118,6 +118,9 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
         EXTERNAL / "method_reference_provenance.csv",
+        EXTERNAL / "adapter_acceptance_fixtures.json",
+        EXTERNAL / "adapter_acceptance_fixtures.md",
+        EXTERNAL / "adapter_acceptance_fixtures.csv",
         EXTERNAL / "manifest_assembly_checklist.csv",
         EXTERNAL / "manifest_precollection_draft.json",
         EXTERNAL / "manifest_precollection_draft.md",
@@ -876,6 +879,9 @@ def build_payload() -> dict[str, Any]:
         and method_checks.get("manifest_entry_templates_cover_required_hash_fields") is True
         and method_checks.get("work_orders_forbid_scaffolds_and_reference_adapters") is True
         and method_checks.get("policy_or_config_hash_in_logs_required") is True
+        and method_checks.get("adapter_acceptance_fixtures_cover_non_oracle_methods") is True
+        and method_checks.get("adapter_acceptance_fixtures_define_contract") is True
+        and method_checks.get("work_orders_reference_acceptance_fixtures") is True
         and method_checks.get("reference_adapter_provenance_covers_non_oracle_methods") is True
         and method_checks.get("reference_adapter_hashes_recorded") is True
         and method_checks.get("reference_adapters_marked_non_evidence") is True
@@ -884,6 +890,9 @@ def build_payload() -> dict[str, Any]:
         and "external_validation/method_implementation_packet.md" in paths
         and "external_validation/method_implementation_work_orders.csv" in paths
         and "external_validation/method_reference_provenance.csv" in paths
+        and "external_validation/adapter_acceptance_fixtures.json" in paths
+        and "external_validation/adapter_acceptance_fixtures.md" in paths
+        and "external_validation/adapter_acceptance_fixtures.csv" in paths
         and "results/external_method_implementation_audit.json" in paths
         and "scripts/build_external_method_implementation_packet.py" in paths,
         (

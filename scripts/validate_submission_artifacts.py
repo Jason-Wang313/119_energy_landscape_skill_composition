@@ -1668,6 +1668,9 @@ def main():
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
         EXTERNAL / "method_reference_provenance.csv",
+        EXTERNAL / "adapter_acceptance_fixtures.json",
+        EXTERNAL / "adapter_acceptance_fixtures.md",
+        EXTERNAL / "adapter_acceptance_fixtures.csv",
         RESULTS / "external_method_implementation_audit.json",
         RESULTS / "external_method_implementation_audit.md",
         ROOT / "scripts" / "build_external_method_implementation_packet.py",
@@ -1690,6 +1693,38 @@ def main():
         fail("external method implementation packet has too few reference provenance records")
     if method_packet.get("reference_adapter_provenance_csv") != "external_validation/method_reference_provenance.csv":
         fail("external method implementation packet should point to method_reference_provenance.csv")
+    if int(method_packet.get("adapter_acceptance_fixture_count", 0) or 0) < 11:
+        fail("external method implementation packet has too few adapter acceptance fixtures")
+    if method_packet.get("adapter_acceptance_fixtures_json") != "external_validation/adapter_acceptance_fixtures.json":
+        fail("external method implementation packet should point to adapter_acceptance_fixtures.json")
+    fixture_packet = json.loads((EXTERNAL / "adapter_acceptance_fixtures.json").read_text(encoding="utf-8"))
+    if fixture_packet.get("version") != "adapter_acceptance_fixtures_v1":
+        fail("adapter acceptance fixture packet version mismatch")
+    if fixture_packet.get("not_external_evidence") is not True:
+        fail("adapter acceptance fixtures must be marked non-evidence")
+    if fixture_packet.get("strict_adapter_evidence_ready") is not False:
+        fail("adapter acceptance fixtures must not claim strict adapter evidence")
+    fixtures = fixture_packet.get("fixtures", []) or []
+    if len(fixtures) < 11:
+        fail("adapter acceptance fixture packet must cover all non-oracle methods")
+    fixture_methods = {fixture.get("method") for fixture in fixtures}
+    if "oracle_basin_composer" in fixture_methods:
+        fail("adapter acceptance fixtures must not include the oracle method")
+    for fixture in fixtures:
+        if fixture.get("not_external_evidence") is not True:
+            fail("each adapter acceptance fixture must be marked non-evidence")
+        if fixture.get("evidence_status") != "synthetic_contract_fixture_not_rollout_evidence":
+            fail("adapter acceptance fixtures must keep synthetic non-evidence status")
+        if len(str(fixture.get("fixture_sha256", ""))) != 64:
+            fail("adapter acceptance fixtures must include a 64-character fixture hash")
+        if len(str(fixture.get("synthetic_policy_or_config_hash", ""))) != 64:
+            fail("adapter acceptance fixtures must include a synthetic policy/config hash")
+        if not {"initialize", "propose", "log", "reset"}.issubset(set(fixture.get("required_api", []) or [])):
+            fail("adapter acceptance fixtures must declare the full adapter API")
+        if not {"decision", "predicted_seam_risk", "failure_diagnosis", "repair_action"}.issubset(set(fixture.get("required_proposal_fields", []) or [])):
+            fail("adapter acceptance fixtures must declare proposal fields")
+        if not {"policy_or_config_hash", "predicted_seam_risk", "decision", "failure_diagnosis"}.issubset(set(fixture.get("required_log_fields", []) or [])):
+            fail("adapter acceptance fixtures must declare core log fields")
     reference_provenance = method_packet.get("reference_adapter_provenance", []) or []
     if len(reference_provenance) < 11:
         fail("external method implementation packet missing reference adapter provenance")
@@ -1720,6 +1755,11 @@ def main():
     work_order_methods = {order.get("method") for order in method_packet.get("work_orders", []) or []}
     if "oracle_basin_composer" in work_order_methods:
         fail("external method implementation packet must not create an oracle work order")
+    for order in method_packet.get("work_orders", []) or []:
+        if order.get("adapter_acceptance_fixture_path") != "external_validation/adapter_acceptance_fixtures.json":
+            fail("external method work orders must reference adapter_acceptance_fixtures.json")
+        if not order.get("adapter_acceptance_fixture_id"):
+            fail("external method work orders must reference an adapter acceptance fixture id")
     method_command_text = "\n".join(method_packet.get("strict_acceptance_commands", []) or [])
     for fragment in (
         "build_external_method_implementation_packet.py",
@@ -1753,6 +1793,9 @@ def main():
         "manifest_entry_templates_require_independent_provenance",
         "work_orders_forbid_scaffolds_and_reference_adapters",
         "policy_or_config_hash_in_logs_required",
+        "adapter_acceptance_fixtures_cover_non_oracle_methods",
+        "adapter_acceptance_fixtures_define_contract",
+        "work_orders_reference_acceptance_fixtures",
         "reference_adapter_provenance_covers_non_oracle_methods",
         "reference_adapter_hashes_recorded",
         "reference_adapters_marked_non_evidence",

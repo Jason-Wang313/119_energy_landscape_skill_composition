@@ -339,6 +339,9 @@ External method implementation packet:
 - `external_validation/method_implementation_packet.json`
 - `external_validation/method_implementation_packet.md`
 - `external_validation/method_implementation_work_orders.csv`
+- `external_validation/adapter_acceptance_fixtures.json`
+- `external_validation/adapter_acceptance_fixtures.md`
+- `external_validation/adapter_acceptance_fixtures.csv`
 - `results/external_method_implementation_audit.json`
 - `results/external_method_implementation_audit.md`
 

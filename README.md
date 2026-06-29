@@ -106,6 +106,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - ManiSkill render machine qualification packet: `results/maniskill_render_machine_qualification.md`
 - ManiSkill pilot runtime liveness audit: `results/maniskill_pilot_runtime_liveness_audit.md`
 - External method implementation packet: `external_validation/method_implementation_packet.md`
+- Adapter acceptance fixtures: `external_validation/adapter_acceptance_fixtures.md`
 - External method implementation audit: `results/external_method_implementation_audit.md`
 - External method reference provenance: `external_validation/method_reference_provenance.csv`
 - Independent validation route: `external_validation/independent_validation_route.md`

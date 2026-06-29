@@ -40,6 +40,7 @@
 - External config validator: `scripts/validate_external_configs.py`
 - External baseline contract builder: `scripts/build_external_baseline_contract.py`
 - External method implementation packet builder: `scripts/build_external_method_implementation_packet.py`
+  - Emits adapter acceptance fixtures: `external_validation/adapter_acceptance_fixtures.{json,md,csv}`
 - External adapter scaffold builder: `scripts/build_external_adapter_scaffolds.py`
 - External reference adapter builder: `scripts/build_external_reference_adapters.py`
 - External local dry-run builder: `scripts/build_external_local_dry_run.py`
@@ -259,6 +260,9 @@
   - `external_validation/baselines/barrier_certified_energy_composer_v5/adapter.py`
   - `external_validation/baselines/barrier_certified_energy_composer_v5/reference_adapter_metadata.json`
   - `external_validation/reference_adapter_report.md`
+  - `external_validation/adapter_acceptance_fixtures.json`
+  - `external_validation/adapter_acceptance_fixtures.md`
+  - `external_validation/adapter_acceptance_fixtures.csv`
   - `external_validation/local_dry_run/manifest.json`
   - `external_validation/local_dry_run/logs/peg_place_regrasp.jsonl`
   - `results/external_local_dry_run_metrics.json`

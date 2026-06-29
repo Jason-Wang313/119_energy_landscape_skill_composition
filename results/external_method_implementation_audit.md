@@ -20,6 +20,9 @@ This audit checks that every missing non-oracle method has a concrete implementa
 - `pass` `manifest_entry_templates_require_independent_provenance`: implementation_provenance requires operator/lab signoff, no oracle access, no scaffold/reference use, no outcome tuning, and locked hashes
 - `pass` `work_orders_forbid_scaffolds_and_reference_adapters`: every non-oracle method requires independent implementation evidence and forbids scaffold/reference adapters as evidence
 - `pass` `policy_or_config_hash_in_logs_required`: every work order requires JSONL policy_or_config_hash to match manifest-declared method provenance
+- `pass` `adapter_acceptance_fixtures_cover_non_oracle_methods`: fixtures=11, missing=[]
+- `pass` `adapter_acceptance_fixtures_define_contract`: fixtures declare required API, proposal/log fields, synthetic hashes, and non-evidence status
+- `pass` `work_orders_reference_acceptance_fixtures`: fixture_path=external_validation/adapter_acceptance_fixtures.json
 - `pass` `reference_adapter_provenance_covers_non_oracle_methods`: reference_records=11, missing=[]
 - `pass` `reference_adapter_hashes_recorded`: hash_fields=('adapter_sha256', 'metadata_sha256', 'common_adapter_sha256', 'reference_policy_hash')
 - `pass` `reference_adapters_marked_non_evidence`: all reference adapters are implementation-only and forbidden as strict evidence
@@ -29,4 +32,4 @@ This audit checks that every missing non-oracle method has a concrete implementa
 - `pass` `strict_commands_cover_adapter_rollout_pairing_and_evidence`: commands=['python scripts\\build_external_method_implementation_packet.py', 'python scripts\\validate_external_adapters.py --strict', 'python scripts\\build_external_baseline_contract.py', 'python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict', 'python scripts\\audit_external_pairing_integrity.py --strict', 'python scripts\\audit_external_evidence.py --strict']
 - `pass` `adapter_evidence_still_missing`: adapter_evidence_passed=False
 - `pass` `no_real_implementation_files_created`: external_validation/implementations is intentionally absent until a real operator supplies implementations
-- `pass` `packet_files_written`: packet_json=True, packet_md=True, work_orders_csv=True, reference_provenance_csv=True
+- `pass` `packet_files_written`: packet_json=True, packet_md=True, work_orders_csv=True, reference_provenance_csv=True, acceptance_fixtures_json=True

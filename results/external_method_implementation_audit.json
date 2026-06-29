@@ -56,6 +56,21 @@
       "passed": true
     },
     {
+      "detail": "fixtures=11, missing=[]",
+      "name": "adapter_acceptance_fixtures_cover_non_oracle_methods",
+      "passed": true
+    },
+    {
+      "detail": "fixtures declare required API, proposal/log fields, synthetic hashes, and non-evidence status",
+      "name": "adapter_acceptance_fixtures_define_contract",
+      "passed": true
+    },
+    {
+      "detail": "fixture_path=external_validation/adapter_acceptance_fixtures.json",
+      "name": "work_orders_reference_acceptance_fixtures",
+      "passed": true
+    },
+    {
       "detail": "reference_records=11, missing=[]",
       "name": "reference_adapter_provenance_covers_non_oracle_methods",
       "passed": true
@@ -101,7 +116,7 @@
       "passed": true
     },
     {
-      "detail": "packet_json=True, packet_md=True, work_orders_csv=True, reference_provenance_csv=True",
+      "detail": "packet_json=True, packet_md=True, work_orders_csv=True, reference_provenance_csv=True, acceptance_fixtures_json=True",
       "name": "packet_files_written",
       "passed": true
     }

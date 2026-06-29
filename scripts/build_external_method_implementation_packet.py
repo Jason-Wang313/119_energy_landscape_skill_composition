@@ -16,6 +16,9 @@ PACKET_JSON = EXTERNAL / "method_implementation_packet.json"
 PACKET_MD = EXTERNAL / "method_implementation_packet.md"
 WORK_ORDERS_CSV = EXTERNAL / "method_implementation_work_orders.csv"
 REFERENCE_PROVENANCE_CSV = EXTERNAL / "method_reference_provenance.csv"
+ACCEPTANCE_FIXTURES_JSON = EXTERNAL / "adapter_acceptance_fixtures.json"
+ACCEPTANCE_FIXTURES_MD = EXTERNAL / "adapter_acceptance_fixtures.md"
+ACCEPTANCE_FIXTURES_CSV = EXTERNAL / "adapter_acceptance_fixtures.csv"
 AUDIT_JSON = RESULTS / "external_method_implementation_audit.json"
 AUDIT_MD = RESULTS / "external_method_implementation_audit.md"
 
@@ -33,6 +36,8 @@ REQUIRED_ARTIFACT_FIELDS = [
     "manifest_method_entry",
     "policy_or_config_hash_in_logs",
 ]
+REQUIRED_ADAPTER_API = ["initialize", "propose", "log", "reset"]
+REQUIRED_PROPOSAL_FIELDS = ["decision", "predicted_seam_risk", "failure_diagnosis", "repair_action"]
 MANIFEST_METHOD_ENTRY_FIELDS = [
     "name",
     "implementation",
@@ -139,6 +144,8 @@ def build_work_orders(specs: list[dict[str, Any]], log_schema: dict[str, Any]) -
                 "target_adapter_dir": f"external_validation/baselines/{method}",
                 "suggested_real_implementation_path": f"external_validation/implementations/{method}/implementation.py",
                 "manifest_implementation_key": f"methods[{method}].implementation",
+                "adapter_acceptance_fixture_id": stable_hash(f"paper119_adapter_acceptance_fixture:{method}:v1")[:16],
+                "adapter_acceptance_fixture_path": "external_validation/adapter_acceptance_fixtures.json",
                 "manifest_method_entry_template": {
                     "name": method,
                     "implementation": f"external_validation/implementations/{method}/adapter.py",
@@ -176,6 +183,86 @@ def spec_required_log_fields(log_schema: dict[str, Any]) -> list[str]:
     if isinstance(required, list):
         return sorted(str(item) for item in required)
     return []
+
+
+def canonical_hash(payload: dict[str, Any]) -> str:
+    text = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    return stable_hash(text)
+
+
+def build_acceptance_fixtures(specs: list[dict[str, Any]], log_schema: dict[str, Any]) -> dict[str, Any]:
+    required_log_fields = [
+        field
+        for field in spec_required_log_fields(log_schema)
+        if field in {"method", "policy_or_config_hash", "predicted_seam_risk", "decision", "failure_diagnosis", "repair_action", "success", "realized_seam_breach", "utility"}
+    ]
+    fixtures: list[dict[str, Any]] = []
+    for spec in non_oracle_specs(specs):
+        method = str(spec["method"])
+        synthetic_hash = stable_hash(f"paper119_adapter_acceptance_fixture:{method}:policy_or_config:v1")
+        fixture = {
+            "method": method,
+            "role": spec.get("role", ""),
+            "spec_file": spec.get("_path", ""),
+            "fixture_id": stable_hash(f"paper119_adapter_acceptance_fixture:{method}:v1")[:16],
+            "not_external_evidence": True,
+            "evidence_status": "synthetic_contract_fixture_not_rollout_evidence",
+            "required_api": REQUIRED_ADAPTER_API,
+            "required_proposal_fields": REQUIRED_PROPOSAL_FIELDS,
+            "required_log_fields": required_log_fields,
+            "synthetic_policy_or_config_hash": synthetic_hash,
+            "synthetic_inputs": {
+                "observation": {
+                    "scene_id": "synthetic_scene_000",
+                    "task_family": "peg_place_regrasp",
+                    "state": {"gripper_pose": [0.0, 0.1, 0.2], "object_pose": [0.2, 0.1, 0.0]},
+                    "contact": {"force_norm": 0.4, "mode": "free_to_contact"},
+                },
+                "terminal_samples": [
+                    {"sample_id": "sample_0", "state_hash": stable_hash("sample_0"), "features": [0.1, 0.2, 0.3]},
+                    {"sample_id": "sample_1", "state_hash": stable_hash("sample_1"), "features": [0.2, 0.3, 0.4]},
+                ],
+                "config": {
+                    "method_name": method,
+                    "policy_or_config_hash": synthetic_hash,
+                    "fixed_risk_budget": 0.15,
+                },
+                "compute_budget": {"wall_clock_seconds": 1.0, "simulator_query_budget": 4},
+                "outcome": {
+                    "success": True,
+                    "realized_seam_breach": False,
+                    "utility": 1.0,
+                    "composition_cost": 0.1,
+                },
+            },
+            "acceptance_assertions": [
+                "adapter imports without side effects",
+                "initialize(config) returns a dict",
+                "propose(observation, terminal_samples, skill_i, skill_j, compute_budget) returns required proposal fields",
+                "predicted_seam_risk is numeric in [0, 1]",
+                "log(episode_context, proposal, outcome) returns required log fields",
+                "log.policy_or_config_hash is a 64-character SHA256 and matches the manifest-declared checkpoint_or_config_hash during strict validation",
+                "reset(reset_context) completes without raising NotImplementedError",
+            ],
+            "strict_evidence_boundary": (
+                "Passing this synthetic fixture is only a pre-rollout adapter smoke test. "
+                "Strict evidence still requires external_validation/manifest.json, operator-supplied implementation provenance, "
+                "checkpoint/config artifact hashes, raw JSONL rollout logs, render-backed videos, pairing/release audits, and audit_external_evidence.py --strict."
+            ),
+        }
+        fixture["fixture_sha256"] = canonical_hash(fixture)
+        fixtures.append(fixture)
+    return {
+        "version": "adapter_acceptance_fixtures_v1",
+        "not_external_evidence": True,
+        "strict_adapter_evidence_ready": False,
+        "fixture_count": len(fixtures),
+        "required_api": REQUIRED_ADAPTER_API,
+        "required_proposal_fields": REQUIRED_PROPOSAL_FIELDS,
+        "source_validator": "scripts/validate_external_adapters.py",
+        "source_packet": rel(PACKET_JSON),
+        "fixtures": fixtures,
+    }
 
 
 def collect_reference_adapter_provenance(specs: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -253,6 +340,8 @@ def write_work_orders_csv(orders: list[dict[str, Any]]) -> None:
         "target_adapter_dir",
         "suggested_real_implementation_path",
         "manifest_implementation_key",
+        "adapter_acceptance_fixture_id",
+        "adapter_acceptance_fixture_path",
         "independent_implementation_required",
         "scaffold_allowed_as_evidence",
         "reference_adapter_allowed_as_evidence",
@@ -276,10 +365,85 @@ def write_work_orders_csv(orders: list[dict[str, Any]]) -> None:
             )
 
 
+def write_acceptance_fixtures_csv(packet: dict[str, Any]) -> None:
+    fieldnames = [
+        "method",
+        "role",
+        "spec_file",
+        "fixture_id",
+        "fixture_sha256",
+        "synthetic_policy_or_config_hash",
+        "required_api",
+        "required_proposal_fields",
+        "required_log_fields",
+        "evidence_status",
+    ]
+    with ACCEPTANCE_FIXTURES_CSV.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        for fixture in packet.get("fixtures", []) or []:
+            writer.writerow(
+                {
+                    "method": fixture.get("method", ""),
+                    "role": fixture.get("role", ""),
+                    "spec_file": fixture.get("spec_file", ""),
+                    "fixture_id": fixture.get("fixture_id", ""),
+                    "fixture_sha256": fixture.get("fixture_sha256", ""),
+                    "synthetic_policy_or_config_hash": fixture.get("synthetic_policy_or_config_hash", ""),
+                    "required_api": ";".join(fixture.get("required_api", []) or []),
+                    "required_proposal_fields": ";".join(fixture.get("required_proposal_fields", []) or []),
+                    "required_log_fields": ";".join(fixture.get("required_log_fields", []) or []),
+                    "evidence_status": fixture.get("evidence_status", ""),
+                }
+            )
+
+
+def write_acceptance_fixtures_md(packet: dict[str, Any]) -> None:
+    lines = [
+        "# Adapter Acceptance Fixtures",
+        "",
+        "Not evidence: `true`.",
+        f"Fixture count: `{packet['fixture_count']}`.",
+        f"Strict adapter evidence ready: `{str(packet['strict_adapter_evidence_ready']).lower()}`.",
+        "",
+        "These fixtures are synthetic pre-rollout smoke tests for independent method implementations. They make the adapter API and log-field expectations concrete, but they do not replace manifest-declared implementations, checkpoint/config hashes, raw rollout logs, render-backed videos, or strict external evidence audits.",
+        "",
+        f"Source validator: `{packet['source_validator']}`.",
+        "",
+        "## Fixtures",
+        "",
+    ]
+    for fixture in packet.get("fixtures", []) or []:
+        inputs = fixture.get("synthetic_inputs", {}) or {}
+        lines.extend(
+            [
+                f"### `{fixture['method']}`",
+                "",
+                f"- Fixture ID: `{fixture['fixture_id']}`",
+                f"- Fixture SHA256: `{fixture['fixture_sha256']}`",
+                f"- Synthetic policy/config hash: `{fixture['synthetic_policy_or_config_hash']}`",
+                f"- Required API: {', '.join(f'`{item}`' for item in fixture['required_api'])}",
+                f"- Required proposal fields: {', '.join(f'`{item}`' for item in fixture['required_proposal_fields'])}",
+                f"- Required log fields: {', '.join(f'`{item}`' for item in fixture['required_log_fields'])}",
+                "- Synthetic input summary:",
+                f"  - task_family: `{inputs.get('observation', {}).get('task_family')}`",
+                f"  - terminal_samples: `{len(inputs.get('terminal_samples', []) or [])}`",
+                f"  - fixed_risk_budget: `{inputs.get('config', {}).get('fixed_risk_budget')}`",
+                "",
+                "Acceptance assertions:",
+            ]
+        )
+        for item in fixture.get("acceptance_assertions", []) or []:
+            lines.append(f"- {item}")
+        lines.extend(["", f"Evidence boundary: {fixture['strict_evidence_boundary']}", ""])
+    ACCEPTANCE_FIXTURES_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def build_packet(
     specs: list[dict[str, Any]],
     work_orders: list[dict[str, Any]],
     reference_provenance: list[dict[str, Any]],
+    acceptance_fixtures: dict[str, Any],
     baseline_audit: dict[str, Any],
     adapter_evidence: dict[str, Any],
 ) -> dict[str, Any]:
@@ -311,6 +475,10 @@ def build_packet(
         "reference_adapter_provenance_count": len(reference_provenance),
         "reference_adapter_provenance_csv": rel(REFERENCE_PROVENANCE_CSV),
         "reference_adapter_provenance": reference_provenance,
+        "adapter_acceptance_fixture_count": int(acceptance_fixtures.get("fixture_count", 0) or 0),
+        "adapter_acceptance_fixtures_json": rel(ACCEPTANCE_FIXTURES_JSON),
+        "adapter_acceptance_fixtures_md": rel(ACCEPTANCE_FIXTURES_MD),
+        "adapter_acceptance_fixtures_csv": rel(ACCEPTANCE_FIXTURES_CSV),
         "strict_acceptance_commands": STRICT_ACCEPTANCE_COMMANDS,
         "forbidden_evidence_shortcuts": [
             "using scaffold adapters as manifest-declared implementations",
@@ -336,8 +504,11 @@ def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_a
     checks: list[dict[str, Any]] = []
     work_orders = packet.get("work_orders", []) or []
     reference_provenance = packet.get("reference_adapter_provenance", []) or []
+    fixture_packet = read_json(ACCEPTANCE_FIXTURES_JSON) if ACCEPTANCE_FIXTURES_JSON.exists() else {}
+    fixture_records = fixture_packet.get("fixtures", []) or []
     method_names = {order.get("method") for order in work_orders}
     reference_methods = {record.get("method") for record in reference_provenance}
+    fixture_methods = {record.get("method") for record in fixture_records if isinstance(record, dict)}
     non_oracle_method_names = {str(spec.get("method")) for spec in non_oracle_specs(specs)}
     baseline_missing = set(baseline_audit.get("missing_implementations", []) or [])
     command_text = "\n".join(packet.get("strict_acceptance_commands", []) or [])
@@ -377,6 +548,32 @@ def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_a
         for order in work_orders
     )
     log_hash_policy_ok = all(order.get("policy_or_config_hash_in_logs_required") is True for order in work_orders)
+    acceptance_fixture_ids = {str(fixture.get("fixture_id", "")) for fixture in fixture_records if isinstance(fixture, dict)}
+    work_order_fixture_refs_ok = all(
+        order.get("adapter_acceptance_fixture_path") == rel(ACCEPTANCE_FIXTURES_JSON)
+        and str(order.get("adapter_acceptance_fixture_id", "")) in acceptance_fixture_ids
+        for order in work_orders
+    )
+    fixtures_cover_methods_ok = (
+        fixture_packet.get("version") == "adapter_acceptance_fixtures_v1"
+        and fixture_packet.get("not_external_evidence") is True
+        and fixture_packet.get("strict_adapter_evidence_ready") is False
+        and len(fixture_records) >= 11
+        and non_oracle_method_names.issubset(fixture_methods)
+        and ORACLE_METHOD not in fixture_methods
+    )
+    fixture_contracts_ok = all(
+        isinstance(fixture, dict)
+        and set(REQUIRED_ADAPTER_API).issubset(set(fixture.get("required_api", []) or []))
+        and set(REQUIRED_PROPOSAL_FIELDS).issubset(set(fixture.get("required_proposal_fields", []) or []))
+        and {"policy_or_config_hash", "predicted_seam_risk", "decision", "failure_diagnosis"}.issubset(set(fixture.get("required_log_fields", []) or []))
+        and len(str(fixture.get("synthetic_policy_or_config_hash", ""))) == 64
+        and len(str(fixture.get("fixture_sha256", ""))) == 64
+        and fixture.get("evidence_status") == "synthetic_contract_fixture_not_rollout_evidence"
+        and fixture.get("not_external_evidence") is True
+        for fixture in fixture_records
+        if isinstance(fixture, dict)
+    )
     hex_hash_fields = ("adapter_sha256", "metadata_sha256", "common_adapter_sha256", "reference_policy_hash")
     reference_hashes_ok = all(
         all(len(str(record.get(field, ""))) == 64 for field in hex_hash_fields)
@@ -476,6 +673,24 @@ def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_a
     )
     add_check(
         checks,
+        "adapter_acceptance_fixtures_cover_non_oracle_methods",
+        fixtures_cover_methods_ok,
+        f"fixtures={len(fixture_records)}, missing={sorted(non_oracle_method_names - fixture_methods)}",
+    )
+    add_check(
+        checks,
+        "adapter_acceptance_fixtures_define_contract",
+        fixture_contracts_ok,
+        "fixtures declare required API, proposal/log fields, synthetic hashes, and non-evidence status",
+    )
+    add_check(
+        checks,
+        "work_orders_reference_acceptance_fixtures",
+        work_order_fixture_refs_ok,
+        f"fixture_path={packet.get('adapter_acceptance_fixtures_json')}",
+    )
+    add_check(
+        checks,
         "reference_adapter_provenance_covers_non_oracle_methods",
         len(reference_provenance) >= 11 and non_oracle_method_names.issubset(reference_methods),
         f"reference_records={len(reference_provenance)}, missing={sorted(non_oracle_method_names - reference_methods)}",
@@ -540,10 +755,17 @@ def audit_packet(packet: dict[str, Any], specs: list[dict[str, Any]], baseline_a
     add_check(
         checks,
         "packet_files_written",
-        PACKET_JSON.exists() and PACKET_MD.exists() and WORK_ORDERS_CSV.exists() and REFERENCE_PROVENANCE_CSV.exists(),
+        PACKET_JSON.exists()
+        and PACKET_MD.exists()
+        and WORK_ORDERS_CSV.exists()
+        and REFERENCE_PROVENANCE_CSV.exists()
+        and ACCEPTANCE_FIXTURES_JSON.exists()
+        and ACCEPTANCE_FIXTURES_MD.exists()
+        and ACCEPTANCE_FIXTURES_CSV.exists(),
         (
             f"packet_json={PACKET_JSON.exists()}, packet_md={PACKET_MD.exists()}, "
-            f"work_orders_csv={WORK_ORDERS_CSV.exists()}, reference_provenance_csv={REFERENCE_PROVENANCE_CSV.exists()}"
+            f"work_orders_csv={WORK_ORDERS_CSV.exists()}, reference_provenance_csv={REFERENCE_PROVENANCE_CSV.exists()}, "
+            f"acceptance_fixtures_json={ACCEPTANCE_FIXTURES_JSON.exists()}"
         ),
     )
 
@@ -567,9 +789,18 @@ def write_packet_md(packet: dict[str, Any]) -> None:
         "Not evidence: `true`.",
         f"Non-oracle method work orders: `{packet['non_oracle_method_count']}`.",
         f"Reference adapter provenance records: `{packet['reference_adapter_provenance_count']}`.",
+        f"Adapter acceptance fixtures: `{packet['adapter_acceptance_fixture_count']}`.",
         f"Strict adapter evidence ready: `{str(packet['strict_adapter_evidence_ready']).lower()}`.",
         "",
         "This packet converts the missing independent baseline layer into concrete implementation work orders. It does not provide real implementations, checkpoints, configs, logs, videos, or manifest evidence.",
+        "",
+        "## Adapter Acceptance Fixtures (Non-Evidence)",
+        "",
+        f"- JSON: `{packet['adapter_acceptance_fixtures_json']}`",
+        f"- Markdown: `{packet['adapter_acceptance_fixtures_md']}`",
+        f"- CSV: `{packet['adapter_acceptance_fixtures_csv']}`",
+        "",
+        "The fixture packet gives each independent implementation a synthetic smoke-test input and required adapter/log fields before rollout collection. Passing these fixtures does not count as external evidence; strict evidence still requires manifest-declared implementations, checkpoint/config hashes, raw JSONL logs, render-backed videos, and final strict audits.",
         "",
         "## Reference Adapter Provenance (Non-Evidence)",
         "",
@@ -665,9 +896,13 @@ def main() -> int:
     adapter_evidence = read_json(RESULTS / "external_adapter_contract_evidence_audit.json")
     work_orders = build_work_orders(specs, log_schema)
     reference_provenance = collect_reference_adapter_provenance(specs)
+    acceptance_fixtures = build_acceptance_fixtures(specs, log_schema)
     write_work_orders_csv(work_orders)
     write_reference_provenance_csv(reference_provenance)
-    packet = build_packet(specs, work_orders, reference_provenance, baseline_audit, adapter_evidence)
+    ACCEPTANCE_FIXTURES_JSON.write_text(json.dumps(acceptance_fixtures, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_acceptance_fixtures_csv(acceptance_fixtures)
+    write_acceptance_fixtures_md(acceptance_fixtures)
+    packet = build_packet(specs, work_orders, reference_provenance, acceptance_fixtures, baseline_audit, adapter_evidence)
     PACKET_JSON.write_text(json.dumps(packet, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     write_packet_md(packet)
     audit = audit_packet(packet, specs, baseline_audit, adapter_evidence)
@@ -683,6 +918,9 @@ def main() -> int:
     print(f"Wrote {PACKET_MD}")
     print(f"Wrote {WORK_ORDERS_CSV}")
     print(f"Wrote {REFERENCE_PROVENANCE_CSV}")
+    print(f"Wrote {ACCEPTANCE_FIXTURES_JSON}")
+    print(f"Wrote {ACCEPTANCE_FIXTURES_MD}")
+    print(f"Wrote {ACCEPTANCE_FIXTURES_CSV}")
     print(f"Wrote {AUDIT_JSON}")
     print(f"Wrote {AUDIT_MD}")
     return 0 if audit["passed"] else 1

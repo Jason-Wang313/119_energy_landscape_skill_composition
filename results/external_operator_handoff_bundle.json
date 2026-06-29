@@ -5,7 +5,7 @@
     "config_template": 4,
     "generated_non_evidence_report": 88,
     "operator_command_source": 38,
-    "operator_facing_input": 63,
+    "operator_facing_input": 66,
     "prepared_config_input": 4,
     "reference_adapter": 60,
     "runner_backend_template": 5,
@@ -48,7 +48,7 @@
       "passed": true
     },
     {
-      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 88, 'operator_command_source': 38, 'operator_facing_input': 63, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 88, 'operator_command_source': 38, 'operator_facing_input': 66, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "handoff_has_task_config_and_baseline_assets",
       "passed": true
     },
@@ -153,7 +153,7 @@
       "passed": true
     },
     {
-      "detail": "hashed_files=278",
+      "detail": "hashed_files=281",
       "name": "file_hashes_are_recorded",
       "passed": true
     }
@@ -168,49 +168,49 @@
     "placeholder_not_external_evidence"
   ],
   "handoff_bundle_ready": true,
-  "included_file_count": 278,
+  "included_file_count": 281,
   "included_files": [
     {
-      "bytes": 24358,
+      "bytes": 24442,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "0A02987628D074941361E51A00B8853BD0A8A2D57BF33F4204F701A3F3C5CC81"
+      "sha256": "A8726982C0903BE19C58409B56519E06CAE45A71AF8523EA673B63E9A3D9FE68"
     },
     {
-      "bytes": 12363,
+      "bytes": 12425,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/haonan_yilun_outreach_package.md",
-      "sha256": "C50296D0277DE2E5B5A8DB56B08BAD3D90F55717E8F095F42D4A15CA31BBF49E"
+      "sha256": "FB75F29A5607B4FB3E7BCCC3510CAC5D644A4589BEFFCB54F6DF6DCD8BFFE2C8"
     },
     {
-      "bytes": 21628,
+      "bytes": 21796,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/independent_validation_protocol.md",
-      "sha256": "D5A1269B3AFA2DFCE6270E32C6348D60894A4E6ACF4C7C3790ABCDAF8E83E718"
+      "sha256": "7EDFEE348BE624FC1BA8818A88D526CC53B3632F3D31A1500A19F9C5A868FC2E"
     },
     {
-      "bytes": 17580,
+      "bytes": 17857,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/reproducibility_checklist.md",
-      "sha256": "9CED7FEA9A3F4D19B1F59013C9446678587FB0F18A8FC3A76CCDBA93609BAEDA"
+      "sha256": "DEDF3B7295DEA1D19D9D8DDABDB7E875CE2BC7456C93AAED2C48D62796D07AC7"
     },
     {
-      "bytes": 15344,
+      "bytes": 15373,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "DD4C8BE06291AFAB39B4703D4BCDDD76014F8DB60B54948B0C1249544866257F"
+      "sha256": "E74ACD7DDEAB9FCCDB565F1D93A85C19DE29DF612DD8DA22854C9CB1702F78DD"
     },
     {
-      "bytes": 32120,
+      "bytes": 32225,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/README.md",
-      "sha256": "2260A952708EDDF7DAD4DCBB3296B33B11FA9A7B3A452EDF693323891B3F33A6"
+      "sha256": "A5055BEB6282011C16ED0CF7B9F1FE3F70420D104BB54E924C6512A4377557DD"
     },
     {
       "bytes": 4898,
@@ -232,6 +232,27 @@
       "exists": true,
       "path": "external_validation/ablation_collection_work_orders.csv",
       "sha256": "EF3D0848B8132E3B4009354E23785BD44DAE2AFC8EE66E3EC8732267A6E9387A"
+    },
+    {
+      "bytes": 6081,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "external_validation/adapter_acceptance_fixtures.csv",
+      "sha256": "D03B5D89EE71FEA723CCC37A7092CD725574382CCC88C229784D7D5CE0CA8F54"
+    },
+    {
+      "bytes": 41085,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "external_validation/adapter_acceptance_fixtures.json",
+      "sha256": "9EE0526CF98600195B1E5257F9177C69346D2F3593ED582D67D3CB5797984D08"
+    },
+    {
+      "bytes": 18169,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "external_validation/adapter_acceptance_fixtures.md",
+      "sha256": "EE98FFB8E3767687273702ABAD34E29AF5ECDCF5A67C17A545657CCB11AB2EF0"
     },
     {
       "bytes": 8780,
@@ -1018,25 +1039,25 @@
       "sha256": "B56A11CB20914B2FD2649DA647F7722DE43D6B04DE3E89704A8CD3F952A4E031"
     },
     {
-      "bytes": 78948,
+      "bytes": 81008,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/method_implementation_packet.json",
-      "sha256": "739A72EB2D3C7DB1067894A4D8E906186FB5DBD8F064A88BCE4F184A6996D15D"
+      "sha256": "D745F78A466A3E069ECFDB1272595AEA744CA6A4F1EFD45401196371E4F7E5FD"
     },
     {
-      "bytes": 49110,
+      "bytes": 49752,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/method_implementation_packet.md",
-      "sha256": "743B29FACE09D42A0732E6291DBF3F3D7F5E3A7827C22D8243E06877CE25843F"
+      "sha256": "1152F00BAA03F1462BF8071E7B1F4AA5C8D7142D817492BACDF06294456F767B"
     },
     {
-      "bytes": 9004,
+      "bytes": 9836,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/method_implementation_work_orders.csv",
-      "sha256": "0207B150D5CE1ABA1BA602767A0E9D65F896C3E165064873B23E9F24625382AE"
+      "sha256": "F0E1176FA9EF80BDCE8FA11648F9107C0675091272D5244F4D2C2B26E3156615"
     },
     {
       "bytes": 7830,
@@ -1249,18 +1270,18 @@
       "sha256": "50DB11390933EFA90710391C3F7EFF62333FA59EE22778D563E7C8E71E1D877B"
     },
     {
-      "bytes": 48266,
+      "bytes": 48458,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.json",
-      "sha256": "DB28F7961FD59B0D1EA8E8786FD0CF62BDF4DB35B8BFA5D7CBBA08D87B9BA434"
+      "sha256": "63F9156CE7B35FC94840DDF3619FA05AB09046D94972B32FD0BF59E758E3A20F"
     },
     {
-      "bytes": 29759,
+      "bytes": 29930,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.md",
-      "sha256": "3111F087691009817CA92A12BF94B2AB2C8B3A148883D32FE63FE7C208E39D51"
+      "sha256": "53218785CA962D5D7880DD8AC4F8C83A43CE1907CF5ED94B01361AC512CCD9C7"
     },
     {
       "bytes": 3130,
@@ -1459,18 +1480,18 @@
       "sha256": "B68911C22003E7E03E48D7486AB58F53AD10457F0C25ABCD47A134E37A247892"
     },
     {
-      "bytes": 36041,
+      "bytes": 36225,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.json",
-      "sha256": "D62B33BD44E3AB2954D058D7B12A0560FF14CCF72602A63D568002ACB172DEAA"
+      "sha256": "46B89ED71429ACCFEBE8DB37E13A1B817AFA59B599C8A2C10BB600AE8800F379"
     },
     {
-      "bytes": 27901,
+      "bytes": 28085,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.md",
-      "sha256": "9ACA23FA9C772B63D307E9A86637E0FB3B3FFA73FBC12B93F5F9D46ACD0639A8"
+      "sha256": "F326072A05E8EB3E1CAE7F6E6DCFF2C965BD1007EE2747E9D79E21D4BCB68DD4"
     },
     {
       "bytes": 7157,
@@ -1529,25 +1550,25 @@
       "sha256": "83CC75004A0B4C959D91B489A9809CEA43D95D4E81376D5D3C93C4819710D54E"
     },
     {
-      "bytes": 4919,
+      "bytes": 5498,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_method_implementation_audit.json",
-      "sha256": "7D2FC14654402B7D804B804484C1365445A769BC63260DB69D9E18C299596671"
+      "sha256": "FB06B42ECCB12E1B5B7EF0538C9A1F565D983C3D4A17F60FE6C4713B2A4BE2AD"
     },
     {
-      "bytes": 3626,
+      "bytes": 4019,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_method_implementation_audit.md",
-      "sha256": "00B1FA80C6AD1ABF786EC65890CAAE17E44B84BD109BE4FFFA821E224C1A706B"
+      "sha256": "13D39DA4B6B6A25FD652D107FF06B3C7E1B99322E6AB50FB5E81E67990456E4C"
     },
     {
-      "bytes": 47316,
+      "bytes": 47508,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.json",
-      "sha256": "D5F854B3802D73FC573EB64B7B89D05BF71C13A36509E268C5BB6526CDE2EF3C"
+      "sha256": "CFB7F9911BA7DCC0E2D1BB94F4AFDF25E35B44984F6802D1DBBAD8CFD28B1277"
     },
     {
       "bytes": 22313,
@@ -1935,11 +1956,11 @@
       "sha256": "D42BB90D22ACA025927A3E8CE13D84A7C7F228939707D9BBBDDB2FF6426FDF43"
     },
     {
-      "bytes": 76368,
+      "bytes": 77056,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_acquisition_packet.py",
-      "sha256": "44E4E08F46F292E8FB6E1EE8793A426EB47F1F4902B146F94053B9879C686BE8"
+      "sha256": "0F9876413D5E736DA717AD087E4AA16AEF2F24414B646C434ACCF1EA4F6B9762"
     },
     {
       "bytes": 18694,
@@ -1991,18 +2012,18 @@
       "sha256": "FA9F3890C25B2FEA0F484520C38270BDE202F02317734563983522F3237EA09D"
     },
     {
-      "bytes": 33038,
+      "bytes": 45972,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_method_implementation_packet.py",
-      "sha256": "DC5B4B9D515991093168D1B16586581C0FE59B4FF03E18D63EDD714487A57774"
+      "sha256": "B9137208560E4473D3CF09C3CF9D85DE849381FBD3635D350D555C313B06195C"
     },
     {
-      "bytes": 58272,
+      "bytes": 58921,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "85430A5DF17C624D9344609182FD12E7C889D15A4A266BA04AB905821AEE0DC9"
+      "sha256": "C5C62B21A78CDA3D817572C70E0277312404795101EC32BA1166375C31C69581"
     },
     {
       "bytes": 49800,
@@ -2556,6 +2577,9 @@
         "external_validation/method_implementation_packet.md",
         "external_validation/method_implementation_work_orders.csv",
         "external_validation/method_reference_provenance.csv",
+        "external_validation/adapter_acceptance_fixtures.json",
+        "external_validation/adapter_acceptance_fixtures.md",
+        "external_validation/adapter_acceptance_fixtures.csv",
         "results/external_method_implementation_audit.json"
       ],
       "closes": [
