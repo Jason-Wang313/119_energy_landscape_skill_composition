@@ -3,7 +3,7 @@
 Passed: `true`.
 Not evidence: `true`.
 Strict external evidence ready: `false`.
-Blocking failures mapped: `36/36`.
+Blocking failures mapped: `37/37`.
 
 This ledger maps every current strict external-evidence failure to the operator artifact, source packet, strict gate, and completion test that would close it. It does not create a manifest, logs, videos, checkpoints, or external validation evidence.
 
@@ -15,7 +15,7 @@ This ledger maps every current strict external-evidence failure to the operator 
 - `methods_baselines`: failures `4`, source `external_validation/method_implementation_packet.md; external_validation/method_implementation_work_orders.csv; external_validation/method_reference_provenance.csv`.
 - `oracle_boundary`: failures `2`, source `external_validation/manifest_template.json; docs/claim_evidence_ledger.json`.
 - `pairing_release`: failures `6`, source `external_validation/manifest_assembly_checklist.csv; results/external_release_package_audit.md; results/external_pairing_integrity_audit.md`.
-- `rollout_logs_videos_metrics`: failures `10`, source `external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv`.
+- `rollout_logs_videos_metrics`: failures `11`, source `external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv`.
 - `task_configs`: failures `3`, source `external_validation/config_manifest_packet.md; external_validation/config_manifest_work_orders.csv`.
 
 ## Strict Command Spine
@@ -78,6 +78,7 @@ python scripts\audit_external_evidence.py --strict
 - `fixed_risk_coverage` -> `rollout_logs_videos_metrics`: external rollout metric validator passes and manifest metrics match recomputed rollout metrics
 - `positive_task_family_coverage` -> `rollout_logs_videos_metrics`: external rollout metric validator passes and manifest metrics match recomputed rollout metrics
 - `external_rollout_metrics_passed` -> `rollout_logs_videos_metrics`: external rollout metric validator passes and manifest metrics match recomputed rollout metrics
+- `external_rollout_confidence_gates_passed` -> `rollout_logs_videos_metrics`: external rollout metric validator passes and manifest metrics match recomputed rollout metrics
 - `external_pairing_integrity_ready` -> `pairing_release`: pairing_ready=true and release_package_ready=true under strict audits
 - `external_release_package_ready` -> `pairing_release`: pairing_ready=true and release_package_ready=true under strict audits
 - `manifest_metrics_match_rollout` -> `rollout_logs_videos_metrics`: external rollout metric validator passes and manifest metrics match recomputed rollout metrics
@@ -93,8 +94,8 @@ python scripts\audit_external_evidence.py --strict
 ## Checks
 
 - `pass` `ledger_is_non_evidence_and_fail_closed`: writes only ledger/audit files and keeps strict_external_evidence_ready=false
-- `pass` `strict_external_evidence_is_currently_missing`: submission_ready=False, failures=36
-- `pass` `every_blocking_failure_is_mapped`: unmapped=[], mapped=36, failures=36
+- `pass` `strict_external_evidence_is_currently_missing`: submission_ready=False, failures=37
+- `pass` `every_blocking_failure_is_mapped`: unmapped=[], mapped=37, failures=37
 - `pass` `all_required_closure_groups_present`: missing=[]
 - `pass` `source_packets_loaded`: collection, rollout, config, method, ablation, and fidelity packets loaded
 - `pass` `manifest_template_declares_expected_evidence_fields`: manifest template has version, tasks, methods, release_artifacts, and ablations

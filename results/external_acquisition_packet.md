@@ -89,7 +89,7 @@ python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 30 --
 
 ## External Evidence Intake Ledger
 
-- Blocking failures mapped: `36/36`
+- Blocking failures mapped: `37/37`
 - Closure groups: `8`
 - Strict external evidence ready: `false`
 - Unmapped failures: `[]`
@@ -129,7 +129,7 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 - `pass` `config_manifest_packet_ready`: config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False
 - `pass` `rollout_evidence_packet_ready`: rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False
 - `pass` `ablation_collection_packet_ready`: work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False
-- `pass` `evidence_intake_ledger_ready`: mapped=36/36, groups=8
+- `pass` `evidence_intake_ledger_ready`: mapped=37/37, groups=8
 - `pass` `pilot_smoke_packet_ready`: pilot_smoke_packet_ready=True, strict_evidence_ready=False
 - `pass` `maniskill_render_video_preflight_recorded`: render_video_ready=False, envs=4, failure_classes=['render_timeout', 'vulkan_descriptor_pool_exhaustion']
 - `pass` `maniskill_pilot_runtime_liveness_ready`: pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, timed_out=False, records=0, videos=0, diagnostic_fallbacks=0, failure_summary='runner exited with returncode 1 after progress stage record_video_start before producing the required pilot record/video'

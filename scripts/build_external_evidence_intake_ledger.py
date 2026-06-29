@@ -106,6 +106,7 @@ FAILURE_GROUPS = {
     "fixed_risk_coverage": "rollout_logs_videos_metrics",
     "positive_task_family_coverage": "rollout_logs_videos_metrics",
     "external_rollout_metrics_passed": "rollout_logs_videos_metrics",
+    "external_rollout_confidence_gates_passed": "rollout_logs_videos_metrics",
     "manifest_metrics_match_rollout": "rollout_logs_videos_metrics",
     "external_adapter_contract_evidence_passed": "methods_baselines",
     "required_methods": "methods_baselines",

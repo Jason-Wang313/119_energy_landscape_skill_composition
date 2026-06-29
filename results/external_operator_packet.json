@@ -67,7 +67,7 @@
       "passed": true
     },
     {
-      "detail": "mapped=36/36, groups=8",
+      "detail": "mapped=37/37, groups=8",
       "name": "evidence_intake_ledger_recorded_but_not_evidence",
       "passed": true
     },
@@ -127,11 +127,11 @@
   "evidence_intake_ledger": {
     "audit_md_path": "results/external_evidence_intake_ledger_audit.md",
     "audit_path": "results/external_evidence_intake_ledger_audit.json",
-    "blocking_failure_count": 36,
+    "blocking_failure_count": 37,
     "build_command": "python scripts\\build_external_evidence_intake_ledger.py",
     "closure_group_count": 8,
     "csv_path": "external_validation/evidence_intake_ledger.csv",
-    "mapped_failure_count": 36,
+    "mapped_failure_count": 37,
     "not_external_evidence": true,
     "packet_path": "external_validation/evidence_intake_ledger.md",
     "strict_external_evidence_ready": false,

@@ -152,6 +152,12 @@
     },
     {
       "blocking": true,
+      "detail": "version=None, all_primary=None, missing=['external_success_margin', 'external_utility_margin', 'fixed_risk_breach', 'fixed_risk_coverage', 'paired_win_rate'], failing=[], positive_task_gate=None",
+      "name": "external_rollout_confidence_gates_passed",
+      "passed": false
+    },
+    {
+      "blocking": true,
       "detail": "pairing_ready=False, blocking_missing_count=1",
       "name": "external_pairing_integrity_ready",
       "passed": false
@@ -540,6 +546,12 @@
       "blocking": true,
       "detail": "passed=False, episodes=0",
       "name": "external_rollout_metrics_passed",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "version=None, all_primary=None, missing=['external_success_margin', 'external_utility_margin', 'fixed_risk_breach', 'fixed_risk_coverage', 'paired_win_rate'], failing=[], positive_task_gate=None",
+      "name": "external_rollout_confidence_gates_passed",
       "passed": false
     },
     {

@@ -30,6 +30,7 @@ Manifest: `C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landsca
 - `fixed_risk_coverage`: value=None, threshold=0.55
 - `positive_task_family_coverage`: positive=0, total=0
 - `external_rollout_metrics_passed`: passed=False, episodes=0
+- `external_rollout_confidence_gates_passed`: version=None, all_primary=None, missing=['external_success_margin', 'external_utility_margin', 'fixed_risk_breach', 'fixed_risk_coverage', 'paired_win_rate'], failing=[], positive_task_gate=None
 - `external_pairing_integrity_ready`: pairing_ready=False, blocking_missing_count=1
 - `external_release_package_ready`: release_package_ready=False, blocking_missing_count=1
 - `manifest_metrics_match_rollout`: external_success_margin: manifest=None, rollout=None; external_utility_margin: manifest=None, rollout=None; paired_win_rate: manifest=None, rollout=None; fixed_risk_breach: manifest=None, rollout=None
@@ -98,6 +99,7 @@ Manifest: `C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landsca
 - `fail` `fixed_risk_coverage`: value=None, threshold=0.55
 - `fail` `positive_task_family_coverage`: positive=0, total=0
 - `fail` `external_rollout_metrics_passed`: passed=False, episodes=0
+- `fail` `external_rollout_confidence_gates_passed`: version=None, all_primary=None, missing=['external_success_margin', 'external_utility_margin', 'fixed_risk_breach', 'fixed_risk_coverage', 'paired_win_rate'], failing=[], positive_task_gate=None
 - `pass` `external_pairing_integrity_audit_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\results\external_pairing_integrity_audit.json
 - `fail` `external_pairing_integrity_ready`: pairing_ready=False, blocking_missing_count=1
 - `pass` `external_release_package_audit_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\results\external_release_package_audit.json

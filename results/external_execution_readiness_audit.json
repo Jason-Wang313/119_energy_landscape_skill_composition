@@ -471,7 +471,7 @@
       "passed": true
     },
     {
-      "detail": "mapped=36/36, groups=8",
+      "detail": "mapped=37/37, groups=8",
       "name": "external_evidence_intake_ledger_maps_all_strict_failures",
       "passed": true
     },

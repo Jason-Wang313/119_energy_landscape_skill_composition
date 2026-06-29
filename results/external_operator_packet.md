@@ -185,7 +185,7 @@ This ledger is not evidence. It maps every current strict external-evidence fail
 - CSV: `external_validation/evidence_intake_ledger.csv`
 - Audit JSON: `results/external_evidence_intake_ledger_audit.json`
 - Audit notes: `results/external_evidence_intake_ledger_audit.md`
-- Blocking failures mapped: `36/36`
+- Blocking failures mapped: `37/37`
 - Closure groups: `8`
 - Strict external evidence ready: `false`
 - Unmapped failures: `[]`
@@ -345,7 +345,7 @@ Post-collection strict gates:
 - `pass` `render_video_preflight_recorded_but_not_evidence`: render_video_ready=False, envs=4, failure_classes=['render_timeout', 'vulkan_descriptor_pool_exhaustion']
 - `pass` `render_machine_qualification_recorded_but_not_evidence`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=11
 - `pass` `ablation_collection_packet_recorded_but_not_evidence`: work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False
-- `pass` `evidence_intake_ledger_recorded_but_not_evidence`: mapped=36/36, groups=8
+- `pass` `evidence_intake_ledger_recorded_but_not_evidence`: mapped=37/37, groups=8
 - `pass` `precollection_manifest_draft_ready_but_not_evidence`: configs=4, method_gaps=11, rollout_gaps=8, official_manifest_exists=False
 - `pass` `operator_actions_cover_start_to_finish`: missing=[]
 - `pass` `operator_action_titles_present`: missing_titles=[]

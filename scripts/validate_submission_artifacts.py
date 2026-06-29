@@ -2754,6 +2754,7 @@ def main():
     rollout_validator_text = (ROOT / "scripts" / "validate_external_rollouts.py").read_text(encoding="utf-8")
     rollout_self_test_text = (ROOT / "scripts" / "self_test_external_rollout_validator.py").read_text(encoding="utf-8")
     evidence_pipeline_self_test_text = (ROOT / "scripts" / "self_test_external_evidence_pipeline.py").read_text(encoding="utf-8")
+    audit_external_evidence_text = (ROOT / "scripts" / "audit_external_evidence.py").read_text(encoding="utf-8")
     for term in (
         "strict_video_evidence",
         "MIN_STRICT_VIDEO_BYTES",
@@ -2814,6 +2815,15 @@ def main():
         fail("external evidence pipeline self-test must exercise strict MP4 video evidence validation")
     if "confidence-gated rollout statistics" not in evidence_pipeline_self_test_text:
         fail("external evidence pipeline self-test must exercise confidence-gated rollout statistics")
+    for term in (
+        "external_rollout_confidence_gates_passed",
+        "CONFIDENCE_METRICS",
+        "all_primary_confidence_gates_passed",
+    ):
+        if term not in audit_external_evidence_text:
+            fail(f"final external evidence audit missing rollout confidence gate term: {term}")
+    if "tampered rollout confidence summary did not fail" not in evidence_pipeline_self_test_text:
+        fail("external evidence pipeline self-test must reject tampered rollout confidence summaries in the final evidence audit")
     if "tampered release artifact hash test did not fail" not in evidence_pipeline_self_test_text:
         fail("external evidence pipeline self-test must reject tampered release artifact hashes in the final evidence audit")
 

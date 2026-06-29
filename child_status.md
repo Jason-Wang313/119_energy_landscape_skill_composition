@@ -22,4 +22,6 @@ External method/count/pairing/hash/uniqueness gates: the strict full-method cove
 
 External statistical confidence gate: confidence-gated external rollout statistics now require 95% bootstrap confidence bounds over raw external logs to clear the predeclared success, utility, paired-win, fixed-risk coverage, and fixed-risk breach thresholds before the external mechanism claim can pass.
 
+Final rollout confidence summary gate: the final strict evidence audit now rejects stale or tampered rollout metric summaries that claim `passed=true` without an embedded `external_statistical_confidence_v1` summary clearing all primary confidence gates.
+
 Final release artifact hash recomputation gate: the final external evidence audit recomputes manifest-declared code/config/log/video/checkpoint SHA256 values, so stale release hashes fail even if a separate release-package report exists.

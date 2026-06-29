@@ -113,7 +113,7 @@
       "passed": true
     },
     {
-      "detail": "mapped=36/36, groups=8",
+      "detail": "mapped=37/37, groups=8",
       "name": "evidence_intake_ledger_included",
       "passed": true
     },
@@ -171,11 +171,11 @@
   "included_file_count": 278,
   "included_files": [
     {
-      "bytes": 23142,
+      "bytes": 23757,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "2C96511FA4596C7FC18D52D7F7CAB997AC2C00D212363A9CD030A61D8F8388A8"
+      "sha256": "ED88939FD1AB51939101752D49CE1CD338911B16AB6A1FF9D984994F69BCF5FE"
     },
     {
       "bytes": 12044,
@@ -199,11 +199,11 @@
       "sha256": "FFC41551F2AD82490EC379631C2FC2CCB64BDAFA2DF84F96E863A727A9CEC5D1"
     },
     {
-      "bytes": 14770,
+      "bytes": 15025,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "327CFC9C26B4BF3702B4ED51DCEEB2325CA53F8B8DD2827A50F3D5EF375D0B50"
+      "sha256": "C52D4D5E08692697E7CCFC019DF5B5970C00AA9A2C62178AFBCB7341B1F7417C"
     },
     {
       "bytes": 32120,
@@ -899,25 +899,25 @@
       "sha256": "021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9"
     },
     {
-      "bytes": 23410,
+      "bytes": 24251,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/evidence_intake_ledger.csv",
-      "sha256": "0A89EDC5C6F50E1149E185CC174A294ECB8C5D3E7849B0E8E9D061992F7E0E14"
+      "sha256": "D3AC6811574F004B1E61C7F89507D9FC7B6DC235CC8F6152B9E6A259FB67FD19"
     },
     {
-      "bytes": 38183,
+      "bytes": 39263,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/evidence_intake_ledger.json",
-      "sha256": "FC80658E4682EE8BE2580EAE67869D54E1EBFA180BE15527637E791BC8BD818E"
+      "sha256": "37642ABD197BFB8F1002F5B7E0BC1A9B5560CADCD9A2A3F384D6C59A91B3BAC0"
     },
     {
-      "bytes": 9966,
+      "bytes": 10141,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/evidence_intake_ledger.md",
-      "sha256": "AFE9134D806125F8D174D879D20B012ECF35E4AEAF56C504AD49918E713EA17C"
+      "sha256": "DBB96E0D48333D12C8E5BA92644247248C8F574B2CA6B2DD783D08A7A1B084C6"
     },
     {
       "bytes": 26039,
@@ -1253,14 +1253,14 @@
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.json",
-      "sha256": "031E5D032AACAA6E24B453A4CFB787527CA743701F9199186F4E43EA82527213"
+      "sha256": "CF6CDF4DB7F031F17644C551612FBEDCBA2E04A6EB050BE3BCC221A035B1819A"
     },
     {
       "bytes": 29638,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.md",
-      "sha256": "3D72B6676C5FFEEA3B8415DB76D14E7635443F0E0FFA67855949F5143A132F23"
+      "sha256": "2D09F1BBD189FA609CEA7A96ECF2AD72CAC801554B1EE927FD1AE32B4E2B773A"
     },
     {
       "bytes": 3130,
@@ -1431,18 +1431,18 @@
       "sha256": "4CC337580323BADB03441EE8478DDDEF19CC9857F1B0B032264B78DB6A947DF7"
     },
     {
-      "bytes": 38183,
+      "bytes": 39263,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_evidence_intake_ledger_audit.json",
-      "sha256": "FC80658E4682EE8BE2580EAE67869D54E1EBFA180BE15527637E791BC8BD818E"
+      "sha256": "37642ABD197BFB8F1002F5B7E0BC1A9B5560CADCD9A2A3F384D6C59A91B3BAC0"
     },
     {
-      "bytes": 9966,
+      "bytes": 10141,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_evidence_intake_ledger_audit.md",
-      "sha256": "AFE9134D806125F8D174D879D20B012ECF35E4AEAF56C504AD49918E713EA17C"
+      "sha256": "DBB96E0D48333D12C8E5BA92644247248C8F574B2CA6B2DD783D08A7A1B084C6"
     },
     {
       "bytes": 12344,
@@ -1463,14 +1463,14 @@
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.json",
-      "sha256": "88B9ECDE422D018424751B67E4CDD86BE095038AF09036139EF43D5BD20695E4"
+      "sha256": "D62B33BD44E3AB2954D058D7B12A0560FF14CCF72602A63D568002ACB172DEAA"
     },
     {
       "bytes": 27901,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.md",
-      "sha256": "47C7D59652CE16418A519A60CA8996133633C44B3AC0B7C951895027E3A4F945"
+      "sha256": "9ACA23FA9C772B63D307E9A86637E0FB3B3FFA73FBC12B93F5F9D46ACD0639A8"
     },
     {
       "bytes": 7157,
@@ -1547,14 +1547,14 @@
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.json",
-      "sha256": "B980D2444540B75CDCC325DBA06F01DD81B9113C2EA67247DC0A687FB4C81744"
+      "sha256": "034084364ED5FA176CD9413CC8BF9BF3C4D7BF544F7DE62CC9BF4B76CAFF774F"
     },
     {
       "bytes": 22214,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.md",
-      "sha256": "EEA00A27A668DD96B54AC082D04CB4A583D59D1FDF991F683E028EF9EF192B24"
+      "sha256": "9B6ABC499BECC320C26C0D2F954049457BDBE035A43BF43610B805D0AB41ACA2"
     },
     {
       "bytes": 525,
@@ -1865,11 +1865,11 @@
       "sha256": "D57C161EF11EEC793D785A336514D1CEBB0A4E6691FFFEE5CEE70AA6C5384828"
     },
     {
-      "bytes": 27601,
+      "bytes": 29377,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/audit_external_evidence.py",
-      "sha256": "01C318AA9148688A37550FF18B1DDF00BEB63F2325FFC2D38C04A37CA0E2EDEC"
+      "sha256": "45D90F489F1908BBAD5CADC23BF40091BA8F48145AD85D4307D60EEFCBB9C8BD"
     },
     {
       "bytes": 17816,
@@ -1963,11 +1963,11 @@
       "sha256": "756C0C5B64F4F0DB6C1E45742096A2BCE03AA346C34D91A834ED196296839EB8"
     },
     {
-      "bytes": 18962,
+      "bytes": 19041,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_evidence_intake_ledger.py",
-      "sha256": "6FB5B15EA46BFE8518482DEF815626E4D0E5012C2F0805100DAEB601D4FB5944"
+      "sha256": "19814CB551C9734C785077201236F9E3A1D3B86E385295FE0A3DF2572B31BF17"
     },
     {
       "bytes": 40250,

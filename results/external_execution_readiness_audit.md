@@ -130,7 +130,7 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_ablation_collection_covers_strict_ablation_blocker`: work_order_count=5, expected_ablation_records=600, checks={'packet_is_non_evidence_and_fail_closed': True, 'collection_plan_loaded': True, 'task_and_reset_budget_preserved': True, 'required_ablations_match_strict_audit': True, 'every_required_ablation_has_work_order': True, 'work_orders_use_local_reference_variants': True, 'manifest_template_declares_ablation_booleans': True, 'operator_commands_cover_collection_manifest_rollout_and_strict_evidence': True, 'no_real_manifest_written': True}
 - `pass` `external_evidence_intake_ledger_ready`: passed
 - `pass` `external_evidence_intake_ledger_not_evidence`: not_external_evidence=True, strict_external_evidence_ready=False
-- `pass` `external_evidence_intake_ledger_maps_all_strict_failures`: mapped=36/36, groups=8
+- `pass` `external_evidence_intake_ledger_maps_all_strict_failures`: mapped=37/37, groups=8
 - `pass` `baseline_contract_ready`: passed
 - `pass` `baseline_contract_reports_missing_implementations`: implementations_ready=False, missing=11
 - `pass` `adapter_scaffolds_ready`: passed

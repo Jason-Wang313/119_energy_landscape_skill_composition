@@ -1,5 +1,5 @@
 {
-  "blocking_failure_count": 36,
+  "blocking_failure_count": 37,
   "checks": [
     {
       "detail": "writes only ledger/audit files and keeps strict_external_evidence_ready=false",
@@ -7,12 +7,12 @@
       "passed": true
     },
     {
-      "detail": "submission_ready=False, failures=36",
+      "detail": "submission_ready=False, failures=37",
       "name": "strict_external_evidence_is_currently_missing",
       "passed": true
     },
     {
-      "detail": "unmapped=[], mapped=36, failures=36",
+      "detail": "unmapped=[], mapped=37, failures=37",
       "name": "every_blocking_failure_is_mapped",
       "passed": true
     },
@@ -80,7 +80,7 @@
       "strict_gate": "python scripts\\audit_external_pairing_integrity.py --strict; python scripts\\audit_external_release_package.py --strict"
     },
     {
-      "failure_count": 10,
+      "failure_count": 11,
       "name": "rollout_logs_videos_metrics",
       "source_packet": "external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv",
       "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
@@ -94,7 +94,7 @@
   ],
   "ledger_csv_path": "external_validation/evidence_intake_ledger.csv",
   "ledger_path": "external_validation/evidence_intake_ledger.md",
-  "mapped_failure_count": 36,
+  "mapped_failure_count": 37,
   "not_external_evidence": true,
   "operator_commands": [
     "python scripts\\audit_external_fidelity_acceptance.py --strict",
@@ -356,6 +356,16 @@
       "current_detail": "passed=False, episodes=0",
       "evidence_ready_now": "false",
       "failure_name": "external_rollout_metrics_passed",
+      "operator_artifacts": "manifest-declared external_validation/logs/*.jsonl, external_validation/videos/<task_family>/ files, and metrics recomputed from raw JSONL logs",
+      "source_packet": "external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv",
+      "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "closure_group": "rollout_logs_videos_metrics",
+      "completion_test": "external rollout metric validator passes and manifest metrics match recomputed rollout metrics",
+      "current_detail": "version=None, all_primary=None, missing=['external_success_margin', 'external_utility_margin', 'fixed_risk_breach', 'fixed_risk_coverage', 'paired_win_rate'], failing=[], positive_task_gate=None",
+      "evidence_ready_now": "false",
+      "failure_name": "external_rollout_confidence_gates_passed",
       "operator_artifacts": "manifest-declared external_validation/logs/*.jsonl, external_validation/videos/<task_family>/ files, and metrics recomputed from raw JSONL logs",
       "source_packet": "external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv",
       "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"

@@ -708,6 +708,28 @@ def reset(reset_context):
         if audit["submission_ready"] is not True:
             failures = [f"{item['name']}: {item['detail']}" for item in audit["blocking_failures"]]
             raise AssertionError(f"synthetic full-pipeline audit did not pass: {failures}")
+
+        rollout_metrics_before = evidence.ROLLOUT_METRICS_JSON.read_bytes()
+        try:
+            tampered_rollout_metrics = json.loads(rollout_metrics_before.decode("utf-8"))
+            tampered_rollout_metrics["passed"] = True
+            tampered_rollout_metrics["summary"].pop("statistical_confidence", None)
+            evidence.ROLLOUT_METRICS_JSON.write_text(
+                json.dumps(tampered_rollout_metrics, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+            tampered_rollout_audit = evidence.audit_manifest(manifest, manifest_exists=True)
+        finally:
+            evidence.ROLLOUT_METRICS_JSON.write_bytes(rollout_metrics_before)
+        tampered_rollout_failures = {
+            item["name"]: item["detail"] for item in tampered_rollout_audit["blocking_failures"]
+        }
+        if (
+            tampered_rollout_audit["submission_ready"] is True
+            or "external_rollout_confidence_gates_passed" not in tampered_rollout_failures
+        ):
+            raise AssertionError("tampered rollout confidence summary did not fail the final external evidence audit")
+
         tampered_manifest = json.loads(json.dumps(manifest))
         tampered_manifest["release_artifacts"]["code"][0]["sha256"] = "0" * 64
         tampered_audit = evidence.audit_manifest(tampered_manifest, manifest_exists=True)
@@ -718,7 +740,7 @@ def reset(reset_context):
             raise AssertionError(f"tampered release artifact hash failed for the wrong reason: {tampered_failures['release_code']}")
 
     assert_real_manifest_untouched(real_manifest_before)
-    print("External evidence pipeline self-test passed: temporary synthetic package reaches READY with confidence-gated rollout statistics, tampered release artifact hashes fail, and real repo evidence remains untouched.")
+    print("External evidence pipeline self-test passed: temporary synthetic package reaches READY with confidence-gated rollout statistics, tampered rollout confidence summaries and release artifact hashes fail, and real repo evidence remains untouched.")
     return 0
 
 

@@ -96,6 +96,13 @@ THRESHOLDS = {
     "fixed_risk_breach": 0.02,
     "fixed_risk_coverage": 0.55,
 }
+CONFIDENCE_METRICS = {
+    "external_success_margin",
+    "external_utility_margin",
+    "paired_win_rate",
+    "fixed_risk_breach",
+    "fixed_risk_coverage",
+}
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -479,6 +486,35 @@ def audit_manifest(manifest: dict[str, Any], manifest_exists: bool) -> dict[str,
         "external_rollout_metrics_passed",
         rollout_passed,
         f"passed={rollout_payload.get('passed') if isinstance(rollout_payload, dict) else None!r}, episodes={rollout_summary.get('episodes')!r}",
+    )
+    statistical_confidence = rollout_summary.get("statistical_confidence", {})
+    statistical_confidence = statistical_confidence if isinstance(statistical_confidence, dict) else {}
+    confidence_metrics = statistical_confidence.get("metrics", {})
+    confidence_metrics = confidence_metrics if isinstance(confidence_metrics, dict) else {}
+    missing_confidence = sorted(CONFIDENCE_METRICS - set(confidence_metrics))
+    failing_confidence = sorted(
+        metric_name
+        for metric_name, metric_payload in confidence_metrics.items()
+        if metric_name in CONFIDENCE_METRICS
+        and (not isinstance(metric_payload, dict) or metric_payload.get("passed") is not True)
+    )
+    positive_task_gate = statistical_confidence.get("positive_task_families_gate", {})
+    positive_task_gate = positive_task_gate if isinstance(positive_task_gate, dict) else {}
+    add_check(
+        checks,
+        "external_rollout_confidence_gates_passed",
+        rollout_passed
+        and statistical_confidence.get("version") == "external_statistical_confidence_v1"
+        and statistical_confidence.get("all_primary_confidence_gates_passed") is True
+        and not missing_confidence
+        and not failing_confidence
+        and positive_task_gate.get("passed") is True,
+        (
+            f"version={statistical_confidence.get('version')!r}, "
+            f"all_primary={statistical_confidence.get('all_primary_confidence_gates_passed')!r}, "
+            f"missing={missing_confidence}, failing={failing_confidence}, "
+            f"positive_task_gate={positive_task_gate.get('passed')!r}"
+        ),
     )
     pairing_integrity_exists = PAIRING_INTEGRITY_JSON.exists()
     pairing_integrity = read_json(PAIRING_INTEGRITY_JSON) if pairing_integrity_exists else {}
