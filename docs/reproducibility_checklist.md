@@ -56,6 +56,7 @@
 - External operator packet builder: `scripts/build_external_operator_packet.py`
 - External collection job packet builder: `scripts/build_external_collection_job_packet.py`
 - External operator handoff bundle builder: `scripts/build_external_operator_handoff_bundle.py`
+- External operator release bundle builder: `scripts/build_external_operator_release_bundle.py`
 - External adapter scaffold guard self-test: `scripts/self_test_external_adapter_scaffold_guard.py`
   - Durable report: `results/external_adapter_scaffold_guard_self_test.md`
 - External evidence validator: `scripts/audit_external_evidence.py`
@@ -232,6 +233,10 @@
   - `results/external_collection_job_packet_audit.md`
   - `results/external_operator_handoff_bundle.json`
   - `results/external_operator_handoff_bundle.md`
+  - `external_validation/operator_release_bundle_manifest.csv`
+  - `external_validation/operator_release_bundle_README.md`
+  - `results/external_operator_release_bundle_plan.json`
+  - `results/external_operator_release_bundle_plan.md`
   - `results/external_pairing_integrity_audit.json`
   - `results/external_pairing_integrity_audit.md`
   - `results/external_pairing_integrity_self_test.json`

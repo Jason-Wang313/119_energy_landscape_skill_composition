@@ -82,11 +82,11 @@ Post-collection strict gates:
 
 ## Included Files
 
-- `README.md` (operator_facing_input, 29620 bytes, sha256 `E195CC2738301835CD92FBBF45C05D22B65B288019BAC47CD5D7B03F4EF674B2`)
-- `docs/haonan_yilun_outreach_package.md` (operator_facing_input, 13950 bytes, sha256 `04D161023CAC9D3D72A8F50C051FC2D000A94411BE561A328353C8AE2B851EB4`)
+- `README.md` (operator_facing_input, 29991 bytes, sha256 `BA57563930E58E8D5EDB4FD437D0CD68ECBA2A50A9E82CD27ADEFF9234E42AA0`)
+- `docs/haonan_yilun_outreach_package.md` (operator_facing_input, 14022 bytes, sha256 `5AAF7DA39F72FE1C3821DBE9A437F30D97CAF3BB5058F82013BBEA4919B0118D`)
 - `docs/independent_validation_protocol.md` (operator_facing_input, 21796 bytes, sha256 `7EDFEE348BE624FC1BA8818A88D526CC53B3632F3D31A1500A19F9C5A868FC2E`)
-- `docs/reproducibility_checklist.md` (operator_facing_input, 19613 bytes, sha256 `C96E23C5032DA4964757B8CBDC564BDB75B4CC89816C4D15C6B1A4D5FA26F19A`)
-- `docs/submission_readiness_decision.md` (operator_facing_input, 18728 bytes, sha256 `4AF5D7494B1FAFC55B8DDFB90D3A1E355BDED5D404226B85AC0BCA1404FCB2BB`)
+- `docs/reproducibility_checklist.md` (operator_facing_input, 19944 bytes, sha256 `07605B6E7760E5BEE64A45376E5A0697FF6D15DF6F24B1D5D29737020DFF380B`)
+- `docs/submission_readiness_decision.md` (operator_facing_input, 18950 bytes, sha256 `1D752687113D4406F32B627FECDBA0B13AC2729F59DCB00C9247A71CDA1D476A`)
 - `external_validation/README.md` (operator_facing_input, 34698 bytes, sha256 `5E0E6D9D7D06DC4AB8F664ACC65BEEAEE65799B48D82753722812C08BBFB261B`)
 - `external_validation/ablation_collection_packet.json` (operator_facing_input, 5212 bytes, sha256 `93E9ED0730D12385B9C02230FC10B0469D4EEDCE85EFA58FF83ADB6D0FE6E0EA`)
 - `external_validation/ablation_collection_packet.md` (operator_facing_input, 3695 bytes, sha256 `BBA79EF72B352B4799A1EE7322BC1A20A0E996F71C9CCB8DF2F98307B455ED99`)

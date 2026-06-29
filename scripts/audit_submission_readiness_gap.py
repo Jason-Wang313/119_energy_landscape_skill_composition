@@ -114,6 +114,8 @@ def main() -> int:
     handoff_bundle = read_json(handoff_bundle_path) if handoff_bundle_path.exists() else {}
     collection_job_path = RESULTS / "external_collection_job_packet_audit.json"
     collection_job = read_json(collection_job_path) if collection_job_path.exists() else {}
+    operator_release_path = RESULTS / "external_operator_release_bundle_plan.json"
+    operator_release = read_json(operator_release_path) if operator_release_path.exists() else {}
     method_implementation_path = RESULTS / "external_method_implementation_audit.json"
     method_implementation = read_json(method_implementation_path) if method_implementation_path.exists() else {}
     presentation_path = RESULTS / "presentation_quality_audit.json"
@@ -631,6 +633,7 @@ def main() -> int:
     rollout_evidence_checks = {check.get("name"): check.get("passed") for check in rollout_evidence.get("checks", [])}
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", [])}
     collection_job_checks = {check.get("name"): check.get("passed") for check in collection_job.get("checks", [])}
+    operator_release_checks = {check.get("name"): check.get("passed") for check in operator_release.get("checks", [])}
     acquisition_packet_ok = (
         acquisition_packet.get("passed") is True
         and acquisition_packet.get("version") == "external_acquisition_packet_v1"
@@ -695,11 +698,21 @@ def main() -> int:
         and len(collection_job.get("job_steps", []) or []) >= 17
         and collection_job_checks.get("command_sequence_covers_full_external_validation_route") is True
         and collection_job_checks.get("official_collection_commands_guarded") is True
+        and operator_release.get("passed") is True
+        and operator_release.get("version") == "external_operator_release_bundle_plan_v1"
+        and operator_release.get("not_external_evidence") is True
+        and operator_release.get("strict_external_evidence_ready") is False
+        and operator_release.get("bundle_state") == "READY_TO_SEND_OPERATOR_PACKAGE"
+        and operator_release.get("archive_written") is False
+        and int(operator_release.get("included_file_count", 0) or 0) >= 300
+        and operator_release_checks.get("handoff_hashes_recomputed") is True
+        and operator_release_checks.get("forbidden_evidence_paths_excluded") is True
         and exists_all(
             [
                 ROOT / "scripts" / "build_external_acquisition_packet.py",
                 ROOT / "scripts" / "build_external_collection_job_packet.py",
                 ROOT / "scripts" / "build_external_operator_handoff_bundle.py",
+                ROOT / "scripts" / "build_external_operator_release_bundle.py",
                 ROOT / "scripts" / "build_external_backend_integration_packet.py",
                 ROOT / "scripts" / "build_external_fidelity_provenance_packet.py",
                 ROOT / "scripts" / "build_external_config_manifest_packet.py",
@@ -733,6 +746,10 @@ def main() -> int:
                 EXTERNAL / "collection_job_checklist.csv",
                 RESULTS / "external_collection_job_packet_audit.json",
                 RESULTS / "external_collection_job_packet_audit.md",
+                EXTERNAL / "operator_release_bundle_manifest.csv",
+                EXTERNAL / "operator_release_bundle_README.md",
+                RESULTS / "external_operator_release_bundle_plan.json",
+                RESULTS / "external_operator_release_bundle_plan.md",
                 RESULTS / "external_operator_handoff_bundle.json",
                 RESULTS / "external_operator_handoff_bundle.md",
             ]
@@ -746,6 +763,7 @@ def main() -> int:
             "scripts/build_external_acquisition_packet.py",
             "scripts/build_external_collection_job_packet.py",
             "scripts/build_external_operator_handoff_bundle.py",
+            "scripts/build_external_operator_release_bundle.py",
             "scripts/build_external_backend_integration_packet.py",
             "scripts/build_external_fidelity_provenance_packet.py",
             "scripts/build_external_config_manifest_packet.py",
@@ -779,6 +797,10 @@ def main() -> int:
             "external_validation/collection_job_checklist.csv",
             "results/external_collection_job_packet_audit.json",
             "results/external_collection_job_packet_audit.md",
+            "external_validation/operator_release_bundle_manifest.csv",
+            "external_validation/operator_release_bundle_README.md",
+            "results/external_operator_release_bundle_plan.json",
+            "results/external_operator_release_bundle_plan.md",
             "results/external_operator_handoff_bundle.json",
             "results/external_operator_handoff_bundle.md",
         ],

@@ -64,6 +64,7 @@ def main() -> int:
     operator = read_json(RESULTS / "external_operator_packet.json")
     handoff = read_json(RESULTS / "external_operator_handoff_bundle.json")
     collection_job = read_json(RESULTS / "external_collection_job_packet_audit.json")
+    operator_release = read_json(RESULTS / "external_operator_release_bundle_plan.json")
     analysis = read_json(RESULTS / "external_analysis_plan_audit.json")
     platform_probe = read_json(RESULTS / "external_platform_probe.json")
     task_binding = read_json(RESULTS / "maniskill_task_binding_probe.json")
@@ -263,6 +264,32 @@ def main() -> int:
             f"job_state={collection_job.get('job_state')!r}, "
             f"steps={len(collection_job.get('job_steps', []) or [])}, "
             f"blockers={collection_job.get('remaining_submission_blocker_count')!r}"
+        ),
+    )
+    operator_release_checks = {check.get("name"): check.get("passed") for check in operator_release.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_operator_release_bundle_visible",
+        operator_release.get("passed") is True
+        and operator_release.get("not_external_evidence") is True
+        and operator_release.get("strict_external_evidence_ready") is False
+        and operator_release.get("bundle_state") == "READY_TO_SEND_OPERATOR_PACKAGE"
+        and operator_release.get("archive_written") is False
+        and int(operator_release.get("included_file_count", 0) or 0) >= 300
+        and operator_release_checks.get("handoff_hashes_recomputed") is True
+        and operator_release_checks.get("forbidden_evidence_paths_excluded") is True
+        and (ROOT / "scripts" / "build_external_operator_release_bundle.py").exists()
+        and (ROOT / "external_validation" / "operator_release_bundle_manifest.csv").exists()
+        and (ROOT / "external_validation" / "operator_release_bundle_README.md").exists()
+        and (RESULTS / "external_operator_release_bundle_plan.md").exists()
+        and "External operator release bundle" in texts["README"]
+        and "External operator release bundle" in texts["final_audit"]
+        and "External operator release bundle" in texts["reproducibility"]
+        and "External operator release bundle" in texts["outreach"],
+        (
+            f"bundle_state={operator_release.get('bundle_state')!r}, "
+            f"files={operator_release.get('included_file_count')!r}, "
+            f"archive_written={operator_release.get('archive_written')!r}"
         ),
     )
     runbook_checks = {check.get("name"): check.get("passed") for check in runbook.get("checks", []) or []}
@@ -1404,6 +1431,7 @@ def main() -> int:
             "maniskill_fidelity_metadata_probe_claim",
             "external_operator_packet_claim",
             "external_operator_handoff_bundle_claim",
+            "external_operator_release_bundle_claim",
             "external_analysis_plan_claim",
             "external_platform_onboarding_claim",
             "external_fidelity_provenance_packet_claim",
@@ -1438,7 +1466,7 @@ def main() -> int:
             "external_config_materialization_claim",
             "reviewer_response_packet_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'local_planner_edge_policy_claim', 'local_failure_memory_adaptation_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'external_collection_job_packet_claim', 'external_config_manifest_packet_claim', 'external_config_evidence_hash_gate_claim', 'external_rollout_evidence_packet_claim', 'external_strict_video_evidence_gate_claim', 'external_ablation_collection_packet_claim', 'external_evidence_intake_ledger_claim', 'external_precollection_manifest_draft_claim', 'external_precollection_freeze_receipt_claim', 'external_precollection_freeze_receipt_self_test_claim', 'external_postcollection_evidence_seal_claim', 'external_postcollection_evidence_seal_self_test_claim', 'external_postcollection_seal_consistency_gate_claim', 'external_postcollection_seal_consistency_self_test_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
+        f"missing={sorted({'local_planner_edge_policy_claim', 'local_failure_memory_adaptation_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_operator_release_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'external_collection_job_packet_claim', 'external_config_manifest_packet_claim', 'external_config_evidence_hash_gate_claim', 'external_rollout_evidence_packet_claim', 'external_strict_video_evidence_gate_claim', 'external_ablation_collection_packet_claim', 'external_evidence_intake_ledger_claim', 'external_precollection_manifest_draft_claim', 'external_precollection_freeze_receipt_claim', 'external_precollection_freeze_receipt_self_test_claim', 'external_postcollection_evidence_seal_claim', 'external_postcollection_evidence_seal_self_test_claim', 'external_postcollection_seal_consistency_gate_claim', 'external_postcollection_seal_consistency_self_test_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -1519,6 +1547,7 @@ def main() -> int:
             "External collection job packet",
             "External collection runbook route-gate audit",
             "External operator handoff bundle",
+            "External operator release bundle",
             "Reviewer response packet",
             "17/21",
         ],
@@ -1598,6 +1627,7 @@ def main() -> int:
             "External collection job packet",
             "External collection runbook route-gate audit",
             "External operator handoff bundle",
+            "External operator release bundle",
             "Reviewer response packet",
             "Haonan/Yilun outreach package",
             "17 satisfied, 4 blocking external gaps",
@@ -1679,6 +1709,7 @@ def main() -> int:
             "external collection job packet",
             "external collection runbook route-gate audit",
             "external operator handoff bundle",
+            "external operator release bundle",
             "reviewer response packet",
             "outreach package now frames Haonan's role as fit/falsification advice",
             "ICLR main ready: no",
@@ -1759,6 +1790,7 @@ def main() -> int:
             "External collection job packet",
             "External collection runbook route-gate audit",
             "External operator handoff bundle",
+            "External operator release bundle",
             "Reviewer response packet",
             "outreach PDFs now reflect the operator-packet/no-go stance",
             "17/21 objective requirements satisfied",
@@ -1847,6 +1879,8 @@ def main() -> int:
             "scripts/build_external_collection_job_packet.py",
             "External collection job packet",
             "scripts/build_external_operator_handoff_bundle.py",
+            "scripts/build_external_operator_release_bundle.py",
+            "External operator release bundle",
             "scripts/build_reviewer_response_packet.py",
             "reviewer response packet",
             "operator-packet/no-go stance",
@@ -1927,12 +1961,14 @@ def main() -> int:
             "External collection job packet",
             "external collection runbook route-gate audit",
             "external operator handoff bundle",
+            "External operator release bundle",
             "reviewer response packet",
             "operator-packet-aligned Haonan/Yilun outreach package",
         ],
         "outreach": [
             "results/external_operator_packet.md",
             "External collection job packet",
+            "External operator release bundle",
             "ManiSkill fidelity metadata probe",
             "fidelity acceptance materializer",
             "reference-adapter provenance catalog",

@@ -165,6 +165,7 @@ def main():
         "scripts\\build_external_operator_packet.py",
         "scripts\\build_external_collection_job_packet.py",
         "scripts\\build_external_operator_handoff_bundle.py",
+        "scripts\\build_external_operator_release_bundle.py",
         "scripts\\self_test_external_adapter_scaffold_guard.py",
         "scripts\\self_test_external_backend_contract.py",
         "scripts\\self_test_external_collection_preflight.py",
@@ -263,6 +264,7 @@ def main():
         "python scripts/build_external_operator_packet.py",
         "python scripts/build_external_collection_job_packet.py",
         "python scripts/build_external_operator_handoff_bundle.py",
+        "python scripts/build_external_operator_release_bundle.py",
         "python scripts/audit_external_release_package.py",
         "python scripts/self_test_external_manifest_builder.py",
         "python scripts/self_test_external_release_package.py",
@@ -4584,6 +4586,58 @@ def main():
         if fragment not in collection_job_command_text:
             fail(f"external collection job command file missing fragment: {fragment}")
 
+    operator_release_path = RESULTS / "external_operator_release_bundle_plan.json"
+    operator_release_md_path = RESULTS / "external_operator_release_bundle_plan.md"
+    operator_release_manifest_path = EXTERNAL / "operator_release_bundle_manifest.csv"
+    operator_release_readme_path = EXTERNAL / "operator_release_bundle_README.md"
+    for path in (
+        ROOT / "scripts" / "build_external_operator_release_bundle.py",
+        operator_release_path,
+        operator_release_md_path,
+        operator_release_manifest_path,
+        operator_release_readme_path,
+    ):
+        if not path.exists():
+            fail(f"missing external operator release bundle artifact: {path}")
+    operator_release = json.loads(operator_release_path.read_text(encoding="utf-8"))
+    if operator_release.get("version") != "external_operator_release_bundle_plan_v1":
+        fail("external operator release bundle plan version mismatch")
+    if operator_release.get("passed") is not True:
+        fail("external operator release bundle plan did not pass")
+    if operator_release.get("not_external_evidence") is not True:
+        fail("external operator release bundle plan must declare that it is not evidence")
+    if operator_release.get("strict_external_evidence_ready") is not False:
+        fail("external operator release bundle plan must not claim strict external evidence readiness")
+    if operator_release.get("bundle_state") != "READY_TO_SEND_OPERATOR_PACKAGE":
+        fail("external operator release bundle must report READY_TO_SEND_OPERATOR_PACKAGE")
+    if operator_release.get("archive_write_enabled") is not False or operator_release.get("archive_written") is not False:
+        fail("external operator release bundle default validation must not write an archive")
+    if int(operator_release.get("included_file_count", 0) or 0) < 300:
+        fail("external operator release bundle covers too few handoff files")
+    if operator_release.get("missing_files") or operator_release.get("mismatched_hashes") or operator_release.get("forbidden_paths"):
+        fail("external operator release bundle has missing, mismatched, or forbidden paths")
+    release_checks = {check.get("name"): check.get("passed") for check in operator_release.get("checks", [])}
+    for required_check in (
+        "release_bundle_is_non_evidence",
+        "source_handoff_bundle_ready",
+        "collection_job_packet_present_in_handoff",
+        "handoff_hashes_recomputed",
+        "forbidden_evidence_paths_excluded",
+        "release_manifest_covers_all_handoff_files",
+        "archive_writer_is_explicit_and_optional",
+        "no_real_manifest_written",
+        "archive_not_written_by_default",
+    ):
+        if release_checks.get(required_check) is not True:
+            fail(f"external operator release bundle plan missing passing check: {required_check}")
+    manifest_rows = count_rows(operator_release_manifest_path)
+    if manifest_rows != int(operator_release.get("included_file_count", 0) or 0):
+        fail("external operator release bundle manifest row count must match included_file_count")
+    release_readme_text = operator_release_readme_path.read_text(encoding="utf-8")
+    for fragment in ("non-evidence", "operator handoff", "--write-archive", "external_validation/manifest.json"):
+        if fragment not in release_readme_text:
+            fail(f"external operator release README missing fragment: {fragment}")
+
     config_materialization_path = RESULTS / "external_config_materialization_plan.json"
     if not config_materialization_path.exists():
         fail("missing results/external_config_materialization_plan.json; run scripts/materialize_external_configs.py")
@@ -5197,6 +5251,7 @@ def main():
         "operator_packet_no_go_visible",
         "collection_readiness_tracked_reference_route_visible",
         "external_collection_job_packet_visible",
+        "external_operator_release_bundle_visible",
         "analysis_plan_visible",
         "platform_onboarding_visible",
         "fidelity_provenance_packet_visible",

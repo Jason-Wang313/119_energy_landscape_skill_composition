@@ -196,18 +196,18 @@
   "included_file_count": 309,
   "included_files": [
     {
-      "bytes": 29620,
+      "bytes": 29991,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "E195CC2738301835CD92FBBF45C05D22B65B288019BAC47CD5D7B03F4EF674B2"
+      "sha256": "BA57563930E58E8D5EDB4FD437D0CD68ECBA2A50A9E82CD27ADEFF9234E42AA0"
     },
     {
-      "bytes": 13950,
+      "bytes": 14022,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/haonan_yilun_outreach_package.md",
-      "sha256": "04D161023CAC9D3D72A8F50C051FC2D000A94411BE561A328353C8AE2B851EB4"
+      "sha256": "5AAF7DA39F72FE1C3821DBE9A437F30D97CAF3BB5058F82013BBEA4919B0118D"
     },
     {
       "bytes": 21796,
@@ -217,18 +217,18 @@
       "sha256": "7EDFEE348BE624FC1BA8818A88D526CC53B3632F3D31A1500A19F9C5A868FC2E"
     },
     {
-      "bytes": 19613,
+      "bytes": 19944,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/reproducibility_checklist.md",
-      "sha256": "C96E23C5032DA4964757B8CBDC564BDB75B4CC89816C4D15C6B1A4D5FA26F19A"
+      "sha256": "07605B6E7760E5BEE64A45376E5A0697FF6D15DF6F24B1D5D29737020DFF380B"
     },
     {
-      "bytes": 18728,
+      "bytes": 18950,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "4AF5D7494B1FAFC55B8DDFB90D3A1E355BDED5D404226B85AC0BCA1404FCB2BB"
+      "sha256": "1D752687113D4406F32B627FECDBA0B13AC2729F59DCB00C9247A71CDA1D476A"
     },
     {
       "bytes": 34698,

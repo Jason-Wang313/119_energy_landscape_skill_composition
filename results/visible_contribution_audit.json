@@ -52,6 +52,11 @@
       "passed": true
     },
     {
+      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=309, archive_written=False",
+      "name": "external_operator_release_bundle_visible",
+      "passed": true
+    },
+    {
       "detail": "validation_command_count=47, route_gates=True, gate_order=True",
       "name": "external_runbook_route_gates_visible",
       "passed": true
