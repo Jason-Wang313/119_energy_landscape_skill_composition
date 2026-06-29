@@ -11,9 +11,9 @@
   "category_counts": {
     "baseline_spec": 12,
     "config_template": 4,
-    "generated_non_evidence_report": 98,
-    "operator_command_source": 43,
-    "operator_facing_input": 79,
+    "generated_non_evidence_report": 100,
+    "operator_command_source": 44,
+    "operator_facing_input": 83,
     "prepared_config_input": 4,
     "reference_adapter": 60,
     "runner_backend_template": 5,
@@ -46,7 +46,7 @@
       "passed": true
     },
     {
-      "detail": "records=309, handoff_count=309",
+      "detail": "records=316, handoff_count=316",
       "name": "release_manifest_covers_all_handoff_files",
       "passed": true
     },
@@ -77,7 +77,7 @@
     "placeholder_not_external_evidence"
   ],
   "forbidden_paths": [],
-  "included_file_count": 309,
+  "included_file_count": 316,
   "manifest_csv": "external_validation/operator_release_bundle_manifest.csv",
   "mismatched_hashes": [],
   "missing_files": [],
@@ -87,6 +87,6 @@
   "source_collection_job": "results/external_collection_job_packet_audit.json",
   "source_handoff_bundle": "results/external_operator_handoff_bundle.json",
   "strict_external_evidence_ready": false,
-  "total_payload_bytes": 4369597,
+  "total_payload_bytes": 4408470,
   "version": "external_operator_release_bundle_plan_v1"
 }

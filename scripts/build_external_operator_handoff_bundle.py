@@ -72,6 +72,7 @@ def build_file_manifest() -> dict[str, str]:
 
     for path in (
         ROOT / "README.md",
+        ROOT / "requirements.txt",
         DOCS / "independent_validation_protocol.md",
         DOCS / "submission_readiness_decision.md",
         DOCS / "reproducibility_checklist.md",
@@ -90,6 +91,9 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "statistical_analysis_plan.md",
         EXTERNAL / "platform_onboarding_packet.json",
         EXTERNAL / "platform_onboarding_packet.md",
+        EXTERNAL / "collection_machine_bootstrap.json",
+        EXTERNAL / "collection_machine_bootstrap.md",
+        EXTERNAL / "collection_machine_bootstrap.ps1",
         EXTERNAL / "fidelity_provenance_packet.json",
         EXTERNAL / "fidelity_provenance_packet.md",
         EXTERNAL / "fidelity_provenance_work_orders.csv",
@@ -159,6 +163,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_acquisition_packet.py",
         SCRIPTS / "build_external_analysis_plan.py",
         SCRIPTS / "build_external_platform_onboarding.py",
+        SCRIPTS / "build_external_collection_machine_bootstrap.py",
         SCRIPTS / "probe_external_platform.py",
         SCRIPTS / "probe_maniskill_task_bindings.py",
         SCRIPTS / "probe_maniskill_env_smoke.py",
@@ -219,6 +224,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "maniskill_fidelity_metadata_probe.md",
         RESULTS / "external_platform_onboarding_audit.json",
         RESULTS / "external_platform_onboarding_audit.md",
+        RESULTS / "external_collection_machine_bootstrap_audit.json",
+        RESULTS / "external_collection_machine_bootstrap_audit.md",
         RESULTS / "external_fidelity_provenance_audit.json",
         RESULTS / "external_fidelity_provenance_audit.md",
         RESULTS / "external_fidelity_acceptance_draft_audit.json",
@@ -387,6 +394,10 @@ def build_payload() -> dict[str, Any]:
     pilot_runtime = require_payload(RESULTS / "maniskill_pilot_runtime_liveness_audit.json", "maniskill_pilot_runtime_liveness_audit_v1")
     render_machine = require_payload(RESULTS / "maniskill_render_machine_qualification.json", "maniskill_render_machine_qualification_v1")
     collection_job = require_payload(RESULTS / "external_collection_job_packet_audit.json", "external_collection_job_packet_audit_v1")
+    machine_bootstrap = require_payload(
+        RESULTS / "external_collection_machine_bootstrap_audit.json",
+        "external_collection_machine_bootstrap_audit_v1",
+    )
     precollection_manifest = require_payload(
         RESULTS / "external_precollection_manifest_draft_audit.json",
         "external_precollection_manifest_draft_audit_v1",
@@ -489,6 +500,28 @@ def build_payload() -> dict[str, Any]:
             f"job_state={collection_job.get('job_state')!r}, "
             f"steps={len(collection_job.get('job_steps', []) or [])}, "
             f"blockers={collection_job.get('remaining_submission_blocker_count')!r}"
+        ),
+    )
+    machine_bootstrap_checks = {check.get("name"): check.get("passed") for check in machine_bootstrap.get("checks", []) or []}
+    add_check(
+        checks,
+        "collection_machine_bootstrap_included",
+        machine_bootstrap.get("passed") is True
+        and machine_bootstrap.get("not_external_evidence") is True
+        and machine_bootstrap.get("strict_external_evidence_ready") is False
+        and machine_bootstrap.get("bootstrap_state") == "READY_TO_BOOTSTRAP_EXTERNAL_MACHINE"
+        and machine_bootstrap_checks.get("bootstrap_script_is_probe_only") is True
+        and machine_bootstrap_checks.get("local_machine_not_promoted") is True
+        and machine_bootstrap_checks.get("no_real_outputs_written") is True
+        and "external_validation/collection_machine_bootstrap.json" in paths
+        and "external_validation/collection_machine_bootstrap.md" in paths
+        and "external_validation/collection_machine_bootstrap.ps1" in paths
+        and "results/external_collection_machine_bootstrap_audit.json" in paths
+        and "results/external_collection_machine_bootstrap_audit.md" in paths
+        and "scripts/build_external_collection_machine_bootstrap.py" in paths,
+        (
+            f"bootstrap_state={machine_bootstrap.get('bootstrap_state')!r}, "
+            f"command={machine_bootstrap.get('command_file')!r}"
         ),
     )
     precollection_checks = {check.get("name"): check.get("passed") for check in precollection_manifest.get("checks", []) or []}

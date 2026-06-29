@@ -164,6 +164,7 @@ def main():
         "scripts\\build_external_acquisition_packet.py",
         "scripts\\build_external_operator_packet.py",
         "scripts\\build_external_collection_job_packet.py",
+        "scripts\\build_external_collection_machine_bootstrap.py",
         "scripts\\build_external_operator_handoff_bundle.py",
         "scripts\\build_external_operator_release_bundle.py",
         "scripts\\self_test_external_adapter_scaffold_guard.py",
@@ -263,6 +264,7 @@ def main():
         "python scripts/build_external_acquisition_packet.py",
         "python scripts/build_external_operator_packet.py",
         "python scripts/build_external_collection_job_packet.py",
+        "python scripts/build_external_collection_machine_bootstrap.py",
         "python scripts/build_external_operator_handoff_bundle.py",
         "python scripts/build_external_operator_release_bundle.py",
         "python scripts/audit_external_release_package.py",
@@ -4485,6 +4487,7 @@ def main():
         "maniskill_pilot_runtime_liveness_included",
         "maniskill_render_machine_qualification_included",
         "external_collection_job_packet_included",
+        "collection_machine_bootstrap_included",
         "method_implementation_packet_included",
         "operator_actions_cover_evidence_collection",
         "post_collection_commands_cover_strict_gates",
@@ -4585,6 +4588,73 @@ def main():
     ):
         if fragment not in collection_job_command_text:
             fail(f"external collection job command file missing fragment: {fragment}")
+
+    bootstrap_packet_path = EXTERNAL / "collection_machine_bootstrap.json"
+    bootstrap_packet_md_path = EXTERNAL / "collection_machine_bootstrap.md"
+    bootstrap_command_path = EXTERNAL / "collection_machine_bootstrap.ps1"
+    bootstrap_audit_path = RESULTS / "external_collection_machine_bootstrap_audit.json"
+    bootstrap_audit_md_path = RESULTS / "external_collection_machine_bootstrap_audit.md"
+    for path in (
+        ROOT / "scripts" / "build_external_collection_machine_bootstrap.py",
+        bootstrap_packet_path,
+        bootstrap_packet_md_path,
+        bootstrap_command_path,
+        bootstrap_audit_path,
+        bootstrap_audit_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external collection machine bootstrap artifact: {path}")
+    bootstrap_packet = json.loads(bootstrap_packet_path.read_text(encoding="utf-8"))
+    bootstrap_audit = json.loads(bootstrap_audit_path.read_text(encoding="utf-8"))
+    if bootstrap_packet.get("version") != "external_collection_machine_bootstrap_v1":
+        fail("external collection machine bootstrap packet version mismatch")
+    if bootstrap_audit.get("version") != "external_collection_machine_bootstrap_audit_v1":
+        fail("external collection machine bootstrap audit version mismatch")
+    if bootstrap_audit.get("packet_version") != "external_collection_machine_bootstrap_v1":
+        fail("external collection machine bootstrap audit must record the packet version")
+    for name, payload in (("packet", bootstrap_packet), ("audit", bootstrap_audit)):
+        if payload.get("passed") is not True:
+            fail(f"external collection machine bootstrap {name} did not pass")
+        if payload.get("not_external_evidence") is not True:
+            fail(f"external collection machine bootstrap {name} must declare that it is not evidence")
+        if payload.get("strict_external_evidence_ready") is not False:
+            fail(f"external collection machine bootstrap {name} must not claim strict external evidence readiness")
+        if payload.get("bootstrap_state") != "READY_TO_BOOTSTRAP_EXTERNAL_MACHINE":
+            fail(f"external collection machine bootstrap {name} must be ready to bootstrap an external machine")
+        if len(payload.get("bootstrap_steps", []) or []) < 7:
+            fail(f"external collection machine bootstrap {name} has too few bootstrap steps")
+    bootstrap_checks = {check.get("name"): check.get("passed") for check in bootstrap_audit.get("checks", [])}
+    for required_check in (
+        "bootstrap_packet_is_non_evidence",
+        "source_platform_onboarding_ready",
+        "source_collection_job_still_no_go",
+        "local_machine_not_promoted",
+        "bootstrap_commands_cover_machine_render_and_liveness",
+        "bootstrap_script_is_probe_only",
+        "install_guidance_mentions_core_optional_stack",
+        "no_real_outputs_written",
+    ):
+        if bootstrap_checks.get(required_check) is not True:
+            fail(f"external collection machine bootstrap missing passing check: {required_check}")
+    bootstrap_command_text = bootstrap_command_path.read_text(encoding="utf-8")
+    for fragment in (
+        "ConfirmBootstrapOnly",
+        "probe_external_platform.py --strict",
+        "probe_maniskill_task_bindings.py --strict",
+        "probe_maniskill_env_smoke.py --strict",
+        "probe_maniskill_fidelity_metadata.py --strict",
+        "audit_maniskill_render_video_preflight.py",
+        "audit_maniskill_pilot_runtime_liveness.py",
+        "build_maniskill_render_machine_qualification.py",
+        "mani_skill",
+        "torch",
+        "imageio-ffmpeg",
+    ):
+        if fragment not in bootstrap_command_text:
+            fail(f"external collection machine bootstrap command file missing fragment: {fragment}")
+    for forbidden in ("real_collection_runner.py", "materialize_fidelity_acceptance.py", "build_external_manifest.py --write"):
+        if forbidden in bootstrap_command_text:
+            fail(f"external collection machine bootstrap command file must not include collection/evidence command: {forbidden}")
 
     operator_release_path = RESULTS / "external_operator_release_bundle_plan.json"
     operator_release_md_path = RESULTS / "external_operator_release_bundle_plan.md"
@@ -5251,6 +5321,7 @@ def main():
         "operator_packet_no_go_visible",
         "collection_readiness_tracked_reference_route_visible",
         "external_collection_job_packet_visible",
+        "external_collection_machine_bootstrap_visible",
         "external_operator_release_bundle_visible",
         "analysis_plan_visible",
         "platform_onboarding_visible",

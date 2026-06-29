@@ -42,7 +42,7 @@
       "passed": true
     },
     {
-      "detail": "files=309, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=316, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -52,7 +52,12 @@
       "passed": true
     },
     {
-      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=309, archive_written=False",
+      "detail": "bootstrap_state='READY_TO_BOOTSTRAP_EXTERNAL_MACHINE', command='external_validation/collection_machine_bootstrap.ps1'",
+      "name": "external_collection_machine_bootstrap_visible",
+      "passed": true
+    },
+    {
+      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=316, archive_written=False",
       "name": "external_operator_release_bundle_visible",
       "passed": true
     },

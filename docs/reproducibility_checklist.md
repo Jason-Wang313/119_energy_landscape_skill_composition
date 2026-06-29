@@ -55,6 +55,7 @@
 - External evidence acquisition packet builder: `scripts/build_external_acquisition_packet.py`
 - External operator packet builder: `scripts/build_external_operator_packet.py`
 - External collection job packet builder: `scripts/build_external_collection_job_packet.py`
+- External collection machine bootstrap builder: `scripts/build_external_collection_machine_bootstrap.py`
 - External operator handoff bundle builder: `scripts/build_external_operator_handoff_bundle.py`
 - External operator release bundle builder: `scripts/build_external_operator_release_bundle.py`
 - External adapter scaffold guard self-test: `scripts/self_test_external_adapter_scaffold_guard.py`
@@ -231,6 +232,11 @@
   - `external_validation/collection_job_checklist.csv`
   - `results/external_collection_job_packet_audit.json`
   - `results/external_collection_job_packet_audit.md`
+  - `external_validation/collection_machine_bootstrap.json`
+  - `external_validation/collection_machine_bootstrap.md`
+  - `external_validation/collection_machine_bootstrap.ps1`
+  - `results/external_collection_machine_bootstrap_audit.json`
+  - `results/external_collection_machine_bootstrap_audit.md`
   - `results/external_operator_handoff_bundle.json`
   - `results/external_operator_handoff_bundle.md`
   - `external_validation/operator_release_bundle_manifest.csv`

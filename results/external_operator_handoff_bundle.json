@@ -3,9 +3,9 @@
   "category_counts": {
     "baseline_spec": 12,
     "config_template": 4,
-    "generated_non_evidence_report": 98,
-    "operator_command_source": 43,
-    "operator_facing_input": 79,
+    "generated_non_evidence_report": 100,
+    "operator_command_source": 44,
+    "operator_facing_input": 83,
     "prepared_config_input": 4,
     "reference_adapter": 60,
     "runner_backend_template": 5,
@@ -48,12 +48,17 @@
       "passed": true
     },
     {
+      "detail": "bootstrap_state='READY_TO_BOOTSTRAP_EXTERNAL_MACHINE', command='external_validation/collection_machine_bootstrap.ps1'",
+      "name": "collection_machine_bootstrap_included",
+      "passed": true
+    },
+    {
       "detail": "configs=4, method_gaps=11, rollout_gaps=8",
       "name": "precollection_manifest_draft_included",
       "passed": true
     },
     {
-      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 98, 'operator_command_source': 43, 'operator_facing_input': 79, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 100, 'operator_command_source': 44, 'operator_facing_input': 83, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "handoff_has_task_config_and_baseline_assets",
       "passed": true
     },
@@ -178,7 +183,7 @@
       "passed": true
     },
     {
-      "detail": "hashed_files=309",
+      "detail": "hashed_files=316",
       "name": "file_hashes_are_recorded",
       "passed": true
     }
@@ -193,21 +198,21 @@
     "placeholder_not_external_evidence"
   ],
   "handoff_bundle_ready": true,
-  "included_file_count": 309,
+  "included_file_count": 316,
   "included_files": [
     {
-      "bytes": 29991,
+      "bytes": 30386,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "BA57563930E58E8D5EDB4FD437D0CD68ECBA2A50A9E82CD27ADEFF9234E42AA0"
+      "sha256": "D06DD6FDA3F6CB47038D80B4D720739047ED7FA717E970A7B84252BF339B5048"
     },
     {
-      "bytes": 14022,
+      "bytes": 14104,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/haonan_yilun_outreach_package.md",
-      "sha256": "5AAF7DA39F72FE1C3821DBE9A437F30D97CAF3BB5058F82013BBEA4919B0118D"
+      "sha256": "F9CE2DB3E8B69A27A930A4A650F9A9AFD207B6CDD993DF94BD71EDEE85D84EDF"
     },
     {
       "bytes": 21796,
@@ -217,18 +222,18 @@
       "sha256": "7EDFEE348BE624FC1BA8818A88D526CC53B3632F3D31A1500A19F9C5A868FC2E"
     },
     {
-      "bytes": 19944,
+      "bytes": 20351,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/reproducibility_checklist.md",
-      "sha256": "07605B6E7760E5BEE64A45376E5A0697FF6D15DF6F24B1D5D29737020DFF380B"
+      "sha256": "27437FF196C1BAAFD7CC9FECB6D80A4F6D7507A00C98A7C4DB6590C21B8F86BE"
     },
     {
-      "bytes": 18950,
+      "bytes": 19271,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "1D752687113D4406F32B627FECDBA0B13AC2729F59DCB00C9247A71CDA1D476A"
+      "sha256": "863EE3C7C0C5916E2516930D763914AF3B795797B8C65A710597788E8F5511E9"
     },
     {
       "bytes": 34698,
@@ -875,6 +880,27 @@
       "sha256": "5705718A05989CA7DFE3327267A8D840964693EF680431ED421CC948E915DD2F"
     },
     {
+      "bytes": 5300,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "external_validation/collection_machine_bootstrap.json",
+      "sha256": "D6C0B04B73B12D5ECEE31DEAC91675D92C750A9339AEEACAD5092BE91BB2CFBE"
+    },
+    {
+      "bytes": 3593,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "external_validation/collection_machine_bootstrap.md",
+      "sha256": "2ABF1CBECCCF1F110B674D3FDE603BDFE34A7637A5D29A09527FD210736BDF4E"
+    },
+    {
+      "bytes": 2330,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "external_validation/collection_machine_bootstrap.ps1",
+      "sha256": "B50B58B3A30AE2F73BBD647E844D026E75E1750A0B4E43B55CCC6F99C48E166D"
+    },
+    {
       "bytes": 5942,
       "category": "operator_facing_input",
       "exists": true,
@@ -1372,6 +1398,13 @@
       "sha256": "357F6A44637AD1D55E6E98775B60640FE0E7C0A32FE0C1707FC5863C00D3CDB9"
     },
     {
+      "bytes": 89,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "requirements.txt",
+      "sha256": "A2D11E893CA2585FFC7D208B887FADAD3D48F376565BD9A6E662FC968F3BF028"
+    },
+    {
       "bytes": 5211,
       "category": "generated_non_evidence_report",
       "exists": true,
@@ -1510,6 +1543,20 @@
       "exists": true,
       "path": "results/external_collection_job_packet_audit.md",
       "sha256": "5E0B9B48844464D7F1992A5DCFF2867FD7A391E1F4C3ACEF7259E0C291631019"
+    },
+    {
+      "bytes": 5371,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_collection_machine_bootstrap_audit.json",
+      "sha256": "CDEB3F7C5A66D80C9A9C9FE68394C7B061E02F1C415C0932E5EBD8E73A771C10"
+    },
+    {
+      "bytes": 3599,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_collection_machine_bootstrap_audit.md",
+      "sha256": "B765790A3A322F3B54B079FCD0A0FB4A43AB915D254504D381E7430E3FE92E53"
     },
     {
       "bytes": 147907,
@@ -2184,6 +2231,13 @@
       "sha256": "6424A5A6C950798D9D48BC2FBA120C18D14750FF4CC184CC6A41482982398E0E"
     },
     {
+      "bytes": 15439,
+      "category": "operator_command_source",
+      "exists": true,
+      "path": "scripts/build_external_collection_machine_bootstrap.py",
+      "sha256": "E94EB18269326A1FBEF0B369E3976600366AB16E821ED33B13E846DC4D293DC2"
+    },
+    {
       "bytes": 20797,
       "category": "operator_command_source",
       "exists": true,
@@ -2226,11 +2280,11 @@
       "sha256": "C166221116A089779E0111AE13BDB75CC1625849486A1C116AF8534D264334AF"
     },
     {
-      "bytes": 71620,
+      "bytes": 73567,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "44FDF4DEEEA0595130A2AD60C89D4E601CF49D9884D3CFC6D31757BFD3D390C4"
+      "sha256": "E8C1B32B748A01E4B447E00A3D99071F2E8336ECB35B45ACD89451AFBEB7B9BF"
     },
     {
       "bytes": 70465,

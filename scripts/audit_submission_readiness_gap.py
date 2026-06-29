@@ -114,6 +114,8 @@ def main() -> int:
     handoff_bundle = read_json(handoff_bundle_path) if handoff_bundle_path.exists() else {}
     collection_job_path = RESULTS / "external_collection_job_packet_audit.json"
     collection_job = read_json(collection_job_path) if collection_job_path.exists() else {}
+    machine_bootstrap_path = RESULTS / "external_collection_machine_bootstrap_audit.json"
+    machine_bootstrap = read_json(machine_bootstrap_path) if machine_bootstrap_path.exists() else {}
     operator_release_path = RESULTS / "external_operator_release_bundle_plan.json"
     operator_release = read_json(operator_release_path) if operator_release_path.exists() else {}
     method_implementation_path = RESULTS / "external_method_implementation_audit.json"
@@ -633,6 +635,7 @@ def main() -> int:
     rollout_evidence_checks = {check.get("name"): check.get("passed") for check in rollout_evidence.get("checks", [])}
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", [])}
     collection_job_checks = {check.get("name"): check.get("passed") for check in collection_job.get("checks", [])}
+    machine_bootstrap_checks = {check.get("name"): check.get("passed") for check in machine_bootstrap.get("checks", [])}
     operator_release_checks = {check.get("name"): check.get("passed") for check in operator_release.get("checks", [])}
     acquisition_packet_ok = (
         acquisition_packet.get("passed") is True
@@ -698,6 +701,15 @@ def main() -> int:
         and len(collection_job.get("job_steps", []) or []) >= 17
         and collection_job_checks.get("command_sequence_covers_full_external_validation_route") is True
         and collection_job_checks.get("official_collection_commands_guarded") is True
+        and machine_bootstrap.get("passed") is True
+        and machine_bootstrap.get("version") == "external_collection_machine_bootstrap_audit_v1"
+        and machine_bootstrap.get("packet_version") == "external_collection_machine_bootstrap_v1"
+        and machine_bootstrap.get("not_external_evidence") is True
+        and machine_bootstrap.get("strict_external_evidence_ready") is False
+        and machine_bootstrap.get("bootstrap_state") == "READY_TO_BOOTSTRAP_EXTERNAL_MACHINE"
+        and machine_bootstrap_checks.get("bootstrap_script_is_probe_only") is True
+        and machine_bootstrap_checks.get("local_machine_not_promoted") is True
+        and machine_bootstrap_checks.get("no_real_outputs_written") is True
         and operator_release.get("passed") is True
         and operator_release.get("version") == "external_operator_release_bundle_plan_v1"
         and operator_release.get("not_external_evidence") is True
@@ -711,6 +723,7 @@ def main() -> int:
             [
                 ROOT / "scripts" / "build_external_acquisition_packet.py",
                 ROOT / "scripts" / "build_external_collection_job_packet.py",
+                ROOT / "scripts" / "build_external_collection_machine_bootstrap.py",
                 ROOT / "scripts" / "build_external_operator_handoff_bundle.py",
                 ROOT / "scripts" / "build_external_operator_release_bundle.py",
                 ROOT / "scripts" / "build_external_backend_integration_packet.py",
@@ -746,6 +759,11 @@ def main() -> int:
                 EXTERNAL / "collection_job_checklist.csv",
                 RESULTS / "external_collection_job_packet_audit.json",
                 RESULTS / "external_collection_job_packet_audit.md",
+                EXTERNAL / "collection_machine_bootstrap.json",
+                EXTERNAL / "collection_machine_bootstrap.md",
+                EXTERNAL / "collection_machine_bootstrap.ps1",
+                RESULTS / "external_collection_machine_bootstrap_audit.json",
+                RESULTS / "external_collection_machine_bootstrap_audit.md",
                 EXTERNAL / "operator_release_bundle_manifest.csv",
                 EXTERNAL / "operator_release_bundle_README.md",
                 RESULTS / "external_operator_release_bundle_plan.json",
@@ -762,6 +780,7 @@ def main() -> int:
         evidence=[
             "scripts/build_external_acquisition_packet.py",
             "scripts/build_external_collection_job_packet.py",
+            "scripts/build_external_collection_machine_bootstrap.py",
             "scripts/build_external_operator_handoff_bundle.py",
             "scripts/build_external_operator_release_bundle.py",
             "scripts/build_external_backend_integration_packet.py",
@@ -797,6 +816,11 @@ def main() -> int:
             "external_validation/collection_job_checklist.csv",
             "results/external_collection_job_packet_audit.json",
             "results/external_collection_job_packet_audit.md",
+            "external_validation/collection_machine_bootstrap.json",
+            "external_validation/collection_machine_bootstrap.md",
+            "external_validation/collection_machine_bootstrap.ps1",
+            "results/external_collection_machine_bootstrap_audit.json",
+            "results/external_collection_machine_bootstrap_audit.md",
             "external_validation/operator_release_bundle_manifest.csv",
             "external_validation/operator_release_bundle_README.md",
             "results/external_operator_release_bundle_plan.json",

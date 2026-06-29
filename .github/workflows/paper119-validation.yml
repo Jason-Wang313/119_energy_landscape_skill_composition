@@ -199,6 +199,9 @@ jobs:
       - name: Build external collection job packet
         run: python scripts/build_external_collection_job_packet.py
 
+      - name: Build external collection machine bootstrap
+        run: python scripts/build_external_collection_machine_bootstrap.py
+
       - name: Build external operator handoff bundle
         run: python scripts/build_external_operator_handoff_bundle.py
 
