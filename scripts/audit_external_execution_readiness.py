@@ -1226,6 +1226,44 @@ def main() -> int:
         ),
     )
 
+    freeze_ok, precollection_freeze, freeze_detail = passed_json(
+        RESULTS / "external_precollection_freeze_receipt_audit.json",
+        version="external_precollection_freeze_receipt_audit_v1",
+    )
+    add_check(checks, "external_precollection_freeze_receipt_ready", freeze_ok, freeze_detail)
+    freeze_checks = {
+        check.get("name"): check.get("passed")
+        for check in precollection_freeze.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "external_precollection_freeze_receipt_not_evidence",
+        precollection_freeze.get("not_external_evidence") is True
+        and precollection_freeze.get("strict_external_evidence_ready") is False
+        and precollection_freeze.get("freeze_receipt_ready") is False
+        and freeze_checks.get("receipt_is_non_evidence_and_fail_closed") is True,
+        (
+            f"freeze_receipt_ready={precollection_freeze.get('freeze_receipt_ready')!r}, "
+            f"strict_external_evidence_ready={precollection_freeze.get('strict_external_evidence_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "external_precollection_freeze_receipt_hash_lock",
+        int(precollection_freeze.get("locked_artifact_count", 0) or 0) >= 25
+        and freeze_checks.get("core_lock_artifacts_hashed") is True
+        and freeze_checks.get("prepared_task_configs_hashed") is True
+        and freeze_checks.get("checkout_and_skill_hash_recorded") is True,
+        f"locked_artifact_count={precollection_freeze.get('locked_artifact_count')!r}",
+    )
+    add_check(
+        checks,
+        "external_precollection_freeze_receipt_gate_order",
+        freeze_checks.get("strict_sequence_places_receipt_before_collection") is True
+        and "build_external_precollection_freeze_receipt.py" in "\n".join(precollection_freeze.get("strict_command_sequence", []) or []),
+        f"commands={len(precollection_freeze.get('strict_command_sequence', []) or [])}",
+    )
+
     preflight_path = RESULTS / "external_evidence_preflight.json"
     preflight_ok, preflight, preflight_detail = passed_json(
         preflight_path,
@@ -1404,6 +1442,9 @@ def main() -> int:
         EXTERNAL / "manifest_assembly_checklist.csv",
         EXTERNAL / "manifest_precollection_draft.json",
         EXTERNAL / "manifest_precollection_draft.md",
+        EXTERNAL / "precollection_freeze_receipt.json",
+        EXTERNAL / "precollection_freeze_receipt.md",
+        EXTERNAL / "precollection_freeze_receipt.csv",
         EXTERNAL / "log_schema_v1.json",
         EXTERNAL / "statistical_analysis_plan.json",
         EXTERNAL / "statistical_analysis_plan.md",
@@ -1456,6 +1497,7 @@ def main() -> int:
         RESULTS / "external_ablation_collection_audit.md",
         RESULTS / "external_evidence_intake_ledger_audit.md",
         RESULTS / "external_precollection_manifest_draft_audit.md",
+        RESULTS / "external_precollection_freeze_receipt_audit.md",
         EXTERNAL / "evidence_intake_ledger.json",
         EXTERNAL / "evidence_intake_ledger.md",
         EXTERNAL / "evidence_intake_ledger.csv",
@@ -1607,6 +1649,10 @@ def main() -> int:
         "external_precollection_manifest_draft_not_evidence",
         "external_precollection_manifest_draft_config_hashes",
         "external_precollection_manifest_draft_fail_closed",
+        "external_precollection_freeze_receipt_ready",
+        "external_precollection_freeze_receipt_not_evidence",
+        "external_precollection_freeze_receipt_hash_lock",
+        "external_precollection_freeze_receipt_gate_order",
         "external_evidence_preflight_ready",
         "external_evidence_preflight_not_evidence",
         "external_evidence_preflight_fail_closed",
@@ -1654,6 +1700,7 @@ def main() -> int:
             "completed rollout evidence packet work orders with manifest-declared JSONL logs and videos",
             "manifest-declared external ablation logs and videos for basin_overlap, barrier_height, descent_continuity, risk_calibration, and seam_repair",
             "completed evidence intake ledger rows for all current strict external-evidence failures",
+            "completed precollection freeze receipt with real backend, specific run id, independent operator identity, clean checkout, and unsealed alias map before collection",
             "manifest-declared videos",
             "official manifest promotion from the precollection draft after real evidence is collected",
             "manifest-declared independent non-oracle adapter implementations",

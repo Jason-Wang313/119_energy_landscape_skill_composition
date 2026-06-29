@@ -94,6 +94,10 @@ def build_payload() -> dict[str, Any]:
         RESULTS / "external_evidence_intake_ledger_audit.json",
         "external_evidence_intake_ledger_v1",
     )
+    precollection_freeze = require_payload(
+        RESULTS / "external_precollection_freeze_receipt_audit.json",
+        "external_precollection_freeze_receipt_audit_v1",
+    )
     precollection_manifest = require_payload(
         RESULTS / "external_precollection_manifest_draft_audit.json",
         "external_precollection_manifest_draft_audit_v1",
@@ -137,6 +141,7 @@ def build_payload() -> dict[str, Any]:
         "maniskill_render_machine_qualification",
         "ablation_collection_packet",
         "evidence_intake_ledger",
+        "precollection_freeze_receipt",
         "run_collection",
         "manifest_and_release",
         "strict_rollout_recompute",
@@ -339,6 +344,27 @@ def build_payload() -> dict[str, Any]:
             f"groups={len(evidence_intake.get('closure_groups', []) or [])}"
         ),
     )
+    freeze_action = actions.get("precollection_freeze_receipt", {})
+    freeze_commands = "\n".join(freeze_action.get("commands", []) or [])
+    freeze_checks = {check.get("name"): check.get("passed") for check in precollection_freeze.get("checks", []) or []}
+    add_check(
+        checks,
+        "precollection_freeze_receipt_recorded_but_not_evidence",
+        precollection_freeze.get("passed") is True
+        and precollection_freeze.get("not_external_evidence") is True
+        and precollection_freeze.get("strict_external_evidence_ready") is False
+        and precollection_freeze.get("freeze_receipt_ready") is False
+        and int(precollection_freeze.get("locked_artifact_count", 0) or 0) >= 25
+        and freeze_checks.get("receipt_is_non_evidence_and_fail_closed") is True
+        and freeze_checks.get("core_lock_artifacts_hashed") is True
+        and freeze_checks.get("prepared_task_configs_hashed") is True
+        and freeze_checks.get("strict_sequence_places_receipt_before_collection") is True
+        and "build_external_precollection_freeze_receipt.py" in freeze_commands,
+        (
+            f"locked_artifacts={precollection_freeze.get('locked_artifact_count')!r}, "
+            f"freeze_receipt_ready={precollection_freeze.get('freeze_receipt_ready')!r}"
+        ),
+    )
     precollection_checks = {check.get("name"): check.get("passed") for check in precollection_manifest.get("checks", []) or []}
     add_check(
         checks,
@@ -437,11 +463,13 @@ def build_payload() -> dict[str, Any]:
                 EXTERNAL / "runner" / "real_collection_runner.py",
                 EXTERNAL / "blinded_operator_sheet.csv",
                 EXTERNAL / "method_alias_map.json",
+                EXTERNAL / "precollection_freeze_receipt.md",
+                EXTERNAL / "precollection_freeze_receipt.csv",
                 EXTERNAL / "platform_qualification_checklist.md",
                 EXTERNAL / "config_schema_v1.json",
             )
         ),
-        "runbook, runner, blinded sheet, alias map, platform checklist, and config schema",
+        "runbook, runner, blinded sheet, alias map, precollection freeze receipt, platform checklist, and config schema",
     )
 
     passed = all(check["passed"] for check in checks)
@@ -452,6 +480,12 @@ def build_payload() -> dict[str, Any]:
         "python scripts\\audit_external_collection_readiness.py --strict "
         f"--backend-module {reference_backend} --task-config-dir external_validation\\configs "
         f"--run-id {reference_run_id} --unsealed-alias-map"
+    )
+    reference_precollection_freeze_command = (
+        "python scripts\\build_external_precollection_freeze_receipt.py "
+        f"--backend-module {reference_backend} --run-id {reference_run_id} "
+        "--operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> "
+        "--date-locked <YYYY-MM-DD> --unsealed-alias-map"
     )
     reference_collection_command = (
         "python external_validation\\runner\\real_collection_runner.py "
@@ -479,6 +513,7 @@ def build_payload() -> dict[str, Any]:
             "blocking_missing_count": int(reference_preflight.get("collection_blocking_missing_count", 0) or 0),
             "blocking_missing": reference_blockers,
             "pre_collection_gate_command": reference_pre_collection_gate_command,
+            "precollection_freeze_command": reference_precollection_freeze_command,
             "collection_command_after_fidelity_acceptance": reference_collection_command,
             "audit_command": "python scripts\\audit_maniskill_reference_collection_preflight.py",
         },
@@ -589,6 +624,19 @@ def build_payload() -> dict[str, Any]:
             "audit_md_path": "results/external_evidence_intake_ledger_audit.md",
             "build_command": "python scripts\\build_external_evidence_intake_ledger.py",
         },
+        "precollection_freeze_receipt": {
+            "not_external_evidence": True,
+            "strict_external_evidence_ready": precollection_freeze.get("strict_external_evidence_ready") is True,
+            "freeze_receipt_ready": precollection_freeze.get("freeze_receipt_ready") is True,
+            "locked_artifact_count": int(precollection_freeze.get("locked_artifact_count", 0) or 0),
+            "missing_lock_paths": list(precollection_freeze.get("missing_lock_paths", []) or []),
+            "packet_path": "external_validation/precollection_freeze_receipt.md",
+            "csv_path": "external_validation/precollection_freeze_receipt.csv",
+            "audit_path": "results/external_precollection_freeze_receipt_audit.json",
+            "audit_md_path": "results/external_precollection_freeze_receipt_audit.md",
+            "build_command": "python scripts\\build_external_precollection_freeze_receipt.py",
+            "operator_regeneration_command": precollection_freeze.get("operator_regeneration_command"),
+        },
         "precollection_manifest_draft": {
             "not_external_evidence": True,
             "draft_ready": precollection_manifest.get("draft_ready") is True,
@@ -610,6 +658,12 @@ def build_payload() -> dict[str, Any]:
             "python scripts\\audit_external_collection_readiness.py --strict "
             "--backend-module <module_or_path> --task-config-dir external_validation\\configs "
             "--run-id <specific_run_id> --unsealed-alias-map"
+        ),
+        "precollection_freeze_command": (
+            "python scripts\\build_external_precollection_freeze_receipt.py "
+            "--backend-module <module_or_path> --run-id <specific_run_id> "
+            "--operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> "
+            "--date-locked <YYYY-MM-DD> --unsealed-alias-map"
         ),
         "backend_contract_gate_command": backend_contract.get("strict_command", ""),
         "config_materialization_command": materialization.get("operator_write_command", ""),
@@ -636,7 +690,10 @@ def build_payload() -> dict[str, Any]:
             "results/external_rollout_evidence_audit.json",
             "results/external_ablation_collection_audit.json",
             "results/external_evidence_intake_ledger_audit.json",
+            "results/external_precollection_freeze_receipt_audit.json",
             "results/external_precollection_manifest_draft_audit.json",
+            "external_validation/precollection_freeze_receipt.json",
+            "external_validation/precollection_freeze_receipt.md",
             "external_validation/manifest_precollection_draft.json",
             "external_validation/manifest_precollection_draft.md",
             "results/external_fidelity_provenance_audit.json",
@@ -693,6 +750,12 @@ def write_md(payload: dict[str, Any]) -> None:
             "",
             "```powershell",
             reference["pre_collection_gate_command"],
+            "```",
+            "",
+            "Reference-route precollection freeze receipt:",
+            "",
+            "```powershell",
+            reference["precollection_freeze_command"],
             "```",
             "",
             "Reference-route collection command after fidelity acceptance passes:",
@@ -919,6 +982,31 @@ def write_md(payload: dict[str, Any]) -> None:
         ]
     )
 
+    freeze = payload["precollection_freeze_receipt"]
+    lines.extend(
+        [
+            "",
+            "## External Precollection Freeze Receipt",
+            "",
+            "This receipt is not evidence. It hash-locks the operator sheet, alias map, prepared task configs, backend/run identity, method cutover checklist, manifest draft, runner files, and source audits before official JSONL/video collection.",
+            "",
+            f"- Receipt: `{freeze['packet_path']}`",
+            f"- CSV: `{freeze['csv_path']}`",
+            f"- Audit JSON: `{freeze['audit_path']}`",
+            f"- Audit notes: `{freeze['audit_md_path']}`",
+            f"- Locked artifacts: `{freeze['locked_artifact_count']}`",
+            f"- Freeze receipt ready: `{str(freeze['freeze_receipt_ready']).lower()}`",
+            f"- Strict external evidence ready: `{str(freeze['strict_external_evidence_ready']).lower()}`",
+            f"- Missing lock paths: `{freeze['missing_lock_paths']}`",
+            "",
+            "Operator regeneration command:",
+            "",
+            "```powershell",
+            str(freeze["operator_regeneration_command"] or freeze["build_command"]),
+            "```",
+        ]
+    )
+
     precollection = payload["precollection_manifest_draft"]
     lines.extend(
         [
@@ -972,6 +1060,12 @@ def write_md(payload: dict[str, Any]) -> None:
             "",
             "```powershell",
             payload["pre_collection_gate_command"],
+            "```",
+            "",
+            "Precollection freeze receipt:",
+            "",
+            "```powershell",
+            payload["precollection_freeze_command"],
             "```",
             "",
             "Actual collection command after the strict gate passes:",

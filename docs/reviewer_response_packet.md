@@ -59,7 +59,7 @@ Current local fact: The readiness audit reports 17/21 requirements satisfied and
 
 Allowed claim: The current paper is locally strong but not ready for deployment-level claims or final main-conference submission claims.
 
-Remaining gate: Real robot or accepted high-fidelity manifest/log/video/checkpoint evidence must pass strict audits. The strict fidelity acceptance provenance gate rejects acceptance files unless they come from guarded materialization, declare acceptance_ready=true, carry a SHA40 collection commit, carry an ISO-like lock date, include operator confirmation booleans, and keep strict evidence flags false until manifest-backed logs/videos pass. The pilot liveness layer, render resource sweep, render failure remediation packet, and reset-timeout triage sidecar are non-evidence: they record timeout progress, backend reset substage markers, 16x16 descriptor-pool failure persistence, render-backed-video remediation work orders, the active reset-stage task/config/method/env, the last backend substage reached, and whether a diagnostic sidecar rejected before JSONL write was stopped by the official video guard before any official row can be written.
+Remaining gate: Real robot or accepted high-fidelity manifest/log/video/checkpoint evidence must pass strict audits. The strict fidelity acceptance provenance gate rejects acceptance files unless they come from guarded materialization, declare acceptance_ready=true, carry a SHA40 collection commit, carry an ISO-like lock date, include operator confirmation booleans, and keep strict evidence flags false until manifest-backed logs/videos pass. The pilot liveness layer is non-evidence: it records timeout progress and whether a diagnostic sidecar rejected before JSONL write was stopped by the official video guard before any official row can be written.
 
 Outreach use: Do not ask Haonan to supply the missing proof; ask for fit/falsification advice and possible collaboration.
 
@@ -124,7 +124,7 @@ Evidence:
 
 Response: The local paper names the prior method and multiple baselines, but the strict external baseline contract still keeps independent non-oracle evidence as missing.
 
-Current local fact: The strict external baseline and adapter-evidence audits remain fail-closed until manifest-declared real implementations exist; the method manifest cutover checklist names the required `manifest.methods[]` fields, checkpoint/config hashes, implementation provenance, fairness-contract bindings, and JSONL `policy_or_config_hash` matches for every non-oracle method.
+Current local fact: The strict external baseline and adapter-evidence audits remain fail-closed until manifest-declared real implementations exist.
 
 Allowed claim: Local baselines are broad and audited; independent external baseline evidence is still required.
 
@@ -212,7 +212,7 @@ Evidence:
 
 Response: Agree. The correct current decision is STRONG_REVISE; the packet exists to make the remaining proof layer concrete.
 
-Current local fact: Readiness remains 17/21 with 4 blocking external gaps. The official video write guard rejects diagnostic fallback, non-MP4-like, undersized, out-of-dir, or unexpected videos, and the official JSONL write guard rejects schema-invalid rollout records before the actual collection runner appends them. atomic official evidence promotion preserves prior official videos/logs if the selected batch fails, and the render failure remediation packet converts the current render-backed-video blocker into non-evidence operator work orders, but these remain tooling hardening rather than external validation.
+Current local fact: Readiness remains 17/21 with 4 blocking external gaps. The official video write guard rejects diagnostic fallback, non-MP4-like, undersized, out-of-dir, or unexpected videos, and the official JSONL write guard rejects schema-invalid rollout records before the actual collection runner appends them. atomic official evidence promotion preserves prior official videos/logs if the selected batch fails, the render resource sweep records the current render-backed-video blocker, and the external precollection freeze receipt hash-locks precollection inputs before official collection; these remain tooling hardening rather than external validation.
 
 Allowed claim: The local package is stronger and more reviewer-ready, but not independently complete.
 

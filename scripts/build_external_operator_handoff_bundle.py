@@ -110,6 +110,9 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "evidence_intake_ledger.json",
         EXTERNAL / "evidence_intake_ledger.md",
         EXTERNAL / "evidence_intake_ledger.csv",
+        EXTERNAL / "precollection_freeze_receipt.json",
+        EXTERNAL / "precollection_freeze_receipt.md",
+        EXTERNAL / "precollection_freeze_receipt.csv",
         EXTERNAL / "pilot_smoke_packet.json",
         EXTERNAL / "pilot_smoke_packet.md",
         EXTERNAL / "pilot_smoke_work_orders.csv",
@@ -161,6 +164,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_rollout_evidence_packet.py",
         SCRIPTS / "build_external_ablation_collection_packet.py",
         SCRIPTS / "build_external_evidence_intake_ledger.py",
+        SCRIPTS / "build_external_precollection_freeze_receipt.py",
         SCRIPTS / "audit_external_pilot_smoke.py",
         SCRIPTS / "build_external_pilot_smoke_packet.py",
         SCRIPTS / "audit_maniskill_render_video_preflight.py",
@@ -221,6 +225,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_ablation_collection_audit.md",
         RESULTS / "external_evidence_intake_ledger_audit.json",
         RESULTS / "external_evidence_intake_ledger_audit.md",
+        RESULTS / "external_precollection_freeze_receipt_audit.json",
+        RESULTS / "external_precollection_freeze_receipt_audit.md",
         RESULTS / "external_pilot_smoke_audit.json",
         RESULTS / "external_pilot_smoke_audit.md",
         RESULTS / "external_pilot_smoke_packet_audit.json",
@@ -346,6 +352,10 @@ def build_payload() -> dict[str, Any]:
     rollout_evidence = require_payload(RESULTS / "external_rollout_evidence_audit.json", "external_rollout_evidence_audit_v1")
     ablation_packet = require_payload(RESULTS / "external_ablation_collection_audit.json", "external_ablation_collection_audit_v1")
     evidence_intake = require_payload(RESULTS / "external_evidence_intake_ledger_audit.json", "external_evidence_intake_ledger_v1")
+    precollection_freeze = require_payload(
+        RESULTS / "external_precollection_freeze_receipt_audit.json",
+        "external_precollection_freeze_receipt_audit_v1",
+    )
     method_implementation = require_payload(RESULTS / "external_method_implementation_audit.json", "external_method_implementation_audit_v1")
     pilot_smoke = require_payload(RESULTS / "external_pilot_smoke_packet_audit.json", "external_pilot_smoke_packet_audit_v1")
     render_preflight = require_payload(RESULTS / "maniskill_render_video_preflight_audit.json", "maniskill_render_video_preflight_audit_v2")
@@ -768,6 +778,28 @@ def build_payload() -> dict[str, Any]:
             f"groups={len(evidence_intake.get('closure_groups', []) or [])}"
         ),
     )
+    freeze_checks = {check.get("name"): check.get("passed") for check in precollection_freeze.get("checks", []) or []}
+    add_check(
+        checks,
+        "precollection_freeze_receipt_included",
+        precollection_freeze.get("passed") is True
+        and precollection_freeze.get("not_external_evidence") is True
+        and precollection_freeze.get("strict_external_evidence_ready") is False
+        and precollection_freeze.get("freeze_receipt_ready") is False
+        and int(precollection_freeze.get("locked_artifact_count", 0) or 0) >= 25
+        and freeze_checks.get("core_lock_artifacts_hashed") is True
+        and freeze_checks.get("prepared_task_configs_hashed") is True
+        and freeze_checks.get("strict_sequence_places_receipt_before_collection") is True
+        and "external_validation/precollection_freeze_receipt.json" in paths
+        and "external_validation/precollection_freeze_receipt.md" in paths
+        and "external_validation/precollection_freeze_receipt.csv" in paths
+        and "results/external_precollection_freeze_receipt_audit.json" in paths
+        and "scripts/build_external_precollection_freeze_receipt.py" in paths,
+        (
+            f"locked_artifacts={precollection_freeze.get('locked_artifact_count')!r}, "
+            f"freeze_receipt_ready={precollection_freeze.get('freeze_receipt_ready')!r}"
+        ),
+    )
     pilot_smoke_checks = {check.get("name"): check.get("passed") for check in pilot_smoke.get("checks", []) or []}
     add_check(
         checks,
@@ -960,6 +992,7 @@ def build_payload() -> dict[str, Any]:
             "rollout_evidence_packet",
             "ablation_collection_packet",
             "evidence_intake_ledger",
+            "precollection_freeze_receipt",
             "backend_module",
             "real_task_configs",
             "platform_fidelity",
@@ -974,7 +1007,7 @@ def build_payload() -> dict[str, Any]:
             "strict_rollout_recompute",
             "final_strict_gate",
         }.issubset(action_ids),
-        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'fidelity_acceptance_materializer', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'ablation_collection_packet', 'evidence_intake_ledger', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'maniskill_render_video_preflight', 'maniskill_render_resource_sweep', 'maniskill_pilot_runtime_liveness', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
+        f"missing={sorted({'platform_onboarding', 'fidelity_metadata_probe', 'fidelity_provenance_packet', 'fidelity_acceptance_draft', 'fidelity_acceptance_materializer', 'backend_integration_packet', 'maniskill_reference_backend_audit', 'maniskill_reference_collection_preflight', 'config_manifest_packet', 'rollout_evidence_packet', 'ablation_collection_packet', 'evidence_intake_ledger', 'precollection_freeze_receipt', 'backend_module', 'real_task_configs', 'platform_fidelity', 'method_implementation_packet', 'pilot_smoke_packet', 'maniskill_render_video_preflight', 'maniskill_render_resource_sweep', 'maniskill_pilot_runtime_liveness', 'real_method_implementations', 'run_collection', 'manifest_and_release', 'strict_rollout_recompute', 'final_strict_gate'} - action_ids)}",
     )
     add_check(
         checks,
@@ -1010,6 +1043,7 @@ def build_payload() -> dict[str, Any]:
         "missing_files": missing_files,
         "operator_next_actions": operator_actions,
         "pre_collection_gate_command": operator.get("pre_collection_gate_command", ""),
+        "precollection_freeze_command": operator.get("precollection_freeze_command", ""),
         "backend_contract_gate_command": operator.get("backend_contract_gate_command", ""),
         "strict_collection_command": operator.get("strict_collection_command", ""),
         "post_collection_strict_commands": post_commands,
@@ -1032,6 +1066,7 @@ def build_payload() -> dict[str, Any]:
             "results/maniskill_render_resource_sweep.json",
             "results/maniskill_pilot_runtime_liveness_audit.json",
             "results/external_method_implementation_audit.json",
+            "results/external_precollection_freeze_receipt_audit.json",
             "results/external_precollection_manifest_draft_audit.json",
             "results/external_evidence_preflight.json",
             "results/external_release_package_audit.json",
@@ -1066,6 +1101,12 @@ def write_md(payload: dict[str, Any]) -> None:
         "",
         "```powershell",
         payload["pre_collection_gate_command"],
+        "```",
+        "",
+        "Precollection freeze receipt:",
+        "",
+        "```powershell",
+        payload["precollection_freeze_command"],
         "```",
         "",
         "Actual collection command after the strict gate passes:",

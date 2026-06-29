@@ -142,6 +142,7 @@ def main():
         "scripts\\build_external_ablation_collection_packet.py",
         "scripts\\build_external_evidence_intake_ledger.py",
         "scripts\\build_external_precollection_manifest_draft.py",
+        "scripts\\build_external_precollection_freeze_receipt.py",
         "scripts\\build_external_baseline_contract.py",
         "scripts\\build_external_adapter_scaffolds.py",
         "scripts\\build_external_reference_adapters.py",
@@ -232,6 +233,7 @@ def main():
         "python scripts/build_external_ablation_collection_packet.py",
         "python scripts/build_external_evidence_intake_ledger.py",
         "python scripts/build_external_precollection_manifest_draft.py",
+        "python scripts/build_external_precollection_freeze_receipt.py",
         "python scripts/build_external_analysis_plan.py",
         "python scripts/probe_external_platform.py",
         "python scripts/probe_maniskill_task_bindings.py",
@@ -358,6 +360,7 @@ def main():
         "build_maniskill_render_machine_qualification.py",
         "build_external_ablation_collection_packet.py",
         "build_external_evidence_intake_ledger.py",
+        "build_external_precollection_freeze_receipt.py",
         "materialize_external_configs.py --platform-type high_fidelity_sim",
         "real_collection_runner.py --backend-module <module_or_path>",
         "audit_external_evidence_preflight.py",
@@ -1982,6 +1985,7 @@ def main():
     for fragment in (
         "materialize_fidelity_acceptance.py",
         "audit_external_collection_readiness.py --strict",
+        "build_external_precollection_freeze_receipt.py",
         "real_collection_runner.py",
         "build_external_manifest.py --write --check-video-paths",
         "validate_external_rollouts.py --write-results --check-video-paths --strict",
@@ -2012,6 +2016,61 @@ def main():
     ):
         if precollection_checks.get(required_check) is not True:
             fail(f"external precollection manifest draft audit missing passing check: {required_check}")
+
+    freeze_receipt_path = EXTERNAL / "precollection_freeze_receipt.json"
+    freeze_receipt_md_path = EXTERNAL / "precollection_freeze_receipt.md"
+    freeze_receipt_csv_path = EXTERNAL / "precollection_freeze_receipt.csv"
+    freeze_audit_path = RESULTS / "external_precollection_freeze_receipt_audit.json"
+    freeze_audit_md_path = RESULTS / "external_precollection_freeze_receipt_audit.md"
+    for path in (
+        ROOT / "scripts" / "build_external_precollection_freeze_receipt.py",
+        freeze_receipt_path,
+        freeze_receipt_md_path,
+        freeze_receipt_csv_path,
+        freeze_audit_path,
+        freeze_audit_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external precollection freeze receipt artifact: {path}")
+    freeze_receipt = json.loads(freeze_receipt_path.read_text(encoding="utf-8"))
+    freeze_audit = json.loads(freeze_audit_path.read_text(encoding="utf-8"))
+    if freeze_receipt.get("version") != "external_precollection_freeze_receipt_v1":
+        fail("external precollection freeze receipt version mismatch")
+    if freeze_receipt.get("not_external_evidence") is not True:
+        fail("external precollection freeze receipt must declare that it is not evidence")
+    if freeze_receipt.get("strict_external_evidence_ready") is not False or freeze_receipt.get("freeze_receipt_ready") is not False:
+        fail("external precollection freeze receipt must stay fail-closed before real operator lock")
+    if "not a manifest, rollout log" not in str(freeze_receipt.get("evidence_boundary", "")):
+        fail("external precollection freeze receipt must state its evidence boundary")
+    if int(len(freeze_receipt.get("lock_artifacts", []) or [])) < 25:
+        fail("external precollection freeze receipt locks too few artifacts")
+    if "build_external_precollection_freeze_receipt.py" not in "\n".join(freeze_receipt.get("strict_command_sequence", []) or []):
+        fail("external precollection freeze receipt must include itself in the strict command sequence")
+    if freeze_audit.get("version") != "external_precollection_freeze_receipt_audit_v1":
+        fail("external precollection freeze receipt audit version mismatch")
+    if freeze_audit.get("passed") is not True:
+        fail("external precollection freeze receipt audit did not pass")
+    if freeze_audit.get("not_external_evidence") is not True:
+        fail("external precollection freeze receipt audit must declare that it is not evidence")
+    if freeze_audit.get("strict_external_evidence_ready") is not False or freeze_audit.get("freeze_receipt_ready") is not False:
+        fail("external precollection freeze receipt audit must keep strict evidence and receipt readiness false")
+    if int(freeze_audit.get("locked_artifact_count", 0) or 0) < 25:
+        fail("external precollection freeze receipt audit locks too few artifacts")
+    freeze_checks = {check.get("name"): check.get("passed") for check in freeze_audit.get("checks", [])}
+    for required_check in (
+        "receipt_is_non_evidence_and_fail_closed",
+        "core_lock_artifacts_hashed",
+        "prepared_task_configs_hashed",
+        "backend_module_still_operator_supplied",
+        "run_identity_still_operator_supplied",
+        "checkout_and_skill_hash_recorded",
+        "strict_sequence_places_receipt_before_collection",
+        "receipt_references_manifest_rollout_release_final_gates",
+        "source_state_preserves_external_blockers",
+        "no_real_manifest_written",
+    ):
+        if freeze_checks.get(required_check) is not True:
+            fail(f"external precollection freeze receipt audit missing passing check: {required_check}")
 
     preflight_path = RESULTS / "external_evidence_preflight.json"
     if not preflight_path.exists():
@@ -3242,6 +3301,10 @@ def main():
         "external_precollection_manifest_draft_not_evidence",
         "external_precollection_manifest_draft_config_hashes",
         "external_precollection_manifest_draft_fail_closed",
+        "external_precollection_freeze_receipt_ready",
+        "external_precollection_freeze_receipt_not_evidence",
+        "external_precollection_freeze_receipt_hash_lock",
+        "external_precollection_freeze_receipt_gate_order",
         "external_acquisition_packet_ready",
         "external_acquisition_packet_not_evidence",
         "external_acquisition_packet_maps_all_blockers",
@@ -3337,6 +3400,9 @@ def main():
         EXTERNAL / "pilot_smoke_packet.json",
         EXTERNAL / "pilot_smoke_packet.md",
         EXTERNAL / "pilot_smoke_work_orders.csv",
+        EXTERNAL / "precollection_freeze_receipt.json",
+        EXTERNAL / "precollection_freeze_receipt.md",
+        EXTERNAL / "precollection_freeze_receipt.csv",
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
@@ -3348,6 +3414,7 @@ def main():
         EXTERNAL / "manifest_precollection_draft.md",
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "external_precollection_manifest_draft_audit.md",
+        RESULTS / "external_precollection_freeze_receipt_audit.md",
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.md",
         RESULTS / "external_ablation_collection_audit.md",
@@ -3414,6 +3481,7 @@ def main():
         "rollout_evidence_packet_ready",
         "ablation_collection_packet_ready",
         "evidence_intake_ledger_ready",
+        "precollection_freeze_receipt_ready",
         "backend_contract_gate_ready",
         "backend_integration_packet_ready",
         "maniskill_reference_backend_audit_ready",
@@ -3450,6 +3518,19 @@ def main():
         fail(f"external acquisition packet evidence intake summary has unmapped failures: {acquisition_intake.get('unmapped_failures')}")
     if "external_validation/evidence_intake_ledger.md" not in str(acquisition_intake.get("operator_packet_path", "")):
         fail("external acquisition packet evidence intake summary must point to the intake ledger")
+    acquisition_freeze = acquisition.get("precollection_freeze_receipt", {}) or {}
+    if acquisition_freeze.get("not_external_evidence") is not True:
+        fail("external acquisition packet freeze receipt summary must be marked non-evidence")
+    if acquisition_freeze.get("strict_external_evidence_ready") is not False:
+        fail("external acquisition packet freeze receipt summary must keep strict evidence false")
+    if acquisition_freeze.get("freeze_receipt_ready") is not False:
+        fail("external acquisition packet freeze receipt summary must keep freeze readiness false before real operator lock")
+    if int(acquisition_freeze.get("locked_artifact_count", 0) or 0) < 25:
+        fail("external acquisition packet freeze receipt summary locks too few artifacts")
+    if "external_validation/precollection_freeze_receipt.md" not in str(acquisition_freeze.get("operator_packet_path", "")):
+        fail("external acquisition packet freeze receipt summary must point to the receipt markdown")
+    if "build_external_precollection_freeze_receipt.py" not in str(acquisition_freeze.get("audit_command", "")):
+        fail("external acquisition packet freeze receipt summary must include rebuild command")
 
     operator_packet_path = RESULTS / "external_operator_packet.json"
     if not operator_packet_path.exists():
@@ -3717,6 +3798,25 @@ def main():
     intake_action_commands = "\n".join(intake_actions[0].get("commands", []) or [])
     if "build_external_evidence_intake_ledger.py" not in intake_action_commands:
         fail("external operator packet evidence intake action must rebuild the intake ledger")
+    operator_freeze = operator_packet.get("precollection_freeze_receipt", {}) or {}
+    if operator_freeze.get("not_external_evidence") is not True:
+        fail("external operator packet freeze receipt summary must be marked non-evidence")
+    if operator_freeze.get("strict_external_evidence_ready") is not False:
+        fail("external operator packet freeze receipt summary must keep strict evidence false")
+    if operator_freeze.get("freeze_receipt_ready") is not False:
+        fail("external operator packet freeze receipt summary must keep freeze readiness false before real operator lock")
+    if int(operator_freeze.get("locked_artifact_count", 0) or 0) < 25:
+        fail("external operator packet freeze receipt summary locks too few artifacts")
+    if "external_validation/precollection_freeze_receipt.md" not in str(operator_freeze.get("packet_path", "")):
+        fail("external operator packet freeze receipt summary must point to the receipt markdown")
+    if "build_external_precollection_freeze_receipt.py" not in str(operator_freeze.get("build_command", "")):
+        fail("external operator packet freeze receipt summary must include rebuild command")
+    freeze_actions = [action for action in operator_actions if action.get("id") == "precollection_freeze_receipt"]
+    if not freeze_actions:
+        fail("external operator packet missing precollection_freeze_receipt action")
+    freeze_action_commands = "\n".join(freeze_actions[0].get("commands", []) or [])
+    if "build_external_precollection_freeze_receipt.py" not in freeze_action_commands:
+        fail("external operator packet freeze receipt action must rebuild the freeze receipt")
     operator_precollection = operator_packet.get("precollection_manifest_draft", {}) or {}
     if operator_precollection.get("not_external_evidence") is not True:
         fail("external operator packet precollection manifest draft summary must be marked non-evidence")
@@ -3739,8 +3839,14 @@ def main():
     if "build_external_precollection_manifest_draft.py" not in str(operator_precollection.get("build_command", "")):
         fail("external operator packet precollection manifest draft summary must include rebuild command")
     precollection_cutover = "\n".join(operator_precollection.get("cutover_commands", []) or [])
-    if "build_external_manifest.py --write --check-video-paths" not in precollection_cutover or "audit_external_evidence.py --strict" not in precollection_cutover:
+    if (
+        "build_external_precollection_freeze_receipt.py" not in precollection_cutover
+        or "build_external_manifest.py --write --check-video-paths" not in precollection_cutover
+        or "audit_external_evidence.py --strict" not in precollection_cutover
+    ):
         fail("external operator packet precollection manifest draft summary must include final manifest/evidence cutover commands")
+    if "build_external_precollection_freeze_receipt.py" not in operator_packet.get("precollection_freeze_command", ""):
+        fail("external operator packet missing precollection freeze command")
     if "audit_external_collection_readiness.py --strict" not in operator_packet.get("pre_collection_gate_command", ""):
         fail("external operator packet missing strict pre-collection gate command")
     if "audit_external_backend_contract.py --strict" not in operator_packet.get("backend_contract_gate_command", ""):
@@ -3812,6 +3918,7 @@ def main():
         "ablation_collection_packet_included",
         "evidence_intake_ledger_included",
         "precollection_manifest_draft_included",
+        "precollection_freeze_receipt_included",
         "pilot_smoke_packet_included",
         "maniskill_render_video_preflight_included",
         "maniskill_render_resource_sweep_included",
@@ -4449,6 +4556,7 @@ def main():
         "strict_video_evidence_gate_visible",
         "release_package_internal_artifact_rejection_visible",
         "precollection_manifest_draft_visible",
+        "precollection_freeze_receipt_visible",
         "method_implementation_packet_visible",
         "maniskill_pilot_runtime_liveness_visible",
         "materializer_guard_visible",

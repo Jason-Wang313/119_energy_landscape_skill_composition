@@ -219,6 +219,15 @@ def pre_collection_gate_command(backend_module: str, run_id: str) -> str:
     )
 
 
+def precollection_freeze_command(backend_module: str, run_id: str) -> str:
+    return (
+        "python scripts\\build_external_precollection_freeze_receipt.py "
+        f"--backend-module {backend_module} --run-id {run_id} "
+        "--operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> "
+        "--date-locked <YYYY-MM-DD> --unsealed-alias-map"
+    )
+
+
 def build_reference_route(
     *,
     fidelity: dict[str, Any],
@@ -267,6 +276,7 @@ def build_reference_route(
         "blocking_missing_count": len(blockers),
         "blocking_missing": blockers,
         "pre_collection_gate_command": pre_collection_gate_command(backend_module, REFERENCE_RUN_ID),
+        "precollection_freeze_command": precollection_freeze_command(backend_module, REFERENCE_RUN_ID),
         "collection_command_after_fidelity_acceptance": collection_command(backend_module, REFERENCE_RUN_ID),
         "audit_command": "python scripts\\audit_maniskill_reference_collection_preflight.py",
         "evidence_boundary": (
@@ -343,6 +353,7 @@ def build_payload(args: argparse.Namespace) -> dict[str, Any]:
             "--output-log-dir external_validation\\logs --video-dir external_validation\\videos "
             "--run-id <specific_run_id> --unsealed-alias-map"
         ),
+        "precollection_freeze_command": precollection_freeze_command("<module_or_path>", "<specific_run_id>"),
         "post_collection_strict_commands": [
             r"python scripts\build_external_manifest.py --write --check-video-paths",
             r"python scripts\audit_external_release_package.py --strict",
@@ -391,6 +402,12 @@ def write_outputs(payload: dict[str, Any]) -> None:
         "",
         "```powershell",
         payload["tracked_reference_route"]["pre_collection_gate_command"],
+        "```",
+        "",
+        "Reference precollection freeze receipt:",
+        "",
+        "```powershell",
+        payload["tracked_reference_route"]["precollection_freeze_command"],
         "```",
         "",
         "Reference collection command after fidelity acceptance:",

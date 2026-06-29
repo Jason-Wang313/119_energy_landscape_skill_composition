@@ -31,6 +31,12 @@ Reference pre-collection gate:
 python scripts\audit_external_collection_readiness.py --strict --backend-module external_validation\runner\maniskill_reference_backend.py --task-config-dir external_validation\configs --run-id maniskill_sapien_reference_preflight_protocol_v1 --unsealed-alias-map
 ```
 
+Reference precollection freeze receipt:
+
+```powershell
+python scripts\build_external_precollection_freeze_receipt.py --backend-module external_validation\runner\maniskill_reference_backend.py --run-id maniskill_sapien_reference_preflight_protocol_v1 --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map
+```
+
 Reference collection command after fidelity acceptance:
 
 ```powershell

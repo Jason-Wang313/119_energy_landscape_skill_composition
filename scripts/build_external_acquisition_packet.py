@@ -36,6 +36,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "maniskill_render_machine_qualification",
         "ablation_collection_packet",
         "evidence_intake_ledger",
+        "precollection_freeze_receipt",
         "run_collection",
         "manifest_and_release",
     ],
@@ -43,18 +44,21 @@ MISSING_REQUIREMENT_ACTIONS = {
         "rollout_evidence_packet",
         "ablation_collection_packet",
         "evidence_intake_ledger",
+        "precollection_freeze_receipt",
         "run_collection",
         "strict_rollout_recompute",
     ],
     "Manifest-declared real task configs replace non-evidence templates": [
         "config_manifest_packet",
         "evidence_intake_ledger",
+        "precollection_freeze_receipt",
         "real_task_configs",
         "manifest_and_release",
     ],
     "Manifest-declared independent non-oracle baseline evidence and fairness contract": [
         "method_implementation_packet",
         "evidence_intake_ledger",
+        "precollection_freeze_receipt",
         "real_method_implementations",
         "strict_adapter_evidence",
     ],
@@ -275,6 +279,23 @@ ACTION_CATALOG = {
             "External rollout metrics recomputed from raw JSONL logs",
             "Manifest-declared real task configs replace non-evidence templates",
             "Manifest-declared independent non-oracle baseline evidence and fairness contract",
+        ],
+    },
+    "precollection_freeze_receipt": {
+        "title": "Freeze precollection hashes before official rollout collection",
+        "operator_input": "specific backend module, run id, operator id, collection machine, date lock, unsealed alias map, and current clean-checkout code/skill hashes",
+        "artifacts": [
+            "external_validation/precollection_freeze_receipt.json",
+            "external_validation/precollection_freeze_receipt.md",
+            "external_validation/precollection_freeze_receipt.csv",
+            "results/external_precollection_freeze_receipt_audit.json",
+        ],
+        "commands": [
+            "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+            "python scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
+        ],
+        "closes": [
+            "precollection drift between alias map, configs, backend, run id, code commit, skill library, and final raw logs/videos",
         ],
     },
     "platform_fidelity": {
@@ -586,6 +607,7 @@ def main() -> int:
     rollout_evidence_path = RESULTS / "external_rollout_evidence_audit.json"
     ablation_packet_path = RESULTS / "external_ablation_collection_audit.json"
     evidence_intake_path = RESULTS / "external_evidence_intake_ledger_audit.json"
+    precollection_freeze_path = RESULTS / "external_precollection_freeze_receipt_audit.json"
     method_packet_path = RESULTS / "external_method_implementation_audit.json"
     pilot_smoke_path = RESULTS / "external_pilot_smoke_packet_audit.json"
     render_preflight_path = RESULTS / "maniskill_render_video_preflight_audit.json"
@@ -614,6 +636,7 @@ def main() -> int:
     rollout_evidence = require_json(rollout_evidence_path)
     ablation_packet = require_json(ablation_packet_path)
     evidence_intake = require_json(evidence_intake_path)
+    precollection_freeze = require_json(precollection_freeze_path)
     method_packet = require_json(method_packet_path)
     pilot_smoke = require_json(pilot_smoke_path)
     render_preflight = require_json(render_preflight_path)
@@ -655,6 +678,7 @@ def main() -> int:
                 rollout_evidence_path,
                 ablation_packet_path,
                 evidence_intake_path,
+                precollection_freeze_path,
                 method_packet_path,
                 pilot_smoke_path,
                 render_preflight_path,
@@ -685,6 +709,7 @@ def main() -> int:
                 rollout_evidence_path,
                 ablation_packet_path,
                 evidence_intake_path,
+                precollection_freeze_path,
                 method_packet_path,
                 pilot_smoke_path,
                 render_preflight_path,
@@ -901,6 +926,26 @@ def main() -> int:
             f"mapped={evidence_intake.get('mapped_failure_count')!r}/"
             f"{evidence_intake.get('blocking_failure_count')!r}, "
             f"groups={len(evidence_intake.get('closure_groups', []) or [])}"
+        ),
+    )
+    freeze_checks = {check.get("name"): check.get("passed") for check in precollection_freeze.get("checks", []) or []}
+    add_check(
+        checks,
+        "precollection_freeze_receipt_ready",
+        precollection_freeze.get("passed") is True
+        and precollection_freeze.get("not_external_evidence") is True
+        and precollection_freeze.get("strict_external_evidence_ready") is False
+        and precollection_freeze.get("freeze_receipt_ready") is False
+        and int(precollection_freeze.get("locked_artifact_count", 0) or 0) >= 25
+        and freeze_checks.get("receipt_is_non_evidence_and_fail_closed") is True
+        and freeze_checks.get("core_lock_artifacts_hashed") is True
+        and freeze_checks.get("prepared_task_configs_hashed") is True
+        and freeze_checks.get("strict_sequence_places_receipt_before_collection") is True
+        and (EXTERNAL / "precollection_freeze_receipt.md").exists()
+        and (EXTERNAL / "precollection_freeze_receipt.csv").exists(),
+        (
+            f"locked_artifacts={precollection_freeze.get('locked_artifact_count')!r}, "
+            f"freeze_receipt_ready={precollection_freeze.get('freeze_receipt_ready')!r}"
         ),
     )
     pilot_smoke_checks = {check.get("name"): check.get("passed") for check in pilot_smoke.get("checks", []) or []}
@@ -1241,6 +1286,7 @@ def main() -> int:
         "build_external_config_manifest_packet.py",
         "build_external_rollout_evidence_packet.py",
         "build_external_evidence_intake_ledger.py",
+        "build_external_precollection_freeze_receipt.py",
         "build_external_fidelity_provenance_packet.py",
         "build_external_fidelity_acceptance_draft.py",
         "materialize_fidelity_acceptance.py",
@@ -1317,6 +1363,7 @@ def main() -> int:
                 rollout_evidence_path,
                 ablation_packet_path,
                 evidence_intake_path,
+                precollection_freeze_path,
                 method_packet_path,
                 pilot_smoke_path,
                 render_preflight_path,
@@ -1398,6 +1445,18 @@ def main() -> int:
             "audit_md_path": "results/external_evidence_intake_ledger_audit.md",
             "operator_packet_path": "external_validation/evidence_intake_ledger.md",
             "operator_csv_path": "external_validation/evidence_intake_ledger.csv",
+        },
+        "precollection_freeze_receipt": {
+            "not_external_evidence": True,
+            "strict_external_evidence_ready": precollection_freeze.get("strict_external_evidence_ready") is True,
+            "freeze_receipt_ready": precollection_freeze.get("freeze_receipt_ready") is True,
+            "locked_artifact_count": int(precollection_freeze.get("locked_artifact_count", 0) or 0),
+            "missing_lock_paths": list(precollection_freeze.get("missing_lock_paths", []) or []),
+            "audit_command": "python scripts\\build_external_precollection_freeze_receipt.py",
+            "audit_path": "results/external_precollection_freeze_receipt_audit.json",
+            "audit_md_path": "results/external_precollection_freeze_receipt_audit.md",
+            "operator_packet_path": "external_validation/precollection_freeze_receipt.md",
+            "operator_csv_path": "external_validation/precollection_freeze_receipt.csv",
         },
         "collection_blockers": collection_blockers,
         "operator_actions": actions,

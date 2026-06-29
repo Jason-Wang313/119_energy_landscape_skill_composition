@@ -35,6 +35,12 @@ Reference-route pre-collection gate:
 python scripts\audit_external_collection_readiness.py --strict --backend-module external_validation\runner\maniskill_reference_backend.py --task-config-dir external_validation\configs --run-id maniskill_sapien_reference_preflight_protocol_v1 --unsealed-alias-map
 ```
 
+Reference-route precollection freeze receipt:
+
+```powershell
+python scripts\build_external_precollection_freeze_receipt.py --backend-module external_validation\runner\maniskill_reference_backend.py --run-id maniskill_sapien_reference_preflight_protocol_v1 --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map
+```
+
 Reference-route collection command after fidelity acceptance passes:
 
 ```powershell
@@ -219,6 +225,25 @@ Ledger rebuild command:
 python scripts\build_external_evidence_intake_ledger.py
 ```
 
+## External Precollection Freeze Receipt
+
+This receipt is not evidence. It hash-locks the operator sheet, alias map, prepared task configs, backend/run identity, method cutover checklist, manifest draft, runner files, and source audits before official JSONL/video collection.
+
+- Receipt: `external_validation/precollection_freeze_receipt.md`
+- CSV: `external_validation/precollection_freeze_receipt.csv`
+- Audit JSON: `results/external_precollection_freeze_receipt_audit.json`
+- Audit notes: `results/external_precollection_freeze_receipt_audit.md`
+- Locked artifacts: `26`
+- Freeze receipt ready: `false`
+- Strict external evidence ready: `false`
+- Missing lock paths: `['selected_backend_module']`
+
+Operator regeneration command:
+
+```powershell
+python scripts\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map
+```
+
 ## External Precollection Manifest Draft
 
 This draft is not evidence. It pre-fills the task-config hashes and cutover command spine that are safe before collection, while keeping `external_validation/manifest.json` absent and every strict evidence gate false.
@@ -256,6 +281,9 @@ python scripts\audit_external_backend_contract.py --strict --backend-module <mod
 ```
 ```powershell
 python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map
+```
+```powershell
+python scripts\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map
 ```
 ```powershell
 python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id <specific_run_id> --unsealed-alias-map
@@ -302,6 +330,12 @@ Strict pre-collection gate:
 python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map
 ```
 
+Precollection freeze receipt:
+
+```powershell
+python scripts\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map
+```
+
 Actual collection command after the strict gate passes:
 
 ```powershell
@@ -339,6 +373,7 @@ Post-collection strict gates:
 - `rollout_evidence_packet`: Use the rollout evidence packet as the raw-log evidence checklist
 - `ablation_collection_packet`: Collect manifest-declared external ablations
 - `evidence_intake_ledger`: Use the evidence intake ledger to close every strict external-evidence failure
+- `precollection_freeze_receipt`: Freeze precollection hashes before official rollout collection
 - `platform_fidelity`: Fill platform fidelity acceptance with real provenance
 - `fidelity_acceptance_draft`: Generate the tracked ManiSkill fidelity acceptance draft
 - `fidelity_acceptance_materializer`: Materialize fidelity acceptance only through the guarded promotion path
@@ -371,6 +406,7 @@ Post-collection strict gates:
 - `pass` `render_machine_qualification_recorded_but_not_evidence`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12
 - `pass` `ablation_collection_packet_recorded_but_not_evidence`: work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False
 - `pass` `evidence_intake_ledger_recorded_but_not_evidence`: mapped=37/37, groups=8
+- `pass` `precollection_freeze_receipt_recorded_but_not_evidence`: locked_artifacts=26, freeze_receipt_ready=False
 - `pass` `precollection_manifest_draft_ready_but_not_evidence`: configs=4, method_gaps=11, rollout_gaps=8, official_manifest_exists=False
 - `pass` `operator_actions_cover_start_to_finish`: missing=[]
 - `pass` `operator_action_titles_present`: missing_titles=[]
@@ -381,4 +417,4 @@ python scripts\audit_external_collection_readiness.py --backend-module <module_o
 - `pass` `strict_collection_command_is_explicit`: python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id <specific_run_id> --unsealed-alias-map
 - `pass` `post_collection_gates_cover_evidence`: commands=8
 - `pass` `no_real_manifest_written`: external_validation/manifest.json absent before real evidence
-- `pass` `packet_artifacts_exist`: runbook, runner, blinded sheet, alias map, platform checklist, and config schema
+- `pass` `packet_artifacts_exist`: runbook, runner, blinded sheet, alias map, precollection freeze receipt, platform checklist, and config schema

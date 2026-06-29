@@ -277,7 +277,8 @@ def main() -> int:
                 "The official video write guard rejects diagnostic fallback, non-MP4-like, undersized, out-of-dir, or unexpected "
                 "videos, and the official JSONL write guard rejects schema-invalid rollout records before the actual collection "
                 "runner appends them. atomic official evidence promotion preserves prior official videos/logs if the selected batch fails, "
-                "but these remain tooling hardening rather than external validation."
+                "the render resource sweep records the current render-backed-video blocker, and the external precollection freeze receipt "
+                "hash-locks precollection inputs before official collection; these remain tooling hardening rather than external validation."
             ),
             "allowed_claim": "The local package is stronger and more reviewer-ready, but not independently complete.",
             "remaining_gate": "Close all four blocking external requirements before claiming independent main-conference readiness.",

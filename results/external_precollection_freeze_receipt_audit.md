@@ -1,0 +1,42 @@
+# External Precollection Freeze Receipt Audit
+
+Passed: `true`.
+Not evidence: `true`.
+Freeze receipt ready: `false`.
+Strict external evidence ready: `false`.
+Locked artifacts: `26`.
+
+This audit checks that the precollection freeze receipt hash-locks the operator sheet, alias map, prepared configs, method cutover checklist, manifest draft, runner files, source audits, and current checkout before any official JSONL/video collection can count.
+
+## Checks
+
+- `pass` `receipt_is_non_evidence_and_fail_closed`: not_external_evidence=True, strict_external_evidence_ready=False, freeze_receipt_ready=False
+- `pass` `core_lock_artifacts_hashed`: core_count=21
+- `pass` `prepared_task_configs_hashed`: config_count=4
+- `pass` `backend_module_still_operator_supplied`: backend_module=''
+- `pass` `run_identity_still_operator_supplied`: run_id='paper119_external_validation_run', unsealed_alias_map=False
+- `pass` `checkout_and_skill_hash_recorded`: commit='562e6bc7d1db3ce96d96597e488bd0dc796e1c0e', skill_hash='F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802'
+- `pass` `strict_sequence_places_receipt_before_collection`: python scripts\audit_external_fidelity_acceptance.py --strict
+python scripts\validate_external_configs.py --strict
+python scripts\validate_external_adapters.py --strict
+python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id paper119_external_validation_run --unsealed-alias-map
+python scripts\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map
+python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id paper119_external_validation_run --unsealed-alias-map
+python scripts\build_external_manifest.py --write --check-video-paths
+python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict
+python scripts\audit_external_pairing_integrity.py --strict
+python scripts\audit_external_release_package.py --strict
+python scripts\audit_external_evidence.py --strict
+- `pass` `receipt_references_manifest_rollout_release_final_gates`: python scripts\audit_external_fidelity_acceptance.py --strict
+python scripts\validate_external_configs.py --strict
+python scripts\validate_external_adapters.py --strict
+python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id paper119_external_validation_run --unsealed-alias-map
+python scripts\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map
+python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id paper119_external_validation_run --unsealed-alias-map
+python scripts\build_external_manifest.py --write --check-video-paths
+python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict
+python scripts\audit_external_pairing_integrity.py --strict
+python scripts\audit_external_release_package.py --strict
+python scripts\audit_external_evidence.py --strict
+- `pass` `source_state_preserves_external_blockers`: {'fidelity_acceptance_ready': False, 'collection_ready': False, 'collection_blocking_missing': ['backend_module_ready: --backend-module is required before actual collection', "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'", 'alias_unsealing_explicit: unsealed_alias_map=False', "run_id_specific: run_id='paper119_external_validation_run'"], 'fidelity_blocking_missing': ['manifest_exists: external_validation/manifest.json missing', 'manifest_declares_acceptance_path: source_kind=template', 'real_acceptance_file_exists: external_validation/fidelity_acceptance_template.json', "real_acceptance_version: version='paper119_fidelity_acceptance_template_v1', expected='paper119_fidelity_acceptance_v1'", 'real_acceptance_declares_ready: acceptance_ready=None', 'not_template_only: template_only=True', 'strict_readiness_remains_external_to_acceptance: not_external_evidence=True, strict_fidelity_evidence_ready=None, strict_external_evidence_ready=None', "route_matches_manifest: acceptance_route='high_fidelity_sim', manifest_route=''", "route_has_enough_task_families: route='high_fidelity_sim', counts={'real_robot': 0, 'high_fidelity_sim': 0}", "platform_values_filled: placeholder_fields=['asset_sources', 'contact_solver', 'physics_engine', 'platform_name', 'platform_version', 'robot_model_source', 'substeps_per_control_step', 'timestep_seconds']", "qualification_text_filled: weak_or_placeholder=['contact_dynamics_justification', 'known_limitations', 'operator_independence_statement', 'paired_reset_replay_test', 'real_or_benchmark_calibration_basis']", 'operator_independence_declared: operator_not_target_collaborator=True', "date_locked_filled: date_locked='FILL_AFTER_PLATFORM_SELECTION'", "date_locked_iso_like: date_locked='FILL_AFTER_PLATFORM_SELECTION'", "code_commit_filled: code_commit=''", "code_commit_sha40: code_commit=''", 'skill_library_hash_valid: skill_library_hash must be 64-character SHA256', 'operator_confirmation_booleans_true: manifest_declaration_confirmed_by_operator=None, real_rollout_evidence_confirmed_by_operator=None', 'materialized_by_guarded_path: materialized_by=None, materialized_from_draft_path=None', "all_acceptance_gates_passed: unpassed=['platform_provenance_complete', 'paired_reset_replay_verified', 'contact_failure_observable', 'non_oracle_methods_fair', 'raw_logs_drive_metrics']"]}
+- `pass` `no_real_manifest_written`: external_validation/manifest.json absent before real evidence

@@ -6,6 +6,7 @@
     "python scripts\\audit_external_fidelity_acceptance.py --strict",
     "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path>",
     "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
     "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
     "python scripts\\build_external_manifest.py --write --check-video-paths",
     "python scripts\\validate_external_configs.py --strict",
@@ -513,22 +514,22 @@
     {
       "exists": true,
       "path": "results/external_evidence_intake_ledger_audit.json",
-      "sha256": "37642ABD197BFB8F1002F5B7E0BC1A9B5560CADCD9A2A3F384D6C59A91B3BAC0"
+      "sha256": "D7B1B41DD6E7F2069F09B998E728C74C6CC19ED11B7F470C9BDF546147F97402"
     },
     {
       "exists": true,
       "path": "results/external_method_implementation_audit.json",
-      "sha256": "76B035C0A4245E9EB4F9C35D04CF4B2113A4AE4DFBB69F7A92BFC26F300C3E0C"
+      "sha256": "F8AA15870753DC4E6B4F681ACEF956A4C49ADAF3A12A98C32091582474021FAC"
     },
     {
       "exists": true,
       "path": "results/external_collection_readiness_audit.json",
-      "sha256": "E7588F12130745BCDCB8A824693C3E9AB3C33843BA2327453E1E1589CE3BB835"
+      "sha256": "74168764841A1FF414AC673994CBA4FD724DF7A20C17A364A761B21D94E636EE"
     },
     {
       "exists": true,
       "path": "results/maniskill_render_machine_qualification.json",
-      "sha256": "4BF152A800CE2F7DCAF6404277B184E59A18792571D7814FA0F9F778D5D3F382"
+      "sha256": "0FB486CE9AAFF6B8765562D3108666CA37C0797835DB062BCBA77AF22D153694"
     }
   ],
   "strict_config_evidence_ready": false,

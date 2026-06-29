@@ -19,6 +19,7 @@ This audit checks that the precollection manifest draft is useful for an operato
 - `pass` `source_reports_hash_listed`: sources=8
 - `pass` `cutover_command_contains_materialize_fidelity_acceptance`: materialize_fidelity_acceptance.py
 - `pass` `cutover_command_contains_audit_external_collection_readiness`: audit_external_collection_readiness.py --strict
+- `pass` `cutover_command_contains_build_external_precollection_freeze_receipt`: build_external_precollection_freeze_receipt.py
 - `pass` `cutover_command_contains_real_collection_runner`: real_collection_runner.py
 - `pass` `cutover_command_contains_build_external_manifest`: build_external_manifest.py --write --check-video-paths
 - `pass` `cutover_command_contains_validate_external_rollouts`: validate_external_rollouts.py --write-results --check-video-paths --strict

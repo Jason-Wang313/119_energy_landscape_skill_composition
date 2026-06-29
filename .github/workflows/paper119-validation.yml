@@ -169,6 +169,9 @@ jobs:
       - name: Build external precollection manifest draft
         run: python scripts/build_external_precollection_manifest_draft.py
 
+      - name: Build external precollection freeze receipt
+        run: python scripts/build_external_precollection_freeze_receipt.py
+
       - name: Build external acquisition packet
         run: python scripts/build_external_acquisition_packet.py
 

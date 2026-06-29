@@ -41,12 +41,12 @@
       "passed": true
     },
     {
-      "detail": "files=287, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=293, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
     {
-      "detail": "validation_command_count=44, route_gates=True, gate_order=True",
+      "detail": "validation_command_count=45, route_gates=True, gate_order=True",
       "name": "external_runbook_route_gates_visible",
       "passed": true
     },
@@ -203,6 +203,11 @@
     {
       "detail": "prepared_configs=4, method_gaps=11, rollout_gaps=8, official_manifest_exists=False",
       "name": "precollection_manifest_draft_visible",
+      "passed": true
+    },
+    {
+      "detail": "locked_artifacts=26, freeze_receipt_ready=False, strict_external_evidence_ready=False",
+      "name": "precollection_freeze_receipt_visible",
       "passed": true
     },
     {
