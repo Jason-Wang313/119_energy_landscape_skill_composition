@@ -38,6 +38,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "evidence_intake_ledger",
         "precollection_freeze_receipt",
         "run_collection",
+        "postcollection_evidence_seal",
         "manifest_and_release",
     ],
     "External rollout metrics recomputed from raw JSONL logs": [
@@ -46,6 +47,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "evidence_intake_ledger",
         "precollection_freeze_receipt",
         "run_collection",
+        "postcollection_evidence_seal",
         "strict_rollout_recompute",
     ],
     "Manifest-declared real task configs replace non-evidence templates": [
@@ -53,6 +55,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "evidence_intake_ledger",
         "precollection_freeze_receipt",
         "real_task_configs",
+        "postcollection_evidence_seal",
         "manifest_and_release",
     ],
     "Manifest-declared independent non-oracle baseline evidence and fairness contract": [
@@ -60,6 +63,7 @@ MISSING_REQUIREMENT_ACTIONS = {
         "evidence_intake_ledger",
         "precollection_freeze_receipt",
         "real_method_implementations",
+        "postcollection_evidence_seal",
         "strict_adapter_evidence",
     ],
 }
@@ -296,6 +300,24 @@ ACTION_CATALOG = {
         ],
         "closes": [
             "precollection drift between alias map, configs, backend, run id, code commit, skill library, and final raw logs/videos",
+        ],
+    },
+    "postcollection_evidence_seal": {
+        "title": "Seal raw postcollection logs and videos before manifest promotion",
+        "operator_input": "specific backend module, run id, operator id, collection machine, seal date, completed JSONL logs, rollout videos, and prepared configs after official collection",
+        "artifacts": [
+            "external_validation/postcollection_evidence_seal.json",
+            "external_validation/postcollection_evidence_seal.md",
+            "external_validation/postcollection_evidence_seal.csv",
+            "results/external_postcollection_evidence_seal_audit.json",
+        ],
+        "commands": [
+            "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+            "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+            "python scripts\\build_external_manifest.py --write --check-video-paths",
+        ],
+        "closes": [
+            "postcollection drift between raw JSONL logs, rollout videos, configs, operator metadata, precollection receipt, and manifest promotion",
         ],
     },
     "platform_fidelity": {
@@ -608,6 +630,7 @@ def main() -> int:
     ablation_packet_path = RESULTS / "external_ablation_collection_audit.json"
     evidence_intake_path = RESULTS / "external_evidence_intake_ledger_audit.json"
     precollection_freeze_path = RESULTS / "external_precollection_freeze_receipt_audit.json"
+    postcollection_seal_path = RESULTS / "external_postcollection_evidence_seal_audit.json"
     method_packet_path = RESULTS / "external_method_implementation_audit.json"
     pilot_smoke_path = RESULTS / "external_pilot_smoke_packet_audit.json"
     render_preflight_path = RESULTS / "maniskill_render_video_preflight_audit.json"
@@ -637,6 +660,7 @@ def main() -> int:
     ablation_packet = require_json(ablation_packet_path)
     evidence_intake = require_json(evidence_intake_path)
     precollection_freeze = require_json(precollection_freeze_path)
+    postcollection_seal = require_json(postcollection_seal_path)
     method_packet = require_json(method_packet_path)
     pilot_smoke = require_json(pilot_smoke_path)
     render_preflight = require_json(render_preflight_path)
@@ -679,6 +703,7 @@ def main() -> int:
                 ablation_packet_path,
                 evidence_intake_path,
                 precollection_freeze_path,
+                postcollection_seal_path,
                 method_packet_path,
                 pilot_smoke_path,
                 render_preflight_path,
@@ -710,6 +735,7 @@ def main() -> int:
                 ablation_packet_path,
                 evidence_intake_path,
                 precollection_freeze_path,
+                postcollection_seal_path,
                 method_packet_path,
                 pilot_smoke_path,
                 render_preflight_path,
@@ -946,6 +972,30 @@ def main() -> int:
         (
             f"locked_artifacts={precollection_freeze.get('locked_artifact_count')!r}, "
             f"freeze_receipt_ready={precollection_freeze.get('freeze_receipt_ready')!r}"
+        ),
+    )
+    seal_checks = {check.get("name"): check.get("passed") for check in postcollection_seal.get("checks", []) or []}
+    add_check(
+        checks,
+        "postcollection_evidence_seal_ready",
+        postcollection_seal.get("passed") is True
+        and postcollection_seal.get("not_external_evidence") is True
+        and postcollection_seal.get("strict_external_evidence_ready") is False
+        and postcollection_seal.get("postcollection_seal_ready") is False
+        and postcollection_seal.get("ready_for_manifest_promotion") is False
+        and int(postcollection_seal.get("sealed_artifact_count", 0) or 0) >= 8
+        and int(postcollection_seal.get("jsonl_record_count", 0) or 0) == 0
+        and int(postcollection_seal.get("rollout_video_count", 0) or 0) == 0
+        and seal_checks.get("seal_is_non_evidence_and_fail_closed") is True
+        and seal_checks.get("strict_sequence_places_seal_after_collection_before_manifest") is True
+        and seal_checks.get("seal_references_rollout_pairing_release_final_gates") is True
+        and (EXTERNAL / "postcollection_evidence_seal.md").exists()
+        and (EXTERNAL / "postcollection_evidence_seal.csv").exists(),
+        (
+            f"sealed_artifacts={postcollection_seal.get('sealed_artifact_count')!r}, "
+            f"records={postcollection_seal.get('jsonl_record_count')!r}, "
+            f"videos={postcollection_seal.get('rollout_video_count')!r}, "
+            f"seal_ready={postcollection_seal.get('postcollection_seal_ready')!r}"
         ),
     )
     pilot_smoke_checks = {check.get("name"): check.get("passed") for check in pilot_smoke.get("checks", []) or []}
@@ -1287,6 +1337,7 @@ def main() -> int:
         "build_external_rollout_evidence_packet.py",
         "build_external_evidence_intake_ledger.py",
         "build_external_precollection_freeze_receipt.py",
+        "build_external_postcollection_evidence_seal.py",
         "build_external_fidelity_provenance_packet.py",
         "build_external_fidelity_acceptance_draft.py",
         "materialize_fidelity_acceptance.py",
@@ -1364,6 +1415,7 @@ def main() -> int:
                 ablation_packet_path,
                 evidence_intake_path,
                 precollection_freeze_path,
+                postcollection_seal_path,
                 method_packet_path,
                 pilot_smoke_path,
                 render_preflight_path,
@@ -1457,6 +1509,21 @@ def main() -> int:
             "audit_md_path": "results/external_precollection_freeze_receipt_audit.md",
             "operator_packet_path": "external_validation/precollection_freeze_receipt.md",
             "operator_csv_path": "external_validation/precollection_freeze_receipt.csv",
+        },
+        "postcollection_evidence_seal": {
+            "not_external_evidence": True,
+            "strict_external_evidence_ready": postcollection_seal.get("strict_external_evidence_ready") is True,
+            "postcollection_seal_ready": postcollection_seal.get("postcollection_seal_ready") is True,
+            "ready_for_manifest_promotion": postcollection_seal.get("ready_for_manifest_promotion") is True,
+            "sealed_artifact_count": int(postcollection_seal.get("sealed_artifact_count", 0) or 0),
+            "jsonl_record_count": int(postcollection_seal.get("jsonl_record_count", 0) or 0),
+            "rollout_video_count": int(postcollection_seal.get("rollout_video_count", 0) or 0),
+            "expected_records": int(postcollection_seal.get("expected_records", 0) or 0),
+            "audit_command": "python scripts\\build_external_postcollection_evidence_seal.py",
+            "audit_path": "results/external_postcollection_evidence_seal_audit.json",
+            "audit_md_path": "results/external_postcollection_evidence_seal_audit.md",
+            "operator_packet_path": "external_validation/postcollection_evidence_seal.md",
+            "operator_csv_path": "external_validation/postcollection_evidence_seal.csv",
         },
         "collection_blockers": collection_blockers,
         "operator_actions": actions,

@@ -143,6 +143,7 @@ def main():
         "scripts\\build_external_evidence_intake_ledger.py",
         "scripts\\build_external_precollection_manifest_draft.py",
         "scripts\\build_external_precollection_freeze_receipt.py",
+        "scripts\\build_external_postcollection_evidence_seal.py",
         "scripts\\build_external_baseline_contract.py",
         "scripts\\build_external_adapter_scaffolds.py",
         "scripts\\build_external_reference_adapters.py",
@@ -234,6 +235,7 @@ def main():
         "python scripts/build_external_evidence_intake_ledger.py",
         "python scripts/build_external_precollection_manifest_draft.py",
         "python scripts/build_external_precollection_freeze_receipt.py",
+        "python scripts/build_external_postcollection_evidence_seal.py",
         "python scripts/build_external_analysis_plan.py",
         "python scripts/probe_external_platform.py",
         "python scripts/probe_maniskill_task_bindings.py",
@@ -361,6 +363,7 @@ def main():
         "build_external_ablation_collection_packet.py",
         "build_external_evidence_intake_ledger.py",
         "build_external_precollection_freeze_receipt.py",
+        "build_external_postcollection_evidence_seal.py",
         "materialize_external_configs.py --platform-type high_fidelity_sim",
         "real_collection_runner.py --backend-module <module_or_path>",
         "audit_external_evidence_preflight.py",
@@ -1987,6 +1990,7 @@ def main():
         "audit_external_collection_readiness.py --strict",
         "build_external_precollection_freeze_receipt.py",
         "real_collection_runner.py",
+        "build_external_postcollection_evidence_seal.py",
         "build_external_manifest.py --write --check-video-paths",
         "validate_external_rollouts.py --write-results --check-video-paths --strict",
         "audit_external_evidence.py --strict",
@@ -2071,6 +2075,77 @@ def main():
     ):
         if freeze_checks.get(required_check) is not True:
             fail(f"external precollection freeze receipt audit missing passing check: {required_check}")
+
+    postcollection_seal_path = EXTERNAL / "postcollection_evidence_seal.json"
+    postcollection_seal_md_path = EXTERNAL / "postcollection_evidence_seal.md"
+    postcollection_seal_csv_path = EXTERNAL / "postcollection_evidence_seal.csv"
+    postcollection_seal_audit_path = RESULTS / "external_postcollection_evidence_seal_audit.json"
+    postcollection_seal_audit_md_path = RESULTS / "external_postcollection_evidence_seal_audit.md"
+    for path in (
+        ROOT / "scripts" / "build_external_postcollection_evidence_seal.py",
+        postcollection_seal_path,
+        postcollection_seal_md_path,
+        postcollection_seal_csv_path,
+        postcollection_seal_audit_path,
+        postcollection_seal_audit_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external postcollection evidence seal artifact: {path}")
+    postcollection_seal = json.loads(postcollection_seal_path.read_text(encoding="utf-8"))
+    postcollection_seal_audit = json.loads(postcollection_seal_audit_path.read_text(encoding="utf-8"))
+    if postcollection_seal.get("version") != "external_postcollection_evidence_seal_v1":
+        fail("external postcollection evidence seal version mismatch")
+    if postcollection_seal.get("not_external_evidence") is not True:
+        fail("external postcollection evidence seal must declare that it is not evidence")
+    if (
+        postcollection_seal.get("strict_external_evidence_ready") is not False
+        or postcollection_seal.get("postcollection_seal_ready") is not False
+        or postcollection_seal.get("ready_for_manifest_promotion") is not False
+    ):
+        fail("external postcollection evidence seal must stay fail-closed before real logs/videos")
+    if "before manifest promotion" not in str(postcollection_seal.get("evidence_boundary", "")):
+        fail("external postcollection evidence seal must state its manifest-promotion evidence boundary")
+    if int(len(postcollection_seal.get("seal_artifacts", []) or [])) < 8:
+        fail("external postcollection evidence seal hashes too few artifacts")
+    if int(postcollection_seal.get("jsonl_record_count", 0) or 0) != 0 or int(postcollection_seal.get("rollout_video_count", 0) or 0) != 0:
+        fail("external postcollection evidence seal must not find official logs or videos before collection")
+    postcollection_sequence = "\n".join(postcollection_seal.get("strict_command_sequence", []) or [])
+    if (
+        "real_collection_runner.py" not in postcollection_sequence
+        or "build_external_postcollection_evidence_seal.py" not in postcollection_sequence
+        or "build_external_manifest.py --write --check-video-paths" not in postcollection_sequence
+    ):
+        fail("external postcollection evidence seal must include collection, seal, and manifest-promotion commands")
+    if postcollection_seal_audit.get("version") != "external_postcollection_evidence_seal_audit_v1":
+        fail("external postcollection evidence seal audit version mismatch")
+    if postcollection_seal_audit.get("passed") is not True:
+        fail("external postcollection evidence seal audit did not pass")
+    if postcollection_seal_audit.get("not_external_evidence") is not True:
+        fail("external postcollection evidence seal audit must declare that it is not evidence")
+    if (
+        postcollection_seal_audit.get("strict_external_evidence_ready") is not False
+        or postcollection_seal_audit.get("postcollection_seal_ready") is not False
+        or postcollection_seal_audit.get("ready_for_manifest_promotion") is not False
+    ):
+        fail("external postcollection evidence seal audit must keep strict evidence and manifest promotion false")
+    if int(postcollection_seal_audit.get("sealed_artifact_count", 0) or 0) < 8:
+        fail("external postcollection evidence seal audit hashes too few artifacts")
+    if int(postcollection_seal_audit.get("jsonl_record_count", 0) or 0) != 0 or int(postcollection_seal_audit.get("rollout_video_count", 0) or 0) != 0:
+        fail("external postcollection evidence seal audit must remain pre-collection fail-closed by default")
+    postcollection_checks = {check.get("name"): check.get("passed") for check in postcollection_seal_audit.get("checks", [])}
+    for required_check in (
+        "seal_is_non_evidence_and_fail_closed",
+        "precollection_freeze_loaded_but_not_real_ready",
+        "raw_logs_and_videos_absent_before_collection",
+        "operator_metadata_still_required",
+        "hash_inventory_written_for_precollection_inputs",
+        "strict_sequence_places_seal_after_collection_before_manifest",
+        "seal_references_rollout_pairing_release_final_gates",
+        "strict_evidence_gates_still_false",
+        "no_real_manifest_written",
+    ):
+        if postcollection_checks.get(required_check) is not True:
+            fail(f"external postcollection evidence seal audit missing passing check: {required_check}")
 
     preflight_path = RESULTS / "external_evidence_preflight.json"
     if not preflight_path.exists():
@@ -3305,6 +3380,10 @@ def main():
         "external_precollection_freeze_receipt_not_evidence",
         "external_precollection_freeze_receipt_hash_lock",
         "external_precollection_freeze_receipt_gate_order",
+        "external_postcollection_evidence_seal_ready",
+        "external_postcollection_evidence_seal_not_evidence",
+        "external_postcollection_evidence_seal_hash_inventory",
+        "external_postcollection_evidence_seal_gate_order",
         "external_acquisition_packet_ready",
         "external_acquisition_packet_not_evidence",
         "external_acquisition_packet_maps_all_blockers",
@@ -3403,6 +3482,9 @@ def main():
         EXTERNAL / "precollection_freeze_receipt.json",
         EXTERNAL / "precollection_freeze_receipt.md",
         EXTERNAL / "precollection_freeze_receipt.csv",
+        EXTERNAL / "postcollection_evidence_seal.json",
+        EXTERNAL / "postcollection_evidence_seal.md",
+        EXTERNAL / "postcollection_evidence_seal.csv",
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
@@ -3415,6 +3497,7 @@ def main():
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "external_precollection_manifest_draft_audit.md",
         RESULTS / "external_precollection_freeze_receipt_audit.md",
+        RESULTS / "external_postcollection_evidence_seal_audit.md",
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.md",
         RESULTS / "external_ablation_collection_audit.md",
@@ -3482,6 +3565,7 @@ def main():
         "ablation_collection_packet_ready",
         "evidence_intake_ledger_ready",
         "precollection_freeze_receipt_ready",
+        "postcollection_evidence_seal_ready",
         "backend_contract_gate_ready",
         "backend_integration_packet_ready",
         "maniskill_reference_backend_audit_ready",
@@ -3531,6 +3615,23 @@ def main():
         fail("external acquisition packet freeze receipt summary must point to the receipt markdown")
     if "build_external_precollection_freeze_receipt.py" not in str(acquisition_freeze.get("audit_command", "")):
         fail("external acquisition packet freeze receipt summary must include rebuild command")
+    acquisition_seal = acquisition.get("postcollection_evidence_seal", {}) or {}
+    if acquisition_seal.get("not_external_evidence") is not True:
+        fail("external acquisition packet postcollection seal summary must be marked non-evidence")
+    if acquisition_seal.get("strict_external_evidence_ready") is not False:
+        fail("external acquisition packet postcollection seal summary must keep strict evidence false")
+    if acquisition_seal.get("postcollection_seal_ready") is not False:
+        fail("external acquisition packet postcollection seal summary must keep seal readiness false before real logs/videos")
+    if acquisition_seal.get("ready_for_manifest_promotion") is not False:
+        fail("external acquisition packet postcollection seal summary must keep manifest promotion false before real logs/videos")
+    if int(acquisition_seal.get("sealed_artifact_count", 0) or 0) < 8:
+        fail("external acquisition packet postcollection seal summary hashes too few artifacts")
+    if int(acquisition_seal.get("jsonl_record_count", 0) or 0) != 0 or int(acquisition_seal.get("rollout_video_count", 0) or 0) != 0:
+        fail("external acquisition packet postcollection seal summary must remain fail-closed by default")
+    if "external_validation/postcollection_evidence_seal.md" not in str(acquisition_seal.get("operator_packet_path", "")):
+        fail("external acquisition packet postcollection seal summary must point to the seal markdown")
+    if "build_external_postcollection_evidence_seal.py" not in str(acquisition_seal.get("audit_command", "")):
+        fail("external acquisition packet postcollection seal summary must include rebuild command")
 
     operator_packet_path = RESULTS / "external_operator_packet.json"
     if not operator_packet_path.exists():
@@ -3817,6 +3918,29 @@ def main():
     freeze_action_commands = "\n".join(freeze_actions[0].get("commands", []) or [])
     if "build_external_precollection_freeze_receipt.py" not in freeze_action_commands:
         fail("external operator packet freeze receipt action must rebuild the freeze receipt")
+    operator_seal = operator_packet.get("postcollection_evidence_seal", {}) or {}
+    if operator_seal.get("not_external_evidence") is not True:
+        fail("external operator packet postcollection seal summary must be marked non-evidence")
+    if operator_seal.get("strict_external_evidence_ready") is not False:
+        fail("external operator packet postcollection seal summary must keep strict evidence false")
+    if operator_seal.get("postcollection_seal_ready") is not False:
+        fail("external operator packet postcollection seal summary must keep seal readiness false before real logs/videos")
+    if operator_seal.get("ready_for_manifest_promotion") is not False:
+        fail("external operator packet postcollection seal summary must keep manifest promotion false before real logs/videos")
+    if int(operator_seal.get("sealed_artifact_count", 0) or 0) < 8:
+        fail("external operator packet postcollection seal summary hashes too few artifacts")
+    if int(operator_seal.get("jsonl_record_count", 0) or 0) != 0 or int(operator_seal.get("rollout_video_count", 0) or 0) != 0:
+        fail("external operator packet postcollection seal summary must remain fail-closed by default")
+    if "external_validation/postcollection_evidence_seal.md" not in str(operator_seal.get("packet_path", "")):
+        fail("external operator packet postcollection seal summary must point to the seal markdown")
+    if "build_external_postcollection_evidence_seal.py" not in str(operator_seal.get("build_command", "")):
+        fail("external operator packet postcollection seal summary must include rebuild command")
+    seal_actions = [action for action in operator_actions if action.get("id") == "postcollection_evidence_seal"]
+    if not seal_actions:
+        fail("external operator packet missing postcollection_evidence_seal action")
+    seal_action_commands = "\n".join(seal_actions[0].get("commands", []) or [])
+    if "build_external_postcollection_evidence_seal.py" not in seal_action_commands:
+        fail("external operator packet postcollection seal action must rebuild the seal")
     operator_precollection = operator_packet.get("precollection_manifest_draft", {}) or {}
     if operator_precollection.get("not_external_evidence") is not True:
         fail("external operator packet precollection manifest draft summary must be marked non-evidence")
@@ -3841,6 +3965,7 @@ def main():
     precollection_cutover = "\n".join(operator_precollection.get("cutover_commands", []) or [])
     if (
         "build_external_precollection_freeze_receipt.py" not in precollection_cutover
+        or "build_external_postcollection_evidence_seal.py" not in precollection_cutover
         or "build_external_manifest.py --write --check-video-paths" not in precollection_cutover
         or "audit_external_evidence.py --strict" not in precollection_cutover
     ):
@@ -3859,6 +3984,8 @@ def main():
         fail("external operator packet backend action must run backend contract before collection readiness")
     if "real_collection_runner.py" not in operator_packet.get("strict_collection_command", ""):
         fail("external operator packet missing actual collection command")
+    if "build_external_postcollection_evidence_seal.py" not in operator_packet.get("postcollection_seal_command", ""):
+        fail("external operator packet missing postcollection seal command")
     post_commands = operator_packet.get("post_collection_strict_commands", []) or []
     for command_fragment in ("validate_external_rollouts.py", "audit_external_pairing_integrity.py", "audit_external_evidence.py"):
         if not any(command_fragment in command for command in post_commands):
@@ -3919,6 +4046,7 @@ def main():
         "evidence_intake_ledger_included",
         "precollection_manifest_draft_included",
         "precollection_freeze_receipt_included",
+        "postcollection_evidence_seal_included",
         "pilot_smoke_packet_included",
         "maniskill_render_video_preflight_included",
         "maniskill_render_resource_sweep_included",
@@ -4557,6 +4685,7 @@ def main():
         "release_package_internal_artifact_rejection_visible",
         "precollection_manifest_draft_visible",
         "precollection_freeze_receipt_visible",
+        "postcollection_evidence_seal_visible",
         "method_implementation_packet_visible",
         "maniskill_pilot_runtime_liveness_visible",
         "materializer_guard_visible",

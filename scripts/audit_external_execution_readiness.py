@@ -1264,6 +1264,52 @@ def main() -> int:
         f"commands={len(precollection_freeze.get('strict_command_sequence', []) or [])}",
     )
 
+    seal_ok, postcollection_seal, seal_detail = passed_json(
+        RESULTS / "external_postcollection_evidence_seal_audit.json",
+        version="external_postcollection_evidence_seal_audit_v1",
+    )
+    add_check(checks, "external_postcollection_evidence_seal_ready", seal_ok, seal_detail)
+    seal_checks = {
+        check.get("name"): check.get("passed")
+        for check in postcollection_seal.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "external_postcollection_evidence_seal_not_evidence",
+        postcollection_seal.get("not_external_evidence") is True
+        and postcollection_seal.get("strict_external_evidence_ready") is False
+        and postcollection_seal.get("postcollection_seal_ready") is False
+        and postcollection_seal.get("ready_for_manifest_promotion") is False
+        and seal_checks.get("seal_is_non_evidence_and_fail_closed") is True,
+        (
+            f"postcollection_seal_ready={postcollection_seal.get('postcollection_seal_ready')!r}, "
+            f"ready_for_manifest_promotion={postcollection_seal.get('ready_for_manifest_promotion')!r}, "
+            f"strict_external_evidence_ready={postcollection_seal.get('strict_external_evidence_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "external_postcollection_evidence_seal_hash_inventory",
+        int(postcollection_seal.get("sealed_artifact_count", 0) or 0) >= 8
+        and int(postcollection_seal.get("jsonl_record_count", 0) or 0) == 0
+        and int(postcollection_seal.get("rollout_video_count", 0) or 0) == 0
+        and seal_checks.get("hash_inventory_written_for_precollection_inputs") is True
+        and seal_checks.get("raw_logs_and_videos_absent_before_collection") is True,
+        (
+            f"sealed_artifacts={postcollection_seal.get('sealed_artifact_count')!r}, "
+            f"records={postcollection_seal.get('jsonl_record_count')!r}, "
+            f"videos={postcollection_seal.get('rollout_video_count')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "external_postcollection_evidence_seal_gate_order",
+        seal_checks.get("strict_sequence_places_seal_after_collection_before_manifest") is True
+        and seal_checks.get("seal_references_rollout_pairing_release_final_gates") is True
+        and "build_external_postcollection_evidence_seal.py" in "\n".join(postcollection_seal.get("strict_command_sequence", []) or []),
+        f"commands={len(postcollection_seal.get('strict_command_sequence', []) or [])}",
+    )
+
     preflight_path = RESULTS / "external_evidence_preflight.json"
     preflight_ok, preflight, preflight_detail = passed_json(
         preflight_path,
@@ -1445,6 +1491,9 @@ def main() -> int:
         EXTERNAL / "precollection_freeze_receipt.json",
         EXTERNAL / "precollection_freeze_receipt.md",
         EXTERNAL / "precollection_freeze_receipt.csv",
+        EXTERNAL / "postcollection_evidence_seal.json",
+        EXTERNAL / "postcollection_evidence_seal.md",
+        EXTERNAL / "postcollection_evidence_seal.csv",
         EXTERNAL / "log_schema_v1.json",
         EXTERNAL / "statistical_analysis_plan.json",
         EXTERNAL / "statistical_analysis_plan.md",
@@ -1498,6 +1547,7 @@ def main() -> int:
         RESULTS / "external_evidence_intake_ledger_audit.md",
         RESULTS / "external_precollection_manifest_draft_audit.md",
         RESULTS / "external_precollection_freeze_receipt_audit.md",
+        RESULTS / "external_postcollection_evidence_seal_audit.md",
         EXTERNAL / "evidence_intake_ledger.json",
         EXTERNAL / "evidence_intake_ledger.md",
         EXTERNAL / "evidence_intake_ledger.csv",
@@ -1653,6 +1703,10 @@ def main() -> int:
         "external_precollection_freeze_receipt_not_evidence",
         "external_precollection_freeze_receipt_hash_lock",
         "external_precollection_freeze_receipt_gate_order",
+        "external_postcollection_evidence_seal_ready",
+        "external_postcollection_evidence_seal_not_evidence",
+        "external_postcollection_evidence_seal_hash_inventory",
+        "external_postcollection_evidence_seal_gate_order",
         "external_evidence_preflight_ready",
         "external_evidence_preflight_not_evidence",
         "external_evidence_preflight_fail_closed",
@@ -1701,6 +1755,7 @@ def main() -> int:
             "manifest-declared external ablation logs and videos for basin_overlap, barrier_height, descent_continuity, risk_calibration, and seam_repair",
             "completed evidence intake ledger rows for all current strict external-evidence failures",
             "completed precollection freeze receipt with real backend, specific run id, independent operator identity, clean checkout, and unsealed alias map before collection",
+            "completed postcollection evidence seal with raw JSONL/video hashes before manifest promotion",
             "manifest-declared videos",
             "official manifest promotion from the precollection draft after real evidence is collected",
             "manifest-declared independent non-oracle adapter implementations",

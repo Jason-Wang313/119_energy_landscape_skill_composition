@@ -22,6 +22,7 @@ This audit checks whether the package is ready for an independent external valid
 - `manifest-declared external ablation logs and videos for basin_overlap, barrier_height, descent_continuity, risk_calibration, and seam_repair`
 - `completed evidence intake ledger rows for all current strict external-evidence failures`
 - `completed precollection freeze receipt with real backend, specific run id, independent operator identity, clean checkout, and unsealed alias map before collection`
+- `completed postcollection evidence seal with raw JSONL/video hashes before manifest promotion`
 - `manifest-declared videos`
 - `official manifest promotion from the precollection draft after real evidence is collected`
 - `manifest-declared independent non-oracle adapter implementations`
@@ -158,6 +159,10 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_precollection_freeze_receipt_not_evidence`: freeze_receipt_ready=False, strict_external_evidence_ready=False
 - `pass` `external_precollection_freeze_receipt_hash_lock`: locked_artifact_count=26
 - `pass` `external_precollection_freeze_receipt_gate_order`: commands=11
+- `pass` `external_postcollection_evidence_seal_ready`: passed
+- `pass` `external_postcollection_evidence_seal_not_evidence`: postcollection_seal_ready=False, ready_for_manifest_promotion=False, strict_external_evidence_ready=False
+- `pass` `external_postcollection_evidence_seal_hash_inventory`: sealed_artifacts=11, records=0, videos=0
+- `pass` `external_postcollection_evidence_seal_gate_order`: commands=11
 - `pass` `external_evidence_preflight_ready`: passed
 - `pass` `external_evidence_preflight_not_evidence`: not_external_evidence=True
 - `pass` `external_evidence_preflight_fail_closed`: evidence_ready=False, readiness_state='COLLECT_EXTERNAL_EVIDENCE', blocking_missing_count=56
@@ -165,8 +170,8 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_evidence_preflight_operator_actions`: operator_next_actions=5
 - `pass` `external_acquisition_packet_ready`: passed
 - `pass` `external_acquisition_packet_not_evidence`: not_external_evidence=True, strict_evidence_ready=False, acquisition_packet_ready=True
-- `pass` `external_acquisition_packet_maps_all_blockers`: missing_requirements=4, operator_actions=33
-- `pass` `external_acquisition_packet_backend_gate`: checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'backend_integration_packet_ready': True, 'maniskill_reference_backend_audit_ready': True, 'maniskill_reference_collection_preflight_ready': True, 'config_manifest_packet_ready': True, 'rollout_evidence_packet_ready': True, 'ablation_collection_packet_ready': True, 'evidence_intake_ledger_ready': True, 'precollection_freeze_receipt_ready': True, 'pilot_smoke_packet_ready': True, 'maniskill_render_video_preflight_recorded': True, 'maniskill_render_resource_sweep_recorded': True, 'maniskill_pilot_runtime_liveness_ready': True, 'maniskill_render_machine_qualification_ready': True, 'method_implementation_packet_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'platform_probe_ready': True, 'task_binding_probe_ready': True, 'env_smoke_probe_ready': True, 'fidelity_metadata_probe_ready': True, 'platform_onboarding_ready': True, 'fidelity_provenance_packet_ready': True, 'fidelity_acceptance_draft_ready': True, 'fidelity_acceptance_materializer_ready': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}
+- `pass` `external_acquisition_packet_maps_all_blockers`: missing_requirements=4, operator_actions=34
+- `pass` `external_acquisition_packet_backend_gate`: checks={'source_audits_exist': True, 'gap_audit_has_four_external_blockers': True, 'all_missing_requirements_mapped': True, 'all_action_ids_exist': True, 'collection_preflight_fail_closed': True, 'config_intake_directory_tracked': True, 'config_materializer_ready': True, 'backend_contract_gate_ready': True, 'backend_integration_packet_ready': True, 'maniskill_reference_backend_audit_ready': True, 'maniskill_reference_collection_preflight_ready': True, 'config_manifest_packet_ready': True, 'rollout_evidence_packet_ready': True, 'ablation_collection_packet_ready': True, 'evidence_intake_ledger_ready': True, 'precollection_freeze_receipt_ready': True, 'postcollection_evidence_seal_ready': True, 'pilot_smoke_packet_ready': True, 'maniskill_render_video_preflight_recorded': True, 'maniskill_render_resource_sweep_recorded': True, 'maniskill_pilot_runtime_liveness_ready': True, 'maniskill_render_machine_qualification_ready': True, 'method_implementation_packet_ready': True, 'preflight_operator_actions_present': True, 'route_independent_of_haonan': True, 'platform_probe_ready': True, 'task_binding_probe_ready': True, 'env_smoke_probe_ready': True, 'fidelity_metadata_probe_ready': True, 'platform_onboarding_ready': True, 'fidelity_provenance_packet_ready': True, 'fidelity_acceptance_draft_ready': True, 'fidelity_acceptance_materializer_ready': True, 'post_collection_strict_commands_cover_all_gates': True, 'no_real_manifest_written': True, 'operator_actions_cover_collection_blockers': True, 'backend_action_runs_contract_before_readiness': True}
 - `pass` `external_operator_packet_ready`: passed
 - `pass` `external_operator_packet_not_evidence`: not_external_evidence=True, strict_evidence_ready=False, operator_packet_ready=True
 - `pass` `external_operator_packet_backend_gate`: backend_contract_gate_command='python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json'
@@ -174,7 +179,7 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_operator_handoff_bundle_ready`: passed
 - `pass` `external_operator_handoff_bundle_not_evidence`: not_external_evidence=True, strict_evidence_ready=False, handoff_bundle_ready=True, start_state='DO_NOT_COLLECT_YET'
 - `pass` `external_operator_handoff_bundle_excludes_evidence_paths`: forbidden_included_paths=[]
-- `pass` `external_operator_handoff_bundle_hash_manifest`: included_file_count=293, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 92, 'operator_command_source': 40, 'operator_facing_input': 72, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}
+- `pass` `external_operator_handoff_bundle_hash_manifest`: included_file_count=299, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 94, 'operator_command_source': 41, 'operator_facing_input': 75, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}
 - `pass` `strict_evidence_gates_remain_not_ready`: external_submission_ready=False, rollout_passed=False, config_passed=False, adapter_passed=False
 - `pass` `operator_packet_paths_exist`: missing=[]
 - `pass` `task_cards_ge_4`: task_cards=4

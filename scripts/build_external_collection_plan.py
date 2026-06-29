@@ -52,6 +52,7 @@ REQUIRED_COMMANDS = [
     r"python scripts\validate_external_adapters.py --strict",
     r"python scripts\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
     r"python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id <specific_run_id> --unsealed-alias-map",
+    r"python scripts\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
     r"python scripts\build_external_manifest.py --write --check-video-paths",
     r"python scripts\audit_external_collection_readiness.py --strict",
     r"python scripts\audit_external_release_package.py --strict",

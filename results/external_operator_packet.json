@@ -82,6 +82,11 @@
       "passed": true
     },
     {
+      "detail": "sealed_artifacts=11, records=0, videos=0, seal_ready=False",
+      "name": "postcollection_evidence_seal_recorded_but_not_evidence",
+      "passed": true
+    },
+    {
       "detail": "configs=4, method_gaps=11, rollout_gaps=8, official_manifest_exists=False",
       "name": "precollection_manifest_draft_ready_but_not_evidence",
       "passed": true
@@ -499,6 +504,25 @@
     },
     {
       "artifacts": [
+        "external_validation/postcollection_evidence_seal.json",
+        "external_validation/postcollection_evidence_seal.md",
+        "external_validation/postcollection_evidence_seal.csv",
+        "results/external_postcollection_evidence_seal_audit.json"
+      ],
+      "closes": [
+        "postcollection drift between raw JSONL logs, rollout videos, configs, operator metadata, precollection receipt, and manifest promotion"
+      ],
+      "commands": [
+        "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+        "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+        "python scripts\\build_external_manifest.py --write --check-video-paths"
+      ],
+      "id": "postcollection_evidence_seal",
+      "operator_input": "specific backend module, run id, operator id, collection machine, seal date, completed JSONL logs, rollout videos, and prepared configs after official collection",
+      "title": "Seal raw postcollection logs and videos before manifest promotion"
+    },
+    {
+      "artifacts": [
         "external_validation/fidelity_acceptance.json"
       ],
       "closes": [
@@ -815,6 +839,23 @@
     "python scripts\\audit_external_pairing_integrity.py --strict",
     "python scripts\\audit_external_evidence.py --strict"
   ],
+  "postcollection_evidence_seal": {
+    "audit_md_path": "results/external_postcollection_evidence_seal_audit.md",
+    "audit_path": "results/external_postcollection_evidence_seal_audit.json",
+    "build_command": "python scripts\\build_external_postcollection_evidence_seal.py",
+    "csv_path": "external_validation/postcollection_evidence_seal.csv",
+    "expected_records": 1440,
+    "jsonl_record_count": 0,
+    "not_external_evidence": true,
+    "operator_regeneration_command": "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+    "packet_path": "external_validation/postcollection_evidence_seal.md",
+    "postcollection_seal_ready": false,
+    "ready_for_manifest_promotion": false,
+    "rollout_video_count": 0,
+    "sealed_artifact_count": 11,
+    "strict_external_evidence_ready": false
+  },
+  "postcollection_seal_command": "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
   "pre_collection_blockers": [
     "backend_module_ready: --backend-module is required before actual collection",
     "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'",
@@ -850,6 +891,7 @@
       "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
       "python scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
       "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+      "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
       "python scripts\\build_external_manifest.py --write --check-video-paths",
       "python scripts\\validate_external_configs.py --strict",
       "python scripts\\validate_external_adapters.py --strict",
@@ -964,9 +1006,12 @@
     "results/external_ablation_collection_audit.json",
     "results/external_evidence_intake_ledger_audit.json",
     "results/external_precollection_freeze_receipt_audit.json",
+    "results/external_postcollection_evidence_seal_audit.json",
     "results/external_precollection_manifest_draft_audit.json",
     "external_validation/precollection_freeze_receipt.json",
     "external_validation/precollection_freeze_receipt.md",
+    "external_validation/postcollection_evidence_seal.json",
+    "external_validation/postcollection_evidence_seal.md",
     "external_validation/manifest_precollection_draft.json",
     "external_validation/manifest_precollection_draft.md",
     "results/external_fidelity_provenance_audit.json",
@@ -986,6 +1031,7 @@
     "collection_command_after_fidelity_acceptance": "python external_validation\\runner\\real_collection_runner.py --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id maniskill_sapien_reference_preflight_protocol_v1 --unsealed-alias-map",
     "collection_ready": false,
     "not_external_evidence": true,
+    "postcollection_seal_command": "python scripts\\build_external_postcollection_evidence_seal.py --backend-module external_validation\\runner\\maniskill_reference_backend.py --run-id maniskill_sapien_reference_preflight_protocol_v1 --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
     "pre_collection_gate_command": "python scripts\\audit_external_collection_readiness.py --strict --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --run-id maniskill_sapien_reference_preflight_protocol_v1 --unsealed-alias-map",
     "precollection_freeze_command": "python scripts\\build_external_precollection_freeze_receipt.py --backend-module external_validation\\runner\\maniskill_reference_backend.py --run-id maniskill_sapien_reference_preflight_protocol_v1 --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
     "reference_backend_contract_ready": true,

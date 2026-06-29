@@ -3,7 +3,7 @@
   "collection_machine": "",
   "current_checkout": {
     "clean_checkout": false,
-    "code_commit": "562e6bc7d1db3ce96d96597e488bd0dc796e1c0e",
+    "code_commit": "396097036997844e64a0c4a08d3365d65ac8b94d",
     "dirty_status_lines": [
       "M .github/workflows/paper119-validation.yml",
       " M README.md",
@@ -21,15 +21,12 @@
       " M external_validation/manifest_precollection_draft.md",
       " M results/external_collection_plan.json",
       " M results/external_collection_plan.md",
-      " M results/external_collection_readiness_audit.json",
-      " M results/external_collection_readiness_audit.md",
       " M results/external_evidence_intake_ledger_audit.json",
       " M results/external_evidence_intake_ledger_audit.md",
       " M results/external_precollection_manifest_draft_audit.json",
       " M results/external_precollection_manifest_draft_audit.md",
       " M results/external_runbook_audit.json",
       " M results/external_runbook_audit.md",
-      " M scripts/audit_external_collection_readiness.py",
       " M scripts/audit_external_execution_readiness.py",
       " M scripts/audit_visible_contribution.py",
       " M scripts/build_external_acquisition_packet.py",
@@ -41,7 +38,7 @@
       " M scripts/build_external_runbook.py",
       " M scripts/build_submission_artifacts.ps1",
       " M scripts/validate_submission_artifacts.py",
-      "?? scripts/build_external_precollection_freeze_receipt.py"
+      "?? scripts/build_external_postcollection_evidence_seal.py"
     ],
     "skill_library_hash": "F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802"
   },
@@ -68,14 +65,14 @@
       "path": "external_validation/manifest_precollection_draft.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "C10232A44BCEAF1A27BAB702D284119CDA87AFCBC52A28433432F2F3D6C10029"
+      "sha256": "8B8E9DED2328D4A971FB0ED47F058A322842088546CAC3E9B9206CAA61015AAF"
     },
     {
       "exists": true,
       "path": "external_validation/manifest_precollection_draft.md",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "4B1E1D944B41D39A7D4D311FC0E8867CC2C45997F6A1B1E331D5CA9E515701E2"
+      "sha256": "8F73778E3DB775EFF8532439D6655E899F21434FF7E6C42DBF03B856981DF994"
     },
     {
       "exists": true,
@@ -103,14 +100,14 @@
       "path": "external_validation/evidence_intake_ledger.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "D7B1B41DD6E7F2069F09B998E728C74C6CC19ED11B7F470C9BDF546147F97402"
+      "sha256": "026AAF947FDE52A9BDF6902CC63B6F23FC55F7A58A045A462C19D9ADC098BE73"
     },
     {
       "exists": true,
       "path": "external_validation/evidence_intake_ledger.md",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "513E004923A6C2CBFC89E4DE896C363C991F279BF22CD7AC8901DA1B45FF45C6"
+      "sha256": "AE01307873E96C479BC5FF27991BE5924032FA64F8C9AC12B67E06DFE01C1550"
     },
     {
       "exists": true,
@@ -187,14 +184,14 @@
       "path": "results/external_evidence_intake_ledger_audit.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "D7B1B41DD6E7F2069F09B998E728C74C6CC19ED11B7F470C9BDF546147F97402"
+      "sha256": "026AAF947FDE52A9BDF6902CC63B6F23FC55F7A58A045A462C19D9ADC098BE73"
     },
     {
       "exists": true,
       "path": "results/external_precollection_manifest_draft_audit.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "F2423E20A2BF363BB7D15F2E52BB340CCECB4DAB650998818342057309BC81D0"
+      "sha256": "BEFA82AC6DF3AA0CD5A13AA61D7AB1CB2D6C32BBBDC9482BB5213DFB3A8B5FC9"
     },
     {
       "exists": true,

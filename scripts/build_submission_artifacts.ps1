@@ -155,6 +155,7 @@ try {
         Invoke-Native python scripts\build_external_evidence_intake_ledger.py
         Invoke-Native python scripts\build_external_precollection_manifest_draft.py
         Invoke-Native python scripts\build_external_precollection_freeze_receipt.py
+        Invoke-Native python scripts\build_external_postcollection_evidence_seal.py
         Invoke-Native python scripts\build_external_acquisition_packet.py
         Invoke-Native python scripts\build_external_operator_packet.py
         Invoke-Native python scripts\build_external_operator_handoff_bundle.py

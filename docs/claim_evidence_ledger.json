@@ -221,6 +221,11 @@
       "evidence": ["scripts/build_external_precollection_freeze_receipt.py", "external_validation/precollection_freeze_receipt.json", "external_validation/precollection_freeze_receipt.md", "external_validation/precollection_freeze_receipt.csv", "results/external_precollection_freeze_receipt_audit.json", "results/external_precollection_freeze_receipt_audit.md"]
     },
     {
+      "name": "external_postcollection_evidence_seal_claim",
+      "claim": "The repository provides a non-evidence External postcollection evidence seal that hash-locks raw JSONL logs, rollout videos, prepared configs, precollection receipt, operator metadata, and manifest-promotion inputs after official collection and before manifest writing while keeping strict external evidence false.",
+      "evidence": ["scripts/build_external_postcollection_evidence_seal.py", "external_validation/postcollection_evidence_seal.json", "external_validation/postcollection_evidence_seal.md", "external_validation/postcollection_evidence_seal.csv", "results/external_postcollection_evidence_seal_audit.json", "results/external_postcollection_evidence_seal_audit.md"]
+    },
+    {
       "name": "external_operator_packet_claim",
       "claim": "The repository provides a generated non-evidence operator packet with a go/no-go state, backend qualification gate, generic pre-collection blockers, a tracked ManiSkill reference route that reaches the single fidelity-acceptance blocker, a fidelity-metadata probe summary, exact collection commands, and post-collection strict gates for an independent validation operator.",
       "evidence": ["scripts/build_external_operator_packet.py", "results/external_operator_packet.json", "results/external_operator_packet.md", "results/external_backend_contract_audit.json", "results/external_collection_readiness_audit.json", "results/maniskill_reference_collection_preflight_audit.json", "results/maniskill_fidelity_metadata_probe.json", "results/external_acquisition_packet.json"]

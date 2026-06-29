@@ -98,6 +98,10 @@ def build_payload() -> dict[str, Any]:
         RESULTS / "external_precollection_freeze_receipt_audit.json",
         "external_precollection_freeze_receipt_audit_v1",
     )
+    postcollection_seal = require_payload(
+        RESULTS / "external_postcollection_evidence_seal_audit.json",
+        "external_postcollection_evidence_seal_audit_v1",
+    )
     precollection_manifest = require_payload(
         RESULTS / "external_precollection_manifest_draft_audit.json",
         "external_precollection_manifest_draft_audit_v1",
@@ -142,6 +146,7 @@ def build_payload() -> dict[str, Any]:
         "ablation_collection_packet",
         "evidence_intake_ledger",
         "precollection_freeze_receipt",
+        "postcollection_evidence_seal",
         "run_collection",
         "manifest_and_release",
         "strict_rollout_recompute",
@@ -365,6 +370,30 @@ def build_payload() -> dict[str, Any]:
             f"freeze_receipt_ready={precollection_freeze.get('freeze_receipt_ready')!r}"
         ),
     )
+    seal_action = actions.get("postcollection_evidence_seal", {})
+    seal_commands = "\n".join(seal_action.get("commands", []) or [])
+    seal_checks = {check.get("name"): check.get("passed") for check in postcollection_seal.get("checks", []) or []}
+    add_check(
+        checks,
+        "postcollection_evidence_seal_recorded_but_not_evidence",
+        postcollection_seal.get("passed") is True
+        and postcollection_seal.get("not_external_evidence") is True
+        and postcollection_seal.get("strict_external_evidence_ready") is False
+        and postcollection_seal.get("postcollection_seal_ready") is False
+        and postcollection_seal.get("ready_for_manifest_promotion") is False
+        and int(postcollection_seal.get("sealed_artifact_count", 0) or 0) >= 8
+        and int(postcollection_seal.get("jsonl_record_count", 0) or 0) == 0
+        and int(postcollection_seal.get("rollout_video_count", 0) or 0) == 0
+        and seal_checks.get("seal_is_non_evidence_and_fail_closed") is True
+        and seal_checks.get("strict_sequence_places_seal_after_collection_before_manifest") is True
+        and "build_external_postcollection_evidence_seal.py" in seal_commands,
+        (
+            f"sealed_artifacts={postcollection_seal.get('sealed_artifact_count')!r}, "
+            f"records={postcollection_seal.get('jsonl_record_count')!r}, "
+            f"videos={postcollection_seal.get('rollout_video_count')!r}, "
+            f"seal_ready={postcollection_seal.get('postcollection_seal_ready')!r}"
+        ),
+    )
     precollection_checks = {check.get("name"): check.get("passed") for check in precollection_manifest.get("checks", []) or []}
     add_check(
         checks,
@@ -493,6 +522,12 @@ def build_payload() -> dict[str, Any]:
         "--output-log-dir external_validation\\logs --video-dir external_validation\\videos "
         f"--run-id {reference_run_id} --unsealed-alias-map"
     )
+    reference_postcollection_seal_command = (
+        "python scripts\\build_external_postcollection_evidence_seal.py "
+        f"--backend-module {reference_backend} --run-id {reference_run_id} "
+        "--operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> "
+        "--date-sealed <YYYY-MM-DD>"
+    )
     return {
         "version": "external_operator_packet_v1",
         "passed": passed,
@@ -515,6 +550,7 @@ def build_payload() -> dict[str, Any]:
             "pre_collection_gate_command": reference_pre_collection_gate_command,
             "precollection_freeze_command": reference_precollection_freeze_command,
             "collection_command_after_fidelity_acceptance": reference_collection_command,
+            "postcollection_seal_command": reference_postcollection_seal_command,
             "audit_command": "python scripts\\audit_maniskill_reference_collection_preflight.py",
         },
         "fidelity_acceptance_draft": {
@@ -637,6 +673,22 @@ def build_payload() -> dict[str, Any]:
             "build_command": "python scripts\\build_external_precollection_freeze_receipt.py",
             "operator_regeneration_command": precollection_freeze.get("operator_regeneration_command"),
         },
+        "postcollection_evidence_seal": {
+            "not_external_evidence": True,
+            "strict_external_evidence_ready": postcollection_seal.get("strict_external_evidence_ready") is True,
+            "postcollection_seal_ready": postcollection_seal.get("postcollection_seal_ready") is True,
+            "ready_for_manifest_promotion": postcollection_seal.get("ready_for_manifest_promotion") is True,
+            "sealed_artifact_count": int(postcollection_seal.get("sealed_artifact_count", 0) or 0),
+            "jsonl_record_count": int(postcollection_seal.get("jsonl_record_count", 0) or 0),
+            "rollout_video_count": int(postcollection_seal.get("rollout_video_count", 0) or 0),
+            "expected_records": int(postcollection_seal.get("expected_records", 0) or 0),
+            "packet_path": "external_validation/postcollection_evidence_seal.md",
+            "csv_path": "external_validation/postcollection_evidence_seal.csv",
+            "audit_path": "results/external_postcollection_evidence_seal_audit.json",
+            "audit_md_path": "results/external_postcollection_evidence_seal_audit.md",
+            "build_command": "python scripts\\build_external_postcollection_evidence_seal.py",
+            "operator_regeneration_command": postcollection_seal.get("operator_regeneration_command"),
+        },
         "precollection_manifest_draft": {
             "not_external_evidence": True,
             "draft_ready": precollection_manifest.get("draft_ready") is True,
@@ -665,6 +717,12 @@ def build_payload() -> dict[str, Any]:
             "--operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> "
             "--date-locked <YYYY-MM-DD> --unsealed-alias-map"
         ),
+        "postcollection_seal_command": (
+            "python scripts\\build_external_postcollection_evidence_seal.py "
+            "--backend-module <module_or_path> --run-id <specific_run_id> "
+            "--operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> "
+            "--date-sealed <YYYY-MM-DD>"
+        ),
         "backend_contract_gate_command": backend_contract.get("strict_command", ""),
         "config_materialization_command": materialization.get("operator_write_command", ""),
         "strict_collection_command": collection.get("strict_collection_command", ""),
@@ -691,9 +749,12 @@ def build_payload() -> dict[str, Any]:
             "results/external_ablation_collection_audit.json",
             "results/external_evidence_intake_ledger_audit.json",
             "results/external_precollection_freeze_receipt_audit.json",
+            "results/external_postcollection_evidence_seal_audit.json",
             "results/external_precollection_manifest_draft_audit.json",
             "external_validation/precollection_freeze_receipt.json",
             "external_validation/precollection_freeze_receipt.md",
+            "external_validation/postcollection_evidence_seal.json",
+            "external_validation/postcollection_evidence_seal.md",
             "external_validation/manifest_precollection_draft.json",
             "external_validation/manifest_precollection_draft.md",
             "results/external_fidelity_provenance_audit.json",
@@ -1007,6 +1068,33 @@ def write_md(payload: dict[str, Any]) -> None:
         ]
     )
 
+    seal = payload["postcollection_evidence_seal"]
+    lines.extend(
+        [
+            "",
+            "## External Postcollection Evidence Seal",
+            "",
+            "This seal is not evidence. It hash-locks raw JSONL logs, rollout videos, prepared configs, precollection receipt, and operator metadata after official collection and before manifest promotion.",
+            "",
+            f"- Seal: `{seal['packet_path']}`",
+            f"- CSV: `{seal['csv_path']}`",
+            f"- Audit JSON: `{seal['audit_path']}`",
+            f"- Audit notes: `{seal['audit_md_path']}`",
+            f"- Sealed artifacts: `{seal['sealed_artifact_count']}`",
+            f"- JSONL records: `{seal['jsonl_record_count']}/{seal['expected_records']}`",
+            f"- Rollout videos: `{seal['rollout_video_count']}`",
+            f"- Postcollection seal ready: `{str(seal['postcollection_seal_ready']).lower()}`",
+            f"- Ready for manifest promotion: `{str(seal['ready_for_manifest_promotion']).lower()}`",
+            f"- Strict external evidence ready: `{str(seal['strict_external_evidence_ready']).lower()}`",
+            "",
+            "Operator regeneration command:",
+            "",
+            "```powershell",
+            str(seal["operator_regeneration_command"] or seal["build_command"]),
+            "```",
+        ]
+    )
+
     precollection = payload["precollection_manifest_draft"]
     lines.extend(
         [
@@ -1072,6 +1160,12 @@ def write_md(payload: dict[str, Any]) -> None:
             "",
             "```powershell",
             payload["strict_collection_command"],
+            "```",
+            "",
+            "Postcollection evidence seal before manifest promotion:",
+            "",
+            "```powershell",
+            payload["postcollection_seal_command"],
             "```",
             "",
             "Official video write guard: the runner refuses diagnostic fallback sidecars, non-MP4-like files, undersized files, out-of-dir paths, or unexpected returned video paths before any official JSONL row is written.",

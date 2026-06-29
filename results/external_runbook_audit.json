@@ -46,7 +46,7 @@
       "passed": true
     },
     {
-      "detail": "positions={'audit_external_fidelity_acceptance.py': 403, 'audit_external_backend_contract.py': 623, 'audit_maniskill_reference_collection_preflight.py': 725, 'audit_maniskill_render_video_preflight.py': 1112, 'build_external_precollection_freeze_receipt.py': 1972, 'real_collection_runner.py --backend-module <module_or_path>': 2243, 'build_external_manifest.py --write --check-video-paths': 2493, 'validate_external_rollouts.py --write-results --check-video-paths --strict': 2736, 'audit_external_evidence.py --strict': 3002}",
+      "detail": "positions={'audit_external_fidelity_acceptance.py': 403, 'audit_external_backend_contract.py': 623, 'audit_maniskill_reference_collection_preflight.py': 725, 'audit_maniskill_render_video_preflight.py': 1112, 'build_external_precollection_freeze_receipt.py': 1972, 'real_collection_runner.py --backend-module <module_or_path>': 2243, 'build_external_postcollection_evidence_seal.py': 2493, 'build_external_manifest.py --write --check-video-paths': 2724, 'validate_external_rollouts.py --write-results --check-video-paths --strict': 2967, 'audit_external_evidence.py --strict': 3233}",
       "name": "gate_order_preserves_preflight_before_collection_and_evidence",
       "passed": true
     },
@@ -85,6 +85,7 @@
     "materialize_external_configs.py --platform-type high_fidelity_sim",
     "build_external_precollection_freeze_receipt.py",
     "real_collection_runner.py --backend-module <module_or_path>",
+    "build_external_postcollection_evidence_seal.py",
     "audit_external_evidence_preflight.py",
     "build_external_ablation_collection_packet.py",
     "build_external_evidence_intake_ledger.py"
@@ -96,6 +97,6 @@
     "external_validation/task_cards/door_open_navigation.md",
     "external_validation/task_cards/cable_route_insert.md"
   ],
-  "validation_command_count": 45,
+  "validation_command_count": 46,
   "version": "external_runbook_audit_v1"
 }

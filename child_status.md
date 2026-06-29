@@ -18,6 +18,8 @@ Failure-memory adaptation audit: local observed-to-held-out seam signatures show
 
 Reviewer packet: the reviewer response packet now records the natural skill-seam world/action defense, the current evidence boundary, and the one-paper Haonan/Yilun outreach rule without changing the STRONG_REVISE decision.
 
+external postcollection evidence seal: `external_validation/postcollection_evidence_seal.md` now records the non-evidence hash-lock step for raw JSONL logs, rollout videos, prepared configs, precollection receipt, and operator metadata after official collection and before manifest promotion.
+
 adapter acceptance fixtures: `external_validation/adapter_acceptance_fixtures.md` now provides non-evidence synthetic API/log-field smoke fixtures for all non-oracle method implementations before strict rollout collection.
 method manifest cutover checklist: `external_validation/method_manifest_cutover_checklist.md` maps every non-oracle method to required `manifest.methods[]` fields, checkpoint/config hashes, implementation provenance, fairness-contract bindings, and JSONL `policy_or_config_hash` matching before strict adapter evidence can pass.
 

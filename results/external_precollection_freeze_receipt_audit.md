@@ -15,7 +15,7 @@ This audit checks that the precollection freeze receipt hash-locks the operator 
 - `pass` `prepared_task_configs_hashed`: config_count=4
 - `pass` `backend_module_still_operator_supplied`: backend_module=''
 - `pass` `run_identity_still_operator_supplied`: run_id='paper119_external_validation_run', unsealed_alias_map=False
-- `pass` `checkout_and_skill_hash_recorded`: commit='562e6bc7d1db3ce96d96597e488bd0dc796e1c0e', skill_hash='F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802'
+- `pass` `checkout_and_skill_hash_recorded`: commit='396097036997844e64a0c4a08d3365d65ac8b94d', skill_hash='F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802'
 - `pass` `strict_sequence_places_receipt_before_collection`: python scripts\audit_external_fidelity_acceptance.py --strict
 python scripts\validate_external_configs.py --strict
 python scripts\validate_external_adapters.py --strict

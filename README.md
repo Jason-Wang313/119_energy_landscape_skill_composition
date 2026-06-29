@@ -121,6 +121,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External fidelity acceptance audit: `results/external_fidelity_acceptance_audit.md`
 - External fidelity acceptance self-test: `results/external_fidelity_acceptance_self_test.md`
 - External collection runbook: `external_validation/collection_runbook.md`
+- External collection runbook command count: 46 validation commands
 - External operator record sheet: `external_validation/operator_record_sheet.csv`
 - External blinded evaluation protocol: `external_validation/blind_evaluation_protocol.md`
 - External blinded operator sheet: `external_validation/blinded_operator_sheet.csv`
@@ -148,6 +149,8 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External precollection manifest draft audit: `results/external_precollection_manifest_draft_audit.md`
 - External precollection freeze receipt: `external_validation/precollection_freeze_receipt.md`
 - External precollection freeze receipt audit: `results/external_precollection_freeze_receipt_audit.md`
+- External postcollection evidence seal: `external_validation/postcollection_evidence_seal.md`
+- External postcollection evidence seal audit: `results/external_postcollection_evidence_seal_audit.md`
 - External config template audit: `results/external_config_template_audit.md`
 - External config evidence self-test: `results/external_config_evidence_self_test.md`
 - External baseline implementation contract: `external_validation/baseline_implementation_contract.md`
