@@ -616,6 +616,9 @@ def main() -> int:
         and release_package_self_test.get("bad_release_package_ready") is False
         and release_self_checks.get("bad_artifacts_rejected_as_release_evidence") is True
         and "FORBIDDEN_RELEASE_LOG_VIDEO_FRAGMENTS" in release_audit_text
+        and "inspect_video_artifact" in release_audit_text
+        and "video directory contains no MP4 files" in release_audit_text
+        and "video artifact is not MP4-like evidence with an ftyp box" in release_audit_text
         and "staging" in release_audit_text
         and "backup" in release_audit_text
         and "diagnostic" in release_audit_text
@@ -623,6 +626,8 @@ def main() -> int:
         and "peg_place_regrasp.backup.jsonl" in release_self_test_text
         and "peg_place_regrasp.diagnostic.mp4" in release_self_test_text
         and "peg_place_regrasp.fallback.mp4" in release_self_test_text
+        and "empty_video_dir" in release_self_test_text
+        and "video directory contains no MP4 files" in release_self_test_text
         and "release-package internal-artifact rejection gate" in texts["README"]
         and "release-package internal-artifact rejection gate" in texts["final_audit"]
         and "release-package internal-artifact rejection gate" in texts["readiness_audit"],
@@ -867,6 +872,8 @@ def main() -> int:
             "External config manifest packet",
             "External rollout evidence packet",
             "strict MP4 video evidence gate",
+            "empty-video-directory",
+            "non-MP4-like",
             "External ablation collection packet",
             "External evidence intake ledger",
             "External precollection manifest draft",
@@ -917,6 +924,8 @@ def main() -> int:
             "External config manifest packet",
             "External rollout evidence packet",
             "strict MP4 video evidence gate",
+            "empty video directories",
+            "non-MP4-like video artifacts",
             "External ablation collection packet",
             "External evidence intake ledger",
             "External precollection manifest draft",
@@ -968,6 +977,8 @@ def main() -> int:
             "external config manifest packet",
             "external rollout evidence packet",
             "strict MP4 video evidence gate",
+            "empty video directories",
+            "non-MP4-like video artifacts",
             "external ablation collection packet",
             "external evidence intake ledger",
             "external precollection manifest draft",
@@ -1019,6 +1030,8 @@ def main() -> int:
             "External config manifest packet",
             "External rollout evidence packet",
             "strict MP4 video evidence gate",
+            "empty video directories",
+            "non-MP4-like video artifacts",
             "External ablation collection packet",
             "External evidence intake ledger",
             "External precollection manifest draft",
@@ -1071,6 +1084,8 @@ def main() -> int:
             "scripts/build_external_config_manifest_packet.py",
             "scripts/build_external_rollout_evidence_packet.py",
             "strict MP4 video evidence gate",
+            "empty video directories",
+            "non-MP4-like video artifacts",
             "scripts/build_external_ablation_collection_packet.py",
             "scripts/build_external_evidence_intake_ledger.py",
             "scripts/build_external_precollection_manifest_draft.py",
@@ -1124,6 +1139,8 @@ def main() -> int:
             "external config manifest packet",
             "external rollout evidence packet",
             "strict MP4 video evidence gate",
+            "empty-video-directory",
+            "non-MP4-like",
             "external ablation collection packet",
             "external evidence intake ledger",
             "external precollection manifest draft",

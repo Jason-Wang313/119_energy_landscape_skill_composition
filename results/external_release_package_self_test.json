@@ -12,7 +12,7 @@
       "passed": true
     },
     {
-      "detail": "blocking_fragments_present=True, blockers=15",
+      "detail": "blocking_fragments_present=True, blockers=20",
       "name": "bad_artifacts_rejected_as_release_evidence",
       "passed": true
     },

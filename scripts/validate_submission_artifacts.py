@@ -879,6 +879,9 @@ def main():
     release_self_test_text = (ROOT / "scripts" / "self_test_external_release_package.py").read_text(encoding="utf-8")
     for release_guard_term in (
         "FORBIDDEN_RELEASE_LOG_VIDEO_FRAGMENTS",
+        "inspect_video_artifact",
+        "video directory contains no MP4 files",
+        "video artifact is not MP4-like evidence with an ftyp box",
         "staging",
         "backup",
         "diagnostic",
@@ -892,6 +895,8 @@ def main():
         "peg_place_regrasp.diagnostic.mp4",
         "peg_place_regrasp.fallback.mp4",
         "peg_place_regrasp.backup.mp4",
+        "empty_video_dir",
+        "video directory contains no MP4 files",
     ):
         if release_fixture not in release_self_test_text:
             fail(f"external release package self-test missing internal-artifact rejection fixture: {release_fixture}")

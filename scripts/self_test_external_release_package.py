@@ -84,7 +84,7 @@ def initialize(config):
     log.parent.mkdir(parents=True, exist_ok=True)
     log.write_text(json.dumps({"run_id": "release_package_self_test", "method": "barrier_certified_energy_composer_v5"}) + "\n", encoding="utf-8")
     video.parent.mkdir(parents=True, exist_ok=True)
-    video.write_bytes((b"release package self-test rollout video bytes\n" * 40))
+    video.write_bytes(b"\x00\x00\x00\x18ftypisom\x00\x00\x02\x00isomiso2mp41" + (b"release package self-test rollout video bytes\n" * 40))
     checkpoint.parent.mkdir(parents=True, exist_ok=True)
     checkpoint.write_text(digest("release-package-self-test-checkpoint") + "\n", encoding="utf-8")
 
@@ -116,7 +116,9 @@ def bad_release_artifacts(tmp: Path) -> dict[str, list[dict[str, str]]]:
     diagnostic_video = internal_artifact_dir / "peg_place_regrasp.diagnostic.mp4"
     fallback_video = internal_artifact_dir / "peg_place_regrasp.fallback.mp4"
     backup_video = internal_artifact_dir / "peg_place_regrasp.backup.mp4"
+    empty_video_dir = internal_artifact_dir / "empty_video_dir"
     staged_log.parent.mkdir(parents=True, exist_ok=True)
+    empty_video_dir.mkdir(parents=True, exist_ok=True)
     staged_log.write_text(json.dumps({"not_external_evidence": True, "kind": "staged_log"}) + "\n", encoding="utf-8")
     backup_log.write_text(json.dumps({"not_external_evidence": True, "kind": "backup_log"}) + "\n", encoding="utf-8")
     diagnostic_video.write_bytes((b"diagnostic release-package self-test video bytes\n" * 40))
@@ -127,7 +129,7 @@ def bad_release_artifacts(tmp: Path) -> dict[str, list[dict[str, str]]]:
         "code": [entry(scaffold)],
         "configs": [entry(template_config)],
         "logs": [entry(local_log), entry(staged_log), entry(backup_log)],
-        "videos": [entry(placeholder_video), entry(diagnostic_video), entry(fallback_video), entry(backup_video)],
+        "videos": [entry(placeholder_video), entry(diagnostic_video), entry(fallback_video), entry(backup_video), entry(empty_video_dir)],
         "checkpoints": [entry(local_checkpoint)],
     }
 
@@ -159,7 +161,7 @@ def write_report(payload: dict[str, Any]) -> None:
         "Not evidence: `true`.",
         f"Synthetic release package ready: `{str(payload['synthetic_release_package_ready']).lower()}`.",
         "",
-        "This self-test builds temporary manifest-declared release artifacts and exercises the external release-package hash gate directly. It proves complete synthetic artifacts can pass, missing manifests fail, local-dry-run/template/scaffold/placeholder artifacts plus staged/backup/diagnostic log-video artifacts are rejected as evidence, and the real release-package audit report is not overwritten.",
+        "This self-test builds temporary manifest-declared release artifacts and exercises the external release-package hash gate directly. It proves complete synthetic artifacts can pass, missing manifests fail, local-dry-run/template/scaffold/placeholder artifacts plus staged/backup/diagnostic/fallback log-video artifacts, empty video directories, and non-MP4-like video artifacts are rejected as evidence, and the real release-package audit report is not overwritten.",
         "",
         "## Checks",
         "",
@@ -224,6 +226,7 @@ def main() -> int:
                 "backup",
                 "diagnostic",
                 "fallback",
+                "video directory contains no MP4 files",
                 "manifest is marked local_dry_run_only/not_external_evidence",
             )
         ),

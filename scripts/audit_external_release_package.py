@@ -87,6 +87,35 @@ def inspect_config(path: Path) -> list[str]:
     return blockers
 
 
+def inspect_video_file(path: Path) -> list[str]:
+    blockers: list[str] = []
+    if path.suffix.lower() != ".mp4":
+        blockers.append("video artifact must be an .mp4 file")
+        return blockers
+    if path.stat().st_size < 1024:
+        blockers.append("video artifact is too small to be credible rollout media")
+    with path.open("rb") as handle:
+        header = handle.read(16)
+    if len(header) < 12 or header[4:8] != b"ftyp":
+        blockers.append("video artifact is not MP4-like evidence with an ftyp box")
+    return blockers
+
+
+def inspect_video_artifact(path: Path) -> list[str]:
+    if path.is_file():
+        return inspect_video_file(path)
+    if not path.is_dir():
+        return []
+    mp4_files = sorted(child for child in path.rglob("*.mp4") if child.is_file())
+    blockers: list[str] = []
+    if not mp4_files:
+        blockers.append("video directory contains no MP4 files")
+    for child in mp4_files:
+        child_blockers = inspect_video_file(child)
+        blockers.extend(f"{rel(child)}: {item}" for item in child_blockers)
+    return blockers
+
+
 def inspect_entry(kind: str, entry: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
     path_value = str(entry.get("path", ""))
     declared_hash = str(entry.get("sha256", ""))
@@ -128,8 +157,8 @@ def inspect_entry(kind: str, entry: dict[str, Any]) -> tuple[dict[str, Any], lis
             elif path.is_dir():
                 for config_path in sorted(path.rglob("*.json")):
                     blockers.extend(f"{rel(config_path)}: {item}" for item in inspect_config(config_path))
-        if kind == "videos" and path.is_file() and path.stat().st_size < 1024:
-            blockers.append("video artifact is too small to be credible rollout media")
+        if kind == "videos":
+            blockers.extend(inspect_video_artifact(path))
 
     return (
         {
@@ -211,7 +240,7 @@ def write_outputs(payload: dict[str, Any]) -> None:
         f"Release package ready: `{str(payload['release_package_ready']).lower()}`.",
         f"Blocking missing items: `{payload['blocking_missing_count']}`.",
         "",
-        "This audit verifies manifest-declared release artifacts by path and SHA256 hash, and rejects local dry-run, template, scaffold, placeholder, staged, backup, diagnostic, or fallback log/video artifacts as evidence.",
+        "This audit verifies manifest-declared release artifacts by path and SHA256 hash, and rejects local dry-run, template, scaffold, placeholder, staged, backup, diagnostic, fallback, empty-video-directory, or non-MP4-like log/video artifacts as evidence.",
         "",
         "## Artifact Counts",
         "",
