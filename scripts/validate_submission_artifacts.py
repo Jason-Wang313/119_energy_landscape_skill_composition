@@ -163,6 +163,7 @@ def main():
         "scripts\\audit_external_evidence_preflight.py",
         "scripts\\build_external_acquisition_packet.py",
         "scripts\\build_external_operator_packet.py",
+        "scripts\\build_external_collection_job_packet.py",
         "scripts\\build_external_operator_handoff_bundle.py",
         "scripts\\self_test_external_adapter_scaffold_guard.py",
         "scripts\\self_test_external_backend_contract.py",
@@ -260,6 +261,7 @@ def main():
         "python scripts/build_external_method_implementation_packet.py",
         "python scripts/build_external_acquisition_packet.py",
         "python scripts/build_external_operator_packet.py",
+        "python scripts/build_external_collection_job_packet.py",
         "python scripts/build_external_operator_handoff_bundle.py",
         "python scripts/audit_external_release_package.py",
         "python scripts/self_test_external_manifest_builder.py",
@@ -4480,6 +4482,7 @@ def main():
         "maniskill_render_resource_sweep_included",
         "maniskill_pilot_runtime_liveness_included",
         "maniskill_render_machine_qualification_included",
+        "external_collection_job_packet_included",
         "method_implementation_packet_included",
         "operator_actions_cover_evidence_collection",
         "post_collection_commands_cover_strict_gates",
@@ -4487,6 +4490,99 @@ def main():
     ):
         if handoff_checks.get(required_check) is not True:
             fail(f"external operator handoff bundle missing passing check: {required_check}")
+
+    collection_job_packet_path = EXTERNAL / "collection_job_packet.json"
+    collection_job_packet_md_path = EXTERNAL / "collection_job_packet.md"
+    collection_job_commands_path = EXTERNAL / "collection_job_commands.ps1"
+    collection_job_checklist_path = EXTERNAL / "collection_job_checklist.csv"
+    collection_job_audit_path = RESULTS / "external_collection_job_packet_audit.json"
+    collection_job_audit_md_path = RESULTS / "external_collection_job_packet_audit.md"
+    for path in (
+        ROOT / "scripts" / "build_external_collection_job_packet.py",
+        collection_job_packet_path,
+        collection_job_packet_md_path,
+        collection_job_commands_path,
+        collection_job_checklist_path,
+        collection_job_audit_path,
+        collection_job_audit_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external collection job packet artifact: {path}")
+    collection_job_packet = json.loads(collection_job_packet_path.read_text(encoding="utf-8"))
+    collection_job_audit = json.loads(collection_job_audit_path.read_text(encoding="utf-8"))
+    if collection_job_packet.get("version") != "external_collection_job_packet_v1":
+        fail("external collection job packet version mismatch")
+    if collection_job_audit.get("version") != "external_collection_job_packet_audit_v1":
+        fail("external collection job packet audit version mismatch")
+    for name, payload in (("packet", collection_job_packet), ("audit", collection_job_audit)):
+        if payload.get("passed") is not True:
+            fail(f"external collection job {name} did not pass")
+        if payload.get("not_external_evidence") is not True:
+            fail(f"external collection job {name} must declare that it is not evidence")
+        if payload.get("strict_external_evidence_ready") is not False:
+            fail(f"external collection job {name} must not claim strict external evidence readiness")
+        if payload.get("job_state") != "DO_NOT_START_COLLECTION_YET":
+            fail(f"external collection job {name} must remain fail-closed before real evidence")
+        if payload.get("collection_ready") is not False:
+            fail(f"external collection job {name} must preserve collection_ready=false in the current repo")
+        if payload.get("render_machine_qualified") is not False:
+            fail(f"external collection job {name} must preserve render_machine_qualified=false in the current repo")
+        if int(payload.get("remaining_submission_blocker_count", 0) or 0) != 4:
+            fail(f"external collection job {name} must map the four remaining submission blockers")
+        if len(payload.get("job_steps", []) or []) < 17:
+            fail(f"external collection job {name} has too few ordered job steps")
+    collection_job_ids = {str(step.get("id", "")) for step in collection_job_packet.get("job_steps", []) if isinstance(step, dict)}
+    for required_job_id in (
+        "platform_probe",
+        "render_profile_matrix",
+        "pilot_runtime_liveness",
+        "backend_contract",
+        "fidelity_acceptance_materialization",
+        "strict_collection_readiness",
+        "precollection_freeze_receipt",
+        "official_collection_runner",
+        "postcollection_evidence_seal",
+        "postcollection_seal_consistency",
+        "manifest_promotion",
+        "strict_rollout_recompute",
+        "strict_config_evidence",
+        "strict_adapter_evidence",
+        "strict_pairing_integrity",
+        "strict_release_package",
+        "final_external_evidence_audit",
+    ):
+        if required_job_id not in collection_job_ids:
+            fail(f"external collection job packet missing job step: {required_job_id}")
+    collection_job_checks = {check.get("name"): check.get("passed") for check in collection_job_audit.get("checks", [])}
+    for required_check in (
+        "job_packet_is_non_evidence",
+        "source_payloads_loaded",
+        "job_state_fail_closed_until_render_and_collection_ready",
+        "command_sequence_covers_full_external_validation_route",
+        "command_order_preserves_preflight_collection_manifest_safety",
+        "official_collection_commands_guarded",
+        "current_blockers_explicit_and_mapped",
+        "pre_and_postcollection_hash_gates_present",
+        "render_machine_self_test_proves_ready_and_fail_closed_cases",
+        "no_real_manifest_written",
+    ):
+        if collection_job_checks.get(required_check) is not True:
+            fail(f"external collection job packet audit missing passing check: {required_check}")
+    collection_job_command_text = collection_job_commands_path.read_text(encoding="utf-8")
+    for fragment in (
+        "ConfirmOfficialCollection",
+        "Assert-NoPlaceholder",
+        "audit_maniskill_render_video_preflight.py",
+        "audit_maniskill_pilot_runtime_liveness.py",
+        "materialize_fidelity_acceptance.py",
+        "audit_external_collection_readiness.py",
+        "real_collection_runner.py",
+        "build_external_manifest.py",
+        "validate_external_rollouts.py",
+        "audit_external_evidence.py",
+    ):
+        if fragment not in collection_job_command_text:
+            fail(f"external collection job command file missing fragment: {fragment}")
 
     config_materialization_path = RESULTS / "external_config_materialization_plan.json"
     if not config_materialization_path.exists():
@@ -5100,6 +5196,7 @@ def main():
         "readiness_gap_state_visible",
         "operator_packet_no_go_visible",
         "collection_readiness_tracked_reference_route_visible",
+        "external_collection_job_packet_visible",
         "analysis_plan_visible",
         "platform_onboarding_visible",
         "fidelity_provenance_packet_visible",

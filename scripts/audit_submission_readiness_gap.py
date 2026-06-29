@@ -112,6 +112,8 @@ def main() -> int:
     acquisition_packet = read_json(acquisition_packet_path) if acquisition_packet_path.exists() else {}
     handoff_bundle_path = RESULTS / "external_operator_handoff_bundle.json"
     handoff_bundle = read_json(handoff_bundle_path) if handoff_bundle_path.exists() else {}
+    collection_job_path = RESULTS / "external_collection_job_packet_audit.json"
+    collection_job = read_json(collection_job_path) if collection_job_path.exists() else {}
     method_implementation_path = RESULTS / "external_method_implementation_audit.json"
     method_implementation = read_json(method_implementation_path) if method_implementation_path.exists() else {}
     presentation_path = RESULTS / "presentation_quality_audit.json"
@@ -628,6 +630,7 @@ def main() -> int:
     config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", [])}
     rollout_evidence_checks = {check.get("name"): check.get("passed") for check in rollout_evidence.get("checks", [])}
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", [])}
+    collection_job_checks = {check.get("name"): check.get("passed") for check in collection_job.get("checks", [])}
     acquisition_packet_ok = (
         acquisition_packet.get("passed") is True
         and acquisition_packet.get("version") == "external_acquisition_packet_v1"
@@ -676,15 +679,26 @@ def main() -> int:
         and handoff_bundle.get("strict_evidence_ready") is False
         and handoff_bundle.get("start_state") == "DO_NOT_COLLECT_YET"
         and handoff_checks.get("bundle_excludes_rollout_evidence_artifacts") is True
+        and handoff_checks.get("external_collection_job_packet_included") is True
         and handoff_checks.get("backend_integration_packet_included") is True
         and handoff_checks.get("fidelity_provenance_packet_included") is True
         and handoff_checks.get("config_manifest_packet_included") is True
         and handoff_checks.get("rollout_evidence_packet_included") is True
         and handoff_checks.get("method_implementation_packet_included") is True
         and handoff_checks.get("file_hashes_are_recorded") is True
+        and collection_job.get("passed") is True
+        and collection_job.get("version") == "external_collection_job_packet_audit_v1"
+        and collection_job.get("not_external_evidence") is True
+        and collection_job.get("strict_external_evidence_ready") is False
+        and collection_job.get("job_state") == "DO_NOT_START_COLLECTION_YET"
+        and int(collection_job.get("remaining_submission_blocker_count", 0) or 0) == 4
+        and len(collection_job.get("job_steps", []) or []) >= 17
+        and collection_job_checks.get("command_sequence_covers_full_external_validation_route") is True
+        and collection_job_checks.get("official_collection_commands_guarded") is True
         and exists_all(
             [
                 ROOT / "scripts" / "build_external_acquisition_packet.py",
+                ROOT / "scripts" / "build_external_collection_job_packet.py",
                 ROOT / "scripts" / "build_external_operator_handoff_bundle.py",
                 ROOT / "scripts" / "build_external_backend_integration_packet.py",
                 ROOT / "scripts" / "build_external_fidelity_provenance_packet.py",
@@ -713,6 +727,12 @@ def main() -> int:
                 RESULTS / "external_rollout_evidence_audit.md",
                 RESULTS / "external_method_implementation_audit.json",
                 RESULTS / "external_method_implementation_audit.md",
+                EXTERNAL / "collection_job_packet.json",
+                EXTERNAL / "collection_job_packet.md",
+                EXTERNAL / "collection_job_commands.ps1",
+                EXTERNAL / "collection_job_checklist.csv",
+                RESULTS / "external_collection_job_packet_audit.json",
+                RESULTS / "external_collection_job_packet_audit.md",
                 RESULTS / "external_operator_handoff_bundle.json",
                 RESULTS / "external_operator_handoff_bundle.md",
             ]
@@ -724,6 +744,7 @@ def main() -> int:
         status="satisfied" if acquisition_packet_ok else "missing",
         evidence=[
             "scripts/build_external_acquisition_packet.py",
+            "scripts/build_external_collection_job_packet.py",
             "scripts/build_external_operator_handoff_bundle.py",
             "scripts/build_external_backend_integration_packet.py",
             "scripts/build_external_fidelity_provenance_packet.py",
@@ -752,6 +773,12 @@ def main() -> int:
             "results/external_rollout_evidence_audit.md",
             "results/external_method_implementation_audit.json",
             "results/external_method_implementation_audit.md",
+            "external_validation/collection_job_packet.json",
+            "external_validation/collection_job_packet.md",
+            "external_validation/collection_job_commands.ps1",
+            "external_validation/collection_job_checklist.csv",
+            "results/external_collection_job_packet_audit.json",
+            "results/external_collection_job_packet_audit.md",
             "results/external_operator_handoff_bundle.json",
             "results/external_operator_handoff_bundle.md",
         ],

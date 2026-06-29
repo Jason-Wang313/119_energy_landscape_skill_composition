@@ -196,6 +196,9 @@ jobs:
       - name: Build external operator packet
         run: python scripts/build_external_operator_packet.py
 
+      - name: Build external collection job packet
+        run: python scripts/build_external_collection_job_packet.py
+
       - name: Build external operator handoff bundle
         run: python scripts/build_external_operator_handoff_bundle.py
 

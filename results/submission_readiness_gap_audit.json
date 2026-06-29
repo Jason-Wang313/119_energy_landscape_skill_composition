@@ -270,6 +270,7 @@
       "blocker": "",
       "evidence": [
         "scripts/build_external_acquisition_packet.py",
+        "scripts/build_external_collection_job_packet.py",
         "scripts/build_external_operator_handoff_bundle.py",
         "scripts/build_external_backend_integration_packet.py",
         "scripts/build_external_fidelity_provenance_packet.py",
@@ -298,6 +299,12 @@
         "results/external_rollout_evidence_audit.md",
         "results/external_method_implementation_audit.json",
         "results/external_method_implementation_audit.md",
+        "external_validation/collection_job_packet.json",
+        "external_validation/collection_job_packet.md",
+        "external_validation/collection_job_commands.ps1",
+        "external_validation/collection_job_checklist.csv",
+        "results/external_collection_job_packet_audit.json",
+        "results/external_collection_job_packet_audit.md",
         "results/external_operator_handoff_bundle.json",
         "results/external_operator_handoff_bundle.md"
       ],

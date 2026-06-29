@@ -121,6 +121,10 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "pilot_smoke_work_orders.csv",
         EXTERNAL / "render_resource_sweep_work_orders.csv",
         EXTERNAL / "render_machine_qualification_packet.md",
+        EXTERNAL / "collection_job_packet.json",
+        EXTERNAL / "collection_job_packet.md",
+        EXTERNAL / "collection_job_commands.ps1",
+        EXTERNAL / "collection_job_checklist.csv",
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
@@ -176,6 +180,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "audit_maniskill_render_resource_sweep.py",
         SCRIPTS / "audit_maniskill_pilot_runtime_liveness.py",
         SCRIPTS / "build_maniskill_render_machine_qualification.py",
+        SCRIPTS / "build_external_collection_job_packet.py",
         SCRIPTS / "build_external_method_implementation_packet.py",
         SCRIPTS / "materialize_external_configs.py",
         SCRIPTS / "audit_external_backend_contract.py",
@@ -248,6 +253,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "maniskill_pilot_runtime_liveness_audit.md",
         RESULTS / "maniskill_render_machine_qualification.json",
         RESULTS / "maniskill_render_machine_qualification.md",
+        RESULTS / "external_collection_job_packet_audit.json",
+        RESULTS / "external_collection_job_packet_audit.md",
         RESULTS / "external_method_implementation_audit.json",
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "independent_validation_route_audit.json",
@@ -379,6 +386,7 @@ def build_payload() -> dict[str, Any]:
     render_resource_sweep = require_payload(RESULTS / "maniskill_render_resource_sweep.json", "maniskill_render_resource_sweep_v1")
     pilot_runtime = require_payload(RESULTS / "maniskill_pilot_runtime_liveness_audit.json", "maniskill_pilot_runtime_liveness_audit_v1")
     render_machine = require_payload(RESULTS / "maniskill_render_machine_qualification.json", "maniskill_render_machine_qualification_v1")
+    collection_job = require_payload(RESULTS / "external_collection_job_packet_audit.json", "external_collection_job_packet_audit_v1")
     precollection_manifest = require_payload(
         RESULTS / "external_precollection_manifest_draft_audit.json",
         "external_precollection_manifest_draft_audit_v1",
@@ -456,6 +464,32 @@ def build_payload() -> dict[str, Any]:
         "no_real_manifest_written",
         not (EXTERNAL / "manifest.json").exists(),
         "external_validation/manifest.json absent before real evidence",
+    )
+    collection_job_checks = {check.get("name"): check.get("passed") for check in collection_job.get("checks", []) or []}
+    add_check(
+        checks,
+        "external_collection_job_packet_included",
+        collection_job.get("passed") is True
+        and collection_job.get("not_external_evidence") is True
+        and collection_job.get("strict_external_evidence_ready") is False
+        and collection_job.get("job_state") == "DO_NOT_START_COLLECTION_YET"
+        and int(collection_job.get("remaining_submission_blocker_count", 0) or 0) == 4
+        and int(len(collection_job.get("job_steps", []) or [])) >= 17
+        and collection_job_checks.get("command_sequence_covers_full_external_validation_route") is True
+        and collection_job_checks.get("official_collection_commands_guarded") is True
+        and collection_job_checks.get("no_real_manifest_written") is True
+        and "external_validation/collection_job_packet.json" in paths
+        and "external_validation/collection_job_packet.md" in paths
+        and "external_validation/collection_job_commands.ps1" in paths
+        and "external_validation/collection_job_checklist.csv" in paths
+        and "results/external_collection_job_packet_audit.json" in paths
+        and "results/external_collection_job_packet_audit.md" in paths
+        and "scripts/build_external_collection_job_packet.py" in paths,
+        (
+            f"job_state={collection_job.get('job_state')!r}, "
+            f"steps={len(collection_job.get('job_steps', []) or [])}, "
+            f"blockers={collection_job.get('remaining_submission_blocker_count')!r}"
+        ),
     )
     precollection_checks = {check.get("name"): check.get("passed") for check in precollection_manifest.get("checks", []) or []}
     add_check(

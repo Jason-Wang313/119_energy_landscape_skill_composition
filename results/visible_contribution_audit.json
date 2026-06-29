@@ -42,8 +42,13 @@
       "passed": true
     },
     {
-      "detail": "files=302, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=309, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
+      "passed": true
+    },
+    {
+      "detail": "job_state='DO_NOT_START_COLLECTION_YET', steps=17, blockers=4",
+      "name": "external_collection_job_packet_visible",
       "passed": true
     },
     {

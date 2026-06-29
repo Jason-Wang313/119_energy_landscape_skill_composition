@@ -54,6 +54,7 @@
 - External evidence preflight validator: `scripts/audit_external_evidence_preflight.py`
 - External evidence acquisition packet builder: `scripts/build_external_acquisition_packet.py`
 - External operator packet builder: `scripts/build_external_operator_packet.py`
+- External collection job packet builder: `scripts/build_external_collection_job_packet.py`
 - External operator handoff bundle builder: `scripts/build_external_operator_handoff_bundle.py`
 - External adapter scaffold guard self-test: `scripts/self_test_external_adapter_scaffold_guard.py`
   - Durable report: `results/external_adapter_scaffold_guard_self_test.md`
@@ -223,6 +224,12 @@
   - `results/external_acquisition_packet.md`
   - `results/external_operator_packet.json`
   - `results/external_operator_packet.md`
+  - `external_validation/collection_job_packet.json`
+  - `external_validation/collection_job_packet.md`
+  - `external_validation/collection_job_commands.ps1`
+  - `external_validation/collection_job_checklist.csv`
+  - `results/external_collection_job_packet_audit.json`
+  - `results/external_collection_job_packet_audit.md`
   - `results/external_operator_handoff_bundle.json`
   - `results/external_operator_handoff_bundle.md`
   - `results/external_pairing_integrity_audit.json`
