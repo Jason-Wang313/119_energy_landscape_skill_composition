@@ -75,6 +75,13 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def write_synthetic_mp4(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    header = b"\x00\x00\x00\x18ftypisom\x00\x00\x02\x00isomiso2mp41"
+    payload = b"\x00\x00\x02\x20mdat" + (b"synthetic render-backed self-test frame bytes; not external evidence\n" * 16)
+    path.write_bytes(header + payload)
+
+
 def rel(root: Path, path: Path) -> str:
     return path.relative_to(root).as_posix()
 
@@ -333,7 +340,7 @@ def write_task_artifacts(root: Path, external: Path, policy_hashes: dict[str, st
             for scene_index in range(30):
                 for method in METHODS:
                     video_path = video_dir / f"{scene_index:03d}_{method}.mp4"
-                    video_path.write_bytes((f"synthetic self-test video bytes for {task} {scene_index} {method}\n".encode("utf-8")) * 32)
+                    write_synthetic_mp4(video_path)
                     record = make_record(root, task, scene_index, method, video_path, policy_hashes)
                     handle.write(json.dumps(record, sort_keys=True) + "\n")
                     if scene_index == 0 and method in {rollout.PRIMARY_METHOD, "proposed_energy_landscape_composer_v4_1", rollout.ORACLE_METHOD}:
@@ -499,7 +506,13 @@ def main() -> int:
         write_json(external / "manifest.json", manifest)
 
         schema = json.loads((external / "log_schema_v1.json").read_text(encoding="utf-8"))
-        records, errors = rollout.load_records(manifest, schema, check_video_paths=True, max_errors=1)
+        records, errors = rollout.load_records(
+            manifest,
+            schema,
+            check_video_paths=True,
+            strict_video_evidence=True,
+            max_errors=1,
+        )
         if errors:
             raise AssertionError(f"synthetic external records failed validation: {errors[:3]}")
         rollout_summary = rollout.summarize(records, schema)

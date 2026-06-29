@@ -11,12 +11,12 @@
   },
   "checks": [
     {
-      "detail": "path=C:\\Users\\wangz\\Downloads\\119.pdf, sha=0793D4A8BCD6817DE1D8490441639696EA01026CC0AD152A8E38709CC121CD92, size=467205",
+      "detail": "path=C:\\Users\\wangz\\Downloads\\119.pdf, sha=317D3156519D8E5062DCB23FF6EE487175ECD3F7B2B81268DB194359F8433B60, size=467426",
       "name": "canonical_pdf_metadata_available",
       "passed": true
     },
     {
-      "detail": "paper_sha=0793D4A8BCD6817DE1D8490441639696EA01026CC0AD152A8E38709CC121CD92, canonical_sha=0793D4A8BCD6817DE1D8490441639696EA01026CC0AD152A8E38709CC121CD92",
+      "detail": "paper_sha=317D3156519D8E5062DCB23FF6EE487175ECD3F7B2B81268DB194359F8433B60, canonical_sha=317D3156519D8E5062DCB23FF6EE487175ECD3F7B2B81268DB194359F8433B60",
       "name": "paper_pdf_matches_canonical",
       "passed": true
     },
@@ -121,12 +121,12 @@
       "passed": true
     },
     {
-      "detail": "render_video_ready=False, render_backend='cpu', shader_pack='minimal', envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory']",
+      "detail": "render_video_ready=False, render_backend='cpu', shader_pack='minimal', envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: render preflight exceeded 45 seconds; OpenCabinetDrawer-v1: render preflight exceeded 45 seconds; OpenCabinetDoor-v1: render preflight exceeded 45 seconds; PullCubeTool-v1: render preflight exceeded 45 seconds']",
       "name": "maniskill_render_video_preflight_visible",
       "passed": true
     },
     {
-      "detail": "classes=['vulkan_descriptor_pool_exhaustion'], remediation=5",
+      "detail": "classes=['render_timeout'], remediation=3",
       "name": "renderer_failure_classifier_visible",
       "passed": true
     },
@@ -138,6 +138,11 @@
     {
       "detail": "rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False",
       "name": "rollout_evidence_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "strict rollout validation rejects placeholder/diagnostic/non-MP4 video paths when --strict --check-video-paths is enabled",
+      "name": "strict_video_evidence_gate_visible",
       "passed": true
     },
     {
@@ -231,7 +236,7 @@
       "passed": true
     },
     {
-      "detail": "sha=0793D4A8BCD6817DE1D8490441639696EA01026CC0AD152A8E38709CC121CD92, size=467205, missing_sha=[], missing_size=[]",
+      "detail": "sha=317D3156519D8E5062DCB23FF6EE487175ECD3F7B2B81268DB194359F8433B60, size=467426, missing_sha=[], missing_size=[]",
       "name": "public_pdf_metadata_matches_canonical_artifact",
       "passed": true
     }

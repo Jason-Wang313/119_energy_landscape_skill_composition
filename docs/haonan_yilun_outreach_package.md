@@ -51,7 +51,7 @@ Send:
 - A 4-page clean technical preview.
 - One figure or 30-second GIF showing `skill i -> seam critic -> accept/repair/reject -> skill j`.
 - Link to repo/logs only if the repo is clean enough to survive inspection.
-- Keep the independent validation protocol, `results/external_operator_packet.md`, the ManiSkill fidelity metadata probe, the fidelity acceptance materializer, the ManiSkill render-video preflight with its renderer-failure classifier, the ManiSkill render machine qualification packet, the External ablation collection packet, the External evidence intake ledger, the External precollection manifest draft, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, and the manifest assembly checklist ready as follow-up artifacts, not as first-email clutter.
+- Keep the independent validation protocol, `results/external_operator_packet.md`, the ManiSkill fidelity metadata probe, the fidelity acceptance materializer, the ManiSkill render-video preflight with its renderer-failure classifier, the ManiSkill render machine qualification packet, the strict MP4 video evidence gate, the External ablation collection packet, the External evidence intake ledger, the External precollection manifest draft, the reference-adapter provenance catalog, the strict reference-adapter rejection gate, and the manifest assembly checklist ready as follow-up artifacts, not as first-email clutter.
 - Keep the reviewer response packet ready as a private defense layer for likely objections, not as first-email clutter.
 
 The full PDF can be offered after he shows interest.
@@ -142,7 +142,7 @@ Validation ask:
 - Test as a seam critic in a real or high-fidelity behavior-composition stack.
 - Same skill library and paired resets across baselines.
 - Report success, utility, seam failure, breach, coverage, calibration, and videos.
-- Use the independent operator packet, External ablation collection packet, External evidence intake ledger, reference-adapter provenance catalog, strict reference-adapter rejection gate, and manifest assembly checklist as Jason-owned validation scaffolding; do not frame Haonan as responsible for supplying the missing proof.
+- Use the independent operator packet, strict MP4 video evidence gate, External ablation collection packet, External evidence intake ledger, reference-adapter provenance catalog, strict reference-adapter rejection gate, and manifest assembly checklist as Jason-owned validation scaffolding; do not frame Haonan as responsible for supplying the missing proof.
 
 Why it fits CoStream:
 

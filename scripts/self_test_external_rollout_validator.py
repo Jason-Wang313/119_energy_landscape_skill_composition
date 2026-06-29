@@ -16,6 +16,13 @@ def digest(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
+def write_synthetic_mp4(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    header = b"\x00\x00\x00\x18ftypisom\x00\x00\x02\x00isomiso2mp41"
+    payload = b"\x00\x00\x02\x20mdat" + (b"synthetic self-test frame bytes; not external evidence\n" * 16)
+    path.write_bytes(header + payload)
+
+
 def make_record(task: str, scene_idx: int, method: str, *, success: bool, utility: float) -> dict:
     return {
         "run_id": "synthetic_self_test_only",
@@ -130,6 +137,41 @@ def main() -> int:
         )
         if not any("missing required fields" in error and "utility" in error for error in bad_errors):
             raise AssertionError(f"missing-field test did not fail as expected: {bad_errors}")
+
+        video_dir = Path(tmp_name) / "videos" / "peg_place_regrasp"
+        good_video = video_dir / "good_render_backed_fixture.mp4"
+        write_synthetic_mp4(good_video)
+        good_video_record = dict(records[0])
+        good_video_record["video_path"] = str(good_video)
+        good_video_errors = rollout.validate_record(
+            good_video_record,
+            line_id="synthetic_good_video_record",
+            schema=schema,
+            manifest_methods={rollout.PRIMARY_METHOD, "greedy_module_sequence"},
+            manifest_tasks=set(summary["task_families"]),
+            check_video_paths=True,
+            manifest_video_dirs={"peg_place_regrasp": video_dir},
+            strict_video_evidence=True,
+        )
+        if good_video_errors:
+            raise AssertionError(f"strict video fixture unexpectedly failed: {good_video_errors}")
+
+        fake_video = video_dir / "fake_text_payload.mp4"
+        fake_video.write_bytes(b"plain text pretending to be an mp4\n" * 32)
+        fake_video_record = dict(good_video_record)
+        fake_video_record["video_path"] = str(fake_video)
+        fake_video_errors = rollout.validate_record(
+            fake_video_record,
+            line_id="synthetic_fake_video_record",
+            schema=schema,
+            manifest_methods={rollout.PRIMARY_METHOD, "greedy_module_sequence"},
+            manifest_tasks=set(summary["task_families"]),
+            check_video_paths=True,
+            manifest_video_dirs={"peg_place_regrasp": video_dir},
+            strict_video_evidence=True,
+        )
+        if not any("not MP4-like evidence" in error for error in fake_video_errors):
+            raise AssertionError(f"strict video fixture did not reject fake MP4: {fake_video_errors}")
 
     print("External rollout validator self-test passed: synthetic metrics recomputed and schema failure path checked.")
     return 0

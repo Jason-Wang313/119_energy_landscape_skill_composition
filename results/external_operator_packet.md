@@ -114,9 +114,9 @@ This preflight is not evidence and does not satisfy fidelity acceptance. It chec
 - Strict external evidence ready: `false`
 - Environments probed: `4`
 - Render-ready environments: `0`
-- Blocking missing: `['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory']`
-- Renderer failure classes: `['vulkan_descriptor_pool_exhaustion']`
-- Operator remediation items: `5`
+- Blocking missing: `['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: render preflight exceeded 45 seconds; OpenCabinetDrawer-v1: render preflight exceeded 45 seconds; OpenCabinetDoor-v1: render preflight exceeded 45 seconds; PullCubeTool-v1: render preflight exceeded 45 seconds']`
+- Renderer failure classes: `['render_timeout']`
+- Operator remediation items: `3`
 
 Render preflight command:
 
@@ -149,7 +149,7 @@ This packet is not evidence. It requires the exact collection machine to pass pl
 - Qualification state: `DO_NOT_COLLECT_RENDER_MACHINE`
 - Render machine qualified: `false`
 - Strict external evidence ready: `false`
-- Blocking missing: `['render_video_ready is false in results/maniskill_render_video_preflight_audit.json', 'PegInsertionSide-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', 'PegInsertionSide-v1 did not write a renderer-backed MP4', 'OpenCabinetDrawer-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', 'OpenCabinetDrawer-v1 did not write a renderer-backed MP4', 'OpenCabinetDoor-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', 'OpenCabinetDoor-v1 did not write a renderer-backed MP4', 'PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', 'PullCubeTool-v1 did not write a renderer-backed MP4', 'pilot runtime liveness is not ready on the selected machine', 'pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence', 'pilot runtime render_video_ready is false']`
+- Blocking missing: `['render_video_ready is false in results/maniskill_render_video_preflight_audit.json', 'PegInsertionSide-v1 has no render-backed MP4: render preflight exceeded 45 seconds', 'PegInsertionSide-v1 did not write a renderer-backed MP4', 'OpenCabinetDrawer-v1 has no render-backed MP4: render preflight exceeded 45 seconds', 'OpenCabinetDrawer-v1 did not write a renderer-backed MP4', 'OpenCabinetDoor-v1 has no render-backed MP4: render preflight exceeded 45 seconds', 'OpenCabinetDoor-v1 did not write a renderer-backed MP4', 'PullCubeTool-v1 has no render-backed MP4: render preflight exceeded 45 seconds', 'PullCubeTool-v1 did not write a renderer-backed MP4', 'pilot runtime liveness is not ready on the selected machine', 'pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence', 'pilot runtime render_video_ready is false']`
 
 Qualification packet command:
 
@@ -338,7 +338,7 @@ Post-collection strict gates:
 - `pass` `fidelity_acceptance_draft_ready_but_fail_closed`: draft_ready=True, remaining_operator_inputs=10
 - `pass` `fidelity_acceptance_materializer_guarded`: write_enabled=False, acceptance_write_ready=False
 - `pass` `fidelity_metadata_probe_ready_but_not_evidence`: strict_metadata_ready=True, primary_metadata_missing=[]
-- `pass` `render_video_preflight_recorded_but_not_evidence`: render_video_ready=False, envs=4, failure_classes=['vulkan_descriptor_pool_exhaustion']
+- `pass` `render_video_preflight_recorded_but_not_evidence`: render_video_ready=False, envs=4, failure_classes=['render_timeout']
 - `pass` `render_machine_qualification_recorded_but_not_evidence`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12
 - `pass` `ablation_collection_packet_recorded_but_not_evidence`: work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False
 - `pass` `evidence_intake_ledger_recorded_but_not_evidence`: mapped=36/36, groups=8

@@ -91,6 +91,9 @@ def main() -> int:
     local_model_release = read_json(RESULTS / "local_model_release_audit.json")
     reviewer_packet = read_json(RESULTS / "reviewer_response_packet_audit.json")
     ledger = read_json(DOCS / "claim_evidence_ledger.json")
+    rollout_validator_text = read_text(ROOT / "scripts" / "validate_external_rollouts.py")
+    rollout_self_test_text = read_text(ROOT / "scripts" / "self_test_external_rollout_validator.py")
+    evidence_pipeline_self_test_text = read_text(ROOT / "scripts" / "self_test_external_evidence_pipeline.py")
 
     files = {
         "README": ROOT / "README.md",
@@ -544,6 +547,18 @@ def main() -> int:
     )
     add_check(
         checks,
+        "strict_video_evidence_gate_visible",
+        "strict_video_evidence" in rollout_validator_text
+        and "MIN_STRICT_VIDEO_BYTES" in rollout_validator_text
+        and "FORBIDDEN_VIDEO_PATH_FRAGMENTS" in rollout_validator_text
+        and "ftyp" in rollout_validator_text
+        and "diagnostic fallback sidecar" in rollout_validator_text
+        and "strict video fixture did not reject fake MP4" in rollout_self_test_text
+        and "write_synthetic_mp4" in evidence_pipeline_self_test_text,
+        "strict rollout validation rejects placeholder/diagnostic/non-MP4 video paths when --strict --check-video-paths is enabled",
+    )
+    add_check(
+        checks,
         "ablation_collection_packet_visible",
         ablation_collection.get("passed") is True
         and ablation_collection.get("not_external_evidence") is True
@@ -724,6 +739,7 @@ def main() -> int:
             "maniskill_render_machine_qualification_claim",
             "external_config_manifest_packet_claim",
             "external_rollout_evidence_packet_claim",
+            "external_strict_video_evidence_gate_claim",
             "external_ablation_collection_packet_claim",
             "external_evidence_intake_ledger_claim",
             "external_precollection_manifest_draft_claim",
@@ -734,7 +750,7 @@ def main() -> int:
             "external_config_materialization_claim",
             "reviewer_response_packet_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'local_planner_edge_policy_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_ablation_collection_packet_claim', 'external_evidence_intake_ledger_claim', 'external_precollection_manifest_draft_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
+        f"missing={sorted({'local_planner_edge_policy_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'external_config_manifest_packet_claim', 'external_rollout_evidence_packet_claim', 'external_strict_video_evidence_gate_claim', 'external_ablation_collection_packet_claim', 'external_evidence_intake_ledger_claim', 'external_precollection_manifest_draft_claim', 'external_method_implementation_packet_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -768,6 +784,7 @@ def main() -> int:
             "ManiSkill pilot runtime liveness audit",
             "External config manifest packet",
             "External rollout evidence packet",
+            "strict MP4 video evidence gate",
             "External ablation collection packet",
             "External evidence intake ledger",
             "External precollection manifest draft",
@@ -811,6 +828,7 @@ def main() -> int:
             "ManiSkill pilot runtime liveness audit",
             "External config manifest packet",
             "External rollout evidence packet",
+            "strict MP4 video evidence gate",
             "External ablation collection packet",
             "External evidence intake ledger",
             "External precollection manifest draft",
@@ -855,6 +873,7 @@ def main() -> int:
             "ManiSkill pilot runtime liveness audit",
             "external config manifest packet",
             "external rollout evidence packet",
+            "strict MP4 video evidence gate",
             "external ablation collection packet",
             "external evidence intake ledger",
             "external precollection manifest draft",
@@ -899,6 +918,7 @@ def main() -> int:
             "ManiSkill pilot runtime liveness audit",
             "External config manifest packet",
             "External rollout evidence packet",
+            "strict MP4 video evidence gate",
             "External ablation collection packet",
             "External evidence intake ledger",
             "External precollection manifest draft",
@@ -944,6 +964,7 @@ def main() -> int:
             "scripts/audit_maniskill_pilot_runtime_liveness.py",
             "scripts/build_external_config_manifest_packet.py",
             "scripts/build_external_rollout_evidence_packet.py",
+            "strict MP4 video evidence gate",
             "scripts/build_external_ablation_collection_packet.py",
             "scripts/build_external_evidence_intake_ledger.py",
             "scripts/build_external_precollection_manifest_draft.py",
@@ -990,6 +1011,7 @@ def main() -> int:
             "ManiSkill pilot runtime liveness audit",
             "external config manifest packet",
             "external rollout evidence packet",
+            "strict MP4 video evidence gate",
             "external ablation collection packet",
             "external evidence intake ledger",
             "external precollection manifest draft",
@@ -1020,6 +1042,7 @@ def main() -> int:
             "External ablation collection packet",
             "External evidence intake ledger",
             "External precollection manifest draft",
+            "strict MP4 video evidence gate",
         ],
         "reviewer": [
             "Not evidence: `true`.",

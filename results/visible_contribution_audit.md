@@ -7,8 +7,8 @@ This audit checks that the public-facing contribution docs describe the current 
 
 ## Checks
 
-- `pass` `canonical_pdf_metadata_available`: path=C:\Users\wangz\Downloads\119.pdf, sha=0793D4A8BCD6817DE1D8490441639696EA01026CC0AD152A8E38709CC121CD92, size=467205
-- `pass` `paper_pdf_matches_canonical`: paper_sha=0793D4A8BCD6817DE1D8490441639696EA01026CC0AD152A8E38709CC121CD92, canonical_sha=0793D4A8BCD6817DE1D8490441639696EA01026CC0AD152A8E38709CC121CD92
+- `pass` `canonical_pdf_metadata_available`: path=C:\Users\wangz\Downloads\119.pdf, sha=317D3156519D8E5062DCB23FF6EE487175ECD3F7B2B81268DB194359F8433B60, size=467426
+- `pass` `paper_pdf_matches_canonical`: paper_sha=317D3156519D8E5062DCB23FF6EE487175ECD3F7B2B81268DB194359F8433B60, canonical_sha=317D3156519D8E5062DCB23FF6EE487175ECD3F7B2B81268DB194359F8433B60
 - `pass` `readiness_gap_state_visible`: objective_complete=False, satisfied=17, blocking=4
 - `pass` `operator_packet_no_go_visible`: start_state='DO_NOT_COLLECT_YET', blocking_missing_count=4
 - `pass` `operator_packet_tracked_reference_route_visible`: backend='external_validation\\runner\\maniskill_reference_backend.py', run_id='maniskill_sapien_reference_preflight_protocol_v1', blocking=["fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
@@ -29,10 +29,11 @@ This audit checks that the public-facing contribution docs describe the current 
 - `pass` `runner_backend_probe_visible`: records_written=2, schema_errors=[]
 - `pass` `pilot_smoke_packet_visible`: pilot_smoke_packet_ready=True, strict_evidence_ready=False
 - `pass` `maniskill_pilot_runtime_liveness_visible`: pilot_runtime_ready=False, runner_io_ready=True, render_video_ready=False, render_backend='cpu', shader_pack='minimal', timed_out=False, records=1, videos=1, diagnostic_fallbacks=1, failure_summary='runner wrote quarantined schema-valid row/video using diagnostic non-evidence video fallback; render-backed video remains unavailable'
-- `pass` `maniskill_render_video_preflight_visible`: render_video_ready=False, render_backend='cpu', shader_pack='minimal', envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory; PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory']
-- `pass` `renderer_failure_classifier_visible`: classes=['vulkan_descriptor_pool_exhaustion'], remediation=5
+- `pass` `maniskill_render_video_preflight_visible`: render_video_ready=False, render_backend='cpu', shader_pack='minimal', envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: render preflight exceeded 45 seconds; OpenCabinetDrawer-v1: render preflight exceeded 45 seconds; OpenCabinetDoor-v1: render preflight exceeded 45 seconds; PullCubeTool-v1: render preflight exceeded 45 seconds']
+- `pass` `renderer_failure_classifier_visible`: classes=['render_timeout'], remediation=3
 - `pass` `config_manifest_packet_visible`: config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False
 - `pass` `rollout_evidence_packet_visible`: rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False
+- `pass` `strict_video_evidence_gate_visible`: strict rollout validation rejects placeholder/diagnostic/non-MP4 video paths when --strict --check-video-paths is enabled
 - `pass` `ablation_collection_packet_visible`: work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False
 - `pass` `evidence_intake_ledger_visible`: mapped=36/36, strict_external_evidence_ready=False
 - `pass` `precollection_manifest_draft_visible`: prepared_configs=4, method_gaps=11, rollout_gaps=8, official_manifest_exists=False
@@ -51,4 +52,4 @@ This audit checks that the public-facing contribution docs describe the current 
 - `pass` `child_status_current_visible_contribution_terms`: missing=[]
 - `pass` `outreach_current_visible_contribution_terms`: missing=[]
 - `pass` `reviewer_current_visible_contribution_terms`: missing=[]
-- `pass` `public_pdf_metadata_matches_canonical_artifact`: sha=0793D4A8BCD6817DE1D8490441639696EA01026CC0AD152A8E38709CC121CD92, size=467205, missing_sha=[], missing_size=[]
+- `pass` `public_pdf_metadata_matches_canonical_artifact`: sha=317D3156519D8E5062DCB23FF6EE487175ECD3F7B2B81268DB194359F8433B60, size=467426, missing_sha=[], missing_size=[]

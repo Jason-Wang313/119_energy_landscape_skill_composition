@@ -241,6 +241,11 @@
       "evidence": ["scripts/build_external_rollout_evidence_packet.py", "external_validation/rollout_evidence_packet.json", "external_validation/rollout_evidence_packet.md", "external_validation/rollout_evidence_work_orders.csv", "results/external_rollout_evidence_audit.json", "results/external_rollout_evidence_audit.md", "results/external_rollout_metrics.json", "results/external_evidence_preflight.json"]
     },
     {
+      "name": "external_strict_video_evidence_gate_claim",
+      "claim": "The repository provides a strict MP4 video evidence gate that rejects missing, placeholder, diagnostic, non-MP4-like, undersized, or out-of-manifest video paths when strict external rollout validation is enabled.",
+      "evidence": ["scripts/validate_external_rollouts.py", "scripts/self_test_external_rollout_validator.py", "scripts/self_test_external_evidence_pipeline.py", "results/external_rollout_metrics.json", "results/external_rollout_evidence_audit.json"]
+    },
+    {
       "name": "external_ablation_collection_packet_claim",
       "claim": "The repository provides a non-evidence external ablation collection packet that maps the strict external ablation blocker to five manifest-declared ablation work orders over the same accepted configs, skill library, resets, observation interface, and compute budget, while manifest ablation evidence and strict external evidence remain false.",
       "evidence": ["scripts/build_external_ablation_collection_packet.py", "external_validation/ablation_collection_packet.json", "external_validation/ablation_collection_packet.md", "external_validation/ablation_collection_work_orders.csv", "results/external_ablation_collection_audit.json", "results/external_ablation_collection_audit.md", "results/external_evidence_audit.json", "results/external_collection_plan.json"]

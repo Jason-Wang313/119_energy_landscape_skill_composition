@@ -226,6 +226,11 @@ def run_probe(row: dict[str, str], args: argparse.Namespace) -> dict[str, Any]:
         "stderr_tail": stderr[-2000:],
         "parsed_marker": bool(marker_payload),
         "output_path": rel(target),
+        "render_backend": str(args.render_backend),
+        "shader_pack": str(args.shader_pack),
+        "width": int(args.width),
+        "height": int(args.height),
+        "seed": int(args.seed),
         "not_external_evidence": True,
     }
     record.update(marker_payload)

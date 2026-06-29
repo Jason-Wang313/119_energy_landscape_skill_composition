@@ -2641,6 +2641,23 @@ def main():
     schema_errors = rollout_metrics.get("schema_errors", [])
     if not any("missing manifest" in str(error) for error in schema_errors):
         fail("external rollout validation should currently fail because external_validation/manifest.json is missing")
+    rollout_validator_text = (ROOT / "scripts" / "validate_external_rollouts.py").read_text(encoding="utf-8")
+    rollout_self_test_text = (ROOT / "scripts" / "self_test_external_rollout_validator.py").read_text(encoding="utf-8")
+    evidence_pipeline_self_test_text = (ROOT / "scripts" / "self_test_external_evidence_pipeline.py").read_text(encoding="utf-8")
+    for term in (
+        "strict_video_evidence",
+        "MIN_STRICT_VIDEO_BYTES",
+        "FORBIDDEN_VIDEO_PATH_FRAGMENTS",
+        "diagnostic fallback sidecar",
+        "not MP4-like evidence",
+        "ftyp",
+    ):
+        if term not in rollout_validator_text:
+            fail(f"external rollout validator missing strict video evidence term: {term}")
+    if "strict video fixture did not reject fake MP4" not in rollout_self_test_text:
+        fail("external rollout validator self-test must reject fake text .mp4 fixtures")
+    if "write_synthetic_mp4" not in evidence_pipeline_self_test_text or "strict_video_evidence=True" not in evidence_pipeline_self_test_text:
+        fail("external evidence pipeline self-test must exercise strict MP4 video evidence validation")
 
     execution_readiness_path = RESULTS / "external_execution_readiness_audit.json"
     if not execution_readiness_path.exists():
@@ -3841,6 +3858,7 @@ def main():
         "runner_backend_probe_visible",
         "config_manifest_packet_visible",
         "rollout_evidence_packet_visible",
+        "strict_video_evidence_gate_visible",
         "precollection_manifest_draft_visible",
         "method_implementation_packet_visible",
         "maniskill_pilot_runtime_liveness_visible",

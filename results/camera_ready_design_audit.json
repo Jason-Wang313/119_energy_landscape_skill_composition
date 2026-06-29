@@ -93,7 +93,7 @@
   ],
   "density_summary": {
     "maximum": 0.17718214558550693,
-    "mean": 0.09833657099203316,
+    "mean": 0.09819884317363307,
     "minimum": 0.018074866310160427,
     "sparse_pages": [
       16,
@@ -112,9 +112,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.1448826803448652,
+      "foreground_fraction": 0.14528866091891302,
       "height": 770,
-      "luminance_std": 0.1675289781623331,
+      "luminance_std": 0.16752541033871965,
       "page": 1,
       "width": 595
     },
@@ -126,9 +126,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.1730590417985376,
+      "foreground_fraction": 0.171507148313871,
       "height": 770,
-      "luminance_std": 0.17762727599274702,
+      "luminance_std": 0.17688653150800798,
       "page": 2,
       "width": 595
     },
@@ -140,9 +140,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.17247408054130745,
+      "foreground_fraction": 0.1694881588999236,
       "height": 770,
-      "luminance_std": 0.15401248029559148,
+      "luminance_std": 0.15168367581448394,
       "page": 3,
       "width": 595
     },

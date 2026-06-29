@@ -1,13 +1,13 @@
 {
   "blocking_missing": [
     "render_video_ready is false in results/maniskill_render_video_preflight_audit.json",
-    "PegInsertionSide-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+    "PegInsertionSide-v1 has no render-backed MP4: render preflight exceeded 45 seconds",
     "PegInsertionSide-v1 did not write a renderer-backed MP4",
-    "OpenCabinetDrawer-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+    "OpenCabinetDrawer-v1 has no render-backed MP4: render preflight exceeded 45 seconds",
     "OpenCabinetDrawer-v1 did not write a renderer-backed MP4",
-    "OpenCabinetDoor-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+    "OpenCabinetDoor-v1 has no render-backed MP4: render preflight exceeded 45 seconds",
     "OpenCabinetDoor-v1 did not write a renderer-backed MP4",
-    "PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+    "PullCubeTool-v1 has no render-backed MP4: render preflight exceeded 45 seconds",
     "PullCubeTool-v1 did not write a renderer-backed MP4",
     "pilot runtime liveness is not ready on the selected machine",
     "pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence",

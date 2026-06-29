@@ -22,6 +22,16 @@ OUT_MD = RESULTS / "external_rollout_metrics.md"
 PRIMARY_METHOD = "barrier_certified_energy_composer_v5"
 ORACLE_METHOD = "oracle_basin_composer"
 HEX64 = re.compile(r"^[A-Fa-f0-9]{64}$")
+MIN_STRICT_VIDEO_BYTES = 512
+FORBIDDEN_VIDEO_PATH_FRAGMENTS = {
+    "diagnostic",
+    "fallback",
+    "local_dry_run",
+    "pilot_runtime_guard",
+    "pilot_smoke",
+    "placeholder_not_external_evidence",
+    "render_video_preflight",
+}
 
 
 @dataclass
@@ -40,6 +50,65 @@ def read_json(path: Path) -> dict[str, Any]:
 def rel_path(value: str) -> Path:
     path = Path(value)
     return path if path.is_absolute() else ROOT / path
+
+
+def rel(path: Path) -> str:
+    try:
+        return path.relative_to(ROOT).as_posix()
+    except ValueError:
+        return str(path)
+
+
+def is_under(path: Path, parent: Path) -> bool:
+    try:
+        path.resolve().relative_to(parent.resolve())
+        return True
+    except ValueError:
+        return False
+
+
+def validate_video_path(
+    video_path_value: str,
+    *,
+    task_family: str,
+    manifest_video_dirs: dict[str, Path],
+    strict_video_evidence: bool,
+    line_id: str,
+) -> list[str]:
+    errors: list[str] = []
+    path = rel_path(video_path_value)
+    if not path.exists():
+        return [f"{line_id}: video_path does not exist: {video_path_value}"]
+    if not strict_video_evidence:
+        return []
+    if not path.is_file():
+        errors.append(f"{line_id}: strict video_path must be a file: {video_path_value}")
+    if path.suffix.lower() != ".mp4":
+        errors.append(f"{line_id}: strict video_path must end in .mp4: {video_path_value}")
+    lowered_parts = {part.lower() for part in path.parts}
+    lowered_text = str(path).replace("\\", "/").lower()
+    forbidden_hits = sorted(
+        fragment
+        for fragment in FORBIDDEN_VIDEO_PATH_FRAGMENTS
+        if fragment in lowered_parts or fragment in lowered_text
+    )
+    if forbidden_hits:
+        errors.append(f"{line_id}: strict video_path contains forbidden non-evidence fragment(s) {forbidden_hits}: {video_path_value}")
+    expected_dir = manifest_video_dirs.get(task_family)
+    if expected_dir is not None and not is_under(path, expected_dir):
+        errors.append(f"{line_id}: strict video_path must be under manifest video_dir {rel(expected_dir)}: {video_path_value}")
+    diagnostic_sidecar = Path(str(path) + ".diagnostic.json")
+    if diagnostic_sidecar.exists():
+        errors.append(f"{line_id}: strict video_path has diagnostic fallback sidecar: {rel(diagnostic_sidecar)}")
+    if path.exists() and path.is_file():
+        size = path.stat().st_size
+        if size < MIN_STRICT_VIDEO_BYTES:
+            errors.append(f"{line_id}: strict video_path is too small for reviewable MP4 evidence: {size} bytes")
+        with path.open("rb") as handle:
+            header = handle.read(16)
+        if len(header) < 12 or header[4:8] != b"ftyp":
+            errors.append(f"{line_id}: strict video_path is not MP4-like evidence with an ftyp box: {video_path_value}")
+    return errors
 
 
 def as_float(record: dict[str, Any], field: str, errors: list[str], line_id: str) -> float | None:
@@ -69,6 +138,8 @@ def validate_record(
     manifest_methods: set[str],
     manifest_tasks: set[str],
     check_video_paths: bool,
+    manifest_video_dirs: dict[str, Path] | None = None,
+    strict_video_evidence: bool = False,
 ) -> list[str]:
     errors: list[str] = []
     required = set(schema.get("required_fields", {}))
@@ -131,8 +202,16 @@ def validate_record(
 
     if check_video_paths:
         video_path = str(record.get("video_path", ""))
-        if video_path and not rel_path(video_path).exists():
-            errors.append(f"{line_id}: video_path does not exist: {video_path}")
+        if video_path:
+            errors.extend(
+                validate_video_path(
+                    video_path,
+                    task_family=str(record.get("task_family", "")),
+                    manifest_video_dirs=manifest_video_dirs or {},
+                    strict_video_evidence=strict_video_evidence,
+                    line_id=line_id,
+                )
+            )
 
     return errors
 
@@ -142,6 +221,7 @@ def load_records(
     schema: dict[str, Any],
     *,
     check_video_paths: bool,
+    strict_video_evidence: bool = False,
     max_errors: int,
 ) -> tuple[list[dict[str, Any]], list[str]]:
     tasks = manifest.get("tasks", [])
@@ -150,6 +230,11 @@ def load_records(
     methods = methods if isinstance(methods, list) else []
     manifest_tasks = {str(task.get("task_family", "")) for task in tasks if isinstance(task, dict)}
     manifest_methods = {str(method.get("name", "")) for method in methods if isinstance(method, dict)}
+    manifest_video_dirs = {
+        str(task.get("task_family", "")): rel_path(str(task.get("video_dir", "")))
+        for task in tasks
+        if isinstance(task, dict) and str(task.get("task_family", "")) and str(task.get("video_dir", ""))
+    }
 
     records: list[dict[str, Any]] = []
     errors: list[str] = []
@@ -191,6 +276,8 @@ def load_records(
                         manifest_methods=manifest_methods,
                         manifest_tasks=manifest_tasks,
                         check_video_paths=check_video_paths,
+                        manifest_video_dirs=manifest_video_dirs,
+                        strict_video_evidence=strict_video_evidence,
                     )
                 )
                 records.append(record)
@@ -405,7 +492,13 @@ def main() -> int:
 
     manifest = read_json(args.manifest)
     schema = read_json(args.schema)
-    records, errors = load_records(manifest, schema, check_video_paths=args.check_video_paths, max_errors=args.max_errors)
+    records, errors = load_records(
+        manifest,
+        schema,
+        check_video_paths=args.check_video_paths,
+        strict_video_evidence=args.strict and args.check_video_paths,
+        max_errors=args.max_errors,
+    )
     summary = summarize(records, schema) if records else {"version": "external_rollout_metrics_v1", "episodes": 0}
     checks = threshold_checks(summary, schema) if records else []
     passed = not errors and bool(records) and all(check.passed for check in checks)
