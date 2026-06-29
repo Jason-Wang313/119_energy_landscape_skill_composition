@@ -298,6 +298,8 @@ def load_records(
 
     records: list[dict[str, Any]] = []
     errors: list[str] = []
+    seen_record_keys: dict[tuple[Any, ...], str] = {}
+    seen_video_paths: dict[str, str] = {}
     manifest_task_configs: dict[str, dict[str, Any]] = {}
     for task_family, task in manifest_task_specs.items():
         config_path_value = str(task.get("config_path", "")).strip()
@@ -354,6 +356,26 @@ def load_records(
                     if len(errors) >= max_errors:
                         return records, errors
                     continue
+                record_key = (
+                    record.get("run_id"),
+                    record.get("task_family"),
+                    record.get("method"),
+                    record.get("seed"),
+                    record.get("episode_index"),
+                )
+                if all(item is not None and item != "" for item in record_key):
+                    prior_line = seen_record_keys.get(record_key)
+                    if prior_line:
+                        errors.append(f"{line_id}: duplicate rollout record identity also seen at {prior_line}")
+                    else:
+                        seen_record_keys[record_key] = line_id
+                video_key = str(record.get("video_path", "")).replace("\\", "/").strip()
+                if video_key:
+                    prior_video_line = seen_video_paths.get(video_key)
+                    if prior_video_line:
+                        errors.append(f"{line_id}: duplicate video_path also used at {prior_video_line}: {video_key}")
+                    else:
+                        seen_video_paths[video_key] = line_id
                 errors.extend(
                     validate_record(
                         record,

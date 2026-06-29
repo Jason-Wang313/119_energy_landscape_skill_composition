@@ -167,6 +167,49 @@ def main() -> int:
         if not any("missing required fields" in error and "utility" in error for error in bad_errors):
             raise AssertionError(f"missing-field test did not fail as expected: {bad_errors}")
 
+        duplicate_identity_manifest = json.loads(json.dumps(manifest))
+        duplicate_identity_log = Path(tmp_name) / "logs" / "duplicate_identity.jsonl"
+        duplicate_task = str(duplicate_identity_manifest["tasks"][0]["task_family"])
+        duplicate_rows = [
+            make_record(duplicate_task, 0, rollout.PRIMARY_METHOD, success=True, utility=1.0),
+            make_record(duplicate_task, 0, rollout.PRIMARY_METHOD, success=True, utility=1.0),
+        ]
+        duplicate_rows[1]["video_path"] = duplicate_rows[1]["video_path"] + ".copy"
+        duplicate_identity_log.write_text(
+            "".join(json.dumps(record, sort_keys=True) + "\n" for record in duplicate_rows),
+            encoding="utf-8",
+        )
+        duplicate_identity_manifest["tasks"][0]["log_jsonl"] = str(duplicate_identity_log)
+        _, duplicate_identity_errors = rollout.load_records(
+            duplicate_identity_manifest,
+            schema,
+            check_video_paths=False,
+            max_errors=10,
+        )
+        if not any("duplicate rollout record identity" in error for error in duplicate_identity_errors):
+            raise AssertionError(f"duplicate rollout identity test did not fail as expected: {duplicate_identity_errors}")
+
+        duplicate_video_manifest = json.loads(json.dumps(manifest))
+        duplicate_video_log = Path(tmp_name) / "logs" / "duplicate_video_path.jsonl"
+        video_rows = [
+            make_record(duplicate_task, 100, rollout.PRIMARY_METHOD, success=True, utility=1.0),
+            make_record(duplicate_task, 101, rollout.PRIMARY_METHOD, success=True, utility=1.0),
+        ]
+        video_rows[1]["video_path"] = video_rows[0]["video_path"]
+        duplicate_video_log.write_text(
+            "".join(json.dumps(record, sort_keys=True) + "\n" for record in video_rows),
+            encoding="utf-8",
+        )
+        duplicate_video_manifest["tasks"][0]["log_jsonl"] = str(duplicate_video_log)
+        _, duplicate_video_errors = rollout.load_records(
+            duplicate_video_manifest,
+            schema,
+            check_video_paths=False,
+            max_errors=10,
+        )
+        if not any("duplicate video_path" in error for error in duplicate_video_errors):
+            raise AssertionError(f"duplicate video path test did not fail as expected: {duplicate_video_errors}")
+
         stale_config_hash_manifest = json.loads(json.dumps(manifest))
         stale_config_hash_manifest["tasks"][0]["config_hash"] = digest("stale:task_config")
         _, stale_config_hash_errors = rollout.load_records(
