@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import argparse
 import copy
+import hashlib
 import json
 import re
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -63,8 +65,52 @@ def has_sha(value: Any) -> bool:
     return isinstance(value, str) and bool(re.fullmatch(r"[A-Fa-f0-9]{64}", value.strip()))
 
 
+def has_commit(value: Any) -> bool:
+    return isinstance(value, str) and bool(re.fullmatch(r"[A-Fa-f0-9]{40}", value.strip()))
+
+
 def has_text(value: Any, *, min_len: int = 12) -> bool:
     return isinstance(value, str) and len(value.strip()) >= min_len
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest().upper()
+
+
+def sha256_tree(path: Path) -> str:
+    if not path.exists():
+        return ""
+    digest = hashlib.sha256()
+    files = sorted(
+        child
+        for child in path.rglob("*")
+        if child.is_file() and "__pycache__" not in child.parts and child.suffix != ".pyc"
+    )
+    for child in files:
+        digest.update(child.relative_to(path).as_posix().encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(sha256_file(child).encode("ascii"))
+        digest.update(b"\0")
+    return digest.hexdigest().upper()
+
+
+def run_git(args: list[str]) -> str:
+    try:
+        proc = subprocess.run(
+            ["git", *args],
+            cwd=ROOT,
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+    except Exception:
+        return ""
+    return proc.stdout.strip() if proc.returncode == 0 else ""
 
 
 def add_check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str) -> None:
@@ -79,7 +125,7 @@ def operator_text_ready(args: argparse.Namespace) -> tuple[bool, list[str]]:
             if not has_sha(value):
                 missing.append(label)
         elif attr == "code_commit":
-            if not has_text(value, min_len=7):
+            if not has_commit(value):
                 missing.append(label)
         elif not has_text(value):
             missing.append(label)
@@ -202,9 +248,19 @@ def payload_has_contract_shape(payload: dict[str, Any]) -> bool:
 
 def build_plan(args: argparse.Namespace) -> dict[str, Any]:
     draft = read_json(args.draft)
+    current_commit = run_git(["rev-parse", "HEAD"])
+    current_dirty_status = [line for line in run_git(["status", "--short"]).splitlines() if line.strip()]
+    current_skill_library_hash = sha256_tree(EXTERNAL / "baselines")
     text_ready, missing_text = operator_text_ready(args)
     confirm_ready, missing_confirmations = confirmations_ready(args)
-    acceptance_write_ready = text_ready and confirm_ready
+    checkout_matches_operator_inputs = (
+        has_commit(current_commit)
+        and args.code_commit.strip().lower() == current_commit.lower()
+        and has_sha(current_skill_library_hash)
+        and args.skill_library_hash.strip().upper() == current_skill_library_hash
+    )
+    clean_checkout = not current_dirty_status
+    acceptance_write_ready = text_ready and confirm_ready and checkout_matches_operator_inputs and clean_checkout
     candidate = build_acceptance_payload(draft, args, acceptance_write_ready)
 
     command = (
@@ -219,8 +275,8 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         "--acceptance-gate-signoff <gate_signoff_summary> "
         "--known-limitations <known_limitations> "
         "--date-locked <YYYY-MM-DD> "
-        "--code-commit <commit_sha> "
-        "--skill-library-hash <sha256> "
+        "--code-commit <current_clean_checkout_commit_sha> "
+        "--skill-library-hash <current_baselines_sha256> "
         "--confirm-real-platform --confirm-independent-operator "
         "--confirm-render-backed-videos --confirm-real-rollout-evidence "
         "--confirm-manifest-declaration --write"
@@ -259,6 +315,28 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         "write_requires_complete_operator_signoff",
         not args.write or acceptance_write_ready,
         f"write={args.write!r}, acceptance_write_ready={acceptance_write_ready!r}",
+    )
+    add_check(
+        checks,
+        "current_checkout_hashes_recorded",
+        has_commit(current_commit) and has_sha(current_skill_library_hash),
+        f"current_commit={current_commit!r}, current_skill_library_hash={current_skill_library_hash!r}",
+    )
+    add_check(
+        checks,
+        "write_requires_clean_checkout",
+        not args.write or clean_checkout,
+        f"write={args.write!r}, dirty_status_count={len(current_dirty_status)}",
+    )
+    add_check(
+        checks,
+        "write_requires_current_code_commit_and_skill_hash",
+        not args.write or checkout_matches_operator_inputs,
+        (
+            f"write={args.write!r}, supplied_commit={args.code_commit!r}, current_commit={current_commit!r}, "
+            f"supplied_skill_hash={args.skill_library_hash.upper() if isinstance(args.skill_library_hash, str) else args.skill_library_hash!r}, "
+            f"current_skill_hash={current_skill_library_hash!r}"
+        ),
     )
     add_check(
         checks,
@@ -319,6 +397,12 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         "missing_confirmations": missing_confirmations,
         "required_operator_arguments": TEXT_ARGUMENTS,
         "required_confirmations": CONFIRMATION_FLAGS,
+        "current_checkout": {
+            "code_commit": current_commit,
+            "dirty_status_lines": current_dirty_status,
+            "skill_library_hash": current_skill_library_hash,
+            "clean_checkout": clean_checkout,
+        },
         "operator_write_command": command,
         "files_written": files_written,
         "candidate_acceptance_ready": candidate.get("acceptance_ready") is True,
@@ -344,6 +428,15 @@ def write_md(payload: dict[str, Any]) -> None:
         "```powershell",
         payload["operator_write_command"],
         "```",
+        "",
+        "## Current Checkout Guard",
+        "",
+        f"- Code commit: `{payload['current_checkout']['code_commit']}`",
+        f"- Skill-library hash: `{payload['current_checkout']['skill_library_hash']}`",
+        f"- Clean checkout: `{str(payload['current_checkout']['clean_checkout']).lower()}`",
+        f"- Dirty status lines: `{len(payload['current_checkout']['dirty_status_lines'])}`",
+        "",
+        "The write path requires the supplied `--code-commit` and `--skill-library-hash` to match these values on a clean checkout before writing `external_validation/fidelity_acceptance.json`.",
         "",
         "## Missing Operator Inputs In This Run",
         "",

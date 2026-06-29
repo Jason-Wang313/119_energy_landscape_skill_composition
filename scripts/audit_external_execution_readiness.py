@@ -363,6 +363,7 @@ def main() -> int:
     )
     add_check(checks, "fidelity_acceptance_materializer_ready", fidelity_materialization_ok, fidelity_materialization_detail)
     fidelity_materialization_checks = {check.get("name"): check.get("passed") for check in fidelity_materialization.get("checks", []) or []}
+    materializer_checkout = fidelity_materialization.get("current_checkout", {}) or {}
     add_check(
         checks,
         "fidelity_acceptance_materializer_not_evidence",
@@ -380,6 +381,11 @@ def main() -> int:
         checks,
         "fidelity_acceptance_materializer_guarded",
         fidelity_materialization_checks.get("operator_write_command_is_guarded") is True
+        and fidelity_materialization_checks.get("current_checkout_hashes_recorded") is True
+        and fidelity_materialization_checks.get("write_requires_clean_checkout") is True
+        and fidelity_materialization_checks.get("write_requires_current_code_commit_and_skill_hash") is True
+        and len(str(materializer_checkout.get("code_commit", ""))) == 40
+        and len(str(materializer_checkout.get("skill_library_hash", ""))) == 64
         and "materialize_fidelity_acceptance.py" in str(fidelity_materialization.get("operator_write_command", ""))
         and "--confirm-real-platform" in str(fidelity_materialization.get("operator_write_command", ""))
         and "--confirm-independent-operator" in str(fidelity_materialization.get("operator_write_command", ""))
@@ -387,7 +393,13 @@ def main() -> int:
         and "--confirm-real-rollout-evidence" in str(fidelity_materialization.get("operator_write_command", ""))
         and (ROOT / "scripts" / "materialize_fidelity_acceptance.py").exists()
         and (RESULTS / "fidelity_acceptance_materialization_plan.md").exists(),
-        str(fidelity_materialization.get("operator_write_command", "")),
+        (
+            f"command={fidelity_materialization.get('operator_write_command', '')!r}, "
+            f"commit={materializer_checkout.get('code_commit')!r}, "
+            f"skill_hash={materializer_checkout.get('skill_library_hash')!r}, "
+            f"clean={materializer_checkout.get('clean_checkout')!r}, "
+            f"dirty_count={len(materializer_checkout.get('dirty_status_lines', []) or [])}"
+        ),
     )
 
     blind_ok, blind, blind_detail = passed_json(

@@ -299,7 +299,7 @@ ACTION_CATALOG = {
     },
     "fidelity_acceptance_materializer": {
         "title": "Materialize fidelity acceptance only through the guarded promotion path",
-        "operator_input": "real platform provenance, independent operator signoff, render-backed evidence-video readiness, real rollout evidence, manifest declaration, code commit, and skill-library hash",
+        "operator_input": "real platform provenance, independent operator signoff, render-backed evidence-video readiness, real rollout evidence, manifest declaration, current clean-checkout code commit, and current skill-library hash",
         "artifacts": [
             "scripts/materialize_fidelity_acceptance.py",
             "results/fidelity_acceptance_materialization_plan.json",
@@ -308,7 +308,7 @@ ACTION_CATALOG = {
         ],
         "commands": [
             "python scripts\\materialize_fidelity_acceptance.py",
-            "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
+            "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --confirm-real-rollout-evidence --confirm-manifest-declaration --write",
             "python scripts\\audit_external_fidelity_acceptance.py --strict",
         ],
         "closes": ["guarded promotion from draft fidelity intake to manifest-declared acceptance; still not rollout evidence until strict audits pass"],
@@ -1143,6 +1143,7 @@ def main() -> int:
         ),
     )
     materializer_checks = {check.get("name"): check.get("passed") for check in fidelity_materialization.get("checks", []) or []}
+    materializer_checkout = fidelity_materialization.get("current_checkout", {}) or {}
     add_check(
         checks,
         "fidelity_acceptance_materializer_ready",
@@ -1154,6 +1155,11 @@ def main() -> int:
         and fidelity_materialization.get("strict_fidelity_evidence_ready") is False
         and materializer_checks.get("draft_exists_and_is_draft_version") is True
         and materializer_checks.get("operator_write_command_is_guarded") is True
+        and materializer_checks.get("current_checkout_hashes_recorded") is True
+        and materializer_checks.get("write_requires_clean_checkout") is True
+        and materializer_checks.get("write_requires_current_code_commit_and_skill_hash") is True
+        and len(str(materializer_checkout.get("code_commit", ""))) == 40
+        and len(str(materializer_checkout.get("skill_library_hash", ""))) == 64
         and (ROOT / "scripts" / "materialize_fidelity_acceptance.py").exists()
         and (RESULTS / "fidelity_acceptance_materialization_plan.md").exists(),
         (

@@ -353,6 +353,7 @@ def main() -> int:
         ),
     )
     fidelity_materialization_checks = {check.get("name"): check.get("passed") for check in fidelity_materialization.get("checks", []) or []}
+    materializer_checkout = fidelity_materialization.get("current_checkout", {}) or {}
     add_check(
         checks,
         "fidelity_acceptance_materializer_visible",
@@ -362,10 +363,19 @@ def main() -> int:
         and fidelity_materialization.get("write_enabled") is False
         and fidelity_materialization.get("acceptance_write_ready") is False
         and fidelity_materialization.get("strict_fidelity_evidence_ready") is False
-        and fidelity_materialization_checks.get("operator_write_command_is_guarded") is True,
+        and fidelity_materialization_checks.get("operator_write_command_is_guarded") is True
+        and fidelity_materialization_checks.get("current_checkout_hashes_recorded") is True
+        and fidelity_materialization_checks.get("write_requires_clean_checkout") is True
+        and fidelity_materialization_checks.get("write_requires_current_code_commit_and_skill_hash") is True
+        and len(str(materializer_checkout.get("code_commit", ""))) == 40
+        and len(str(materializer_checkout.get("skill_library_hash", ""))) == 64,
         (
             f"write_enabled={fidelity_materialization.get('write_enabled')!r}, "
-            f"acceptance_write_ready={fidelity_materialization.get('acceptance_write_ready')!r}"
+            f"acceptance_write_ready={fidelity_materialization.get('acceptance_write_ready')!r}, "
+            f"commit={materializer_checkout.get('code_commit')!r}, "
+            f"skill_hash={materializer_checkout.get('skill_library_hash')!r}, "
+            f"clean={materializer_checkout.get('clean_checkout')!r}, "
+            f"dirty_count={len(materializer_checkout.get('dirty_status_lines', []) or [])}"
         ),
     )
     backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration.get("checks", []) or []}
@@ -997,6 +1007,7 @@ def main() -> int:
             "External fidelity acceptance draft",
             "fidelity acceptance promotion checklist",
             "Fidelity acceptance materialization plan",
+            "cache-independent",
             "External backend integration packet",
             "ManiSkill reference backend readiness audit",
             "ManiSkill reference collection preflight audit",
@@ -1058,6 +1069,7 @@ def main() -> int:
             "External fidelity acceptance draft",
             "fidelity acceptance promotion checklist",
             "Fidelity acceptance materialization plan",
+            "cache-independent",
             "External backend integration packet",
             "ManiSkill reference backend readiness audit",
             "ManiSkill reference collection preflight audit",
@@ -1120,6 +1132,7 @@ def main() -> int:
             "external fidelity acceptance draft",
             "fidelity acceptance promotion checklist",
             "fidelity acceptance materializer",
+            "cache-independent",
             "external backend integration packet",
             "ManiSkill reference backend readiness audit",
             "ManiSkill reference collection preflight audit",
@@ -1183,6 +1196,7 @@ def main() -> int:
             "External fidelity acceptance draft",
             "fidelity acceptance promotion checklist",
             "Fidelity acceptance materialization plan",
+            "cache-independent",
             "External backend integration packet",
             "ManiSkill reference backend readiness audit",
             "ManiSkill reference collection preflight audit",
@@ -1245,6 +1259,7 @@ def main() -> int:
             "scripts/build_external_fidelity_acceptance_draft.py",
             "fidelity acceptance promotion checklist",
             "scripts/materialize_fidelity_acceptance.py",
+            "cache-independent",
             "scripts/build_external_backend_integration_packet.py",
             "scripts/audit_maniskill_backend_readiness.py",
             "scripts/audit_maniskill_reference_collection_preflight.py",
@@ -1312,6 +1327,7 @@ def main() -> int:
             "external fidelity acceptance draft",
             "fidelity acceptance promotion checklist",
             "fidelity acceptance materializer",
+            "cache-independent",
             "external backend integration packet",
             "ManiSkill reference backend readiness audit",
             "ManiSkill reference collection preflight audit",

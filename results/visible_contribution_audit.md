@@ -23,7 +23,7 @@ This audit checks that the public-facing contribution docs describe the current 
 - `pass` `platform_onboarding_visible`: platform_onboarding_ready=True, strict_evidence_ready=False
 - `pass` `fidelity_provenance_packet_visible`: fidelity_provenance_packet_ready=True, strict_fidelity_evidence_ready=False, strict_external_evidence_ready=False
 - `pass` `fidelity_acceptance_draft_visible`: draft_ready=True, remaining_operator_inputs=10, acceptance_ready=False
-- `pass` `fidelity_acceptance_materializer_visible`: write_enabled=False, acceptance_write_ready=False
+- `pass` `fidelity_acceptance_materializer_visible`: write_enabled=False, acceptance_write_ready=False, commit='c08399bf94f01560ddc3daa0ee37bb1cc0fe22db', skill_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1', clean=False, dirty_count=29
 - `pass` `backend_integration_packet_visible`: backend_integration_packet_ready=True, strict_backend_ready=False
 - `pass` `maniskill_reference_backend_visible`: backend_contract_ready=True, video_writer_ready=True, render_backend='cpu', shader_pack='minimal', official_collection_ready=False, strict_external_evidence_ready=False
 - `pass` `maniskill_reference_collection_preflight_visible`: contract_ready=True, collection_ready=False, blocking=["fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]

@@ -3287,6 +3287,13 @@ def main():
         fail("external operator packet fidelity acceptance materializer must not be write-ready without operator inputs")
     if operator_materializer.get("strict_fidelity_evidence_ready") is not False:
         fail("external operator packet fidelity acceptance materializer must preserve strict fidelity evidence false")
+    operator_materializer_checkout = operator_materializer.get("current_checkout", {}) or {}
+    if len(str(operator_materializer_checkout.get("code_commit", ""))) != 40:
+        fail("external operator packet fidelity materializer must expose the current checkout commit")
+    if len(str(operator_materializer_checkout.get("skill_library_hash", ""))) != 64:
+        fail("external operator packet fidelity materializer must expose the current skill-library hash")
+    if not isinstance(operator_materializer_checkout.get("clean_checkout"), bool):
+        fail("external operator packet fidelity materializer must expose clean checkout status")
     materializer_command = str(operator_materializer.get("operator_write_command", ""))
     for fragment in (
         "materialize_fidelity_acceptance.py",
@@ -3824,6 +3831,13 @@ def main():
         fail("fidelity acceptance materialization plan must not be write-ready without operator inputs")
     if fidelity_materialization.get("strict_fidelity_evidence_ready") is not False:
         fail("fidelity acceptance materialization plan must keep strict fidelity evidence false")
+    current_checkout = fidelity_materialization.get("current_checkout", {}) or {}
+    if not current_checkout.get("code_commit") or len(str(current_checkout.get("code_commit"))) != 40:
+        fail("fidelity acceptance materializer must record the current checkout commit")
+    if not current_checkout.get("skill_library_hash") or len(str(current_checkout.get("skill_library_hash"))) != 64:
+        fail("fidelity acceptance materializer must record the current skill-library hash")
+    if not isinstance(current_checkout.get("clean_checkout"), bool):
+        fail("fidelity acceptance materializer must report clean_checkout as a boolean")
     materializer_command = str(fidelity_materialization.get("operator_write_command", ""))
     for fragment in (
         "materialize_fidelity_acceptance.py",
@@ -3843,6 +3857,9 @@ def main():
         "operator_text_required_before_write",
         "confirmation_flags_required_before_write",
         "write_requires_complete_operator_signoff",
+        "current_checkout_hashes_recorded",
+        "write_requires_clean_checkout",
+        "write_requires_current_code_commit_and_skill_hash",
         "default_run_does_not_write_real_acceptance_or_manifest",
         "gates_accepted_only_after_confirmations",
         "strict_evidence_remains_external_to_materializer",

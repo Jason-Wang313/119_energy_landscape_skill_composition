@@ -91,7 +91,7 @@
       "passed": true
     },
     {
-      "detail": "write_enabled=False, acceptance_write_ready=False",
+      "detail": "write_enabled=False, acceptance_write_ready=False, commit='c08399bf94f01560ddc3daa0ee37bb1cc0fe22db', skill_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1', clean=False, dirty_count=29",
       "name": "fidelity_acceptance_materializer_visible",
       "passed": true
     },
