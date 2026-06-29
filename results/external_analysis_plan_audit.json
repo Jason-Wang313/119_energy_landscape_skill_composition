@@ -22,6 +22,11 @@
       "passed": true
     },
     {
+      "detail": "confidence_gate={'version': 'external_statistical_confidence_v1', 'confidence_level': 0.95, 'bootstrap_replicates': 1000, 'bootstrap_seed': 119, 'rule': 'For external_success_margin, external_utility_margin, paired_win_rate, and fixed_risk_coverage, the 95% bootstrap lower confidence bound must meet or exceed the predeclared threshold. For fixed_risk_breach, the 95% bootstrap upper confidence bound must be at or below the threshold. Positive task-family coverage remains a predeclared count gate.'}",
+      "name": "confidence_gate_is_predeclared",
+      "passed": true
+    },
+    {
       "detail": "plan=['task_family', 'platform_type', 'scene_id', 'seed', 'skill_i', 'skill_j', 'initial_state_hash'], schema=['task_family', 'platform_type', 'scene_id', 'seed', 'skill_i', 'skill_j', 'initial_state_hash']",
       "name": "paired_key_matches_schema",
       "passed": true

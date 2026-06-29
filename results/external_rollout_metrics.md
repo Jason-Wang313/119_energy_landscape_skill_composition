@@ -8,6 +8,10 @@ Strongest external baseline: `None`.
 ## Threshold Checks
 
 
+## Statistical Confidence
+
+- not computed
+
 ## Schema Errors
 
 - missing manifest C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\external_validation\manifest.json

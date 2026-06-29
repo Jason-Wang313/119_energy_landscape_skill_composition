@@ -396,6 +396,15 @@ def main():
     }
     if not required_metrics.issubset(hypothesis_metrics):
         fail(f"external statistical analysis plan missing primary hypotheses: {sorted(required_metrics - hypothesis_metrics)}")
+    confidence_gate = analysis_plan.get("statistical_confidence_gate", {}) or {}
+    if (
+        confidence_gate.get("version") != "external_statistical_confidence_v1"
+        or confidence_gate.get("confidence_level") != 0.95
+        or int(confidence_gate.get("bootstrap_replicates", 0) or 0) < 1000
+        or "lower confidence bound" not in str(confidence_gate.get("rule", ""))
+        or "upper confidence" not in str(confidence_gate.get("rule", ""))
+    ):
+        fail("external statistical analysis plan must predeclare the 95% bootstrap confidence gate")
     strict_gates = "\n".join(analysis_plan.get("decision_rule", {}).get("strict_gates", []) or [])
     for fragment in (
         "audit_external_release_package.py --strict",
@@ -411,6 +420,10 @@ def main():
     exclusions = analysis_plan.get("exclusion_policy", {}) or {}
     if exclusions.get("unit") != "paired_reset_method_panel":
         fail("external statistical analysis plan must use paired_reset_method_panel as exclusion unit")
+    reporting = set(analysis_plan.get("required_reporting", []) or [])
+    for required_report in ("statistical_confidence", "95% confidence intervals for primary external metrics"):
+        if required_report not in reporting:
+            fail(f"external statistical analysis plan missing confidence reporting requirement: {required_report}")
     forbidden_exclusions = "\n".join(exclusions.get("forbidden", []) or [])
     if "dropping only the proposed method" not in forbidden_exclusions or "after viewing method identity" not in forbidden_exclusions:
         fail("external statistical analysis plan exclusion policy does not block cherry-picking")
@@ -428,6 +441,7 @@ def main():
         "primary_method_matches_schema",
         "thresholds_match_log_schema",
         "primary_hypotheses_cover_all_strict_thresholds",
+        "confidence_gate_is_predeclared",
         "paired_key_matches_schema",
         "collection_plan_record_budget_referenced",
         "decision_rule_requires_strict_external_gates",
@@ -2753,6 +2767,10 @@ def main():
         "seen_video_paths",
         "duplicate video_path",
         "MIN_EPISODES_PER_METHOD",
+        "external_statistical_confidence_v1",
+        "bootstrap_mean_ci",
+        "statistical_confidence",
+        "confidence_gate",
         "record_counts_by_task_method",
         "episodes_per_method must be integer >=",
         "does not match episodes_per_method",
@@ -2777,6 +2795,8 @@ def main():
         "internal_runner_artifact.staging.mp4",
         "internal_runner_artifact.backup.mp4",
         "forbidden non-evidence fragment",
+        "weak statistical confidence test did not fail",
+        "external_success_margin_confidence_gate",
         "missing method-coverage test did not fail",
         "weak episode-count test did not fail",
         "short record-count test did not fail",
@@ -2792,6 +2812,8 @@ def main():
             fail(f"external rollout validator self-test missing staged/backup rejection fixture: {forbidden_fixture}")
     if "write_synthetic_mp4" not in evidence_pipeline_self_test_text or "strict_video_evidence=True" not in evidence_pipeline_self_test_text:
         fail("external evidence pipeline self-test must exercise strict MP4 video evidence validation")
+    if "confidence-gated rollout statistics" not in evidence_pipeline_self_test_text:
+        fail("external evidence pipeline self-test must exercise confidence-gated rollout statistics")
     if "tampered release artifact hash test did not fail" not in evidence_pipeline_self_test_text:
         fail("external evidence pipeline self-test must reject tampered release artifact hashes in the final evidence audit")
 

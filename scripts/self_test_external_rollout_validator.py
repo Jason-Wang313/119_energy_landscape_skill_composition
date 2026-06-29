@@ -184,6 +184,43 @@ def main() -> int:
         failed_checks = [check.message for check in checks if not check.passed]
         if failed_checks:
             raise AssertionError(f"unexpected failed threshold checks: {failed_checks}")
+        confidence = summary.get("statistical_confidence", {})
+        if confidence.get("version") != "external_statistical_confidence_v1":
+            raise AssertionError(f"missing statistical confidence summary: {confidence}")
+        if confidence.get("all_primary_confidence_gates_passed") is not True:
+            raise AssertionError(f"synthetic confidence gates did not pass: {confidence}")
+        for metric_name in (
+            "external_success_margin",
+            "external_utility_margin",
+            "paired_win_rate",
+            "fixed_risk_coverage",
+            "fixed_risk_breach",
+        ):
+            metric = confidence.get("metrics", {}).get(metric_name, {})
+            if metric.get("passed") is not True:
+                raise AssertionError(f"synthetic confidence gate failed for {metric_name}: {metric}")
+
+        weak_confidence_records = []
+        for record in records:
+            weak_record = dict(record)
+            if weak_record["method"] == rollout.PRIMARY_METHOD:
+                weak_success = int(weak_record["episode_index"]) < 26
+                weak_record["success"] = weak_success
+                weak_record["seam_failure"] = not weak_success
+                weak_record["failure_diagnosis"] = "none" if weak_success else "basin_miss"
+                weak_record["utility"] = 1.0 if weak_success else 0.42
+            weak_confidence_records.append(weak_record)
+        weak_confidence_summary = rollout.summarize(weak_confidence_records, schema)
+        weak_confidence_checks = rollout.threshold_checks(weak_confidence_summary, schema)
+        if all(check.passed for check in weak_confidence_checks):
+            raise AssertionError("weak statistical confidence test did not fail the strict rollout gates")
+        if not any(
+            (not check.passed) and "external_success_margin_confidence_gate" in check.message
+            for check in weak_confidence_checks
+        ):
+            raise AssertionError(
+                f"weak statistical confidence failed for the wrong reason: {[check.message for check in weak_confidence_checks if not check.passed]}"
+            )
 
         bad_record = dict(records[0])
         del bad_record["utility"]

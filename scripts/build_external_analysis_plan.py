@@ -16,6 +16,9 @@ AUDIT_MD = RESULTS / "external_analysis_plan_audit.md"
 
 PRIMARY_METHOD = "barrier_certified_energy_composer_v5"
 ORACLE_METHOD = "oracle_basin_composer"
+CONFIDENCE_LEVEL = 0.95
+BOOTSTRAP_REPLICATES = 1000
+BOOTSTRAP_SEED = 119
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -60,6 +63,19 @@ def build_plan(schema: dict[str, Any], collection_plan: dict[str, Any]) -> dict[
         "paired_comparison_key": paired_key,
         "required_log_fields": required_fields,
         "primary_thresholds": thresholds,
+        "statistical_confidence_gate": {
+            "version": "external_statistical_confidence_v1",
+            "confidence_level": CONFIDENCE_LEVEL,
+            "bootstrap_replicates": BOOTSTRAP_REPLICATES,
+            "bootstrap_seed": BOOTSTRAP_SEED,
+            "rule": (
+                "For external_success_margin, external_utility_margin, paired_win_rate, and "
+                "fixed_risk_coverage, the 95% bootstrap lower confidence bound must meet or exceed "
+                "the predeclared threshold. For fixed_risk_breach, the 95% bootstrap upper confidence "
+                "bound must be at or below the threshold. Positive task-family coverage remains a "
+                "predeclared count gate."
+            ),
+        },
         "primary_hypotheses": [
             {
                 "id": "H1_success_margin",
@@ -105,7 +121,7 @@ def build_plan(schema: dict[str, Any], collection_plan: dict[str, Any]) -> dict[
             },
         ],
         "decision_rule": {
-            "external_mechanism_claim_passes": "all_primary_hypotheses_pass_and_all_strict_evidence_gates_pass",
+            "external_mechanism_claim_passes": "all_primary_hypotheses_pass_all_confidence_gates_pass_and_all_strict_evidence_gates_pass",
             "strict_gates": [
                 "python scripts\\audit_external_release_package.py --strict",
                 "python scripts\\audit_external_fidelity_acceptance.py --strict",
@@ -149,6 +165,8 @@ def build_plan(schema: dict[str, Any], collection_plan: dict[str, Any]) -> dict[
             "fixed_risk_coverage",
             "fixed_risk_breach",
             "positive_task_families",
+            "statistical_confidence",
+            "95% confidence intervals for primary external metrics",
             "strongest_external_baseline",
             "per-task success margins",
             "strict gate outputs",
@@ -203,6 +221,17 @@ def audit_plan(plan: dict[str, Any], schema: dict[str, Any], collection_plan: di
         "primary_hypotheses_cover_all_strict_thresholds",
         required_metrics.issubset(hypothesis_metrics),
         f"missing={sorted(required_metrics - hypothesis_metrics)}",
+    )
+    confidence_gate = plan.get("statistical_confidence_gate", {}) or {}
+    add_check(
+        checks,
+        "confidence_gate_is_predeclared",
+        confidence_gate.get("version") == "external_statistical_confidence_v1"
+        and confidence_gate.get("confidence_level") == CONFIDENCE_LEVEL
+        and int(confidence_gate.get("bootstrap_replicates", 0) or 0) >= BOOTSTRAP_REPLICATES
+        and "lower confidence bound" in str(confidence_gate.get("rule", ""))
+        and "upper confidence" in str(confidence_gate.get("rule", "")),
+        f"confidence_gate={confidence_gate}",
     )
     add_check(
         checks,
@@ -266,10 +295,12 @@ def audit_plan(plan: dict[str, Any], schema: dict[str, Any], collection_plan: di
             "fixed_risk_coverage",
             "fixed_risk_breach",
             "positive_task_families",
+            "statistical_confidence",
+            "95% confidence intervals for primary external metrics",
             "strict gate outputs",
             "all exclusions with reasons and timestamps",
         }.issubset(reporting),
-        f"missing={sorted({'external_success_margin', 'external_utility_margin', 'paired_win_rate', 'fixed_risk_coverage', 'fixed_risk_breach', 'positive_task_families', 'strict gate outputs', 'all exclusions with reasons and timestamps'} - reporting)}",
+        f"missing={sorted({'external_success_margin', 'external_utility_margin', 'paired_win_rate', 'fixed_risk_coverage', 'fixed_risk_breach', 'positive_task_families', 'statistical_confidence', '95% confidence intervals for primary external metrics', 'strict gate outputs', 'all exclusions with reasons and timestamps'} - reporting)}",
     )
     passed = all(check["passed"] for check in checks)
     return {
@@ -303,6 +334,19 @@ def write_plan_md(plan: dict[str, Any]) -> None:
             f"- `{hypothesis['id']}`: `{hypothesis['metric']}` "
             f"{hypothesis['direction']} `{hypothesis['threshold']}`."
         )
+    gate = plan["statistical_confidence_gate"]
+    lines.extend(
+        [
+            "",
+            "## Statistical Confidence Gate",
+            "",
+            f"Confidence level: `{gate['confidence_level']}`.",
+            f"Bootstrap replicates: `{gate['bootstrap_replicates']}`.",
+            f"Bootstrap seed: `{gate['bootstrap_seed']}`.",
+            "",
+            gate["rule"],
+        ]
+    )
     lines.extend(["", "## Strict Gates", ""])
     for command in plan["decision_rule"]["strict_gates"]:
         lines.append(f"- `{command}`")

@@ -633,6 +633,10 @@ def main() -> int:
         and "seen_video_paths" in rollout_validator_text
         and "duplicate video_path" in rollout_validator_text
         and "MIN_EPISODES_PER_METHOD" in rollout_validator_text
+        and "external_statistical_confidence_v1" in rollout_validator_text
+        and "bootstrap_mean_ci" in rollout_validator_text
+        and "statistical_confidence" in rollout_validator_text
+        and "confidence_gate" in rollout_validator_text
         and "record_counts_by_task_method" in rollout_validator_text
         and "episodes_per_method must be integer >=" in rollout_validator_text
         and "does not match episodes_per_method" in rollout_validator_text
@@ -657,10 +661,16 @@ def main() -> int:
         and "stale task config hash test did not fail" in rollout_self_test_text
         and "stale task config row test did not fail" in rollout_self_test_text
         and "spoofed policy/config hash test did not fail" in rollout_self_test_text
+        and "weak statistical confidence test did not fail" in rollout_self_test_text
+        and "external_success_margin_confidence_gate" in rollout_self_test_text
         and "internal_runner_artifact.staging.mp4" in rollout_self_test_text
         and "internal_runner_artifact.backup.mp4" in rollout_self_test_text
-        and "write_synthetic_mp4" in evidence_pipeline_self_test_text,
-        "strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths, incomplete method sets, duplicate rows/videos, weak sample counts, mispaired method panels, stale task configs, and manifest method-hash mismatches",
+        and "write_synthetic_mp4" in evidence_pipeline_self_test_text
+        and "confidence-gated rollout statistics" in evidence_pipeline_self_test_text
+        and "confidence-gated external rollout statistics" in texts["README"]
+        and "confidence-gated external rollout statistics" in texts["final_audit"]
+        and "confidence-gated external rollout statistics" in texts["readiness_audit"],
+        "strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths, incomplete method sets, duplicate rows/videos, weak sample counts, mispaired method panels, stale task configs, manifest method-hash mismatches, and weak confidence bounds",
     )
     release_self_checks = {check.get("name"): check.get("passed") for check in release_package_self_test.get("checks", []) or []}
     add_check(

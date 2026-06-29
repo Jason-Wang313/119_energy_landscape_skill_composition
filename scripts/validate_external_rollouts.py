@@ -39,6 +39,9 @@ REQUIRED_METHODS = {
 HEX64 = re.compile(r"^[A-Fa-f0-9]{64}$")
 MIN_STRICT_VIDEO_BYTES = 512
 MIN_EPISODES_PER_METHOD = 30
+CONFIDENCE_LEVEL = 0.95
+BOOTSTRAP_REPLICATES = 1000
+BOOTSTRAP_SEED = 119
 FORBIDDEN_VIDEO_PATH_FRAGMENTS = {
     "diagnostic",
     "fallback",
@@ -488,6 +491,180 @@ def paired_key(record: dict[str, Any], schema: dict[str, Any]) -> tuple[Any, ...
     return tuple(record.get(field) for field in fields)
 
 
+def quantile(sorted_values: list[float], q: float) -> float | None:
+    if not sorted_values:
+        return None
+    if len(sorted_values) == 1:
+        return sorted_values[0]
+    position = q * (len(sorted_values) - 1)
+    lower = int(math.floor(position))
+    upper = int(math.ceil(position))
+    if lower == upper:
+        return sorted_values[lower]
+    weight = position - lower
+    return sorted_values[lower] * (1.0 - weight) + sorted_values[upper] * weight
+
+
+def bootstrap_mean_ci(values: list[float], metric_name: str) -> dict[str, Any]:
+    clean = [float(value) for value in values if math.isfinite(float(value))]
+    if not clean:
+        return {
+            "n": 0,
+            "estimate": None,
+            "ci_low": None,
+            "ci_high": None,
+            "confidence_level": CONFIDENCE_LEVEL,
+            "bootstrap_replicates": BOOTSTRAP_REPLICATES,
+        }
+    estimate = mean(clean)
+    if len(clean) == 1:
+        return {
+            "n": 1,
+            "estimate": estimate,
+            "ci_low": estimate,
+            "ci_high": estimate,
+            "confidence_level": CONFIDENCE_LEVEL,
+            "bootstrap_replicates": 0,
+        }
+
+    state = int(hashlib.sha256(f"{BOOTSTRAP_SEED}:{metric_name}".encode("utf-8")).hexdigest()[:8], 16)
+    estimates: list[float] = []
+    n = len(clean)
+    for _ in range(BOOTSTRAP_REPLICATES):
+        total = 0.0
+        for _sample_index in range(n):
+            state = (1103515245 * state + 12345) & 0x7FFFFFFF
+            total += clean[state % n]
+        estimates.append(total / n)
+    estimates.sort()
+    alpha = (1.0 - CONFIDENCE_LEVEL) / 2.0
+    return {
+        "n": n,
+        "estimate": estimate,
+        "ci_low": quantile(estimates, alpha),
+        "ci_high": quantile(estimates, 1.0 - alpha),
+        "confidence_level": CONFIDENCE_LEVEL,
+        "bootstrap_replicates": BOOTSTRAP_REPLICATES,
+    }
+
+
+def confidence_metric(values: list[float], metric_name: str, threshold: Any, direction: str) -> dict[str, Any]:
+    result = bootstrap_mean_ci(values, metric_name)
+    result["threshold"] = threshold
+    result["direction"] = direction
+    if result["ci_low"] is None or result["ci_high"] is None or threshold is None:
+        result["passed"] = False
+    elif direction == "greater_or_equal":
+        result["passed"] = float(result["ci_low"]) >= float(threshold)
+    elif direction == "less_or_equal":
+        result["passed"] = float(result["ci_high"]) <= float(threshold)
+    else:
+        result["passed"] = False
+    return result
+
+
+def build_statistical_confidence(
+    records: list[dict[str, Any]],
+    schema: dict[str, Any],
+    summary: dict[str, Any],
+) -> dict[str, Any]:
+    thresholds = schema.get("primary_thresholds", {}) or {}
+    strongest_baseline = summary.get("strongest_external_baseline")
+    paired_groups: dict[tuple[Any, ...], dict[str, dict[str, Any]]] = defaultdict(dict)
+    for record in records:
+        paired_groups[paired_key(record, schema)][str(record["method"])] = record
+
+    paired_available = [
+        methods
+        for methods in paired_groups.values()
+        if PRIMARY_METHOD in methods and strongest_baseline and strongest_baseline in methods
+    ]
+    success_diffs: list[float] = []
+    utility_diffs: list[float] = []
+    paired_wins: list[float] = []
+    for methods in paired_available:
+        primary = methods[PRIMARY_METHOD]
+        baseline = methods[str(strongest_baseline)]
+        primary_success = 1.0 if primary["success"] else 0.0
+        baseline_success = 1.0 if baseline["success"] else 0.0
+        primary_utility = float(primary["utility"])
+        baseline_utility = float(baseline["utility"])
+        success_diffs.append(primary_success - baseline_success)
+        utility_diffs.append(primary_utility - baseline_utility)
+        paired_wins.append(
+            1.0
+            if (primary_success, primary_utility) > (baseline_success, baseline_utility)
+            else 0.0
+        )
+
+    proposed_records = [record for record in records if record["method"] == PRIMARY_METHOD]
+    accepted_records = [
+        row
+        for row in proposed_records
+        if row["decision"] in {"accept", "repair", "transition"}
+        and float(row["predicted_seam_risk"]) <= float(row["fixed_risk_budget"])
+    ]
+    coverage_values = [1.0 if row in accepted_records else 0.0 for row in proposed_records]
+    breach_values = [1.0 if row["realized_seam_breach"] else 0.0 for row in accepted_records]
+
+    metrics = {
+        "external_success_margin": confidence_metric(
+            success_diffs,
+            "external_success_margin",
+            thresholds.get("external_success_margin"),
+            "greater_or_equal",
+        ),
+        "external_utility_margin": confidence_metric(
+            utility_diffs,
+            "external_utility_margin",
+            thresholds.get("external_utility_margin"),
+            "greater_or_equal",
+        ),
+        "paired_win_rate": confidence_metric(
+            paired_wins,
+            "paired_win_rate",
+            thresholds.get("paired_win_rate"),
+            "greater_or_equal",
+        ),
+        "fixed_risk_coverage": confidence_metric(
+            coverage_values,
+            "fixed_risk_coverage",
+            thresholds.get("fixed_risk_coverage"),
+            "greater_or_equal",
+        ),
+        "fixed_risk_breach": confidence_metric(
+            breach_values,
+            "fixed_risk_breach",
+            thresholds.get("fixed_risk_breach"),
+            "less_or_equal",
+        ),
+    }
+    positive_gate = {
+        "estimate": summary.get("positive_task_families"),
+        "threshold": thresholds.get("positive_task_families"),
+        "direction": "greater_or_equal",
+        "passed": (
+            summary.get("positive_task_families") is not None
+            and thresholds.get("positive_task_families") is not None
+            and int(summary["positive_task_families"]) >= int(thresholds["positive_task_families"])
+        ),
+    }
+    return {
+        "version": "external_statistical_confidence_v1",
+        "confidence_level": CONFIDENCE_LEVEL,
+        "bootstrap_replicates": BOOTSTRAP_REPLICATES,
+        "bootstrap_seed": BOOTSTRAP_SEED,
+        "paired_comparison_count": len(paired_available),
+        "proposed_episode_count": len(proposed_records),
+        "accepted_proposed_episode_count": len(accepted_records),
+        "strongest_external_baseline": strongest_baseline,
+        "metrics": metrics,
+        "positive_task_families_gate": positive_gate,
+        "all_primary_confidence_gates_passed": all(metric["passed"] for metric in metrics.values())
+        and positive_gate["passed"],
+    }
+
+
 def summarize(records: list[dict[str, Any]], schema: dict[str, Any]) -> dict[str, Any]:
     by_method: dict[str, list[dict[str, Any]]] = defaultdict(list)
     by_task_method: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
@@ -584,7 +761,7 @@ def summarize(records: list[dict[str, Any]], schema: dict[str, Any]) -> dict[str
             "success_margin": margin,
         }
 
-    return {
+    summary = {
         "version": "external_rollout_metrics_v1",
         "episodes": len(records),
         "task_families": tasks,
@@ -603,6 +780,8 @@ def summarize(records: list[dict[str, Any]], schema: dict[str, Any]) -> dict[str
         "positive_task_families": positive_tasks,
         "external_task_families": len(tasks),
     }
+    summary["statistical_confidence"] = build_statistical_confidence(records, schema, summary)
+    return summary
 
 
 def threshold_checks(summary: dict[str, Any], schema: dict[str, Any]) -> list[ValidationResult]:
@@ -633,6 +812,36 @@ def threshold_checks(summary: dict[str, Any], schema: dict[str, Any]) -> list[Va
             f"positive_task_families: value={positive}, threshold={positive_threshold}",
         )
     )
+    confidence = summary.get("statistical_confidence", {}) or {}
+    confidence_metrics = confidence.get("metrics", {}) or {}
+    for key in (
+        "external_success_margin",
+        "external_utility_margin",
+        "paired_win_rate",
+        "fixed_risk_coverage",
+        "fixed_risk_breach",
+    ):
+        metric = confidence_metrics.get(key, {}) or {}
+        checks.append(
+            ValidationResult(
+                metric.get("passed") is True,
+                (
+                    f"{key}_confidence_gate: estimate={metric.get('estimate')}, "
+                    f"ci{int(CONFIDENCE_LEVEL * 100)}=[{metric.get('ci_low')}, {metric.get('ci_high')}], "
+                    f"threshold={metric.get('threshold')}, direction={metric.get('direction')}"
+                ),
+            )
+        )
+    positive_gate = confidence.get("positive_task_families_gate", {}) or {}
+    checks.append(
+        ValidationResult(
+            positive_gate.get("passed") is True,
+            (
+                "positive_task_families_confidence_gate: "
+                f"value={positive_gate.get('estimate')}, threshold={positive_gate.get('threshold')}"
+            ),
+        )
+    )
     return checks
 
 
@@ -660,6 +869,20 @@ def write_outputs(summary: dict[str, Any], checks: list[ValidationResult], error
     for check in checks:
         status = "pass" if check.passed else "fail"
         lines.append(f"- `{status}` {check.message}")
+    confidence = summary.get("statistical_confidence", {}) or {}
+    lines.extend(["", "## Statistical Confidence", ""])
+    if confidence:
+        lines.append(f"Confidence level: `{confidence.get('confidence_level')}`.")
+        lines.append(f"Bootstrap replicates: `{confidence.get('bootstrap_replicates')}`.")
+        lines.append(f"All primary confidence gates passed: `{str(confidence.get('all_primary_confidence_gates_passed')).lower()}`.")
+        for metric_name, metric in (confidence.get("metrics", {}) or {}).items():
+            lines.append(
+                f"- `{metric_name}`: estimate={metric.get('estimate')}, "
+                f"ci=[{metric.get('ci_low')}, {metric.get('ci_high')}], "
+                f"threshold={metric.get('threshold')}, passed={metric.get('passed')}"
+            )
+    else:
+        lines.append("- not computed")
     lines.extend(["", "## Schema Errors", ""])
     if errors:
         for error in errors[:100]:

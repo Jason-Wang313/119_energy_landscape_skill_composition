@@ -552,6 +552,10 @@ def main() -> int:
         failed_thresholds = [check.message for check in threshold_checks if not check.passed]
         if failed_thresholds:
             raise AssertionError(f"synthetic external rollout thresholds failed: {failed_thresholds}")
+        if rollout_summary.get("statistical_confidence", {}).get("all_primary_confidence_gates_passed") is not True:
+            raise AssertionError(
+                f"synthetic external metrics failed statistical confidence gates: {rollout_summary.get('statistical_confidence')}"
+            )
         rollout.write_outputs(rollout_summary, threshold_checks, [])
 
         manifest["metrics"] = {
@@ -714,7 +718,7 @@ def reset(reset_context):
             raise AssertionError(f"tampered release artifact hash failed for the wrong reason: {tampered_failures['release_code']}")
 
     assert_real_manifest_untouched(real_manifest_before)
-    print("External evidence pipeline self-test passed: temporary synthetic package reaches READY, tampered release artifact hashes fail, and real repo evidence remains untouched.")
+    print("External evidence pipeline self-test passed: temporary synthetic package reaches READY with confidence-gated rollout statistics, tampered release artifact hashes fail, and real repo evidence remains untouched.")
     return 0
 
 

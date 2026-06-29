@@ -16,6 +16,14 @@ This plan pre-registers how the independent external validation logs will be ana
 - `H5_fixed_risk_breach`: `fixed_risk_breach` less_or_equal `0.02`.
 - `H6_task_family_coverage`: `positive_task_families` greater_or_equal `3`.
 
+## Statistical Confidence Gate
+
+Confidence level: `0.95`.
+Bootstrap replicates: `1000`.
+Bootstrap seed: `119`.
+
+For external_success_margin, external_utility_margin, paired_win_rate, and fixed_risk_coverage, the 95% bootstrap lower confidence bound must meet or exceed the predeclared threshold. For fixed_risk_breach, the 95% bootstrap upper confidence bound must be at or below the threshold. Positive task-family coverage remains a predeclared count gate.
+
 ## Strict Gates
 
 - `python scripts\audit_external_release_package.py --strict`
@@ -51,6 +59,8 @@ Forbidden:
 - fixed_risk_coverage
 - fixed_risk_breach
 - positive_task_families
+- statistical_confidence
+- 95% confidence intervals for primary external metrics
 - strongest_external_baseline
 - per-task success margins
 - strict gate outputs

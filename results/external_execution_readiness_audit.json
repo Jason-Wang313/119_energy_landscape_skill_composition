@@ -26,12 +26,12 @@
       "passed": true
     },
     {
-      "detail": "analysis_checks={'plan_is_non_evidence_and_locked': True, 'primary_method_matches_schema': True, 'thresholds_match_log_schema': True, 'primary_hypotheses_cover_all_strict_thresholds': True, 'paired_key_matches_schema': True, 'collection_plan_record_budget_referenced': True, 'decision_rule_requires_strict_external_gates': True, 'exclusion_policy_blocks_cherry_picking': True, 'unblinding_policy_preserves_blind_eval': True, 'required_reporting_covers_primary_and_audit_outputs': True}",
+      "detail": "analysis_checks={'plan_is_non_evidence_and_locked': True, 'primary_method_matches_schema': True, 'thresholds_match_log_schema': True, 'primary_hypotheses_cover_all_strict_thresholds': True, 'confidence_gate_is_predeclared': True, 'paired_key_matches_schema': True, 'collection_plan_record_budget_referenced': True, 'decision_rule_requires_strict_external_gates': True, 'exclusion_policy_blocks_cherry_picking': True, 'unblinding_policy_preserves_blind_eval': True, 'required_reporting_covers_primary_and_audit_outputs': True}",
       "name": "external_analysis_plan_threshold_lock",
       "passed": true
     },
     {
-      "detail": "analysis_checks={'plan_is_non_evidence_and_locked': True, 'primary_method_matches_schema': True, 'thresholds_match_log_schema': True, 'primary_hypotheses_cover_all_strict_thresholds': True, 'paired_key_matches_schema': True, 'collection_plan_record_budget_referenced': True, 'decision_rule_requires_strict_external_gates': True, 'exclusion_policy_blocks_cherry_picking': True, 'unblinding_policy_preserves_blind_eval': True, 'required_reporting_covers_primary_and_audit_outputs': True}",
+      "detail": "analysis_checks={'plan_is_non_evidence_and_locked': True, 'primary_method_matches_schema': True, 'thresholds_match_log_schema': True, 'primary_hypotheses_cover_all_strict_thresholds': True, 'confidence_gate_is_predeclared': True, 'paired_key_matches_schema': True, 'collection_plan_record_budget_referenced': True, 'decision_rule_requires_strict_external_gates': True, 'exclusion_policy_blocks_cherry_picking': True, 'unblinding_policy_preserves_blind_eval': True, 'required_reporting_covers_primary_and_audit_outputs': True}",
       "name": "external_analysis_plan_exclusion_policy",
       "passed": true
     },

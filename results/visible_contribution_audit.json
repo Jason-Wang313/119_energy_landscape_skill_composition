@@ -161,7 +161,7 @@
       "passed": true
     },
     {
-      "detail": "strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths, incomplete method sets, duplicate rows/videos, weak sample counts, mispaired method panels, stale task configs, and manifest method-hash mismatches",
+      "detail": "strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths, incomplete method sets, duplicate rows/videos, weak sample counts, mispaired method panels, stale task configs, manifest method-hash mismatches, and weak confidence bounds",
       "name": "strict_video_evidence_gate_visible",
       "passed": true
     },
