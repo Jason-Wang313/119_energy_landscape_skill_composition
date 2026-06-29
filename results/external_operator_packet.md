@@ -73,9 +73,9 @@ The materializer is the guarded promotion path from the draft to `external_valid
 - Strict fidelity evidence ready: `false`
 - Missing operator text fields: `12`
 - Missing confirmation flags: `5`
-- Plan-generation checkout commit: `d7a4310a3a4ea9fd70a4b0b9912a9d141ddf2014`
+- Plan-generation checkout commit: `05ad296ffe9baba14bce7ca5389a30ec39a9579e`
 - Plan-generation skill-library hash: `62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1`
-- Plan-generation checkout clean: `false`
+- Plan-generation checkout clean: `true`
 
 Dry-run plan command:
 
@@ -153,7 +153,7 @@ This packet is not evidence. It requires the exact collection machine to pass pl
 - Qualification state: `DO_NOT_COLLECT_RENDER_MACHINE`
 - Render machine qualified: `false`
 - Strict external evidence ready: `false`
-- Blocking missing: `['render_video_ready is false in results/maniskill_render_video_preflight_audit.json', 'PegInsertionSide-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', 'PegInsertionSide-v1 did not write a renderer-backed MP4', 'OpenCabinetDrawer-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', 'OpenCabinetDrawer-v1 did not write a renderer-backed MP4', 'OpenCabinetDoor-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', 'OpenCabinetDoor-v1 did not write a renderer-backed MP4', 'PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', 'PullCubeTool-v1 did not write a renderer-backed MP4', 'pilot runtime liveness is not ready on the selected machine', 'pilot runtime render_video_ready is false']`
+- Blocking missing: `['render_video_ready is false in results/maniskill_render_video_preflight_audit.json', 'PegInsertionSide-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', 'PegInsertionSide-v1 did not write a renderer-backed MP4', 'OpenCabinetDrawer-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', 'OpenCabinetDrawer-v1 did not write a renderer-backed MP4', 'OpenCabinetDoor-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', 'OpenCabinetDoor-v1 did not write a renderer-backed MP4', 'PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory', 'PullCubeTool-v1 did not write a renderer-backed MP4', 'pilot runtime liveness is not ready on the selected machine', 'pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence', 'pilot runtime render_video_ready is false']`
 
 Qualification packet command:
 
@@ -347,7 +347,7 @@ Post-collection strict gates:
 - `pass` `fidelity_acceptance_materializer_guarded`: write_enabled=False, acceptance_write_ready=False
 - `pass` `fidelity_metadata_probe_ready_but_not_evidence`: strict_metadata_ready=True, primary_metadata_missing=[]
 - `pass` `render_video_preflight_recorded_but_not_evidence`: render_video_ready=False, envs=4, failure_classes=['vulkan_descriptor_pool_exhaustion']
-- `pass` `render_machine_qualification_recorded_but_not_evidence`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=11
+- `pass` `render_machine_qualification_recorded_but_not_evidence`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12
 - `pass` `ablation_collection_packet_recorded_but_not_evidence`: work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False
 - `pass` `evidence_intake_ledger_recorded_but_not_evidence`: mapped=37/37, groups=8
 - `pass` `precollection_manifest_draft_ready_but_not_evidence`: configs=4, method_gaps=11, rollout_gaps=8, official_manifest_exists=False

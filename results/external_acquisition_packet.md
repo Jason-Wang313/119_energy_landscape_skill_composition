@@ -133,8 +133,8 @@ python external_validation\runner\real_collection_runner.py --backend-module <mo
 - `pass` `evidence_intake_ledger_ready`: mapped=37/37, groups=8
 - `pass` `pilot_smoke_packet_ready`: pilot_smoke_packet_ready=True, strict_evidence_ready=False
 - `pass` `maniskill_render_video_preflight_recorded`: render_video_ready=False, envs=4, failure_classes=['vulkan_descriptor_pool_exhaustion']
-- `pass` `maniskill_pilot_runtime_liveness_ready`: pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, timed_out=False, records=0, videos=0, diagnostic_fallbacks=0, failure_summary='runner exited with returncode 1 after progress stage record_video_start before producing the required pilot record/video'
-- `pass` `maniskill_render_machine_qualification_ready`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=11
+- `pass` `maniskill_pilot_runtime_liveness_ready`: pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, timed_out=False, records=0, videos=0, diagnostic_fallbacks=1, failure_summary='official video guard rejected diagnostic fallback sidecar before JSONL write after progress stage record_video_start'
+- `pass` `maniskill_render_machine_qualification_ready`: qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12
 - `pass` `method_implementation_packet_ready`: method_implementation_packet_ready=True, strict_adapter_evidence_ready=False
 - `pass` `preflight_operator_actions_present`: operator_next_actions=5, evidence_ready=False
 - `pass` `route_independent_of_haonan`: primary_route='maniskill_sapien_primary'

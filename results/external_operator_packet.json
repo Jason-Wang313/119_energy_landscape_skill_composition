@@ -57,7 +57,7 @@
       "passed": true
     },
     {
-      "detail": "qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=11",
+      "detail": "qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12",
       "name": "render_machine_qualification_recorded_but_not_evidence",
       "passed": true
     },
@@ -155,12 +155,9 @@
   "fidelity_acceptance_materializer": {
     "acceptance_write_ready": false,
     "current_checkout": {
-      "clean_checkout": false,
-      "code_commit": "d7a4310a3a4ea9fd70a4b0b9912a9d141ddf2014",
-      "dirty_status_lines": [
-        "M scripts/build_external_operator_packet.py",
-        " M scripts/materialize_fidelity_acceptance.py"
-      ],
+      "clean_checkout": true,
+      "code_commit": "05ad296ffe9baba14bce7ca5389a30ec39a9579e",
+      "dirty_status_lines": [],
       "skill_library_hash": "62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1"
     },
     "missing_confirmation_count": 5,
@@ -823,6 +820,7 @@
       "PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
       "PullCubeTool-v1 did not write a renderer-backed MP4",
       "pilot runtime liveness is not ready on the selected machine",
+      "pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence",
       "pilot runtime render_video_ready is false"
     ],
     "build_command": "python scripts\\build_maniskill_render_machine_qualification.py",

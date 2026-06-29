@@ -941,6 +941,15 @@ def main() -> int:
         and pilot_runtime_videos >= 1
         and pilot_runtime_fallbacks >= 1
     )
+    pilot_runtime_guarded_rejection = (
+        pilot_runtime.get("runner_io_ready") is False
+        and pilot_runtime_records == 0
+        and pilot_runtime_videos == 0
+        and pilot_runtime_fallbacks >= 1
+        and pilot_runtime.get("official_video_guard_blocked_diagnostic_fallback") is True
+        and pilot_runtime_checks.get("official_guard_rejects_diagnostic_before_jsonl_write") is True
+        and pilot_runtime_checks.get("diagnostic_rejection_paths_are_quarantined") is True
+    )
     pilot_runtime_unavailable = (
         pilot_runtime.get("runner_io_ready") is False
         and pilot_runtime_records == 0
@@ -951,7 +960,7 @@ def main() -> int:
         checks,
         "maniskill_pilot_runtime_liveness_ready",
         pilot_runtime_basic
-        and (pilot_runtime_diagnostic_io or pilot_runtime_unavailable)
+        and (pilot_runtime_diagnostic_io or pilot_runtime_guarded_rejection or pilot_runtime_unavailable)
         and (ROOT / "scripts" / "audit_maniskill_pilot_runtime_liveness.py").exists()
         and (RESULTS / "maniskill_pilot_runtime_liveness_audit.md").exists(),
         (
