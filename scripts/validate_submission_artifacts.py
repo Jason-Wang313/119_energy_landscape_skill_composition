@@ -5348,6 +5348,7 @@ def main():
     bootstrap_packet_path = EXTERNAL / "collection_machine_bootstrap.json"
     bootstrap_packet_md_path = EXTERNAL / "collection_machine_bootstrap.md"
     bootstrap_command_path = EXTERNAL / "collection_machine_bootstrap.ps1"
+    bootstrap_shell_command_path = EXTERNAL / "collection_machine_bootstrap.sh"
     bootstrap_audit_path = RESULTS / "external_collection_machine_bootstrap_audit.json"
     bootstrap_audit_md_path = RESULTS / "external_collection_machine_bootstrap_audit.md"
     for path in (
@@ -5355,6 +5356,7 @@ def main():
         bootstrap_packet_path,
         bootstrap_packet_md_path,
         bootstrap_command_path,
+        bootstrap_shell_command_path,
         bootstrap_audit_path,
         bootstrap_audit_md_path,
     ):
@@ -5388,12 +5390,18 @@ def main():
         "bootstrap_commands_cover_machine_render_and_liveness",
         "bootstrap_requires_explicit_confirmation",
         "bootstrap_script_is_probe_only",
+        "bash_command_file_uses_lf_line_endings",
         "install_guidance_mentions_core_optional_stack",
         "no_real_outputs_written",
     ):
         if bootstrap_checks.get(required_check) is not True:
             fail(f"external collection machine bootstrap missing passing check: {required_check}")
     bootstrap_command_text = bootstrap_command_path.read_text(encoding="utf-8")
+    bootstrap_shell_command_text = bootstrap_shell_command_path.read_text(encoding="utf-8")
+    if "external_validation/collection_machine_bootstrap.sh" not in bootstrap_packet.get("command_files", []):
+        fail("external collection machine bootstrap packet must list the Bash command file")
+    if bootstrap_packet.get("linux_command_file") != "external_validation/collection_machine_bootstrap.sh":
+        fail("external collection machine bootstrap packet must expose the Linux command file")
     for fragment in (
         "ConfirmBootstrapOnly",
         "probe_external_platform.py --strict",
@@ -5409,9 +5417,27 @@ def main():
     ):
         if fragment not in bootstrap_command_text:
             fail(f"external collection machine bootstrap command file missing fragment: {fragment}")
+    for fragment in (
+        "PAPER119_CONFIRM_BOOTSTRAP_ONLY",
+        "--confirm-bootstrap-only",
+        "probe_external_platform.py --strict",
+        "probe_maniskill_task_bindings.py --strict",
+        "probe_maniskill_env_smoke.py --strict",
+        "probe_maniskill_fidelity_metadata.py --strict",
+        "audit_maniskill_render_video_preflight.py",
+        "audit_maniskill_pilot_runtime_liveness.py",
+        "build_maniskill_render_machine_qualification.py",
+        "mani_skill",
+        "torch",
+        "imageio-ffmpeg",
+    ):
+        if fragment not in bootstrap_shell_command_text:
+            fail(f"external collection machine bootstrap Bash file missing fragment: {fragment}")
     for forbidden in ("real_collection_runner.py", "materialize_fidelity_acceptance.py", "build_external_manifest.py --write"):
         if forbidden in bootstrap_command_text:
             fail(f"external collection machine bootstrap command file must not include collection/evidence command: {forbidden}")
+        if forbidden in bootstrap_shell_command_text:
+            fail(f"external collection machine bootstrap Bash file must not include collection/evidence command: {forbidden}")
 
     bootstrap_self_test_path = RESULTS / "external_collection_machine_bootstrap_self_test.json"
     bootstrap_self_test_md_path = RESULTS / "external_collection_machine_bootstrap_self_test.md"

@@ -20,6 +20,7 @@ REAL_OUTPUTS = [
     REAL_EXTERNAL / "collection_machine_bootstrap.json",
     REAL_EXTERNAL / "collection_machine_bootstrap.md",
     REAL_EXTERNAL / "collection_machine_bootstrap.ps1",
+    REAL_EXTERNAL / "collection_machine_bootstrap.sh",
     REAL_RESULTS / "external_collection_machine_bootstrap_audit.json",
     REAL_RESULTS / "external_collection_machine_bootstrap_audit.md",
 ]
@@ -101,6 +102,7 @@ def run_builder(
         bootstrap.OUT_PACKET_JSON,
         bootstrap.OUT_PACKET_MD,
         bootstrap.OUT_COMMANDS,
+        bootstrap.OUT_COMMANDS_SH,
         bootstrap.OUT_AUDIT_JSON,
         bootstrap.OUT_AUDIT_MD,
         bootstrap.write_command_file,
@@ -113,6 +115,7 @@ def run_builder(
         bootstrap.OUT_PACKET_JSON = bootstrap.EXTERNAL / "collection_machine_bootstrap.json"
         bootstrap.OUT_PACKET_MD = bootstrap.EXTERNAL / "collection_machine_bootstrap.md"
         bootstrap.OUT_COMMANDS = bootstrap.EXTERNAL / "collection_machine_bootstrap.ps1"
+        bootstrap.OUT_COMMANDS_SH = bootstrap.EXTERNAL / "collection_machine_bootstrap.sh"
         bootstrap.OUT_AUDIT_JSON = bootstrap.RESULTS / "external_collection_machine_bootstrap_audit.json"
         bootstrap.OUT_AUDIT_MD = bootstrap.RESULTS / "external_collection_machine_bootstrap_audit.md"
 
@@ -123,15 +126,53 @@ def run_builder(
                 if unsafe_command:
                     text += "\nInvoke-Native python external_validation\\runner\\real_collection_runner.py\n"
                     text += "Invoke-Native python scripts\\build_external_manifest.py --write\n"
+                    ps1_text = bootstrap.OUT_COMMANDS.read_text(encoding="utf-8")
+                    sh_text = bootstrap.OUT_COMMANDS_SH.read_text(encoding="utf-8")
+                    bootstrap.OUT_COMMANDS.write_text(
+                        ps1_text
+                        + "\nInvoke-Native python external_validation\\runner\\real_collection_runner.py\n"
+                        + "Invoke-Native python scripts\\build_external_manifest.py --write\n",
+                        encoding="utf-8",
+                    )
+                    bootstrap.OUT_COMMANDS_SH.write_text(
+                        sh_text
+                        + "\n$PYTHON_BIN external_validation/runner/real_collection_runner.py\n"
+                        + "$PYTHON_BIN scripts/build_external_manifest.py --write\n",
+                        encoding="utf-8",
+                    )
                 if missing_confirmation:
                     text = (
                         text.replace("ConfirmBootstrapOnly", "BootstrapOnlyShortcut")
+                        .replace("PAPER119_CONFIRM_BOOTSTRAP_ONLY", "PAPER119_BOOTSTRAP_SHORTCUT")
+                        .replace("--confirm-bootstrap-only", "--bootstrap-shortcut")
                         .replace("Refusing to bootstrap silently", "Bootstrap shortcut")
                         .replace("This script does not collect official evidence", "Shortcut mode")
                     )
+                    bootstrap.OUT_COMMANDS.write_text(
+                        bootstrap.OUT_COMMANDS.read_text(encoding="utf-8")
+                        .replace("ConfirmBootstrapOnly", "BootstrapOnlyShortcut")
+                        .replace("Refusing to bootstrap silently", "Bootstrap shortcut")
+                        .replace("This script does not collect official evidence", "Shortcut mode"),
+                        encoding="utf-8",
+                    )
+                    bootstrap.OUT_COMMANDS_SH.write_text(
+                        bootstrap.OUT_COMMANDS_SH.read_text(encoding="utf-8")
+                        .replace("PAPER119_CONFIRM_BOOTSTRAP_ONLY", "PAPER119_BOOTSTRAP_SHORTCUT")
+                        .replace("--confirm-bootstrap-only", "--bootstrap-shortcut")
+                        .replace("Refusing to bootstrap silently", "Bootstrap shortcut")
+                        .replace("This script does not collect official evidence", "Shortcut mode"),
+                        encoding="utf-8",
+                    )
                 if missing_install_guidance:
                     text = text.replace("mani_skill", "missing_skill_package")
-                bootstrap.OUT_COMMANDS.write_text(text, encoding="utf-8")
+                    bootstrap.OUT_COMMANDS.write_text(
+                        bootstrap.OUT_COMMANDS.read_text(encoding="utf-8").replace("mani_skill", "missing_skill_package"),
+                        encoding="utf-8",
+                    )
+                    bootstrap.OUT_COMMANDS_SH.write_text(
+                        bootstrap.OUT_COMMANDS_SH.read_text(encoding="utf-8").replace("mani_skill", "missing_skill_package"),
+                        encoding="utf-8",
+                    )
                 return text
 
             bootstrap.write_command_file = mutated_command_file
@@ -153,6 +194,7 @@ def run_builder(
             bootstrap.OUT_PACKET_JSON,
             bootstrap.OUT_PACKET_MD,
             bootstrap.OUT_COMMANDS,
+            bootstrap.OUT_COMMANDS_SH,
             bootstrap.OUT_AUDIT_JSON,
             bootstrap.OUT_AUDIT_MD,
             bootstrap.write_command_file,
@@ -274,7 +316,9 @@ def main() -> int:
         and complete_checks.get("local_machine_not_promoted") is True
         and complete_checks.get("bootstrap_requires_explicit_confirmation") is True
         and complete_checks.get("bootstrap_script_is_probe_only") is True
+        and complete_checks.get("bash_command_file_uses_lf_line_endings") is True
         and complete_checks.get("no_real_outputs_written") is True
+        and "external_validation/collection_machine_bootstrap.sh" in complete_payload.get("command_files", [])
     )
     add_check(
         checks,

@@ -64,13 +64,18 @@
       "passed": true
     },
     {
-      "detail": "bootstrap command file requires an explicit bootstrap-only confirmation before running probes",
+      "detail": "PowerShell and Bash bootstrap command files require explicit bootstrap-only confirmation before running probes",
       "name": "bootstrap_requires_explicit_confirmation",
       "passed": true
     },
     {
       "detail": "forbidden_fragments=[]",
       "name": "bootstrap_script_is_probe_only",
+      "passed": true
+    },
+    {
+      "detail": "crlf_count=0, lf_count=77",
+      "name": "bash_command_file_uses_lf_line_endings",
       "passed": true
     },
     {
@@ -85,6 +90,10 @@
     }
   ],
   "command_file": "external_validation/collection_machine_bootstrap.ps1",
+  "command_files": [
+    "external_validation/collection_machine_bootstrap.ps1",
+    "external_validation/collection_machine_bootstrap.sh"
+  ],
   "current_local_state": {
     "env_smoke_ready": true,
     "fidelity_metadata_ready": true,
@@ -103,6 +112,7 @@
     "task_binding_ready": true
   },
   "failed_checks": [],
+  "linux_command_file": "external_validation/collection_machine_bootstrap.sh",
   "not_external_evidence": true,
   "operator_preconditions": [
     "Use an independent GPU/Vulkan collection machine or robot-lab machine, not the current failing local render path.",

@@ -1070,7 +1070,10 @@ def main() -> int:
         and machine_bootstrap.get("not_external_evidence") is True
         and machine_bootstrap.get("strict_external_evidence_ready") is False
         and machine_bootstrap.get("bootstrap_state") == "READY_TO_BOOTSTRAP_EXTERNAL_MACHINE"
+        and machine_bootstrap.get("linux_command_file") == "external_validation/collection_machine_bootstrap.sh"
+        and "external_validation/collection_machine_bootstrap.sh" in machine_bootstrap.get("command_files", [])
         and machine_bootstrap_checks.get("bootstrap_script_is_probe_only") is True
+        and machine_bootstrap_checks.get("bash_command_file_uses_lf_line_endings") is True
         and machine_bootstrap_checks.get("local_machine_not_promoted") is True
         and machine_bootstrap_checks.get("no_real_outputs_written") is True
         and operator_release.get("passed") is True
@@ -1161,6 +1164,7 @@ def main() -> int:
                 EXTERNAL / "collection_machine_bootstrap.json",
                 EXTERNAL / "collection_machine_bootstrap.md",
                 EXTERNAL / "collection_machine_bootstrap.ps1",
+                EXTERNAL / "collection_machine_bootstrap.sh",
                 RESULTS / "external_collection_machine_bootstrap_audit.json",
                 RESULTS / "external_collection_machine_bootstrap_audit.md",
                 ROOT / "scripts" / "self_test_external_collection_machine_bootstrap.py",
@@ -1266,6 +1270,7 @@ def main() -> int:
             "external_validation/collection_machine_bootstrap.json",
             "external_validation/collection_machine_bootstrap.md",
             "external_validation/collection_machine_bootstrap.ps1",
+            "external_validation/collection_machine_bootstrap.sh",
             "results/external_collection_machine_bootstrap_audit.json",
             "results/external_collection_machine_bootstrap_audit.md",
             "scripts/self_test_external_collection_machine_bootstrap.py",

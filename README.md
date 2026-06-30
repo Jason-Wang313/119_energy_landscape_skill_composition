@@ -200,7 +200,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External collection job command spine: `external_validation/collection_job_commands.ps1`
 - External collection job packet audit: `results/external_collection_job_packet_audit.md`
 - External collection job packet self-test: `results/external_collection_job_packet_self_test.md`
-- External collection machine bootstrap: `external_validation/collection_machine_bootstrap.md`
+- External collection machine bootstrap: `external_validation/collection_machine_bootstrap.md` (`collection_machine_bootstrap.ps1` and `collection_machine_bootstrap.sh`)
 - External collection machine bootstrap audit: `results/external_collection_machine_bootstrap_audit.md`
 - External collection machine bootstrap self-test: `results/external_collection_machine_bootstrap_self_test.md`
 - External operator handoff bundle: `results/external_operator_handoff_bundle.md`

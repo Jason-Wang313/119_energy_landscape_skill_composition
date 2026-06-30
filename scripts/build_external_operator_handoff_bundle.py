@@ -94,6 +94,7 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "collection_machine_bootstrap.json",
         EXTERNAL / "collection_machine_bootstrap.md",
         EXTERNAL / "collection_machine_bootstrap.ps1",
+        EXTERNAL / "collection_machine_bootstrap.sh",
         EXTERNAL / "fidelity_provenance_packet.json",
         EXTERNAL / "fidelity_provenance_packet.md",
         EXTERNAL / "fidelity_provenance_work_orders.csv",
@@ -606,12 +607,16 @@ def build_payload() -> dict[str, Any]:
         and machine_bootstrap.get("not_external_evidence") is True
         and machine_bootstrap.get("strict_external_evidence_ready") is False
         and machine_bootstrap.get("bootstrap_state") == "READY_TO_BOOTSTRAP_EXTERNAL_MACHINE"
+        and machine_bootstrap.get("linux_command_file") == "external_validation/collection_machine_bootstrap.sh"
+        and "external_validation/collection_machine_bootstrap.sh" in machine_bootstrap.get("command_files", [])
         and machine_bootstrap_checks.get("bootstrap_script_is_probe_only") is True
+        and machine_bootstrap_checks.get("bash_command_file_uses_lf_line_endings") is True
         and machine_bootstrap_checks.get("local_machine_not_promoted") is True
         and machine_bootstrap_checks.get("no_real_outputs_written") is True
         and "external_validation/collection_machine_bootstrap.json" in paths
         and "external_validation/collection_machine_bootstrap.md" in paths
         and "external_validation/collection_machine_bootstrap.ps1" in paths
+        and "external_validation/collection_machine_bootstrap.sh" in paths
         and "results/external_collection_machine_bootstrap_audit.json" in paths
         and "results/external_collection_machine_bootstrap_audit.md" in paths
         and "scripts/build_external_collection_machine_bootstrap.py" in paths,

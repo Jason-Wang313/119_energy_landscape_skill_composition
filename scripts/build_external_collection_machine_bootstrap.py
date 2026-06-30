@@ -12,6 +12,7 @@ RESULTS = ROOT / "results"
 OUT_PACKET_JSON = EXTERNAL / "collection_machine_bootstrap.json"
 OUT_PACKET_MD = EXTERNAL / "collection_machine_bootstrap.md"
 OUT_COMMANDS = EXTERNAL / "collection_machine_bootstrap.ps1"
+OUT_COMMANDS_SH = EXTERNAL / "collection_machine_bootstrap.sh"
 OUT_AUDIT_JSON = RESULTS / "external_collection_machine_bootstrap_audit.json"
 OUT_AUDIT_MD = RESULTS / "external_collection_machine_bootstrap_audit.md"
 
@@ -72,7 +73,7 @@ def add_check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str
 
 
 def write_command_file() -> str:
-    text = r"""[CmdletBinding()]
+    ps1_text = r"""[CmdletBinding()]
 param(
     [switch]$ConfirmBootstrapOnly,
     [switch]$InstallManiSkill,
@@ -118,8 +119,88 @@ Invoke-Native python scripts\build_maniskill_render_machine_qualification.py
 Write-Host ""
 Write-Host "Bootstrap probes complete. If render-machine qualification is still DO_NOT_COLLECT_RENDER_MACHINE, do not run official collection."
 """
-    OUT_COMMANDS.write_text(text, encoding="utf-8")
-    return text
+    sh_text = r"""#!/usr/bin/env bash
+set -euo pipefail
+
+CONFIRM_BOOTSTRAP_ONLY=0
+INSTALL_MANISKILL=0
+ACCEPTED_BACKEND="${ACCEPTED_BACKEND:-sapien_cuda}"
+SHADER_PACK="${SHADER_PACK:-minimal}"
+RENDER_PREFLIGHT_TIMEOUT_SECONDS="${RENDER_PREFLIGHT_TIMEOUT_SECONDS:-120}"
+PILOT_TIMEOUT_SECONDS="${PILOT_TIMEOUT_SECONDS:-180}"
+PYTHON_BIN="${PYTHON:-python3}"
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --confirm-bootstrap-only)
+      CONFIRM_BOOTSTRAP_ONLY=1
+      shift
+      ;;
+    --install-maniskill)
+      INSTALL_MANISKILL=1
+      shift
+      ;;
+    --accepted-backend)
+      ACCEPTED_BACKEND="$2"
+      shift 2
+      ;;
+    --shader-pack)
+      SHADER_PACK="$2"
+      shift 2
+      ;;
+    --render-preflight-timeout-seconds)
+      RENDER_PREFLIGHT_TIMEOUT_SECONDS="$2"
+      shift 2
+      ;;
+    --pilot-timeout-seconds)
+      PILOT_TIMEOUT_SECONDS="$2"
+      shift 2
+      ;;
+    -h|--help)
+      echo "Usage: $0 --confirm-bootstrap-only [--install-maniskill] [--accepted-backend BACKEND] [--shader-pack PACK]"
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: $1" >&2
+      exit 2
+      ;;
+  esac
+done
+
+if [[ "${PAPER119_CONFIRM_BOOTSTRAP_ONLY:-0}" == "1" ]]; then
+  CONFIRM_BOOTSTRAP_ONLY=1
+fi
+
+if [[ "$CONFIRM_BOOTSTRAP_ONLY" != "1" ]]; then
+  echo "Refusing to bootstrap silently. Re-run with --confirm-bootstrap-only or PAPER119_CONFIRM_BOOTSTRAP_ONLY=1 on the independent collection machine. This script does not collect official evidence." >&2
+  exit 2
+fi
+
+run_python() {
+  "$PYTHON_BIN" "$@"
+}
+
+if [[ "$INSTALL_MANISKILL" == "1" ]]; then
+  run_python -m pip install --upgrade pip
+  run_python -m pip install numpy matplotlib imageio imageio-ffmpeg
+  run_python -m pip install --upgrade mani_skill
+  run_python -m pip install torch torchvision torchaudio
+fi
+
+run_python scripts/probe_external_platform.py --strict
+run_python scripts/probe_maniskill_task_bindings.py --strict
+run_python scripts/probe_maniskill_env_smoke.py --strict
+run_python scripts/probe_maniskill_fidelity_metadata.py --strict
+run_python scripts/audit_maniskill_render_video_preflight.py --timeout-seconds "$RENDER_PREFLIGHT_TIMEOUT_SECONDS" --max-envs 4 --width 128 --height 128 --render-backend "$ACCEPTED_BACKEND" --shader-pack "$SHADER_PACK" --profile-matrix --profile-matrix-max-envs 1 --timeout-diagnosis-seconds 180 --timeout-diagnosis-width 64 --timeout-diagnosis-height 64
+run_python scripts/audit_maniskill_pilot_runtime_liveness.py --timeout-seconds "$PILOT_TIMEOUT_SECONDS" --render-backend "$ACCEPTED_BACKEND" --shader-pack "$SHADER_PACK" --render-width 128 --render-height 128
+run_python scripts/build_maniskill_render_machine_qualification.py
+
+printf '\nBootstrap probes complete. If render-machine qualification is still DO_NOT_COLLECT_RENDER_MACHINE, do not run official collection.\n'
+"""
+    OUT_COMMANDS.write_text(ps1_text, encoding="utf-8")
+    with OUT_COMMANDS_SH.open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write(sh_text)
+    return "\n# PowerShell bootstrap\n" + ps1_text + "\n# Bash bootstrap\n" + sh_text
 
 
 def build_payload() -> tuple[dict[str, Any], str]:
@@ -207,9 +288,11 @@ def build_payload() -> tuple[dict[str, Any], str]:
         checks,
         "bootstrap_requires_explicit_confirmation",
         "ConfirmBootstrapOnly" in command_text
+        and "PAPER119_CONFIRM_BOOTSTRAP_ONLY" in command_text
+        and "--confirm-bootstrap-only" in command_text
         and "Refusing to bootstrap silently" in command_text
         and "This script does not collect official evidence" in command_text,
-        "bootstrap command file requires an explicit bootstrap-only confirmation before running probes",
+        "PowerShell and Bash bootstrap command files require explicit bootstrap-only confirmation before running probes",
     )
     forbidden_present = [fragment for fragment in PROBE_ONLY_FORBIDDEN_FRAGMENTS if fragment in command_text]
     add_check(
@@ -217,6 +300,15 @@ def build_payload() -> tuple[dict[str, Any], str]:
         "bootstrap_script_is_probe_only",
         not forbidden_present,
         f"forbidden_fragments={forbidden_present}",
+    )
+    sh_bytes = OUT_COMMANDS_SH.read_bytes() if OUT_COMMANDS_SH.exists() else b""
+    sh_crlf_count = sh_bytes.count(b"\r\n")
+    sh_lf_count = sh_bytes.count(b"\n")
+    add_check(
+        checks,
+        "bash_command_file_uses_lf_line_endings",
+        bool(sh_bytes) and sh_crlf_count == 0 and sh_lf_count > 0,
+        f"crlf_count={sh_crlf_count}, lf_count={sh_lf_count}",
     )
     add_check(
         checks,
@@ -245,6 +337,8 @@ def build_payload() -> tuple[dict[str, Any], str]:
             rel(RESULTS / "external_collection_job_packet_audit.json"),
         ],
         "command_file": rel(OUT_COMMANDS),
+        "command_files": [rel(OUT_COMMANDS), rel(OUT_COMMANDS_SH)],
+        "linux_command_file": rel(OUT_COMMANDS_SH),
         "bootstrap_steps": bootstrap_steps,
         "current_local_state": current_local_state,
         "operator_preconditions": [
@@ -277,6 +371,7 @@ def write_outputs(payload: dict[str, Any]) -> None:
         f"Strict external evidence ready: `{str(payload['strict_external_evidence_ready']).lower()}`.",
         f"Bootstrap state: `{payload['bootstrap_state']}`.",
         f"Command file: `{payload['command_file']}`.",
+        f"Linux command file: `{payload['linux_command_file']}`.",
         "",
         "This packet prepares the independent collection machine before fidelity acceptance or official collection. It does not write `external_validation/manifest.json`, official JSONL logs, rollout videos, checkpoints, or fidelity acceptance files.",
         "",

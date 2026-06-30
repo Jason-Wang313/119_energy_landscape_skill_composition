@@ -27,16 +27,16 @@ This preflight tests whether the selected ManiSkill/SAPIEN runtime can export re
 ## Renderer Profile Retest Commands
 
 ```powershell
-python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend cpu --shader-pack minimal
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 1 --width 128 --height 128 --render-backend cpu --shader-pack minimal
 ```
 ```powershell
-python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend gpu --shader-pack minimal
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 1 --width 128 --height 128 --render-backend gpu --shader-pack minimal
 ```
 ```powershell
-python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend sapien_cuda --shader-pack minimal
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 1 --width 128 --height 128 --render-backend sapien_cuda --shader-pack minimal
 ```
 ```powershell
-python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4 --width 64 --height 64 --render-backend cpu --shader-pack minimal
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend cpu --shader-pack minimal
 ```
 
 ## Renderer Profile Matrix
@@ -68,10 +68,10 @@ python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --
 - `pass` `renderer_failure_class_recorded_when_not_ready`: classes=['vulkan_descriptor_pool_exhaustion']
 - `pass` `renderer_failure_stage_recorded_when_not_ready`: failure_stages=['initial_render_start', 'initial_render_start', 'initial_render_start', 'initial_render_start']
 - `pass` `operator_remediation_present_when_not_ready`: items=5
-- `pass` `profile_retest_commands_cover_renderer_backends`: python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend cpu --shader-pack minimal
-python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend gpu --shader-pack minimal
-python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend sapien_cuda --shader-pack minimal
-python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4 --width 64 --height 64 --render-backend cpu --shader-pack minimal
+- `pass` `profile_retest_commands_cover_renderer_backends`: python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 1 --width 128 --height 128 --render-backend cpu --shader-pack minimal
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 1 --width 128 --height 128 --render-backend gpu --shader-pack minimal
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 1 --width 128 --height 128 --render-backend sapien_cuda --shader-pack minimal
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend cpu --shader-pack minimal
 - `pass` `profile_matrix_records_renderer_backends`: profile_matrix=True, backends=['cpu', 'gpu', 'sapien_cuda']
 - `pass` `profile_matrix_terminal_status`: profile_matrix_records=3
 - `pass` `profile_matrix_quarantined_non_evidence`: profile_matrix_records=3

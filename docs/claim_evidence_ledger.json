@@ -193,12 +193,12 @@
     {
       "name": "external_collection_machine_bootstrap_claim",
       "claim": "The repository provides a non-evidence External collection machine bootstrap packet and guarded command file for an independent GPU/Vulkan collection machine, covering platform, task binding, environment smoke, fidelity metadata, render-video preflight, pilot liveness, and render-machine qualification probes while explicitly avoiding fidelity acceptance materialization, official collection, manifest writing, logs, and videos.",
-      "evidence": ["scripts/build_external_collection_machine_bootstrap.py", "external_validation/collection_machine_bootstrap.json", "external_validation/collection_machine_bootstrap.md", "external_validation/collection_machine_bootstrap.ps1", "results/external_collection_machine_bootstrap_audit.json", "results/external_collection_machine_bootstrap_audit.md", "results/external_collection_job_packet_audit.json", "results/maniskill_render_machine_qualification.json"]
+      "evidence": ["scripts/build_external_collection_machine_bootstrap.py", "external_validation/collection_machine_bootstrap.json", "external_validation/collection_machine_bootstrap.md", "external_validation/collection_machine_bootstrap.ps1", "external_validation/collection_machine_bootstrap.sh", "results/external_collection_machine_bootstrap_audit.json", "results/external_collection_machine_bootstrap_audit.md", "results/external_collection_job_packet_audit.json", "results/maniskill_render_machine_qualification.json"]
     },
     {
       "name": "external_collection_machine_bootstrap_self_test_claim",
       "claim": "The repository provides a non-evidence External collection machine bootstrap self-test that rebuilds the bootstrap packet in temporary copied workspaces and rejects missing source reports, source evidence drift, premature collection-job go-state, local render-machine promotion, unsafe evidence-writing commands, missing explicit confirmation, install-guidance drift, and premature manifest/log/video outputs without touching the real bootstrap outputs.",
-      "evidence": ["scripts/self_test_external_collection_machine_bootstrap.py", "results/external_collection_machine_bootstrap_self_test.json", "results/external_collection_machine_bootstrap_self_test.md", "scripts/build_external_collection_machine_bootstrap.py", "external_validation/collection_machine_bootstrap.json", "results/external_collection_machine_bootstrap_audit.json"]
+      "evidence": ["scripts/self_test_external_collection_machine_bootstrap.py", "results/external_collection_machine_bootstrap_self_test.json", "results/external_collection_machine_bootstrap_self_test.md", "scripts/build_external_collection_machine_bootstrap.py", "external_validation/collection_machine_bootstrap.json", "external_validation/collection_machine_bootstrap.sh", "results/external_collection_machine_bootstrap_audit.json"]
     },
     {
       "name": "external_operator_release_bundle_claim",

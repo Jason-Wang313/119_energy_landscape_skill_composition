@@ -414,13 +414,17 @@ def main() -> int:
         and machine_bootstrap.get("not_external_evidence") is True
         and machine_bootstrap.get("strict_external_evidence_ready") is False
         and machine_bootstrap.get("bootstrap_state") == "READY_TO_BOOTSTRAP_EXTERNAL_MACHINE"
+        and machine_bootstrap.get("linux_command_file") == "external_validation/collection_machine_bootstrap.sh"
+        and "external_validation/collection_machine_bootstrap.sh" in machine_bootstrap.get("command_files", [])
         and machine_bootstrap_checks.get("bootstrap_requires_explicit_confirmation") is True
         and machine_bootstrap_checks.get("bootstrap_script_is_probe_only") is True
+        and machine_bootstrap_checks.get("bash_command_file_uses_lf_line_endings") is True
         and machine_bootstrap_checks.get("local_machine_not_promoted") is True
         and machine_bootstrap_checks.get("no_real_outputs_written") is True
         and (ROOT / "scripts" / "build_external_collection_machine_bootstrap.py").exists()
         and (ROOT / "external_validation" / "collection_machine_bootstrap.md").exists()
         and (ROOT / "external_validation" / "collection_machine_bootstrap.ps1").exists()
+        and (ROOT / "external_validation" / "collection_machine_bootstrap.sh").exists()
         and (RESULTS / "external_collection_machine_bootstrap_audit.md").exists()
         and "External collection machine bootstrap" in texts["README"]
         and "External collection machine bootstrap" in texts["final_audit"]

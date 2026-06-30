@@ -6,7 +6,7 @@
     "generated_non_evidence_report": 128,
     "method_config_candidate": 11,
     "operator_command_source": 59,
-    "operator_facing_input": 86,
+    "operator_facing_input": 87,
     "prepared_config_input": 4,
     "reference_adapter": 60,
     "runner_backend_template": 5,
@@ -64,7 +64,7 @@
       "passed": true
     },
     {
-      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 128, 'method_config_candidate': 11, 'operator_command_source': 59, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 128, 'method_config_candidate': 11, 'operator_command_source': 59, 'operator_facing_input': 87, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "handoff_has_task_config_and_baseline_assets",
       "passed": true
     },
@@ -229,7 +229,7 @@
       "passed": true
     },
     {
-      "detail": "hashed_files=373",
+      "detail": "hashed_files=374",
       "name": "file_hashes_are_recorded",
       "passed": true
     }
@@ -244,21 +244,21 @@
     "placeholder_not_external_evidence"
   ],
   "handoff_bundle_ready": true,
-  "included_file_count": 373,
+  "included_file_count": 374,
   "included_files": [
     {
-      "bytes": 33542,
+      "bytes": 33617,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "6F028798FB77345C41E3EB240F4076F8183837A3BB16416847FCCE4B51821BC9"
+      "sha256": "663EC7F11691C07C2EC567366112E523E3DD720C111AEADFAED5B1AFCD65A656"
     },
     {
-      "bytes": 14352,
+      "bytes": 14385,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/haonan_yilun_outreach_package.md",
-      "sha256": "E5322A42181A5C1E94D66D5B3BC624F15F0AE9F6FD3A030320E590A7BA38CA06"
+      "sha256": "3540DDC2F6787BC0D3006BA4EA4FA3CBB0F303F28A50FB064252050174E8C1DF"
     },
     {
       "bytes": 21796,
@@ -268,18 +268,18 @@
       "sha256": "7EDFEE348BE624FC1BA8818A88D526CC53B3632F3D31A1500A19F9C5A868FC2E"
     },
     {
-      "bytes": 25348,
+      "bytes": 25406,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/reproducibility_checklist.md",
-      "sha256": "60FC4603323DFAF299F00C54A712BC8EA7B23494716A2604E864CEE2A4FA472A"
+      "sha256": "8B974D81ADC61A88DDB10F802A6CC6D383DE645F669E968D3A1EBFD378B4C1E4"
     },
     {
-      "bytes": 26484,
+      "bytes": 26509,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "7EAACC7D8BD1BBA5BEB749463BA6C60BB07CB3CAF97467DFC2C50E6DBC7F6AA1"
+      "sha256": "475EDB914E4F84A1FAA9BE1B1724421827B4461C57FAFC08027EDC31DE7C4785"
     },
     {
       "bytes": 34698,
@@ -926,18 +926,18 @@
       "sha256": "F4860EF625547478173C792F5FC93D1B1C27BAF4CF7301CA030B476ED3E96A11"
     },
     {
-      "bytes": 5510,
+      "bytes": 5895,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/collection_machine_bootstrap.json",
-      "sha256": "5BFAA5DFA12C2693810B0E4546611CDC61BD69861D45D32613E47C4F18F72D85"
+      "sha256": "4DABFEF074B1DFCA43723A415300E5ECAF969BA57928496E9928787DDB65EDEE"
     },
     {
-      "bytes": 3741,
+      "bytes": 3912,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/collection_machine_bootstrap.md",
-      "sha256": "89C65B68674F88B4B66392D0D9C96CE5AF97CEBBE673B558CD8339F9FF7D279E"
+      "sha256": "05ADB92A7DBD845061F7575CCE5ED32412F9AFFF37574029E6B7E3204AF9C848"
     },
     {
       "bytes": 2330,
@@ -945,6 +945,13 @@
       "exists": true,
       "path": "external_validation/collection_machine_bootstrap.ps1",
       "sha256": "B50B58B3A30AE2F73BBD647E844D026E75E1750A0B4E43B55CCC6F99C48E166D"
+    },
+    {
+      "bytes": 2776,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "external_validation/collection_machine_bootstrap.sh",
+      "sha256": "E5046E68D3AD2BC624B74F3CC361AD93D76D1979733ABDE50911DAE704F17268"
     },
     {
       "bytes": 5942,
@@ -1731,18 +1738,18 @@
       "sha256": "A6AE1D5685E70291378D58638E2529C4588D5090D2193BD1E74E96220510AB28"
     },
     {
-      "bytes": 5581,
+      "bytes": 5966,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_collection_machine_bootstrap_audit.json",
-      "sha256": "BEF70CC831C395F5FCA3B1F2D6838362ABDE77EC09B1687C27C01D445338EAB6"
+      "sha256": "042037EF9223C6555FF9515D4D51112CFE550111444FAB4EF126FCCC593DE8BF"
     },
     {
-      "bytes": 3747,
+      "bytes": 3918,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_collection_machine_bootstrap_audit.md",
-      "sha256": "3AE8EF1988C040BDD2FF165D79D8D9B92174317E080C1B9D7CA0DB0EA985565A"
+      "sha256": "1CB439E9F005B4FA17FD46288CFC168DAC16165E38D3BC6E5B62AEC3C48FFAB0"
     },
     {
       "bytes": 147907,
@@ -2417,18 +2424,18 @@
       "sha256": "5BDE7CFD292DB6D1D54E8720F5BA869DDAF599C203F13FF5BACD04094B47F4CE"
     },
     {
-      "bytes": 60314,
+      "bytes": 60381,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_render_video_preflight_audit.json",
-      "sha256": "1365D912692FBF72544AA2C2980C60D2B82F242F5562354F690A0530F3E90167"
+      "sha256": "3AD488236C55C898D167A56CC79176B03DC1072A167B5A80C583ADD72384FE03"
     },
     {
-      "bytes": 7582,
+      "bytes": 7606,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/maniskill_render_video_preflight_audit.md",
-      "sha256": "033875B78831A23DC646D5DE6E76B89ED5F4F3FEBD0E8A41B0C75FE2BE822C3E"
+      "sha256": "726C3C6F1798EFB19AC31D27D8668612046F9BACBCA9549EBC22C350E7F07625"
     },
     {
       "bytes": 9710,
@@ -2578,11 +2585,11 @@
       "sha256": "7328EDF6989A347CEADC1152087AAA4219D194561B13DEE624B4D2AE0BF3D46D"
     },
     {
-      "bytes": 15819,
+      "bytes": 19569,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_collection_machine_bootstrap.py",
-      "sha256": "9A82BB080F8997ED83061E38742C318062B642E19730952B72721D0EF2E12F73"
+      "sha256": "285BACFF2821C2E6EABB453DE43406B36FEAA97AD2EF943782095B3D12C51569"
     },
     {
       "bytes": 21003,
@@ -2627,11 +2634,11 @@
       "sha256": "C166221116A089779E0111AE13BDB75CC1625849486A1C116AF8534D264334AF"
     },
     {
-      "bytes": 104789,
+      "bytes": 105234,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "2B4D8D10B12342417D80A016D83CDC4699E5A18DA187F0F1F99AE68E3598C9E6"
+      "sha256": "6BB792DBDEB3239047B0BB1AF44103985D92662569037F359BC9007C3B06A886"
     },
     {
       "bytes": 71405,

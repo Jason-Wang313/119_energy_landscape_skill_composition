@@ -45,7 +45,7 @@ External collection job packet: `external_validation/collection_job_packet.md` a
 
 External collection job packet self-test: `results/external_collection_job_packet_self_test.md` mutation-tests the guarded command spine in temporary copied workspaces and rejects missing sources, source evidence drift, premature manifests, premature ready states, unsafe command edits, hash-gate drift, and render self-test drift without touching the real packet outputs.
 
-External collection machine bootstrap: `external_validation/collection_machine_bootstrap.md` now gives an independent GPU/Vulkan operator a guarded probe-only command path through platform, task, environment, fidelity metadata, render, pilot, and render-machine qualification checks before fidelity acceptance or official collection.
+External collection machine bootstrap: `external_validation/collection_machine_bootstrap.md` now gives an independent GPU/Vulkan operator guarded Windows and Linux probe-only command paths through platform, task, environment, fidelity metadata, render, pilot, and render-machine qualification checks before fidelity acceptance or official collection.
 
 External collection machine bootstrap self-test: `results/external_collection_machine_bootstrap_self_test.md` mutation-tests the guarded probe-only bootstrap and rejects missing sources, source evidence drift, premature collection go-state, local-machine promotion, unsafe evidence-writing commands, missing confirmation, install-guidance drift, and premature manifest/log/video outputs without touching the real bootstrap outputs.
 

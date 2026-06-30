@@ -21,14 +21,14 @@ The External operator release bundle self-test documents transfer-package fail-c
 - `pass` `operator_packet_no_go_visible`: start_state='DO_NOT_COLLECT_YET', blocking_missing_count=4
 - `pass` `collection_readiness_tracked_reference_route_visible`: backend='external_validation\\runner\\maniskill_reference_backend.py', run_id='maniskill_sapien_reference_preflight_protocol_v1', blocking=["reference_fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
 - `pass` `operator_packet_tracked_reference_route_visible`: backend='external_validation\\runner\\maniskill_reference_backend.py', run_id='maniskill_sapien_reference_preflight_protocol_v1', blocking=["fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
-- `pass` `operator_handoff_bundle_visible`: files=373, forbidden=[], start_state='DO_NOT_COLLECT_YET'
+- `pass` `operator_handoff_bundle_visible`: files=374, forbidden=[], start_state='DO_NOT_COLLECT_YET'
 - `pass` `external_operator_handoff_bundle_self_test_visible`: fixture_ready=True, no_go_drift_rejected=True, strict_drift_rejected=True, forbidden_rejected=True
 - `pass` `external_acquisition_packet_self_test_visible`: fixture_ready=True, missing_source_rejected=True, unmapped_blocker_rejected=True, manifest_rejected=True, collection_drift_rejected=True
 - `pass` `external_collection_job_packet_visible`: job_state='DO_NOT_START_COLLECTION_YET', steps=17, blockers=4
 - `pass` `external_collection_job_packet_self_test_visible`: fixture_ready=True, missing_source_rejected=True, source_drift_rejected=True, manifest_rejected=True, ready_state_rejected=True, unsafe_command_rejected=True
 - `pass` `external_collection_machine_bootstrap_visible`: bootstrap_state='READY_TO_BOOTSTRAP_EXTERNAL_MACHINE', command='external_validation/collection_machine_bootstrap.ps1'
 - `pass` `external_collection_machine_bootstrap_self_test_visible`: fixture_ready=True, missing_source_rejected=True, job_go_rejected=True, local_promotion_rejected=True, unsafe_command_rejected=True
-- `pass` `external_operator_release_bundle_visible`: bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=373, archive_written=False
+- `pass` `external_operator_release_bundle_visible`: bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=374, archive_written=False
 - `pass` `external_operator_release_bundle_self_test_visible`: fixture_ready=True, archive_ready=True, forbidden_rejected=True, real_untouched=True
 - `pass` `external_runbook_route_gates_visible`: validation_command_count=47, route_gates=True, gate_order=True
 - `pass` `analysis_plan_visible`: analysis_plan_ready=True, strict_evidence_ready=False

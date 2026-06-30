@@ -120,6 +120,7 @@ def run_builder(
                         "external_validation/collection_machine_bootstrap.json",
                         "external_validation/collection_machine_bootstrap.md",
                         "external_validation/collection_machine_bootstrap.ps1",
+                        "external_validation/collection_machine_bootstrap.sh",
                         "results/external_collection_machine_bootstrap_audit.json",
                         "results/external_collection_machine_bootstrap_audit.md",
                         "scripts/build_external_collection_machine_bootstrap.py",

@@ -5,6 +5,7 @@ Not evidence: `true`.
 Strict external evidence ready: `false`.
 Bootstrap state: `READY_TO_BOOTSTRAP_EXTERNAL_MACHINE`.
 Command file: `external_validation/collection_machine_bootstrap.ps1`.
+Linux command file: `external_validation/collection_machine_bootstrap.sh`.
 
 This packet prepares the independent collection machine before fidelity acceptance or official collection. It does not write `external_validation/manifest.json`, official JSONL logs, rollout videos, checkpoints, or fidelity acceptance files.
 
@@ -52,7 +53,8 @@ This packet prepares the independent collection machine before fidelity acceptan
 - `pass` `source_collection_job_still_no_go`: job_state='DO_NOT_START_COLLECTION_YET', strict=False
 - `pass` `local_machine_not_promoted`: qualified=False, state='DO_NOT_COLLECT_RENDER_MACHINE'
 - `pass` `bootstrap_commands_cover_machine_render_and_liveness`: bootstrap command file covers platform, task, env, metadata, render, pilot, and qualification probes
-- `pass` `bootstrap_requires_explicit_confirmation`: bootstrap command file requires an explicit bootstrap-only confirmation before running probes
+- `pass` `bootstrap_requires_explicit_confirmation`: PowerShell and Bash bootstrap command files require explicit bootstrap-only confirmation before running probes
 - `pass` `bootstrap_script_is_probe_only`: forbidden_fragments=[]
+- `pass` `bash_command_file_uses_lf_line_endings`: crlf_count=0, lf_count=77
 - `pass` `install_guidance_mentions_core_optional_stack`: optional installer covers local package deps, ManiSkill/SAPIEN dependency path, Torch, and video encoding
 - `pass` `no_real_outputs_written`: manifest/log/video evidence files remain absent before official collection
