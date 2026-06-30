@@ -346,6 +346,11 @@
       "evidence": ["scripts/materialize_external_configs.py", "results/external_config_materialization_plan.json", "results/external_config_materialization_plan.md", "external_validation/configs/README.md", "external_validation/configs/peg_place_regrasp.json", "external_validation/configs/drawer_to_pick_transfer.json", "external_validation/configs/door_open_navigation.json", "external_validation/configs/cable_route_insert.json"]
     },
     {
+      "name": "external_config_materialization_self_test_claim",
+      "claim": "The repository self-tests External config materialization in temporary copied workspaces, proving the default plan writes no configs, confirmed fixture writes materialize schema-valid task configs, and missing confirmation, placeholder platform names, template tokens, missing task bindings, overwrite attempts, and real-output drift fail closed without touching real prepared configs or materialization reports.",
+      "evidence": ["scripts/self_test_external_config_materialization.py", "results/external_config_materialization_self_test.json", "results/external_config_materialization_self_test.md", "scripts/materialize_external_configs.py", "results/external_config_materialization_plan.json", "results/external_config_materialization_plan.md", "external_validation/config_templates", "external_validation/maniskill_task_bindings.json"]
+    },
+    {
       "name": "external_config_manifest_packet_claim",
       "claim": "The repository provides a non-evidence config manifest packet that turns prepared task configs into manifest-declaration and hash-lock work orders while strict config evidence and manifest-declared config readiness remain false.",
       "evidence": ["scripts/build_external_config_manifest_packet.py", "external_validation/config_manifest_packet.json", "external_validation/config_manifest_packet.md", "external_validation/config_manifest_work_orders.csv", "results/external_config_manifest_audit.json", "results/external_config_manifest_audit.md", "results/external_config_materialization_plan.json", "results/external_config_evidence_audit.json"]

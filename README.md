@@ -144,6 +144,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External task config schema: `external_validation/config_schema_v1.json`
 - External real-config intake directory: `external_validation/configs/README.md`
 - External config materialization plan: `results/external_config_materialization_plan.md`
+- External config materialization self-test: `results/external_config_materialization_self_test.md`
 - External config manifest packet: `external_validation/config_manifest_packet.md`
 - External config manifest audit: `results/external_config_manifest_audit.md`
 - External config manifest packet self-test: `results/external_config_manifest_packet_self_test.md`

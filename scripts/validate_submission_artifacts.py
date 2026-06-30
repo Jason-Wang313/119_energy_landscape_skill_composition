@@ -140,6 +140,7 @@ def main():
         "scripts\\validate_external_configs.py",
         "scripts\\self_test_external_config_evidence.py",
         "scripts\\materialize_external_configs.py",
+        "scripts\\self_test_external_config_materialization.py",
         "scripts\\build_external_config_manifest_packet.py",
         "scripts\\self_test_external_config_manifest_packet.py",
         "scripts\\build_external_rollout_evidence_packet.py",
@@ -256,6 +257,7 @@ def main():
         "python scripts/self_test_external_config_evidence.py",
         "python scripts/self_test_external_adapter_evidence.py",
         "python scripts/materialize_external_configs.py",
+        "python scripts/self_test_external_config_materialization.py",
         "python scripts/build_external_config_manifest_packet.py",
         "python scripts/build_external_rollout_evidence_packet.py",
         "python scripts/build_external_ablation_collection_packet.py",
@@ -5125,6 +5127,7 @@ def main():
         "maniskill_reference_backend_included",
         "maniskill_reference_collection_preflight_included",
         "config_manifest_packet_included",
+        "config_materialization_self_test_included",
         "rollout_evidence_packet_included",
         "ablation_collection_packet_included",
         "ablation_collection_packet_self_test_included",
@@ -5564,6 +5567,16 @@ def main():
     if not config_materialization_path.exists():
         fail("missing results/external_config_materialization_plan.json; run scripts/materialize_external_configs.py")
     config_materialization = json.loads(config_materialization_path.read_text(encoding="utf-8"))
+    config_materialization_self_test_path = RESULTS / "external_config_materialization_self_test.json"
+    config_materialization_self_test_md_path = RESULTS / "external_config_materialization_self_test.md"
+    for path in (
+        ROOT / "scripts" / "self_test_external_config_materialization.py",
+        config_materialization_self_test_path,
+        config_materialization_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external config materialization self-test artifact: {path}")
+    config_materialization_self_test = json.loads(config_materialization_self_test_path.read_text(encoding="utf-8"))
     if config_materialization.get("version") != "external_config_materialization_plan_v1":
         fail("external config materialization plan version mismatch")
     if config_materialization.get("passed") is not True:
@@ -5578,6 +5591,41 @@ def main():
         fail("external config materialization plan covers too few tasks")
     if not config_materialization.get("operator_write_command", "").endswith("--confirm-real-platform --write"):
         fail("external config materialization plan missing guarded operator write command")
+    if config_materialization_self_test.get("version") != "external_config_materialization_self_test_v1":
+        fail("external config materialization self-test version mismatch")
+    if config_materialization_self_test.get("passed") is not True:
+        fail("external config materialization self-test did not pass")
+    if config_materialization_self_test.get("not_external_evidence") is not True:
+        fail("external config materialization self-test must declare that it is not evidence")
+    if config_materialization_self_test.get("strict_config_evidence_ready") is not False:
+        fail("external config materialization self-test must keep strict config evidence false")
+    for required_field in (
+        "temporary_plan_ready",
+        "confirmed_write_fixture_ready",
+        "write_without_confirm_rejected",
+        "placeholder_platform_write_rejected",
+        "template_token_write_rejected",
+        "missing_task_binding_rejected",
+        "overwrite_without_force_rejected",
+        "real_outputs_untouched",
+    ):
+        if config_materialization_self_test.get(required_field) is not True:
+            fail(f"external config materialization self-test missing passing field: {required_field}")
+    config_materialization_self_checks = {
+        check.get("name"): check.get("passed") for check in config_materialization_self_test.get("checks", []) or []
+    }
+    for required_check in (
+        "temporary_config_materialization_plan_ready_but_non_evidence",
+        "confirmed_temp_write_materializes_schema_valid_configs",
+        "write_without_confirmation_rejected",
+        "placeholder_platform_write_rejected",
+        "template_token_write_rejected",
+        "missing_task_binding_file_rejected",
+        "overwrite_without_force_rejected",
+        "real_config_materialization_outputs_untouched",
+    ):
+        if config_materialization_self_checks.get(required_check) is not True:
+            fail(f"external config materialization self-test missing passing check: {required_check}")
 
     config_manifest_packet_path = EXTERNAL / "config_manifest_packet.json"
     config_manifest_packet_md_path = EXTERNAL / "config_manifest_packet.md"
@@ -6342,6 +6390,7 @@ def main():
         "external_execution_readiness_self_test_visible",
         "maniskill_fidelity_metadata_probe_visible",
         "runner_backend_probe_visible",
+        "external_config_materialization_self_test_visible",
         "config_manifest_packet_visible",
         "config_manifest_packet_self_test_visible",
         "rollout_evidence_packet_visible",

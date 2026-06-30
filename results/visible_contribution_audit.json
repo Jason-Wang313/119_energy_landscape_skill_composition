@@ -42,7 +42,7 @@
       "passed": true
     },
     {
-      "detail": "files=370, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=373, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -77,7 +77,7 @@
       "passed": true
     },
     {
-      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=370, archive_written=False",
+      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=373, archive_written=False",
       "name": "external_operator_release_bundle_visible",
       "passed": true
     },
@@ -234,6 +234,11 @@
     {
       "detail": "ready='QUALIFIED_FOR_RENDER_BACKED_PILOT', fail_closed='DO_NOT_COLLECT_RENDER_MACHINE', fallback_rejected=True, real_untouched=True",
       "name": "render_machine_qualification_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "temporary_plan_ready=True, confirmed_write_fixture_ready=True, real_outputs_untouched=True",
+      "name": "external_config_materialization_self_test_visible",
       "passed": true
     },
     {

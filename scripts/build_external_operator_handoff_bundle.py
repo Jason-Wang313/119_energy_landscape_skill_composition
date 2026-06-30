@@ -200,6 +200,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "materialize_external_method_configs.py",
         SCRIPTS / "self_test_external_method_config_materialization.py",
         SCRIPTS / "materialize_external_configs.py",
+        SCRIPTS / "self_test_external_config_materialization.py",
         SCRIPTS / "build_external_baseline_contract.py",
         SCRIPTS / "self_test_external_baseline_contract.py",
         SCRIPTS / "audit_external_backend_contract.py",
@@ -321,6 +322,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_config_template_audit.md",
         RESULTS / "external_config_materialization_plan.json",
         RESULTS / "external_config_materialization_plan.md",
+        RESULTS / "external_config_materialization_self_test.json",
+        RESULTS / "external_config_materialization_self_test.md",
         RESULTS / "external_fidelity_acceptance_audit.json",
         RESULTS / "external_fidelity_acceptance_audit.md",
         RESULTS / "external_baseline_contract_audit.json",
@@ -427,6 +430,10 @@ def build_payload() -> dict[str, Any]:
     config_manifest_self_test = require_payload(
         RESULTS / "external_config_manifest_packet_self_test.json",
         "external_config_manifest_packet_self_test_v1",
+    )
+    config_materialization_self_test = require_payload(
+        RESULTS / "external_config_materialization_self_test.json",
+        "external_config_materialization_self_test_v1",
     )
     rollout_evidence = require_payload(RESULTS / "external_rollout_evidence_audit.json", "external_rollout_evidence_audit_v1")
     rollout_evidence_self_test = require_payload(
@@ -969,6 +976,36 @@ def build_payload() -> dict[str, Any]:
         check.get("name"): check.get("passed")
         for check in config_manifest_self_test.get("checks", []) or []
     }
+    config_materialization_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in config_materialization_self_test.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "config_materialization_self_test_included",
+        config_materialization_self_test.get("passed") is True
+        and config_materialization_self_test.get("not_external_evidence") is True
+        and config_materialization_self_test.get("strict_config_evidence_ready") is False
+        and config_materialization_self_test.get("temporary_plan_ready") is True
+        and config_materialization_self_test.get("confirmed_write_fixture_ready") is True
+        and config_materialization_self_test.get("write_without_confirm_rejected") is True
+        and config_materialization_self_test.get("placeholder_platform_write_rejected") is True
+        and config_materialization_self_test.get("template_token_write_rejected") is True
+        and config_materialization_self_test.get("missing_task_binding_rejected") is True
+        and config_materialization_self_test.get("overwrite_without_force_rejected") is True
+        and config_materialization_self_test.get("real_outputs_untouched") is True
+        and config_materialization_self_checks.get("temporary_config_materialization_plan_ready_but_non_evidence") is True
+        and config_materialization_self_checks.get("confirmed_temp_write_materializes_schema_valid_configs") is True
+        and config_materialization_self_checks.get("real_config_materialization_outputs_untouched") is True
+        and "results/external_config_materialization_self_test.json" in paths
+        and "results/external_config_materialization_self_test.md" in paths
+        and "scripts/self_test_external_config_materialization.py" in paths,
+        (
+            f"temporary_plan_ready={config_materialization_self_test.get('temporary_plan_ready')!r}, "
+            f"confirmed_write_fixture_ready={config_materialization_self_test.get('confirmed_write_fixture_ready')!r}, "
+            f"real_outputs_untouched={config_materialization_self_test.get('real_outputs_untouched')!r}"
+        ),
+    )
     add_check(
         checks,
         "config_manifest_packet_included",
@@ -1607,6 +1644,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_backend_integration_packet_self_test.json",
             "results/maniskill_backend_readiness_audit.json",
             "results/external_config_manifest_audit.json",
+            "results/external_config_materialization_self_test.json",
             "results/external_config_manifest_packet_self_test.json",
             "results/external_rollout_evidence_audit.json",
             "results/external_rollout_evidence_packet_self_test.json",

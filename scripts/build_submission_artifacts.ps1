@@ -137,6 +137,7 @@ try {
         Invoke-Native python scripts\validate_external_configs.py
         Invoke-Native python scripts\self_test_external_config_evidence.py
         Invoke-Native python scripts\materialize_external_configs.py
+        Invoke-Native python scripts\self_test_external_config_materialization.py
         Invoke-Native python scripts\build_external_config_manifest_packet.py
         Invoke-Native python scripts\self_test_external_config_manifest_packet.py
         Invoke-Native python scripts\build_external_baseline_contract.py

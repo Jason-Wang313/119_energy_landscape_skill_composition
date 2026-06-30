@@ -127,6 +127,9 @@ jobs:
       - name: Plan external config materialization
         run: python scripts/materialize_external_configs.py
 
+      - name: Self-test external config materialization
+        run: python scripts/self_test_external_config_materialization.py
+
       - name: Build external config manifest packet
         run: python scripts/build_external_config_manifest_packet.py
 

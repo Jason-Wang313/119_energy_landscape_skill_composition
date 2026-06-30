@@ -168,6 +168,10 @@ def main() -> int:
         if method_config_materialization_self_test_path.exists()
         else {}
     )
+    config_materialization_self_test_path = RESULTS / "external_config_materialization_self_test.json"
+    config_materialization_self_test = (
+        read_json(config_materialization_self_test_path) if config_materialization_self_test_path.exists() else {}
+    )
     presentation_path = RESULTS / "presentation_quality_audit.json"
     presentation = read_json(presentation_path) if presentation_path.exists() else {}
     figure_readability_path = RESULTS / "figure_readability_audit.json"
@@ -379,6 +383,9 @@ def main() -> int:
             ROOT / "scripts" / "self_test_external_method_config_materialization.py",
             RESULTS / "external_method_config_materialization_self_test.json",
             RESULTS / "external_method_config_materialization_self_test.md",
+            ROOT / "scripts" / "self_test_external_config_materialization.py",
+            RESULTS / "external_config_materialization_self_test.json",
+            RESULTS / "external_config_materialization_self_test.md",
             ROOT / "scripts" / "self_test_external_config_manifest_packet.py",
             RESULTS / "external_config_manifest_packet_self_test.json",
             RESULTS / "external_config_manifest_packet_self_test.md",
@@ -462,6 +469,9 @@ def main() -> int:
             "scripts/self_test_external_method_config_materialization.py",
             "results/external_method_config_materialization_self_test.json",
             "results/external_method_config_materialization_self_test.md",
+            "scripts/self_test_external_config_materialization.py",
+            "results/external_config_materialization_self_test.json",
+            "results/external_config_materialization_self_test.md",
             "scripts/self_test_external_config_manifest_packet.py",
             "results/external_config_manifest_packet_self_test.json",
             "results/external_config_manifest_packet_self_test.md",
@@ -847,6 +857,10 @@ def main() -> int:
         check.get("name"): check.get("passed")
         for check in config_manifest_self_test.get("checks", []) or []
     }
+    config_materialization_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in config_materialization_self_test.get("checks", []) or []
+    }
     rollout_evidence_checks = {check.get("name"): check.get("passed") for check in rollout_evidence.get("checks", [])}
     rollout_self_checks = {check.get("name"): check.get("passed") for check in rollout_evidence_self_test.get("checks", [])}
     ablation_self_checks = {
@@ -922,6 +936,21 @@ def main() -> int:
         and fidelity_provenance_self_test.get("real_outputs_untouched") is True
         and fidelity_provenance_self_checks.get("temporary_fidelity_provenance_packet_ready_but_non_evidence") is True
         and fidelity_provenance_self_checks.get("real_fidelity_provenance_outputs_untouched") is True
+        and config_materialization_self_test.get("passed") is True
+        and config_materialization_self_test.get("version") == "external_config_materialization_self_test_v1"
+        and config_materialization_self_test.get("not_external_evidence") is True
+        and config_materialization_self_test.get("strict_config_evidence_ready") is False
+        and config_materialization_self_test.get("temporary_plan_ready") is True
+        and config_materialization_self_test.get("confirmed_write_fixture_ready") is True
+        and config_materialization_self_test.get("write_without_confirm_rejected") is True
+        and config_materialization_self_test.get("placeholder_platform_write_rejected") is True
+        and config_materialization_self_test.get("template_token_write_rejected") is True
+        and config_materialization_self_test.get("missing_task_binding_rejected") is True
+        and config_materialization_self_test.get("overwrite_without_force_rejected") is True
+        and config_materialization_self_test.get("real_outputs_untouched") is True
+        and config_materialization_self_checks.get("temporary_config_materialization_plan_ready_but_non_evidence") is True
+        and config_materialization_self_checks.get("confirmed_temp_write_materializes_schema_valid_configs") is True
+        and config_materialization_self_checks.get("real_config_materialization_outputs_untouched") is True
         and config_manifest.get("passed") is True
         and config_manifest.get("not_external_evidence") is True
         and config_manifest.get("config_manifest_packet_ready") is True
@@ -1097,6 +1126,9 @@ def main() -> int:
                 RESULTS / "external_fidelity_provenance_packet_self_test.md",
                 RESULTS / "external_config_manifest_audit.json",
                 RESULTS / "external_config_manifest_audit.md",
+                ROOT / "scripts" / "self_test_external_config_materialization.py",
+                RESULTS / "external_config_materialization_self_test.json",
+                RESULTS / "external_config_materialization_self_test.md",
                 RESULTS / "external_config_manifest_packet_self_test.json",
                 RESULTS / "external_config_manifest_packet_self_test.md",
                 RESULTS / "external_rollout_evidence_audit.json",
@@ -1199,6 +1231,9 @@ def main() -> int:
             "results/external_fidelity_provenance_packet_self_test.md",
             "results/external_config_manifest_audit.json",
             "results/external_config_manifest_audit.md",
+            "scripts/self_test_external_config_materialization.py",
+            "results/external_config_materialization_self_test.json",
+            "results/external_config_materialization_self_test.md",
             "results/external_config_manifest_packet_self_test.json",
             "results/external_config_manifest_packet_self_test.md",
             "results/external_rollout_evidence_audit.json",
