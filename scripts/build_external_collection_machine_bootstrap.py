@@ -203,6 +203,14 @@ def build_payload() -> tuple[dict[str, Any], str]:
         )),
         "bootstrap command file covers platform, task, env, metadata, render, pilot, and qualification probes",
     )
+    add_check(
+        checks,
+        "bootstrap_requires_explicit_confirmation",
+        "ConfirmBootstrapOnly" in command_text
+        and "Refusing to bootstrap silently" in command_text
+        and "This script does not collect official evidence" in command_text,
+        "bootstrap command file requires an explicit bootstrap-only confirmation before running probes",
+    )
     forbidden_present = [fragment for fragment in PROBE_ONLY_FORBIDDEN_FRAGMENTS if fragment in command_text]
     add_check(
         checks,

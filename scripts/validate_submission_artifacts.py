@@ -168,6 +168,7 @@ def main():
         "scripts\\build_external_collection_job_packet.py",
         "scripts\\self_test_external_collection_job_packet.py",
         "scripts\\build_external_collection_machine_bootstrap.py",
+        "scripts\\self_test_external_collection_machine_bootstrap.py",
         "scripts\\build_external_operator_handoff_bundle.py",
         "scripts\\build_external_operator_release_bundle.py",
         "scripts\\self_test_external_adapter_scaffold_guard.py",
@@ -271,6 +272,7 @@ def main():
         "python scripts/build_external_collection_job_packet.py",
         "python scripts/self_test_external_collection_job_packet.py",
         "python scripts/build_external_collection_machine_bootstrap.py",
+        "python scripts/self_test_external_collection_machine_bootstrap.py",
         "python scripts/build_external_operator_handoff_bundle.py",
         "python scripts/build_external_operator_release_bundle.py",
         "python scripts/audit_external_release_package.py",
@@ -4893,6 +4895,7 @@ def main():
         "source_collection_job_still_no_go",
         "local_machine_not_promoted",
         "bootstrap_commands_cover_machine_render_and_liveness",
+        "bootstrap_requires_explicit_confirmation",
         "bootstrap_script_is_probe_only",
         "install_guidance_mentions_core_optional_stack",
         "no_real_outputs_written",
@@ -4918,6 +4921,54 @@ def main():
     for forbidden in ("real_collection_runner.py", "materialize_fidelity_acceptance.py", "build_external_manifest.py --write"):
         if forbidden in bootstrap_command_text:
             fail(f"external collection machine bootstrap command file must not include collection/evidence command: {forbidden}")
+
+    bootstrap_self_test_path = RESULTS / "external_collection_machine_bootstrap_self_test.json"
+    bootstrap_self_test_md_path = RESULTS / "external_collection_machine_bootstrap_self_test.md"
+    for path in (
+        ROOT / "scripts" / "self_test_external_collection_machine_bootstrap.py",
+        bootstrap_self_test_path,
+        bootstrap_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external collection machine bootstrap self-test artifact: {path}")
+    bootstrap_self_test = json.loads(bootstrap_self_test_path.read_text(encoding="utf-8"))
+    if bootstrap_self_test.get("version") != "external_collection_machine_bootstrap_self_test_v1":
+        fail("external collection machine bootstrap self-test version mismatch")
+    if bootstrap_self_test.get("passed") is not True:
+        fail("external collection machine bootstrap self-test did not pass")
+    if bootstrap_self_test.get("not_external_evidence") is not True:
+        fail("external collection machine bootstrap self-test must declare that it is not evidence")
+    if bootstrap_self_test.get("strict_external_evidence_ready") is not False:
+        fail("external collection machine bootstrap self-test must keep strict external evidence false")
+    for field in (
+        "temporary_fixture_ready",
+        "missing_source_rejected",
+        "source_evidence_drift_rejected",
+        "collection_job_go_state_rejected",
+        "local_machine_promotion_rejected",
+        "unsafe_command_rejected",
+        "missing_confirmation_rejected",
+        "install_guidance_drift_rejected",
+        "premature_outputs_rejected",
+        "real_outputs_untouched",
+    ):
+        if bootstrap_self_test.get(field) is not True:
+            fail(f"external collection machine bootstrap self-test field must be true: {field}")
+    bootstrap_self_checks = {check.get("name"): check.get("passed") for check in bootstrap_self_test.get("checks", [])}
+    for required_check in (
+        "temporary_fixture_builds_current_bootstrap_packet",
+        "missing_source_report_rejected",
+        "source_non_evidence_drift_rejected",
+        "collection_job_go_state_rejected",
+        "local_machine_promotion_rejected",
+        "unsafe_command_rejected",
+        "missing_confirmation_rejected",
+        "install_guidance_drift_rejected",
+        "premature_outputs_rejected",
+        "real_repository_bootstrap_outputs_untouched",
+    ):
+        if bootstrap_self_checks.get(required_check) is not True:
+            fail(f"external collection machine bootstrap self-test missing passing check: {required_check}")
 
     operator_release_path = RESULTS / "external_operator_release_bundle_plan.json"
     operator_release_md_path = RESULTS / "external_operator_release_bundle_plan.md"
@@ -5586,7 +5637,9 @@ def main():
         "operator_packet_no_go_visible",
         "collection_readiness_tracked_reference_route_visible",
         "external_collection_job_packet_visible",
+        "external_collection_job_packet_self_test_visible",
         "external_collection_machine_bootstrap_visible",
+        "external_collection_machine_bootstrap_self_test_visible",
         "external_operator_release_bundle_visible",
         "analysis_plan_visible",
         "platform_onboarding_visible",

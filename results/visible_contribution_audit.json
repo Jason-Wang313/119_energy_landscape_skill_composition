@@ -67,6 +67,11 @@
       "passed": true
     },
     {
+      "detail": "fixture_ready=True, missing_source_rejected=True, job_go_rejected=True, local_promotion_rejected=True, unsafe_command_rejected=True",
+      "name": "external_collection_machine_bootstrap_self_test_visible",
+      "passed": true
+    },
+    {
       "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=333, archive_written=False",
       "name": "external_operator_release_bundle_visible",
       "passed": true

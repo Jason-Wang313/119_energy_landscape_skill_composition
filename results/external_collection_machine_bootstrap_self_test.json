@@ -1,0 +1,68 @@
+{
+  "checks": [
+    {
+      "detail": "status=0, state='READY_TO_BOOTSTRAP_EXTERNAL_MACHINE', steps=7",
+      "name": "temporary_fixture_builds_current_bootstrap_packet",
+      "passed": true
+    },
+    {
+      "detail": "status=1, error='missing results/external_platform_onboarding_audit.json'",
+      "name": "missing_source_report_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, source_check=False",
+      "name": "source_non_evidence_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, job_check=False",
+      "name": "collection_job_go_state_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, local_machine_check=False",
+      "name": "local_machine_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, probe_only_check=False",
+      "name": "unsafe_command_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, confirmation_check=False",
+      "name": "missing_confirmation_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, install_check=False",
+      "name": "install_guidance_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, no_outputs_check=False",
+      "name": "premature_outputs_rejected",
+      "passed": true
+    },
+    {
+      "detail": "before={'external_validation/collection_machine_bootstrap.json': '5bfaa5dfa12c2693810b0e4546611cdc61bd69861d45d32613e47c4f18f72d85', 'external_validation/collection_machine_bootstrap.md': '89c65b68674f88b4b66392d0d9c96ce5af97cebbe673b558cd8339f9ff7d279e', 'external_validation/collection_machine_bootstrap.ps1': 'b50b58b3a30ae2f73bbd647e844d026e75e1750a0b4e43b55ccc6f99c48e166d', 'results/external_collection_machine_bootstrap_audit.json': 'bef70cc831c395f5fca3b1f2d6838362abde77ec09b1687c27c01d445338eab6', 'results/external_collection_machine_bootstrap_audit.md': '3ae8ef1988c040bdd2ff165d79d8d9b92174317e080c1b9d7ca0db0ea985565a'}, after={'external_validation/collection_machine_bootstrap.json': '5bfaa5dfa12c2693810b0e4546611cdc61bd69861d45d32613e47c4f18f72d85', 'external_validation/collection_machine_bootstrap.md': '89c65b68674f88b4b66392d0d9c96ce5af97cebbe673b558cd8339f9ff7d279e', 'external_validation/collection_machine_bootstrap.ps1': 'b50b58b3a30ae2f73bbd647e844d026e75e1750a0b4e43b55ccc6f99c48e166d', 'results/external_collection_machine_bootstrap_audit.json': 'bef70cc831c395f5fca3b1f2d6838362abde77ec09b1687c27c01d445338eab6', 'results/external_collection_machine_bootstrap_audit.md': '3ae8ef1988c040bdd2ff165d79d8d9b92174317e080c1b9d7ca0db0ea985565a'}",
+      "name": "real_repository_bootstrap_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "collection_job_go_state_rejected": true,
+  "install_guidance_drift_rejected": true,
+  "local_machine_promotion_rejected": true,
+  "missing_confirmation_rejected": true,
+  "missing_source_rejected": true,
+  "not_external_evidence": true,
+  "passed": true,
+  "premature_outputs_rejected": true,
+  "real_outputs_untouched": true,
+  "source_evidence_drift_rejected": true,
+  "strict_external_evidence_ready": false,
+  "temporary_fixture_ready": true,
+  "unsafe_command_rejected": true,
+  "version": "external_collection_machine_bootstrap_self_test_v1"
+}

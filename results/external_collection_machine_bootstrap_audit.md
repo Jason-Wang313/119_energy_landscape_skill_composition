@@ -52,6 +52,7 @@ This packet prepares the independent collection machine before fidelity acceptan
 - `pass` `source_collection_job_still_no_go`: job_state='DO_NOT_START_COLLECTION_YET', strict=False
 - `pass` `local_machine_not_promoted`: qualified=False, state='DO_NOT_COLLECT_RENDER_MACHINE'
 - `pass` `bootstrap_commands_cover_machine_render_and_liveness`: bootstrap command file covers platform, task, env, metadata, render, pilot, and qualification probes
+- `pass` `bootstrap_requires_explicit_confirmation`: bootstrap command file requires an explicit bootstrap-only confirmation before running probes
 - `pass` `bootstrap_script_is_probe_only`: forbidden_fragments=[]
 - `pass` `install_guidance_mentions_core_optional_stack`: optional installer covers local package deps, ManiSkill/SAPIEN dependency path, Torch, and video encoding
 - `pass` `no_real_outputs_written`: manifest/log/video evidence files remain absent before official collection

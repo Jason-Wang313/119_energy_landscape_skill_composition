@@ -186,6 +186,11 @@
       "evidence": ["scripts/build_external_collection_machine_bootstrap.py", "external_validation/collection_machine_bootstrap.json", "external_validation/collection_machine_bootstrap.md", "external_validation/collection_machine_bootstrap.ps1", "results/external_collection_machine_bootstrap_audit.json", "results/external_collection_machine_bootstrap_audit.md", "results/external_collection_job_packet_audit.json", "results/maniskill_render_machine_qualification.json"]
     },
     {
+      "name": "external_collection_machine_bootstrap_self_test_claim",
+      "claim": "The repository provides a non-evidence External collection machine bootstrap self-test that rebuilds the bootstrap packet in temporary copied workspaces and rejects missing source reports, source evidence drift, premature collection-job go-state, local render-machine promotion, unsafe evidence-writing commands, missing explicit confirmation, install-guidance drift, and premature manifest/log/video outputs without touching the real bootstrap outputs.",
+      "evidence": ["scripts/self_test_external_collection_machine_bootstrap.py", "results/external_collection_machine_bootstrap_self_test.json", "results/external_collection_machine_bootstrap_self_test.md", "scripts/build_external_collection_machine_bootstrap.py", "external_validation/collection_machine_bootstrap.json", "results/external_collection_machine_bootstrap_audit.json"]
+    },
+    {
       "name": "external_operator_release_bundle_claim",
       "claim": "The repository provides a non-evidence External operator release bundle plan that recomputes the handoff file hashes, excludes official logs, videos, checkpoints, local dry-run artifacts, placeholder media, and real manifests, and can create a deterministic transfer archive only through an explicit write-archive command.",
       "evidence": ["scripts/build_external_operator_release_bundle.py", "external_validation/operator_release_bundle_manifest.csv", "external_validation/operator_release_bundle_README.md", "results/external_operator_release_bundle_plan.json", "results/external_operator_release_bundle_plan.md", "results/external_operator_handoff_bundle.json", "results/external_operator_handoff_bundle.md"]

@@ -64,6 +64,11 @@
       "passed": true
     },
     {
+      "detail": "bootstrap command file requires an explicit bootstrap-only confirmation before running probes",
+      "name": "bootstrap_requires_explicit_confirmation",
+      "passed": true
+    },
+    {
       "detail": "forbidden_fragments=[]",
       "name": "bootstrap_script_is_probe_only",
       "passed": true

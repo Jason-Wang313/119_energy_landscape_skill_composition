@@ -39,6 +39,8 @@ External collection job packet self-test: `results/external_collection_job_packe
 
 External collection machine bootstrap: `external_validation/collection_machine_bootstrap.md` now gives an independent GPU/Vulkan operator a guarded probe-only command path through platform, task, environment, fidelity metadata, render, pilot, and render-machine qualification checks before fidelity acceptance or official collection.
 
+External collection machine bootstrap self-test: `results/external_collection_machine_bootstrap_self_test.md` mutation-tests the guarded probe-only bootstrap and rejects missing sources, source evidence drift, premature collection go-state, local-machine promotion, unsafe evidence-writing commands, missing confirmation, install-guidance drift, and premature manifest/log/video outputs without touching the real bootstrap outputs.
+
 External operator release bundle: `results/external_operator_release_bundle_plan.md` now recomputes the handoff hash manifest and prepares a deterministic transfer-archive command while leaving archive writing disabled by default and excluding real evidence paths.
 
 Fidelity materializer checkout guard: `results/fidelity_acceptance_materialization_plan.md` now records the current checkout commit and a cache-independent baseline-library hash, and the write path rejects stale commits, mismatched hashes, and dirty checkouts before `external_validation/fidelity_acceptance.json` can be created.
