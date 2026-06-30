@@ -88,6 +88,6 @@
   "source_collection_job": "results/external_collection_job_packet_audit.json",
   "source_handoff_bundle": "results/external_operator_handoff_bundle.json",
   "strict_external_evidence_ready": false,
-  "total_payload_bytes": 5272216,
+  "total_payload_bytes": 5276907,
   "version": "external_operator_release_bundle_plan_v1"
 }

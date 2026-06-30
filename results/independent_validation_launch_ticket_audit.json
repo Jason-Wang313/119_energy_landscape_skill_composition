@@ -21,7 +21,7 @@
       "passed": true
     },
     {
-      "detail": "operator_files_exist=8/8",
+      "detail": "operator_files_exist=9/9",
       "name": "command_files_exist_for_windows_and_linux",
       "passed": true
     },
@@ -33,6 +33,11 @@
     {
       "detail": "qualification_state='DO_NOT_COLLECT_RENDER_MACHINE'",
       "name": "render_machine_no_go_visible",
+      "passed": true
+    },
+    {
+      "detail": "ready='QUALIFIED_FOR_RENDER_BACKED_PILOT', fail='DO_NOT_COLLECT_RENDER_MACHINE', host_state='RENDER_HOST_NOT_QUALIFIED'",
+      "name": "render_state_vocabulary_is_consistent",
       "passed": true
     },
     {
@@ -53,6 +58,11 @@
     {
       "detail": "Windows and Linux bootstrap/collection commands are present",
       "name": "issue_body_contains_copy_paste_commands",
+      "passed": true
+    },
+    {
+      "detail": "render_host_brief_passed=True",
+      "name": "render_host_brief_attached_to_issue",
       "passed": true
     },
     {
@@ -78,7 +88,8 @@
     "external_validation/collection_job_commands.ps1",
     "external_validation/collection_job_commands.sh",
     "docs/external_evidence_closure_brief.md",
-    "external_validation/operator_release_bundle_README.md"
+    "external_validation/operator_release_bundle_README.md",
+    "external_validation/render_host_qualification_brief.md"
   ],
   "passed": true,
   "readiness": {
@@ -94,7 +105,9 @@
     "execution_readiness": "results/external_execution_readiness_audit.json",
     "machine_bootstrap": "results/external_collection_machine_bootstrap_audit.json",
     "readiness_gap": "results/submission_readiness_gap_audit.json",
-    "render_machine": "results/maniskill_render_machine_qualification.json"
+    "render_host_brief": "results/maniskill_render_host_qualification_brief_audit.json",
+    "render_machine": "results/maniskill_render_machine_qualification.json",
+    "render_machine_self_test": "results/maniskill_render_machine_qualification_self_test.json"
   },
   "strict_blockers": [
     "Independent real-robot or accepted high-fidelity external validation evidence",

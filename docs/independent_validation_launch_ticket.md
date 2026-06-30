@@ -17,6 +17,7 @@ Paper 119 independent external validation run: qualify machine, collect official
 
 - `DO_NOT_START_COLLECTION_YET`: official collection is blocked until render/liveness, fidelity, backend, run-id, alias, and operator metadata gates pass.
 - `DO_NOT_COLLECT_RENDER_MACHINE`: the current local machine is not accepted for official evidence collection.
+- `QUALIFIED_FOR_RENDER_BACKED_PILOT`: the render-machine qualification ready state required before fidelity acceptance and official collection.
 - Haonan is not required for proof, and the launch route is not Haonan-dependent.
 - Do not pitch Haonan as responsible for supplying the missing proof.
 - Do not mention Yilun as the validation motive; this ticket is for independent evidence collection.
@@ -26,6 +27,7 @@ Paper 119 independent external validation run: qualify machine, collect official
 - [ ] Independent operator or lab is identified.
 - [ ] Accepted real robot or accepted high-fidelity simulator machine is available.
 - [ ] Operator has the release bundle README and manifest, plus this launch ticket.
+- [ ] Operator has `external_validation/render_host_qualification_brief.md` and understands the current render host state is `RENDER_HOST_NOT_QUALIFIED`.
 - [ ] Operator agrees that placeholder fields, diagnostic fallback videos, local dry-run records, and template configs cannot count as evidence.
 - [ ] Operator understands that `external_validation/manifest.json` must not exist until postcollection strict gates are ready.
 
@@ -39,6 +41,7 @@ Paper 119 independent external validation run: qualify machine, collect official
 - `external_validation/collection_job_commands.sh`
 - `docs/external_evidence_closure_brief.md`
 - `external_validation/operator_release_bundle_README.md`
+- `external_validation/render_host_qualification_brief.md`
 
 ## Current Strict Blockers
 
@@ -65,7 +68,7 @@ Linux:
 
 Phase 1 acceptance:
 
-- [ ] `results/maniskill_render_machine_qualification.json` reports `qualification_state=READY_FOR_EXTERNAL_COLLECTION` on the independent machine.
+- [ ] `results/maniskill_render_machine_qualification.json` reports `qualification_state=QUALIFIED_FOR_RENDER_BACKED_PILOT` and `render_machine_qualified=true` on the independent machine, replacing the current `DO_NOT_COLLECT_RENDER_MACHINE` state.
 - [ ] Render-backed MP4 export passes for the primary ManiSkill/SAPIEN task families with no diagnostic fallback promotion.
 - [ ] Pilot runtime liveness passes with official-video and JSONL write guards intact.
 

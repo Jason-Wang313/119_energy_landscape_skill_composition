@@ -568,6 +568,8 @@ def main() -> int:
         and launch_ticket_checks.get("collection_guardrails_visible") is True
         and launch_ticket_checks.get("haonan_not_required") is True
         and launch_ticket_checks.get("issue_body_contains_copy_paste_commands") is True
+        and launch_ticket_checks.get("render_state_vocabulary_is_consistent") is True
+        and launch_ticket_checks.get("render_host_brief_attached_to_issue") is True
         and launch_ticket_checks.get("operator_copy_matches_docs_copy") is True
         and (ROOT / "scripts" / "build_independent_validation_launch_ticket.py").exists()
         and (ROOT / "docs" / "independent_validation_launch_ticket.md").exists()
@@ -580,6 +582,9 @@ def main() -> int:
         and "Independent validation launch ticket" in texts["outreach"]
         and "DO_NOT_START_COLLECTION_YET" in texts["launch_ticket"]
         and "DO_NOT_COLLECT_RENDER_MACHINE" in texts["launch_ticket"]
+        and "QUALIFIED_FOR_RENDER_BACKED_PILOT" in texts["launch_ticket"]
+        and "READY_FOR_EXTERNAL_COLLECTION" not in texts["launch_ticket"]
+        and "external_validation/render_host_qualification_brief.md" in texts["launch_ticket"]
         and "Haonan is not required for proof" in texts["launch_ticket"],
         (
             f"launch_state={launch_ticket.get('launch_state')!r}, "

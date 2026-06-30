@@ -5372,10 +5372,12 @@ def main():
         "command_files_exist_for_windows_and_linux",
         "collection_guardrails_visible",
         "render_machine_no_go_visible",
+        "render_state_vocabulary_is_consistent",
         "haonan_not_required",
         "acceptance_criteria_close_all_blockers",
         "source_checks_reused",
         "issue_body_contains_copy_paste_commands",
+        "render_host_brief_attached_to_issue",
         "operator_copy_matches_docs_copy",
         "no_real_manifest_written",
     ):
@@ -5388,6 +5390,8 @@ def main():
         "Not evidence: `true`.",
         "DO_NOT_START_COLLECTION_YET",
         "DO_NOT_COLLECT_RENDER_MACHINE",
+        "QUALIFIED_FOR_RENDER_BACKED_PILOT",
+        "external_validation/render_host_qualification_brief.md",
         "Haonan is not required for proof",
         "Do not pitch Haonan as responsible for supplying the missing proof.",
         "python scripts\\audit_external_evidence.py --strict",
@@ -5398,6 +5402,8 @@ def main():
     ):
         if fragment not in launch_text:
             fail(f"independent validation launch ticket missing fragment: {fragment}")
+    if "READY_FOR_EXTERNAL_COLLECTION" in launch_text:
+        fail("independent validation launch ticket contains stale render qualification state READY_FOR_EXTERNAL_COLLECTION")
 
     handoff_bundle_path = RESULTS / "external_operator_handoff_bundle.json"
     if not handoff_bundle_path.exists():

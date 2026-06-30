@@ -283,11 +283,11 @@
       "sha256": "A442CD743D708F1792AD8E15AE9682513415608259AD4E6A0B5462254C559569"
     },
     {
-      "bytes": 8219,
+      "bytes": 8681,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/independent_validation_launch_ticket.md",
-      "sha256": "ABE7F32CBFEB5D4C48C1838008BB51C74F4F7C6349AC09B6108C47AB1EE1C7D1"
+      "sha256": "C1CA49DEAA8C57A5E087ED87AF7121838644A9303029908E01DB0E258195AFF1"
     },
     {
       "bytes": 21796,
@@ -1158,11 +1158,11 @@
       "sha256": "7E26F05053D899036351634D075F4F1B3CE8AC7464A581C27EEC3C1CD65DBCDA"
     },
     {
-      "bytes": 8219,
+      "bytes": 8681,
       "category": "operator_facing_input",
       "exists": true,
       "path": "external_validation/independent_validation_launch_ticket.md",
-      "sha256": "ABE7F32CBFEB5D4C48C1838008BB51C74F4F7C6349AC09B6108C47AB1EE1C7D1"
+      "sha256": "C1CA49DEAA8C57A5E087ED87AF7121838644A9303029908E01DB0E258195AFF1"
     },
     {
       "bytes": 7270,
@@ -2397,18 +2397,18 @@
       "sha256": "572A7B01E90B901065142A09BBE2416E0F1E190463D0F96CA208E8536BA5078E"
     },
     {
-      "bytes": 4670,
+      "bytes": 5295,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/independent_validation_launch_ticket_audit.json",
-      "sha256": "BC8AFAEB693AD1D1B2C3A520053615BB43139D9C8D3EA13F053303FC9866E6BA"
+      "sha256": "95999959B6085927AA615A3C683B4AF9B868DC7BE5A86C44E8800AD18C5398E2"
     },
     {
-      "bytes": 2413,
+      "bytes": 2663,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/independent_validation_launch_ticket_audit.md",
-      "sha256": "6E5B8C07E9A73CDBBF50589791820C361CCB285CAB30AC76B6E1CAEC7F41E7B9"
+      "sha256": "DFD87BD4490CC368EB37D4D5A7F2F255FDC0BF784EC3956D8EC2018F2E78BFE3"
     },
     {
       "bytes": 8182,
@@ -2810,11 +2810,11 @@
       "sha256": "08C85AA06AA704107282CAF145AD000F5C76EC307B1B85B86341C529706A9575"
     },
     {
-      "bytes": 23060,
+      "bytes": 25952,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_independent_validation_launch_ticket.py",
-      "sha256": "74ACB83D792272DA6FA1BD3DA8EAE73F86B250B4FC65663C082B15EE3F05F1D1"
+      "sha256": "6FE23B8F382CEF0CA428EC27D030AFC5D0887BB88484042D2E681639DE1A3B0F"
     },
     {
       "bytes": 20727,

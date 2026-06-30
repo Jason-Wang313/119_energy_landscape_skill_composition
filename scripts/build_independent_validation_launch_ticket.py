@@ -32,6 +32,8 @@ SOURCE_ARTIFACTS = {
     "machine_bootstrap": "results/external_collection_machine_bootstrap_audit.json",
     "execution_readiness": "results/external_execution_readiness_audit.json",
     "render_machine": "results/maniskill_render_machine_qualification.json",
+    "render_machine_self_test": "results/maniskill_render_machine_qualification_self_test.json",
+    "render_host_brief": "results/maniskill_render_host_qualification_brief_audit.json",
 }
 
 OPERATOR_FILES = [
@@ -43,6 +45,7 @@ OPERATOR_FILES = [
     "external_validation/collection_job_commands.sh",
     "docs/external_evidence_closure_brief.md",
     "external_validation/operator_release_bundle_README.md",
+    "external_validation/render_host_qualification_brief.md",
 ]
 
 
@@ -89,6 +92,8 @@ def build_ticket(
     machine_bootstrap: dict[str, Any],
     execution: dict[str, Any],
     render_machine: dict[str, Any],
+    render_machine_self_test: dict[str, Any],
+    render_host_brief: dict[str, Any],
 ) -> str:
     satisfied = int(gap.get("satisfied_requirements", 0) or 0)
     missing = int(gap.get("missing_requirements", 0) or 0)
@@ -96,6 +101,8 @@ def build_ticket(
     blocker_count = int(gap.get("blocking_missing_requirements", 0) or 0)
     closure_items = closure.get("closure_items", []) or []
     job_steps = collection_job.get("job_steps", []) or []
+    render_ready_state = str(render_machine_self_test.get("synthetic_ready_state", "QUALIFIED_FOR_RENDER_BACKED_PILOT"))
+    render_fail_state = str(render_machine.get("qualification_state", "DO_NOT_COLLECT_RENDER_MACHINE"))
 
     bootstrap_windows = r".\external_validation\collection_machine_bootstrap.ps1 -ConfirmBootstrapOnly -InstallManiSkill -AcceptedBackend <accepted_backend> -ShaderPack <accepted_shader_pack>"
     bootstrap_linux = "./external_validation/collection_machine_bootstrap.sh --confirm-bootstrap-only --install-maniskill --accepted-backend <accepted_backend> --shader-pack <accepted_shader_pack>"
@@ -122,6 +129,7 @@ def build_ticket(
         "",
         "- `DO_NOT_START_COLLECTION_YET`: official collection is blocked until render/liveness, fidelity, backend, run-id, alias, and operator metadata gates pass.",
         "- `DO_NOT_COLLECT_RENDER_MACHINE`: the current local machine is not accepted for official evidence collection.",
+        f"- `{render_ready_state}`: the render-machine qualification ready state required before fidelity acceptance and official collection.",
         "- Haonan is not required for proof, and the launch route is not Haonan-dependent.",
         "- Do not pitch Haonan as responsible for supplying the missing proof.",
         "- Do not mention Yilun as the validation motive; this ticket is for independent evidence collection.",
@@ -131,6 +139,7 @@ def build_ticket(
         "- [ ] Independent operator or lab is identified.",
         "- [ ] Accepted real robot or accepted high-fidelity simulator machine is available.",
         "- [ ] Operator has the release bundle README and manifest, plus this launch ticket.",
+        f"- [ ] Operator has `external_validation/render_host_qualification_brief.md` and understands the current render host state is `{render_host_brief.get('host_qualification_state')}`.",
         "- [ ] Operator agrees that placeholder fields, diagnostic fallback videos, local dry-run records, and template configs cannot count as evidence.",
         "- [ ] Operator understands that `external_validation/manifest.json` must not exist until postcollection strict gates are ready.",
         "",
@@ -170,7 +179,7 @@ def build_ticket(
             "",
             "Phase 1 acceptance:",
             "",
-            "- [ ] `results/maniskill_render_machine_qualification.json` reports `qualification_state=READY_FOR_EXTERNAL_COLLECTION` on the independent machine.",
+            f"- [ ] `results/maniskill_render_machine_qualification.json` reports `qualification_state={render_ready_state}` and `render_machine_qualified=true` on the independent machine, replacing the current `{render_fail_state}` state.",
             "- [ ] Render-backed MP4 export passes for the primary ManiSkill/SAPIEN task families with no diagnostic fallback promotion.",
             "- [ ] Pilot runtime liveness passes with official-video and JSONL write guards intact.",
             "",
@@ -240,8 +249,25 @@ def main() -> int:
     machine_bootstrap = read_json(ROOT / SOURCE_ARTIFACTS["machine_bootstrap"], "external_collection_machine_bootstrap_audit_v1")
     execution = read_json(ROOT / SOURCE_ARTIFACTS["execution_readiness"], "external_execution_readiness_audit_v1")
     render_machine = read_json(ROOT / SOURCE_ARTIFACTS["render_machine"], "maniskill_render_machine_qualification_v1")
+    render_machine_self_test = read_json(
+        ROOT / SOURCE_ARTIFACTS["render_machine_self_test"],
+        "maniskill_render_machine_qualification_self_test_v1",
+    )
+    render_host_brief = read_json(
+        ROOT / SOURCE_ARTIFACTS["render_host_brief"],
+        "maniskill_render_host_qualification_brief_v1",
+    )
 
-    ticket = build_ticket(gap, closure, collection_job, machine_bootstrap, execution, render_machine)
+    ticket = build_ticket(
+        gap,
+        closure,
+        collection_job,
+        machine_bootstrap,
+        execution,
+        render_machine,
+        render_machine_self_test,
+        render_host_brief,
+    )
     OUT_DOC.write_text(ticket + "\n", encoding="utf-8")
     OUT_EXTERNAL.write_text(ticket + "\n", encoding="utf-8")
 
@@ -251,8 +277,11 @@ def main() -> int:
     bootstrap_checks = named_checks(machine_bootstrap)
     closure_checks = named_checks(closure)
     execution_checks = named_checks(execution)
+    render_machine_self_checks = named_checks(render_machine_self_test)
+    render_host_checks = named_checks(render_host_brief)
     operator_files_exist = [item for item in OPERATOR_FILES if (ROOT / item).exists()]
     body = OUT_DOC.read_text(encoding="utf-8")
+    render_ready_state = str(render_machine_self_test.get("synthetic_ready_state", ""))
 
     checks: list[dict[str, Any]] = []
     add_check(checks, "ticket_is_non_evidence", "Not evidence: `true`." in body, "ticket declares non-evidence")
@@ -330,6 +359,22 @@ def main() -> int:
     )
     add_check(
         checks,
+        "render_state_vocabulary_is_consistent",
+        render_ready_state == "QUALIFIED_FOR_RENDER_BACKED_PILOT"
+        and render_machine_self_test.get("synthetic_fail_closed_state") == "DO_NOT_COLLECT_RENDER_MACHINE"
+        and render_machine_self_checks.get("synthetic_ready_machine_qualifies") is True
+        and render_host_brief.get("collection_state") == "DO_NOT_COLLECT_RENDER_MACHINE"
+        and render_host_checks.get("current_render_host_fails_closed") is True
+        and "qualification_state=QUALIFIED_FOR_RENDER_BACKED_PILOT" in body
+        and "READY_FOR_EXTERNAL_COLLECTION" not in body,
+        (
+            f"ready={render_machine_self_test.get('synthetic_ready_state')!r}, "
+            f"fail={render_machine_self_test.get('synthetic_fail_closed_state')!r}, "
+            f"host_state={render_host_brief.get('host_qualification_state')!r}"
+        ),
+    )
+    add_check(
+        checks,
         "haonan_not_required",
         closure.get("haonan_dependency") is False
         and "Haonan is not required for proof" in body
@@ -368,6 +413,14 @@ def main() -> int:
         and "<accepted_run_id>" in body
         and "<independent_operator_or_lab>" in body,
         "Windows and Linux bootstrap/collection commands are present",
+    )
+    add_check(
+        checks,
+        "render_host_brief_attached_to_issue",
+        "external_validation/render_host_qualification_brief.md" in body
+        and render_host_brief.get("passed") is True
+        and render_host_brief.get("haonan_dependency") is False,
+        f"render_host_brief_passed={render_host_brief.get('passed')!r}",
     )
     add_check(
         checks,
