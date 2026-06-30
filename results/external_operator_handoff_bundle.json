@@ -3,9 +3,9 @@
   "category_counts": {
     "baseline_spec": 12,
     "config_template": 4,
-    "generated_non_evidence_report": 106,
+    "generated_non_evidence_report": 108,
     "method_config_candidate": 11,
-    "operator_command_source": 47,
+    "operator_command_source": 48,
     "operator_facing_input": 86,
     "prepared_config_input": 4,
     "reference_adapter": 60,
@@ -59,7 +59,7 @@
       "passed": true
     },
     {
-      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 106, 'method_config_candidate': 11, 'operator_command_source': 47, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 108, 'method_config_candidate': 11, 'operator_command_source': 48, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "handoff_has_task_config_and_baseline_assets",
       "passed": true
     },
@@ -189,7 +189,7 @@
       "passed": true
     },
     {
-      "detail": "hashed_files=339",
+      "detail": "hashed_files=342",
       "name": "file_hashes_are_recorded",
       "passed": true
     }
@@ -204,14 +204,14 @@
     "placeholder_not_external_evidence"
   ],
   "handoff_bundle_ready": true,
-  "included_file_count": 339,
+  "included_file_count": 342,
   "included_files": [
     {
-      "bytes": 32388,
+      "bytes": 32500,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "26443BF753FD81EBF4594A8C19A3A4AC67DB3B426275293F2A03A21634C99789"
+      "sha256": "6219CE3DF9743D6A668C539F2A820A874EA15FF7DB2DC416E6296CDD77B0CB56"
     },
     {
       "bytes": 14198,
@@ -228,11 +228,11 @@
       "sha256": "7EDFEE348BE624FC1BA8818A88D526CC53B3632F3D31A1500A19F9C5A868FC2E"
     },
     {
-      "bytes": 23236,
+      "bytes": 23429,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/reproducibility_checklist.md",
-      "sha256": "D85E3D8F47E576D1B727D49BF1DA9CE9D0EEFAB4859EEEDC9C4E2EDE641FCC96"
+      "sha256": "C7F9963F0BC171409CF7B8E3B1AF51EB6DF3E9B05EC84493FBFF699710A7FB56"
     },
     {
       "bytes": 22626,
@@ -1887,6 +1887,20 @@
       "sha256": "8A318351DC5AA27C081AB65BE30E28AA60115DA7B416076CEE74B5892754C313"
     },
     {
+      "bytes": 3571,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_method_implementation_packet_self_test.json",
+      "sha256": "8211193F5044C041B9464E60EA9691268A25B501BF26010E33B1B5EAD93AD189"
+    },
+    {
+      "bytes": 1906,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_method_implementation_packet_self_test.md",
+      "sha256": "292524B8333A2755E2314324E3201A64F8AA2FA584E5EEFFF37262B2442C064D"
+    },
+    {
       "bytes": 62046,
       "category": "generated_non_evidence_report",
       "exists": true,
@@ -2426,11 +2440,11 @@
       "sha256": "C166221116A089779E0111AE13BDB75CC1625849486A1C116AF8534D264334AF"
     },
     {
-      "bytes": 77697,
+      "bytes": 79891,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "125CA19750106D0B8E3186796AD254BBB66F64E93967801F6D2F84D641C232D4"
+      "sha256": "864F76CD5937B4488690257696AEA585B77FEBA61FFBF4C6E3AAC11158DC30DF"
     },
     {
       "bytes": 71405,
@@ -2557,6 +2571,13 @@
       "exists": true,
       "path": "scripts/self_test_external_manifest_builder.py",
       "sha256": "BC85BA411F1250745D6691CF8C388D94CFB65084C1FBC9405E845C58FBFF7366"
+    },
+    {
+      "bytes": 20450,
+      "category": "operator_command_source",
+      "exists": true,
+      "path": "scripts/self_test_external_method_implementation_packet.py",
+      "sha256": "6033FA1D708803B9ED1C8CE5E579A3CFB822B8BED4B137A27AE72C38A4C8C4A1"
     },
     {
       "bytes": 31757,
@@ -3238,6 +3259,7 @@
     "results/maniskill_render_resource_sweep.json",
     "results/maniskill_pilot_runtime_liveness_audit.json",
     "results/external_method_implementation_audit.json",
+    "results/external_method_implementation_packet_self_test.json",
     "results/external_precollection_freeze_receipt_audit.json",
     "results/external_postcollection_evidence_seal_audit.json",
     "results/external_postcollection_seal_consistency_audit.json",

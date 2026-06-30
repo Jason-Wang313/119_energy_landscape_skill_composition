@@ -1810,6 +1810,9 @@ def main():
         RESULTS / "external_method_implementation_audit.json",
         RESULTS / "external_method_implementation_audit.md",
         ROOT / "scripts" / "build_external_method_implementation_packet.py",
+        ROOT / "scripts" / "self_test_external_method_implementation_packet.py",
+        RESULTS / "external_method_implementation_packet_self_test.json",
+        RESULTS / "external_method_implementation_packet_self_test.md",
     ]
     for path in method_packet_paths:
         if not path.exists():
@@ -1991,6 +1994,46 @@ def main():
     ):
         if method_audit_checks.get(required_check) is not True:
             fail(f"external method implementation audit missing passing check: {required_check}")
+    method_self_test = json.loads((RESULTS / "external_method_implementation_packet_self_test.json").read_text(encoding="utf-8"))
+    if method_self_test.get("version") != "external_method_implementation_packet_self_test_v1":
+        fail("external method implementation packet self-test version mismatch")
+    if method_self_test.get("passed") is not True:
+        fail("external method implementation packet self-test did not pass")
+    if method_self_test.get("not_external_evidence") is not True:
+        fail("external method implementation packet self-test must declare that it is not evidence")
+    if method_self_test.get("strict_adapter_evidence_ready") is not False:
+        fail("external method implementation packet self-test must not claim strict adapter evidence")
+    for required_flag in (
+        "temporary_packet_ready",
+        "missing_work_order_rejected",
+        "oracle_work_order_rejected",
+        "reference_adapter_shortcut_rejected",
+        "checkpoint_hash_shortcut_rejected",
+        "fairness_binding_drift_rejected",
+        "fixture_contract_drift_rejected",
+        "cutover_shortcut_rejected",
+        "strict_command_drift_rejected",
+        "adapter_evidence_promotion_rejected",
+        "real_outputs_untouched",
+    ):
+        if method_self_test.get(required_flag) is not True:
+            fail(f"external method implementation packet self-test missing true flag: {required_flag}")
+    method_self_checks = {check.get("name"): check.get("passed") for check in method_self_test.get("checks", []) or []}
+    for required_check in (
+        "temporary_method_packet_ready_but_non_evidence",
+        "missing_work_order_rejected",
+        "oracle_work_order_rejected",
+        "reference_adapter_shortcut_rejected",
+        "checkpoint_hash_shortcut_rejected",
+        "fairness_binding_drift_rejected",
+        "fixture_contract_drift_rejected",
+        "cutover_shortcut_rejected",
+        "strict_command_drift_rejected",
+        "adapter_evidence_promotion_rejected",
+        "real_method_packet_outputs_untouched",
+    ):
+        if method_self_checks.get(required_check) is not True:
+            fail(f"external method implementation packet self-test missing passing check: {required_check}")
 
     method_config_paths = [
         EXTERNAL / "method_config_materialization_plan.json",

@@ -124,6 +124,10 @@ def main() -> int:
     operator_release = read_json(operator_release_path) if operator_release_path.exists() else {}
     method_implementation_path = RESULTS / "external_method_implementation_audit.json"
     method_implementation = read_json(method_implementation_path) if method_implementation_path.exists() else {}
+    method_implementation_self_test_path = RESULTS / "external_method_implementation_packet_self_test.json"
+    method_implementation_self_test = (
+        read_json(method_implementation_self_test_path) if method_implementation_self_test_path.exists() else {}
+    )
     method_config_materialization_path = RESULTS / "external_method_config_materialization_audit.json"
     method_config_materialization = (
         read_json(method_config_materialization_path) if method_config_materialization_path.exists() else {}
@@ -326,6 +330,9 @@ def main() -> int:
             ROOT / "scripts" / "self_test_external_execution_readiness.py",
             RESULTS / "external_execution_readiness_self_test.json",
             RESULTS / "external_execution_readiness_self_test.md",
+            ROOT / "scripts" / "self_test_external_method_implementation_packet.py",
+            RESULTS / "external_method_implementation_packet_self_test.json",
+            RESULTS / "external_method_implementation_packet_self_test.md",
             ROOT / "scripts" / "self_test_external_evidence_pipeline.py",
             RESULTS / "external_rollout_validator_self_test.json",
             RESULTS / "external_rollout_validator_self_test.md",
@@ -385,6 +392,9 @@ def main() -> int:
             "scripts/self_test_external_execution_readiness.py",
             "results/external_execution_readiness_self_test.json",
             "results/external_execution_readiness_self_test.md",
+            "scripts/self_test_external_method_implementation_packet.py",
+            "results/external_method_implementation_packet_self_test.json",
+            "results/external_method_implementation_packet_self_test.md",
             "scripts/self_test_external_rollout_validator.py",
             "results/external_rollout_validator_self_test.json",
             "results/external_rollout_validator_self_test.md",
@@ -692,6 +702,7 @@ def main() -> int:
     config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", [])}
     rollout_evidence_checks = {check.get("name"): check.get("passed") for check in rollout_evidence.get("checks", [])}
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", [])}
+    method_self_checks = {check.get("name"): check.get("passed") for check in method_implementation_self_test.get("checks", [])}
     method_config_checks = {
         check.get("name"): check.get("passed")
         for check in method_config_materialization.get("checks", []) or []
@@ -741,6 +752,18 @@ def main() -> int:
         and method_implementation.get("not_external_evidence") is True
         and method_implementation.get("strict_adapter_evidence_ready") is False
         and method_checks.get("work_orders_cover_all_missing_non_oracle_methods") is True
+        and method_implementation_self_test.get("passed") is True
+        and method_implementation_self_test.get("version") == "external_method_implementation_packet_self_test_v1"
+        and method_implementation_self_test.get("not_external_evidence") is True
+        and method_implementation_self_test.get("temporary_packet_ready") is True
+        and method_implementation_self_test.get("missing_work_order_rejected") is True
+        and method_implementation_self_test.get("oracle_work_order_rejected") is True
+        and method_implementation_self_test.get("reference_adapter_shortcut_rejected") is True
+        and method_implementation_self_test.get("checkpoint_hash_shortcut_rejected") is True
+        and method_implementation_self_test.get("fairness_binding_drift_rejected") is True
+        and method_implementation_self_test.get("real_outputs_untouched") is True
+        and method_self_checks.get("temporary_method_packet_ready_but_non_evidence") is True
+        and method_self_checks.get("adapter_evidence_promotion_rejected") is True
         and method_config_materialization.get("passed") is True
         and method_config_materialization.get("version") == "external_method_config_materialization_audit_v1"
         and method_config_materialization.get("not_external_evidence") is True
@@ -806,6 +829,7 @@ def main() -> int:
                 ROOT / "scripts" / "build_external_config_manifest_packet.py",
                 ROOT / "scripts" / "build_external_rollout_evidence_packet.py",
                 ROOT / "scripts" / "build_external_method_implementation_packet.py",
+                ROOT / "scripts" / "self_test_external_method_implementation_packet.py",
                 ROOT / "scripts" / "materialize_external_method_configs.py",
                 EXTERNAL / "backend_integration_packet.md",
                 EXTERNAL / "backend_integration_work_orders.csv",
@@ -831,6 +855,8 @@ def main() -> int:
                 RESULTS / "external_rollout_evidence_audit.md",
                 RESULTS / "external_method_implementation_audit.json",
                 RESULTS / "external_method_implementation_audit.md",
+                RESULTS / "external_method_implementation_packet_self_test.json",
+                RESULTS / "external_method_implementation_packet_self_test.md",
                 RESULTS / "external_method_config_materialization_audit.json",
                 RESULTS / "external_method_config_materialization_audit.md",
                 EXTERNAL / "collection_job_packet.json",
@@ -883,6 +909,7 @@ def main() -> int:
             "scripts/build_external_config_manifest_packet.py",
             "scripts/build_external_rollout_evidence_packet.py",
             "scripts/build_external_method_implementation_packet.py",
+            "scripts/self_test_external_method_implementation_packet.py",
             "scripts/materialize_external_method_configs.py",
             "external_validation/backend_integration_packet.md",
             "external_validation/backend_integration_work_orders.csv",
@@ -908,6 +935,8 @@ def main() -> int:
             "results/external_rollout_evidence_audit.md",
             "results/external_method_implementation_audit.json",
             "results/external_method_implementation_audit.md",
+            "results/external_method_implementation_packet_self_test.json",
+            "results/external_method_implementation_packet_self_test.md",
             "results/external_method_config_materialization_audit.json",
             "results/external_method_config_materialization_audit.md",
             "external_validation/collection_job_packet.json",

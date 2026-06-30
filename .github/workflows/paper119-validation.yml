@@ -106,6 +106,9 @@ jobs:
       - name: Build external method implementation packet
         run: python scripts/build_external_method_implementation_packet.py
 
+      - name: Self-test external method implementation packet
+        run: python scripts/self_test_external_method_implementation_packet.py
+
       - name: Materialize external method config candidates
         run: python scripts/materialize_external_method_configs.py
 

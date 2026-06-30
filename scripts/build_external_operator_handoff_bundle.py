@@ -190,6 +190,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_maniskill_render_machine_qualification.py",
         SCRIPTS / "build_external_collection_job_packet.py",
         SCRIPTS / "build_external_method_implementation_packet.py",
+        SCRIPTS / "self_test_external_method_implementation_packet.py",
         SCRIPTS / "materialize_external_method_configs.py",
         SCRIPTS / "materialize_external_configs.py",
         SCRIPTS / "audit_external_backend_contract.py",
@@ -270,6 +271,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_collection_job_packet_audit.md",
         RESULTS / "external_method_implementation_audit.json",
         RESULTS / "external_method_implementation_audit.md",
+        RESULTS / "external_method_implementation_packet_self_test.json",
+        RESULTS / "external_method_implementation_packet_self_test.md",
         RESULTS / "external_method_config_materialization_audit.json",
         RESULTS / "external_method_config_materialization_audit.md",
         RESULTS / "independent_validation_route_audit.json",
@@ -401,6 +404,10 @@ def build_payload() -> dict[str, Any]:
         "external_postcollection_seal_consistency_audit_v1",
     )
     method_implementation = require_payload(RESULTS / "external_method_implementation_audit.json", "external_method_implementation_audit_v1")
+    method_implementation_self_test = require_payload(
+        RESULTS / "external_method_implementation_packet_self_test.json",
+        "external_method_implementation_packet_self_test_v1",
+    )
     method_config_materialization = require_payload(
         RESULTS / "external_method_config_materialization_audit.json",
         "external_method_config_materialization_audit_v1",
@@ -794,6 +801,10 @@ def build_payload() -> dict[str, Any]:
         ),
     )
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", []) or []}
+    method_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in method_implementation_self_test.get("checks", []) or []
+    }
     config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", []) or []}
     add_check(
         checks,
@@ -1122,6 +1133,21 @@ def build_payload() -> dict[str, Any]:
         and method_checks.get("reference_adapter_hashes_recorded") is True
         and method_checks.get("reference_adapters_marked_non_evidence") is True
         and method_checks.get("reference_manifest_stubs_not_strict_ready") is True
+        and method_implementation_self_test.get("passed") is True
+        and method_implementation_self_test.get("not_external_evidence") is True
+        and method_implementation_self_test.get("temporary_packet_ready") is True
+        and method_implementation_self_test.get("missing_work_order_rejected") is True
+        and method_implementation_self_test.get("oracle_work_order_rejected") is True
+        and method_implementation_self_test.get("reference_adapter_shortcut_rejected") is True
+        and method_implementation_self_test.get("checkpoint_hash_shortcut_rejected") is True
+        and method_implementation_self_test.get("fairness_binding_drift_rejected") is True
+        and method_implementation_self_test.get("fixture_contract_drift_rejected") is True
+        and method_implementation_self_test.get("cutover_shortcut_rejected") is True
+        and method_implementation_self_test.get("strict_command_drift_rejected") is True
+        and method_implementation_self_test.get("adapter_evidence_promotion_rejected") is True
+        and method_implementation_self_test.get("real_outputs_untouched") is True
+        and method_self_checks.get("temporary_method_packet_ready_but_non_evidence") is True
+        and method_self_checks.get("adapter_evidence_promotion_rejected") is True
         and "external_validation/method_implementation_packet.json" in paths
         and "external_validation/method_implementation_packet.md" in paths
         and "external_validation/method_implementation_work_orders.csv" in paths
@@ -1132,7 +1158,10 @@ def build_payload() -> dict[str, Any]:
         and "external_validation/adapter_acceptance_fixtures.md" in paths
         and "external_validation/adapter_acceptance_fixtures.csv" in paths
         and "results/external_method_implementation_audit.json" in paths
-        and "scripts/build_external_method_implementation_packet.py" in paths,
+        and "results/external_method_implementation_packet_self_test.json" in paths
+        and "results/external_method_implementation_packet_self_test.md" in paths
+        and "scripts/build_external_method_implementation_packet.py" in paths
+        and "scripts/self_test_external_method_implementation_packet.py" in paths,
         (
             f"method_implementation_packet_ready={method_implementation.get('method_implementation_packet_ready')!r}, "
             f"strict_adapter_evidence_ready={method_implementation.get('strict_adapter_evidence_ready')!r}"
@@ -1263,6 +1292,7 @@ def build_payload() -> dict[str, Any]:
             "results/maniskill_render_resource_sweep.json",
             "results/maniskill_pilot_runtime_liveness_audit.json",
             "results/external_method_implementation_audit.json",
+            "results/external_method_implementation_packet_self_test.json",
             "results/external_precollection_freeze_receipt_audit.json",
             "results/external_postcollection_evidence_seal_audit.json",
             "results/external_postcollection_seal_consistency_audit.json",
