@@ -1,0 +1,74 @@
+{
+  "checks": [
+    {
+      "detail": "status=0, files=333, archive=False",
+      "name": "temporary_fixture_builds_current_release_plan",
+      "passed": true
+    },
+    {
+      "detail": "status=0, entries=335, sha='FC97EA0F69B98EF7B12E4BF7B100CE6A20FBE1AC5C45BBDA0E602A02BCC643E9'",
+      "name": "explicit_archive_fixture_writes_deterministic_transfer_zip",
+      "passed": true
+    },
+    {
+      "detail": "status=1, error='missing results/external_operator_handoff_bundle.json'",
+      "name": "missing_handoff_source_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, source_check=False",
+      "name": "handoff_no_go_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, hash_check=False",
+      "name": "missing_file_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, hash_check=False",
+      "name": "hash_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, forbidden_check=False",
+      "name": "forbidden_evidence_path_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, manifest_check=False",
+      "name": "premature_manifest_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, job_check=False",
+      "name": "collection_job_go_state_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, job_check=False",
+      "name": "collection_job_omission_rejected",
+      "passed": true
+    },
+    {
+      "detail": "before={'results/external_operator_release_bundle_plan.json': 'ad6cbc65223bdcbce379056f9664d65a02120003d052a8450a7410e5a6b10d76', 'results/external_operator_release_bundle_plan.md': 'af110bdeec851c1b30fa677c18064d86aa3152ca80f040ba0c0ee9d79e7b9e15', 'external_validation/operator_release_bundle_manifest.csv': 'a92f5ce7c4b9eb813d0cef97e02262b3b589626b66b031f3802c2c8daafb3e8d', 'external_validation/operator_release_bundle_README.md': 'fae3bbe6afe36a7421ed3082b49155c30115480d611444a59de06d93f7c33d4f', 'results/paper119_external_operator_release_bundle.zip': None}, after={'results/external_operator_release_bundle_plan.json': 'ad6cbc65223bdcbce379056f9664d65a02120003d052a8450a7410e5a6b10d76', 'results/external_operator_release_bundle_plan.md': 'af110bdeec851c1b30fa677c18064d86aa3152ca80f040ba0c0ee9d79e7b9e15', 'external_validation/operator_release_bundle_manifest.csv': 'a92f5ce7c4b9eb813d0cef97e02262b3b589626b66b031f3802c2c8daafb3e8d', 'external_validation/operator_release_bundle_README.md': 'fae3bbe6afe36a7421ed3082b49155c30115480d611444a59de06d93f7c33d4f', 'results/paper119_external_operator_release_bundle.zip': None}",
+      "name": "real_repository_release_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "collection_job_go_state_rejected": true,
+  "collection_job_omission_rejected": true,
+  "explicit_archive_fixture_ready": true,
+  "forbidden_evidence_path_rejected": true,
+  "handoff_no_go_drift_rejected": true,
+  "hash_drift_rejected": true,
+  "missing_file_rejected": true,
+  "missing_handoff_rejected": true,
+  "not_external_evidence": true,
+  "passed": true,
+  "premature_manifest_rejected": true,
+  "real_outputs_untouched": true,
+  "strict_external_evidence_ready": false,
+  "temporary_fixture_ready": true,
+  "version": "external_operator_release_bundle_self_test_v1"
+}

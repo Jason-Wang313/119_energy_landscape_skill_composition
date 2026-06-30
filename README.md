@@ -194,6 +194,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External operator handoff bundle: `results/external_operator_handoff_bundle.md`
 - External operator handoff bundle self-test: `results/external_operator_handoff_bundle_self_test.md`
 - External operator release bundle: `results/external_operator_release_bundle_plan.md`
+- External operator release bundle self-test: `results/external_operator_release_bundle_self_test.md`
 - External operator release manifest: `external_validation/operator_release_bundle_manifest.csv`
 - External evidence contract: `external_validation/manifest_template.json`
 - External rollout log schema: `external_validation/log_schema_v1.json`

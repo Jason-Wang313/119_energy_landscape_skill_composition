@@ -172,6 +172,7 @@ def main():
         "scripts\\build_external_operator_handoff_bundle.py",
         "scripts\\self_test_external_operator_handoff_bundle.py",
         "scripts\\build_external_operator_release_bundle.py",
+        "scripts\\self_test_external_operator_release_bundle.py",
         "scripts\\self_test_external_adapter_scaffold_guard.py",
         "scripts\\self_test_external_backend_contract.py",
         "scripts\\self_test_external_collection_preflight.py",
@@ -277,6 +278,7 @@ def main():
         "python scripts/build_external_operator_handoff_bundle.py",
         "python scripts/self_test_external_operator_handoff_bundle.py",
         "python scripts/build_external_operator_release_bundle.py",
+        "python scripts/self_test_external_operator_release_bundle.py",
         "python scripts/audit_external_release_package.py",
         "python scripts/self_test_external_manifest_builder.py",
         "python scripts/self_test_external_release_package.py",
@@ -5074,6 +5076,56 @@ def main():
         if fragment not in release_readme_text:
             fail(f"external operator release README missing fragment: {fragment}")
 
+    operator_release_self_test_path = RESULTS / "external_operator_release_bundle_self_test.json"
+    operator_release_self_test_md_path = RESULTS / "external_operator_release_bundle_self_test.md"
+    for path in (
+        ROOT / "scripts" / "self_test_external_operator_release_bundle.py",
+        operator_release_self_test_path,
+        operator_release_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external operator release bundle self-test artifact: {path}")
+    operator_release_self_test = json.loads(operator_release_self_test_path.read_text(encoding="utf-8"))
+    if operator_release_self_test.get("version") != "external_operator_release_bundle_self_test_v1":
+        fail("external operator release bundle self-test version mismatch")
+    if operator_release_self_test.get("passed") is not True:
+        fail("external operator release bundle self-test did not pass")
+    if operator_release_self_test.get("not_external_evidence") is not True:
+        fail("external operator release bundle self-test must declare that it is not evidence")
+    if operator_release_self_test.get("strict_external_evidence_ready") is not False:
+        fail("external operator release bundle self-test must keep strict external evidence false")
+    for field in (
+        "temporary_fixture_ready",
+        "explicit_archive_fixture_ready",
+        "missing_handoff_rejected",
+        "handoff_no_go_drift_rejected",
+        "missing_file_rejected",
+        "hash_drift_rejected",
+        "forbidden_evidence_path_rejected",
+        "premature_manifest_rejected",
+        "collection_job_go_state_rejected",
+        "collection_job_omission_rejected",
+        "real_outputs_untouched",
+    ):
+        if operator_release_self_test.get(field) is not True:
+            fail(f"external operator release bundle self-test field must be true: {field}")
+    operator_release_self_checks = {check.get("name"): check.get("passed") for check in operator_release_self_test.get("checks", [])}
+    for required_check in (
+        "temporary_fixture_builds_current_release_plan",
+        "explicit_archive_fixture_writes_deterministic_transfer_zip",
+        "missing_handoff_source_rejected",
+        "handoff_no_go_drift_rejected",
+        "missing_file_rejected",
+        "hash_drift_rejected",
+        "forbidden_evidence_path_rejected",
+        "premature_manifest_rejected",
+        "collection_job_go_state_rejected",
+        "collection_job_omission_rejected",
+        "real_repository_release_outputs_untouched",
+    ):
+        if operator_release_self_checks.get(required_check) is not True:
+            fail(f"external operator release bundle self-test missing passing check: {required_check}")
+
     config_materialization_path = RESULTS / "external_config_materialization_plan.json"
     if not config_materialization_path.exists():
         fail("missing results/external_config_materialization_plan.json; run scripts/materialize_external_configs.py")
@@ -5695,6 +5747,7 @@ def main():
         "external_collection_machine_bootstrap_visible",
         "external_collection_machine_bootstrap_self_test_visible",
         "external_operator_release_bundle_visible",
+        "external_operator_release_bundle_self_test_visible",
         "analysis_plan_visible",
         "platform_onboarding_visible",
         "fidelity_provenance_packet_visible",

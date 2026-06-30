@@ -45,6 +45,8 @@ External operator handoff bundle self-test: `results/external_operator_handoff_b
 
 External operator release bundle: `results/external_operator_release_bundle_plan.md` now recomputes the handoff hash manifest and prepares a deterministic transfer-archive command while leaving archive writing disabled by default and excluding real evidence paths.
 
+External operator release bundle self-test: `results/external_operator_release_bundle_self_test.md` verifies the default no-archive plan, explicit transfer-archive path, missing handoff source rejection, handoff no-go/hash drift rejection, forbidden evidence path rejection, premature manifest rejection, collection-job drift/omission rejection, and real-output untouched guard without touching the real release outputs.
+
 Fidelity materializer checkout guard: `results/fidelity_acceptance_materialization_plan.md` now records the current checkout commit and a cache-independent baseline-library hash, and the write path rejects stale commits, mismatched hashes, and dirty checkouts before `external_validation/fidelity_acceptance.json` can be created.
 
 fidelity materializer checkout self-test: `results/fidelity_acceptance_materializer_self_test.md` verifies the guarded temporary write path, stale commit rejection, mismatched skill-hash rejection, dirty checkout rejection, cache-file exclusion, and real acceptance untouched guard while remaining non-evidence.

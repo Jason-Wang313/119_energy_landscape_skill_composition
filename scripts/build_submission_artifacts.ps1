@@ -172,6 +172,7 @@ try {
         Invoke-Native python scripts\build_external_operator_handoff_bundle.py
         Invoke-Native python scripts\self_test_external_operator_handoff_bundle.py
         Invoke-Native python scripts\build_external_operator_release_bundle.py
+        Invoke-Native python scripts\self_test_external_operator_release_bundle.py
         Invoke-Native python scripts\self_test_external_adapter_scaffold_guard.py
         Invoke-Native python scripts\self_test_external_backend_contract.py
         Invoke-Native python scripts\self_test_external_collection_preflight.py
