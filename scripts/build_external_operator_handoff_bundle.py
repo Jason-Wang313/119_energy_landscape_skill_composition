@@ -79,6 +79,7 @@ def build_file_manifest() -> dict[str, str]:
         DOCS / "haonan_yilun_outreach_package.md",
         DOCS / "external_evidence_closure_brief.md",
         DOCS / "independent_validation_launch_ticket.md",
+        DOCS / "maniskill_render_host_qualification_brief.md",
         EXTERNAL / "README.md",
         EXTERNAL / "independent_validation_launch_ticket.md",
         EXTERNAL / "collection_runbook.md",
@@ -129,6 +130,7 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "pilot_smoke_work_orders.csv",
         EXTERNAL / "render_resource_sweep_work_orders.csv",
         EXTERNAL / "render_machine_qualification_packet.md",
+        EXTERNAL / "render_host_qualification_brief.md",
         EXTERNAL / "collection_job_packet.json",
         EXTERNAL / "collection_job_packet.md",
         EXTERNAL / "collection_job_commands.ps1",
@@ -202,6 +204,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "audit_maniskill_render_resource_sweep.py",
         SCRIPTS / "audit_maniskill_pilot_runtime_liveness.py",
         SCRIPTS / "build_maniskill_render_machine_qualification.py",
+        SCRIPTS / "build_maniskill_render_host_qualification_brief.py",
         SCRIPTS / "build_external_collection_job_packet.py",
         SCRIPTS / "build_external_method_implementation_packet.py",
         SCRIPTS / "self_test_external_method_implementation_packet.py",
@@ -306,6 +309,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "maniskill_pilot_runtime_liveness_audit.md",
         RESULTS / "maniskill_render_machine_qualification.json",
         RESULTS / "maniskill_render_machine_qualification.md",
+        RESULTS / "maniskill_render_host_qualification_brief_audit.json",
+        RESULTS / "maniskill_render_host_qualification_brief_audit.md",
         RESULTS / "external_collection_job_packet_audit.json",
         RESULTS / "external_collection_job_packet_audit.md",
         RESULTS / "external_method_implementation_audit.json",
@@ -512,6 +517,10 @@ def build_payload() -> dict[str, Any]:
     render_resource_sweep = require_payload(RESULTS / "maniskill_render_resource_sweep.json", "maniskill_render_resource_sweep_v1")
     pilot_runtime = require_payload(RESULTS / "maniskill_pilot_runtime_liveness_audit.json", "maniskill_pilot_runtime_liveness_audit_v1")
     render_machine = require_payload(RESULTS / "maniskill_render_machine_qualification.json", "maniskill_render_machine_qualification_v1")
+    render_host_brief = require_payload(
+        RESULTS / "maniskill_render_host_qualification_brief_audit.json",
+        "maniskill_render_host_qualification_brief_v1",
+    )
     collection_job = require_payload(RESULTS / "external_collection_job_packet_audit.json", "external_collection_job_packet_audit_v1")
     machine_bootstrap = require_payload(
         RESULTS / "external_collection_machine_bootstrap_audit.json",
@@ -1463,6 +1472,31 @@ def build_payload() -> dict[str, Any]:
             f"blocking={len(render_machine.get('blocking_missing', []) or [])}"
         ),
     )
+    render_host_checks = {check.get("name"): check.get("passed") for check in render_host_brief.get("checks", []) or []}
+    add_check(
+        checks,
+        "maniskill_render_host_qualification_brief_included",
+        render_host_brief.get("passed") is True
+        and render_host_brief.get("not_external_evidence") is True
+        and render_host_brief.get("strict_external_evidence_ready") is False
+        and render_host_brief.get("host_qualification_state") == "RENDER_HOST_NOT_QUALIFIED"
+        and render_host_brief.get("collection_state") == "DO_NOT_COLLECT_RENDER_MACHINE"
+        and render_host_brief.get("haonan_dependency") is False
+        and "vulkan_descriptor_pool_exhaustion" in (render_host_brief.get("renderer_failure_classes", []) or [])
+        and "initial_render_start" in (render_host_brief.get("renderer_failure_stages", []) or [])
+        and render_host_checks.get("current_render_host_fails_closed") is True
+        and render_host_checks.get("operator_commands_cover_probe_sweep_preflight_liveness_qualification") is True
+        and "scripts/build_maniskill_render_host_qualification_brief.py" in paths
+        and "docs/maniskill_render_host_qualification_brief.md" in paths
+        and "external_validation/render_host_qualification_brief.md" in paths
+        and "results/maniskill_render_host_qualification_brief_audit.json" in paths
+        and "results/maniskill_render_host_qualification_brief_audit.md" in paths,
+        (
+            f"host_state={render_host_brief.get('host_qualification_state')!r}, "
+            f"collection_state={render_host_brief.get('collection_state')!r}, "
+            f"classes={render_host_brief.get('renderer_failure_classes')!r}"
+        ),
+    )
     add_check(
         checks,
         "method_implementation_packet_included",
@@ -1726,6 +1760,7 @@ def build_payload() -> dict[str, Any]:
             "results/maniskill_render_video_preflight_audit.json",
             "results/maniskill_render_resource_sweep.json",
             "results/maniskill_pilot_runtime_liveness_audit.json",
+            "results/maniskill_render_host_qualification_brief_audit.json",
             "results/external_method_implementation_audit.json",
             "results/external_method_implementation_packet_self_test.json",
             "results/external_baseline_contract_audit.json",

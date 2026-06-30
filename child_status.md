@@ -53,6 +53,8 @@ External collection machine bootstrap self-test: `results/external_collection_ma
 
 Independent validation launch ticket: `docs/independent_validation_launch_ticket.md`, `external_validation/independent_validation_launch_ticket.md`, and `results/independent_validation_launch_ticket_audit.md` now turn the four strict external blockers into a copyable operator issue body with `DO_NOT_START_COLLECTION_YET`, `DO_NOT_COLLECT_RENDER_MACHINE`, guarded Windows/Linux commands, close criteria, and a non-Haonan proof route while remaining non-evidence.
 
+ManiSkill render host qualification brief: `docs/maniskill_render_host_qualification_brief.md`, `external_validation/render_host_qualification_brief.md`, and `results/maniskill_render_host_qualification_brief_audit.md` keep the current render host at `DO_NOT_COLLECT_RENDER_MACHINE`, preserve the Vulkan descriptor-pool `ErrorOutOfPoolMemory` failure, and specify the independent GPU/Vulkan host requirements, command spine, and close criteria before official collection.
+
 External operator handoff bundle self-test: `results/external_operator_handoff_bundle_self_test.md` mutation-tests the no-evidence handoff and rejects missing source packets, no-go drift, acquisition blocker drift, premature strict-evidence readiness, missing included files, forbidden evidence paths, premature real manifests, and omitted collection-job/bootstrap packets without touching the real handoff outputs.
 
 External operator release bundle: `results/external_operator_release_bundle_plan.md` now recomputes the handoff hash manifest and prepares a deterministic transfer-archive command while leaving archive writing disabled by default and excluding real evidence paths.

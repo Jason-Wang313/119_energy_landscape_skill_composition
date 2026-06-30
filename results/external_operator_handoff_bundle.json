@@ -3,10 +3,10 @@
   "category_counts": {
     "baseline_spec": 12,
     "config_template": 4,
-    "generated_non_evidence_report": 134,
+    "generated_non_evidence_report": 136,
     "method_config_candidate": 11,
-    "operator_command_source": 62,
-    "operator_facing_input": 91,
+    "operator_command_source": 63,
+    "operator_facing_input": 93,
     "prepared_config_input": 4,
     "reference_adapter": 60,
     "runner_backend_template": 5,
@@ -74,7 +74,7 @@
       "passed": true
     },
     {
-      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 134, 'method_config_candidate': 11, 'operator_command_source': 62, 'operator_facing_input': 91, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 136, 'method_config_candidate': 11, 'operator_command_source': 63, 'operator_facing_input': 93, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "handoff_has_task_config_and_baseline_assets",
       "passed": true
     },
@@ -209,6 +209,11 @@
       "passed": true
     },
     {
+      "detail": "host_state='RENDER_HOST_NOT_QUALIFIED', collection_state='DO_NOT_COLLECT_RENDER_MACHINE', classes=['vulkan_descriptor_pool_exhaustion']",
+      "name": "maniskill_render_host_qualification_brief_included",
+      "passed": true
+    },
+    {
       "detail": "method_implementation_packet_ready=True, strict_adapter_evidence_ready=False",
       "name": "method_implementation_packet_included",
       "passed": true
@@ -239,7 +244,7 @@
       "passed": true
     },
     {
-      "detail": "hashed_files=387",
+      "detail": "hashed_files=392",
       "name": "file_hashes_are_recorded",
       "passed": true
     }
@@ -254,14 +259,14 @@
     "placeholder_not_external_evidence"
   ],
   "handoff_bundle_ready": true,
-  "included_file_count": 387,
+  "included_file_count": 392,
   "included_files": [
     {
-      "bytes": 35508,
+      "bytes": 36234,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "85AA3B471C6C3E601058624F2EEDEA960EF0629A54F84107C2780399C1DBF835"
+      "sha256": "2C653B0E71DD498371482BC3557295C3340942D45D8CEDB1185F665A9455FFCE"
     },
     {
       "bytes": 11318,
@@ -271,11 +276,11 @@
       "sha256": "7A284EC84C024910358918C31EFBF71D21B42FBF5C8E572CF35634802304CFAA"
     },
     {
-      "bytes": 15258,
+      "bytes": 15332,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/haonan_yilun_outreach_package.md",
-      "sha256": "D27226B147DE11F1CF6BF601138F95B81105B4B35CD22F2EA0F8E5F6EAB437D6"
+      "sha256": "A442CD743D708F1792AD8E15AE9682513415608259AD4E6A0B5462254C559569"
     },
     {
       "bytes": 8219,
@@ -292,18 +297,25 @@
       "sha256": "7EDFEE348BE624FC1BA8818A88D526CC53B3632F3D31A1500A19F9C5A868FC2E"
     },
     {
-      "bytes": 26157,
+      "bytes": 6332,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "docs/maniskill_render_host_qualification_brief.md",
+      "sha256": "5F3317883345DE601B48E0B729077EF1EF4F74D73082200AB83E18EA1BAC38D5"
+    },
+    {
+      "bytes": 26263,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/reproducibility_checklist.md",
-      "sha256": "9C507377B02341F3C5EAB9B63906D9E39470D395C4F160F1AE79558183193087"
+      "sha256": "4817F0A77C9F93E63BCF2191A85EA11994AB35186535F164448888753F3CA5B3"
     },
     {
-      "bytes": 27197,
+      "bytes": 27488,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "E81B44C954AE79A7E274895620F998D36972D47A9A2E0EC4A6D3B56D9843CCC3"
+      "sha256": "399E97C325DF8D679DCFD8B4BB13B5FBC141F41CB582ED8A2376C42C18F33780"
     },
     {
       "bytes": 34698,
@@ -1447,6 +1459,13 @@
       "sha256": "F64B68656335697769F9E7E60F19D974CF5D36D118D94B1296A7368CF49F4C2C"
     },
     {
+      "bytes": 6332,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "external_validation/render_host_qualification_brief.md",
+      "sha256": "5F3317883345DE601B48E0B729077EF1EF4F74D73082200AB83E18EA1BAC38D5"
+    },
+    {
       "bytes": 5074,
       "category": "operator_facing_input",
       "exists": true,
@@ -2476,6 +2495,20 @@
       "sha256": "28691987D608EA40FA50EBD7BCA64E7240E5583DCEDFC72E729829EDDF35F942"
     },
     {
+      "bytes": 9280,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/maniskill_render_host_qualification_brief_audit.json",
+      "sha256": "ED41481A03FD36038C1EE5D0E3C89D5CF9272A379220B6CE4779CBCAC512EE8C"
+    },
+    {
+      "bytes": 2393,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/maniskill_render_host_qualification_brief_audit.md",
+      "sha256": "DFA02A29866AF98452E84D720B5A270F9997FD11F150119BE7FF494AA5C7E1AC"
+    },
+    {
       "bytes": 5426,
       "category": "generated_non_evidence_report",
       "exists": true,
@@ -2721,11 +2754,11 @@
       "sha256": "C166221116A089779E0111AE13BDB75CC1625849486A1C116AF8534D264334AF"
     },
     {
-      "bytes": 109193,
+      "bytes": 111508,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "723E2BB033568CDC85479CF98941E1F82BFC4D92062D367B12D66191C5364F6B"
+      "sha256": "E608409F5706A8380327563CA7EDF0D3FE30334E4D62D9640DE3254B5463C1AF"
     },
     {
       "bytes": 71405,
@@ -2782,6 +2815,13 @@
       "exists": true,
       "path": "scripts/build_independent_validation_launch_ticket.py",
       "sha256": "74ACB83D792272DA6FA1BD3DA8EAE73F86B250B4FC65663C082B15EE3F05F1D1"
+    },
+    {
+      "bytes": 20727,
+      "category": "operator_command_source",
+      "exists": true,
+      "path": "scripts/build_maniskill_render_host_qualification_brief.py",
+      "sha256": "9035B44F0DBF6D8CB94D3B74E84BCAC4EE6F9A7AAE3F3335278E29D09C987B30"
     },
     {
       "bytes": 25508,
@@ -3631,6 +3671,7 @@
     "results/maniskill_render_video_preflight_audit.json",
     "results/maniskill_render_resource_sweep.json",
     "results/maniskill_pilot_runtime_liveness_audit.json",
+    "results/maniskill_render_host_qualification_brief_audit.json",
     "results/external_method_implementation_audit.json",
     "results/external_method_implementation_packet_self_test.json",
     "results/external_baseline_contract_audit.json",

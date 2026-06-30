@@ -75,6 +75,7 @@
 - External manifest builder: `scripts/build_external_manifest.py`
 - External manifest builder self-test: `scripts/self_test_external_manifest_builder.py`
 - ManiSkill render machine qualification packet: `scripts/build_maniskill_render_machine_qualification.py`
+- ManiSkill render host qualification brief: `scripts/build_maniskill_render_host_qualification_brief.py`
 - ManiSkill render machine qualification self-test: `scripts/self_test_maniskill_render_machine_qualification.py`
   - Durable report: `results/maniskill_render_machine_qualification_self_test.md`
 - External release package validator: `scripts/audit_external_release_package.py`

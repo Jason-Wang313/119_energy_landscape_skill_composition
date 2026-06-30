@@ -45,7 +45,7 @@
       "passed": true
     },
     {
-      "detail": "files=387, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=392, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -95,7 +95,7 @@
       "passed": true
     },
     {
-      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=387, archive_written=False",
+      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=392, archive_written=False",
       "name": "external_operator_release_bundle_visible",
       "passed": true
     },
@@ -247,6 +247,11 @@
     {
       "detail": "state='RENDER_REMEDIATION_REQUIRED', errors=['RuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory'], work_orders=['collection_readiness_gate', 'diagnostic_fallback_exclusion', 'fidelity_acceptance_after_render_ready', 'pilot_liveness_retest', 'render_profile_matrix_retest', 'renderer_platform_probe']",
       "name": "render_failure_remediation_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "host_state='RENDER_HOST_NOT_QUALIFIED', collection_state='DO_NOT_COLLECT_RENDER_MACHINE', sources=['https://maniskill.readthedocs.io/en/latest/user_guide/getting_started/installation.html', 'https://sapien.ucsd.edu/docs/latest/index.html', 'https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateDescriptorSets.html']",
+      "name": "maniskill_render_host_qualification_brief_visible",
       "passed": true
     },
     {

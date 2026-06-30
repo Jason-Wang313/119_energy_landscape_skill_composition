@@ -136,6 +136,7 @@ def main():
         "scripts\\audit_maniskill_render_video_preflight.py",
         "scripts\\audit_maniskill_pilot_runtime_liveness.py",
         "scripts\\build_maniskill_render_machine_qualification.py",
+        "scripts\\build_maniskill_render_host_qualification_brief.py",
         "scripts\\self_test_maniskill_render_machine_qualification.py",
         "scripts\\validate_external_configs.py",
         "scripts\\self_test_external_config_evidence.py",
@@ -255,6 +256,7 @@ def main():
         "python scripts/audit_maniskill_render_video_preflight.py",
         "python scripts/audit_maniskill_pilot_runtime_liveness.py",
         "python scripts/build_maniskill_render_machine_qualification.py",
+        "python scripts/build_maniskill_render_host_qualification_brief.py",
         "python scripts/self_test_maniskill_render_machine_qualification.py",
         "python scripts/audit_external_evidence_preflight.py",
         "python scripts/self_test_external_evidence_preflight.py",
@@ -3708,19 +3710,29 @@ def main():
     render_remediation_path = RESULTS / "maniskill_render_failure_remediation.json"
     render_remediation_md_path = RESULTS / "maniskill_render_failure_remediation.md"
     render_remediation_csv_path = EXTERNAL / "render_failure_remediation_work_orders.csv"
+    render_host_brief_path = RESULTS / "maniskill_render_host_qualification_brief_audit.json"
+    render_host_brief_md_path = RESULTS / "maniskill_render_host_qualification_brief_audit.md"
+    render_host_docs_path = DOCS / "maniskill_render_host_qualification_brief.md"
+    render_host_external_path = EXTERNAL / "render_host_qualification_brief.md"
     for path in (
         ROOT / "scripts" / "build_maniskill_render_machine_qualification.py",
+        ROOT / "scripts" / "build_maniskill_render_host_qualification_brief.py",
         render_machine_path,
         render_machine_md_path,
         render_machine_packet_path,
         render_remediation_path,
         render_remediation_md_path,
         render_remediation_csv_path,
+        render_host_brief_path,
+        render_host_brief_md_path,
+        render_host_docs_path,
+        render_host_external_path,
     ):
         if not path.exists():
             fail(f"missing ManiSkill render machine qualification artifact: {path}")
     render_machine = json.loads(render_machine_path.read_text(encoding="utf-8"))
     render_remediation = json.loads(render_remediation_path.read_text(encoding="utf-8"))
+    render_host_brief = json.loads(render_host_brief_path.read_text(encoding="utf-8"))
     if render_machine.get("version") != "maniskill_render_machine_qualification_v1":
         fail("ManiSkill render machine qualification version mismatch")
     if render_machine.get("passed") is not True:
@@ -3803,6 +3815,61 @@ def main():
     ):
         if render_remediation_checks.get(required_check) is not True:
             fail(f"ManiSkill render failure remediation missing passing check: {required_check}")
+    if render_host_brief.get("version") != "maniskill_render_host_qualification_brief_v1":
+        fail("ManiSkill render host qualification brief version mismatch")
+    if render_host_brief.get("passed") is not True:
+        fail("ManiSkill render host qualification brief audit did not pass")
+    if render_host_brief.get("not_external_evidence") is not True:
+        fail("ManiSkill render host qualification brief must declare that it is not evidence")
+    if render_host_brief.get("strict_external_evidence_ready") is not False:
+        fail("ManiSkill render host qualification brief must not claim strict external evidence readiness")
+    if render_host_brief.get("host_qualification_state") != "RENDER_HOST_NOT_QUALIFIED":
+        fail("current render host qualification brief must keep the current host unqualified")
+    if render_host_brief.get("collection_state") != "DO_NOT_COLLECT_RENDER_MACHINE":
+        fail("current render host qualification brief must preserve the render-machine no-go state")
+    if render_host_brief.get("haonan_dependency") is not False:
+        fail("render host qualification brief must not depend on Haonan/Yilun")
+    if "vulkan_descriptor_pool_exhaustion" not in (render_host_brief.get("renderer_failure_classes", []) or []):
+        fail("render host qualification brief must preserve the Vulkan descriptor-pool failure class")
+    if "initial_render_start" not in (render_host_brief.get("renderer_failure_stages", []) or []):
+        fail("render host qualification brief must preserve the initial render failure stage")
+    if not any("ErrorOutOfPoolMemory" in str(error) for error in render_host_brief.get("error_signatures", []) or []):
+        fail("render host qualification brief must preserve the ErrorOutOfPoolMemory signature")
+    if len(render_host_brief.get("minimum_resource_sweep_failures", []) or []) < 3:
+        fail("render host qualification brief must include the minimum resource sweep failures")
+    if render_host_docs_path.read_text(encoding="utf-8") != render_host_external_path.read_text(encoding="utf-8"):
+        fail("render host qualification docs and external copies must match")
+    source_urls = [str(source.get("url", "")) for source in render_host_brief.get("official_sources", []) if isinstance(source, dict)]
+    for source_domain in ("maniskill.readthedocs.io", "sapien.ucsd.edu", "registry.khronos.org"):
+        if not any(source_domain in url for url in source_urls):
+            fail(f"render host qualification brief missing official source domain: {source_domain}")
+    render_host_commands = "\n".join(render_host_brief.get("operator_commands", []) or [])
+    for fragment in (
+        "probe_external_platform.py --strict",
+        "audit_maniskill_render_resource_sweep.py",
+        "audit_maniskill_render_video_preflight.py",
+        "audit_maniskill_pilot_runtime_liveness.py",
+        "build_maniskill_render_machine_qualification.py",
+        "materialize_fidelity_acceptance.py",
+        "audit_external_collection_readiness.py --strict",
+    ):
+        if fragment not in render_host_commands:
+            fail(f"render host qualification brief missing command fragment: {fragment}")
+    render_host_checks = {check.get("name"): check.get("passed") for check in render_host_brief.get("checks", [])}
+    for required_check in (
+        "brief_is_non_evidence",
+        "current_render_host_fails_closed",
+        "vulkan_descriptor_pool_failure_preserved",
+        "minimum_resource_sweep_preserved",
+        "pilot_liveness_guard_preserved",
+        "official_source_urls_present",
+        "operator_commands_cover_probe_sweep_preflight_liveness_qualification",
+        "acceptance_criteria_close_all_render_host_gates",
+        "haonan_is_not_a_dependency",
+        "no_real_manifest_written",
+    ):
+        if render_host_checks.get(required_check) is not True:
+            fail(f"render host qualification brief missing passing check: {required_check}")
 
     render_machine_self_test_path = RESULTS / "maniskill_render_machine_qualification_self_test.json"
     render_machine_self_test_md_path = RESULTS / "maniskill_render_machine_qualification_self_test.md"
@@ -5371,9 +5438,14 @@ def main():
         "results/independent_validation_launch_ticket_audit.json",
         "results/independent_validation_launch_ticket_audit.md",
         "scripts/build_independent_validation_launch_ticket.py",
+        "docs/maniskill_render_host_qualification_brief.md",
+        "external_validation/render_host_qualification_brief.md",
+        "results/maniskill_render_host_qualification_brief_audit.json",
+        "results/maniskill_render_host_qualification_brief_audit.md",
+        "scripts/build_maniskill_render_host_qualification_brief.py",
     ):
         if required_path not in handoff_paths:
-            fail(f"external operator handoff bundle missing independent launch ticket path: {required_path}")
+            fail(f"external operator handoff bundle missing required launch/render-host path: {required_path}")
     for required_check in (
         "operator_packet_is_no_go_non_evidence",
         "acquisition_maps_all_remaining_blockers",
@@ -5410,6 +5482,7 @@ def main():
         "maniskill_render_resource_sweep_included",
         "maniskill_pilot_runtime_liveness_included",
         "maniskill_render_machine_qualification_included",
+        "maniskill_render_host_qualification_brief_included",
         "external_collection_job_packet_included",
         "collection_machine_bootstrap_included",
         "method_implementation_packet_included",
@@ -6725,6 +6798,7 @@ def main():
         "external_method_config_materialization_visible",
         "external_method_config_materialization_self_test_visible",
         "maniskill_pilot_runtime_liveness_visible",
+        "maniskill_render_host_qualification_brief_visible",
         "materializer_guard_visible",
         "planner_edge_policy_visible",
         "failure_memory_adaptation_visible",

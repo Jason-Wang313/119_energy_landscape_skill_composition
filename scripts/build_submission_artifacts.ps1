@@ -133,6 +133,7 @@ try {
         Invoke-Native python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds $RenderPreflightTimeoutSeconds --max-envs $RenderPreflightMaxEnvs --profile-matrix --profile-matrix-max-envs $RenderProfileMatrixMaxEnvs
         Invoke-Native python scripts\audit_maniskill_pilot_runtime_liveness.py
         Invoke-Native python scripts\build_maniskill_render_machine_qualification.py
+        Invoke-Native python scripts\build_maniskill_render_host_qualification_brief.py
         Invoke-Native python scripts\self_test_maniskill_render_machine_qualification.py
         Invoke-Native python scripts\validate_external_configs.py
         Invoke-Native python scripts\self_test_external_config_evidence.py
