@@ -1,0 +1,98 @@
+{
+  "adapter_api_drift_rejected": true,
+  "checks": [
+    {
+      "detail": "status=0, passed=True, methods=12",
+      "name": "temporary_baseline_contract_ready_but_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "method_check=False",
+      "name": "missing_required_method_rejected",
+      "passed": true
+    },
+    {
+      "detail": "implementation_check=False",
+      "name": "premature_implementation_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "source_check=False",
+      "name": "independent_source_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "oracle_check=False",
+      "name": "oracle_boundary_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "fairness_check=False",
+      "name": "fairness_invariant_shrink_rejected",
+      "passed": true
+    },
+    {
+      "detail": "adapter_api_check=False",
+      "name": "adapter_api_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "spec_binding_check=False",
+      "name": "spec_method_binding_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "release_evidence_check=False",
+      "name": "release_evidence_spec_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "policy_hash_check=False",
+      "name": "policy_config_log_field_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "contract_file_check=False",
+      "name": "contract_file_deletion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "changed=[]",
+      "name": "real_baseline_contract_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "contract_file_deletion_rejected": true,
+  "fairness_invariant_shrink_rejected": true,
+  "implementations_ready": false,
+  "independent_source_drift_rejected": true,
+  "missing_required_method_rejected": true,
+  "not_external_evidence": true,
+  "oracle_boundary_drift_rejected": true,
+  "passed": true,
+  "policy_config_log_field_drift_rejected": true,
+  "premature_implementation_promotion_rejected": true,
+  "real_output_hashes": {
+    "external_validation/baseline_implementation_contract.md": "6a9d35c0af017df3d40dfa4606f6d25d77d5a6394d800fc123e26e3ca9899dad",
+    "external_validation/baseline_implementation_matrix.csv": "bd52e82cd3323352ecf291baef9cfbbaafc382a8902a9505a817b156f45cd01d",
+    "external_validation/baseline_specs/barrier_certified_energy_composer_v5.json": "c9f658c69e506d4d6041ba15afdd6b3d7cca59c66215c59aaeb18846e552f812",
+    "external_validation/baseline_specs/behavior_cloned_skill_chain.json": "6c6f97ba41c0e43fa1be3547aa25a7f0fb92eb5b1d04c5d75058734a2b6a79e6",
+    "external_validation/baseline_specs/cem_trajectory_composer.json": "47a2e1400a54a14ad03c29ba3a557ef2a3c0f36d55c8b03e9c88ed32e34f626d",
+    "external_validation/baseline_specs/diffusion_skill_stitcher.json": "635e07b25aa4dd9cbaf18db439c58971ca99aee86482ede3fcd4c1fdd3ba7611",
+    "external_validation/baseline_specs/energy_compatibility_heuristic.json": "585ee36283ebcc0780c5c6b79bfcab0f8ddb562dbccc6e98379e6ae99f9eff18",
+    "external_validation/baseline_specs/greedy_module_sequence.json": "6c4327b7f5b0719d0dac4e12b4b507a8744aa6c68e54ee48ca16b52e81d90336",
+    "external_validation/baseline_specs/option_graph_planner.json": "d0de4635206512731388a74facd5bb1ff87f1da236c5f3559f676a0b88e99f4e",
+    "external_validation/baseline_specs/oracle_basin_composer.json": "32979ef2b3c53c14f53301f308b51033a823593bae0628bca9c7a0d785052881",
+    "external_validation/baseline_specs/proposed_energy_landscape_composer_v4_1.json": "2a5c0bca5465cc83977ca434c807074bd71f71b3da6bfae5be57a8ee9351069f",
+    "external_validation/baseline_specs/residual_rl_composer.json": "03b3e3134a6564f6fc4e991b7f5ed2a772032238d79cc744e0b179a7d3eee0bb",
+    "external_validation/baseline_specs/stable_dmp_handoff.json": "9d6536d923635d4be87b26f0a984303bf751331a8917f9cf52f4a7e7f42e7a70",
+    "external_validation/baseline_specs/tamp_feasibility_screen.json": "84c3ddfb27ab3207b9ad378f40a299051c94a43bbd73c17ef90055a2bf5a49cb",
+    "results/external_baseline_contract_audit.json": "03a42f96435c226d0998fa49344cd1a71905676b4722b217691393d63af93a75",
+    "results/external_baseline_contract_audit.md": "7a12c9ae1bf7bc6938f7e749f95eb648f436b9a4e5a8f1e6ea1f7a251ce17616"
+  },
+  "real_outputs_untouched": true,
+  "release_evidence_spec_drift_rejected": true,
+  "spec_method_binding_drift_rejected": true,
+  "temporary_contract_ready": true,
+  "version": "external_baseline_contract_self_test_v1"
+}

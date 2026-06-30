@@ -138,6 +138,7 @@ try {
         Invoke-Native python scripts\build_external_config_manifest_packet.py
         Invoke-Native python scripts\self_test_external_config_manifest_packet.py
         Invoke-Native python scripts\build_external_baseline_contract.py
+        Invoke-Native python scripts\self_test_external_baseline_contract.py
         Invoke-Native python scripts\build_external_adapter_scaffolds.py
         Invoke-Native python scripts\build_external_reference_adapters.py
         Invoke-Native python scripts\build_external_local_dry_run.py

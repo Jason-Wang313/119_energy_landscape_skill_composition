@@ -195,6 +195,8 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "self_test_external_method_implementation_packet.py",
         SCRIPTS / "materialize_external_method_configs.py",
         SCRIPTS / "materialize_external_configs.py",
+        SCRIPTS / "build_external_baseline_contract.py",
+        SCRIPTS / "self_test_external_baseline_contract.py",
         SCRIPTS / "audit_external_backend_contract.py",
         SCRIPTS / "audit_maniskill_backend_readiness.py",
         SCRIPTS / "audit_maniskill_reference_collection_preflight.py",
@@ -305,6 +307,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_fidelity_acceptance_audit.md",
         RESULTS / "external_baseline_contract_audit.json",
         RESULTS / "external_baseline_contract_audit.md",
+        RESULTS / "external_baseline_contract_self_test.json",
+        RESULTS / "external_baseline_contract_self_test.md",
         RESULTS / "external_adapter_scaffold_audit.json",
         RESULTS / "external_adapter_scaffold_audit.md",
         RESULTS / "external_reference_adapter_audit.json",
@@ -421,6 +425,11 @@ def build_payload() -> dict[str, Any]:
     method_implementation_self_test = require_payload(
         RESULTS / "external_method_implementation_packet_self_test.json",
         "external_method_implementation_packet_self_test_v1",
+    )
+    baseline_contract = require_payload(RESULTS / "external_baseline_contract_audit.json", "external_baseline_contract_audit_v1")
+    baseline_contract_self_test = require_payload(
+        RESULTS / "external_baseline_contract_self_test.json",
+        "external_baseline_contract_self_test_v1",
     )
     method_config_materialization = require_payload(
         RESULTS / "external_method_config_materialization_audit.json",
@@ -1218,6 +1227,52 @@ def build_payload() -> dict[str, Any]:
             f"strict_adapter_evidence_ready={method_implementation.get('strict_adapter_evidence_ready')!r}"
         ),
     )
+    baseline_checks = {check.get("name"): check.get("passed") for check in baseline_contract.get("checks", []) or []}
+    baseline_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in baseline_contract_self_test.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "baseline_contract_self_test_included",
+        baseline_contract.get("passed") is True
+        and baseline_contract.get("not_external_evidence") is True
+        and baseline_contract.get("implementations_ready") is False
+        and int(baseline_contract.get("method_count", 0) or 0) >= 12
+        and len(baseline_contract.get("missing_implementations", []) or []) >= 11
+        and baseline_checks.get("spec_files_are_method_bound") is True
+        and baseline_checks.get("adapter_api_covers_required_methods") is True
+        and baseline_checks.get("specs_require_release_evidence") is True
+        and baseline_checks.get("specs_require_policy_config_hash_logs") is True
+        and baseline_contract_self_test.get("passed") is True
+        and baseline_contract_self_test.get("not_external_evidence") is True
+        and baseline_contract_self_test.get("implementations_ready") is False
+        and baseline_contract_self_test.get("temporary_contract_ready") is True
+        and baseline_contract_self_test.get("missing_required_method_rejected") is True
+        and baseline_contract_self_test.get("premature_implementation_promotion_rejected") is True
+        and baseline_contract_self_test.get("independent_source_drift_rejected") is True
+        and baseline_contract_self_test.get("oracle_boundary_drift_rejected") is True
+        and baseline_contract_self_test.get("fairness_invariant_shrink_rejected") is True
+        and baseline_contract_self_test.get("adapter_api_drift_rejected") is True
+        and baseline_contract_self_test.get("release_evidence_spec_drift_rejected") is True
+        and baseline_contract_self_test.get("policy_config_log_field_drift_rejected") is True
+        and baseline_contract_self_test.get("real_outputs_untouched") is True
+        and baseline_self_checks.get("temporary_baseline_contract_ready_but_non_evidence") is True
+        and baseline_self_checks.get("real_baseline_contract_outputs_untouched") is True
+        and "external_validation/baseline_implementation_contract.md" in paths
+        and "external_validation/baseline_implementation_matrix.csv" in paths
+        and "results/external_baseline_contract_audit.json" in paths
+        and "results/external_baseline_contract_self_test.json" in paths
+        and "results/external_baseline_contract_self_test.md" in paths
+        and "scripts/build_external_baseline_contract.py" in paths
+        and "scripts/self_test_external_baseline_contract.py" in paths
+        and category_counts.get("baseline_spec", 0) >= 12,
+        (
+            f"methods={baseline_contract.get('method_count')!r}, "
+            f"implementations_ready={baseline_contract.get('implementations_ready')!r}, "
+            f"self_test={baseline_contract_self_test.get('passed')!r}"
+        ),
+    )
     method_config_checks = {
         check.get("name"): check.get("passed")
         for check in method_config_materialization.get("checks", []) or []
@@ -1346,6 +1401,8 @@ def build_payload() -> dict[str, Any]:
             "results/maniskill_pilot_runtime_liveness_audit.json",
             "results/external_method_implementation_audit.json",
             "results/external_method_implementation_packet_self_test.json",
+            "results/external_baseline_contract_audit.json",
+            "results/external_baseline_contract_self_test.json",
             "results/external_precollection_freeze_receipt_audit.json",
             "results/external_postcollection_evidence_seal_audit.json",
             "results/external_postcollection_seal_consistency_audit.json",

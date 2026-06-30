@@ -3,9 +3,9 @@
   "category_counts": {
     "baseline_spec": 12,
     "config_template": 4,
-    "generated_non_evidence_report": 112,
+    "generated_non_evidence_report": 114,
     "method_config_candidate": 11,
-    "operator_command_source": 50,
+    "operator_command_source": 52,
     "operator_facing_input": 86,
     "prepared_config_input": 4,
     "reference_adapter": 60,
@@ -59,7 +59,7 @@
       "passed": true
     },
     {
-      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 112, 'method_config_candidate': 11, 'operator_command_source': 50, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 114, 'method_config_candidate': 11, 'operator_command_source': 52, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "handoff_has_task_config_and_baseline_assets",
       "passed": true
     },
@@ -174,6 +174,11 @@
       "passed": true
     },
     {
+      "detail": "methods=12, implementations_ready=False, self_test=True",
+      "name": "baseline_contract_self_test_included",
+      "passed": true
+    },
+    {
       "detail": "candidate_configs=11, strict_adapter_evidence_ready=False, oracle_excluded=True",
       "name": "method_config_materialization_included",
       "passed": true
@@ -189,7 +194,7 @@
       "passed": true
     },
     {
-      "detail": "hashed_files=348",
+      "detail": "hashed_files=352",
       "name": "file_hashes_are_recorded",
       "passed": true
     }
@@ -204,14 +209,14 @@
     "placeholder_not_external_evidence"
   ],
   "handoff_bundle_ready": true,
-  "included_file_count": 348,
+  "included_file_count": 352,
   "included_files": [
     {
-      "bytes": 32702,
+      "bytes": 32792,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "2295F1372D03876AB08CE3B83699D8BC6EDD0A433C9D0E9C4AA778FC27F484DD"
+      "sha256": "22B2A7E56A113E26325628F60B359725E67B231C78D9776F7CE861DB6D91A04A"
     },
     {
       "bytes": 14198,
@@ -228,18 +233,18 @@
       "sha256": "7EDFEE348BE624FC1BA8818A88D526CC53B3632F3D31A1500A19F9C5A868FC2E"
     },
     {
-      "bytes": 23782,
+      "bytes": 23942,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/reproducibility_checklist.md",
-      "sha256": "B75F5D834333A02E985F247F3E1FD31F148D1F2EB9A8D9C307CA3E4028741963"
+      "sha256": "35F0CA1205613011BA86B17D5F8206E9F3092A76EC9F67C59AAAF596799BCCC3"
     },
     {
-      "bytes": 23888,
+      "bytes": 24375,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "D2885996F69E1F225A00E1F7ADC6A67CDA5F54AC4FA6C1C5A32FA82A95B18CA7"
+      "sha256": "B7251705040B0412163F3BEE0343EF9B209636D58EC8E61EE42E9D0CB0B270C0"
     },
     {
       "bytes": 34698,
@@ -1607,18 +1612,32 @@
       "sha256": "76B8CC5C8BD05A99798DC03B3EAD866D649858DBE34735EC4E4CA8F704D52614"
     },
     {
-      "bytes": 5254,
+      "bytes": 5745,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_baseline_contract_audit.json",
-      "sha256": "3D6D8B08A0894F96387CB91CBB00BBF659527C18BD0D9EA8A35A480ED30AB70C"
+      "sha256": "03A42F96435C226D0998FA49344CD1A71905676B4722B217691393D63AF93A75"
     },
     {
-      "bytes": 2454,
+      "bytes": 2697,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_baseline_contract_audit.md",
-      "sha256": "5D214E40E4DCD0E680C8F63D327FE2CA33FDE99CF046E1D27A59BA1DFA7C7D30"
+      "sha256": "7A12C9AE1BF7BC6938F7E749F95EB648F436B9A4E5A8F1E6EA1F7A251CE17616"
+    },
+    {
+      "bytes": 4570,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_baseline_contract_self_test.json",
+      "sha256": "1419CF2E5B627110688F2783D557121605367E74D8A53B54F61577203B1464AC"
+    },
+    {
+      "bytes": 2053,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_baseline_contract_self_test.md",
+      "sha256": "B76525DE32F07A4CC50E30A93D62CACED393059BB7C02B2514E367E870AA16D1"
     },
     {
       "bytes": 1972,
@@ -2412,6 +2431,13 @@
       "sha256": "8BCA04F29A5F058AD4A5EE786FBF26F7E11136081BD1B11994FDF1DE3AACC506"
     },
     {
+      "bytes": 20272,
+      "category": "operator_command_source",
+      "exists": true,
+      "path": "scripts/build_external_baseline_contract.py",
+      "sha256": "8A3B79C50463A4974D5EF4C1CCBA409F45030C4867E3694B0C0C65B6E7E78E98"
+    },
+    {
       "bytes": 34657,
       "category": "operator_command_source",
       "exists": true,
@@ -2468,11 +2494,11 @@
       "sha256": "C166221116A089779E0111AE13BDB75CC1625849486A1C116AF8534D264334AF"
     },
     {
-      "bytes": 83501,
+      "bytes": 87266,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "7E84A57EDE2F4678BC0EC05EC85805702A6CD0009A91F7311C215483AC879A4D"
+      "sha256": "21B1F5DE6B567C7C9DDC7483668848C29AD53131452E63CEAE888C96C08731F5"
     },
     {
       "bytes": 71405,
@@ -2578,6 +2604,13 @@
       "exists": true,
       "path": "scripts/probe_maniskill_task_bindings.py",
       "sha256": "AC9A26FDA7512B17AD35589525DF3A41E7C5CF28C164850C4F835466C69D92E2"
+    },
+    {
+      "bytes": 17692,
+      "category": "operator_command_source",
+      "exists": true,
+      "path": "scripts/self_test_external_baseline_contract.py",
+      "sha256": "B0BC8E8E4C7B31D6AF525613754940382A2B4CFC97D970C80C0BC7225AA478C1"
     },
     {
       "bytes": 20765,
@@ -3304,6 +3337,8 @@
     "results/maniskill_pilot_runtime_liveness_audit.json",
     "results/external_method_implementation_audit.json",
     "results/external_method_implementation_packet_self_test.json",
+    "results/external_baseline_contract_audit.json",
+    "results/external_baseline_contract_self_test.json",
     "results/external_precollection_freeze_receipt_audit.json",
     "results/external_postcollection_evidence_seal_audit.json",
     "results/external_postcollection_seal_consistency_audit.json",

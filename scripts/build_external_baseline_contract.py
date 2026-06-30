@@ -126,6 +126,24 @@ FAIRNESS_INVARIANTS = [
     "oracle_basin_composer is reported only as a post hoc upper bound and is excluded from strongest non-oracle selection",
 ]
 
+REQUIRED_ADAPTER_API_KEYS = {"initialize", "propose", "log", "reset"}
+REQUIRED_RELEASE_EVIDENCE_FIELDS = {
+    "implementation_path_or_repository",
+    "checkpoint_or_config_path",
+    "sha256_or_commit",
+    "episode_log_fields",
+}
+REQUIRED_EPISODE_LOG_FIELDS = {
+    "method",
+    "policy_or_config_hash",
+    "predicted_seam_risk",
+    "decision",
+    "failure_diagnosis",
+    "success",
+    "realized_seam_breach",
+    "utility",
+}
+
 
 def fail(message: str) -> None:
     raise SystemExit(message)
@@ -276,6 +294,19 @@ def add_check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str
     checks.append({"name": name, "passed": bool(passed), "detail": detail})
 
 
+def read_spec_file(rel_path: str) -> dict[str, Any]:
+    path = ROOT / rel_path
+    if not path.exists():
+        return {"_error": f"missing spec file: {rel_path}"}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return {"_error": f"invalid JSON in {rel_path}: {exc}"}
+    if not isinstance(payload, dict):
+        return {"_error": f"spec is not an object: {rel_path}"}
+    return payload
+
+
 def build_audit(names: list[str], rows: list[dict[str, str]], spec_files: list[str]) -> dict[str, Any]:
     checks: list[dict[str, Any]] = []
     method_set = set(names)
@@ -283,13 +314,60 @@ def build_audit(names: list[str], rows: list[dict[str, str]], spec_files: list[s
     missing_implementations = [row["method"] for row in rows if row["implementation_status"] == "missing_external_source"]
     oracle_rows = [row for row in rows if row["method"] == "oracle_basin_composer"]
     non_oracle_rows = [row for row in rows if row["method"] != "oracle_basin_composer"]
+    spec_payloads = [read_spec_file(path) for path in spec_files]
+    spec_methods = {payload.get("method") for payload in spec_payloads if "_error" not in payload}
+    spec_errors = [str(payload["_error"]) for payload in spec_payloads if "_error" in payload]
+    release_evidence_errors = []
+    log_field_errors = []
+    for payload in spec_payloads:
+        if "_error" in payload:
+            continue
+        method = str(payload.get("method", ""))
+        release_evidence = payload.get("required_release_evidence")
+        if not isinstance(release_evidence, dict):
+            release_evidence_errors.append(f"{method}: missing required_release_evidence")
+            continue
+        missing_fields = sorted(REQUIRED_RELEASE_EVIDENCE_FIELDS - set(release_evidence))
+        if missing_fields:
+            release_evidence_errors.append(f"{method}: missing {missing_fields}")
+        log_fields = release_evidence.get("episode_log_fields", [])
+        if not isinstance(log_fields, list):
+            log_field_errors.append(f"{method}: episode_log_fields is not a list")
+            continue
+        missing_log_fields = sorted(REQUIRED_EPISODE_LOG_FIELDS - {str(field) for field in log_fields})
+        if missing_log_fields:
+            log_field_errors.append(f"{method}: missing {missing_log_fields}")
 
     add_check(checks, "not_external_evidence_declared", True, "contract, matrix, specs, and audit are scaffolding only")
     add_check(checks, "method_count_ge_12", len(names) >= 12, f"method_count={len(names)}")
     add_check(checks, "all_required_methods_present", not missing_required, f"missing={missing_required}")
     add_check(checks, "matrix_rows_match_methods", len(rows) == len(names), f"rows={len(rows)}, methods={len(names)}")
     add_check(checks, "spec_files_match_methods", len(spec_files) == len(names), f"specs={len(spec_files)}, methods={len(names)}")
+    add_check(
+        checks,
+        "spec_files_are_method_bound",
+        not spec_errors and spec_methods == method_set,
+        f"spec_errors={spec_errors}, missing={sorted(method_set - spec_methods)}",
+    )
+    add_check(
+        checks,
+        "adapter_api_covers_required_methods",
+        REQUIRED_ADAPTER_API_KEYS.issubset(set(ADAPTER_API)),
+        f"missing={sorted(REQUIRED_ADAPTER_API_KEYS - set(ADAPTER_API))}",
+    )
     add_check(checks, "fairness_invariants_declared", len(FAIRNESS_INVARIANTS) >= 6, f"invariants={len(FAIRNESS_INVARIANTS)}")
+    add_check(
+        checks,
+        "specs_require_release_evidence",
+        not release_evidence_errors,
+        f"errors={release_evidence_errors}",
+    )
+    add_check(
+        checks,
+        "specs_require_policy_config_hash_logs",
+        not log_field_errors,
+        f"errors={log_field_errors}",
+    )
     add_check(
         checks,
         "non_oracle_requires_independent_source",
@@ -305,7 +383,7 @@ def build_audit(names: list[str], rows: list[dict[str, str]], spec_files: list[s
     add_check(
         checks,
         "implementations_not_marked_ready",
-        len(missing_implementations) >= len(NON_ORACLE_METHODS),
+        set(missing_implementations) == NON_ORACLE_METHODS,
         f"missing_implementations={missing_implementations}",
     )
     add_check(checks, "contract_file_exists", CONTRACT_MD.exists(), str(CONTRACT_MD))

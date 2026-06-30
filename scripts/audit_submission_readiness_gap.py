@@ -86,6 +86,10 @@ def main() -> int:
     )
     baseline_contract_path = RESULTS / "external_baseline_contract_audit.json"
     baseline_contract = read_json(baseline_contract_path) if baseline_contract_path.exists() else {}
+    baseline_contract_self_test_path = RESULTS / "external_baseline_contract_self_test.json"
+    baseline_contract_self_test = (
+        read_json(baseline_contract_self_test_path) if baseline_contract_self_test_path.exists() else {}
+    )
     adapter_contract_evidence_path = RESULTS / "external_adapter_contract_evidence_audit.json"
     adapter_contract_evidence = read_json(adapter_contract_evidence_path) if adapter_contract_evidence_path.exists() else {}
     execution_readiness_path = RESULTS / "external_execution_readiness_audit.json"
@@ -256,6 +260,7 @@ def main() -> int:
         status="satisfied" if implementations_ready else "missing",
         evidence=[
             "results/external_baseline_contract_audit.json",
+            "results/external_baseline_contract_self_test.json",
             "results/external_adapter_contract_evidence_audit.json",
             "external_validation/baseline_implementation_contract.md",
         ],
@@ -344,6 +349,9 @@ def main() -> int:
             ROOT / "scripts" / "self_test_external_config_manifest_packet.py",
             RESULTS / "external_config_manifest_packet_self_test.json",
             RESULTS / "external_config_manifest_packet_self_test.md",
+            ROOT / "scripts" / "self_test_external_baseline_contract.py",
+            RESULTS / "external_baseline_contract_self_test.json",
+            RESULTS / "external_baseline_contract_self_test.md",
             ROOT / "scripts" / "self_test_external_rollout_evidence_packet.py",
             RESULTS / "external_rollout_evidence_packet_self_test.json",
             RESULTS / "external_rollout_evidence_packet_self_test.md",
@@ -412,6 +420,9 @@ def main() -> int:
             "scripts/self_test_external_config_manifest_packet.py",
             "results/external_config_manifest_packet_self_test.json",
             "results/external_config_manifest_packet_self_test.md",
+            "scripts/self_test_external_baseline_contract.py",
+            "results/external_baseline_contract_self_test.json",
+            "results/external_baseline_contract_self_test.md",
             "scripts/self_test_external_rollout_evidence_packet.py",
             "results/external_rollout_evidence_packet_self_test.json",
             "results/external_rollout_evidence_packet_self_test.md",

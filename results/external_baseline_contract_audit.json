@@ -32,8 +32,28 @@
       "passed": true
     },
     {
+      "detail": "spec_errors=[], missing=[]",
+      "name": "spec_files_are_method_bound",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "adapter_api_covers_required_methods",
+      "passed": true
+    },
+    {
       "detail": "invariants=6",
       "name": "fairness_invariants_declared",
+      "passed": true
+    },
+    {
+      "detail": "errors=[]",
+      "name": "specs_require_release_evidence",
+      "passed": true
+    },
+    {
+      "detail": "errors=[]",
+      "name": "specs_require_policy_config_hash_logs",
       "passed": true
     },
     {

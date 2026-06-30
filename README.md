@@ -168,6 +168,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External config evidence self-test: `results/external_config_evidence_self_test.md`
 - External baseline implementation contract: `external_validation/baseline_implementation_contract.md`
 - External baseline implementation audit: `results/external_baseline_contract_audit.md`
+- External baseline contract self-test: `results/external_baseline_contract_self_test.md`
 - External baseline adapter scaffolds: `external_validation/baseline_adapter_scaffold.md`
 - External adapter scaffold audit: `results/external_adapter_scaffold_audit.md`
 - External reference adapter report: `external_validation/reference_adapter_report.md`

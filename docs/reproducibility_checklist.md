@@ -43,6 +43,8 @@
 - External collection readiness validator: `scripts/audit_external_collection_readiness.py`
 - External config validator: `scripts/validate_external_configs.py`
 - External baseline contract builder: `scripts/build_external_baseline_contract.py`
+- External baseline contract self-test: `scripts/self_test_external_baseline_contract.py`
+  - Durable report: `results/external_baseline_contract_self_test.md`
 - External method implementation packet builder: `scripts/build_external_method_implementation_packet.py`
   - Emits adapter acceptance fixtures: `external_validation/adapter_acceptance_fixtures.{json,md,csv}`
 - External method implementation packet self-test: `scripts/self_test_external_method_implementation_packet.py`

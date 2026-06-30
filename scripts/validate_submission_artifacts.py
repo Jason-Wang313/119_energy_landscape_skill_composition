@@ -151,6 +151,7 @@ def main():
         "scripts\\audit_external_postcollection_seal_consistency.py",
         "scripts\\self_test_external_postcollection_seal_consistency.py",
         "scripts\\build_external_baseline_contract.py",
+        "scripts\\self_test_external_baseline_contract.py",
         "scripts\\build_external_adapter_scaffolds.py",
         "scripts\\build_external_reference_adapters.py",
         "scripts\\build_external_local_dry_run.py",
@@ -1529,13 +1530,72 @@ def main():
         fail("external baseline contract should still identify missing non-oracle implementations")
     if len(baseline_contract.get("spec_files", [])) < 12:
         fail("external baseline contract has too few method spec files")
+    baseline_checks = {check.get("name"): check.get("passed") for check in baseline_contract.get("checks", [])}
+    for required_check in (
+        "all_required_methods_present",
+        "spec_files_are_method_bound",
+        "adapter_api_covers_required_methods",
+        "fairness_invariants_declared",
+        "specs_require_release_evidence",
+        "specs_require_policy_config_hash_logs",
+        "non_oracle_requires_independent_source",
+        "oracle_post_hoc_only",
+        "implementations_not_marked_ready",
+    ):
+        if baseline_checks.get(required_check) is not True:
+            fail(f"external baseline contract audit missing passing check: {required_check}")
     required_baseline_contract_files = [
         EXTERNAL / "baseline_implementation_contract.md",
         EXTERNAL / "baseline_implementation_matrix.csv",
+        ROOT / "scripts" / "self_test_external_baseline_contract.py",
+        RESULTS / "external_baseline_contract_self_test.json",
+        RESULTS / "external_baseline_contract_self_test.md",
     ]
     for path in required_baseline_contract_files:
         if not path.exists():
             fail(f"missing external baseline contract artifact: {path}")
+    baseline_self_test = json.loads((RESULTS / "external_baseline_contract_self_test.json").read_text(encoding="utf-8"))
+    if baseline_self_test.get("version") != "external_baseline_contract_self_test_v1":
+        fail("external baseline contract self-test version mismatch")
+    if baseline_self_test.get("passed") is not True:
+        fail("external baseline contract self-test did not pass")
+    if baseline_self_test.get("not_external_evidence") is not True:
+        fail("external baseline contract self-test must declare that it is not evidence")
+    if baseline_self_test.get("implementations_ready") is not False:
+        fail("external baseline contract self-test must not claim implementations ready")
+    for required_flag in (
+        "temporary_contract_ready",
+        "missing_required_method_rejected",
+        "premature_implementation_promotion_rejected",
+        "independent_source_drift_rejected",
+        "oracle_boundary_drift_rejected",
+        "fairness_invariant_shrink_rejected",
+        "adapter_api_drift_rejected",
+        "spec_method_binding_drift_rejected",
+        "release_evidence_spec_drift_rejected",
+        "policy_config_log_field_drift_rejected",
+        "contract_file_deletion_rejected",
+        "real_outputs_untouched",
+    ):
+        if baseline_self_test.get(required_flag) is not True:
+            fail(f"external baseline contract self-test missing true flag: {required_flag}")
+    baseline_self_checks = {check.get("name"): check.get("passed") for check in baseline_self_test.get("checks", []) or []}
+    for required_check in (
+        "temporary_baseline_contract_ready_but_non_evidence",
+        "missing_required_method_rejected",
+        "premature_implementation_promotion_rejected",
+        "independent_source_drift_rejected",
+        "oracle_boundary_drift_rejected",
+        "fairness_invariant_shrink_rejected",
+        "adapter_api_drift_rejected",
+        "spec_method_binding_drift_rejected",
+        "release_evidence_spec_drift_rejected",
+        "policy_config_log_field_drift_rejected",
+        "contract_file_deletion_rejected",
+        "real_baseline_contract_outputs_untouched",
+    ):
+        if baseline_self_checks.get(required_check) is not True:
+            fail(f"external baseline contract self-test missing passing check: {required_check}")
 
     adapter_scaffold_path = RESULTS / "external_adapter_scaffold_audit.json"
     if not adapter_scaffold_path.exists():
@@ -4844,6 +4904,7 @@ def main():
         "external_collection_job_packet_included",
         "collection_machine_bootstrap_included",
         "method_implementation_packet_included",
+        "baseline_contract_self_test_included",
         "method_config_materialization_included",
         "operator_actions_cover_evidence_collection",
         "post_collection_commands_cover_strict_gates",
@@ -5996,6 +6057,7 @@ def main():
         "postcollection_evidence_seal_visible",
         "postcollection_seal_consistency_gate_visible",
         "method_implementation_packet_visible",
+        "baseline_contract_self_test_visible",
         "external_method_config_materialization_visible",
         "maniskill_pilot_runtime_liveness_visible",
         "materializer_guard_visible",

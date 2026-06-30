@@ -87,6 +87,7 @@
       "blocker": "baseline contract still reports manifest-declared independent non-oracle evidence as missing; strict adapter contract evidence audit has no passing manifest-declared real implementations",
       "evidence": [
         "results/external_baseline_contract_audit.json",
+        "results/external_baseline_contract_self_test.json",
         "results/external_adapter_contract_evidence_audit.json",
         "external_validation/baseline_implementation_contract.md"
       ],
@@ -180,6 +181,9 @@
         "scripts/self_test_external_config_manifest_packet.py",
         "results/external_config_manifest_packet_self_test.json",
         "results/external_config_manifest_packet_self_test.md",
+        "scripts/self_test_external_baseline_contract.py",
+        "results/external_baseline_contract_self_test.json",
+        "results/external_baseline_contract_self_test.md",
         "scripts/self_test_external_rollout_evidence_packet.py",
         "results/external_rollout_evidence_packet_self_test.json",
         "results/external_rollout_evidence_packet_self_test.md",

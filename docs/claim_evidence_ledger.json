@@ -406,6 +406,11 @@
       "evidence": ["scripts/build_external_baseline_contract.py", "external_validation/baseline_implementation_contract.md", "external_validation/baseline_implementation_matrix.csv", "external_validation/baseline_specs/barrier_certified_energy_composer_v5.json", "external_validation/baseline_specs/oracle_basin_composer.json", "results/external_baseline_contract_audit.json", "results/external_baseline_contract_audit.md"]
     },
     {
+      "name": "external_baseline_contract_self_test_claim",
+      "claim": "The repository self-tests the External baseline contract in temporary copied workspaces, proving the contract remains non-evidence while missing required methods, premature implementation readiness, independent-source drift, oracle-boundary drift, weakened fairness invariants, adapter API drift, spec method-binding drift, missing release-evidence requirements, missing policy/config hash log requirements, and deleted contract files fail closed without touching real baseline-contract outputs.",
+      "evidence": ["scripts/self_test_external_baseline_contract.py", "results/external_baseline_contract_self_test.json", "results/external_baseline_contract_self_test.md", "scripts/build_external_baseline_contract.py", "external_validation/baseline_implementation_contract.md", "external_validation/baseline_implementation_matrix.csv", "results/external_baseline_contract_audit.json"]
+    },
+    {
       "name": "external_adapter_scaffold_claim",
       "claim": "The repository provides non-evidence executable adapter scaffolds for every external method, and strict external validation rejects scaffold-only adapters until real independent implementations replace them.",
       "evidence": ["scripts/build_external_adapter_scaffolds.py", "scripts/self_test_external_adapter_scaffold_guard.py", "external_validation/baseline_adapter_scaffold.md", "external_validation/baselines/README.md", "external_validation/baselines/barrier_certified_energy_composer_v5/adapter_template.py", "external_validation/baselines/barrier_certified_energy_composer_v5/adapter_metadata.json", "results/external_adapter_scaffold_audit.json", "results/external_adapter_scaffold_audit.md"]

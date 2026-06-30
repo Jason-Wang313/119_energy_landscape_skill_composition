@@ -28,7 +28,11 @@ This audit verifies that the baseline implementation contract is complete. It de
 - `pass` `all_required_methods_present`: missing=[]
 - `pass` `matrix_rows_match_methods`: rows=12, methods=12
 - `pass` `spec_files_match_methods`: specs=12, methods=12
+- `pass` `spec_files_are_method_bound`: spec_errors=[], missing=[]
+- `pass` `adapter_api_covers_required_methods`: missing=[]
 - `pass` `fairness_invariants_declared`: invariants=6
+- `pass` `specs_require_release_evidence`: errors=[]
+- `pass` `specs_require_policy_config_hash_logs`: errors=[]
 - `pass` `non_oracle_requires_independent_source`: all non-oracle rows require independent source
 - `pass` `oracle_post_hoc_only`: oracle_rows=[{'not_external_evidence': 'true', 'method': 'oracle_basin_composer', 'role': 'post hoc upper bound only', 'requires_independent_source': 'false', 'expected_adapter_dir': 'post_hoc_upper_bound', 'required_entrypoint': 'evaluate_oracle_upper_bound', 'same_skill_library': 'true', 'same_observation_interface': 'true', 'same_compute_budget': 'not_applicable', 'logging_required': 'true', 'oracle_boundary': 'post_hoc_only', 'implementation_status': 'post_hoc_upper_bound_only'}]
 - `pass` `implementations_not_marked_ready`: missing_implementations=['greedy_module_sequence', 'behavior_cloned_skill_chain', 'option_graph_planner', 'tamp_feasibility_screen', 'stable_dmp_handoff', 'diffusion_skill_stitcher', 'cem_trajectory_composer', 'residual_rl_composer', 'energy_compatibility_heuristic', 'proposed_energy_landscape_composer_v4_1', 'barrier_certified_energy_composer_v5']
