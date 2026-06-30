@@ -1294,6 +1294,15 @@ def main() -> int:
         check.get("name"): check.get("passed")
         for check in precollection_manifest.get("checks", []) or []
     }
+    precollection_self_ok, precollection_self_test, precollection_self_detail = passed_json(
+        RESULTS / "external_precollection_manifest_draft_self_test.json",
+        version="external_precollection_manifest_draft_self_test_v1",
+    )
+    add_check(checks, "external_precollection_manifest_draft_self_test_ready", precollection_self_ok, precollection_self_detail)
+    precollection_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in precollection_self_test.get("checks", []) or []
+    }
     add_check(
         checks,
         "external_precollection_manifest_draft_not_evidence",
@@ -1313,7 +1322,9 @@ def main() -> int:
         checks,
         "external_precollection_manifest_draft_config_hashes",
         int(precollection_manifest.get("prepared_config_count", 0) or 0) >= 4
-        and precollection_checks.get("prepared_config_hashes_prefilled") is True,
+        and precollection_checks.get("prepared_config_hashes_prefilled") is True
+        and precollection_checks.get("prepared_config_hashes_match_current_files") is True
+        and precollection_checks.get("candidate_method_configs_match_current_plan") is True,
         f"prepared_config_count={precollection_manifest.get('prepared_config_count')!r}",
     )
     add_check(
@@ -1327,6 +1338,26 @@ def main() -> int:
         (
             f"method_gaps={precollection_manifest.get('method_gap_count')!r}, "
             f"rollout_gaps={precollection_manifest.get('missing_rollout_artifact_count')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "external_precollection_manifest_draft_self_test_mutations",
+        precollection_self_test.get("passed") is True
+        and precollection_self_test.get("not_external_evidence") is True
+        and precollection_self_test.get("temporary_draft_ready") is True
+        and precollection_self_test.get("premature_evidence_promotion_rejected") is True
+        and precollection_self_test.get("candidate_method_config_hash_drift_rejected") is True
+        and precollection_self_test.get("source_report_drift_rejected") is True
+        and precollection_self_test.get("cutover_command_drift_rejected") is True
+        and precollection_self_test.get("real_manifest_write_rejected") is True
+        and precollection_self_test.get("real_outputs_untouched") is True
+        and precollection_self_checks.get("temporary_precollection_manifest_draft_ready_but_non_evidence") is True
+        and precollection_self_checks.get("real_precollection_manifest_outputs_untouched") is True,
+        (
+            f"temporary_draft_ready={precollection_self_test.get('temporary_draft_ready')!r}, "
+            f"candidate_hash_drift={precollection_self_test.get('candidate_method_config_hash_drift_rejected')!r}, "
+            f"source_drift={precollection_self_test.get('source_report_drift_rejected')!r}"
         ),
     )
 
@@ -1711,6 +1742,7 @@ def main() -> int:
         RESULTS / "external_evidence_intake_ledger_audit.md",
         RESULTS / "external_evidence_intake_ledger_self_test.md",
         RESULTS / "external_precollection_manifest_draft_audit.md",
+        RESULTS / "external_precollection_manifest_draft_self_test.md",
         RESULTS / "external_precollection_freeze_receipt_audit.md",
         RESULTS / "external_postcollection_evidence_seal_audit.md",
         EXTERNAL / "evidence_intake_ledger.json",
@@ -1867,9 +1899,11 @@ def main() -> int:
         "manifest_builder_report_exists",
         "manifest_builder_fail_closed",
         "external_precollection_manifest_draft_ready",
+        "external_precollection_manifest_draft_self_test_ready",
         "external_precollection_manifest_draft_not_evidence",
         "external_precollection_manifest_draft_config_hashes",
         "external_precollection_manifest_draft_fail_closed",
+        "external_precollection_manifest_draft_self_test_mutations",
         "external_precollection_freeze_receipt_ready",
         "external_precollection_freeze_receipt_not_evidence",
         "external_precollection_freeze_receipt_hash_lock",

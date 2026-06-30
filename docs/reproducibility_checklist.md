@@ -48,6 +48,9 @@
 - External evidence intake ledger builder: `scripts/build_external_evidence_intake_ledger.py`
 - External evidence intake ledger self-test: `scripts/self_test_external_evidence_intake_ledger.py`
   - Durable report: `results/external_evidence_intake_ledger_self_test.md`
+- External precollection manifest draft builder: `scripts/build_external_precollection_manifest_draft.py`
+- External precollection manifest draft self-test: `scripts/self_test_external_precollection_manifest_draft.py`
+  - Durable report: `results/external_precollection_manifest_draft_self_test.md`
 - External collection readiness validator: `scripts/audit_external_collection_readiness.py`
 - External config validator: `scripts/validate_external_configs.py`
 - External baseline contract builder: `scripts/build_external_baseline_contract.py`

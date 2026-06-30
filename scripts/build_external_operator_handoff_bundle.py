@@ -209,6 +209,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_manifest.py",
         SCRIPTS / "self_test_external_manifest_builder.py",
         SCRIPTS / "build_external_precollection_manifest_draft.py",
+        SCRIPTS / "self_test_external_precollection_manifest_draft.py",
         SCRIPTS / "audit_external_release_package.py",
         SCRIPTS / "self_test_external_evidence_preflight.py",
         SCRIPTS / "self_test_external_execution_readiness.py",
@@ -269,6 +270,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_evidence_intake_ledger_audit.md",
         RESULTS / "external_evidence_intake_ledger_self_test.json",
         RESULTS / "external_evidence_intake_ledger_self_test.md",
+        RESULTS / "external_precollection_manifest_draft_self_test.json",
+        RESULTS / "external_precollection_manifest_draft_self_test.md",
         RESULTS / "external_precollection_freeze_receipt_audit.json",
         RESULTS / "external_precollection_freeze_receipt_audit.md",
         RESULTS / "external_postcollection_evidence_seal_audit.json",
@@ -436,6 +439,10 @@ def build_payload() -> dict[str, Any]:
     evidence_intake_self_test = require_payload(
         RESULTS / "external_evidence_intake_ledger_self_test.json",
         "external_evidence_intake_ledger_self_test_v1",
+    )
+    precollection_manifest_self_test = require_payload(
+        RESULTS / "external_precollection_manifest_draft_self_test.json",
+        "external_precollection_manifest_draft_self_test_v1",
     )
     precollection_freeze = require_payload(
         RESULTS / "external_precollection_freeze_receipt_audit.json",
@@ -615,17 +622,46 @@ def build_payload() -> dict[str, Any]:
         and int(precollection_manifest.get("missing_rollout_artifact_count", 0) or 0) >= 8
         and precollection_checks.get("draft_marked_non_evidence_and_fail_closed") is True
         and precollection_checks.get("candidate_method_configs_prefilled") is True
+        and precollection_checks.get("candidate_method_configs_match_current_plan") is True
         and precollection_checks.get("method_gaps_bind_candidate_configs") is True
         and precollection_checks.get("method_gaps_still_require_independent_evidence") is True
+        and precollection_checks.get("source_reports_match_current_files") is True
         and "external_validation/manifest_precollection_draft.json" in paths
         and "external_validation/manifest_precollection_draft.md" in paths
         and "results/external_precollection_manifest_draft_audit.json" in paths
+        and "results/external_precollection_manifest_draft_audit.md" in paths
         and "scripts/build_external_precollection_manifest_draft.py" in paths,
         (
             f"configs={precollection_manifest.get('prepared_config_count')!r}, "
             f"method_configs={precollection_manifest.get('candidate_method_config_count')!r}, "
             f"method_gaps={precollection_manifest.get('method_gap_count')!r}, "
             f"rollout_gaps={precollection_manifest.get('missing_rollout_artifact_count')!r}"
+        ),
+    )
+    precollection_self_checks = {
+        check.get("name"): check.get("passed") for check in precollection_manifest_self_test.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "precollection_manifest_draft_self_test_included",
+        precollection_manifest_self_test.get("passed") is True
+        and precollection_manifest_self_test.get("not_external_evidence") is True
+        and precollection_manifest_self_test.get("temporary_draft_ready") is True
+        and precollection_manifest_self_test.get("premature_evidence_promotion_rejected") is True
+        and precollection_manifest_self_test.get("candidate_method_config_hash_drift_rejected") is True
+        and precollection_manifest_self_test.get("source_report_drift_rejected") is True
+        and precollection_manifest_self_test.get("cutover_command_drift_rejected") is True
+        and precollection_manifest_self_test.get("real_manifest_write_rejected") is True
+        and precollection_manifest_self_test.get("real_outputs_untouched") is True
+        and precollection_self_checks.get("temporary_precollection_manifest_draft_ready_but_non_evidence") is True
+        and precollection_self_checks.get("real_precollection_manifest_outputs_untouched") is True
+        and "results/external_precollection_manifest_draft_self_test.json" in paths
+        and "results/external_precollection_manifest_draft_self_test.md" in paths
+        and "scripts/self_test_external_precollection_manifest_draft.py" in paths,
+        (
+            f"temporary_draft_ready={precollection_manifest_self_test.get('temporary_draft_ready')!r}, "
+            f"candidate_hash_drift={precollection_manifest_self_test.get('candidate_method_config_hash_drift_rejected')!r}, "
+            f"source_report_drift={precollection_manifest_self_test.get('source_report_drift_rejected')!r}"
         ),
     )
     add_check(
@@ -1551,6 +1587,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_postcollection_evidence_seal_audit.json",
             "results/external_postcollection_seal_consistency_audit.json",
             "results/external_precollection_manifest_draft_audit.json",
+            "results/external_precollection_manifest_draft_self_test.json",
             "results/external_evidence_preflight.json",
             "results/external_release_package_audit.json",
             "results/external_pairing_integrity_audit.json",

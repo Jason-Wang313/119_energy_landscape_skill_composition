@@ -1,12 +1,12 @@
 {
   "checks": [
     {
-      "detail": "status=0, files=364, archive=False",
+      "detail": "status=0, files=367, archive=False",
       "name": "temporary_fixture_builds_current_release_plan",
       "passed": true
     },
     {
-      "detail": "status=0, entries=366, sha='8F90E1296148843A3A7A6E5B7B9A7098101E7F17DF612E7485F4D490DE55587F'",
+      "detail": "status=0, entries=369, sha='FFDCF6351660DA172EE7F7B0738A8550E142AACDE6AAC9EEA82EC682D6764B55'",
       "name": "explicit_archive_fixture_writes_deterministic_transfer_zip",
       "passed": true
     },
@@ -51,7 +51,7 @@
       "passed": true
     },
     {
-      "detail": "before={'results/external_operator_release_bundle_plan.json': '99fe056a9685f472d3bce8196669bbd9b9dbccdfaad4ea0717566d8a65e596fc', 'results/external_operator_release_bundle_plan.md': 'f887b3ca3a6960fa8851eddd504910664244eece8d4cb1fcf61a9b4398d37c09', 'external_validation/operator_release_bundle_manifest.csv': '045a5ae22dc7c2b5da9f6bedfdd0f065a3a27500e224d2242b94079725511f3c', 'external_validation/operator_release_bundle_README.md': 'a37213dcd33ef3143736d6e8177000393d3edca2a13853570f8a229c20357068', 'results/paper119_external_operator_release_bundle.zip': None}, after={'results/external_operator_release_bundle_plan.json': '99fe056a9685f472d3bce8196669bbd9b9dbccdfaad4ea0717566d8a65e596fc', 'results/external_operator_release_bundle_plan.md': 'f887b3ca3a6960fa8851eddd504910664244eece8d4cb1fcf61a9b4398d37c09', 'external_validation/operator_release_bundle_manifest.csv': '045a5ae22dc7c2b5da9f6bedfdd0f065a3a27500e224d2242b94079725511f3c', 'external_validation/operator_release_bundle_README.md': 'a37213dcd33ef3143736d6e8177000393d3edca2a13853570f8a229c20357068', 'results/paper119_external_operator_release_bundle.zip': None}",
+      "detail": "before={'results/external_operator_release_bundle_plan.json': 'd2e38d3c7c13d1c0b7bdf9148fd5ac77d036d38637db00102ba0ce28458c94c2', 'results/external_operator_release_bundle_plan.md': '7e6a8bd3e570946bda0030552064c5d299a863aa544d7891487407a4857195a1', 'external_validation/operator_release_bundle_manifest.csv': '89ff992a0b1a34782e21aac03561721b75e36db7c593fcb3b307f857dc17f1a2', 'external_validation/operator_release_bundle_README.md': 'bc23261cb5468b72940c29499a97b0a029e4ffa107b3227bab76025c4dbad8bc', 'results/paper119_external_operator_release_bundle.zip': None}, after={'results/external_operator_release_bundle_plan.json': 'd2e38d3c7c13d1c0b7bdf9148fd5ac77d036d38637db00102ba0ce28458c94c2', 'results/external_operator_release_bundle_plan.md': '7e6a8bd3e570946bda0030552064c5d299a863aa544d7891487407a4857195a1', 'external_validation/operator_release_bundle_manifest.csv': '89ff992a0b1a34782e21aac03561721b75e36db7c593fcb3b307f857dc17f1a2', 'external_validation/operator_release_bundle_README.md': 'bc23261cb5468b72940c29499a97b0a029e4ffa107b3227bab76025c4dbad8bc', 'results/paper119_external_operator_release_bundle.zip': None}",
       "name": "real_repository_release_outputs_untouched",
       "passed": true
     }

@@ -780,7 +780,7 @@
     {
       "exists": true,
       "path": "results/external_config_manifest_audit.json",
-      "sha256": "71888C39980962B4AAE8E67DC2338CEB8F2DBA603BC85DF0BF6B50BE7720EF92"
+      "sha256": "A46DED8E5FF2E9E9FAB155569F9FA4FD8FDA633E062962180781B9DCB360D972"
     },
     {
       "exists": true,
@@ -790,12 +790,12 @@
     {
       "exists": true,
       "path": "results/external_ablation_collection_audit.json",
-      "sha256": "42DBE738EC9F7787C52F7A50B456BEEFA872ACECD813E66CA5855608684E4679"
+      "sha256": "586E5A58D35A79EAB496934C9FD2C09421B364CAC09F05C722FD0552A841A885"
     },
     {
       "exists": true,
       "path": "results/external_evidence_intake_ledger_audit.json",
-      "sha256": "A34133E4B58D01490A3D0D0786E7A5FE52352F7F645D16EC657B2D519D6A6DBE"
+      "sha256": "BA2A6A50BCFB44FDF7531CF71BCBEBB68D3E9B3D8851F75BB5F11CED1F8D24D9"
     },
     {
       "exists": true,
@@ -815,7 +815,7 @@
     {
       "exists": true,
       "path": "results/maniskill_render_machine_qualification.json",
-      "sha256": "0FB486CE9AAFF6B8765562D3108666CA37C0797835DB062BCBA77AF22D153694"
+      "sha256": "6C63AC79D94BFC129C68F78C335120CA7A621B44BAEA49889258C3BB12777AAD"
     }
   ],
   "strict_config_evidence_ready": false,

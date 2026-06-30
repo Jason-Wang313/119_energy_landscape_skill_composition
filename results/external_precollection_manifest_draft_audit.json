@@ -23,8 +23,18 @@
       "passed": true
     },
     {
+      "detail": "prepared=4/4, task_paths_match=True, mismatches=[], extra=[]",
+      "name": "prepared_config_hashes_match_current_files",
+      "passed": true
+    },
+    {
       "detail": "candidate_method_configs=11",
       "name": "candidate_method_configs_prefilled",
+      "passed": true
+    },
+    {
+      "detail": "candidate_method_configs=11/11, mismatches=[], extra=[]",
+      "name": "candidate_method_configs_match_current_plan",
       "passed": true
     },
     {
@@ -55,6 +65,11 @@
     {
       "detail": "sources=9",
       "name": "source_reports_hash_listed",
+      "passed": true
+    },
+    {
+      "detail": "sources=9/9, mismatches=[], extra=[]",
+      "name": "source_reports_match_current_files",
       "passed": true
     },
     {

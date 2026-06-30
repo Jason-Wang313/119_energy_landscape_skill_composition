@@ -159,6 +159,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External precollection manifest draft: `external_validation/manifest_precollection_draft.md`
 - External precollection manifest draft candidate method-config hash bindings: `external_validation/manifest_precollection_draft.md`
 - External precollection manifest draft audit: `results/external_precollection_manifest_draft_audit.md`
+- External precollection manifest draft self-test: `results/external_precollection_manifest_draft_self_test.md`
 - External precollection freeze receipt: `external_validation/precollection_freeze_receipt.md`
 - External precollection freeze receipt audit: `results/external_precollection_freeze_receipt_audit.md`
 - External precollection freeze receipt candidate method-config hash locks: `external_validation/precollection_freeze_receipt.csv` now includes all 11 non-oracle candidate method-config JSON hashes while keeping them non-evidence.

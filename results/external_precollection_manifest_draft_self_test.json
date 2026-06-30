@@ -1,0 +1,80 @@
+{
+  "candidate_method_config_hash_drift_rejected": true,
+  "checks": [
+    {
+      "detail": "status=0, configs=4, methods=11",
+      "name": "temporary_precollection_manifest_draft_ready_but_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "premature_evidence_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "missing_prepared_config_hash_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "task_config_path_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "candidate_method_config_hash_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "method_blocker_omission_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "rollout_gap_omission_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "source_report_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "cutover_command_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "real_manifest_write_rejected",
+      "passed": true
+    },
+    {
+      "detail": "required temporary draft output check detects deleted precollection manifest markdown",
+      "name": "draft_file_deletion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "before={'external_validation/manifest_precollection_draft.json': '2efde6f059def0dc03a12baffdcd3e39973ecab4424ca5bcb6b5bc29263fbdb8', 'external_validation/manifest_precollection_draft.md': '0db9bb55d0e70b38e9c96321298309a9c54977e6b137258ef6fa2c0df8879b43', 'results/external_precollection_manifest_draft_audit.json': '5ea5219c264b754dcdeb65b3dc107c99fcf834e6909bf707082abcb537a548bf', 'results/external_precollection_manifest_draft_audit.md': '04d1e0d920d763eaabcbf93fd3378ba2b261c7dcef43ee0e6e2125c6b5cd89e5', 'external_validation/manifest.json': None}, after={'external_validation/manifest_precollection_draft.json': '2efde6f059def0dc03a12baffdcd3e39973ecab4424ca5bcb6b5bc29263fbdb8', 'external_validation/manifest_precollection_draft.md': '0db9bb55d0e70b38e9c96321298309a9c54977e6b137258ef6fa2c0df8879b43', 'results/external_precollection_manifest_draft_audit.json': '5ea5219c264b754dcdeb65b3dc107c99fcf834e6909bf707082abcb537a548bf', 'results/external_precollection_manifest_draft_audit.md': '04d1e0d920d763eaabcbf93fd3378ba2b261c7dcef43ee0e6e2125c6b5cd89e5', 'external_validation/manifest.json': None}",
+      "name": "real_precollection_manifest_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "cutover_command_drift_rejected": true,
+  "draft_file_deletion_rejected": true,
+  "method_blocker_omission_rejected": true,
+  "missing_prepared_config_hash_rejected": true,
+  "not_external_evidence": true,
+  "passed": true,
+  "premature_evidence_promotion_rejected": true,
+  "real_manifest_write_rejected": true,
+  "real_outputs_untouched": true,
+  "rollout_gap_omission_rejected": true,
+  "source_report_drift_rejected": true,
+  "strict_external_evidence_ready": false,
+  "task_config_path_drift_rejected": true,
+  "temporary_draft_ready": true,
+  "version": "external_precollection_manifest_draft_self_test_v1"
+}

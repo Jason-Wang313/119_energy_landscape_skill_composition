@@ -148,6 +148,7 @@ def main():
         "scripts\\build_external_evidence_intake_ledger.py",
         "scripts\\self_test_external_evidence_intake_ledger.py",
         "scripts\\build_external_precollection_manifest_draft.py",
+        "scripts\\self_test_external_precollection_manifest_draft.py",
         "scripts\\build_external_precollection_freeze_receipt.py",
         "scripts\\self_test_external_precollection_freeze_receipt.py",
         "scripts\\build_external_postcollection_evidence_seal.py",
@@ -261,6 +262,7 @@ def main():
         "python scripts/build_external_evidence_intake_ledger.py",
         "python scripts/self_test_external_evidence_intake_ledger.py",
         "python scripts/build_external_precollection_manifest_draft.py",
+        "python scripts/self_test_external_precollection_manifest_draft.py",
         "python scripts/build_external_precollection_freeze_receipt.py",
         "python scripts/self_test_external_precollection_freeze_receipt.py",
         "python scripts/build_external_postcollection_evidence_seal.py",
@@ -2289,17 +2291,23 @@ def main():
     precollection_draft_md_path = EXTERNAL / "manifest_precollection_draft.md"
     precollection_audit_path = RESULTS / "external_precollection_manifest_draft_audit.json"
     precollection_audit_md_path = RESULTS / "external_precollection_manifest_draft_audit.md"
+    precollection_self_test_path = RESULTS / "external_precollection_manifest_draft_self_test.json"
+    precollection_self_test_md_path = RESULTS / "external_precollection_manifest_draft_self_test.md"
     for path in (
         ROOT / "scripts" / "build_external_precollection_manifest_draft.py",
+        ROOT / "scripts" / "self_test_external_precollection_manifest_draft.py",
         precollection_draft_path,
         precollection_draft_md_path,
         precollection_audit_path,
         precollection_audit_md_path,
+        precollection_self_test_path,
+        precollection_self_test_md_path,
     ):
         if not path.exists():
             fail(f"missing external precollection manifest draft artifact: {path}")
     precollection_draft = json.loads(precollection_draft_path.read_text(encoding="utf-8"))
     precollection_audit = json.loads(precollection_audit_path.read_text(encoding="utf-8"))
+    precollection_self_test = json.loads(precollection_self_test_path.read_text(encoding="utf-8"))
     if precollection_draft.get("version") != "external_precollection_manifest_draft_v1":
         fail("external precollection manifest draft version mismatch")
     if precollection_draft.get("not_external_evidence") is not True or precollection_draft.get("draft_only") is not True:
@@ -2384,16 +2392,42 @@ def main():
         "draft_marked_non_evidence_and_fail_closed",
         "official_manifest_absent",
         "prepared_config_hashes_prefilled",
+        "prepared_config_hashes_match_current_files",
         "candidate_method_configs_prefilled",
+        "candidate_method_configs_match_current_plan",
         "method_gaps_bind_candidate_configs",
         "method_gaps_still_require_independent_evidence",
         "method_gaps_remain_blocking",
         "rollout_artifacts_remain_blocking",
         "manifest_assembly_blockers_preserved",
         "source_reports_hash_listed",
+        "source_reports_match_current_files",
     ):
         if precollection_checks.get(required_check) is not True:
             fail(f"external precollection manifest draft audit missing passing check: {required_check}")
+    if precollection_self_test.get("version") != "external_precollection_manifest_draft_self_test_v1":
+        fail("external precollection manifest draft self-test version mismatch")
+    if precollection_self_test.get("passed") is not True:
+        fail("external precollection manifest draft self-test did not pass")
+    if precollection_self_test.get("not_external_evidence") is not True:
+        fail("external precollection manifest draft self-test must declare that it is not evidence")
+    if precollection_self_test.get("temporary_draft_ready") is not True:
+        fail("external precollection manifest draft self-test must prove a temporary draft can be built")
+    for required_field in (
+        "premature_evidence_promotion_rejected",
+        "missing_prepared_config_hash_rejected",
+        "task_config_path_drift_rejected",
+        "candidate_method_config_hash_drift_rejected",
+        "method_blocker_omission_rejected",
+        "rollout_gap_omission_rejected",
+        "source_report_drift_rejected",
+        "cutover_command_drift_rejected",
+        "real_manifest_write_rejected",
+        "draft_file_deletion_rejected",
+        "real_outputs_untouched",
+    ):
+        if precollection_self_test.get(required_field) is not True:
+            fail(f"external precollection manifest draft self-test missing passing field: {required_field}")
 
     freeze_receipt_path = EXTERNAL / "precollection_freeze_receipt.json"
     freeze_receipt_md_path = EXTERNAL / "precollection_freeze_receipt.md"
@@ -4417,6 +4451,7 @@ def main():
         EXTERNAL / "manifest_precollection_draft.md",
         RESULTS / "external_method_implementation_audit.md",
         RESULTS / "external_precollection_manifest_draft_audit.md",
+        RESULTS / "external_precollection_manifest_draft_self_test.md",
         RESULTS / "external_precollection_freeze_receipt_audit.md",
         RESULTS / "external_postcollection_evidence_seal_audit.md",
         RESULTS / "external_config_manifest_audit.md",
@@ -4424,6 +4459,7 @@ def main():
         RESULTS / "external_ablation_collection_audit.md",
         RESULTS / "external_ablation_collection_packet_self_test.md",
         RESULTS / "external_evidence_intake_ledger_audit.md",
+        RESULTS / "external_evidence_intake_ledger_self_test.md",
         RESULTS / "external_pilot_smoke_audit.md",
         RESULTS / "external_pilot_smoke_packet_audit.md",
         RESULTS / "external_config_materialization_plan.md",
@@ -5061,6 +5097,7 @@ def main():
         "evidence_intake_ledger_included",
         "evidence_intake_ledger_self_test_included",
         "precollection_manifest_draft_included",
+        "precollection_manifest_draft_self_test_included",
         "precollection_freeze_receipt_included",
         "postcollection_evidence_seal_included",
         "postcollection_seal_consistency_gate_included",

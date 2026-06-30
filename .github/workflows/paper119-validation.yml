@@ -205,6 +205,9 @@ jobs:
       - name: Build external precollection manifest draft
         run: python scripts/build_external_precollection_manifest_draft.py
 
+      - name: Self-test external precollection manifest draft
+        run: python scripts/self_test_external_precollection_manifest_draft.py
+
       - name: Build external precollection freeze receipt
         run: python scripts/build_external_precollection_freeze_receipt.py
 

@@ -328,7 +328,98 @@ def build_payload() -> dict[str, Any]:
     }
 
 
-def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
+def map_by_key(rows: list[dict[str, Any]], key: str) -> dict[str, dict[str, Any]]:
+    return {str(row.get(key, "")): row for row in rows if isinstance(row, dict) and row.get(key)}
+
+
+def source_reports_match_current_files(source_reports_payload: list[dict[str, Any]]) -> tuple[bool, str]:
+    current_sources = source_report_records()
+    payload_by_path = map_by_key(source_reports_payload, "path")
+    current_by_path = map_by_key(current_sources, "path")
+    mismatches: list[str] = []
+    for path, current in current_by_path.items():
+        payload = payload_by_path.get(path, {})
+        if payload.get("exists") is not True or payload.get("sha256") != current.get("sha256"):
+            mismatches.append(path)
+    extra = sorted(set(payload_by_path) - set(current_by_path))
+    ok = not mismatches and not extra and len(payload_by_path) == len(current_by_path)
+    detail = f"sources={len(payload_by_path)}/{len(current_by_path)}, mismatches={mismatches}, extra={extra}"
+    return ok, detail
+
+
+def prepared_records_match_current_configs(payload: dict[str, Any]) -> tuple[bool, str]:
+    template = read_json(TEMPLATE)
+    schema = read_json(SCHEMA)
+    task_manifest_entries, current_prepared = config_records(template, schema)
+    current_by_task = map_by_key(current_prepared, "task_family")
+    payload_records = payload.get("prepared_config_records", []) or []
+    payload_by_task = map_by_key(payload_records, "task_family")
+    template_tasks = {
+        str(task.get("task_family", "")): str(task.get("config_path", ""))
+        for task in template.get("tasks", []) or []
+        if isinstance(task, dict)
+    }
+    payload_tasks = {
+        str(row.get("task_family", "")): str(row.get("config_path", ""))
+        for row in payload_records
+        if isinstance(row, dict)
+    }
+    draft_entries = payload.get("task_manifest_entries_with_hashes", []) or []
+    draft_entry_tasks = {
+        str(row.get("task_family", "")): str(row.get("config_path", ""))
+        for row in draft_entries
+        if isinstance(row, dict)
+    }
+    mismatches: list[str] = []
+    for task_family, current in current_by_task.items():
+        payload_record = payload_by_task.get(task_family, {})
+        if (
+            payload_record.get("config_path") != current.get("config_path")
+            or payload_record.get("config_hash") != current.get("config_hash")
+            or payload_record.get("strict_validation_passed_if_manifest_declared") is not True
+        ):
+            mismatches.append(task_family)
+    extra = sorted(set(payload_by_task) - set(current_by_task))
+    task_paths_match = payload_tasks == template_tasks and draft_entry_tasks == template_tasks
+    ok = (
+        not mismatches
+        and not extra
+        and len(payload_by_task) == len(current_by_task)
+        and len(draft_entries) == len(task_manifest_entries)
+        and task_paths_match
+    )
+    detail = (
+        f"prepared={len(payload_by_task)}/{len(current_by_task)}, "
+        f"task_paths_match={task_paths_match}, mismatches={mismatches}, extra={extra}"
+    )
+    return ok, detail
+
+
+def candidate_records_match_current_plan(payload: dict[str, Any]) -> tuple[bool, str]:
+    try:
+        current_candidates, _candidate_by_method = method_config_candidates()
+    except SystemExit as exc:
+        return False, f"method config plan rejected: {exc}"
+    payload_records = payload.get("candidate_method_config_records", []) or []
+    payload_by_method = map_by_key(payload_records, "method")
+    current_by_method = map_by_key(current_candidates, "method")
+    mismatches: list[str] = []
+    for method, current in current_by_method.items():
+        payload_record = payload_by_method.get(method, {})
+        if (
+            payload_record.get("config_path") != current.get("config_path")
+            or payload_record.get("config_sha256") != current.get("config_sha256")
+            or current.get("config_hash_matches") is not True
+            or current.get("config_exists") is not True
+        ):
+            mismatches.append(method)
+    extra = sorted(set(payload_by_method) - set(current_by_method))
+    ok = not mismatches and not extra and len(payload_by_method) == len(current_by_method) and len(payload_by_method) >= 11
+    detail = f"candidate_method_configs={len(payload_by_method)}/{len(current_by_method)}, mismatches={mismatches}, extra={extra}"
+    return ok, detail
+
+
+def audit_packet(payload: dict[str, Any]) -> dict[str, Any]:
     checks: list[dict[str, Any]] = []
     config_records_payload = payload.get("prepared_config_records", []) or []
     candidate_method_config_payload = payload.get("candidate_method_config_records", []) or []
@@ -341,6 +432,8 @@ def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
     add_check(checks, "draft_marked_non_evidence_and_fail_closed", payload.get("not_external_evidence") is True and payload.get("draft_only") is True and payload.get("strict_external_evidence_ready") is False and payload.get("ready_to_write_official_manifest") is False, "draft is non-evidence and cannot write the official manifest")
     add_check(checks, "official_manifest_absent", payload.get("official_manifest_exists") is False and not OFFICIAL_MANIFEST.exists(), rel(OFFICIAL_MANIFEST))
     add_check(checks, "prepared_config_hashes_prefilled", len(config_records_payload) >= 4 and all(row.get("strict_validation_passed_if_manifest_declared") is True and len(str(row.get("config_hash", ""))) == 64 for row in config_records_payload), f"configs={len(config_records_payload)}")
+    prepared_match, prepared_detail = prepared_records_match_current_configs(payload)
+    add_check(checks, "prepared_config_hashes_match_current_files", prepared_match, prepared_detail)
     add_check(
         checks,
         "candidate_method_configs_prefilled",
@@ -349,6 +442,8 @@ def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
         and all(row.get("method") != ORACLE_METHOD for row in candidate_method_config_payload),
         f"candidate_method_configs={len(candidate_method_config_payload)}",
     )
+    candidate_match, candidate_detail = candidate_records_match_current_plan(payload)
+    add_check(checks, "candidate_method_configs_match_current_plan", candidate_match, candidate_detail)
     add_check(
         checks,
         "method_gaps_bind_candidate_configs",
@@ -372,6 +467,8 @@ def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
     add_check(checks, "rollout_artifacts_remain_blocking", len(rollout_gaps_payload) >= 8 and int(payload.get("missing_rollout_artifact_count", 0) or 0) >= 8, f"missing_rollout_artifact_count={payload.get('missing_rollout_artifact_count')!r}")
     add_check(checks, "manifest_assembly_blockers_preserved", int(payload.get("manifest_assembly_blocking_count", 0) or 0) >= 20, f"blocking={payload.get('manifest_assembly_blocking_count')!r}")
     add_check(checks, "source_reports_hash_listed", all(row.get("exists") and len(str(row.get("sha256", ""))) == 64 for row in source_reports_payload), f"sources={len(source_reports_payload)}")
+    sources_match, sources_detail = source_reports_match_current_files(source_reports_payload)
+    add_check(checks, "source_reports_match_current_files", sources_match, sources_detail)
     for fragment in (
         "materialize_fidelity_acceptance.py",
         "audit_external_collection_readiness.py --strict",
@@ -407,6 +504,10 @@ def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
         "cutover_commands": payload.get("cutover_commands", []),
         "checks": checks,
     }
+
+
+def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
+    return audit_packet(payload)
 
 
 def write_draft_md(payload: dict[str, Any]) -> None:

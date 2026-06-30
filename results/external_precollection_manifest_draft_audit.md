@@ -13,13 +13,16 @@ This audit checks that the precollection manifest draft is useful for an operato
 - `pass` `draft_marked_non_evidence_and_fail_closed`: draft is non-evidence and cannot write the official manifest
 - `pass` `official_manifest_absent`: external_validation/manifest.json
 - `pass` `prepared_config_hashes_prefilled`: configs=4
+- `pass` `prepared_config_hashes_match_current_files`: prepared=4/4, task_paths_match=True, mismatches=[], extra=[]
 - `pass` `candidate_method_configs_prefilled`: candidate_method_configs=11
+- `pass` `candidate_method_configs_match_current_plan`: candidate_method_configs=11/11, mismatches=[], extra=[]
 - `pass` `method_gaps_bind_candidate_configs`: method_gaps=11
 - `pass` `method_gaps_still_require_independent_evidence`: candidate config hashes do not replace independent implementations, provenance, manifest declaration, or rollout log binding
 - `pass` `method_gaps_remain_blocking`: method_gap_count=11
 - `pass` `rollout_artifacts_remain_blocking`: missing_rollout_artifact_count=8
 - `pass` `manifest_assembly_blockers_preserved`: blocking=28
 - `pass` `source_reports_hash_listed`: sources=9
+- `pass` `source_reports_match_current_files`: sources=9/9, mismatches=[], extra=[]
 - `pass` `cutover_command_contains_materialize_fidelity_acceptance`: materialize_fidelity_acceptance.py
 - `pass` `cutover_command_contains_audit_external_collection_readiness`: audit_external_collection_readiness.py --strict
 - `pass` `cutover_command_contains_build_external_precollection_freeze_receipt`: build_external_precollection_freeze_receipt.py
