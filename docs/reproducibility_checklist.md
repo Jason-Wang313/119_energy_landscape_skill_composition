@@ -33,6 +33,8 @@
 - ManiSkill reference collection preflight validator: `scripts/audit_maniskill_reference_collection_preflight.py`
 - External backend integration packet builder: `scripts/build_external_backend_integration_packet.py`
 - External config manifest packet builder: `scripts/build_external_config_manifest_packet.py`
+- External config manifest packet self-test: `scripts/self_test_external_config_manifest_packet.py`
+  - Durable report: `results/external_config_manifest_packet_self_test.md`
 - External rollout evidence packet builder: `scripts/build_external_rollout_evidence_packet.py`
 - External rollout evidence packet self-test: `scripts/self_test_external_rollout_evidence_packet.py`
   - Durable report: `results/external_rollout_evidence_packet_self_test.md`

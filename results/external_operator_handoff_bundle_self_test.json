@@ -2,7 +2,7 @@
   "acquisition_blocker_drift_rejected": true,
   "checks": [
     {
-      "detail": "status=0, files=345, start_state='DO_NOT_COLLECT_YET'",
+      "detail": "status=0, files=348, start_state='DO_NOT_COLLECT_YET'",
       "name": "temporary_fixture_builds_current_handoff_bundle",
       "passed": true
     },
@@ -52,7 +52,7 @@
       "passed": true
     },
     {
-      "detail": "before={'results/external_operator_handoff_bundle.json': '7c503fb2e2bb4c59f53034131af264b8e7f77a14025d62db00f23e39a8ca09dd', 'results/external_operator_handoff_bundle.md': '9b315e8138758c0ad7089b92fa5d21bf6698c0930829057eefc6adf6d7293c91'}, after={'results/external_operator_handoff_bundle.json': '7c503fb2e2bb4c59f53034131af264b8e7f77a14025d62db00f23e39a8ca09dd', 'results/external_operator_handoff_bundle.md': '9b315e8138758c0ad7089b92fa5d21bf6698c0930829057eefc6adf6d7293c91'}",
+      "detail": "before={'results/external_operator_handoff_bundle.json': '4ef341c42fdfd95647367e279e38085cbe693cabe115a8b221b5e9934cb14279', 'results/external_operator_handoff_bundle.md': '583928a0e1c22024742185b1d57c08dff21bb005c63298f27713b00938eb402e'}, after={'results/external_operator_handoff_bundle.json': '4ef341c42fdfd95647367e279e38085cbe693cabe115a8b221b5e9934cb14279', 'results/external_operator_handoff_bundle.md': '583928a0e1c22024742185b1d57c08dff21bb005c63298f27713b00938eb402e'}",
       "name": "real_repository_handoff_outputs_untouched",
       "passed": true
     }

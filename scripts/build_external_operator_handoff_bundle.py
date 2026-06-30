@@ -176,6 +176,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "materialize_fidelity_acceptance.py",
         SCRIPTS / "build_external_backend_integration_packet.py",
         SCRIPTS / "build_external_config_manifest_packet.py",
+        SCRIPTS / "self_test_external_config_manifest_packet.py",
         SCRIPTS / "build_external_rollout_evidence_packet.py",
         SCRIPTS / "self_test_external_rollout_evidence_packet.py",
         SCRIPTS / "build_external_ablation_collection_packet.py",
@@ -244,6 +245,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_backend_integration_audit.md",
         RESULTS / "external_config_manifest_audit.json",
         RESULTS / "external_config_manifest_audit.md",
+        RESULTS / "external_config_manifest_packet_self_test.json",
+        RESULTS / "external_config_manifest_packet_self_test.md",
         RESULTS / "external_rollout_evidence_audit.json",
         RESULTS / "external_rollout_evidence_audit.md",
         RESULTS / "external_rollout_evidence_packet_self_test.json",
@@ -391,6 +394,10 @@ def build_payload() -> dict[str, Any]:
     maniskill_backend = require_payload(RESULTS / "maniskill_backend_readiness_audit.json", "maniskill_reference_backend_audit_v1")
     maniskill_preflight = require_payload(RESULTS / "maniskill_reference_collection_preflight_audit.json", "maniskill_reference_collection_preflight_audit_v1")
     config_manifest = require_payload(RESULTS / "external_config_manifest_audit.json", "external_config_manifest_audit_v1")
+    config_manifest_self_test = require_payload(
+        RESULTS / "external_config_manifest_packet_self_test.json",
+        "external_config_manifest_packet_self_test_v1",
+    )
     rollout_evidence = require_payload(RESULTS / "external_rollout_evidence_audit.json", "external_rollout_evidence_audit_v1")
     rollout_evidence_self_test = require_payload(
         RESULTS / "external_rollout_evidence_packet_self_test.json",
@@ -813,6 +820,10 @@ def build_payload() -> dict[str, Any]:
         for check in method_implementation_self_test.get("checks", []) or []
     }
     config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", []) or []}
+    config_manifest_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in config_manifest_self_test.get("checks", []) or []
+    }
     add_check(
         checks,
         "config_manifest_packet_included",
@@ -823,11 +834,26 @@ def build_payload() -> dict[str, Any]:
         and config_manifest.get("manifest_declared_config_ready") is False
         and config_manifest_checks.get("work_orders_cover_config_to_manifest_path") is True
         and config_manifest_checks.get("strict_commands_cover_config_manifest_release_and_evidence") is True
+        and config_manifest_self_test.get("passed") is True
+        and config_manifest_self_test.get("not_external_evidence") is True
+        and config_manifest_self_test.get("temporary_packet_ready") is True
+        and config_manifest_self_test.get("missing_task_work_orders_rejected") is True
+        and config_manifest_self_test.get("premature_evidence_promotion_rejected") is True
+        and config_manifest_self_test.get("manifest_task_omission_rejected") is True
+        and config_manifest_self_test.get("prepared_config_hash_drift_rejected") is True
+        and config_manifest_self_test.get("prepared_config_validation_drift_rejected") is True
+        and config_manifest_self_test.get("strict_command_drift_rejected") is True
+        and config_manifest_self_test.get("real_outputs_untouched") is True
+        and config_manifest_self_checks.get("temporary_config_manifest_packet_ready_but_non_evidence") is True
+        and config_manifest_self_checks.get("real_config_manifest_outputs_untouched") is True
         and "external_validation/config_manifest_packet.json" in paths
         and "external_validation/config_manifest_packet.md" in paths
         and "external_validation/config_manifest_work_orders.csv" in paths
         and "results/external_config_manifest_audit.json" in paths
-        and "scripts/build_external_config_manifest_packet.py" in paths,
+        and "results/external_config_manifest_packet_self_test.json" in paths
+        and "results/external_config_manifest_packet_self_test.md" in paths
+        and "scripts/build_external_config_manifest_packet.py" in paths
+        and "scripts/self_test_external_config_manifest_packet.py" in paths,
         (
             f"config_manifest_packet_ready={config_manifest.get('config_manifest_packet_ready')!r}, "
             f"strict_config_evidence_ready={config_manifest.get('strict_config_evidence_ready')!r}, "
@@ -1310,6 +1336,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_backend_integration_audit.json",
             "results/maniskill_backend_readiness_audit.json",
             "results/external_config_manifest_audit.json",
+            "results/external_config_manifest_packet_self_test.json",
             "results/external_rollout_evidence_audit.json",
             "results/external_rollout_evidence_packet_self_test.json",
             "results/external_pilot_smoke_packet_audit.json",

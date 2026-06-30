@@ -143,6 +143,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External config materialization plan: `results/external_config_materialization_plan.md`
 - External config manifest packet: `external_validation/config_manifest_packet.md`
 - External config manifest audit: `results/external_config_manifest_audit.md`
+- External config manifest packet self-test: `results/external_config_manifest_packet_self_test.md`
 - External rollout evidence packet: `external_validation/rollout_evidence_packet.md`
 - External rollout evidence audit: `results/external_rollout_evidence_audit.md`
 - External rollout evidence packet self-test: `results/external_rollout_evidence_packet_self_test.md`

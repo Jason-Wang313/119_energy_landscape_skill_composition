@@ -139,6 +139,7 @@ def main():
         "scripts\\self_test_external_config_evidence.py",
         "scripts\\materialize_external_configs.py",
         "scripts\\build_external_config_manifest_packet.py",
+        "scripts\\self_test_external_config_manifest_packet.py",
         "scripts\\build_external_rollout_evidence_packet.py",
         "scripts\\build_external_ablation_collection_packet.py",
         "scripts\\build_external_evidence_intake_ledger.py",
@@ -5289,6 +5290,9 @@ def main():
         config_manifest_orders_path,
         config_manifest_audit_path,
         config_manifest_audit_md_path,
+        ROOT / "scripts" / "self_test_external_config_manifest_packet.py",
+        RESULTS / "external_config_manifest_packet_self_test.json",
+        RESULTS / "external_config_manifest_packet_self_test.md",
     ):
         if not path.exists():
             fail(f"missing external config manifest packet artifact: {path}")
@@ -5350,6 +5354,55 @@ def main():
     ):
         if config_manifest_checks.get(required_check) is not True:
             fail(f"external config manifest audit missing passing check: {required_check}")
+    config_manifest_self_test = json.loads((RESULTS / "external_config_manifest_packet_self_test.json").read_text(encoding="utf-8"))
+    if config_manifest_self_test.get("version") != "external_config_manifest_packet_self_test_v1":
+        fail("external config manifest packet self-test version mismatch")
+    if config_manifest_self_test.get("passed") is not True:
+        fail("external config manifest packet self-test did not pass")
+    if config_manifest_self_test.get("not_external_evidence") is not True:
+        fail("external config manifest packet self-test must declare that it is not evidence")
+    if config_manifest_self_test.get("strict_config_evidence_ready") is not False:
+        fail("external config manifest packet self-test must not claim strict config evidence")
+    if config_manifest_self_test.get("manifest_declared_config_ready") is not False:
+        fail("external config manifest packet self-test must not claim manifest-declared config readiness")
+    for required_flag in (
+        "temporary_packet_ready",
+        "missing_task_work_orders_rejected",
+        "premature_evidence_promotion_rejected",
+        "materialization_write_drift_rejected",
+        "template_audit_shrink_rejected",
+        "strict_config_evidence_promotion_rejected",
+        "manifest_task_omission_rejected",
+        "prepared_config_hash_drift_rejected",
+        "prepared_config_validation_drift_rejected",
+        "strict_command_drift_rejected",
+        "real_manifest_write_rejected",
+        "manifest_path_drift_rejected",
+        "real_outputs_untouched",
+    ):
+        if config_manifest_self_test.get(required_flag) is not True:
+            fail(f"external config manifest packet self-test missing true flag: {required_flag}")
+    config_manifest_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in config_manifest_self_test.get("checks", []) or []
+    }
+    for required_check in (
+        "temporary_config_manifest_packet_ready_but_non_evidence",
+        "missing_task_work_orders_rejected",
+        "premature_evidence_promotion_rejected",
+        "materialization_write_drift_rejected",
+        "template_audit_shrink_rejected",
+        "strict_config_evidence_promotion_rejected",
+        "manifest_task_omission_rejected",
+        "prepared_config_hash_drift_rejected",
+        "prepared_config_validation_drift_rejected",
+        "strict_command_drift_rejected",
+        "real_manifest_write_rejected",
+        "manifest_path_drift_rejected",
+        "real_config_manifest_outputs_untouched",
+    ):
+        if config_manifest_self_checks.get(required_check) is not True:
+            fail(f"external config manifest packet self-test missing passing check: {required_check}")
 
     fidelity_packet_path = EXTERNAL / "fidelity_provenance_packet.json"
     fidelity_packet_md_path = EXTERNAL / "fidelity_provenance_packet.md"
@@ -5934,6 +5987,7 @@ def main():
         "maniskill_fidelity_metadata_probe_visible",
         "runner_backend_probe_visible",
         "config_manifest_packet_visible",
+        "config_manifest_packet_self_test_visible",
         "rollout_evidence_packet_visible",
         "strict_video_evidence_gate_visible",
         "release_package_internal_artifact_rejection_visible",

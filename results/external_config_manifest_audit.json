@@ -21,7 +21,7 @@
       "passed": true
     },
     {
-      "detail": "tasks=['cable_route_insert', 'door_open_navigation', 'drawer_to_pick_transfer', 'peg_place_regrasp']",
+      "detail": "packet_tasks=['cable_route_insert', 'door_open_navigation', 'drawer_to_pick_transfer', 'peg_place_regrasp'], manifest_tasks=['cable_route_insert', 'door_open_navigation', 'drawer_to_pick_transfer', 'peg_place_regrasp']",
       "name": "manifest_template_declares_all_collection_tasks",
       "passed": true
     },

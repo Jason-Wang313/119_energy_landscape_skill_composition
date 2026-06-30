@@ -3,9 +3,9 @@
   "category_counts": {
     "baseline_spec": 12,
     "config_template": 4,
-    "generated_non_evidence_report": 110,
+    "generated_non_evidence_report": 112,
     "method_config_candidate": 11,
-    "operator_command_source": 49,
+    "operator_command_source": 50,
     "operator_facing_input": 86,
     "prepared_config_input": 4,
     "reference_adapter": 60,
@@ -59,7 +59,7 @@
       "passed": true
     },
     {
-      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 110, 'method_config_candidate': 11, 'operator_command_source': 49, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 112, 'method_config_candidate': 11, 'operator_command_source': 50, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "handoff_has_task_config_and_baseline_assets",
       "passed": true
     },
@@ -189,7 +189,7 @@
       "passed": true
     },
     {
-      "detail": "hashed_files=345",
+      "detail": "hashed_files=348",
       "name": "file_hashes_are_recorded",
       "passed": true
     }
@@ -204,14 +204,14 @@
     "placeholder_not_external_evidence"
   ],
   "handoff_bundle_ready": true,
-  "included_file_count": 345,
+  "included_file_count": 348,
   "included_files": [
     {
-      "bytes": 32602,
+      "bytes": 32702,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "62E9298B52B35ACA6D35231DAE380B3216133144A7B7C7CFE524AF940138175A"
+      "sha256": "2295F1372D03876AB08CE3B83699D8BC6EDD0A433C9D0E9C4AA778FC27F484DD"
     },
     {
       "bytes": 14198,
@@ -228,18 +228,18 @@
       "sha256": "7EDFEE348BE624FC1BA8818A88D526CC53B3632F3D31A1500A19F9C5A868FC2E"
     },
     {
-      "bytes": 23607,
+      "bytes": 23782,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/reproducibility_checklist.md",
-      "sha256": "0D7205803B347E02E109ADE85B6E3417CE678DFD9533F99392ADFF5761D1D094"
+      "sha256": "B75F5D834333A02E985F247F3E1FD31F148D1F2EB9A8D9C307CA3E4028741963"
     },
     {
-      "bytes": 23433,
+      "bytes": 23888,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "DF5A70F9C5547E62647B5B00274E4A8954322A1D8AC02485DCB45087951BA018"
+      "sha256": "D2885996F69E1F225A00E1F7ADC6A67CDA5F54AC4FA6C1C5A32FA82A95B18CA7"
     },
     {
       "bytes": 34698,
@@ -1691,18 +1691,32 @@
       "sha256": "E74D7C135F7D1377312C89D53C695C5D85E7FC134FB9B08634DFA900DEA9B08D"
     },
     {
-      "bytes": 3471,
+      "bytes": 3589,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_config_manifest_audit.json",
-      "sha256": "71888C39980962B4AAE8E67DC2338CEB8F2DBA603BC85DF0BF6B50BE7720EF92"
+      "sha256": "A46DED8E5FF2E9E9FAB155569F9FA4FD8FDA633E062962180781B9DCB360D972"
     },
     {
-      "bytes": 2772,
+      "bytes": 2890,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_config_manifest_audit.md",
-      "sha256": "C0F299190160578330B0923D01ABC38B9DEAD06CD291DE4EE16F3F8984837539"
+      "sha256": "F2F65F83DD6EA9A14BBCFDFC21604551D29ACA5BB6BC34B0465D388F1C88E3F7"
+    },
+    {
+      "bytes": 3256,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_config_manifest_packet_self_test.json",
+      "sha256": "04E797AA2F169E04EB87B50103039B07751A2A974A40BD339EA163BE04E67FFF"
+    },
+    {
+      "bytes": 2197,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_config_manifest_packet_self_test.md",
+      "sha256": "89DF86C6957A00FBE63D622B7C2557113B5B1315C58A8E0C16CFE602C93A7DF4"
     },
     {
       "bytes": 3186,
@@ -2412,11 +2426,11 @@
       "sha256": "9A82BB080F8997ED83061E38742C318062B642E19730952B72721D0EF2E12F73"
     },
     {
-      "bytes": 20797,
+      "bytes": 21003,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_config_manifest_packet.py",
-      "sha256": "756C0C5B64F4F0DB6C1E45742096A2BCE03AA346C34D91A834ED196296839EB8"
+      "sha256": "2C52F840F30A0D6DE34F473952EEA0245C1B122E2FFF71BB6D652890F8095DD6"
     },
     {
       "bytes": 20347,
@@ -2454,11 +2468,11 @@
       "sha256": "C166221116A089779E0111AE13BDB75CC1625849486A1C116AF8534D264334AF"
     },
     {
-      "bytes": 81640,
+      "bytes": 83501,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "5883637F58E64B8C305969941A9C06CAB4CC2DCD02D5DF01441EDF53D0D66E38"
+      "sha256": "7E84A57EDE2F4678BC0EC05EC85805702A6CD0009A91F7311C215483AC879A4D"
     },
     {
       "bytes": 71405,
@@ -2564,6 +2578,13 @@
       "exists": true,
       "path": "scripts/probe_maniskill_task_bindings.py",
       "sha256": "AC9A26FDA7512B17AD35589525DF3A41E7C5CF28C164850C4F835466C69D92E2"
+    },
+    {
+      "bytes": 20765,
+      "category": "operator_command_source",
+      "exists": true,
+      "path": "scripts/self_test_external_config_manifest_packet.py",
+      "sha256": "63009129D2131F4A26021C481C4217B1B960720628FDDCDF59C8DE9E2123E47E"
     },
     {
       "bytes": 17751,
@@ -3273,6 +3294,7 @@
     "results/external_backend_integration_audit.json",
     "results/maniskill_backend_readiness_audit.json",
     "results/external_config_manifest_audit.json",
+    "results/external_config_manifest_packet_self_test.json",
     "results/external_rollout_evidence_audit.json",
     "results/external_rollout_evidence_packet_self_test.json",
     "results/external_pilot_smoke_packet_audit.json",

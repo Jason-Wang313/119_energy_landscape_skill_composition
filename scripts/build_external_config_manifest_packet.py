@@ -202,6 +202,7 @@ def audit_packet(
     command_text = "\n".join(packet.get("strict_acceptance_commands", []) or [])
     order_ids = {order.get("id") for order in work_orders}
     task_names = {record.get("task_family") for record in records}
+    manifest_task_names = {str(task.get("task_family", "")) for task in manifest_tasks(manifest_template)}
     manifest_config_paths = {str(task.get("config_path", "")) for task in manifest_tasks(manifest_template)}
     collection_checks = {check.get("name"): check.get("passed") for check in collection.get("checks", []) or []}
 
@@ -251,9 +252,10 @@ def audit_packet(
         checks,
         "manifest_template_declares_all_collection_tasks",
         len(records) >= 4
+        and task_names == manifest_task_names
         and all(record.get("allowed_by_schema") is True for record in records)
         and all(str(record.get("manifest_config_path", "")).startswith("external_validation/configs/") for record in records),
-        f"tasks={sorted(task_names)}",
+        f"packet_tasks={sorted(task_names)}, manifest_tasks={sorted(manifest_task_names)}",
     )
     add_check(
         checks,

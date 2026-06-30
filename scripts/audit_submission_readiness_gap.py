@@ -74,6 +74,10 @@ def main() -> int:
     config_evidence = read_json(config_evidence_path) if config_evidence_path.exists() else {}
     config_manifest_path = RESULTS / "external_config_manifest_audit.json"
     config_manifest = read_json(config_manifest_path) if config_manifest_path.exists() else {}
+    config_manifest_self_test_path = RESULTS / "external_config_manifest_packet_self_test.json"
+    config_manifest_self_test = (
+        read_json(config_manifest_self_test_path) if config_manifest_self_test_path.exists() else {}
+    )
     rollout_evidence_path = RESULTS / "external_rollout_evidence_audit.json"
     rollout_evidence = read_json(rollout_evidence_path) if rollout_evidence_path.exists() else {}
     rollout_evidence_self_test_path = RESULTS / "external_rollout_evidence_packet_self_test.json"
@@ -337,6 +341,9 @@ def main() -> int:
             ROOT / "scripts" / "self_test_external_method_implementation_packet.py",
             RESULTS / "external_method_implementation_packet_self_test.json",
             RESULTS / "external_method_implementation_packet_self_test.md",
+            ROOT / "scripts" / "self_test_external_config_manifest_packet.py",
+            RESULTS / "external_config_manifest_packet_self_test.json",
+            RESULTS / "external_config_manifest_packet_self_test.md",
             ROOT / "scripts" / "self_test_external_rollout_evidence_packet.py",
             RESULTS / "external_rollout_evidence_packet_self_test.json",
             RESULTS / "external_rollout_evidence_packet_self_test.md",
@@ -402,6 +409,9 @@ def main() -> int:
             "scripts/self_test_external_method_implementation_packet.py",
             "results/external_method_implementation_packet_self_test.json",
             "results/external_method_implementation_packet_self_test.md",
+            "scripts/self_test_external_config_manifest_packet.py",
+            "results/external_config_manifest_packet_self_test.json",
+            "results/external_config_manifest_packet_self_test.md",
             "scripts/self_test_external_rollout_evidence_packet.py",
             "results/external_rollout_evidence_packet_self_test.json",
             "results/external_rollout_evidence_packet_self_test.md",
@@ -499,6 +509,9 @@ def main() -> int:
         and config_manifest.get("config_manifest_packet_ready") is True
         and config_manifest.get("strict_config_evidence_ready") is False
         and config_manifest.get("manifest_declared_config_ready") is False
+        and config_manifest_self_test.get("passed") is True
+        and config_manifest_self_test.get("temporary_packet_ready") is True
+        and config_manifest_self_test.get("real_outputs_untouched") is True
         and rollout_evidence.get("passed") is True
         and rollout_evidence.get("not_external_evidence") is True
         and rollout_evidence.get("rollout_evidence_packet_ready") is True
@@ -543,6 +556,7 @@ def main() -> int:
             "results/external_backend_contract_audit.json",
             "results/external_backend_integration_audit.json",
             "results/external_config_manifest_audit.json",
+            "results/external_config_manifest_packet_self_test.json",
             "results/external_rollout_evidence_audit.json",
             "results/external_collection_readiness_audit.json",
             "results/external_pairing_integrity_audit.json",
@@ -710,6 +724,10 @@ def main() -> int:
     backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration.get("checks", [])}
     fidelity_provenance_checks = {check.get("name"): check.get("passed") for check in fidelity_provenance.get("checks", [])}
     config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", [])}
+    config_manifest_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in config_manifest_self_test.get("checks", []) or []
+    }
     rollout_evidence_checks = {check.get("name"): check.get("passed") for check in rollout_evidence.get("checks", [])}
     rollout_self_checks = {check.get("name"): check.get("passed") for check in rollout_evidence_self_test.get("checks", [])}
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", [])}
@@ -752,7 +770,26 @@ def main() -> int:
         and config_manifest.get("config_manifest_packet_ready") is True
         and config_manifest.get("strict_config_evidence_ready") is False
         and config_manifest.get("manifest_declared_config_ready") is False
+        and config_manifest_checks.get("manifest_template_declares_all_collection_tasks") is True
         and config_manifest_checks.get("work_orders_cover_config_to_manifest_path") is True
+        and config_manifest_self_test.get("passed") is True
+        and config_manifest_self_test.get("version") == "external_config_manifest_packet_self_test_v1"
+        and config_manifest_self_test.get("not_external_evidence") is True
+        and config_manifest_self_test.get("temporary_packet_ready") is True
+        and config_manifest_self_test.get("missing_task_work_orders_rejected") is True
+        and config_manifest_self_test.get("premature_evidence_promotion_rejected") is True
+        and config_manifest_self_test.get("materialization_write_drift_rejected") is True
+        and config_manifest_self_test.get("template_audit_shrink_rejected") is True
+        and config_manifest_self_test.get("strict_config_evidence_promotion_rejected") is True
+        and config_manifest_self_test.get("manifest_task_omission_rejected") is True
+        and config_manifest_self_test.get("prepared_config_hash_drift_rejected") is True
+        and config_manifest_self_test.get("prepared_config_validation_drift_rejected") is True
+        and config_manifest_self_test.get("strict_command_drift_rejected") is True
+        and config_manifest_self_test.get("real_manifest_write_rejected") is True
+        and config_manifest_self_test.get("manifest_path_drift_rejected") is True
+        and config_manifest_self_test.get("real_outputs_untouched") is True
+        and config_manifest_self_checks.get("temporary_config_manifest_packet_ready_but_non_evidence") is True
+        and config_manifest_self_checks.get("real_config_manifest_outputs_untouched") is True
         and rollout_evidence.get("passed") is True
         and rollout_evidence.get("not_external_evidence") is True
         and rollout_evidence.get("rollout_evidence_packet_ready") is True
@@ -853,6 +890,7 @@ def main() -> int:
                 ROOT / "scripts" / "build_external_backend_integration_packet.py",
                 ROOT / "scripts" / "build_external_fidelity_provenance_packet.py",
                 ROOT / "scripts" / "build_external_config_manifest_packet.py",
+                ROOT / "scripts" / "self_test_external_config_manifest_packet.py",
                 ROOT / "scripts" / "build_external_rollout_evidence_packet.py",
                 ROOT / "scripts" / "self_test_external_rollout_evidence_packet.py",
                 ROOT / "scripts" / "build_external_method_implementation_packet.py",
@@ -878,6 +916,8 @@ def main() -> int:
                 RESULTS / "external_fidelity_provenance_audit.md",
                 RESULTS / "external_config_manifest_audit.json",
                 RESULTS / "external_config_manifest_audit.md",
+                RESULTS / "external_config_manifest_packet_self_test.json",
+                RESULTS / "external_config_manifest_packet_self_test.md",
                 RESULTS / "external_rollout_evidence_audit.json",
                 RESULTS / "external_rollout_evidence_audit.md",
                 RESULTS / "external_rollout_evidence_packet_self_test.json",
@@ -936,6 +976,7 @@ def main() -> int:
             "scripts/build_external_backend_integration_packet.py",
             "scripts/build_external_fidelity_provenance_packet.py",
             "scripts/build_external_config_manifest_packet.py",
+            "scripts/self_test_external_config_manifest_packet.py",
             "scripts/build_external_rollout_evidence_packet.py",
             "scripts/self_test_external_rollout_evidence_packet.py",
             "scripts/build_external_method_implementation_packet.py",
@@ -961,6 +1002,8 @@ def main() -> int:
             "results/external_fidelity_provenance_audit.md",
             "results/external_config_manifest_audit.json",
             "results/external_config_manifest_audit.md",
+            "results/external_config_manifest_packet_self_test.json",
+            "results/external_config_manifest_packet_self_test.md",
             "results/external_rollout_evidence_audit.json",
             "results/external_rollout_evidence_audit.md",
             "results/external_rollout_evidence_packet_self_test.json",

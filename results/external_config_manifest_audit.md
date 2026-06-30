@@ -14,7 +14,7 @@ This audit checks that prepared task configs have a concrete path to manifest-de
 - `pass` `materialization_plan_ready_but_not_evidence`: passed=True, write_enabled=False
 - `pass` `template_audit_passes`: config_count=4
 - `pass` `strict_config_evidence_still_fails_without_manifest`: passed=False, config_count=0
-- `pass` `manifest_template_declares_all_collection_tasks`: tasks=['cable_route_insert', 'door_open_navigation', 'drawer_to_pick_transfer', 'peg_place_regrasp']
+- `pass` `manifest_template_declares_all_collection_tasks`: packet_tasks=['cable_route_insert', 'door_open_navigation', 'drawer_to_pick_transfer', 'peg_place_regrasp'], manifest_tasks=['cable_route_insert', 'door_open_navigation', 'drawer_to_pick_transfer', 'peg_place_regrasp']
 - `pass` `prepared_config_files_have_hashes`: hashes=['021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9', '1288223014CB9D9285E4249B2FA607FFC16EBEE20B6F44E0241B63E88233E471', '13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61', '8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E']
 - `pass` `prepared_configs_pass_strict_schema_if_manifest_declared`: errors={}
 - `pass` `work_orders_cover_config_to_manifest_path`: missing=[]

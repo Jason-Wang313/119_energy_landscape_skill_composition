@@ -331,6 +331,11 @@
       "evidence": ["scripts/build_external_config_manifest_packet.py", "external_validation/config_manifest_packet.json", "external_validation/config_manifest_packet.md", "external_validation/config_manifest_work_orders.csv", "results/external_config_manifest_audit.json", "results/external_config_manifest_audit.md", "results/external_config_materialization_plan.json", "results/external_config_evidence_audit.json"]
     },
     {
+      "name": "external_config_manifest_packet_self_test_claim",
+      "claim": "The repository self-tests the External config manifest packet in temporary copied workspaces, proving the packet remains non-evidence while missing config-to-manifest work orders, premature evidence promotion, materialization-write drift, shrunken template coverage, strict config evidence promotion, manifest task omission, stale prepared-config hashes, failed prepared-config validation, strict-command drift, real manifest writes, and manifest path drift fail closed without touching real config-manifest outputs.",
+      "evidence": ["scripts/self_test_external_config_manifest_packet.py", "results/external_config_manifest_packet_self_test.json", "results/external_config_manifest_packet_self_test.md", "scripts/build_external_config_manifest_packet.py", "external_validation/config_manifest_packet.json", "results/external_config_manifest_audit.json", "results/external_config_materialization_plan.json", "results/external_config_evidence_audit.json"]
+    },
+    {
       "name": "external_config_evidence_hash_gate_claim",
       "claim": "The repository provides a strict config evidence hash gate that recomputes manifest-declared task-config hashes, proves the prepared task configs bind under a temporary strict manifest, and rejects strict config evidence when `config_hash` is missing, malformed, or mismatched with `config_path`.",
       "evidence": ["scripts/validate_external_configs.py", "scripts/self_test_external_config_evidence.py", "results/external_config_evidence_self_test.json", "results/external_config_evidence_self_test.md", "results/external_config_evidence_audit.json"]
