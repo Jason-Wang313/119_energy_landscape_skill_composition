@@ -87,7 +87,7 @@
     },
     {
       "name": "visible_contribution_claim",
-      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, outreach package, send-ready outreach packet, reviewer response packet, closure brief, and independent validation launch ticket synchronized with the current planner-edge policy audit, failure-memory adaptation audit, materializer, fidelity materializer checkout self-test, operator packet, collection machine bootstrap, fidelity acceptance draft, strict fidelity acceptance provenance gate, tracked reference route, strict config evidence hash gate, prepared task-config binding, strict full-method coverage gate, strict rollout sample-count gate, strict paired-panel gate, strict rollout uniqueness gate, confidence-gated external rollout statistics, final rollout confidence summary gate, official video write guard, official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, reset-timeout triage sidecar, backend reset substage markers, render host qualification brief, render failure remediation packet, atomic official evidence promotion, release-package internal-artifact rejection, final release artifact hash recomputation, external evidence closure brief, external evidence closure brief self-test, adapter acceptance fixtures, tracked candidate method-config binding, reference-adapter provenance, strict reference-adapter rejection gate, strict checkpoint/config artifact gate, strict fairness-contract binding gate, outreach stance, and readiness boundary.",
+      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, outreach package, send-ready outreach packet, reviewer response packet, closure brief, and independent validation launch ticket synchronized with the current planner-edge policy audit, failure-memory adaptation audit, materializer, fidelity materializer checkout self-test, operator packet, collection machine bootstrap, fidelity acceptance draft, strict fidelity acceptance provenance gate, tracked reference route, strict config evidence hash gate, prepared task-config binding, strict full-method coverage gate, strict rollout sample-count gate, strict paired-panel gate, strict rollout uniqueness gate, confidence-gated external rollout statistics, final rollout confidence summary gate, official video write guard, official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, reset-timeout triage sidecar, backend reset substage markers, render host qualification brief, render failure remediation packet, atomic official evidence promotion, release-package internal-artifact rejection, final release artifact hash recomputation, external evidence closure brief, external evidence closure brief self-test, external operator return package contract, adapter acceptance fixtures, tracked candidate method-config binding, reference-adapter provenance, strict reference-adapter rejection gate, strict checkpoint/config artifact gate, strict fairness-contract binding gate, outreach stance, and readiness boundary.",
       "evidence": ["scripts/audit_visible_contribution.py", "README.md", "docs/final_audit.md", "docs/submission_readiness_decision.md", "docs/submission_readiness_audit_v5.md", "docs/submission_version_log.md", "child_status.md", "docs/haonan_yilun_outreach_package.md", "docs/haonan_yilun_send_ready_outreach.md", "docs/reviewer_response_packet.md", "docs/independent_validation_launch_ticket.md", "docs/maniskill_render_host_qualification_brief.md", "results/independent_validation_launch_ticket_audit.json", "results/maniskill_render_host_qualification_brief_audit.json"]
     },
     {
@@ -461,6 +461,11 @@
       "evidence": ["scripts/self_test_external_evidence_intake_ledger.py", "results/external_evidence_intake_ledger_self_test.json", "results/external_evidence_intake_ledger_self_test.md", "scripts/build_external_evidence_intake_ledger.py", "external_validation/evidence_intake_ledger.json", "external_validation/evidence_intake_ledger.md", "external_validation/evidence_intake_ledger.csv", "results/external_evidence_intake_ledger_audit.json"]
     },
     {
+      "name": "external_operator_return_package_contract_claim",
+      "claim": "The repository provides a non-evidence External operator return package contract that converts current external preflight blockers into exact returned artifact classes, per-task JSONL/video/config counts, per-method checkpoint/config hash requirements, and strict command spine before manifest promotion.",
+      "evidence": ["scripts/build_external_operator_return_package_contract.py", "external_validation/operator_return_package_contract.json", "external_validation/operator_return_package_contract.md", "external_validation/operator_return_package_contract.csv", "results/external_operator_return_package_contract_audit.json", "results/external_operator_return_package_contract_audit.md", "results/external_evidence_preflight.json", "external_validation/manifest_template.json"]
+    },
+    {
       "name": "external_baseline_contract_claim",
       "claim": "The repository provides a non-evidence baseline implementation contract, method matrix, and per-method adapter specs, while explicitly recording that independent non-oracle implementations are still missing.",
       "evidence": ["scripts/build_external_baseline_contract.py", "external_validation/baseline_implementation_contract.md", "external_validation/baseline_implementation_matrix.csv", "external_validation/baseline_specs/barrier_certified_energy_composer_v5.json", "external_validation/baseline_specs/oracle_basin_composer.json", "results/external_baseline_contract_audit.json", "results/external_baseline_contract_audit.md"]
@@ -594,6 +599,7 @@
     "external_validation/rollout_evidence_packet.md",
     "external_validation/ablation_collection_packet.md",
     "external_validation/evidence_intake_ledger.md",
+    "external_validation/operator_return_package_contract.md",
     "external_validation/method_implementation_packet.md",
     "external_validation/method_manifest_cutover_checklist.md",
     "external_validation/independent_validation_launch_ticket.md",
@@ -610,6 +616,7 @@
     "results/external_rollout_evidence_audit.md",
     "results/external_ablation_collection_audit.md",
     "results/external_evidence_intake_ledger_audit.md",
+    "results/external_operator_return_package_contract_audit.md",
     "results/external_evidence_closure_brief.md",
     "results/external_evidence_closure_brief_self_test.md",
     "results/independent_validation_launch_ticket_audit.md",

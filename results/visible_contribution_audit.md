@@ -22,7 +22,7 @@ The External operator release bundle self-test documents transfer-package fail-c
 - `pass` `operator_packet_no_go_visible`: start_state='DO_NOT_COLLECT_YET', blocking_missing_count=4
 - `pass` `collection_readiness_tracked_reference_route_visible`: backend='external_validation\\runner\\maniskill_reference_backend.py', run_id='maniskill_sapien_reference_preflight_protocol_v1', blocking=["reference_fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
 - `pass` `operator_packet_tracked_reference_route_visible`: backend='external_validation\\runner\\maniskill_reference_backend.py', run_id='maniskill_sapien_reference_preflight_protocol_v1', blocking=["fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
-- `pass` `operator_handoff_bundle_visible`: files=392, forbidden=[], start_state='DO_NOT_COLLECT_YET'
+- `pass` `operator_handoff_bundle_visible`: files=398, forbidden=[], start_state='DO_NOT_COLLECT_YET'
 - `pass` `external_operator_handoff_bundle_self_test_visible`: fixture_ready=True, no_go_drift_rejected=True, strict_drift_rejected=True, forbidden_rejected=True
 - `pass` `external_acquisition_packet_self_test_visible`: fixture_ready=True, missing_source_rejected=True, unmapped_blocker_rejected=True, manifest_rejected=True, collection_drift_rejected=True
 - `pass` `external_evidence_closure_brief_visible`: blockers=4, items=4, haonan_dependency=False
@@ -32,7 +32,7 @@ The External operator release bundle self-test documents transfer-package fail-c
 - `pass` `external_collection_machine_bootstrap_visible`: bootstrap_state='READY_TO_BOOTSTRAP_EXTERNAL_MACHINE', command='external_validation/collection_machine_bootstrap.ps1'
 - `pass` `external_collection_machine_bootstrap_self_test_visible`: fixture_ready=True, missing_source_rejected=True, job_go_rejected=True, local_promotion_rejected=True, unsafe_command_rejected=True
 - `pass` `independent_validation_launch_ticket_visible`: launch_state='DO_NOT_START_COLLECTION_YET', render_state='DO_NOT_COLLECT_RENDER_MACHINE', haonan_dependency=False
-- `pass` `external_operator_release_bundle_visible`: bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=392, archive_written=False
+- `pass` `external_operator_release_bundle_visible`: bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=398, archive_written=False
 - `pass` `external_operator_release_bundle_self_test_visible`: fixture_ready=True, archive_ready=True, forbidden_rejected=True, real_untouched=True
 - `pass` `external_runbook_route_gates_visible`: validation_command_count=47, route_gates=True, gate_order=True
 - `pass` `analysis_plan_visible`: analysis_plan_ready=True, strict_evidence_ready=False
@@ -79,6 +79,7 @@ The External operator release bundle self-test documents transfer-package fail-c
 - `pass` `ablation_collection_packet_self_test_visible`: temporary_packet_ready=True, work_order_artifact_command_drift_rejected=True, real_outputs_untouched=True
 - `pass` `evidence_intake_ledger_visible`: mapped=37/37, strict_external_evidence_ready=False
 - `pass` `evidence_intake_ledger_self_test_visible`: temporary_ledger_ready=True, unmapped_failure_rejected=True, real_outputs_untouched=True
+- `pass` `external_operator_return_package_contract_visible`: items=28, expected_records=1440, missing=56
 - `pass` `precollection_manifest_draft_visible`: prepared_configs=4, method_configs=11, method_gaps=11, rollout_gaps=8, official_manifest_exists=False
 - `pass` `precollection_manifest_draft_self_test_visible`: temporary_draft_ready=True, candidate_hash_drift=True, source_report_drift=True
 - `pass` `precollection_freeze_receipt_visible`: locked_artifacts=42, candidate_method_configs=11, freeze_receipt_ready=False, strict_external_evidence_ready=False

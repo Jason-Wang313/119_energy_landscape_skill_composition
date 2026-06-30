@@ -1,0 +1,397 @@
+{
+  "checks": [
+    {
+      "detail": "contract lists required returned artifacts only",
+      "name": "contract_is_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "evidence_ready=False, blockers=56, expected_records=1440",
+      "name": "preflight_blockers_are_current",
+      "passed": true
+    },
+    {
+      "detail": "global_items=5",
+      "name": "global_items_cover_manifest_fidelity_seals_release",
+      "passed": true
+    },
+    {
+      "detail": "tasks=4, task_items=12, expected_records=1440",
+      "name": "task_items_cover_all_manifest_tasks",
+      "passed": true
+    },
+    {
+      "detail": "methods=11, method_items=11",
+      "name": "method_items_cover_non_oracle_methods",
+      "passed": true
+    },
+    {
+      "detail": "candidate_hashes=11/11",
+      "name": "candidate_method_hashes_bound",
+      "passed": true
+    },
+    {
+      "detail": "commands=14",
+      "name": "strict_command_spine_covers_return_to_final_audit",
+      "passed": true
+    },
+    {
+      "detail": "intake_passed=True, release_state='READY_TO_SEND_OPERATOR_PACKAGE'",
+      "name": "intake_ledger_and_release_bundle_are_current_sources",
+      "passed": true
+    },
+    {
+      "detail": "satisfied=17, blocking=4",
+      "name": "readiness_boundary_preserved",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json remains absent before real evidence",
+      "name": "no_real_manifest_written",
+      "passed": true
+    }
+  ],
+  "expected_total_jsonl_records": 1440,
+  "failed_checks": [],
+  "global_item_count": 5,
+  "method_count_including_oracle": 12,
+  "method_item_count": 11,
+  "non_oracle_method_count": 11,
+  "not_external_evidence": true,
+  "passed": true,
+  "preflight_blocking_missing_count": 56,
+  "return_contract_ready": true,
+  "return_item_count": 28,
+  "return_items": [
+    {
+      "acceptance": "accepted fidelity, independent operator, real/high-fidelity platform, render-backed videos, paired replay, and known limitations are signed off",
+      "category": "global",
+      "hash_requirement": "materialized with accepted collection commit and skill-library hash",
+      "id": "fidelity_acceptance",
+      "path": "external_validation/fidelity_acceptance.json",
+      "required_count": 1,
+      "source": "external_validation/fidelity_acceptance_draft.json",
+      "strict_gate": "python scripts\\audit_external_fidelity_acceptance.py --strict"
+    },
+    {
+      "acceptance": "freeze receipt exists before official collection and matches the accepted run id/operator/machine",
+      "category": "global",
+      "hash_requirement": "receipt hashes operator sheet, alias map, configs, candidates, runner, code commit, and skill library before collection",
+      "id": "precollection_freeze_receipt",
+      "path": "external_validation/precollection_freeze_receipt.json",
+      "required_count": 1,
+      "source": "external_validation/manifest_precollection_draft.json",
+      "strict_gate": "python scripts\\build_external_precollection_freeze_receipt.py ..."
+    },
+    {
+      "acceptance": "postcollection seal exists and seal consistency recomputes with no drift before manifest promotion",
+      "category": "global",
+      "hash_requirement": "seal hashes raw logs, videos, configs, precollection receipt, and operator metadata after collection",
+      "id": "postcollection_evidence_seal",
+      "path": "external_validation/postcollection_evidence_seal.json",
+      "required_count": 1,
+      "source": "external_validation/postcollection_evidence_seal.json",
+      "strict_gate": "python scripts\\audit_external_postcollection_seal_consistency.py"
+    },
+    {
+      "acceptance": "manifest is written only after postcollection seal consistency, then all strict evidence gates pass",
+      "category": "global",
+      "hash_requirement": "manifest declares release_artifacts for code, configs, logs, videos, and checkpoints",
+      "id": "manifest",
+      "path": "external_validation/manifest.json",
+      "required_count": 1,
+      "source": "external_validation/manifest_template.json",
+      "strict_gate": "python scripts\\build_external_manifest.py --write --check-video-paths"
+    },
+    {
+      "acceptance": "release package audit and final external evidence audit recompute all release hashes",
+      "category": "global",
+      "hash_requirement": "release_artifacts.code/configs/logs/videos/checkpoints all carry valid SHA256 values",
+      "id": "release_artifacts",
+      "path": "external_validation/manifest.json:release_artifacts",
+      "required_count": 5,
+      "source": "external_validation/manifest_template.json",
+      "strict_gate": "python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "acceptance": "strict config evidence accepts this manifest-declared config and rejects templates/local dry-run configs",
+      "category": "task_config",
+      "hash_requirement": "manifest.tasks[].config_hash must equal SHA256(config_path)",
+      "id": "peg_place_regrasp_config",
+      "path": "external_validation/configs/peg_place_regrasp.json",
+      "required_count": 1,
+      "source": "external_validation/manifest_template.json",
+      "strict_gate": "python scripts\\validate_external_configs.py --strict"
+    },
+    {
+      "acceptance": "JSONL parses, follows log_schema_v1, and contains at least 360 rows for 12 methods x 30 episodes",
+      "category": "task_log",
+      "hash_requirement": "release_artifacts.logs must include this JSONL with SHA256",
+      "id": "peg_place_regrasp_jsonl",
+      "path": "external_validation/logs/peg_place_regrasp.jsonl",
+      "required_count": 360,
+      "source": "external_validation/manifest_template.json",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "acceptance": "videos are render-backed MP4s, unique, non-placeholder, non-diagnostic, and referenced by official JSONL rows",
+      "category": "task_video_dir",
+      "hash_requirement": "release_artifacts.videos must include all manifest-declared MP4 files with SHA256",
+      "id": "peg_place_regrasp_videos",
+      "path": "external_validation/videos/peg_place_regrasp",
+      "required_count": 360,
+      "source": "external_validation/manifest_template.json",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "acceptance": "strict config evidence accepts this manifest-declared config and rejects templates/local dry-run configs",
+      "category": "task_config",
+      "hash_requirement": "manifest.tasks[].config_hash must equal SHA256(config_path)",
+      "id": "drawer_to_pick_transfer_config",
+      "path": "external_validation/configs/drawer_to_pick_transfer.json",
+      "required_count": 1,
+      "source": "external_validation/manifest_template.json",
+      "strict_gate": "python scripts\\validate_external_configs.py --strict"
+    },
+    {
+      "acceptance": "JSONL parses, follows log_schema_v1, and contains at least 360 rows for 12 methods x 30 episodes",
+      "category": "task_log",
+      "hash_requirement": "release_artifacts.logs must include this JSONL with SHA256",
+      "id": "drawer_to_pick_transfer_jsonl",
+      "path": "external_validation/logs/drawer_to_pick_transfer.jsonl",
+      "required_count": 360,
+      "source": "external_validation/manifest_template.json",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "acceptance": "videos are render-backed MP4s, unique, non-placeholder, non-diagnostic, and referenced by official JSONL rows",
+      "category": "task_video_dir",
+      "hash_requirement": "release_artifacts.videos must include all manifest-declared MP4 files with SHA256",
+      "id": "drawer_to_pick_transfer_videos",
+      "path": "external_validation/videos/drawer_to_pick_transfer",
+      "required_count": 360,
+      "source": "external_validation/manifest_template.json",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "acceptance": "strict config evidence accepts this manifest-declared config and rejects templates/local dry-run configs",
+      "category": "task_config",
+      "hash_requirement": "manifest.tasks[].config_hash must equal SHA256(config_path)",
+      "id": "door_open_navigation_config",
+      "path": "external_validation/configs/door_open_navigation.json",
+      "required_count": 1,
+      "source": "external_validation/manifest_template.json",
+      "strict_gate": "python scripts\\validate_external_configs.py --strict"
+    },
+    {
+      "acceptance": "JSONL parses, follows log_schema_v1, and contains at least 360 rows for 12 methods x 30 episodes",
+      "category": "task_log",
+      "hash_requirement": "release_artifacts.logs must include this JSONL with SHA256",
+      "id": "door_open_navigation_jsonl",
+      "path": "external_validation/logs/door_open_navigation.jsonl",
+      "required_count": 360,
+      "source": "external_validation/manifest_template.json",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "acceptance": "videos are render-backed MP4s, unique, non-placeholder, non-diagnostic, and referenced by official JSONL rows",
+      "category": "task_video_dir",
+      "hash_requirement": "release_artifacts.videos must include all manifest-declared MP4 files with SHA256",
+      "id": "door_open_navigation_videos",
+      "path": "external_validation/videos/door_open_navigation",
+      "required_count": 360,
+      "source": "external_validation/manifest_template.json",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "acceptance": "strict config evidence accepts this manifest-declared config and rejects templates/local dry-run configs",
+      "category": "task_config",
+      "hash_requirement": "manifest.tasks[].config_hash must equal SHA256(config_path)",
+      "id": "cable_route_insert_config",
+      "path": "external_validation/configs/cable_route_insert.json",
+      "required_count": 1,
+      "source": "external_validation/manifest_template.json",
+      "strict_gate": "python scripts\\validate_external_configs.py --strict"
+    },
+    {
+      "acceptance": "JSONL parses, follows log_schema_v1, and contains at least 360 rows for 12 methods x 30 episodes",
+      "category": "task_log",
+      "hash_requirement": "release_artifacts.logs must include this JSONL with SHA256",
+      "id": "cable_route_insert_jsonl",
+      "path": "external_validation/logs/cable_route_insert.jsonl",
+      "required_count": 360,
+      "source": "external_validation/manifest_template.json",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "acceptance": "videos are render-backed MP4s, unique, non-placeholder, non-diagnostic, and referenced by official JSONL rows",
+      "category": "task_video_dir",
+      "hash_requirement": "release_artifacts.videos must include all manifest-declared MP4 files with SHA256",
+      "id": "cable_route_insert_videos",
+      "path": "external_validation/videos/cable_route_insert",
+      "required_count": 360,
+      "source": "external_validation/manifest_template.json",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "acceptance": "manifest declares implementation provenance, real checkpoint/config artifact, fairness-contract binding, and official JSONL policy_or_config_hash values that match the manifest",
+      "candidate_hash": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA",
+      "category": "method_artifact",
+      "evidence_role": "independent_non_oracle_method",
+      "hash_requirement": "manifest.methods[].checkpoint_or_config_hash must equal 4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA",
+      "id": "greedy_module_sequence",
+      "path": "external_validation/method_config_candidates/greedy_module_sequence.json",
+      "required_count": 1,
+      "source": "external_validation/method_config_candidates.csv",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "acceptance": "manifest declares implementation provenance, real checkpoint/config artifact, fairness-contract binding, and official JSONL policy_or_config_hash values that match the manifest",
+      "candidate_hash": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2",
+      "category": "method_artifact",
+      "evidence_role": "independent_non_oracle_method",
+      "hash_requirement": "manifest.methods[].checkpoint_or_config_hash must equal BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2",
+      "id": "behavior_cloned_skill_chain",
+      "path": "external_validation/method_config_candidates/behavior_cloned_skill_chain.json",
+      "required_count": 1,
+      "source": "external_validation/method_config_candidates.csv",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "acceptance": "manifest declares implementation provenance, real checkpoint/config artifact, fairness-contract binding, and official JSONL policy_or_config_hash values that match the manifest",
+      "candidate_hash": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD",
+      "category": "method_artifact",
+      "evidence_role": "independent_non_oracle_method",
+      "hash_requirement": "manifest.methods[].checkpoint_or_config_hash must equal DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD",
+      "id": "option_graph_planner",
+      "path": "external_validation/method_config_candidates/option_graph_planner.json",
+      "required_count": 1,
+      "source": "external_validation/method_config_candidates.csv",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "acceptance": "manifest declares implementation provenance, real checkpoint/config artifact, fairness-contract binding, and official JSONL policy_or_config_hash values that match the manifest",
+      "candidate_hash": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB",
+      "category": "method_artifact",
+      "evidence_role": "independent_non_oracle_method",
+      "hash_requirement": "manifest.methods[].checkpoint_or_config_hash must equal 18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB",
+      "id": "tamp_feasibility_screen",
+      "path": "external_validation/method_config_candidates/tamp_feasibility_screen.json",
+      "required_count": 1,
+      "source": "external_validation/method_config_candidates.csv",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "acceptance": "manifest declares implementation provenance, real checkpoint/config artifact, fairness-contract binding, and official JSONL policy_or_config_hash values that match the manifest",
+      "candidate_hash": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF",
+      "category": "method_artifact",
+      "evidence_role": "independent_non_oracle_method",
+      "hash_requirement": "manifest.methods[].checkpoint_or_config_hash must equal 0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF",
+      "id": "stable_dmp_handoff",
+      "path": "external_validation/method_config_candidates/stable_dmp_handoff.json",
+      "required_count": 1,
+      "source": "external_validation/method_config_candidates.csv",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "acceptance": "manifest declares implementation provenance, real checkpoint/config artifact, fairness-contract binding, and official JSONL policy_or_config_hash values that match the manifest",
+      "candidate_hash": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B",
+      "category": "method_artifact",
+      "evidence_role": "independent_non_oracle_method",
+      "hash_requirement": "manifest.methods[].checkpoint_or_config_hash must equal 4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B",
+      "id": "diffusion_skill_stitcher",
+      "path": "external_validation/method_config_candidates/diffusion_skill_stitcher.json",
+      "required_count": 1,
+      "source": "external_validation/method_config_candidates.csv",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "acceptance": "manifest declares implementation provenance, real checkpoint/config artifact, fairness-contract binding, and official JSONL policy_or_config_hash values that match the manifest",
+      "candidate_hash": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99",
+      "category": "method_artifact",
+      "evidence_role": "independent_non_oracle_method",
+      "hash_requirement": "manifest.methods[].checkpoint_or_config_hash must equal BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99",
+      "id": "cem_trajectory_composer",
+      "path": "external_validation/method_config_candidates/cem_trajectory_composer.json",
+      "required_count": 1,
+      "source": "external_validation/method_config_candidates.csv",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "acceptance": "manifest declares implementation provenance, real checkpoint/config artifact, fairness-contract binding, and official JSONL policy_or_config_hash values that match the manifest",
+      "candidate_hash": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F",
+      "category": "method_artifact",
+      "evidence_role": "independent_non_oracle_method",
+      "hash_requirement": "manifest.methods[].checkpoint_or_config_hash must equal 4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F",
+      "id": "residual_rl_composer",
+      "path": "external_validation/method_config_candidates/residual_rl_composer.json",
+      "required_count": 1,
+      "source": "external_validation/method_config_candidates.csv",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "acceptance": "manifest declares implementation provenance, real checkpoint/config artifact, fairness-contract binding, and official JSONL policy_or_config_hash values that match the manifest",
+      "candidate_hash": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C",
+      "category": "method_artifact",
+      "evidence_role": "independent_non_oracle_method",
+      "hash_requirement": "manifest.methods[].checkpoint_or_config_hash must equal ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C",
+      "id": "energy_compatibility_heuristic",
+      "path": "external_validation/method_config_candidates/energy_compatibility_heuristic.json",
+      "required_count": 1,
+      "source": "external_validation/method_config_candidates.csv",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "acceptance": "manifest declares implementation provenance, real checkpoint/config artifact, fairness-contract binding, and official JSONL policy_or_config_hash values that match the manifest",
+      "candidate_hash": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3",
+      "category": "method_artifact",
+      "evidence_role": "paper_predecessor_method",
+      "hash_requirement": "manifest.methods[].checkpoint_or_config_hash must equal 7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3",
+      "id": "proposed_energy_landscape_composer_v4_1",
+      "path": "external_validation/method_config_candidates/proposed_energy_landscape_composer_v4_1.json",
+      "required_count": 1,
+      "source": "external_validation/method_config_candidates.csv",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "acceptance": "manifest declares implementation provenance, real checkpoint/config artifact, fairness-contract binding, and official JSONL policy_or_config_hash values that match the manifest",
+      "candidate_hash": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872",
+      "category": "method_artifact",
+      "evidence_role": "paper_method_under_test",
+      "hash_requirement": "manifest.methods[].checkpoint_or_config_hash must equal 0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872",
+      "id": "barrier_certified_energy_composer_v5",
+      "path": "external_validation/method_config_candidates/barrier_certified_energy_composer_v5.json",
+      "required_count": 1,
+      "source": "external_validation/method_config_candidates.csv",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    }
+  ],
+  "source_reports": [
+    "results/external_evidence_preflight.json",
+    "external_validation/manifest_template.json",
+    "external_validation/method_config_candidates.csv",
+    "external_validation/evidence_intake_ledger.json",
+    "results/external_operator_release_bundle_plan.json",
+    "results/submission_readiness_gap_audit.json"
+  ],
+  "strict_command_spine": [
+    "python scripts\\audit_external_fidelity_acceptance.py --strict",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\validate_external_adapters.py --strict",
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --run-id <accepted_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_precollection_freeze_receipt.py --backend-module external_validation\\runner\\maniskill_reference_backend.py --run-id <accepted_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
+    "python external_validation\\runner\\real_collection_runner.py --backend-module external_validation\\runner\\maniskill_reference_backend.py --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <accepted_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_postcollection_evidence_seal.py --backend-module external_validation\\runner\\maniskill_reference_backend.py --run-id <accepted_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+    "python scripts\\audit_external_postcollection_seal_consistency.py",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_evidence.py --strict",
+    "python scripts\\audit_submission_readiness_gap.py"
+  ],
+  "strict_external_evidence_ready": false,
+  "task_count": 4,
+  "task_item_count": 12,
+  "version": "external_operator_return_package_contract_v1"
+}

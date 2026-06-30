@@ -208,6 +208,9 @@ jobs:
       - name: Build external evidence intake ledger
         run: python scripts/build_external_evidence_intake_ledger.py
 
+      - name: Build external operator return package contract
+        run: python scripts/build_external_operator_return_package_contract.py
+
       - name: Self-test external evidence intake ledger
         run: python scripts/self_test_external_evidence_intake_ledger.py
 

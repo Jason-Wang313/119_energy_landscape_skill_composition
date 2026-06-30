@@ -171,6 +171,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External evidence intake ledger: `external_validation/evidence_intake_ledger.md`
 - External evidence intake audit: `results/external_evidence_intake_ledger_audit.md`
 - External evidence intake ledger self-test: `results/external_evidence_intake_ledger_self_test.md`
+- External operator return package contract: `external_validation/operator_return_package_contract.md` and `results/external_operator_return_package_contract_audit.md` convert the current strict external-evidence blockers into exact returned artifact classes, per-task JSONL/video/config counts, per-method checkpoint/config hash requirements, and final strict command spine; this remains non-evidence and keeps `external_validation/manifest.json` absent.
 - External precollection manifest draft: `external_validation/manifest_precollection_draft.md`
 - External precollection manifest draft candidate method-config hash bindings: `external_validation/manifest_precollection_draft.md`
 - External precollection manifest draft audit: `results/external_precollection_manifest_draft_audit.md`

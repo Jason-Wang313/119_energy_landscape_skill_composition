@@ -119,6 +119,9 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "evidence_intake_ledger.json",
         EXTERNAL / "evidence_intake_ledger.md",
         EXTERNAL / "evidence_intake_ledger.csv",
+        EXTERNAL / "operator_return_package_contract.json",
+        EXTERNAL / "operator_return_package_contract.md",
+        EXTERNAL / "operator_return_package_contract.csv",
         EXTERNAL / "precollection_freeze_receipt.json",
         EXTERNAL / "precollection_freeze_receipt.md",
         EXTERNAL / "precollection_freeze_receipt.csv",
@@ -195,6 +198,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "self_test_external_ablation_collection_packet.py",
         SCRIPTS / "build_external_evidence_intake_ledger.py",
         SCRIPTS / "self_test_external_evidence_intake_ledger.py",
+        SCRIPTS / "build_external_operator_return_package_contract.py",
         SCRIPTS / "build_external_precollection_freeze_receipt.py",
         SCRIPTS / "build_external_postcollection_evidence_seal.py",
         SCRIPTS / "audit_external_postcollection_seal_consistency.py",
@@ -289,6 +293,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_evidence_intake_ledger_audit.md",
         RESULTS / "external_evidence_intake_ledger_self_test.json",
         RESULTS / "external_evidence_intake_ledger_self_test.md",
+        RESULTS / "external_operator_return_package_contract_audit.json",
+        RESULTS / "external_operator_return_package_contract_audit.md",
         RESULTS / "external_precollection_manifest_draft_self_test.json",
         RESULTS / "external_precollection_manifest_draft_self_test.md",
         RESULTS / "external_precollection_freeze_receipt_audit.json",
@@ -477,6 +483,10 @@ def build_payload() -> dict[str, Any]:
     evidence_intake_self_test = require_payload(
         RESULTS / "external_evidence_intake_ledger_self_test.json",
         "external_evidence_intake_ledger_self_test_v1",
+    )
+    return_contract = require_payload(
+        RESULTS / "external_operator_return_package_contract_audit.json",
+        "external_operator_return_package_contract_v1",
     )
     precollection_manifest_self_test = require_payload(
         RESULTS / "external_precollection_manifest_draft_self_test.json",
@@ -1256,6 +1266,37 @@ def build_payload() -> dict[str, Any]:
             f"strict_command_drift_rejected={evidence_intake_self_test.get('strict_command_drift_rejected')!r}"
         ),
     )
+    return_contract_checks = {
+        check.get("name"): check.get("passed") for check in return_contract.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "external_operator_return_package_contract_included",
+        return_contract.get("passed") is True
+        and return_contract.get("not_external_evidence") is True
+        and return_contract.get("strict_external_evidence_ready") is False
+        and return_contract.get("return_contract_ready") is True
+        and int(return_contract.get("preflight_blocking_missing_count", 0) or 0) >= 50
+        and int(return_contract.get("expected_total_jsonl_records", 0) or 0) == 1440
+        and int(return_contract.get("task_count", 0) or 0) == 4
+        and int(return_contract.get("non_oracle_method_count", 0) or 0) == 11
+        and int(return_contract.get("return_item_count", 0) or 0) >= 28
+        and return_contract_checks.get("task_items_cover_all_manifest_tasks") is True
+        and return_contract_checks.get("method_items_cover_non_oracle_methods") is True
+        and return_contract_checks.get("strict_command_spine_covers_return_to_final_audit") is True
+        and return_contract_checks.get("no_real_manifest_written") is True
+        and "external_validation/operator_return_package_contract.json" in paths
+        and "external_validation/operator_return_package_contract.md" in paths
+        and "external_validation/operator_return_package_contract.csv" in paths
+        and "results/external_operator_return_package_contract_audit.json" in paths
+        and "results/external_operator_return_package_contract_audit.md" in paths
+        and "scripts/build_external_operator_return_package_contract.py" in paths,
+        (
+            f"items={return_contract.get('return_item_count')!r}, "
+            f"expected_records={return_contract.get('expected_total_jsonl_records')!r}, "
+            f"missing={return_contract.get('preflight_blocking_missing_count')!r}"
+        ),
+    )
     freeze_checks = {check.get("name"): check.get("passed") for check in precollection_freeze.get("checks", []) or []}
     add_check(
         checks,
@@ -1771,6 +1812,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_postcollection_seal_consistency_audit.json",
             "results/external_precollection_manifest_draft_audit.json",
             "results/external_precollection_manifest_draft_self_test.json",
+            "results/external_operator_return_package_contract_audit.json",
             "results/external_evidence_preflight.json",
             "results/external_release_package_audit.json",
             "results/external_pairing_integrity_audit.json",

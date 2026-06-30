@@ -9,6 +9,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / "docs"
+EXTERNAL = ROOT / "external_validation"
 RESULTS = ROOT / "results"
 OUT_JSON = RESULTS / "visible_contribution_audit.json"
 OUT_MD = RESULTS / "visible_contribution_audit.md"
@@ -109,6 +110,7 @@ def main() -> int:
     ablation_collection_self_test = read_json(RESULTS / "external_ablation_collection_packet_self_test.json")
     evidence_intake = read_json(RESULTS / "external_evidence_intake_ledger_audit.json")
     evidence_intake_self_test = read_json(RESULTS / "external_evidence_intake_ledger_self_test.json")
+    return_contract = read_json(RESULTS / "external_operator_return_package_contract_audit.json")
     precollection_manifest = read_json(RESULTS / "external_precollection_manifest_draft_audit.json")
     precollection_manifest_self_test = read_json(RESULTS / "external_precollection_manifest_draft_self_test.json")
     precollection_freeze = read_json(RESULTS / "external_precollection_freeze_receipt_audit.json")
@@ -1829,6 +1831,41 @@ def main() -> int:
             f"real_outputs_untouched={evidence_intake_self_test.get('real_outputs_untouched')!r}"
         ),
     )
+    return_contract_checks = {
+        check.get("name"): check.get("passed") for check in return_contract.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "external_operator_return_package_contract_visible",
+        return_contract.get("version") == "external_operator_return_package_contract_v1"
+        and return_contract.get("passed") is True
+        and return_contract.get("not_external_evidence") is True
+        and return_contract.get("strict_external_evidence_ready") is False
+        and return_contract.get("return_contract_ready") is True
+        and int(return_contract.get("preflight_blocking_missing_count", 0) or 0) >= 50
+        and int(return_contract.get("expected_total_jsonl_records", 0) or 0) == 1440
+        and int(return_contract.get("task_count", 0) or 0) == 4
+        and int(return_contract.get("non_oracle_method_count", 0) or 0) == 11
+        and int(return_contract.get("return_item_count", 0) or 0) >= 28
+        and return_contract_checks.get("task_items_cover_all_manifest_tasks") is True
+        and return_contract_checks.get("method_items_cover_non_oracle_methods") is True
+        and return_contract_checks.get("strict_command_spine_covers_return_to_final_audit") is True
+        and return_contract_checks.get("no_real_manifest_written") is True
+        and (ROOT / "scripts" / "build_external_operator_return_package_contract.py").exists()
+        and (EXTERNAL / "operator_return_package_contract.json").exists()
+        and (EXTERNAL / "operator_return_package_contract.md").exists()
+        and (EXTERNAL / "operator_return_package_contract.csv").exists()
+        and (RESULTS / "external_operator_return_package_contract_audit.md").exists()
+        and "External operator return package contract" in texts["README"]
+        and "External operator return package contract" in texts["final_audit"]
+        and "External operator return package contract" in texts["readiness_audit"]
+        and "External operator return package contract" in texts["reproducibility"],
+        (
+            f"items={return_contract.get('return_item_count')!r}, "
+            f"expected_records={return_contract.get('expected_total_jsonl_records')!r}, "
+            f"missing={return_contract.get('preflight_blocking_missing_count')!r}"
+        ),
+    )
     precollection_checks = {check.get("name"): check.get("passed") for check in precollection_manifest.get("checks", []) or []}
     add_check(
         checks,
@@ -2457,6 +2494,7 @@ def main() -> int:
             "external_ablation_collection_packet_self_test_claim",
             "external_evidence_intake_ledger_claim",
             "external_evidence_intake_ledger_self_test_claim",
+            "external_operator_return_package_contract_claim",
             "external_precollection_manifest_draft_claim",
             "external_precollection_manifest_draft_self_test_claim",
             "external_precollection_freeze_receipt_claim",
@@ -2482,7 +2520,7 @@ def main() -> int:
             "reviewer_response_packet_claim",
             "haonan_yilun_send_ready_outreach_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'local_planner_edge_policy_claim', 'local_failure_memory_adaptation_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_operator_handoff_bundle_self_test_claim', 'external_evidence_preflight_self_test_claim', 'external_execution_readiness_self_test_claim', 'external_operator_release_bundle_claim', 'external_operator_release_bundle_self_test_claim', 'external_collection_machine_bootstrap_claim', 'external_collection_machine_bootstrap_self_test_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_provenance_packet_self_test_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'external_backend_integration_packet_self_test_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'maniskill_render_host_qualification_brief_claim', 'external_collection_job_packet_claim', 'external_collection_job_packet_self_test_claim', 'external_config_manifest_packet_claim', 'external_config_manifest_packet_self_test_claim', 'external_config_evidence_hash_gate_claim', 'external_rollout_evidence_packet_claim', 'external_rollout_evidence_packet_self_test_claim', 'external_strict_video_evidence_gate_claim', 'external_ablation_collection_packet_claim', 'external_ablation_collection_packet_self_test_claim', 'external_evidence_intake_ledger_claim', 'external_evidence_intake_ledger_self_test_claim', 'external_precollection_manifest_draft_claim', 'external_precollection_manifest_draft_self_test_claim', 'external_precollection_freeze_receipt_claim', 'external_precollection_freeze_receipt_self_test_claim', 'external_postcollection_evidence_seal_claim', 'external_postcollection_evidence_seal_self_test_claim', 'external_postcollection_seal_consistency_gate_claim', 'external_postcollection_seal_consistency_self_test_claim', 'external_acquisition_packet_self_test_claim', 'external_evidence_closure_brief_claim', 'external_evidence_closure_brief_self_test_claim', 'independent_validation_launch_ticket_claim', 'external_method_implementation_packet_claim', 'external_method_implementation_packet_self_test_claim', 'external_baseline_contract_self_test_claim', 'external_method_config_materialization_claim', 'external_method_config_materialization_self_test_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'external_config_materialization_self_test_claim', 'reviewer_response_packet_claim', 'haonan_yilun_send_ready_outreach_claim'} - claim_names)}",
+        f"missing={sorted({'local_planner_edge_policy_claim', 'local_failure_memory_adaptation_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_operator_handoff_bundle_self_test_claim', 'external_evidence_preflight_self_test_claim', 'external_execution_readiness_self_test_claim', 'external_operator_release_bundle_claim', 'external_operator_release_bundle_self_test_claim', 'external_collection_machine_bootstrap_claim', 'external_collection_machine_bootstrap_self_test_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_provenance_packet_self_test_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'external_backend_integration_packet_self_test_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'maniskill_render_host_qualification_brief_claim', 'external_collection_job_packet_claim', 'external_collection_job_packet_self_test_claim', 'external_config_manifest_packet_claim', 'external_config_manifest_packet_self_test_claim', 'external_config_evidence_hash_gate_claim', 'external_rollout_evidence_packet_claim', 'external_rollout_evidence_packet_self_test_claim', 'external_strict_video_evidence_gate_claim', 'external_ablation_collection_packet_claim', 'external_ablation_collection_packet_self_test_claim', 'external_evidence_intake_ledger_claim', 'external_evidence_intake_ledger_self_test_claim', 'external_operator_return_package_contract_claim', 'external_precollection_manifest_draft_claim', 'external_precollection_manifest_draft_self_test_claim', 'external_precollection_freeze_receipt_claim', 'external_precollection_freeze_receipt_self_test_claim', 'external_postcollection_evidence_seal_claim', 'external_postcollection_evidence_seal_self_test_claim', 'external_postcollection_seal_consistency_gate_claim', 'external_postcollection_seal_consistency_self_test_claim', 'external_acquisition_packet_self_test_claim', 'external_evidence_closure_brief_claim', 'external_evidence_closure_brief_self_test_claim', 'independent_validation_launch_ticket_claim', 'external_method_implementation_packet_claim', 'external_method_implementation_packet_self_test_claim', 'external_baseline_contract_self_test_claim', 'external_method_config_materialization_claim', 'external_method_config_materialization_self_test_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'external_config_materialization_self_test_claim', 'reviewer_response_packet_claim', 'haonan_yilun_send_ready_outreach_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -2551,6 +2589,7 @@ def main() -> int:
             "External ablation collection packet self-test",
             "External evidence intake ledger",
             "External evidence intake ledger self-test",
+            "External operator return package contract",
             "External precollection manifest draft",
             "External precollection manifest draft self-test",
             "External precollection freeze receipt",
@@ -2653,6 +2692,7 @@ def main() -> int:
             "External ablation collection packet self-test",
             "External evidence intake ledger",
             "External evidence intake ledger self-test",
+            "External operator return package contract",
             "External precollection manifest draft",
             "External precollection manifest draft self-test",
             "External precollection freeze receipt",
@@ -2756,6 +2796,7 @@ def main() -> int:
             "External ablation collection packet self-test",
             "external evidence intake ledger",
             "External evidence intake ledger self-test",
+            "External operator return package contract",
             "external precollection manifest draft",
             "external precollection manifest draft self-test",
             "external precollection freeze receipt",
@@ -2860,6 +2901,7 @@ def main() -> int:
             "External ablation collection packet self-test",
             "External evidence intake ledger",
             "External evidence intake ledger self-test",
+            "External operator return package contract",
             "External precollection manifest draft",
             "External precollection manifest draft self-test",
             "External precollection freeze receipt",
@@ -2968,6 +3010,8 @@ def main() -> int:
             "scripts/build_external_evidence_intake_ledger.py",
             "scripts/self_test_external_evidence_intake_ledger.py",
             "External evidence intake ledger self-test",
+            "scripts/build_external_operator_return_package_contract.py",
+            "External operator return package contract",
             "scripts/build_external_precollection_manifest_draft.py",
             "scripts/self_test_external_precollection_manifest_draft.py",
             "External precollection manifest draft self-test",
@@ -3091,6 +3135,7 @@ def main() -> int:
             "external ablation collection packet self-test",
             "external evidence intake ledger",
             "external evidence intake ledger self-test",
+            "External operator return package contract",
             "external precollection manifest draft",
             "external precollection manifest draft self-test",
             "external precollection freeze receipt",
@@ -3161,6 +3206,7 @@ def main() -> int:
             "diagnostic sidecar rejected before JSONL write",
             "External ablation collection packet",
             "External evidence intake ledger",
+            "External operator return package contract",
             "External precollection manifest draft",
             "External precollection manifest draft self-test",
             "External precollection freeze receipt",

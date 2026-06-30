@@ -167,6 +167,7 @@ try {
         Invoke-Native python scripts\self_test_external_ablation_collection_packet.py
         Invoke-Native python scripts\build_external_evidence_intake_ledger.py
         Invoke-Native python scripts\self_test_external_evidence_intake_ledger.py
+        Invoke-Native python scripts\build_external_operator_return_package_contract.py
         Invoke-Native python scripts\build_external_precollection_manifest_draft.py
         Invoke-Native python scripts\self_test_external_precollection_manifest_draft.py
         Invoke-Native python scripts\build_external_precollection_freeze_receipt.py

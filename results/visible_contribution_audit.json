@@ -45,7 +45,7 @@
       "passed": true
     },
     {
-      "detail": "files=392, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=398, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -95,7 +95,7 @@
       "passed": true
     },
     {
-      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=392, archive_written=False",
+      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=398, archive_written=False",
       "name": "external_operator_release_bundle_visible",
       "passed": true
     },
@@ -327,6 +327,11 @@
     {
       "detail": "temporary_ledger_ready=True, unmapped_failure_rejected=True, real_outputs_untouched=True",
       "name": "evidence_intake_ledger_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "items=28, expected_records=1440, missing=56",
+      "name": "external_operator_return_package_contract_visible",
       "passed": true
     },
     {

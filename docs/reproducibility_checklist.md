@@ -50,6 +50,8 @@
 - External evidence intake ledger builder: `scripts/build_external_evidence_intake_ledger.py`
 - External evidence intake ledger self-test: `scripts/self_test_external_evidence_intake_ledger.py`
   - Durable report: `results/external_evidence_intake_ledger_self_test.md`
+- External operator return package contract builder: `scripts/build_external_operator_return_package_contract.py`
+  - Durable report: `results/external_operator_return_package_contract_audit.md`
 - External precollection manifest draft builder: `scripts/build_external_precollection_manifest_draft.py`
 - External precollection manifest draft self-test: `scripts/self_test_external_precollection_manifest_draft.py`
   - Durable report: `results/external_precollection_manifest_draft_self_test.md`

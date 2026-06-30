@@ -149,6 +149,7 @@ def main():
         "scripts\\self_test_external_ablation_collection_packet.py",
         "scripts\\build_external_evidence_intake_ledger.py",
         "scripts\\self_test_external_evidence_intake_ledger.py",
+        "scripts\\build_external_operator_return_package_contract.py",
         "scripts\\build_external_precollection_manifest_draft.py",
         "scripts\\self_test_external_precollection_manifest_draft.py",
         "scripts\\build_external_precollection_freeze_receipt.py",
@@ -270,6 +271,7 @@ def main():
         "python scripts/self_test_external_ablation_collection_packet.py",
         "python scripts/build_external_evidence_intake_ledger.py",
         "python scripts/self_test_external_evidence_intake_ledger.py",
+        "python scripts/build_external_operator_return_package_contract.py",
         "python scripts/build_external_precollection_manifest_draft.py",
         "python scripts/self_test_external_precollection_manifest_draft.py",
         "python scripts/build_external_precollection_freeze_receipt.py",
@@ -4146,6 +4148,63 @@ def main():
         if intake_self_checks.get(required_check) is not True:
             fail(f"external evidence intake ledger self-test missing passing check: {required_check}")
 
+    return_contract_json_path = EXTERNAL / "operator_return_package_contract.json"
+    return_contract_md_path = EXTERNAL / "operator_return_package_contract.md"
+    return_contract_csv_path = EXTERNAL / "operator_return_package_contract.csv"
+    return_contract_audit_path = RESULTS / "external_operator_return_package_contract_audit.json"
+    return_contract_audit_md_path = RESULTS / "external_operator_return_package_contract_audit.md"
+    for path in (
+        ROOT / "scripts" / "build_external_operator_return_package_contract.py",
+        return_contract_json_path,
+        return_contract_md_path,
+        return_contract_csv_path,
+        return_contract_audit_path,
+        return_contract_audit_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external operator return package contract artifact: {path}")
+    return_contract = json.loads(return_contract_audit_path.read_text(encoding="utf-8"))
+    return_contract_output = json.loads(return_contract_json_path.read_text(encoding="utf-8"))
+    if return_contract.get("version") != "external_operator_return_package_contract_v1":
+        fail("external operator return package contract audit version mismatch")
+    if return_contract_output.get("version") != "external_operator_return_package_contract_v1":
+        fail("external operator return package contract output version mismatch")
+    if return_contract.get("passed") is not True:
+        fail("external operator return package contract did not pass")
+    if return_contract.get("not_external_evidence") is not True:
+        fail("external operator return package contract must declare that it is not evidence")
+    if return_contract.get("strict_external_evidence_ready") is not False:
+        fail("external operator return package contract must keep strict external evidence false")
+    if return_contract.get("return_contract_ready") is not True:
+        fail("external operator return package contract must report return_contract_ready=true")
+    if int(return_contract.get("preflight_blocking_missing_count", 0) or 0) < 50:
+        fail("external operator return package contract maps too few current preflight blockers")
+    if int(return_contract.get("expected_total_jsonl_records", 0) or 0) != 1440:
+        fail("external operator return package contract expected record count drifted")
+    if int(return_contract.get("task_count", 0) or 0) != 4:
+        fail("external operator return package contract task count drifted")
+    if int(return_contract.get("non_oracle_method_count", 0) or 0) != 11:
+        fail("external operator return package contract non-oracle method count drifted")
+    if int(return_contract.get("return_item_count", 0) or 0) < 28:
+        fail("external operator return package contract has too few return items")
+    if return_contract_output.get("return_item_count") != return_contract.get("return_item_count"):
+        fail("external operator return package contract output and audit item counts diverged")
+    return_contract_checks = {check.get("name"): check.get("passed") for check in return_contract.get("checks", [])}
+    for required_check in (
+        "contract_is_non_evidence",
+        "preflight_blockers_are_current",
+        "global_items_cover_manifest_fidelity_seals_release",
+        "task_items_cover_all_manifest_tasks",
+        "method_items_cover_non_oracle_methods",
+        "candidate_method_hashes_bound",
+        "strict_command_spine_covers_return_to_final_audit",
+        "intake_ledger_and_release_bundle_are_current_sources",
+        "readiness_boundary_preserved",
+        "no_real_manifest_written",
+    ):
+        if return_contract_checks.get(required_check) is not True:
+            fail(f"external operator return package contract missing passing check: {required_check}")
+
     if not (ROOT / "scripts" / "self_test_external_rollout_validator.py").exists():
         fail("missing scripts/self_test_external_rollout_validator.py")
     rollout_self_test_path = RESULTS / "external_rollout_validator_self_test.json"
@@ -5449,9 +5508,15 @@ def main():
         "results/maniskill_render_host_qualification_brief_audit.json",
         "results/maniskill_render_host_qualification_brief_audit.md",
         "scripts/build_maniskill_render_host_qualification_brief.py",
+        "external_validation/operator_return_package_contract.json",
+        "external_validation/operator_return_package_contract.md",
+        "external_validation/operator_return_package_contract.csv",
+        "results/external_operator_return_package_contract_audit.json",
+        "results/external_operator_return_package_contract_audit.md",
+        "scripts/build_external_operator_return_package_contract.py",
     ):
         if required_path not in handoff_paths:
-            fail(f"external operator handoff bundle missing required launch/render-host path: {required_path}")
+            fail(f"external operator handoff bundle missing required operator path: {required_path}")
     for required_check in (
         "operator_packet_is_no_go_non_evidence",
         "acquisition_maps_all_remaining_blockers",
@@ -5478,6 +5543,7 @@ def main():
         "ablation_collection_packet_self_test_included",
         "evidence_intake_ledger_included",
         "evidence_intake_ledger_self_test_included",
+        "external_operator_return_package_contract_included",
         "precollection_manifest_draft_included",
         "precollection_manifest_draft_self_test_included",
         "precollection_freeze_receipt_included",
@@ -6795,6 +6861,7 @@ def main():
         "rollout_evidence_packet_visible",
         "strict_video_evidence_gate_visible",
         "release_package_internal_artifact_rejection_visible",
+        "external_operator_return_package_contract_visible",
         "precollection_manifest_draft_visible",
         "precollection_freeze_receipt_visible",
         "postcollection_evidence_seal_visible",
