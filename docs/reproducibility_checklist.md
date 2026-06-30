@@ -54,6 +54,8 @@
   - Durable report: `results/maniskill_render_machine_qualification_self_test.md`
 - External release package validator: `scripts/audit_external_release_package.py`
 - External evidence preflight validator: `scripts/audit_external_evidence_preflight.py`
+- External evidence preflight self-test: `scripts/self_test_external_evidence_preflight.py`
+  - Durable report: `results/external_evidence_preflight_self_test.md`
 - External evidence acquisition packet builder: `scripts/build_external_acquisition_packet.py`
 - External acquisition packet self-test: `scripts/self_test_external_acquisition_packet.py`
   - Durable report: `results/external_acquisition_packet_self_test.md`
@@ -235,6 +237,8 @@
   - `results/external_release_package_self_test.md`
   - `results/external_evidence_preflight.json`
   - `results/external_evidence_preflight.md`
+  - `results/external_evidence_preflight_self_test.json`
+  - `results/external_evidence_preflight_self_test.md`
   - `results/external_acquisition_packet.json`
   - `results/external_acquisition_packet.md`
   - `results/external_acquisition_packet_self_test.json`

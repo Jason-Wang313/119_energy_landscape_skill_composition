@@ -301,6 +301,11 @@
       "evidence": ["scripts/self_test_external_operator_handoff_bundle.py", "results/external_operator_handoff_bundle_self_test.json", "results/external_operator_handoff_bundle_self_test.md", "scripts/build_external_operator_handoff_bundle.py", "results/external_operator_handoff_bundle.json", "results/external_operator_handoff_bundle.md"]
     },
     {
+      "name": "external_evidence_preflight_self_test_claim",
+      "claim": "The repository self-tests the External evidence preflight in temporary workspaces, proving the current no-manifest state remains fail-closed, a complete temporary 1,440-record package can reach the strict-audit handoff state, and incomplete logs, placeholder videos, template configs, scaffold implementations, and real-output overwrite attempts are rejected without promoting real evidence.",
+      "evidence": ["scripts/self_test_external_evidence_preflight.py", "results/external_evidence_preflight_self_test.json", "results/external_evidence_preflight_self_test.md", "scripts/audit_external_evidence_preflight.py", "results/external_evidence_preflight.json", "results/external_evidence_preflight.md"]
+    },
+    {
       "name": "external_config_template_claim",
       "claim": "The repository provides a non-evidence task config schema, template validator, and tracked real-config intake directory, while strict config evidence remains missing until real manifest-declared configs replace templates.",
       "evidence": ["external_validation/config_schema_v1.json", "external_validation/config_templates/peg_place_regrasp.json", "external_validation/configs/README.md", "scripts/validate_external_configs.py", "results/external_config_template_audit.json", "results/external_config_template_audit.md"]

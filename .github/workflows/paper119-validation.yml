@@ -94,6 +94,9 @@ jobs:
       - name: Audit external evidence preflight
         run: python scripts/audit_external_evidence_preflight.py
 
+      - name: Self-test external evidence preflight
+        run: python scripts/self_test_external_evidence_preflight.py
+
       - name: Self-test external config evidence
         run: python scripts/self_test_external_config_evidence.py
 

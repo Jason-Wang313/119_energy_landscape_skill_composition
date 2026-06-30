@@ -1,0 +1,50 @@
+{
+  "checks": [
+    {
+      "detail": "status=0, state='COLLECT_EXTERNAL_EVIDENCE', missing=60",
+      "name": "tracked_no_manifest_preflight_fails_closed",
+      "passed": true
+    },
+    {
+      "detail": "status=0, state='READY_FOR_STRICT_AUDIT', records=1440/1440",
+      "name": "temporary_complete_preflight_reaches_strict_audit_handoff",
+      "passed": true
+    },
+    {
+      "detail": "status=0, missing=1",
+      "name": "incomplete_log_records_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=0, missing=1",
+      "name": "placeholder_video_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=0, missing=1",
+      "name": "template_config_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=0, missing=1",
+      "name": "scaffold_implementation_rejected",
+      "passed": true
+    },
+    {
+      "detail": "before={'results/external_evidence_preflight.json': 'd163ea7b1e6dc2efbbf26dc10c324a5cb76cd216beb969c316d5a994f8dce0b1', 'results/external_evidence_preflight.md': 'b68911c22003e7e03e48d7486ab58f53ad10457f0c25abcd47a134e37a247892', 'external_validation/manifest.json': None}, after={'results/external_evidence_preflight.json': 'd163ea7b1e6dc2efbbf26dc10c324a5cb76cd216beb969c316d5a994f8dce0b1', 'results/external_evidence_preflight.md': 'b68911c22003e7e03e48d7486ab58f53ad10457f0c25abcd47a134e37a247892', 'external_validation/manifest.json': None}",
+      "name": "real_preflight_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "incomplete_log_rejected": true,
+  "not_external_evidence": true,
+  "passed": true,
+  "placeholder_video_rejected": true,
+  "real_outputs_untouched": true,
+  "scaffold_implementation_rejected": true,
+  "strict_external_evidence_ready": false,
+  "template_config_rejected": true,
+  "temporary_complete_fixture_ready": true,
+  "tracked_no_manifest_fail_closed": true,
+  "version": "external_evidence_preflight_self_test_v1"
+}

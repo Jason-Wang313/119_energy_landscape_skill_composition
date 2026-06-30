@@ -162,6 +162,7 @@ def main():
         "scripts\\audit_external_release_package.py",
         "scripts\\self_test_external_release_package.py",
         "scripts\\audit_external_evidence_preflight.py",
+        "scripts\\self_test_external_evidence_preflight.py",
         "scripts\\build_external_acquisition_packet.py",
         "scripts\\self_test_external_acquisition_packet.py",
         "scripts\\build_external_operator_packet.py",
@@ -241,6 +242,7 @@ def main():
         "python scripts/build_maniskill_render_machine_qualification.py",
         "python scripts/self_test_maniskill_render_machine_qualification.py",
         "python scripts/audit_external_evidence_preflight.py",
+        "python scripts/self_test_external_evidence_preflight.py",
         "python scripts/self_test_external_config_evidence.py",
         "python scripts/self_test_external_adapter_evidence.py",
         "python scripts/materialize_external_configs.py",
@@ -2558,6 +2560,48 @@ def main():
         fail("external evidence preflight has too few method reports")
     if not (RESULTS / "external_evidence_preflight.md").exists():
         fail("missing results/external_evidence_preflight.md")
+
+    preflight_self_test_path = RESULTS / "external_evidence_preflight_self_test.json"
+    preflight_self_test_md_path = RESULTS / "external_evidence_preflight_self_test.md"
+    for path in (
+        ROOT / "scripts" / "self_test_external_evidence_preflight.py",
+        preflight_self_test_path,
+        preflight_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external evidence preflight self-test artifact: {path}")
+    preflight_self_test = json.loads(preflight_self_test_path.read_text(encoding="utf-8"))
+    if preflight_self_test.get("version") != "external_evidence_preflight_self_test_v1":
+        fail("external evidence preflight self-test version mismatch")
+    if preflight_self_test.get("passed") is not True:
+        fail("external evidence preflight self-test did not pass")
+    if preflight_self_test.get("not_external_evidence") is not True:
+        fail("external evidence preflight self-test must declare that it is not evidence")
+    if preflight_self_test.get("strict_external_evidence_ready") is not False:
+        fail("external evidence preflight self-test must keep strict external evidence false")
+    for field in (
+        "tracked_no_manifest_fail_closed",
+        "temporary_complete_fixture_ready",
+        "incomplete_log_rejected",
+        "placeholder_video_rejected",
+        "template_config_rejected",
+        "scaffold_implementation_rejected",
+        "real_outputs_untouched",
+    ):
+        if preflight_self_test.get(field) is not True:
+            fail(f"external evidence preflight self-test field must be true: {field}")
+    preflight_self_checks = {check.get("name"): check.get("passed") for check in preflight_self_test.get("checks", [])}
+    for required_check in (
+        "tracked_no_manifest_preflight_fails_closed",
+        "temporary_complete_preflight_reaches_strict_audit_handoff",
+        "incomplete_log_records_rejected",
+        "placeholder_video_rejected",
+        "template_config_rejected",
+        "scaffold_implementation_rejected",
+        "real_preflight_outputs_untouched",
+    ):
+        if preflight_self_checks.get(required_check) is not True:
+            fail(f"external evidence preflight self-test missing passing check: {required_check}")
 
     local_falsification_path = RESULTS / "local_falsification_audit.json"
     if not local_falsification_path.exists():
@@ -5754,6 +5798,7 @@ def main():
         "backend_integration_packet_visible",
         "maniskill_reference_collection_preflight_visible",
         "external_collection_preflight_self_test_visible",
+        "external_evidence_preflight_self_test_visible",
         "maniskill_fidelity_metadata_probe_visible",
         "runner_backend_probe_visible",
         "config_manifest_packet_visible",

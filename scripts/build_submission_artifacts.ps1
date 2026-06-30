@@ -149,6 +149,7 @@ try {
         Invoke-Native python scripts\audit_external_release_package.py
         Invoke-Native python scripts\self_test_external_release_package.py
         Invoke-Native python scripts\audit_external_evidence_preflight.py
+        Invoke-Native python scripts\self_test_external_evidence_preflight.py
         Invoke-Native python scripts\validate_external_rollouts.py --write-results
         Invoke-Native python scripts\audit_external_pairing_integrity.py
         Invoke-Native python scripts\audit_external_evidence.py
