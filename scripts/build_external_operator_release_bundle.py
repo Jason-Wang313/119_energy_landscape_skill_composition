@@ -192,8 +192,10 @@ def build_payload(write_archive: bool) -> dict[str, Any]:
         "collection_job_packet_present_in_handoff",
         collection_job.get("passed") is True
         and collection_job.get("job_state") == "DO_NOT_START_COLLECTION_YET"
+        and collection_job.get("linux_command_file") == "external_validation/collection_job_commands.sh"
         and "external_validation/collection_job_packet.md" in paths
-        and "external_validation/collection_job_commands.ps1" in paths,
+        and "external_validation/collection_job_commands.ps1" in paths
+        and "external_validation/collection_job_commands.sh" in paths,
         (
             f"job_state={collection_job.get('job_state')!r}, "
             f"packet_in_paths={'external_validation/collection_job_packet.md' in paths}"

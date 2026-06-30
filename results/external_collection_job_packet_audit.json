@@ -29,8 +29,13 @@
       "passed": true
     },
     {
-      "detail": "PowerShell job spine requires explicit confirmation, placeholder checks, runner, manifest, and final strict evidence gate",
+      "detail": "PowerShell and Bash job spines require explicit confirmation, placeholder checks, runner, manifest, and final strict evidence gate",
       "name": "official_collection_commands_guarded",
+      "passed": true
+    },
+    {
+      "detail": "Bash job spine is generated with LF-only content for Linux collection machines",
+      "name": "linux_command_spine_uses_lf_line_endings",
       "passed": true
     },
     {
@@ -56,6 +61,10 @@
   ],
   "collection_ready": false,
   "command_file": "external_validation/collection_job_commands.ps1",
+  "command_files": [
+    "external_validation/collection_job_commands.ps1",
+    "external_validation/collection_job_commands.sh"
+  ],
   "current_blockers": [
     "collection_readiness: backend_module_ready: --backend-module is required before actual collection",
     "collection_readiness: fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'",
@@ -265,6 +274,7 @@
       "phase": "manifest_and_strict_gates"
     }
   ],
+  "linux_command_file": "external_validation/collection_job_commands.sh",
   "not_external_evidence": true,
   "operator_start_state": "DO_NOT_COLLECT_YET",
   "packet_json": "external_validation/collection_job_packet.json",

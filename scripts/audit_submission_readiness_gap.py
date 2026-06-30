@@ -1064,6 +1064,9 @@ def main() -> int:
         and len(collection_job.get("job_steps", []) or []) >= 17
         and collection_job_checks.get("command_sequence_covers_full_external_validation_route") is True
         and collection_job_checks.get("official_collection_commands_guarded") is True
+        and collection_job_checks.get("linux_command_spine_uses_lf_line_endings") is True
+        and collection_job.get("linux_command_file") == "external_validation/collection_job_commands.sh"
+        and "external_validation/collection_job_commands.sh" in (collection_job.get("command_files", []) or [])
         and machine_bootstrap.get("passed") is True
         and machine_bootstrap.get("version") == "external_collection_machine_bootstrap_audit_v1"
         and machine_bootstrap.get("packet_version") == "external_collection_machine_bootstrap_v1"
@@ -1155,6 +1158,7 @@ def main() -> int:
                 EXTERNAL / "collection_job_packet.json",
                 EXTERNAL / "collection_job_packet.md",
                 EXTERNAL / "collection_job_commands.ps1",
+                EXTERNAL / "collection_job_commands.sh",
                 EXTERNAL / "collection_job_checklist.csv",
                 RESULTS / "external_collection_job_packet_audit.json",
                 RESULTS / "external_collection_job_packet_audit.md",
@@ -1261,6 +1265,7 @@ def main() -> int:
             "external_validation/collection_job_packet.json",
             "external_validation/collection_job_packet.md",
             "external_validation/collection_job_commands.ps1",
+            "external_validation/collection_job_commands.sh",
             "external_validation/collection_job_checklist.csv",
             "results/external_collection_job_packet_audit.json",
             "results/external_collection_job_packet_audit.md",

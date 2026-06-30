@@ -163,6 +163,10 @@ def remove_linux_bootstrap(root: Path) -> None:
     (root / "external_validation" / "collection_machine_bootstrap.sh").unlink()
 
 
+def remove_linux_collection_job_command(root: Path) -> None:
+    (root / "external_validation" / "collection_job_commands.sh").unlink()
+
+
 def write_premature_manifest(root: Path) -> None:
     write_json(
         root / "external_validation" / "manifest.json",
@@ -204,12 +208,13 @@ def write_report(payload: dict[str, Any]) -> None:
         f"Missing operator packet rejected: `{str(payload['missing_operator_packet_rejected']).lower()}`.",
         f"Missing required packet file rejected: `{str(payload['missing_required_packet_file_rejected']).lower()}`.",
         f"Missing Linux bootstrap rejected: `{str(payload['missing_linux_bootstrap_rejected']).lower()}`.",
+        f"Missing Linux collection job command rejected: `{str(payload['missing_linux_collection_job_command_rejected']).lower()}`.",
         f"Premature manifest rejected: `{str(payload['premature_manifest_rejected']).lower()}`.",
         f"Strict evidence promotion rejected: `{str(payload['strict_evidence_promotion_rejected']).lower()}`.",
         f"Haonan-dependence drift rejected: `{str(payload['haonan_dependence_drift_rejected']).lower()}`.",
         f"Real execution outputs untouched: `{str(payload['real_outputs_untouched']).lower()}`.",
         "",
-        "This is a tooling-only mutation test. It runs the top-level external execution-readiness audit in temporary copied workspaces, proves the current operator packet is executable but still non-evidence, and proves missing packet sources, premature manifests, accidental strict-evidence promotion, and loss of the independent non-Haonan validation guarantee fail closed without touching the real execution-readiness reports.",
+        "This is a tooling-only mutation test. It runs the top-level external execution-readiness audit in temporary copied workspaces, proves the current operator packet is executable but still non-evidence, and proves missing packet sources, missing Linux bootstrap/collection-job commands, premature manifests, accidental strict-evidence promotion, and loss of the independent non-Haonan validation guarantee fail closed without touching the real execution-readiness reports.",
         "",
         "## Checks",
         "",
@@ -283,6 +288,19 @@ def main() -> int:
         f"status={missing_linux_status}, paths_exist={check_named(missing_linux_payload, 'operator_packet_paths_exist')}",
     )
 
+    missing_linux_job_status, missing_linux_job_payload, _ = run_case(remove_linux_collection_job_command)
+    missing_linux_collection_job_command_rejected = (
+        missing_linux_job_payload.get("passed") is False
+        and missing_linux_job_payload.get("execution_packet_ready") is False
+        and check_named(missing_linux_job_payload, "operator_packet_paths_exist") is False
+    )
+    add_check(
+        checks,
+        "missing_linux_collection_job_command_rejected",
+        missing_linux_collection_job_command_rejected,
+        f"status={missing_linux_job_status}, paths_exist={check_named(missing_linux_job_payload, 'operator_packet_paths_exist')}",
+    )
+
     manifest_status, manifest_payload, _ = run_case(write_premature_manifest)
     premature_manifest_rejected = (
         manifest_payload.get("passed") is False
@@ -336,6 +354,7 @@ def main() -> int:
         "missing_operator_packet_rejected": missing_operator_packet_rejected,
         "missing_required_packet_file_rejected": missing_required_packet_file_rejected,
         "missing_linux_bootstrap_rejected": missing_linux_bootstrap_rejected,
+        "missing_linux_collection_job_command_rejected": missing_linux_collection_job_command_rejected,
         "premature_manifest_rejected": premature_manifest_rejected,
         "strict_evidence_promotion_rejected": strict_evidence_promotion_rejected,
         "haonan_dependence_drift_rejected": haonan_dependence_drift_rejected,
@@ -350,6 +369,7 @@ def main() -> int:
         f"missing_operator_rejected={missing_operator_packet_rejected}; "
         f"missing_file_rejected={missing_required_packet_file_rejected}; "
         f"missing_linux_rejected={missing_linux_bootstrap_rejected}; "
+        f"missing_linux_job_rejected={missing_linux_collection_job_command_rejected}; "
         f"manifest_rejected={premature_manifest_rejected}; "
         f"strict_promotion_rejected={strict_evidence_promotion_rejected}; "
         f"haonan_drift_rejected={haonan_dependence_drift_rejected}; "

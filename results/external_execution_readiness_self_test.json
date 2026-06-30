@@ -21,6 +21,11 @@
       "passed": true
     },
     {
+      "detail": "status=1, paths_exist=False",
+      "name": "missing_linux_collection_job_command_rejected",
+      "passed": true
+    },
+    {
       "detail": "status=1, no_real_manifest=False",
       "name": "premature_manifest_rejected",
       "passed": true
@@ -36,13 +41,14 @@
       "passed": true
     },
     {
-      "detail": "before={'results/external_execution_readiness_audit.json': '2ee65f07926a1a2c772be94ba4cf4f6889d43b0427a81a7ac976cf94c90b1d9c', 'results/external_execution_readiness_audit.md': '5bda2fa175114a895957a3b7619389a89f59a4bbfb0734c3098b3f4df93814ad', 'external_validation/manifest.json': None}, after={'results/external_execution_readiness_audit.json': '2ee65f07926a1a2c772be94ba4cf4f6889d43b0427a81a7ac976cf94c90b1d9c', 'results/external_execution_readiness_audit.md': '5bda2fa175114a895957a3b7619389a89f59a4bbfb0734c3098b3f4df93814ad', 'external_validation/manifest.json': None}",
+      "detail": "before={'results/external_execution_readiness_audit.json': '9eb50dd07cca5d9bb1696f65a614111ab0e5fb305ad26eaca3175e7156e00a7f', 'results/external_execution_readiness_audit.md': 'ed312f76a25c1a5592b76987bb42bbfe2c71a335ed374d8f7ee01cf51ff156e9', 'external_validation/manifest.json': None}, after={'results/external_execution_readiness_audit.json': '9eb50dd07cca5d9bb1696f65a614111ab0e5fb305ad26eaca3175e7156e00a7f', 'results/external_execution_readiness_audit.md': 'ed312f76a25c1a5592b76987bb42bbfe2c71a335ed374d8f7ee01cf51ff156e9', 'external_validation/manifest.json': None}",
       "name": "real_execution_outputs_untouched",
       "passed": true
     }
   ],
   "haonan_dependence_drift_rejected": true,
   "missing_linux_bootstrap_rejected": true,
+  "missing_linux_collection_job_command_rejected": true,
   "missing_operator_packet_rejected": true,
   "missing_required_packet_file_rejected": true,
   "not_external_evidence": true,

@@ -20,6 +20,7 @@ REAL_OUTPUTS = [
     REAL_EXTERNAL / "collection_job_packet.json",
     REAL_EXTERNAL / "collection_job_packet.md",
     REAL_EXTERNAL / "collection_job_commands.ps1",
+    REAL_EXTERNAL / "collection_job_commands.sh",
     REAL_EXTERNAL / "collection_job_checklist.csv",
     REAL_RESULTS / "external_collection_job_packet_audit.json",
     REAL_RESULTS / "external_collection_job_packet_audit.md",
@@ -92,12 +93,17 @@ def run_builder(root: Path, *, unsafe_command_spine: bool = False) -> tuple[int,
         collection_job.OUT_PACKET_JSON,
         collection_job.OUT_PACKET_MD,
         collection_job.OUT_COMMANDS,
+        collection_job.OUT_COMMANDS_SH,
         collection_job.OUT_CHECKLIST,
         collection_job.OUT_AUDIT_JSON,
         collection_job.OUT_AUDIT_MD,
         collection_job.build_command_file,
+        collection_job.build_bash_command_file,
+        collection_job.write_outputs,
     )
     original_build_command_file = collection_job.build_command_file
+    original_build_bash_command_file = collection_job.build_bash_command_file
+    original_write_outputs = collection_job.write_outputs
     try:
         collection_job.ROOT = root
         collection_job.RESULTS = root / "results"
@@ -105,6 +111,7 @@ def run_builder(root: Path, *, unsafe_command_spine: bool = False) -> tuple[int,
         collection_job.OUT_PACKET_JSON = collection_job.EXTERNAL / "collection_job_packet.json"
         collection_job.OUT_PACKET_MD = collection_job.EXTERNAL / "collection_job_packet.md"
         collection_job.OUT_COMMANDS = collection_job.EXTERNAL / "collection_job_commands.ps1"
+        collection_job.OUT_COMMANDS_SH = collection_job.EXTERNAL / "collection_job_commands.sh"
         collection_job.OUT_CHECKLIST = collection_job.EXTERNAL / "collection_job_checklist.csv"
         collection_job.OUT_AUDIT_JSON = collection_job.RESULTS / "external_collection_job_packet_audit.json"
         collection_job.OUT_AUDIT_MD = collection_job.RESULTS / "external_collection_job_packet_audit.md"
@@ -118,7 +125,15 @@ def run_builder(root: Path, *, unsafe_command_spine: bool = False) -> tuple[int,
                     .replace("Assert-NoPlaceholder", "Assert-PlaceholderShortcut")
                 )
 
+            def unsafe_bash_command_file() -> str:
+                return (
+                    original_build_bash_command_file()
+                    .replace("--confirm-official-collection", "--confirm-collection-shortcut")
+                    .replace("require_real_value", "skip_real_value")
+                )
+
             collection_job.build_command_file = unsafe_command_file
+            collection_job.build_bash_command_file = unsafe_bash_command_file
 
         with redirect_stdout(io.StringIO()):
             try:
@@ -128,7 +143,12 @@ def run_builder(root: Path, *, unsafe_command_spine: bool = False) -> tuple[int,
                 payload = audit_payload_from_temp(root)
                 payload["error"] = str(exc)
                 return code, payload
-        return status, audit_payload_from_temp(root)
+        payload = audit_payload_from_temp(root)
+        if status == 0 and not collection_job.OUT_COMMANDS_SH.exists():
+            payload["passed"] = False
+            payload["error"] = "missing external_validation/collection_job_commands.sh"
+            return 1, payload
+        return status, payload
     finally:
         (
             collection_job.ROOT,
@@ -137,10 +157,13 @@ def run_builder(root: Path, *, unsafe_command_spine: bool = False) -> tuple[int,
             collection_job.OUT_PACKET_JSON,
             collection_job.OUT_PACKET_MD,
             collection_job.OUT_COMMANDS,
+            collection_job.OUT_COMMANDS_SH,
             collection_job.OUT_CHECKLIST,
             collection_job.OUT_AUDIT_JSON,
             collection_job.OUT_AUDIT_MD,
             collection_job.build_command_file,
+            collection_job.build_bash_command_file,
+            collection_job.write_outputs,
         ) = original
 
 
@@ -155,13 +178,26 @@ def run_case(
     mutator: Callable[[Path], None] | None = None,
     *,
     unsafe_command_spine: bool = False,
+    skip_linux_command_write: bool = False,
 ) -> tuple[int, dict[str, Any]]:
     with tempfile.TemporaryDirectory(prefix="paper119_collection_job_selftest_") as tmp_dir:
         root = Path(tmp_dir)
         setup_fixture(root)
         if mutator is not None:
             mutator(root)
-        return run_builder(root, unsafe_command_spine=unsafe_command_spine)
+        if skip_linux_command_write:
+            original_write_outputs = collection_job.write_outputs
+
+            def skip_linux_command(packet: dict[str, Any]) -> None:
+                original_write_outputs(packet)
+                (root / "external_validation" / "collection_job_commands.sh").unlink(missing_ok=True)
+
+            collection_job.write_outputs = skip_linux_command
+        try:
+            return run_builder(root, unsafe_command_spine=unsafe_command_spine)
+        finally:
+            if skip_linux_command_write:
+                collection_job.write_outputs = original_write_outputs
 
 
 def remove_operator_packet(root: Path) -> None:
@@ -242,11 +278,12 @@ def write_report(payload: dict[str, Any]) -> None:
         f"Premature manifest rejected: `{str(payload['premature_manifest_rejected']).lower()}`.",
         f"Premature ready state rejected: `{str(payload['premature_ready_state_rejected']).lower()}`.",
         f"Unsafe command spine rejected: `{str(payload['unsafe_command_spine_rejected']).lower()}`.",
+        f"Missing Linux command spine rejected: `{str(payload['missing_linux_command_spine_rejected']).lower()}`.",
         f"Hash gate drift rejected: `{str(payload['hash_gate_drift_rejected']).lower()}`.",
         f"Render self-test drift rejected: `{str(payload['render_self_test_drift_rejected']).lower()}`.",
         f"Real collection job outputs untouched: `{str(payload['real_outputs_untouched']).lower()}`.",
         "",
-        "This is a tooling-only mutation test. It rebuilds the collection job packet in temporary copied workspaces, then proves missing sources, source non-evidence drift, premature manifest presence, premature ready-state promotion, unsafe command-spine edits, hash-gate drift, and render-machine self-test drift fail closed without touching the real collection job packet.",
+        "This is a tooling-only mutation test. It rebuilds the collection job packet in temporary copied workspaces, then proves missing sources, source non-evidence drift, premature manifest presence, premature ready-state promotion, unsafe command-spine edits, missing Linux command-spine output, hash-gate drift, and render-machine self-test drift fail closed without touching the real collection job packet.",
         "",
         "## Checks",
         "",
@@ -275,7 +312,9 @@ def main() -> int:
         and complete_checks.get("job_state_fail_closed_until_render_and_collection_ready") is True
         and complete_checks.get("command_sequence_covers_full_external_validation_route") is True
         and complete_checks.get("official_collection_commands_guarded") is True
+        and complete_checks.get("linux_command_spine_uses_lf_line_endings") is True
         and complete_checks.get("no_real_manifest_written") is True
+        and "external_validation/collection_job_commands.sh" in (complete_payload.get("command_files", []) or [])
     )
     add_check(
         checks,
@@ -346,6 +385,19 @@ def main() -> int:
         f"status={command_status}, command_guard_check={check_named(command_payload, 'official_collection_commands_guarded')}",
     )
 
+    linux_status, linux_payload = run_case(skip_linux_command_write=True)
+    missing_linux_command_spine_rejected = (
+        linux_status != 0
+        and linux_payload.get("passed") is False
+        and "collection_job_commands.sh" in str(linux_payload.get("error", ""))
+    )
+    add_check(
+        checks,
+        "missing_linux_command_spine_rejected",
+        missing_linux_command_spine_rejected,
+        f"status={linux_status}, error={linux_payload.get('error', '')!r}",
+    )
+
     hash_status, hash_payload = run_case(promote_hash_gates)
     hash_gate_drift_rejected = (
         hash_status != 0
@@ -393,6 +445,7 @@ def main() -> int:
         "premature_manifest_rejected": premature_manifest_rejected,
         "premature_ready_state_rejected": premature_ready_state_rejected,
         "unsafe_command_spine_rejected": unsafe_command_spine_rejected,
+        "missing_linux_command_spine_rejected": missing_linux_command_spine_rejected,
         "hash_gate_drift_rejected": hash_gate_drift_rejected,
         "render_self_test_drift_rejected": render_self_test_drift_rejected,
         "real_outputs_untouched": real_outputs_untouched,
@@ -411,6 +464,7 @@ def main() -> int:
         f"manifest_rejected={premature_manifest_rejected}; "
         f"ready_state_rejected={premature_ready_state_rejected}; "
         f"unsafe_command_rejected={unsafe_command_spine_rejected}; "
+        f"missing_linux_command_rejected={missing_linux_command_spine_rejected}; "
         f"hash_drift_rejected={hash_gate_drift_rejected}; "
         f"render_drift_rejected={render_self_test_drift_rejected}; "
         f"real_untouched={real_outputs_untouched}"

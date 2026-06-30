@@ -273,6 +273,7 @@
   - `external_validation/collection_job_packet.json`
   - `external_validation/collection_job_packet.md`
   - `external_validation/collection_job_commands.ps1`
+  - `external_validation/collection_job_commands.sh`
   - `external_validation/collection_job_checklist.csv`
   - `results/external_collection_job_packet_audit.json`
   - `results/external_collection_job_packet_audit.md`

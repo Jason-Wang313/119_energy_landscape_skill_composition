@@ -4399,6 +4399,7 @@ def main():
         "missing_operator_packet_rejected",
         "missing_required_packet_file_rejected",
         "missing_linux_bootstrap_rejected",
+        "missing_linux_collection_job_command_rejected",
         "premature_manifest_rejected",
         "strict_evidence_promotion_rejected",
         "haonan_dependence_drift_rejected",
@@ -4412,6 +4413,7 @@ def main():
         "missing_operator_packet_rejected",
         "missing_required_packet_file_rejected",
         "missing_linux_bootstrap_rejected",
+        "missing_linux_collection_job_command_rejected",
         "premature_manifest_rejected",
         "strict_evidence_promotion_rejected",
         "haonan_dependence_drift_rejected",
@@ -5211,6 +5213,7 @@ def main():
     collection_job_packet_path = EXTERNAL / "collection_job_packet.json"
     collection_job_packet_md_path = EXTERNAL / "collection_job_packet.md"
     collection_job_commands_path = EXTERNAL / "collection_job_commands.ps1"
+    collection_job_shell_commands_path = EXTERNAL / "collection_job_commands.sh"
     collection_job_checklist_path = EXTERNAL / "collection_job_checklist.csv"
     collection_job_audit_path = RESULTS / "external_collection_job_packet_audit.json"
     collection_job_audit_md_path = RESULTS / "external_collection_job_packet_audit.md"
@@ -5219,6 +5222,7 @@ def main():
         collection_job_packet_path,
         collection_job_packet_md_path,
         collection_job_commands_path,
+        collection_job_shell_commands_path,
         collection_job_checklist_path,
         collection_job_audit_path,
         collection_job_audit_md_path,
@@ -5248,6 +5252,11 @@ def main():
             fail(f"external collection job {name} must map the four remaining submission blockers")
         if len(payload.get("job_steps", []) or []) < 17:
             fail(f"external collection job {name} has too few ordered job steps")
+        if payload.get("linux_command_file") != "external_validation/collection_job_commands.sh":
+            fail(f"external collection job {name} must declare the Linux command spine")
+        command_files = payload.get("command_files", []) or []
+        if "external_validation/collection_job_commands.ps1" not in command_files or "external_validation/collection_job_commands.sh" not in command_files:
+            fail(f"external collection job {name} must list both Windows and Linux command spines")
     collection_job_ids = {str(step.get("id", "")) for step in collection_job_packet.get("job_steps", []) if isinstance(step, dict)}
     for required_job_id in (
         "platform_probe",
@@ -5278,6 +5287,7 @@ def main():
         "command_sequence_covers_full_external_validation_route",
         "command_order_preserves_preflight_collection_manifest_safety",
         "official_collection_commands_guarded",
+        "linux_command_spine_uses_lf_line_endings",
         "current_blockers_explicit_and_mapped",
         "pre_and_postcollection_hash_gates_present",
         "render_machine_self_test_proves_ready_and_fail_closed_cases",
@@ -5286,6 +5296,9 @@ def main():
         if collection_job_checks.get(required_check) is not True:
             fail(f"external collection job packet audit missing passing check: {required_check}")
     collection_job_command_text = collection_job_commands_path.read_text(encoding="utf-8")
+    collection_job_shell_command_text = collection_job_shell_commands_path.read_text(encoding="utf-8")
+    if b"\r" in collection_job_shell_commands_path.read_bytes():
+        fail("external collection job Bash command file must use LF line endings")
     for fragment in (
         "ConfirmOfficialCollection",
         "Assert-NoPlaceholder",
@@ -5300,6 +5313,20 @@ def main():
     ):
         if fragment not in collection_job_command_text:
             fail(f"external collection job command file missing fragment: {fragment}")
+    for fragment in (
+        "--confirm-official-collection",
+        "require_real_value",
+        "audit_maniskill_render_video_preflight.py",
+        "audit_maniskill_pilot_runtime_liveness.py",
+        "materialize_fidelity_acceptance.py",
+        "audit_external_collection_readiness.py",
+        "real_collection_runner.py",
+        "build_external_manifest.py",
+        "validate_external_rollouts.py",
+        "audit_external_evidence.py",
+    ):
+        if fragment not in collection_job_shell_command_text:
+            fail(f"external collection job Bash command file missing fragment: {fragment}")
 
     collection_job_self_test_path = RESULTS / "external_collection_job_packet_self_test.json"
     collection_job_self_test_md_path = RESULTS / "external_collection_job_packet_self_test.md"
@@ -5326,6 +5353,7 @@ def main():
         "premature_manifest_rejected",
         "premature_ready_state_rejected",
         "unsafe_command_spine_rejected",
+        "missing_linux_command_spine_rejected",
         "hash_gate_drift_rejected",
         "render_self_test_drift_rejected",
         "real_outputs_untouched",
@@ -5340,6 +5368,7 @@ def main():
         "premature_manifest_rejected",
         "premature_ready_state_rejected",
         "unsafe_command_spine_rejected",
+        "missing_linux_command_spine_rejected",
         "hash_gate_drift_rejected",
         "render_self_test_drift_rejected",
         "real_repository_collection_job_outputs_untouched",

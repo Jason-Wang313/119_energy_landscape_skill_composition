@@ -10,6 +10,7 @@ Render machine qualified: `false`.
 This packet is the ordered operator job for moving from machine qualification to official collection, hash sealing, manifest promotion, and final strict evidence audits. It is not rollout evidence and cannot satisfy the external-evidence requirement by itself.
 
 Guarded command spine: `external_validation/collection_job_commands.ps1`.
+Linux guarded command spine: `external_validation/collection_job_commands.sh`.
 Operator checklist: `external_validation/collection_job_checklist.csv`.
 
 ## Current No-Go Blockers
@@ -261,7 +262,8 @@ python scripts\audit_external_evidence.py --strict
 - `pass` `job_state_fail_closed_until_render_and_collection_ready`: job_state=DO_NOT_START_COLLECTION_YET, render_qualified=False, collection_ready=False, start_state='DO_NOT_COLLECT_YET'
 - `pass` `command_sequence_covers_full_external_validation_route`: missing=[]
 - `pass` `command_order_preserves_preflight_collection_manifest_safety`: positions={'platform_probe': 0, 'render_profile_matrix': 1, 'pilot_runtime_liveness': 2, 'backend_contract': 3, 'fidelity_acceptance_materialization': 4, 'strict_collection_readiness': 5, 'precollection_freeze_receipt': 6, 'official_collection_runner': 7, 'postcollection_evidence_seal': 8, 'postcollection_seal_consistency': 9, 'manifest_promotion': 10, 'strict_rollout_recompute': 11, 'strict_config_evidence': 12, 'strict_adapter_evidence': 13, 'strict_pairing_integrity': 14, 'strict_release_package': 15, 'final_external_evidence_audit': 16}
-- `pass` `official_collection_commands_guarded`: PowerShell job spine requires explicit confirmation, placeholder checks, runner, manifest, and final strict evidence gate
+- `pass` `official_collection_commands_guarded`: PowerShell and Bash job spines require explicit confirmation, placeholder checks, runner, manifest, and final strict evidence gate
+- `pass` `linux_command_spine_uses_lf_line_endings`: Bash job spine is generated with LF-only content for Linux collection machines
 - `pass` `current_blockers_explicit_and_mapped`: current_blockers=16, submission_blockers=4, mapped=37/37
 - `pass` `pre_and_postcollection_hash_gates_present`: manifest_draft=True, freeze_ready=False, seal_ready=False, consistency_ready=False
 - `pass` `render_machine_self_test_proves_ready_and_fail_closed_cases`: ready='QUALIFIED_FOR_RENDER_BACKED_PILOT', fail='DO_NOT_COLLECT_RENDER_MACHINE', fallback=True

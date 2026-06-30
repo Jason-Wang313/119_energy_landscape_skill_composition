@@ -31,6 +31,11 @@
       "passed": true
     },
     {
+      "detail": "status=1, error='missing external_validation/collection_job_commands.sh'",
+      "name": "missing_linux_command_spine_rejected",
+      "passed": true
+    },
+    {
       "detail": "status=1, hash_gate_check=False",
       "name": "hash_gate_drift_rejected",
       "passed": true
@@ -41,12 +46,13 @@
       "passed": true
     },
     {
-      "detail": "before={'external_validation/collection_job_packet.json': 'b74b08b146454a8ae9bc94aeb1059eaf355f509573cbd18c54e65d0aa70e2ead', 'external_validation/collection_job_packet.md': 'f4860ef625547478173c792f5fc93d1b1c27baf4cf7301ca030b476ed3e96a11', 'external_validation/collection_job_commands.ps1': '859953b47dae87355d0370d55fa56721af7440388852ba4ba5ff3a2acbf40c41', 'external_validation/collection_job_checklist.csv': '2acb0609c9240407b17a89b07d968050fcdce0c1e076bc6e00db6b48f09d5388', 'results/external_collection_job_packet_audit.json': '9d02c547036cf06e3fff3b4ed33994fcdb031255ce6e890b86373dc3f5b2f28d', 'results/external_collection_job_packet_audit.md': 'a6ae1d5685e70291378d58638e2529c4588d5090d2193bd1e74e96220510ab28'}, after={'external_validation/collection_job_packet.json': 'b74b08b146454a8ae9bc94aeb1059eaf355f509573cbd18c54e65d0aa70e2ead', 'external_validation/collection_job_packet.md': 'f4860ef625547478173c792f5fc93d1b1c27baf4cf7301ca030b476ed3e96a11', 'external_validation/collection_job_commands.ps1': '859953b47dae87355d0370d55fa56721af7440388852ba4ba5ff3a2acbf40c41', 'external_validation/collection_job_checklist.csv': '2acb0609c9240407b17a89b07d968050fcdce0c1e076bc6e00db6b48f09d5388', 'results/external_collection_job_packet_audit.json': '9d02c547036cf06e3fff3b4ed33994fcdb031255ce6e890b86373dc3f5b2f28d', 'results/external_collection_job_packet_audit.md': 'a6ae1d5685e70291378d58638e2529c4588d5090d2193bd1e74e96220510ab28'}",
+      "detail": "before={'external_validation/collection_job_packet.json': '3ffb936bc442b13421393a684e7a2bc80ed29db5fd2b2dbc4429b96821edeb02', 'external_validation/collection_job_packet.md': '8f307ae6f9e06e49c3b7dc6e327d0024d96d7506628068b1d0131614678b0f8c', 'external_validation/collection_job_commands.ps1': '859953b47dae87355d0370d55fa56721af7440388852ba4ba5ff3a2acbf40c41', 'external_validation/collection_job_commands.sh': '707515d35111212bcd150d528adcdba6a8c0f5b0537d33cd0f823dc505de5ab1', 'external_validation/collection_job_checklist.csv': '2acb0609c9240407b17a89b07d968050fcdce0c1e076bc6e00db6b48f09d5388', 'results/external_collection_job_packet_audit.json': '6e836e64823a73acd851e0b1d3773ca46be81b41a7d97b5e38614886676a8108', 'results/external_collection_job_packet_audit.md': '374c5d80df23014da6cbb002f5572d7cc6c1bbd33b6745f4663f527d0f62ca69'}, after={'external_validation/collection_job_packet.json': '3ffb936bc442b13421393a684e7a2bc80ed29db5fd2b2dbc4429b96821edeb02', 'external_validation/collection_job_packet.md': '8f307ae6f9e06e49c3b7dc6e327d0024d96d7506628068b1d0131614678b0f8c', 'external_validation/collection_job_commands.ps1': '859953b47dae87355d0370d55fa56721af7440388852ba4ba5ff3a2acbf40c41', 'external_validation/collection_job_commands.sh': '707515d35111212bcd150d528adcdba6a8c0f5b0537d33cd0f823dc505de5ab1', 'external_validation/collection_job_checklist.csv': '2acb0609c9240407b17a89b07d968050fcdce0c1e076bc6e00db6b48f09d5388', 'results/external_collection_job_packet_audit.json': '6e836e64823a73acd851e0b1d3773ca46be81b41a7d97b5e38614886676a8108', 'results/external_collection_job_packet_audit.md': '374c5d80df23014da6cbb002f5572d7cc6c1bbd33b6745f4663f527d0f62ca69'}",
       "name": "real_repository_collection_job_outputs_untouched",
       "passed": true
     }
   ],
   "hash_gate_drift_rejected": true,
+  "missing_linux_command_spine_rejected": true,
   "missing_source_rejected": true,
   "not_external_evidence": true,
   "passed": true,

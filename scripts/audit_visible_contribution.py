@@ -350,9 +350,13 @@ def main() -> int:
         and len(collection_job.get("job_steps", []) or []) >= 17
         and collection_job_checks.get("command_sequence_covers_full_external_validation_route") is True
         and collection_job_checks.get("official_collection_commands_guarded") is True
+        and collection_job_checks.get("linux_command_spine_uses_lf_line_endings") is True
+        and collection_job.get("linux_command_file") == "external_validation/collection_job_commands.sh"
+        and "external_validation/collection_job_commands.sh" in (collection_job.get("command_files", []) or [])
         and (ROOT / "scripts" / "build_external_collection_job_packet.py").exists()
         and (ROOT / "external_validation" / "collection_job_packet.md").exists()
         and (ROOT / "external_validation" / "collection_job_commands.ps1").exists()
+        and (ROOT / "external_validation" / "collection_job_commands.sh").exists()
         and (ROOT / "external_validation" / "collection_job_checklist.csv").exists()
         and (RESULTS / "external_collection_job_packet_audit.md").exists()
         and "External collection job packet" in texts["README"]
@@ -379,6 +383,7 @@ def main() -> int:
         and collection_job_self_test.get("premature_manifest_rejected") is True
         and collection_job_self_test.get("premature_ready_state_rejected") is True
         and collection_job_self_test.get("unsafe_command_spine_rejected") is True
+        and collection_job_self_test.get("missing_linux_command_spine_rejected") is True
         and collection_job_self_test.get("hash_gate_drift_rejected") is True
         and collection_job_self_test.get("render_self_test_drift_rejected") is True
         and collection_job_self_test.get("real_outputs_untouched") is True
@@ -388,6 +393,7 @@ def main() -> int:
         and collection_job_self_checks.get("premature_manifest_rejected") is True
         and collection_job_self_checks.get("premature_ready_state_rejected") is True
         and collection_job_self_checks.get("unsafe_command_spine_rejected") is True
+        and collection_job_self_checks.get("missing_linux_command_spine_rejected") is True
         and collection_job_self_checks.get("hash_gate_drift_rejected") is True
         and collection_job_self_checks.get("render_self_test_drift_rejected") is True
         and collection_job_self_checks.get("real_repository_collection_job_outputs_untouched") is True
@@ -3027,7 +3033,7 @@ def main() -> int:
         "The External acquisition packet self-test documents acquisition-packet fail-closed behavior for missing source audits, unmapped blockers, premature manifests, and premature collection readiness.",
         "The External evidence preflight self-test documents preflight fail-closed behavior for the current no-manifest route, incomplete logs, placeholder videos, template configs, scaffold implementations, and real-output overwrite attempts while proving a temporary complete 1,440-record package can reach strict-audit handoff.",
         "The External execution readiness self-test documents top-level execution-packet fail-closed behavior for missing operator packets, missing required packet files, premature manifests, accidental strict-evidence promotion, and Haonan-dependence drift.",
-        "The External collection job packet self-test documents collection-job fail-closed behavior for missing sources, source evidence drift, premature manifests, premature ready states, unsafe command-spine edits, hash-gate drift, and render self-test drift.",
+        "The External collection job packet self-test documents collection-job fail-closed behavior for missing sources, source evidence drift, premature manifests, premature ready states, unsafe command-spine edits, missing Linux command output, hash-gate drift, and render self-test drift.",
         "The External collection machine bootstrap self-test documents bootstrap fail-closed behavior for missing source reports, source evidence drift, premature collection go-states, local-machine promotion, unsafe commands, missing confirmation, install-guidance drift, and premature manifest/log/video outputs.",
         "The External operator handoff bundle self-test documents no-evidence handoff fail-closed behavior for no-go drift, missing files, forbidden evidence paths, premature manifests, missing collection-job/bootstrap packets, and premature strict-evidence readiness.",
         "The External operator release bundle self-test documents transfer-package fail-closed behavior for the default no-archive path, explicit archive creation, source handoff drift, hash drift, forbidden evidence paths, premature manifests, and collection-job drift.",

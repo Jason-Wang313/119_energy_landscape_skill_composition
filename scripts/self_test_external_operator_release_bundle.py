@@ -218,6 +218,7 @@ def remove_collection_job_from_handoff(root: Path) -> None:
             record
             for record in payload.get("included_files", []) or []
             if "collection_job_packet" not in str(record.get("path", ""))
+            and "collection_job_commands" not in str(record.get("path", ""))
             and "build_external_collection_job_packet.py" not in str(record.get("path", ""))
         ]
         payload["included_files"] = records

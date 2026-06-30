@@ -13,6 +13,7 @@ RESULTS = ROOT / "results"
 OUT_PACKET_JSON = EXTERNAL / "collection_job_packet.json"
 OUT_PACKET_MD = EXTERNAL / "collection_job_packet.md"
 OUT_COMMANDS = EXTERNAL / "collection_job_commands.ps1"
+OUT_COMMANDS_SH = EXTERNAL / "collection_job_commands.sh"
 OUT_CHECKLIST = EXTERNAL / "collection_job_checklist.csv"
 OUT_AUDIT_JSON = RESULTS / "external_collection_job_packet_audit.json"
 OUT_AUDIT_MD = RESULTS / "external_collection_job_packet_audit.md"
@@ -371,6 +372,191 @@ Invoke-Native python scripts\\audit_external_evidence.py --strict
 """
 
 
+def build_bash_command_file() -> str:
+    return """#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+cd "${REPO_ROOT}"
+
+PYTHON_BIN="${PYTHON:-python3}"
+CONFIRM_OFFICIAL_COLLECTION=0
+BACKEND_MODULE="external_validation/runner/maniskill_reference_backend.py"
+TASK_CONFIG_DIR="external_validation/configs"
+ACCEPTED_BACKEND="<accepted_backend>"
+SHADER_PACK="<accepted_shader_pack>"
+RUN_ID="<accepted_run_id>"
+OPERATOR_NAME_OR_LAB="<independent_operator_or_lab>"
+OPERATOR_ID="<independent_operator_or_lab>"
+COLLECTION_MACHINE="<machine_or_robot_platform>"
+CONTACT_SOLVER_AND_FRICTION_MODEL="<solver_friction_contact_model>"
+TIMESTEP_AND_SUBSTEPS_PER_CONTROL_STEP="<sim_dt_control_dt_substeps>"
+PAIRED_RESET_REPLAY_TEST="<paired_reset_replay_result>"
+CALIBRATION_BASIS="<calibration_basis>"
+TASK_BINDING_DECISION="<accepted_or_replaced_task_bindings>"
+ACCEPTANCE_GATE_SIGNOFF="<gate_signoff_summary>"
+KNOWN_LIMITATIONS="<known_limitations>"
+DATE_LOCKED="<YYYY-MM-DD>"
+DATE_SEALED="<YYYY-MM-DD>"
+CODE_COMMIT="<commit_sha>"
+SKILL_LIBRARY_HASH="<sha256>"
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --confirm-official-collection)
+            CONFIRM_OFFICIAL_COLLECTION=1
+            shift
+            ;;
+        --backend-module)
+            BACKEND_MODULE="${2:-}"
+            shift 2
+            ;;
+        --task-config-dir)
+            TASK_CONFIG_DIR="${2:-}"
+            shift 2
+            ;;
+        --accepted-backend)
+            ACCEPTED_BACKEND="${2:-}"
+            shift 2
+            ;;
+        --shader-pack)
+            SHADER_PACK="${2:-}"
+            shift 2
+            ;;
+        --run-id)
+            RUN_ID="${2:-}"
+            shift 2
+            ;;
+        --operator-name-or-lab)
+            OPERATOR_NAME_OR_LAB="${2:-}"
+            shift 2
+            ;;
+        --operator-id)
+            OPERATOR_ID="${2:-}"
+            shift 2
+            ;;
+        --collection-machine)
+            COLLECTION_MACHINE="${2:-}"
+            shift 2
+            ;;
+        --contact-solver-and-friction-model)
+            CONTACT_SOLVER_AND_FRICTION_MODEL="${2:-}"
+            shift 2
+            ;;
+        --timestep-and-substeps-per-control-step)
+            TIMESTEP_AND_SUBSTEPS_PER_CONTROL_STEP="${2:-}"
+            shift 2
+            ;;
+        --paired-reset-replay-test)
+            PAIRED_RESET_REPLAY_TEST="${2:-}"
+            shift 2
+            ;;
+        --real-or-benchmark-calibration-basis)
+            CALIBRATION_BASIS="${2:-}"
+            shift 2
+            ;;
+        --task-binding-decision)
+            TASK_BINDING_DECISION="${2:-}"
+            shift 2
+            ;;
+        --acceptance-gate-signoff)
+            ACCEPTANCE_GATE_SIGNOFF="${2:-}"
+            shift 2
+            ;;
+        --known-limitations)
+            KNOWN_LIMITATIONS="${2:-}"
+            shift 2
+            ;;
+        --date-locked)
+            DATE_LOCKED="${2:-}"
+            shift 2
+            ;;
+        --date-sealed)
+            DATE_SEALED="${2:-}"
+            shift 2
+            ;;
+        --code-commit)
+            CODE_COMMIT="${2:-}"
+            shift 2
+            ;;
+        --skill-library-hash)
+            SKILL_LIBRARY_HASH="${2:-}"
+            shift 2
+            ;;
+        --python)
+            PYTHON_BIN="${2:-}"
+            shift 2
+            ;;
+        *)
+            echo "Unknown argument: $1" >&2
+            exit 2
+            ;;
+    esac
+done
+
+if [[ "${PAPER119_CONFIRM_OFFICIAL_COLLECTION:-0}" == "1" ]]; then
+    CONFIRM_OFFICIAL_COLLECTION=1
+fi
+
+run_python() {
+    "${PYTHON_BIN}" "$@"
+}
+
+require_real_value() {
+    local name="$1"
+    local value="$2"
+    if [[ -z "${value//[[:space:]]/}" || "$value" == *"<"* || "$value" == *">"* ]]; then
+        echo "${name} still has placeholder value: ${value}" >&2
+        exit 2
+    fi
+}
+
+if [[ "${CONFIRM_OFFICIAL_COLLECTION}" != "1" ]]; then
+    echo "Refusing official collection. Re-run with --confirm-official-collection only after render-machine qualification, fidelity acceptance, strict collection readiness, and operator fields are real." >&2
+    exit 2
+fi
+
+require_real_value "BackendModule" "${BACKEND_MODULE}"
+require_real_value "TaskConfigDir" "${TASK_CONFIG_DIR}"
+require_real_value "AcceptedBackend" "${ACCEPTED_BACKEND}"
+require_real_value "ShaderPack" "${SHADER_PACK}"
+require_real_value "RunId" "${RUN_ID}"
+require_real_value "OperatorNameOrLab" "${OPERATOR_NAME_OR_LAB}"
+require_real_value "OperatorId" "${OPERATOR_ID}"
+require_real_value "CollectionMachine" "${COLLECTION_MACHINE}"
+require_real_value "ContactSolverAndFrictionModel" "${CONTACT_SOLVER_AND_FRICTION_MODEL}"
+require_real_value "TimestepAndSubstepsPerControlStep" "${TIMESTEP_AND_SUBSTEPS_PER_CONTROL_STEP}"
+require_real_value "PairedResetReplayTest" "${PAIRED_RESET_REPLAY_TEST}"
+require_real_value "CalibrationBasis" "${CALIBRATION_BASIS}"
+require_real_value "TaskBindingDecision" "${TASK_BINDING_DECISION}"
+require_real_value "AcceptanceGateSignoff" "${ACCEPTANCE_GATE_SIGNOFF}"
+require_real_value "KnownLimitations" "${KNOWN_LIMITATIONS}"
+require_real_value "DateLocked" "${DATE_LOCKED}"
+require_real_value "DateSealed" "${DATE_SEALED}"
+require_real_value "CodeCommit" "${CODE_COMMIT}"
+require_real_value "SkillLibraryHash" "${SKILL_LIBRARY_HASH}"
+
+run_python scripts/probe_external_platform.py
+run_python scripts/audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend "${ACCEPTED_BACKEND}" --shader-pack "${SHADER_PACK}" --profile-matrix --profile-matrix-max-envs 1 --timeout-diagnosis-seconds 180 --timeout-diagnosis-width 64 --timeout-diagnosis-height 64
+run_python scripts/audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 180
+run_python scripts/audit_external_backend_contract.py --strict --backend-module "${BACKEND_MODULE}" --task-config-dir "${TASK_CONFIG_DIR}" --alias-map external_validation/method_alias_map.json
+run_python scripts/materialize_fidelity_acceptance.py --operator-name-or-lab "${OPERATOR_NAME_OR_LAB}" --accepted-collection-machine "${COLLECTION_MACHINE}" --contact-solver-and-friction-model "${CONTACT_SOLVER_AND_FRICTION_MODEL}" --timestep-and-substeps-per-control-step "${TIMESTEP_AND_SUBSTEPS_PER_CONTROL_STEP}" --paired-reset-replay-test "${PAIRED_RESET_REPLAY_TEST}" --real-or-benchmark-calibration-basis "${CALIBRATION_BASIS}" --task-binding-decision "${TASK_BINDING_DECISION}" --acceptance-gate-signoff "${ACCEPTANCE_GATE_SIGNOFF}" --known-limitations "${KNOWN_LIMITATIONS}" --date-locked "${DATE_LOCKED}" --code-commit "${CODE_COMMIT}" --skill-library-hash "${SKILL_LIBRARY_HASH}" --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write
+run_python scripts/audit_external_collection_readiness.py --strict --backend-module "${BACKEND_MODULE}" --task-config-dir "${TASK_CONFIG_DIR}" --run-id "${RUN_ID}" --unsealed-alias-map
+run_python scripts/build_external_precollection_freeze_receipt.py --backend-module "${BACKEND_MODULE}" --run-id "${RUN_ID}" --operator-id "${OPERATOR_ID}" --collection-machine "${COLLECTION_MACHINE}" --date-locked "${DATE_LOCKED}" --unsealed-alias-map
+run_python external_validation/runner/real_collection_runner.py --backend-module "${BACKEND_MODULE}" --task-config-dir "${TASK_CONFIG_DIR}" --output-log-dir external_validation/logs --video-dir external_validation/videos --run-id "${RUN_ID}" --unsealed-alias-map
+run_python scripts/build_external_postcollection_evidence_seal.py --backend-module "${BACKEND_MODULE}" --run-id "${RUN_ID}" --operator-id "${OPERATOR_ID}" --collection-machine "${COLLECTION_MACHINE}" --date-sealed "${DATE_SEALED}"
+run_python scripts/audit_external_postcollection_seal_consistency.py
+run_python scripts/build_external_manifest.py --write --check-video-paths
+run_python scripts/validate_external_rollouts.py --write-results --check-video-paths --strict
+run_python scripts/validate_external_configs.py --strict
+run_python scripts/validate_external_adapters.py --strict
+run_python scripts/audit_external_pairing_integrity.py --strict
+run_python scripts/audit_external_release_package.py --strict
+run_python scripts/audit_external_evidence.py --strict
+"""
+
+
 def build_payload() -> dict[str, Any]:
     operator = require_payload(RESULTS / "external_operator_packet.json", "external_operator_packet_v1")
     collection = require_payload(RESULTS / "external_collection_readiness_audit.json", "external_collection_readiness_audit_v1")
@@ -408,6 +594,7 @@ def build_payload() -> dict[str, Any]:
     )
     steps = build_job_steps(job_state)
     command_file_text = build_command_file()
+    bash_command_file_text = build_bash_command_file()
     sequence_ids = [step["id"] for step in steps]
     positions = {step_id: idx for idx, step_id in enumerate(sequence_ids)}
     current_blockers = [
@@ -501,8 +688,19 @@ def build_payload() -> dict[str, Any]:
         and "Assert-NoPlaceholder" in command_file_text
         and "real_collection_runner.py" in command_file_text
         and "build_external_manifest.py --write --check-video-paths" in command_file_text
-        and "audit_external_evidence.py --strict" in command_file_text,
-        "PowerShell job spine requires explicit confirmation, placeholder checks, runner, manifest, and final strict evidence gate",
+        and "audit_external_evidence.py --strict" in command_file_text
+        and "--confirm-official-collection" in bash_command_file_text
+        and "require_real_value" in bash_command_file_text
+        and "real_collection_runner.py" in bash_command_file_text
+        and "build_external_manifest.py --write --check-video-paths" in bash_command_file_text
+        and "audit_external_evidence.py --strict" in bash_command_file_text,
+        "PowerShell and Bash job spines require explicit confirmation, placeholder checks, runner, manifest, and final strict evidence gate",
+    )
+    add_check(
+        checks,
+        "linux_command_spine_uses_lf_line_endings",
+        "\r" not in bash_command_file_text,
+        "Bash job spine is generated with LF-only content for Linux collection machines",
     )
     add_check(
         checks,
@@ -563,6 +761,8 @@ def build_payload() -> dict[str, Any]:
         "current_blockers": current_blockers,
         "job_steps": steps,
         "command_file": rel(OUT_COMMANDS),
+        "linux_command_file": rel(OUT_COMMANDS_SH),
+        "command_files": [rel(OUT_COMMANDS), rel(OUT_COMMANDS_SH)],
         "packet_json": rel(OUT_PACKET_JSON),
         "packet_md": rel(OUT_PACKET_MD),
         "checklist_csv": rel(OUT_CHECKLIST),
@@ -599,6 +799,8 @@ def write_outputs(packet: dict[str, Any]) -> None:
     OUT_PACKET_JSON.write_text(json.dumps(packet, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     OUT_AUDIT_JSON.write_text(json.dumps(audit, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     OUT_COMMANDS.write_text(build_command_file(), encoding="utf-8")
+    with OUT_COMMANDS_SH.open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write(build_bash_command_file())
 
     with OUT_CHECKLIST.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(
@@ -631,6 +833,7 @@ def write_outputs(packet: dict[str, Any]) -> None:
         "This packet is the ordered operator job for moving from machine qualification to official collection, hash sealing, manifest promotion, and final strict evidence audits. It is not rollout evidence and cannot satisfy the external-evidence requirement by itself.",
         "",
         f"Guarded command spine: `{packet['command_file']}`.",
+        f"Linux guarded command spine: `{packet['linux_command_file']}`.",
         f"Operator checklist: `{packet['checklist_csv']}`.",
         "",
     ]

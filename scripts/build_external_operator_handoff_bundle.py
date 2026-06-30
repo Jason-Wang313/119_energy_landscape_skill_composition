@@ -129,6 +129,7 @@ def build_file_manifest() -> dict[str, str]:
         EXTERNAL / "collection_job_packet.json",
         EXTERNAL / "collection_job_packet.md",
         EXTERNAL / "collection_job_commands.ps1",
+        EXTERNAL / "collection_job_commands.sh",
         EXTERNAL / "collection_job_checklist.csv",
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
@@ -585,10 +586,12 @@ def build_payload() -> dict[str, Any]:
         and int(len(collection_job.get("job_steps", []) or [])) >= 17
         and collection_job_checks.get("command_sequence_covers_full_external_validation_route") is True
         and collection_job_checks.get("official_collection_commands_guarded") is True
+        and collection_job_checks.get("linux_command_spine_uses_lf_line_endings") is True
         and collection_job_checks.get("no_real_manifest_written") is True
         and "external_validation/collection_job_packet.json" in paths
         and "external_validation/collection_job_packet.md" in paths
         and "external_validation/collection_job_commands.ps1" in paths
+        and "external_validation/collection_job_commands.sh" in paths
         and "external_validation/collection_job_checklist.csv" in paths
         and "results/external_collection_job_packet_audit.json" in paths
         and "results/external_collection_job_packet_audit.md" in paths

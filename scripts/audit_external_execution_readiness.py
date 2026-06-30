@@ -1644,8 +1644,14 @@ def main() -> int:
         int(handoff_bundle.get("included_file_count", 0) or 0) >= 120
         and handoff_check_map.get("file_hashes_are_recorded") is True
         and handoff_check_map.get("handoff_has_task_config_and_baseline_assets") is True
+        and handoff_check_map.get("external_collection_job_packet_included") is True
         and any(
             str(record.get("path", "")) == "external_validation/collection_machine_bootstrap.sh"
+            for record in handoff_bundle.get("included_files", []) or []
+            if isinstance(record, dict)
+        )
+        and any(
+            str(record.get("path", "")) == "external_validation/collection_job_commands.sh"
             for record in handoff_bundle.get("included_files", []) or []
             if isinstance(record, dict)
         ),
@@ -1736,6 +1742,12 @@ def main() -> int:
         RESULTS / "external_collection_readiness_audit.md",
         RESULTS / "external_operator_packet.md",
         RESULTS / "external_operator_handoff_bundle.md",
+        EXTERNAL / "collection_job_packet.json",
+        EXTERNAL / "collection_job_packet.md",
+        EXTERNAL / "collection_job_commands.ps1",
+        EXTERNAL / "collection_job_commands.sh",
+        EXTERNAL / "collection_job_checklist.csv",
+        RESULTS / "external_collection_job_packet_audit.md",
         EXTERNAL / "collection_machine_bootstrap.sh",
         RESULTS / "external_analysis_plan_audit.md",
         RESULTS / "external_platform_onboarding_audit.md",
