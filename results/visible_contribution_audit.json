@@ -177,7 +177,7 @@
       "passed": true
     },
     {
-      "detail": "temporary_fixture_execution_ready=True, strict_evidence_promotion_rejected=True, haonan_dependence_drift_rejected=True",
+      "detail": "temporary_fixture_execution_ready=True, missing_linux_bootstrap_rejected=True, strict_evidence_promotion_rejected=True, haonan_dependence_drift_rejected=True",
       "name": "external_execution_readiness_self_test_visible",
       "passed": true
     },

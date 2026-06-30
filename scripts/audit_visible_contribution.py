@@ -930,6 +930,7 @@ def main() -> int:
         and execution_readiness_self_test.get("temporary_fixture_execution_ready") is True
         and execution_readiness_self_test.get("missing_operator_packet_rejected") is True
         and execution_readiness_self_test.get("missing_required_packet_file_rejected") is True
+        and execution_readiness_self_test.get("missing_linux_bootstrap_rejected") is True
         and execution_readiness_self_test.get("premature_manifest_rejected") is True
         and execution_readiness_self_test.get("strict_evidence_promotion_rejected") is True
         and execution_readiness_self_test.get("haonan_dependence_drift_rejected") is True
@@ -937,6 +938,7 @@ def main() -> int:
         and execution_readiness_self_checks.get("temporary_fixture_execution_packet_ready_but_non_evidence") is True
         and execution_readiness_self_checks.get("missing_operator_packet_rejected") is True
         and execution_readiness_self_checks.get("missing_required_packet_file_rejected") is True
+        and execution_readiness_self_checks.get("missing_linux_bootstrap_rejected") is True
         and execution_readiness_self_checks.get("premature_manifest_rejected") is True
         and execution_readiness_self_checks.get("strict_evidence_promotion_rejected") is True
         and execution_readiness_self_checks.get("haonan_dependence_drift_rejected") is True
@@ -949,6 +951,7 @@ def main() -> int:
         and "External execution readiness self-test" in texts["reproducibility"],
         (
             f"temporary_fixture_execution_ready={execution_readiness_self_test.get('temporary_fixture_execution_ready')!r}, "
+            f"missing_linux_bootstrap_rejected={execution_readiness_self_test.get('missing_linux_bootstrap_rejected')!r}, "
             f"strict_evidence_promotion_rejected={execution_readiness_self_test.get('strict_evidence_promotion_rejected')!r}, "
             f"haonan_dependence_drift_rejected={execution_readiness_self_test.get('haonan_dependence_drift_rejected')!r}"
         ),

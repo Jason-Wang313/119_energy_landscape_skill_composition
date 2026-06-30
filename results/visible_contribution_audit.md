@@ -48,7 +48,7 @@ The External operator release bundle self-test documents transfer-package fail-c
 - `pass` `maniskill_reference_collection_preflight_visible`: contract_ready=True, collection_ready=False, blocking=["fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
 - `pass` `external_collection_preflight_self_test_visible`: synthetic_ready=True, reference_ready=True, blockers=[]
 - `pass` `external_evidence_preflight_self_test_visible`: temporary_complete_fixture_ready=True, incomplete_log_rejected=True, placeholder_video_rejected=True, template_config_rejected=True, scaffold_implementation_rejected=True
-- `pass` `external_execution_readiness_self_test_visible`: temporary_fixture_execution_ready=True, strict_evidence_promotion_rejected=True, haonan_dependence_drift_rejected=True
+- `pass` `external_execution_readiness_self_test_visible`: temporary_fixture_execution_ready=True, missing_linux_bootstrap_rejected=True, strict_evidence_promotion_rejected=True, haonan_dependence_drift_rejected=True
 - `pass` `runner_backend_probe_visible`: records_written=2, schema_errors=[]
 - `pass` `official_video_write_guard_visible`: runner refuses diagnostic/non-MP4/undersized/out-of-dir videos before official JSONL writes
 - `pass` `official_jsonl_write_guard_visible`: runner refuses schema-invalid rollout records before official JSONL writes
