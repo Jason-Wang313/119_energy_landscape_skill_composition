@@ -76,6 +76,8 @@
   - Durable report: `results/external_adapter_scaffold_guard_self_test.md`
 - External evidence validator: `scripts/audit_external_evidence.py`
 - External execution readiness validator: `scripts/audit_external_execution_readiness.py`
+- External execution readiness self-test: `scripts/self_test_external_execution_readiness.py`
+  - Durable report: `results/external_execution_readiness_self_test.md`
 - External rollout metric validator: `scripts/validate_external_rollouts.py`
 - External pairing integrity validator: `scripts/audit_external_pairing_integrity.py`
 - External rollout validator self-test: `scripts/self_test_external_rollout_validator.py`
@@ -278,6 +280,8 @@
   - `results/external_rollout_validator_self_test.md`
   - `results/external_execution_readiness_audit.json`
   - `results/external_execution_readiness_audit.md`
+  - `results/external_execution_readiness_self_test.json`
+  - `results/external_execution_readiness_self_test.md`
   - `results/summary.json`
   - `results/summary.txt`
 - External collection scaffolding:

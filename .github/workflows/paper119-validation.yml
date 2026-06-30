@@ -244,6 +244,9 @@ jobs:
       - name: Audit external execution readiness
         run: python scripts/audit_external_execution_readiness.py
 
+      - name: Self-test external execution readiness
+        run: python scripts/self_test_external_execution_readiness.py
+
       - name: Audit claim boundary before readiness gap
         run: python scripts/audit_claim_boundary.py
 

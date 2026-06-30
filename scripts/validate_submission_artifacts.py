@@ -185,6 +185,7 @@ def main():
         "scripts\\self_test_external_pairing_integrity.py",
         "scripts\\audit_external_evidence.py",
         "scripts\\audit_external_execution_readiness.py",
+        "scripts\\self_test_external_execution_readiness.py",
         "scripts\\audit_claim_boundary.py",
         "scripts\\audit_submission_readiness_gap.py",
         "scripts\\build_reviewer_response_packet.py",
@@ -285,6 +286,7 @@ def main():
         "python scripts/self_test_external_manifest_builder.py",
         "python scripts/self_test_external_release_package.py",
         "python scripts/audit_external_execution_readiness.py",
+        "python scripts/self_test_external_execution_readiness.py",
         "python scripts/audit_external_pairing_integrity.py",
         "python scripts/self_test_external_pairing_integrity.py",
         "python scripts/self_test_external_rollout_validator.py",
@@ -4034,6 +4036,49 @@ def main():
     ):
         if readiness_checks.get(required_check) is not True:
             fail(f"external execution readiness audit missing passing check: {required_check}")
+
+    execution_self_test_path = RESULTS / "external_execution_readiness_self_test.json"
+    execution_self_test_md_path = RESULTS / "external_execution_readiness_self_test.md"
+    for path in (
+        ROOT / "scripts" / "self_test_external_execution_readiness.py",
+        execution_self_test_path,
+        execution_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external execution readiness self-test artifact: {path}")
+    execution_self_test = json.loads(execution_self_test_path.read_text(encoding="utf-8"))
+    if execution_self_test.get("version") != "external_execution_readiness_self_test_v1":
+        fail("external execution readiness self-test version mismatch")
+    if execution_self_test.get("passed") is not True:
+        fail("external execution readiness self-test did not pass")
+    if execution_self_test.get("not_external_evidence") is not True:
+        fail("external execution readiness self-test must declare that it is not evidence")
+    if execution_self_test.get("strict_external_evidence_ready") is not False:
+        fail("external execution readiness self-test must keep strict external evidence false")
+    for field in (
+        "temporary_fixture_execution_ready",
+        "missing_operator_packet_rejected",
+        "missing_required_packet_file_rejected",
+        "premature_manifest_rejected",
+        "strict_evidence_promotion_rejected",
+        "haonan_dependence_drift_rejected",
+        "real_outputs_untouched",
+    ):
+        if execution_self_test.get(field) is not True:
+            fail(f"external execution readiness self-test field must be true: {field}")
+    execution_self_checks = {check.get("name"): check.get("passed") for check in execution_self_test.get("checks", [])}
+    for required_check in (
+        "temporary_fixture_execution_packet_ready_but_non_evidence",
+        "missing_operator_packet_rejected",
+        "missing_required_packet_file_rejected",
+        "premature_manifest_rejected",
+        "strict_evidence_promotion_rejected",
+        "haonan_dependence_drift_rejected",
+        "real_execution_outputs_untouched",
+    ):
+        if execution_self_checks.get(required_check) is not True:
+            fail(f"external execution readiness self-test missing passing check: {required_check}")
+
     for path in (
         EXTERNAL / "platform_qualification_checklist.md",
         EXTERNAL / "fidelity_acceptance_template.json",
@@ -5799,6 +5844,7 @@ def main():
         "maniskill_reference_collection_preflight_visible",
         "external_collection_preflight_self_test_visible",
         "external_evidence_preflight_self_test_visible",
+        "external_execution_readiness_self_test_visible",
         "maniskill_fidelity_metadata_probe_visible",
         "runner_backend_probe_visible",
         "config_manifest_packet_visible",

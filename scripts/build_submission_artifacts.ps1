@@ -181,6 +181,7 @@ try {
         Invoke-Native python scripts\self_test_external_evidence_pipeline.py
         Invoke-Native python scripts\self_test_external_pairing_integrity.py
         Invoke-Native python scripts\audit_external_execution_readiness.py
+        Invoke-Native python scripts\self_test_external_execution_readiness.py
     }
 
     Invoke-Step "Compile main PDF" {

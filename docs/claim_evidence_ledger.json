@@ -226,6 +226,11 @@
       "evidence": ["scripts/audit_external_execution_readiness.py", "external_validation/platform_qualification_checklist.md", "results/external_execution_readiness_audit.json", "results/external_execution_readiness_audit.md"]
     },
     {
+      "name": "external_execution_readiness_self_test_claim",
+      "claim": "The repository self-tests the top-level External execution readiness gate in temporary copied workspaces, proving the current operator packet is executable but non-evidence while missing operator packets, missing required packet files, premature manifests, accidental strict-evidence promotion, and Haonan-dependence drift fail closed without touching real execution-readiness outputs.",
+      "evidence": ["scripts/self_test_external_execution_readiness.py", "results/external_execution_readiness_self_test.json", "results/external_execution_readiness_self_test.md", "scripts/audit_external_execution_readiness.py", "results/external_execution_readiness_audit.json", "results/external_execution_readiness_audit.md"]
+    },
+    {
       "name": "external_backend_contract_claim",
       "claim": "The repository provides a non-evidence backend contract qualification audit that rejects incomplete runner backends and records that no real backend module is ready until an independent operator supplies one.",
       "evidence": ["scripts/audit_external_backend_contract.py", "scripts/self_test_external_backend_contract.py", "external_validation/runner/backend_contract.py", "external_validation/runner/README.md", "results/external_backend_contract_audit.json", "results/external_backend_contract_audit.md", "results/external_backend_contract_self_test.json", "results/external_backend_contract_self_test.md"]

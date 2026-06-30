@@ -82,6 +82,10 @@ def main() -> int:
     adapter_contract_evidence = read_json(adapter_contract_evidence_path) if adapter_contract_evidence_path.exists() else {}
     execution_readiness_path = RESULTS / "external_execution_readiness_audit.json"
     execution_readiness = read_json(execution_readiness_path) if execution_readiness_path.exists() else {}
+    execution_readiness_self_test_path = RESULTS / "external_execution_readiness_self_test.json"
+    execution_readiness_self_test = (
+        read_json(execution_readiness_self_test_path) if execution_readiness_self_test_path.exists() else {}
+    )
     analysis_plan_path = RESULTS / "external_analysis_plan_audit.json"
     analysis_plan = read_json(analysis_plan_path) if analysis_plan_path.exists() else {}
     platform_onboarding_path = RESULTS / "external_platform_onboarding_audit.json"
@@ -319,6 +323,9 @@ def main() -> int:
             ROOT / "scripts" / "self_test_external_evidence_preflight.py",
             RESULTS / "external_evidence_preflight_self_test.json",
             RESULTS / "external_evidence_preflight_self_test.md",
+            ROOT / "scripts" / "self_test_external_execution_readiness.py",
+            RESULTS / "external_execution_readiness_self_test.json",
+            RESULTS / "external_execution_readiness_self_test.md",
             ROOT / "scripts" / "self_test_external_evidence_pipeline.py",
             RESULTS / "external_rollout_validator_self_test.json",
             RESULTS / "external_rollout_validator_self_test.md",
@@ -375,6 +382,9 @@ def main() -> int:
             "scripts/self_test_external_evidence_preflight.py",
             "results/external_evidence_preflight_self_test.json",
             "results/external_evidence_preflight_self_test.md",
+            "scripts/self_test_external_execution_readiness.py",
+            "results/external_execution_readiness_self_test.json",
+            "results/external_execution_readiness_self_test.md",
             "scripts/self_test_external_rollout_validator.py",
             "results/external_rollout_validator_self_test.json",
             "results/external_rollout_validator_self_test.md",
@@ -392,6 +402,11 @@ def main() -> int:
         execution_readiness.get("passed") is True
         and execution_readiness.get("execution_packet_ready") is True
         and execution_readiness.get("strict_evidence_ready") is False
+        and execution_readiness_self_test.get("passed") is True
+        and execution_readiness_self_test.get("not_external_evidence") is True
+        and execution_readiness_self_test.get("temporary_fixture_execution_ready") is True
+        and execution_readiness_self_test.get("strict_evidence_promotion_rejected") is True
+        and execution_readiness_self_test.get("haonan_dependence_drift_rejected") is True
         and analysis_plan.get("passed") is True
         and analysis_plan.get("not_external_evidence") is True
         and analysis_plan.get("analysis_plan_ready") is True
@@ -482,6 +497,9 @@ def main() -> int:
         status="satisfied" if execution_packet_ok else "missing",
         evidence=[
             "results/external_execution_readiness_audit.json",
+            "scripts/self_test_external_execution_readiness.py",
+            "results/external_execution_readiness_self_test.json",
+            "results/external_execution_readiness_self_test.md",
             "results/external_analysis_plan_audit.json",
             "results/external_platform_onboarding_audit.json",
             "results/external_fidelity_provenance_audit.json",

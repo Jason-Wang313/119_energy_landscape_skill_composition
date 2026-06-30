@@ -1,0 +1,50 @@
+{
+  "checks": [
+    {
+      "detail": "status=0, passed=True, execution_ready=True, strict=False",
+      "name": "temporary_fixture_execution_packet_ready_but_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "status=1, operator_ready=False",
+      "name": "missing_operator_packet_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, paths_exist=False",
+      "name": "missing_required_packet_file_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, no_real_manifest=False",
+      "name": "premature_manifest_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, strict=True, gates_not_ready=False",
+      "name": "strict_evidence_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, independent=False",
+      "name": "haonan_dependence_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "before={'results/external_execution_readiness_audit.json': '7053059eb9c521bab0912b08190731b439c7f707f48d2ee06b6b63144007b303', 'results/external_execution_readiness_audit.md': '568ff4481ff39a1b04757b5502ac8ad6dd6dbee4dea1f0ec034b96d8ed6b763b', 'external_validation/manifest.json': None}, after={'results/external_execution_readiness_audit.json': '7053059eb9c521bab0912b08190731b439c7f707f48d2ee06b6b63144007b303', 'results/external_execution_readiness_audit.md': '568ff4481ff39a1b04757b5502ac8ad6dd6dbee4dea1f0ec034b96d8ed6b763b', 'external_validation/manifest.json': None}",
+      "name": "real_execution_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "haonan_dependence_drift_rejected": true,
+  "missing_operator_packet_rejected": true,
+  "missing_required_packet_file_rejected": true,
+  "not_external_evidence": true,
+  "passed": true,
+  "premature_manifest_rejected": true,
+  "real_outputs_untouched": true,
+  "strict_evidence_promotion_rejected": true,
+  "strict_external_evidence_ready": false,
+  "temporary_fixture_execution_ready": true,
+  "version": "external_execution_readiness_self_test_v1"
+}

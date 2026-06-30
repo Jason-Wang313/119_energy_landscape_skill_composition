@@ -726,7 +726,7 @@
       "passed": true
     },
     {
-      "detail": "included_file_count=333, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 102, 'method_config_candidate': 11, 'operator_command_source': 45, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "included_file_count=336, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 104, 'method_config_candidate': 11, 'operator_command_source': 46, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "external_operator_handoff_bundle_hash_manifest",
       "passed": true
     },

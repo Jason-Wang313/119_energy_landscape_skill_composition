@@ -208,6 +208,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External evidence audit: `results/external_evidence_audit.md`
 - External rollout metrics audit: `results/external_rollout_metrics.md`
 - External execution readiness audit: `results/external_execution_readiness_audit.md`
+- External execution readiness self-test: `results/external_execution_readiness_self_test.md`
 - External platform qualification checklist: `external_validation/platform_qualification_checklist.md`
 - Related-work coverage matrix: `docs/related_work_coverage_matrix.md`
 - Haonan/Yilun outreach package: `docs/haonan_yilun_outreach_package.md`
