@@ -47,6 +47,11 @@
       "passed": true
     },
     {
+      "detail": "fixture_ready=True, no_go_drift_rejected=True, strict_drift_rejected=True, forbidden_rejected=True",
+      "name": "external_operator_handoff_bundle_self_test_visible",
+      "passed": true
+    },
+    {
       "detail": "fixture_ready=True, missing_source_rejected=True, unmapped_blocker_rejected=True, manifest_rejected=True, collection_drift_rejected=True",
       "name": "external_acquisition_packet_self_test_visible",
       "passed": true

@@ -192,6 +192,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External collection machine bootstrap audit: `results/external_collection_machine_bootstrap_audit.md`
 - External collection machine bootstrap self-test: `results/external_collection_machine_bootstrap_self_test.md`
 - External operator handoff bundle: `results/external_operator_handoff_bundle.md`
+- External operator handoff bundle self-test: `results/external_operator_handoff_bundle_self_test.md`
 - External operator release bundle: `results/external_operator_release_bundle_plan.md`
 - External operator release manifest: `external_validation/operator_release_bundle_manifest.csv`
 - External evidence contract: `external_validation/manifest_template.json`

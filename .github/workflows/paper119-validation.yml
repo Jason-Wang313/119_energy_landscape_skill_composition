@@ -217,6 +217,9 @@ jobs:
       - name: Build external operator handoff bundle
         run: python scripts/build_external_operator_handoff_bundle.py
 
+      - name: Self-test external operator handoff bundle
+        run: python scripts/self_test_external_operator_handoff_bundle.py
+
       - name: Build external operator release bundle plan
         run: python scripts/build_external_operator_release_bundle.py
 

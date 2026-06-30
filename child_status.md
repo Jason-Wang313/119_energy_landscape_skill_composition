@@ -41,6 +41,8 @@ External collection machine bootstrap: `external_validation/collection_machine_b
 
 External collection machine bootstrap self-test: `results/external_collection_machine_bootstrap_self_test.md` mutation-tests the guarded probe-only bootstrap and rejects missing sources, source evidence drift, premature collection go-state, local-machine promotion, unsafe evidence-writing commands, missing confirmation, install-guidance drift, and premature manifest/log/video outputs without touching the real bootstrap outputs.
 
+External operator handoff bundle self-test: `results/external_operator_handoff_bundle_self_test.md` mutation-tests the no-evidence handoff and rejects missing source packets, no-go drift, acquisition blocker drift, premature strict-evidence readiness, missing included files, forbidden evidence paths, premature real manifests, and omitted collection-job/bootstrap packets without touching the real handoff outputs.
+
 External operator release bundle: `results/external_operator_release_bundle_plan.md` now recomputes the handoff hash manifest and prepares a deterministic transfer-archive command while leaving archive writing disabled by default and excluding real evidence paths.
 
 Fidelity materializer checkout guard: `results/fidelity_acceptance_materialization_plan.md` now records the current checkout commit and a cache-independent baseline-library hash, and the write path rejects stale commits, mismatched hashes, and dirty checkouts before `external_validation/fidelity_acceptance.json` can be created.

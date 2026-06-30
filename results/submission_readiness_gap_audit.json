@@ -162,6 +162,9 @@
         "scripts/self_test_external_collection_machine_bootstrap.py",
         "results/external_collection_machine_bootstrap_self_test.json",
         "results/external_collection_machine_bootstrap_self_test.md",
+        "scripts/self_test_external_operator_handoff_bundle.py",
+        "results/external_operator_handoff_bundle_self_test.json",
+        "results/external_operator_handoff_bundle_self_test.md",
         "scripts/self_test_external_rollout_validator.py",
         "results/external_rollout_validator_self_test.json",
         "results/external_rollout_validator_self_test.md",
@@ -337,7 +340,10 @@
         "results/external_operator_release_bundle_plan.json",
         "results/external_operator_release_bundle_plan.md",
         "results/external_operator_handoff_bundle.json",
-        "results/external_operator_handoff_bundle.md"
+        "results/external_operator_handoff_bundle.md",
+        "scripts/self_test_external_operator_handoff_bundle.py",
+        "results/external_operator_handoff_bundle_self_test.json",
+        "results/external_operator_handoff_bundle_self_test.md"
       ],
       "requirement": "Machine-audited external evidence acquisition packet for remaining blockers",
       "status": "satisfied",

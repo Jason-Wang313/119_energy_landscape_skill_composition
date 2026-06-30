@@ -170,6 +170,7 @@ def main():
         "scripts\\build_external_collection_machine_bootstrap.py",
         "scripts\\self_test_external_collection_machine_bootstrap.py",
         "scripts\\build_external_operator_handoff_bundle.py",
+        "scripts\\self_test_external_operator_handoff_bundle.py",
         "scripts\\build_external_operator_release_bundle.py",
         "scripts\\self_test_external_adapter_scaffold_guard.py",
         "scripts\\self_test_external_backend_contract.py",
@@ -274,6 +275,7 @@ def main():
         "python scripts/build_external_collection_machine_bootstrap.py",
         "python scripts/self_test_external_collection_machine_bootstrap.py",
         "python scripts/build_external_operator_handoff_bundle.py",
+        "python scripts/self_test_external_operator_handoff_bundle.py",
         "python scripts/build_external_operator_release_bundle.py",
         "python scripts/audit_external_release_package.py",
         "python scripts/self_test_external_manifest_builder.py",
@@ -4715,6 +4717,56 @@ def main():
         if handoff_checks.get(required_check) is not True:
             fail(f"external operator handoff bundle missing passing check: {required_check}")
 
+    handoff_self_test_path = RESULTS / "external_operator_handoff_bundle_self_test.json"
+    handoff_self_test_md_path = RESULTS / "external_operator_handoff_bundle_self_test.md"
+    for path in (
+        ROOT / "scripts" / "self_test_external_operator_handoff_bundle.py",
+        handoff_self_test_path,
+        handoff_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external operator handoff bundle self-test artifact: {path}")
+    handoff_self_test = json.loads(handoff_self_test_path.read_text(encoding="utf-8"))
+    if handoff_self_test.get("version") != "external_operator_handoff_bundle_self_test_v1":
+        fail("external operator handoff bundle self-test version mismatch")
+    if handoff_self_test.get("passed") is not True:
+        fail("external operator handoff bundle self-test did not pass")
+    if handoff_self_test.get("not_external_evidence") is not True:
+        fail("external operator handoff bundle self-test must declare that it is not evidence")
+    if handoff_self_test.get("strict_external_evidence_ready") is not False:
+        fail("external operator handoff bundle self-test must keep strict external evidence false")
+    for field in (
+        "temporary_fixture_ready",
+        "missing_source_rejected",
+        "no_go_drift_rejected",
+        "acquisition_blocker_drift_rejected",
+        "strict_evidence_drift_rejected",
+        "missing_included_file_rejected",
+        "forbidden_evidence_path_rejected",
+        "premature_manifest_rejected",
+        "missing_collection_job_rejected",
+        "missing_machine_bootstrap_rejected",
+        "real_outputs_untouched",
+    ):
+        if handoff_self_test.get(field) is not True:
+            fail(f"external operator handoff bundle self-test field must be true: {field}")
+    handoff_self_checks = {check.get("name"): check.get("passed") for check in handoff_self_test.get("checks", [])}
+    for required_check in (
+        "temporary_fixture_builds_current_handoff_bundle",
+        "missing_source_rejected",
+        "no_go_drift_rejected",
+        "acquisition_blocker_drift_rejected",
+        "strict_evidence_drift_rejected",
+        "missing_included_file_rejected",
+        "forbidden_evidence_path_rejected",
+        "premature_manifest_rejected",
+        "missing_collection_job_rejected",
+        "missing_machine_bootstrap_rejected",
+        "real_repository_handoff_outputs_untouched",
+    ):
+        if handoff_self_checks.get(required_check) is not True:
+            fail(f"external operator handoff bundle self-test missing passing check: {required_check}")
+
     collection_job_packet_path = EXTERNAL / "collection_job_packet.json"
     collection_job_packet_md_path = EXTERNAL / "collection_job_packet.md"
     collection_job_commands_path = EXTERNAL / "collection_job_commands.ps1"
@@ -5636,6 +5688,8 @@ def main():
         "readiness_gap_state_visible",
         "operator_packet_no_go_visible",
         "collection_readiness_tracked_reference_route_visible",
+        "operator_handoff_bundle_visible",
+        "external_operator_handoff_bundle_self_test_visible",
         "external_collection_job_packet_visible",
         "external_collection_job_packet_self_test_visible",
         "external_collection_machine_bootstrap_visible",

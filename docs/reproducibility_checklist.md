@@ -65,6 +65,8 @@
 - External collection machine bootstrap self-test: `scripts/self_test_external_collection_machine_bootstrap.py`
   - Durable report: `results/external_collection_machine_bootstrap_self_test.md`
 - External operator handoff bundle builder: `scripts/build_external_operator_handoff_bundle.py`
+- External operator handoff bundle self-test: `scripts/self_test_external_operator_handoff_bundle.py`
+  - Durable report: `results/external_operator_handoff_bundle_self_test.md`
 - External operator release bundle builder: `scripts/build_external_operator_release_bundle.py`
 - External adapter scaffold guard self-test: `scripts/self_test_external_adapter_scaffold_guard.py`
   - Durable report: `results/external_adapter_scaffold_guard_self_test.md`
@@ -254,6 +256,8 @@
   - `results/external_collection_machine_bootstrap_self_test.md`
   - `results/external_operator_handoff_bundle.json`
   - `results/external_operator_handoff_bundle.md`
+  - `results/external_operator_handoff_bundle_self_test.json`
+  - `results/external_operator_handoff_bundle_self_test.md`
   - `external_validation/operator_release_bundle_manifest.csv`
   - `external_validation/operator_release_bundle_README.md`
   - `results/external_operator_release_bundle_plan.json`

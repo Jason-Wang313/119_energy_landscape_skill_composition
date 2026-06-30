@@ -291,6 +291,11 @@
       "evidence": ["scripts/build_external_operator_handoff_bundle.py", "results/external_operator_handoff_bundle.json", "results/external_operator_handoff_bundle.md", "results/external_operator_packet.json", "results/external_acquisition_packet.json", "results/external_evidence_preflight.json"]
     },
     {
+      "name": "external_operator_handoff_bundle_self_test_claim",
+      "claim": "The repository self-tests the External operator handoff bundle in temporary copied workspaces, proving missing source packets, no-go drift, acquisition blocker drift, premature strict-evidence readiness, missing included files, forbidden evidence paths, premature real manifests, and missing collection-job/bootstrap packets fail closed without touching the real handoff outputs.",
+      "evidence": ["scripts/self_test_external_operator_handoff_bundle.py", "results/external_operator_handoff_bundle_self_test.json", "results/external_operator_handoff_bundle_self_test.md", "scripts/build_external_operator_handoff_bundle.py", "results/external_operator_handoff_bundle.json", "results/external_operator_handoff_bundle.md"]
+    },
+    {
       "name": "external_config_template_claim",
       "claim": "The repository provides a non-evidence task config schema, template validator, and tracked real-config intake directory, while strict config evidence remains missing until real manifest-declared configs replace templates.",
       "evidence": ["external_validation/config_schema_v1.json", "external_validation/config_templates/peg_place_regrasp.json", "external_validation/configs/README.md", "scripts/validate_external_configs.py", "results/external_config_template_audit.json", "results/external_config_template_audit.md"]
