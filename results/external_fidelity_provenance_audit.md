@@ -17,6 +17,7 @@ This audit checks that the platform fidelity/provenance packet is complete as an
 - `pass` `independent_route_and_collection_still_fail_closed`: primary_route='maniskill_sapien_primary', collection_ready=False
 - `pass` `template_declares_required_platform_and_gate_fields`: platform_fields=12, qualification_fields=14, gates=5, tasks=4
 - `pass` `work_orders_cover_fidelity_blockers`: missing_orders=[]
+- `pass` `work_orders_are_actionable_and_artifact_bound`: actionable_orders=6, required_orders=6, final_gate_blocks=17
 - `pass` `strict_commands_cover_fidelity_manifest_collection_and_evidence`: python scripts\build_external_fidelity_provenance_packet.py
 python scripts\build_external_platform_onboarding.py
 python scripts\probe_external_platform.py --strict

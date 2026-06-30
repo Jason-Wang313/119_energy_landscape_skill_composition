@@ -348,6 +348,7 @@ def main() -> int:
         checks,
         "external_fidelity_provenance_covers_acceptance_blocker",
         fidelity_provenance_checks.get("work_orders_cover_fidelity_blockers") is True
+        and fidelity_provenance_checks.get("work_orders_are_actionable_and_artifact_bound") is True
         and fidelity_provenance_checks.get("fidelity_acceptance_contract_ready_but_not_evidence") is True
         and (EXTERNAL / "fidelity_provenance_packet.json").exists()
         and (EXTERNAL / "fidelity_provenance_packet.md").exists()
@@ -360,6 +361,39 @@ def main() -> int:
         fidelity_provenance_checks.get("strict_commands_cover_fidelity_manifest_collection_and_evidence") is True
         and fidelity_provenance_checks.get("no_real_acceptance_or_manifest_written") is True,
         f"checks={fidelity_provenance_checks}",
+    )
+    fidelity_provenance_self_ok, fidelity_provenance_self, fidelity_provenance_self_detail = passed_json(
+        RESULTS / "external_fidelity_provenance_packet_self_test.json",
+        version="external_fidelity_provenance_packet_self_test_v1",
+    )
+    add_check(
+        checks,
+        "external_fidelity_provenance_self_test_ready",
+        fidelity_provenance_self_ok
+        and fidelity_provenance_self.get("not_external_evidence") is True
+        and fidelity_provenance_self.get("strict_fidelity_evidence_ready") is False
+        and fidelity_provenance_self.get("strict_external_evidence_ready") is False
+        and fidelity_provenance_self.get("temporary_packet_ready") is True,
+        fidelity_provenance_self_detail,
+    )
+    fidelity_provenance_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in fidelity_provenance_self.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "external_fidelity_provenance_self_test_guards",
+        fidelity_provenance_self.get("missing_work_orders_rejected") is True
+        and fidelity_provenance_self.get("work_order_artifact_command_drift_rejected") is True
+        and fidelity_provenance_self.get("premature_evidence_promotion_rejected") is True
+        and fidelity_provenance_self.get("acceptance_ready_drift_rejected") is True
+        and fidelity_provenance_self.get("strict_command_drift_rejected") is True
+        and fidelity_provenance_self.get("real_acceptance_or_manifest_write_rejected") is True
+        and fidelity_provenance_self.get("packet_file_deletion_rejected") is True
+        and fidelity_provenance_self.get("real_outputs_untouched") is True
+        and fidelity_provenance_self_checks.get("temporary_fidelity_provenance_packet_ready_but_non_evidence") is True
+        and fidelity_provenance_self_checks.get("real_fidelity_provenance_outputs_untouched") is True,
+        f"checks={fidelity_provenance_self_checks}",
     )
 
     fidelity_materialization_ok, fidelity_materialization, fidelity_materialization_detail = passed_json(
@@ -1560,6 +1594,7 @@ def main() -> int:
         EXTERNAL / "fidelity_provenance_packet.json",
         EXTERNAL / "fidelity_provenance_packet.md",
         EXTERNAL / "fidelity_provenance_work_orders.csv",
+        RESULTS / "external_fidelity_provenance_packet_self_test.md",
         EXTERNAL / "backend_integration_packet.json",
         EXTERNAL / "backend_integration_packet.md",
         EXTERNAL / "backend_integration_work_orders.csv",
@@ -1671,6 +1706,8 @@ def main() -> int:
         "external_fidelity_provenance_not_evidence",
         "external_fidelity_provenance_covers_acceptance_blocker",
         "external_fidelity_provenance_gate_order",
+        "external_fidelity_provenance_self_test_ready",
+        "external_fidelity_provenance_self_test_guards",
         "fidelity_acceptance_materializer_ready",
         "fidelity_acceptance_materializer_not_evidence",
         "fidelity_acceptance_materializer_guarded",

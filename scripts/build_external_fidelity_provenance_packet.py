@@ -194,6 +194,7 @@ def audit_packet(
     checks: list[dict[str, Any]] = []
     work_orders = packet.get("work_orders", []) or []
     order_ids = {str(order.get("id", "")) for order in work_orders}
+    orders_by_id = {str(order.get("id", "")): order for order in work_orders if str(order.get("id", ""))}
     command_text = "\n".join(packet.get("strict_acceptance_commands", []) or [])
     required_orders = {
         "fill_platform_identity_and_physics",
@@ -285,6 +286,26 @@ def audit_packet(
         required_orders <= order_ids
         and int(packet.get("blocking_missing_count", 0) or 0) >= 10,
         f"missing_orders={sorted(required_orders - order_ids)}",
+    )
+    actionable_orders = [
+        order
+        for order_id, order in orders_by_id.items()
+        if order_id in required_orders
+        and str(order.get("operator_input", "")).strip()
+        and len(order.get("required_artifacts", []) or []) > 0
+        and len(order.get("acceptance_commands", []) or []) > 0
+    ]
+    final_gate_blocks = (orders_by_id.get("run_strict_fidelity_and_external_gates") or {}).get("blocks", []) or []
+    add_check(
+        checks,
+        "work_orders_are_actionable_and_artifact_bound",
+        len(actionable_orders) == len(required_orders)
+        and len(final_gate_blocks) == int(packet.get("blocking_missing_count", 0) or 0),
+        (
+            f"actionable_orders={len(actionable_orders)}, "
+            f"required_orders={len(required_orders)}, "
+            f"final_gate_blocks={len(final_gate_blocks)}"
+        ),
     )
     required_fragments = [
         "build_external_fidelity_provenance_packet.py",

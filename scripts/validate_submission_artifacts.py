@@ -116,6 +116,7 @@ def main():
         "scripts\\probe_maniskill_fidelity_metadata.py",
         "scripts\\build_external_platform_onboarding.py",
         "scripts\\build_external_fidelity_provenance_packet.py",
+        "scripts\\self_test_external_fidelity_provenance_packet.py",
         "scripts\\build_external_fidelity_acceptance_draft.py",
         "scripts\\materialize_fidelity_acceptance.py",
         "scripts\\self_test_fidelity_acceptance_materializer.py",
@@ -235,6 +236,7 @@ def main():
         "python scripts/self_test_external_backend_contract.py",
         "python scripts/audit_external_fidelity_acceptance.py",
         "python scripts/self_test_external_fidelity_acceptance.py",
+        "python scripts/self_test_external_fidelity_provenance_packet.py",
         "python scripts/self_test_external_runner_backend.py",
         "python scripts/self_test_external_collection_preflight.py",
         "python scripts/audit_external_collection_readiness.py",
@@ -4017,6 +4019,8 @@ def main():
         "external_fidelity_provenance_not_evidence",
         "external_fidelity_provenance_covers_acceptance_blocker",
         "external_fidelity_provenance_gate_order",
+        "external_fidelity_provenance_self_test_ready",
+        "external_fidelity_provenance_self_test_guards",
         "fidelity_acceptance_materializer_ready",
         "fidelity_acceptance_materializer_not_evidence",
         "fidelity_acceptance_materializer_guarded",
@@ -5472,16 +5476,20 @@ def main():
     fidelity_audit_md_path = RESULTS / "external_fidelity_provenance_audit.md"
     for path in (
         ROOT / "scripts" / "build_external_fidelity_provenance_packet.py",
+        ROOT / "scripts" / "self_test_external_fidelity_provenance_packet.py",
         fidelity_packet_path,
         fidelity_packet_md_path,
         fidelity_orders_path,
         fidelity_audit_path,
         fidelity_audit_md_path,
+        RESULTS / "external_fidelity_provenance_packet_self_test.json",
+        RESULTS / "external_fidelity_provenance_packet_self_test.md",
     ):
         if not path.exists():
             fail(f"missing external fidelity provenance packet artifact: {path}")
     fidelity_packet = json.loads(fidelity_packet_path.read_text(encoding="utf-8"))
     fidelity_audit = json.loads(fidelity_audit_path.read_text(encoding="utf-8"))
+    fidelity_self_test = json.loads((RESULTS / "external_fidelity_provenance_packet_self_test.json").read_text(encoding="utf-8"))
     if fidelity_packet.get("version") != "external_fidelity_provenance_packet_v1":
         fail("external fidelity provenance packet version mismatch")
     if fidelity_packet.get("not_external_evidence") is not True:
@@ -5535,6 +5543,7 @@ def main():
         "independent_route_and_collection_still_fail_closed",
         "template_declares_required_platform_and_gate_fields",
         "work_orders_cover_fidelity_blockers",
+        "work_orders_are_actionable_and_artifact_bound",
         "strict_commands_cover_fidelity_manifest_collection_and_evidence",
         "acceptance_template_not_real_evidence",
         "no_real_acceptance_or_manifest_written",
@@ -5542,6 +5551,54 @@ def main():
     ):
         if fidelity_checks.get(required_check) is not True:
             fail(f"external fidelity provenance audit missing passing check: {required_check}")
+    if fidelity_self_test.get("version") != "external_fidelity_provenance_packet_self_test_v1":
+        fail("external fidelity provenance packet self-test version mismatch")
+    if fidelity_self_test.get("passed") is not True:
+        fail("external fidelity provenance packet self-test did not pass")
+    if fidelity_self_test.get("not_external_evidence") is not True:
+        fail("external fidelity provenance packet self-test must declare non-evidence")
+    if fidelity_self_test.get("strict_fidelity_evidence_ready") is not False:
+        fail("external fidelity provenance packet self-test must keep strict fidelity evidence false")
+    if fidelity_self_test.get("strict_external_evidence_ready") is not False:
+        fail("external fidelity provenance packet self-test must keep strict external evidence false")
+    for required_flag in (
+        "temporary_packet_ready",
+        "missing_work_orders_rejected",
+        "work_order_artifact_command_drift_rejected",
+        "premature_evidence_promotion_rejected",
+        "acceptance_ready_drift_rejected",
+        "onboarding_strict_evidence_drift_rejected",
+        "platform_probe_promotion_rejected",
+        "collection_ready_promotion_rejected",
+        "template_gate_shrink_rejected",
+        "strict_command_drift_rejected",
+        "real_acceptance_or_manifest_write_rejected",
+        "packet_file_deletion_rejected",
+        "real_outputs_untouched",
+    ):
+        if fidelity_self_test.get(required_flag) is not True:
+            fail(f"external fidelity provenance packet self-test missing true flag: {required_flag}")
+    fidelity_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in fidelity_self_test.get("checks", []) or []
+    }
+    for required_check in (
+        "temporary_fidelity_provenance_packet_ready_but_non_evidence",
+        "missing_work_orders_rejected",
+        "work_order_artifact_command_drift_rejected",
+        "premature_evidence_promotion_rejected",
+        "acceptance_ready_drift_rejected",
+        "onboarding_strict_evidence_drift_rejected",
+        "platform_probe_promotion_rejected",
+        "collection_ready_promotion_rejected",
+        "template_gate_shrink_rejected",
+        "strict_command_drift_rejected",
+        "real_acceptance_or_manifest_write_rejected",
+        "packet_file_deletion_rejected",
+        "real_fidelity_provenance_outputs_untouched",
+    ):
+        if fidelity_self_checks.get(required_check) is not True:
+            fail(f"external fidelity provenance packet self-test missing passing check: {required_check}")
 
     fidelity_draft_path = EXTERNAL / "fidelity_acceptance_draft.json"
     fidelity_draft_md_path = EXTERNAL / "fidelity_acceptance_draft.md"
@@ -6040,6 +6097,7 @@ def main():
         "analysis_plan_visible",
         "platform_onboarding_visible",
         "fidelity_provenance_packet_visible",
+        "fidelity_provenance_packet_self_test_visible",
         "backend_integration_packet_visible",
         "maniskill_reference_collection_preflight_visible",
         "external_collection_preflight_self_test_visible",

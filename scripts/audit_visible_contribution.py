@@ -78,6 +78,7 @@ def main() -> int:
     fidelity_metadata = read_json(RESULTS / "maniskill_fidelity_metadata_probe.json")
     onboarding = read_json(RESULTS / "external_platform_onboarding_audit.json")
     fidelity_provenance = read_json(RESULTS / "external_fidelity_provenance_audit.json")
+    fidelity_provenance_self_test = read_json(RESULTS / "external_fidelity_provenance_packet_self_test.json")
     fidelity_draft = read_json(RESULTS / "external_fidelity_acceptance_draft_audit.json")
     fidelity_materialization = read_json(RESULTS / "fidelity_acceptance_materialization_plan.json")
     fidelity_materializer_self_test = read_json(RESULTS / "fidelity_acceptance_materializer_self_test.json")
@@ -631,6 +632,10 @@ def main() -> int:
         ),
     )
     fidelity_provenance_checks = {check.get("name"): check.get("passed") for check in fidelity_provenance.get("checks", []) or []}
+    fidelity_provenance_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in fidelity_provenance_self_test.get("checks", []) or []
+    }
     add_check(
         checks,
         "fidelity_provenance_packet_visible",
@@ -644,6 +649,37 @@ def main() -> int:
             f"fidelity_provenance_packet_ready={fidelity_provenance.get('fidelity_provenance_packet_ready')!r}, "
             f"strict_fidelity_evidence_ready={fidelity_provenance.get('strict_fidelity_evidence_ready')!r}, "
             f"strict_external_evidence_ready={fidelity_provenance.get('strict_external_evidence_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "fidelity_provenance_packet_self_test_visible",
+        fidelity_provenance_self_test.get("version") == "external_fidelity_provenance_packet_self_test_v1"
+        and fidelity_provenance_self_test.get("passed") is True
+        and fidelity_provenance_self_test.get("not_external_evidence") is True
+        and fidelity_provenance_self_test.get("strict_fidelity_evidence_ready") is False
+        and fidelity_provenance_self_test.get("strict_external_evidence_ready") is False
+        and fidelity_provenance_self_test.get("temporary_packet_ready") is True
+        and fidelity_provenance_self_test.get("missing_work_orders_rejected") is True
+        and fidelity_provenance_self_test.get("work_order_artifact_command_drift_rejected") is True
+        and fidelity_provenance_self_test.get("premature_evidence_promotion_rejected") is True
+        and fidelity_provenance_self_test.get("acceptance_ready_drift_rejected") is True
+        and fidelity_provenance_self_test.get("strict_command_drift_rejected") is True
+        and fidelity_provenance_self_test.get("real_acceptance_or_manifest_write_rejected") is True
+        and fidelity_provenance_self_test.get("packet_file_deletion_rejected") is True
+        and fidelity_provenance_self_test.get("real_outputs_untouched") is True
+        and fidelity_provenance_self_checks.get("temporary_fidelity_provenance_packet_ready_but_non_evidence") is True
+        and fidelity_provenance_self_checks.get("work_order_artifact_command_drift_rejected") is True
+        and fidelity_provenance_self_checks.get("real_fidelity_provenance_outputs_untouched") is True
+        and (ROOT / "scripts" / "self_test_external_fidelity_provenance_packet.py").exists()
+        and (RESULTS / "external_fidelity_provenance_packet_self_test.md").exists()
+        and "External fidelity provenance packet self-test" in texts["README"]
+        and "External fidelity provenance packet self-test" in texts["final_audit"]
+        and "External fidelity provenance packet self-test" in texts["reproducibility"],
+        (
+            f"temporary_ready={fidelity_provenance_self_test.get('temporary_packet_ready')!r}, "
+            f"strict_command_drift_rejected={fidelity_provenance_self_test.get('strict_command_drift_rejected')!r}, "
+            f"real_untouched={fidelity_provenance_self_test.get('real_outputs_untouched')!r}"
         ),
     )
     fidelity_draft_checks = {check.get("name"): check.get("passed") for check in fidelity_draft.get("checks", []) or []}
@@ -2019,6 +2055,7 @@ def main() -> int:
             "external_analysis_plan_claim",
             "external_platform_onboarding_claim",
             "external_fidelity_provenance_packet_claim",
+            "external_fidelity_provenance_packet_self_test_claim",
             "external_fidelity_acceptance_draft_claim",
             "external_fidelity_acceptance_materializer_claim",
             "external_backend_integration_packet_claim",
@@ -2057,7 +2094,7 @@ def main() -> int:
             "external_config_materialization_claim",
             "reviewer_response_packet_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'local_planner_edge_policy_claim', 'local_failure_memory_adaptation_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_operator_handoff_bundle_self_test_claim', 'external_evidence_preflight_self_test_claim', 'external_execution_readiness_self_test_claim', 'external_operator_release_bundle_claim', 'external_operator_release_bundle_self_test_claim', 'external_collection_machine_bootstrap_claim', 'external_collection_machine_bootstrap_self_test_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'external_collection_job_packet_claim', 'external_collection_job_packet_self_test_claim', 'external_config_manifest_packet_claim', 'external_config_manifest_packet_self_test_claim', 'external_config_evidence_hash_gate_claim', 'external_rollout_evidence_packet_claim', 'external_rollout_evidence_packet_self_test_claim', 'external_strict_video_evidence_gate_claim', 'external_ablation_collection_packet_claim', 'external_evidence_intake_ledger_claim', 'external_precollection_manifest_draft_claim', 'external_precollection_freeze_receipt_claim', 'external_precollection_freeze_receipt_self_test_claim', 'external_postcollection_evidence_seal_claim', 'external_postcollection_evidence_seal_self_test_claim', 'external_postcollection_seal_consistency_gate_claim', 'external_postcollection_seal_consistency_self_test_claim', 'external_acquisition_packet_self_test_claim', 'external_method_implementation_packet_claim', 'external_method_implementation_packet_self_test_claim', 'external_baseline_contract_self_test_claim', 'external_method_config_materialization_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
+        f"missing={sorted({'local_planner_edge_policy_claim', 'local_failure_memory_adaptation_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_operator_handoff_bundle_self_test_claim', 'external_evidence_preflight_self_test_claim', 'external_execution_readiness_self_test_claim', 'external_operator_release_bundle_claim', 'external_operator_release_bundle_self_test_claim', 'external_collection_machine_bootstrap_claim', 'external_collection_machine_bootstrap_self_test_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_provenance_packet_self_test_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'external_collection_job_packet_claim', 'external_collection_job_packet_self_test_claim', 'external_config_manifest_packet_claim', 'external_config_manifest_packet_self_test_claim', 'external_config_evidence_hash_gate_claim', 'external_rollout_evidence_packet_claim', 'external_rollout_evidence_packet_self_test_claim', 'external_strict_video_evidence_gate_claim', 'external_ablation_collection_packet_claim', 'external_evidence_intake_ledger_claim', 'external_precollection_manifest_draft_claim', 'external_precollection_freeze_receipt_claim', 'external_precollection_freeze_receipt_self_test_claim', 'external_postcollection_evidence_seal_claim', 'external_postcollection_evidence_seal_self_test_claim', 'external_postcollection_seal_consistency_gate_claim', 'external_postcollection_seal_consistency_self_test_claim', 'external_acquisition_packet_self_test_claim', 'external_method_implementation_packet_claim', 'external_method_implementation_packet_self_test_claim', 'external_baseline_contract_self_test_claim', 'external_method_config_materialization_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'reviewer_response_packet_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -2074,6 +2111,7 @@ def main() -> int:
             "ManiSkill fidelity metadata probe",
             "External platform onboarding packet",
             "External fidelity provenance packet",
+            "External fidelity provenance packet self-test",
             "External fidelity acceptance draft",
             "strict fidelity acceptance provenance gate",
             "fidelity acceptance promotion checklist",
@@ -2165,6 +2203,7 @@ def main() -> int:
             "ManiSkill fidelity metadata probe",
             "External platform onboarding packet",
             "External fidelity provenance packet",
+            "External fidelity provenance packet self-test",
             "External fidelity acceptance draft",
             "strict fidelity acceptance provenance gate",
             "fidelity acceptance promotion checklist",
@@ -2352,6 +2391,7 @@ def main() -> int:
             "ManiSkill fidelity metadata probe",
             "External platform onboarding packet",
             "External fidelity provenance packet",
+            "External fidelity provenance packet self-test",
             "External fidelity acceptance draft",
             "strict fidelity acceptance provenance gate",
             "fidelity acceptance promotion checklist",
@@ -2556,6 +2596,7 @@ def main() -> int:
             "ManiSkill fidelity metadata probe",
             "external platform onboarding packet",
             "external fidelity provenance packet",
+            "external fidelity provenance packet self-test",
             "external fidelity acceptance draft",
             "strict fidelity acceptance provenance gate",
             "fidelity acceptance promotion checklist",

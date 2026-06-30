@@ -27,6 +27,8 @@
 - External analysis plan builder: `scripts/build_external_analysis_plan.py`
 - External platform onboarding builder: `scripts/build_external_platform_onboarding.py`
 - External fidelity provenance packet builder: `scripts/build_external_fidelity_provenance_packet.py`
+- External fidelity provenance packet self-test: `scripts/self_test_external_fidelity_provenance_packet.py`
+  - Durable report: `results/external_fidelity_provenance_packet_self_test.md`
 - External fidelity acceptance draft builder: `scripts/build_external_fidelity_acceptance_draft.py`
 - External collection runbook builder: `scripts/build_external_runbook.py`
 - External backend contract validator: `scripts/audit_external_backend_contract.py`

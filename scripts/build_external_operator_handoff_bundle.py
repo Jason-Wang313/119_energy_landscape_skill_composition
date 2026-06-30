@@ -172,6 +172,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "probe_maniskill_env_smoke.py",
         SCRIPTS / "probe_maniskill_fidelity_metadata.py",
         SCRIPTS / "build_external_fidelity_provenance_packet.py",
+        SCRIPTS / "self_test_external_fidelity_provenance_packet.py",
         SCRIPTS / "build_external_fidelity_acceptance_draft.py",
         SCRIPTS / "materialize_fidelity_acceptance.py",
         SCRIPTS / "build_external_backend_integration_packet.py",
@@ -239,6 +240,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_collection_machine_bootstrap_audit.md",
         RESULTS / "external_fidelity_provenance_audit.json",
         RESULTS / "external_fidelity_provenance_audit.md",
+        RESULTS / "external_fidelity_provenance_packet_self_test.json",
+        RESULTS / "external_fidelity_provenance_packet_self_test.md",
         RESULTS / "external_fidelity_acceptance_draft_audit.json",
         RESULTS / "external_fidelity_acceptance_draft_audit.md",
         RESULTS / "fidelity_acceptance_materialization_plan.json",
@@ -392,6 +395,10 @@ def build_payload() -> dict[str, Any]:
     )
     onboarding = require_payload(RESULTS / "external_platform_onboarding_audit.json", "external_platform_onboarding_audit_v1")
     fidelity_provenance = require_payload(RESULTS / "external_fidelity_provenance_audit.json", "external_fidelity_provenance_audit_v1")
+    fidelity_provenance_self_test = require_payload(
+        RESULTS / "external_fidelity_provenance_packet_self_test.json",
+        "external_fidelity_provenance_packet_self_test_v1",
+    )
     fidelity_draft = require_payload(RESULTS / "external_fidelity_acceptance_draft_audit.json", "external_fidelity_acceptance_draft_audit_v1")
     fidelity_materialization = require_payload(RESULTS / "fidelity_acceptance_materialization_plan.json", "fidelity_acceptance_materialization_plan_v1")
     backend_integration = require_payload(RESULTS / "external_backend_integration_audit.json", "external_backend_integration_audit_v1")
@@ -717,6 +724,38 @@ def build_payload() -> dict[str, Any]:
             f"fidelity_provenance_packet_ready={fidelity_provenance.get('fidelity_provenance_packet_ready')!r}, "
             f"strict_fidelity_evidence_ready={fidelity_provenance.get('strict_fidelity_evidence_ready')!r}, "
             f"strict_external_evidence_ready={fidelity_provenance.get('strict_external_evidence_ready')!r}"
+        ),
+    )
+    fidelity_provenance_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in fidelity_provenance_self_test.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "fidelity_provenance_packet_self_test_included",
+        fidelity_provenance_self_test.get("passed") is True
+        and fidelity_provenance_self_test.get("not_external_evidence") is True
+        and fidelity_provenance_self_test.get("strict_fidelity_evidence_ready") is False
+        and fidelity_provenance_self_test.get("strict_external_evidence_ready") is False
+        and fidelity_provenance_self_test.get("temporary_packet_ready") is True
+        and fidelity_provenance_self_test.get("missing_work_orders_rejected") is True
+        and fidelity_provenance_self_test.get("work_order_artifact_command_drift_rejected") is True
+        and fidelity_provenance_self_test.get("premature_evidence_promotion_rejected") is True
+        and fidelity_provenance_self_test.get("acceptance_ready_drift_rejected") is True
+        and fidelity_provenance_self_test.get("strict_command_drift_rejected") is True
+        and fidelity_provenance_self_test.get("real_acceptance_or_manifest_write_rejected") is True
+        and fidelity_provenance_self_test.get("packet_file_deletion_rejected") is True
+        and fidelity_provenance_self_test.get("real_outputs_untouched") is True
+        and fidelity_provenance_self_checks.get("temporary_fidelity_provenance_packet_ready_but_non_evidence") is True
+        and fidelity_provenance_self_checks.get("work_order_artifact_command_drift_rejected") is True
+        and fidelity_provenance_self_checks.get("real_fidelity_provenance_outputs_untouched") is True
+        and "results/external_fidelity_provenance_packet_self_test.json" in paths
+        and "results/external_fidelity_provenance_packet_self_test.md" in paths
+        and "scripts/self_test_external_fidelity_provenance_packet.py" in paths,
+        (
+            f"temporary_ready={fidelity_provenance_self_test.get('temporary_packet_ready')!r}, "
+            f"strict_command_drift_rejected={fidelity_provenance_self_test.get('strict_command_drift_rejected')!r}, "
+            f"real_outputs_untouched={fidelity_provenance_self_test.get('real_outputs_untouched')!r}"
         ),
     )
     fidelity_draft_checks = {check.get("name"): check.get("passed") for check in fidelity_draft.get("checks", []) or []}
@@ -1386,6 +1425,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_platform_onboarding_audit.json",
             "results/maniskill_fidelity_metadata_probe.json",
             "results/external_fidelity_provenance_audit.json",
+            "results/external_fidelity_provenance_packet_self_test.json",
             "results/external_fidelity_acceptance_draft_audit.json",
             "results/fidelity_acceptance_materialization_plan.json",
             "results/external_backend_integration_audit.json",

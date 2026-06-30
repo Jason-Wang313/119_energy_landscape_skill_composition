@@ -93,6 +93,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External platform onboarding audit: `results/external_platform_onboarding_audit.md`
 - External fidelity provenance packet: `external_validation/fidelity_provenance_packet.md`
 - External fidelity provenance audit: `results/external_fidelity_provenance_audit.md`
+- External fidelity provenance packet self-test: `results/external_fidelity_provenance_packet_self_test.md`
 - External fidelity acceptance draft: `external_validation/fidelity_acceptance_draft.md`
 - External fidelity acceptance draft audit: `results/external_fidelity_acceptance_draft_audit.md`
 - Fidelity acceptance materialization plan: `results/fidelity_acceptance_materialization_plan.md`

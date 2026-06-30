@@ -104,6 +104,10 @@ def main() -> int:
     platform_onboarding = read_json(platform_onboarding_path) if platform_onboarding_path.exists() else {}
     fidelity_provenance_path = RESULTS / "external_fidelity_provenance_audit.json"
     fidelity_provenance = read_json(fidelity_provenance_path) if fidelity_provenance_path.exists() else {}
+    fidelity_provenance_self_test_path = RESULTS / "external_fidelity_provenance_packet_self_test.json"
+    fidelity_provenance_self_test = (
+        read_json(fidelity_provenance_self_test_path) if fidelity_provenance_self_test_path.exists() else {}
+    )
     fidelity_acceptance_path = RESULTS / "external_fidelity_acceptance_audit.json"
     fidelity_acceptance = read_json(fidelity_acceptance_path) if fidelity_acceptance_path.exists() else {}
     route_audit_path = RESULTS / "independent_validation_route_audit.json"
@@ -311,6 +315,9 @@ def main() -> int:
             ROOT / "scripts" / "self_test_external_config_evidence.py",
             ROOT / "scripts" / "self_test_external_adapter_evidence.py",
             ROOT / "scripts" / "self_test_external_fidelity_acceptance.py",
+            ROOT / "scripts" / "self_test_external_fidelity_provenance_packet.py",
+            RESULTS / "external_fidelity_provenance_packet_self_test.json",
+            RESULTS / "external_fidelity_provenance_packet_self_test.md",
             ROOT / "scripts" / "self_test_external_precollection_freeze_receipt.py",
             ROOT / "scripts" / "self_test_external_postcollection_evidence_seal.py",
             ROOT / "scripts" / "self_test_external_postcollection_seal_consistency.py",
@@ -461,6 +468,12 @@ def main() -> int:
         and fidelity_provenance.get("fidelity_provenance_packet_ready") is True
         and fidelity_provenance.get("strict_fidelity_evidence_ready") is False
         and fidelity_provenance.get("strict_external_evidence_ready") is False
+        and fidelity_provenance_self_test.get("passed") is True
+        and fidelity_provenance_self_test.get("not_external_evidence") is True
+        and fidelity_provenance_self_test.get("temporary_packet_ready") is True
+        and fidelity_provenance_self_test.get("work_order_artifact_command_drift_rejected") is True
+        and fidelity_provenance_self_test.get("premature_evidence_promotion_rejected") is True
+        and fidelity_provenance_self_test.get("real_outputs_untouched") is True
         and exists_all(
             [
                 EXTERNAL / "statistical_analysis_plan.json",
@@ -547,6 +560,9 @@ def main() -> int:
             "results/external_analysis_plan_audit.json",
             "results/external_platform_onboarding_audit.json",
             "results/external_fidelity_provenance_audit.json",
+            "scripts/self_test_external_fidelity_provenance_packet.py",
+            "results/external_fidelity_provenance_packet_self_test.json",
+            "results/external_fidelity_provenance_packet_self_test.md",
             "external_validation/statistical_analysis_plan.json",
             "external_validation/statistical_analysis_plan.md",
             "external_validation/platform_onboarding_packet.json",
@@ -734,6 +750,10 @@ def main() -> int:
     handoff_checks = {check.get("name"): check.get("passed") for check in handoff_bundle.get("checks", [])}
     backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration.get("checks", [])}
     fidelity_provenance_checks = {check.get("name"): check.get("passed") for check in fidelity_provenance.get("checks", [])}
+    fidelity_provenance_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in fidelity_provenance_self_test.get("checks", []) or []
+    }
     config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", [])}
     config_manifest_self_checks = {
         check.get("name"): check.get("passed")
@@ -776,6 +796,21 @@ def main() -> int:
         and fidelity_provenance.get("strict_fidelity_evidence_ready") is False
         and fidelity_provenance.get("strict_external_evidence_ready") is False
         and fidelity_provenance_checks.get("work_orders_cover_fidelity_blockers") is True
+        and fidelity_provenance_checks.get("work_orders_are_actionable_and_artifact_bound") is True
+        and fidelity_provenance_self_test.get("passed") is True
+        and fidelity_provenance_self_test.get("version") == "external_fidelity_provenance_packet_self_test_v1"
+        and fidelity_provenance_self_test.get("not_external_evidence") is True
+        and fidelity_provenance_self_test.get("temporary_packet_ready") is True
+        and fidelity_provenance_self_test.get("missing_work_orders_rejected") is True
+        and fidelity_provenance_self_test.get("work_order_artifact_command_drift_rejected") is True
+        and fidelity_provenance_self_test.get("premature_evidence_promotion_rejected") is True
+        and fidelity_provenance_self_test.get("acceptance_ready_drift_rejected") is True
+        and fidelity_provenance_self_test.get("strict_command_drift_rejected") is True
+        and fidelity_provenance_self_test.get("real_acceptance_or_manifest_write_rejected") is True
+        and fidelity_provenance_self_test.get("packet_file_deletion_rejected") is True
+        and fidelity_provenance_self_test.get("real_outputs_untouched") is True
+        and fidelity_provenance_self_checks.get("temporary_fidelity_provenance_packet_ready_but_non_evidence") is True
+        and fidelity_provenance_self_checks.get("real_fidelity_provenance_outputs_untouched") is True
         and config_manifest.get("passed") is True
         and config_manifest.get("not_external_evidence") is True
         and config_manifest.get("config_manifest_packet_ready") is True
@@ -859,6 +894,7 @@ def main() -> int:
         and handoff_checks.get("external_collection_job_packet_included") is True
         and handoff_checks.get("backend_integration_packet_included") is True
         and handoff_checks.get("fidelity_provenance_packet_included") is True
+        and handoff_checks.get("fidelity_provenance_packet_self_test_included") is True
         and handoff_checks.get("config_manifest_packet_included") is True
         and handoff_checks.get("rollout_evidence_packet_included") is True
         and handoff_checks.get("method_implementation_packet_included") is True
@@ -900,6 +936,7 @@ def main() -> int:
                 ROOT / "scripts" / "build_external_operator_release_bundle.py",
                 ROOT / "scripts" / "build_external_backend_integration_packet.py",
                 ROOT / "scripts" / "build_external_fidelity_provenance_packet.py",
+                ROOT / "scripts" / "self_test_external_fidelity_provenance_packet.py",
                 ROOT / "scripts" / "build_external_config_manifest_packet.py",
                 ROOT / "scripts" / "self_test_external_config_manifest_packet.py",
                 ROOT / "scripts" / "build_external_rollout_evidence_packet.py",
@@ -925,6 +962,8 @@ def main() -> int:
                 RESULTS / "external_backend_integration_audit.md",
                 RESULTS / "external_fidelity_provenance_audit.json",
                 RESULTS / "external_fidelity_provenance_audit.md",
+                RESULTS / "external_fidelity_provenance_packet_self_test.json",
+                RESULTS / "external_fidelity_provenance_packet_self_test.md",
                 RESULTS / "external_config_manifest_audit.json",
                 RESULTS / "external_config_manifest_audit.md",
                 RESULTS / "external_config_manifest_packet_self_test.json",
@@ -986,6 +1025,7 @@ def main() -> int:
             "scripts/build_external_operator_release_bundle.py",
             "scripts/build_external_backend_integration_packet.py",
             "scripts/build_external_fidelity_provenance_packet.py",
+            "scripts/self_test_external_fidelity_provenance_packet.py",
             "scripts/build_external_config_manifest_packet.py",
             "scripts/self_test_external_config_manifest_packet.py",
             "scripts/build_external_rollout_evidence_packet.py",
@@ -1011,6 +1051,8 @@ def main() -> int:
             "results/external_backend_integration_audit.md",
             "results/external_fidelity_provenance_audit.json",
             "results/external_fidelity_provenance_audit.md",
+            "results/external_fidelity_provenance_packet_self_test.json",
+            "results/external_fidelity_provenance_packet_self_test.md",
             "results/external_config_manifest_audit.json",
             "results/external_config_manifest_audit.md",
             "results/external_config_manifest_packet_self_test.json",

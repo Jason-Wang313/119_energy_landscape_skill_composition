@@ -1,0 +1,97 @@
+{
+  "acceptance_ready": false,
+  "acceptance_ready_drift_rejected": true,
+  "checks": [
+    {
+      "detail": "status=0, passed=True, blocking=17, orders=6",
+      "name": "temporary_fidelity_provenance_packet_ready_but_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "work_order_check=False",
+      "name": "missing_work_orders_rejected",
+      "passed": true
+    },
+    {
+      "detail": "actionable_check=False",
+      "name": "work_order_artifact_command_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "non_evidence_check=False",
+      "name": "premature_evidence_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "acceptance_check=False",
+      "name": "acceptance_ready_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "onboarding_check=False",
+      "name": "onboarding_strict_evidence_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "platform_probe_check=False",
+      "name": "platform_probe_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "collection_check=False",
+      "name": "collection_ready_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "template_check=False",
+      "name": "template_gate_shrink_rejected",
+      "passed": true
+    },
+    {
+      "detail": "command_check=False",
+      "name": "strict_command_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "real_write_check=False",
+      "name": "real_acceptance_or_manifest_write_rejected",
+      "passed": true
+    },
+    {
+      "detail": "packet_file_check=False",
+      "name": "packet_file_deletion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "changed=[]",
+      "name": "real_fidelity_provenance_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "collection_ready_promotion_rejected": true,
+  "missing_work_orders_rejected": true,
+  "not_external_evidence": true,
+  "onboarding_strict_evidence_drift_rejected": true,
+  "packet_file_deletion_rejected": true,
+  "passed": true,
+  "platform_probe_promotion_rejected": true,
+  "premature_evidence_promotion_rejected": true,
+  "real_acceptance_or_manifest_write_rejected": true,
+  "real_output_hashes": {
+    "external_validation/fidelity_acceptance.json": null,
+    "external_validation/fidelity_provenance_packet.json": "0319f0754dcd893be1c9ec98a26fd30df63037f6543868c729e007e4d1125782",
+    "external_validation/fidelity_provenance_packet.md": "ff138e663bdfcddc47be9cc671fb472dc82d3126aedc7b0eba3b9ac7b68476cf",
+    "external_validation/fidelity_provenance_work_orders.csv": "7e26f05053d899036351634d075f4f1b3ce8ac7464a581c27eec3c1cd65dbcda",
+    "external_validation/manifest.json": null,
+    "results/external_fidelity_provenance_audit.json": "16a8ce8ca3aad52c12cd463d99c2f6e6fdb95f92c1f89ef30e38baba114bc7cc",
+    "results/external_fidelity_provenance_audit.md": "51d23b1b9ccc2c39901b11eef4db9f5308ab9c4688af24e70ddae187eb2ef319"
+  },
+  "real_outputs_untouched": true,
+  "strict_command_drift_rejected": true,
+  "strict_external_evidence_ready": false,
+  "strict_fidelity_evidence_ready": false,
+  "template_gate_shrink_rejected": true,
+  "temporary_packet_ready": true,
+  "version": "external_fidelity_provenance_packet_self_test_v1",
+  "work_order_artifact_command_drift_rejected": true
+}
