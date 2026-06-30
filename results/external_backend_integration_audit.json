@@ -22,6 +22,11 @@
       "passed": true
     },
     {
+      "detail": "actionable_orders=5, required_orders=5",
+      "name": "work_orders_are_actionable_and_artifact_bound",
+      "passed": true
+    },
+    {
       "detail": "hooks=['platform_provenance', 'load_task_config', 'reset_scene', 'capture_observation', 'terminal_samples', 'run_method', 'execute_skill_pair', 'record_video', 'policy_or_config_hash']",
       "name": "required_hooks_declared",
       "passed": true

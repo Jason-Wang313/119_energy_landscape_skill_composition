@@ -122,6 +122,10 @@ def main() -> int:
     backend_contract = read_json(backend_contract_path) if backend_contract_path.exists() else {}
     backend_integration_path = RESULTS / "external_backend_integration_audit.json"
     backend_integration = read_json(backend_integration_path) if backend_integration_path.exists() else {}
+    backend_integration_self_test_path = RESULTS / "external_backend_integration_packet_self_test.json"
+    backend_integration_self_test = (
+        read_json(backend_integration_self_test_path) if backend_integration_self_test_path.exists() else {}
+    )
     collection_readiness_path = RESULTS / "external_collection_readiness_audit.json"
     collection_readiness = read_json(collection_readiness_path) if collection_readiness_path.exists() else {}
     pairing_integrity_path = RESULTS / "external_pairing_integrity_audit.json"
@@ -318,6 +322,9 @@ def main() -> int:
             ROOT / "scripts" / "self_test_external_fidelity_provenance_packet.py",
             RESULTS / "external_fidelity_provenance_packet_self_test.json",
             RESULTS / "external_fidelity_provenance_packet_self_test.md",
+            ROOT / "scripts" / "self_test_external_backend_integration_packet.py",
+            RESULTS / "external_backend_integration_packet_self_test.json",
+            RESULTS / "external_backend_integration_packet_self_test.md",
             ROOT / "scripts" / "self_test_external_precollection_freeze_receipt.py",
             ROOT / "scripts" / "self_test_external_postcollection_evidence_seal.py",
             ROOT / "scripts" / "self_test_external_postcollection_seal_consistency.py",
@@ -528,6 +535,12 @@ def main() -> int:
         and backend_integration.get("backend_integration_packet_ready") is True
         and backend_integration.get("strict_backend_ready") is False
         and backend_integration.get("strict_evidence_ready") is False
+        and backend_integration_self_test.get("passed") is True
+        and backend_integration_self_test.get("not_external_evidence") is True
+        and backend_integration_self_test.get("temporary_packet_ready") is True
+        and backend_integration_self_test.get("work_order_artifact_command_drift_rejected") is True
+        and backend_integration_self_test.get("premature_backend_evidence_promotion_rejected") is True
+        and backend_integration_self_test.get("real_outputs_untouched") is True
         and config_manifest.get("passed") is True
         and config_manifest.get("not_external_evidence") is True
         and config_manifest.get("config_manifest_packet_ready") is True
@@ -571,6 +584,9 @@ def main() -> int:
             "external_validation/fidelity_provenance_work_orders.csv",
             "external_validation/backend_integration_packet.md",
             "external_validation/backend_integration_work_orders.csv",
+            "scripts/self_test_external_backend_integration_packet.py",
+            "results/external_backend_integration_packet_self_test.json",
+            "results/external_backend_integration_packet_self_test.md",
             "external_validation/config_manifest_packet.md",
             "external_validation/config_manifest_work_orders.csv",
             "external_validation/rollout_evidence_packet.md",
@@ -749,6 +765,10 @@ def main() -> int:
     acquisition_checks = {check.get("name"): check.get("passed") for check in acquisition_packet.get("checks", [])}
     handoff_checks = {check.get("name"): check.get("passed") for check in handoff_bundle.get("checks", [])}
     backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration.get("checks", [])}
+    backend_integration_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in backend_integration_self_test.get("checks", []) or []
+    }
     fidelity_provenance_checks = {check.get("name"): check.get("passed") for check in fidelity_provenance.get("checks", [])}
     fidelity_provenance_self_checks = {
         check.get("name"): check.get("passed")
@@ -790,6 +810,23 @@ def main() -> int:
         and backend_integration.get("backend_integration_packet_ready") is True
         and backend_integration.get("strict_backend_ready") is False
         and backend_integration_checks.get("work_orders_cover_backend_to_manifest_path") is True
+        and backend_integration_checks.get("work_orders_are_actionable_and_artifact_bound") is True
+        and backend_integration_self_test.get("passed") is True
+        and backend_integration_self_test.get("version") == "external_backend_integration_packet_self_test_v1"
+        and backend_integration_self_test.get("not_external_evidence") is True
+        and backend_integration_self_test.get("temporary_packet_ready") is True
+        and backend_integration_self_test.get("missing_work_orders_rejected") is True
+        and backend_integration_self_test.get("work_order_artifact_command_drift_rejected") is True
+        and backend_integration_self_test.get("premature_backend_evidence_promotion_rejected") is True
+        and backend_integration_self_test.get("route_independence_drift_rejected") is True
+        and backend_integration_self_test.get("actual_backend_promotion_rejected") is True
+        and backend_integration_self_test.get("hook_contract_drift_rejected") is True
+        and backend_integration_self_test.get("provenance_field_drift_rejected") is True
+        and backend_integration_self_test.get("strict_command_drift_rejected") is True
+        and backend_integration_self_test.get("real_backend_file_write_rejected") is True
+        and backend_integration_self_test.get("real_outputs_untouched") is True
+        and backend_integration_self_checks.get("temporary_backend_integration_packet_ready_but_non_evidence") is True
+        and backend_integration_self_checks.get("real_backend_integration_outputs_untouched") is True
         and fidelity_provenance.get("passed") is True
         and fidelity_provenance.get("not_external_evidence") is True
         and fidelity_provenance.get("fidelity_provenance_packet_ready") is True
@@ -893,6 +930,7 @@ def main() -> int:
         and handoff_checks.get("bundle_excludes_rollout_evidence_artifacts") is True
         and handoff_checks.get("external_collection_job_packet_included") is True
         and handoff_checks.get("backend_integration_packet_included") is True
+        and handoff_checks.get("backend_integration_packet_self_test_included") is True
         and handoff_checks.get("fidelity_provenance_packet_included") is True
         and handoff_checks.get("fidelity_provenance_packet_self_test_included") is True
         and handoff_checks.get("config_manifest_packet_included") is True
@@ -935,6 +973,7 @@ def main() -> int:
                 ROOT / "scripts" / "build_external_operator_handoff_bundle.py",
                 ROOT / "scripts" / "build_external_operator_release_bundle.py",
                 ROOT / "scripts" / "build_external_backend_integration_packet.py",
+                ROOT / "scripts" / "self_test_external_backend_integration_packet.py",
                 ROOT / "scripts" / "build_external_fidelity_provenance_packet.py",
                 ROOT / "scripts" / "self_test_external_fidelity_provenance_packet.py",
                 ROOT / "scripts" / "build_external_config_manifest_packet.py",
@@ -960,6 +999,8 @@ def main() -> int:
                 RESULTS / "external_acquisition_packet.md",
                 RESULTS / "external_backend_integration_audit.json",
                 RESULTS / "external_backend_integration_audit.md",
+                RESULTS / "external_backend_integration_packet_self_test.json",
+                RESULTS / "external_backend_integration_packet_self_test.md",
                 RESULTS / "external_fidelity_provenance_audit.json",
                 RESULTS / "external_fidelity_provenance_audit.md",
                 RESULTS / "external_fidelity_provenance_packet_self_test.json",
@@ -1024,6 +1065,7 @@ def main() -> int:
             "scripts/build_external_operator_handoff_bundle.py",
             "scripts/build_external_operator_release_bundle.py",
             "scripts/build_external_backend_integration_packet.py",
+            "scripts/self_test_external_backend_integration_packet.py",
             "scripts/build_external_fidelity_provenance_packet.py",
             "scripts/self_test_external_fidelity_provenance_packet.py",
             "scripts/build_external_config_manifest_packet.py",
@@ -1049,6 +1091,8 @@ def main() -> int:
             "results/external_acquisition_packet.md",
             "results/external_backend_integration_audit.json",
             "results/external_backend_integration_audit.md",
+            "results/external_backend_integration_packet_self_test.json",
+            "results/external_backend_integration_packet_self_test.md",
             "results/external_fidelity_provenance_audit.json",
             "results/external_fidelity_provenance_audit.md",
             "results/external_fidelity_provenance_packet_self_test.json",

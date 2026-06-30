@@ -141,6 +141,11 @@
       "evidence": ["scripts/build_external_backend_integration_packet.py", "external_validation/backend_integration_packet.json", "external_validation/backend_integration_packet.md", "external_validation/backend_integration_work_orders.csv", "results/external_backend_integration_audit.json", "results/external_backend_integration_audit.md", "results/external_backend_contract_audit.json", "results/external_collection_readiness_audit.json"]
     },
     {
+      "name": "external_backend_integration_packet_self_test_claim",
+      "claim": "The repository provides a non-evidence backend integration packet self-test that rebuilds the backend work-order packet in temporary fixtures and verifies fail-closed rejection of missing or vague backend work orders, premature backend/evidence readiness, route-independence drift, false actual-backend readiness, missing hooks/provenance fields, strict-command drift, accidental real backend files, and missing packet files without touching real outputs.",
+      "evidence": ["scripts/self_test_external_backend_integration_packet.py", "results/external_backend_integration_packet_self_test.json", "results/external_backend_integration_packet_self_test.md", "scripts/build_external_backend_integration_packet.py", "results/external_backend_integration_audit.json", "external_validation/backend_integration_packet.json"]
+    },
+    {
       "name": "maniskill_reference_backend_claim",
       "claim": "The repository provides a non-evidence ManiSkill/SAPIEN reference backend candidate that passes backend API, task-config, reference-adapter, MP4-writer, explicit render-backend/shader control, and state-shaped-array video-guard checks while official collection remains fail-closed and strict external evidence remains false.",
       "evidence": ["external_validation/runner/maniskill_reference_backend.py", "scripts/audit_maniskill_backend_readiness.py", "results/maniskill_backend_readiness_audit.json", "results/maniskill_backend_readiness_audit.md", "external_validation/runner/README.md"]
@@ -543,6 +548,7 @@
     "results/external_fidelity_provenance_audit.md",
     "results/external_fidelity_acceptance_draft_audit.md",
     "results/external_backend_integration_audit.md",
+    "results/external_backend_integration_packet_self_test.md",
     "results/external_runner_backend_self_test.md",
     "results/external_config_manifest_audit.md",
     "results/external_rollout_evidence_audit.md",

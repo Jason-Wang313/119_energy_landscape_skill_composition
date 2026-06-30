@@ -176,6 +176,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_fidelity_acceptance_draft.py",
         SCRIPTS / "materialize_fidelity_acceptance.py",
         SCRIPTS / "build_external_backend_integration_packet.py",
+        SCRIPTS / "self_test_external_backend_integration_packet.py",
         SCRIPTS / "build_external_config_manifest_packet.py",
         SCRIPTS / "self_test_external_config_manifest_packet.py",
         SCRIPTS / "build_external_rollout_evidence_packet.py",
@@ -248,6 +249,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "fidelity_acceptance_materialization_plan.md",
         RESULTS / "external_backend_integration_audit.json",
         RESULTS / "external_backend_integration_audit.md",
+        RESULTS / "external_backend_integration_packet_self_test.json",
+        RESULTS / "external_backend_integration_packet_self_test.md",
         RESULTS / "external_config_manifest_audit.json",
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_config_manifest_packet_self_test.json",
@@ -402,6 +405,10 @@ def build_payload() -> dict[str, Any]:
     fidelity_draft = require_payload(RESULTS / "external_fidelity_acceptance_draft_audit.json", "external_fidelity_acceptance_draft_audit_v1")
     fidelity_materialization = require_payload(RESULTS / "fidelity_acceptance_materialization_plan.json", "fidelity_acceptance_materialization_plan_v1")
     backend_integration = require_payload(RESULTS / "external_backend_integration_audit.json", "external_backend_integration_audit_v1")
+    backend_integration_self_test = require_payload(
+        RESULTS / "external_backend_integration_packet_self_test.json",
+        "external_backend_integration_packet_self_test_v1",
+    )
     maniskill_backend = require_payload(RESULTS / "maniskill_backend_readiness_audit.json", "maniskill_reference_backend_audit_v1")
     maniskill_preflight = require_payload(RESULTS / "maniskill_reference_collection_preflight_audit.json", "maniskill_reference_collection_preflight_audit_v1")
     config_manifest = require_payload(RESULTS / "external_config_manifest_audit.json", "external_config_manifest_audit_v1")
@@ -818,6 +825,39 @@ def build_payload() -> dict[str, Any]:
         (
             f"backend_integration_packet_ready={backend_integration.get('backend_integration_packet_ready')!r}, "
             f"strict_backend_ready={backend_integration.get('strict_backend_ready')!r}"
+        ),
+    )
+    backend_integration_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in backend_integration_self_test.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "backend_integration_packet_self_test_included",
+        backend_integration_self_test.get("passed") is True
+        and backend_integration_self_test.get("not_external_evidence") is True
+        and backend_integration_self_test.get("strict_backend_ready") is False
+        and backend_integration_self_test.get("strict_evidence_ready") is False
+        and backend_integration_self_test.get("temporary_packet_ready") is True
+        and backend_integration_self_test.get("missing_work_orders_rejected") is True
+        and backend_integration_self_test.get("work_order_artifact_command_drift_rejected") is True
+        and backend_integration_self_test.get("premature_backend_evidence_promotion_rejected") is True
+        and backend_integration_self_test.get("route_independence_drift_rejected") is True
+        and backend_integration_self_test.get("actual_backend_promotion_rejected") is True
+        and backend_integration_self_test.get("hook_contract_drift_rejected") is True
+        and backend_integration_self_test.get("provenance_field_drift_rejected") is True
+        and backend_integration_self_test.get("strict_command_drift_rejected") is True
+        and backend_integration_self_test.get("real_backend_file_write_rejected") is True
+        and backend_integration_self_test.get("real_outputs_untouched") is True
+        and backend_integration_self_checks.get("temporary_backend_integration_packet_ready_but_non_evidence") is True
+        and backend_integration_self_checks.get("real_backend_integration_outputs_untouched") is True
+        and "results/external_backend_integration_packet_self_test.json" in paths
+        and "results/external_backend_integration_packet_self_test.md" in paths
+        and "scripts/self_test_external_backend_integration_packet.py" in paths,
+        (
+            f"temporary_ready={backend_integration_self_test.get('temporary_packet_ready')!r}, "
+            f"strict_command_drift_rejected={backend_integration_self_test.get('strict_command_drift_rejected')!r}, "
+            f"real_outputs_untouched={backend_integration_self_test.get('real_outputs_untouched')!r}"
         ),
     )
     maniskill_backend_checks = {check.get("name"): check.get("passed") for check in maniskill_backend.get("checks", []) or []}
@@ -1429,6 +1469,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_fidelity_acceptance_draft_audit.json",
             "results/fidelity_acceptance_materialization_plan.json",
             "results/external_backend_integration_audit.json",
+            "results/external_backend_integration_packet_self_test.json",
             "results/maniskill_backend_readiness_audit.json",
             "results/external_config_manifest_audit.json",
             "results/external_config_manifest_packet_self_test.json",

@@ -366,13 +366,23 @@
       "passed": true
     },
     {
-      "detail": "backend_integration_checks={'packet_is_non_evidence_and_fail_closed': True, 'primary_route_matches_onboarding': True, 'backend_contract_harness_ready_but_backend_missing': True, 'work_orders_cover_backend_to_manifest_path': True, 'required_hooks_declared': True, 'provenance_fields_declared': True, 'tasks_and_record_budget_preserved': True, 'strict_commands_cover_backend_config_fidelity_collection_and_evidence': True, 'collection_readiness_still_blocks_backend': True, 'no_real_backend_files_created': True, 'packet_files_written': True}",
+      "detail": "backend_integration_checks={'packet_is_non_evidence_and_fail_closed': True, 'primary_route_matches_onboarding': True, 'backend_contract_harness_ready_but_backend_missing': True, 'work_orders_cover_backend_to_manifest_path': True, 'work_orders_are_actionable_and_artifact_bound': True, 'required_hooks_declared': True, 'provenance_fields_declared': True, 'tasks_and_record_budget_preserved': True, 'strict_commands_cover_backend_config_fidelity_collection_and_evidence': True, 'collection_readiness_still_blocks_backend': True, 'no_real_backend_files_created': True, 'packet_files_written': True}",
       "name": "external_backend_integration_covers_backend_blocker",
       "passed": true
     },
     {
       "detail": "backend packet, work orders, builder, and strict command order are present",
       "name": "external_backend_integration_gate_order",
+      "passed": true
+    },
+    {
+      "detail": "passed",
+      "name": "external_backend_integration_self_test_ready",
+      "passed": true
+    },
+    {
+      "detail": "checks={'temporary_backend_integration_packet_ready_but_non_evidence': True, 'missing_work_orders_rejected': True, 'work_order_artifact_command_drift_rejected': True, 'premature_backend_evidence_promotion_rejected': True, 'route_independence_drift_rejected': True, 'actual_backend_promotion_rejected': True, 'hook_contract_drift_rejected': True, 'provenance_field_drift_rejected': True, 'task_budget_shrink_rejected': True, 'strict_command_drift_rejected': True, 'collection_ready_promotion_rejected': True, 'real_backend_file_write_rejected': True, 'packet_file_deletion_rejected': True, 'real_backend_integration_outputs_untouched': True}",
+      "name": "external_backend_integration_self_test_guards",
       "passed": true
     },
     {
@@ -736,7 +746,7 @@
       "passed": true
     },
     {
-      "detail": "included_file_count=352, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 114, 'method_config_candidate': 11, 'operator_command_source': 52, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "included_file_count=355, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 116, 'method_config_candidate': 11, 'operator_command_source': 53, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "external_operator_handoff_bundle_hash_manifest",
       "passed": true
     },

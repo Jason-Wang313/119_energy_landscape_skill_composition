@@ -1,0 +1,100 @@
+{
+  "actual_backend_promotion_rejected": true,
+  "checks": [
+    {
+      "detail": "status=0, passed=True, records=1440, orders=5",
+      "name": "temporary_backend_integration_packet_ready_but_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "work_order_check=False",
+      "name": "missing_work_orders_rejected",
+      "passed": true
+    },
+    {
+      "detail": "actionable_check=False",
+      "name": "work_order_artifact_command_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "non_evidence_check=False",
+      "name": "premature_backend_evidence_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "route_check=False",
+      "name": "route_independence_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "backend_check=False",
+      "name": "actual_backend_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "hook_check=False",
+      "name": "hook_contract_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "provenance_check=False",
+      "name": "provenance_field_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "budget_check=False",
+      "name": "task_budget_shrink_rejected",
+      "passed": true
+    },
+    {
+      "detail": "command_check=False",
+      "name": "strict_command_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "collection_check=False",
+      "name": "collection_ready_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "backend_file_check=False",
+      "name": "real_backend_file_write_rejected",
+      "passed": true
+    },
+    {
+      "detail": "packet_file_check=False",
+      "name": "packet_file_deletion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "changed=[]",
+      "name": "real_backend_integration_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "collection_ready_promotion_rejected": true,
+  "hook_contract_drift_rejected": true,
+  "missing_work_orders_rejected": true,
+  "not_external_evidence": true,
+  "packet_file_deletion_rejected": true,
+  "passed": true,
+  "premature_backend_evidence_promotion_rejected": true,
+  "provenance_field_drift_rejected": true,
+  "real_backend_file_write_rejected": true,
+  "real_output_hashes": {
+    "external_validation/backend_integration_packet.json": "8581fad2cf3865fbcb78a8f796fc70195830da8771053556f9c5bb147718e303",
+    "external_validation/backend_integration_packet.md": "4253e6578cd2c0ee2c3906484a6abfb8dee168f54a5c4f7441867c80e33201a0",
+    "external_validation/backend_integration_work_orders.csv": "a7a4d24fe4ab850b63afd1719c2642a30e2d029bd8260c298a0bfc43f18e346d",
+    "results/external_backend_integration_audit.json": "a0afab8c887092622adac984227e23d20ab746326b17b53fd0d717cf962406a3",
+    "results/external_backend_integration_audit.md": "9eae89fc0cf94f5859c38db24cebbce3711be4df394e8c52aca7af8a9b349d1b"
+  },
+  "real_outputs_untouched": true,
+  "route_independence_drift_rejected": true,
+  "strict_backend_ready": false,
+  "strict_command_drift_rejected": true,
+  "strict_evidence_ready": false,
+  "task_budget_shrink_rejected": true,
+  "temporary_packet_ready": true,
+  "version": "external_backend_integration_packet_self_test_v1",
+  "work_order_artifact_command_drift_rejected": true
+}

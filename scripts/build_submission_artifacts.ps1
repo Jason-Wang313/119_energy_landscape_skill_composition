@@ -126,6 +126,7 @@ try {
         Invoke-Native python scripts\audit_maniskill_reference_collection_preflight.py
         Invoke-Native python scripts\audit_external_collection_readiness.py
         Invoke-Native python scripts\build_external_backend_integration_packet.py
+        Invoke-Native python scripts\self_test_external_backend_integration_packet.py
         Invoke-Native python scripts\self_test_external_runner_backend.py
         Invoke-Native python scripts\audit_external_pilot_smoke.py
         Invoke-Native python scripts\build_external_pilot_smoke_packet.py

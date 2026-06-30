@@ -14,6 +14,7 @@ This audit checks that the missing backend module has concrete integration work 
 - `pass` `primary_route_matches_onboarding`: route='maniskill_sapien_primary', platform='ManiSkill/SAPIEN'
 - `pass` `backend_contract_harness_ready_but_backend_missing`: actual_backend_ready=False
 - `pass` `work_orders_cover_backend_to_manifest_path`: missing=[]
+- `pass` `work_orders_are_actionable_and_artifact_bound`: actionable_orders=5, required_orders=5
 - `pass` `required_hooks_declared`: hooks=['platform_provenance', 'load_task_config', 'reset_scene', 'capture_observation', 'terminal_samples', 'run_method', 'execute_skill_pair', 'record_video', 'policy_or_config_hash']
 - `pass` `provenance_fields_declared`: provenance_fields=17
 - `pass` `tasks_and_record_budget_preserved`: tasks=['peg_place_regrasp', 'drawer_to_pick_transfer', 'door_open_navigation', 'cable_route_insert'], records=1440

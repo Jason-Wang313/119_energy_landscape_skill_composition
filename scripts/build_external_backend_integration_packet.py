@@ -197,6 +197,7 @@ def audit_packet(packet: dict[str, Any], onboarding: dict[str, Any], backend_con
     work_orders = packet.get("work_orders", []) or []
     command_text = "\n".join(packet.get("strict_acceptance_commands", []) or [])
     order_ids = {order.get("id") for order in work_orders}
+    orders_by_id = {str(order.get("id", "")): order for order in work_orders if str(order.get("id", ""))}
     required_order_ids = {
         "create_non_template_backend_module",
         "bind_task_configs_to_backend",
@@ -239,6 +240,22 @@ def audit_packet(packet: dict[str, Any], onboarding: dict[str, Any], backend_con
         "work_orders_cover_backend_to_manifest_path",
         required_order_ids.issubset(order_ids),
         f"missing={sorted(required_order_ids - order_ids)}",
+    )
+    actionable_orders = [
+        order
+        for order_id, order in orders_by_id.items()
+        if order_id in required_order_ids
+        and str(order.get("route", "")).strip()
+        and str(order.get("platform_family", "")).strip()
+        and str(order.get("operator_input", "")).strip()
+        and len(order.get("required_artifacts", []) or []) > 0
+        and len(order.get("acceptance_commands", []) or []) > 0
+    ]
+    add_check(
+        checks,
+        "work_orders_are_actionable_and_artifact_bound",
+        len(actionable_orders) == len(required_order_ids),
+        f"actionable_orders={len(actionable_orders)}, required_orders={len(required_order_ids)}",
     )
     add_check(
         checks,

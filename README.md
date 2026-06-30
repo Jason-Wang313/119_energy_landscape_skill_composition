@@ -100,6 +100,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - fidelity materializer checkout self-test: `results/fidelity_acceptance_materializer_self_test.md`
 - External backend integration packet: `external_validation/backend_integration_packet.md`
 - External backend integration audit: `results/external_backend_integration_audit.md`
+- External backend integration packet self-test: `results/external_backend_integration_packet_self_test.md`
 - ManiSkill reference backend readiness audit: `results/maniskill_backend_readiness_audit.md`
 - ManiSkill reference collection preflight audit: `results/maniskill_reference_collection_preflight_audit.md`
 - External runner backend probe self-test: `results/external_runner_backend_self_test.md`

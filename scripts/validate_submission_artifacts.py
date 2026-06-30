@@ -129,6 +129,7 @@ def main():
         "scripts\\audit_maniskill_backend_readiness.py",
         "scripts\\audit_maniskill_reference_collection_preflight.py",
         "scripts\\build_external_backend_integration_packet.py",
+        "scripts\\self_test_external_backend_integration_packet.py",
         "scripts\\audit_external_collection_readiness.py",
         "scripts\\audit_external_pilot_smoke.py",
         "scripts\\build_external_pilot_smoke_packet.py",
@@ -273,6 +274,7 @@ def main():
         "python scripts/materialize_fidelity_acceptance.py",
         "python scripts/self_test_fidelity_acceptance_materializer.py",
         "python scripts/build_external_backend_integration_packet.py",
+        "python scripts/self_test_external_backend_integration_packet.py",
         "python scripts/build_external_method_implementation_packet.py",
         "python scripts/materialize_external_method_configs.py",
         "python scripts/build_external_acquisition_packet.py",
@@ -1292,7 +1294,10 @@ def main():
         EXTERNAL / "backend_integration_work_orders.csv",
         RESULTS / "external_backend_integration_audit.json",
         RESULTS / "external_backend_integration_audit.md",
+        RESULTS / "external_backend_integration_packet_self_test.json",
+        RESULTS / "external_backend_integration_packet_self_test.md",
         ROOT / "scripts" / "build_external_backend_integration_packet.py",
+        ROOT / "scripts" / "self_test_external_backend_integration_packet.py",
     ]
     for path in backend_integration_paths:
         if not path.exists():
@@ -1346,6 +1351,7 @@ def main():
         "primary_route_matches_onboarding",
         "backend_contract_harness_ready_but_backend_missing",
         "work_orders_cover_backend_to_manifest_path",
+        "work_orders_are_actionable_and_artifact_bound",
         "required_hooks_declared",
         "provenance_fields_declared",
         "tasks_and_record_budget_preserved",
@@ -1356,6 +1362,57 @@ def main():
     ):
         if backend_integration_checks.get(required_check) is not True:
             fail(f"external backend integration audit missing passing check: {required_check}")
+    backend_integration_self_test = json.loads((RESULTS / "external_backend_integration_packet_self_test.json").read_text(encoding="utf-8"))
+    if backend_integration_self_test.get("version") != "external_backend_integration_packet_self_test_v1":
+        fail("external backend integration packet self-test version mismatch")
+    if backend_integration_self_test.get("passed") is not True:
+        fail("external backend integration packet self-test did not pass")
+    if backend_integration_self_test.get("not_external_evidence") is not True:
+        fail("external backend integration packet self-test must declare non-evidence")
+    if backend_integration_self_test.get("strict_backend_ready") is not False:
+        fail("external backend integration packet self-test must keep strict backend readiness false")
+    if backend_integration_self_test.get("strict_evidence_ready") is not False:
+        fail("external backend integration packet self-test must keep strict evidence readiness false")
+    for required_flag in (
+        "temporary_packet_ready",
+        "missing_work_orders_rejected",
+        "work_order_artifact_command_drift_rejected",
+        "premature_backend_evidence_promotion_rejected",
+        "route_independence_drift_rejected",
+        "actual_backend_promotion_rejected",
+        "hook_contract_drift_rejected",
+        "provenance_field_drift_rejected",
+        "task_budget_shrink_rejected",
+        "strict_command_drift_rejected",
+        "collection_ready_promotion_rejected",
+        "real_backend_file_write_rejected",
+        "packet_file_deletion_rejected",
+        "real_outputs_untouched",
+    ):
+        if backend_integration_self_test.get(required_flag) is not True:
+            fail(f"external backend integration packet self-test missing true flag: {required_flag}")
+    backend_integration_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in backend_integration_self_test.get("checks", []) or []
+    }
+    for required_check in (
+        "temporary_backend_integration_packet_ready_but_non_evidence",
+        "missing_work_orders_rejected",
+        "work_order_artifact_command_drift_rejected",
+        "premature_backend_evidence_promotion_rejected",
+        "route_independence_drift_rejected",
+        "actual_backend_promotion_rejected",
+        "hook_contract_drift_rejected",
+        "provenance_field_drift_rejected",
+        "task_budget_shrink_rejected",
+        "strict_command_drift_rejected",
+        "collection_ready_promotion_rejected",
+        "real_backend_file_write_rejected",
+        "packet_file_deletion_rejected",
+        "real_backend_integration_outputs_untouched",
+    ):
+        if backend_integration_self_checks.get(required_check) is not True:
+            fail(f"external backend integration packet self-test missing passing check: {required_check}")
 
     backend_contract_self_test_path = RESULTS / "external_backend_contract_self_test.json"
     if not backend_contract_self_test_path.exists():
@@ -4073,6 +4130,8 @@ def main():
         "external_backend_integration_not_evidence",
         "external_backend_integration_covers_backend_blocker",
         "external_backend_integration_gate_order",
+        "external_backend_integration_self_test_ready",
+        "external_backend_integration_self_test_guards",
         "external_collection_readiness_audit_ready",
         "external_collection_readiness_not_evidence",
         "external_collection_readiness_fail_closed",
@@ -6099,6 +6158,7 @@ def main():
         "fidelity_provenance_packet_visible",
         "fidelity_provenance_packet_self_test_visible",
         "backend_integration_packet_visible",
+        "backend_integration_packet_self_test_visible",
         "maniskill_reference_collection_preflight_visible",
         "external_collection_preflight_self_test_visible",
         "external_evidence_preflight_self_test_visible",

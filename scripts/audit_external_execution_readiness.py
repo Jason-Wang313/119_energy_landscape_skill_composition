@@ -836,6 +836,7 @@ def main() -> int:
         checks,
         "external_backend_integration_covers_backend_blocker",
         backend_integration_checks.get("work_orders_cover_backend_to_manifest_path") is True
+        and backend_integration_checks.get("work_orders_are_actionable_and_artifact_bound") is True
         and backend_integration_checks.get("required_hooks_declared") is True
         and backend_integration_checks.get("collection_readiness_still_blocks_backend") is True,
         f"backend_integration_checks={backend_integration_checks}",
@@ -848,6 +849,41 @@ def main() -> int:
         and (EXTERNAL / "backend_integration_work_orders.csv").exists()
         and (ROOT / "scripts" / "build_external_backend_integration_packet.py").exists(),
         "backend packet, work orders, builder, and strict command order are present",
+    )
+    backend_integration_self_ok, backend_integration_self, backend_integration_self_detail = passed_json(
+        RESULTS / "external_backend_integration_packet_self_test.json",
+        version="external_backend_integration_packet_self_test_v1",
+    )
+    add_check(
+        checks,
+        "external_backend_integration_self_test_ready",
+        backend_integration_self_ok
+        and backend_integration_self.get("not_external_evidence") is True
+        and backend_integration_self.get("strict_backend_ready") is False
+        and backend_integration_self.get("strict_evidence_ready") is False
+        and backend_integration_self.get("temporary_packet_ready") is True,
+        backend_integration_self_detail,
+    )
+    backend_integration_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in backend_integration_self.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "external_backend_integration_self_test_guards",
+        backend_integration_self.get("missing_work_orders_rejected") is True
+        and backend_integration_self.get("work_order_artifact_command_drift_rejected") is True
+        and backend_integration_self.get("premature_backend_evidence_promotion_rejected") is True
+        and backend_integration_self.get("route_independence_drift_rejected") is True
+        and backend_integration_self.get("actual_backend_promotion_rejected") is True
+        and backend_integration_self.get("hook_contract_drift_rejected") is True
+        and backend_integration_self.get("provenance_field_drift_rejected") is True
+        and backend_integration_self.get("strict_command_drift_rejected") is True
+        and backend_integration_self.get("real_backend_file_write_rejected") is True
+        and backend_integration_self.get("real_outputs_untouched") is True
+        and backend_integration_self_checks.get("temporary_backend_integration_packet_ready_but_non_evidence") is True
+        and backend_integration_self_checks.get("real_backend_integration_outputs_untouched") is True,
+        f"checks={backend_integration_self_checks}",
     )
 
     collection_readiness_ok, collection_readiness, collection_readiness_detail = passed_json(
@@ -1634,6 +1670,7 @@ def main() -> int:
         RESULTS / "external_platform_onboarding_audit.md",
         RESULTS / "external_fidelity_provenance_audit.md",
         RESULTS / "external_backend_integration_audit.md",
+        RESULTS / "external_backend_integration_packet_self_test.md",
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.md",
         RESULTS / "external_ablation_collection_audit.md",
@@ -1754,6 +1791,8 @@ def main() -> int:
         "external_backend_integration_not_evidence",
         "external_backend_integration_covers_backend_blocker",
         "external_backend_integration_gate_order",
+        "external_backend_integration_self_test_ready",
+        "external_backend_integration_self_test_guards",
         "external_collection_readiness_audit_ready",
         "external_collection_readiness_not_evidence",
         "external_collection_readiness_fail_closed",

@@ -34,6 +34,8 @@
 - External backend contract validator: `scripts/audit_external_backend_contract.py`
 - ManiSkill reference collection preflight validator: `scripts/audit_maniskill_reference_collection_preflight.py`
 - External backend integration packet builder: `scripts/build_external_backend_integration_packet.py`
+- External backend integration packet self-test: `scripts/self_test_external_backend_integration_packet.py`
+  - Durable report: `results/external_backend_integration_packet_self_test.md`
 - External config manifest packet builder: `scripts/build_external_config_manifest_packet.py`
 - External config manifest packet self-test: `scripts/self_test_external_config_manifest_packet.py`
   - Durable report: `results/external_config_manifest_packet_self_test.md`
