@@ -166,6 +166,7 @@ def main():
         "scripts\\self_test_external_acquisition_packet.py",
         "scripts\\build_external_operator_packet.py",
         "scripts\\build_external_collection_job_packet.py",
+        "scripts\\self_test_external_collection_job_packet.py",
         "scripts\\build_external_collection_machine_bootstrap.py",
         "scripts\\build_external_operator_handoff_bundle.py",
         "scripts\\build_external_operator_release_bundle.py",
@@ -268,6 +269,7 @@ def main():
         "python scripts/self_test_external_acquisition_packet.py",
         "python scripts/build_external_operator_packet.py",
         "python scripts/build_external_collection_job_packet.py",
+        "python scripts/self_test_external_collection_job_packet.py",
         "python scripts/build_external_collection_machine_bootstrap.py",
         "python scripts/build_external_operator_handoff_bundle.py",
         "python scripts/build_external_operator_release_bundle.py",
@@ -4803,6 +4805,52 @@ def main():
     ):
         if fragment not in collection_job_command_text:
             fail(f"external collection job command file missing fragment: {fragment}")
+
+    collection_job_self_test_path = RESULTS / "external_collection_job_packet_self_test.json"
+    collection_job_self_test_md_path = RESULTS / "external_collection_job_packet_self_test.md"
+    for path in (
+        ROOT / "scripts" / "self_test_external_collection_job_packet.py",
+        collection_job_self_test_path,
+        collection_job_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external collection job packet self-test artifact: {path}")
+    collection_job_self_test = json.loads(collection_job_self_test_path.read_text(encoding="utf-8"))
+    if collection_job_self_test.get("version") != "external_collection_job_packet_self_test_v1":
+        fail("external collection job packet self-test version mismatch")
+    if collection_job_self_test.get("passed") is not True:
+        fail("external collection job packet self-test did not pass")
+    if collection_job_self_test.get("not_external_evidence") is not True:
+        fail("external collection job packet self-test must declare that it is not evidence")
+    if collection_job_self_test.get("strict_external_evidence_ready") is not False:
+        fail("external collection job packet self-test must keep strict external evidence false")
+    for field in (
+        "temporary_fixture_ready",
+        "missing_source_rejected",
+        "source_evidence_drift_rejected",
+        "premature_manifest_rejected",
+        "premature_ready_state_rejected",
+        "unsafe_command_spine_rejected",
+        "hash_gate_drift_rejected",
+        "render_self_test_drift_rejected",
+        "real_outputs_untouched",
+    ):
+        if collection_job_self_test.get(field) is not True:
+            fail(f"external collection job packet self-test field must be true: {field}")
+    collection_job_self_checks = {check.get("name"): check.get("passed") for check in collection_job_self_test.get("checks", [])}
+    for required_check in (
+        "temporary_fixture_builds_current_collection_job_packet",
+        "missing_source_payload_rejected",
+        "source_non_evidence_drift_rejected",
+        "premature_manifest_rejected",
+        "premature_ready_state_rejected",
+        "unsafe_command_spine_rejected",
+        "hash_gate_drift_rejected",
+        "render_self_test_drift_rejected",
+        "real_repository_collection_job_outputs_untouched",
+    ):
+        if collection_job_self_checks.get(required_check) is not True:
+            fail(f"external collection job packet self-test missing passing check: {required_check}")
 
     bootstrap_packet_path = EXTERNAL / "collection_machine_bootstrap.json"
     bootstrap_packet_md_path = EXTERNAL / "collection_machine_bootstrap.md"

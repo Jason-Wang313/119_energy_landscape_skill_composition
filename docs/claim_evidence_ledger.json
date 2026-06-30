@@ -176,6 +176,11 @@
       "evidence": ["scripts/build_external_collection_job_packet.py", "external_validation/collection_job_packet.json", "external_validation/collection_job_packet.md", "external_validation/collection_job_commands.ps1", "external_validation/collection_job_checklist.csv", "results/external_collection_job_packet_audit.json", "results/external_collection_job_packet_audit.md", "results/external_operator_packet.json", "results/external_collection_readiness_audit.json", "results/maniskill_render_machine_qualification.json"]
     },
     {
+      "name": "external_collection_job_packet_self_test_claim",
+      "claim": "The repository provides a non-evidence External collection job packet self-test that rebuilds the packet in temporary copied workspaces and rejects missing sources, source evidence drift, premature manifests, premature ready states, unsafe command-spine edits, hash-gate drift, and render self-test drift without touching the real packet outputs.",
+      "evidence": ["scripts/self_test_external_collection_job_packet.py", "results/external_collection_job_packet_self_test.json", "results/external_collection_job_packet_self_test.md", "scripts/build_external_collection_job_packet.py", "external_validation/collection_job_packet.json", "results/external_collection_job_packet_audit.json"]
+    },
+    {
       "name": "external_collection_machine_bootstrap_claim",
       "claim": "The repository provides a non-evidence External collection machine bootstrap packet and guarded command file for an independent GPU/Vulkan collection machine, covering platform, task binding, environment smoke, fidelity metadata, render-video preflight, pilot liveness, and render-machine qualification probes while explicitly avoiding fidelity acceptance materialization, official collection, manifest writing, logs, and videos.",
       "evidence": ["scripts/build_external_collection_machine_bootstrap.py", "external_validation/collection_machine_bootstrap.json", "external_validation/collection_machine_bootstrap.md", "external_validation/collection_machine_bootstrap.ps1", "results/external_collection_machine_bootstrap_audit.json", "results/external_collection_machine_bootstrap_audit.md", "results/external_collection_job_packet_audit.json", "results/maniskill_render_machine_qualification.json"]

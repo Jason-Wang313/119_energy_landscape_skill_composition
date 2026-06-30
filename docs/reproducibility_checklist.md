@@ -59,6 +59,8 @@
   - Durable report: `results/external_acquisition_packet_self_test.md`
 - External operator packet builder: `scripts/build_external_operator_packet.py`
 - External collection job packet builder: `scripts/build_external_collection_job_packet.py`
+- External collection job packet self-test: `scripts/self_test_external_collection_job_packet.py`
+  - Durable report: `results/external_collection_job_packet_self_test.md`
 - External collection machine bootstrap builder: `scripts/build_external_collection_machine_bootstrap.py`
 - External operator handoff bundle builder: `scripts/build_external_operator_handoff_bundle.py`
 - External operator release bundle builder: `scripts/build_external_operator_release_bundle.py`
@@ -239,6 +241,8 @@
   - `external_validation/collection_job_checklist.csv`
   - `results/external_collection_job_packet_audit.json`
   - `results/external_collection_job_packet_audit.md`
+  - `results/external_collection_job_packet_self_test.json`
+  - `results/external_collection_job_packet_self_test.md`
   - `external_validation/collection_machine_bootstrap.json`
   - `external_validation/collection_machine_bootstrap.md`
   - `external_validation/collection_machine_bootstrap.ps1`

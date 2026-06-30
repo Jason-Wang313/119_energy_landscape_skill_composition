@@ -57,6 +57,11 @@
       "passed": true
     },
     {
+      "detail": "fixture_ready=True, missing_source_rejected=True, source_drift_rejected=True, manifest_rejected=True, ready_state_rejected=True, unsafe_command_rejected=True",
+      "name": "external_collection_job_packet_self_test_visible",
+      "passed": true
+    },
+    {
       "detail": "bootstrap_state='READY_TO_BOOTSTRAP_EXTERNAL_MACHINE', command='external_validation/collection_machine_bootstrap.ps1'",
       "name": "external_collection_machine_bootstrap_visible",
       "passed": true

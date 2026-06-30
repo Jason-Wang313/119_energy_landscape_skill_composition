@@ -35,6 +35,8 @@ Collection-readiness tracked route: `results/external_collection_readiness_audit
 
 External collection job packet: `external_validation/collection_job_packet.md` and `external_validation/collection_job_commands.ps1` now order the remaining external-validation route from platform/render qualification through official collection, postcollection sealing, manifest promotion, and final strict audits while remaining `DO_NOT_START_COLLECTION_YET` and non-evidence.
 
+External collection job packet self-test: `results/external_collection_job_packet_self_test.md` mutation-tests the guarded command spine in temporary copied workspaces and rejects missing sources, source evidence drift, premature manifests, premature ready states, unsafe command edits, hash-gate drift, and render self-test drift without touching the real packet outputs.
+
 External collection machine bootstrap: `external_validation/collection_machine_bootstrap.md` now gives an independent GPU/Vulkan operator a guarded probe-only command path through platform, task, environment, fidelity metadata, render, pilot, and render-machine qualification checks before fidelity acceptance or official collection.
 
 External operator release bundle: `results/external_operator_release_bundle_plan.md` now recomputes the handoff hash manifest and prepares a deterministic transfer-archive command while leaving archive writing disabled by default and excluding real evidence paths.
