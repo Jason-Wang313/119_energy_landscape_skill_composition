@@ -82,13 +82,18 @@
     },
     {
       "name": "visible_contribution_claim",
-      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, outreach package, reviewer response packet, and closure brief synchronized with the current planner-edge policy audit, failure-memory adaptation audit, materializer, fidelity materializer checkout self-test, operator packet, collection machine bootstrap, fidelity acceptance draft, strict fidelity acceptance provenance gate, tracked reference route, strict config evidence hash gate, prepared task-config binding, strict full-method coverage gate, strict rollout sample-count gate, strict paired-panel gate, strict rollout uniqueness gate, confidence-gated external rollout statistics, final rollout confidence summary gate, official video write guard, official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, reset-timeout triage sidecar, backend reset substage markers, render failure remediation packet, atomic official evidence promotion, release-package internal-artifact rejection, final release artifact hash recomputation, external evidence closure brief, external evidence closure brief self-test, adapter acceptance fixtures, tracked candidate method-config binding, reference-adapter provenance, strict reference-adapter rejection gate, strict checkpoint/config artifact gate, strict fairness-contract binding gate, outreach stance, and readiness boundary.",
-      "evidence": ["scripts/audit_visible_contribution.py", "README.md", "docs/final_audit.md", "docs/submission_readiness_decision.md", "docs/submission_readiness_audit_v5.md", "docs/submission_version_log.md", "child_status.md", "docs/haonan_yilun_outreach_package.md", "docs/reviewer_response_packet.md"]
+      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, outreach package, send-ready outreach packet, reviewer response packet, and closure brief synchronized with the current planner-edge policy audit, failure-memory adaptation audit, materializer, fidelity materializer checkout self-test, operator packet, collection machine bootstrap, fidelity acceptance draft, strict fidelity acceptance provenance gate, tracked reference route, strict config evidence hash gate, prepared task-config binding, strict full-method coverage gate, strict rollout sample-count gate, strict paired-panel gate, strict rollout uniqueness gate, confidence-gated external rollout statistics, final rollout confidence summary gate, official video write guard, official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, reset-timeout triage sidecar, backend reset substage markers, render failure remediation packet, atomic official evidence promotion, release-package internal-artifact rejection, final release artifact hash recomputation, external evidence closure brief, external evidence closure brief self-test, adapter acceptance fixtures, tracked candidate method-config binding, reference-adapter provenance, strict reference-adapter rejection gate, strict checkpoint/config artifact gate, strict fairness-contract binding gate, outreach stance, and readiness boundary.",
+      "evidence": ["scripts/audit_visible_contribution.py", "README.md", "docs/final_audit.md", "docs/submission_readiness_decision.md", "docs/submission_readiness_audit_v5.md", "docs/submission_version_log.md", "child_status.md", "docs/haonan_yilun_outreach_package.md", "docs/haonan_yilun_send_ready_outreach.md", "docs/reviewer_response_packet.md"]
     },
     {
       "name": "reviewer_response_packet_claim",
       "claim": "The repository provides a non-evidence reviewer response packet that maps hostile reviewer objections to exact local evidence, allowed claims, remaining external gates, and Haonan/Yilun outreach use while preserving the STRONG_REVISE boundary.",
       "evidence": ["scripts/build_reviewer_response_packet.py", "docs/reviewer_response_packet.md", "results/reviewer_response_packet_audit.json", "results/reviewer_response_packet_audit.md", "results/submission_readiness_gap_audit.json", "docs/haonan_yilun_outreach_package.md"]
+    },
+    {
+      "name": "haonan_yilun_send_ready_outreach_claim",
+      "claim": "The repository provides a non-evidence send-ready Haonan/Yilun outreach packet that keeps the first contact concise, uses CoStream as the only first-email paper anchor, preserves the 17/21 STRONG_REVISE boundary, and does not frame Haonan as responsible for supplying the missing proof.",
+      "evidence": ["scripts/build_haonan_yilun_send_ready_outreach.py", "docs/haonan_yilun_send_ready_outreach.md", "results/haonan_yilun_send_ready_outreach_audit.json", "results/haonan_yilun_send_ready_outreach_audit.md", "outreach/paper119_one_page_memo.pdf", "outreach/paper119_four_page_preview.pdf", "docs/external_evidence_closure_brief.md"]
     },
     {
       "name": "external_collection_plan_claim",
@@ -558,6 +563,7 @@
     "docs/claims.md",
     "docs/final_audit.md",
     "docs/haonan_yilun_outreach_package.md",
+    "docs/haonan_yilun_send_ready_outreach.md",
     "docs/independent_validation_protocol.md",
     "docs/related_work_coverage_matrix.md",
     "docs/local_model_release.md",

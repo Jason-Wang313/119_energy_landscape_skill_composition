@@ -298,6 +298,9 @@ jobs:
       - name: Build reviewer response packet
         run: python scripts/build_reviewer_response_packet.py
 
+      - name: Build Haonan/Yilun send-ready outreach
+        run: python scripts/build_haonan_yilun_send_ready_outreach.py
+
       - name: Audit visible contribution docs
         run: python scripts/audit_visible_contribution.py
 

@@ -200,6 +200,7 @@ def main():
         "scripts\\audit_claim_boundary.py",
         "scripts\\audit_submission_readiness_gap.py",
         "scripts\\build_reviewer_response_packet.py",
+        "scripts\\build_haonan_yilun_send_ready_outreach.py",
         "pdflatex -interaction=nonstopmode -halt-on-error main.tex",
         "bibtex main",
         "Copy-Item -LiteralPath paper\\main.pdf",
@@ -313,6 +314,7 @@ def main():
         "python scripts/self_test_external_evidence_pipeline.py",
         "python scripts/audit_submission_readiness_gap.py",
         "python scripts/build_reviewer_response_packet.py",
+        "python scripts/build_haonan_yilun_send_ready_outreach.py",
         "python scripts/audit_visible_contribution.py",
         "python scripts/audit_claim_boundary.py",
         "python scripts/validate_submission_artifacts.py",
@@ -3221,6 +3223,54 @@ def main():
         fail(f"reviewer response packet missing required boundary/outreach phrases: {missing_reviewer_phrases}")
     if not (RESULTS / "reviewer_response_packet_audit.md").exists():
         fail("missing results/reviewer_response_packet_audit.md")
+
+    send_ready_path = DOCS / "haonan_yilun_send_ready_outreach.md"
+    send_ready_audit_path = RESULTS / "haonan_yilun_send_ready_outreach_audit.json"
+    if not send_ready_path.exists():
+        fail("missing docs/haonan_yilun_send_ready_outreach.md; run scripts/build_haonan_yilun_send_ready_outreach.py")
+    if not send_ready_audit_path.exists():
+        fail("missing results/haonan_yilun_send_ready_outreach_audit.json; run scripts/build_haonan_yilun_send_ready_outreach.py")
+    send_ready = json.loads(send_ready_audit_path.read_text(encoding="utf-8"))
+    if send_ready.get("version") != "haonan_yilun_send_ready_outreach_v1":
+        fail("Haonan/Yilun send-ready outreach audit version mismatch")
+    if send_ready.get("passed") is not True:
+        fail("Haonan/Yilun send-ready outreach audit did not pass")
+    if send_ready.get("not_external_evidence") is not True:
+        fail("Haonan/Yilun send-ready outreach must declare that it is not external evidence")
+    if send_ready.get("current_decision") != "STRONG_REVISE":
+        fail("Haonan/Yilun send-ready outreach must preserve STRONG_REVISE")
+    send_readiness = send_ready.get("readiness", {}) or {}
+    if int(send_readiness.get("satisfied_requirements", 0) or 0) != 17 or int(send_readiness.get("blocking_missing_requirements", 0) or 0) != 4:
+        fail("Haonan/Yilun send-ready outreach must preserve the 17/21 readiness boundary")
+    if int(send_ready.get("first_email_word_count", 999) or 999) > 190:
+        fail("Haonan/Yilun first email is too long")
+    if send_ready.get("primary_first_email_anchor") != "CoStream" or send_ready.get("secondary_first_email_anchor") != "none":
+        fail("Haonan/Yilun first email must use CoStream as the only paper anchor")
+    send_checks = {check.get("name"): check.get("passed") for check in send_ready.get("checks", [])}
+    for required_check in (
+        "first_email_concise",
+        "first_email_uses_one_primary_anchor",
+        "first_contact_forbidden_phrases_absent",
+        "haonan_not_proof_supplier",
+        "yilun_access_motive_absent",
+        "first_wave_attachments_exist",
+        "followup_artifacts_exist",
+        "agenda_identity_visible",
+    ):
+        if send_checks.get(required_check) is not True:
+            fail(f"Haonan/Yilun send-ready outreach missing passing check: {required_check}")
+    send_ready_text = send_ready_path.read_text(encoding="utf-8")
+    for term in (
+        "Not evidence: `true`.",
+        "Mention CoStream as the primary fit anchor",
+        "Do not pitch Haonan as responsible for supplying the missing proof.",
+        "Do not mention Yilun as the outreach motive.",
+        "adaptive physical world/action models for embodied agents",
+    ):
+        if term not in send_ready_text:
+            fail(f"Haonan/Yilun send-ready outreach missing required term: {term}")
+    if not (RESULTS / "haonan_yilun_send_ready_outreach_audit.md").exists():
+        fail("missing results/haonan_yilun_send_ready_outreach_audit.md")
 
     external_audit_path = RESULTS / "external_evidence_audit.json"
     if not external_audit_path.exists():

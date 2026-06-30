@@ -18,6 +18,8 @@ Failure-memory adaptation audit: local observed-to-held-out seam signatures show
 
 Reviewer packet: the reviewer response packet now records the natural skill-seam world/action defense, the current evidence boundary, and the one-paper Haonan/Yilun outreach rule without changing the STRONG_REVISE decision.
 
+Haonan/Yilun send-ready outreach: `docs/haonan_yilun_send_ready_outreach.md` and `results/haonan_yilun_send_ready_outreach_audit.md` now provide the concise first-contact packet with CoStream as the only first-email paper anchor, a 189-word email, the 17/21 STRONG_REVISE boundary, and no proof-burden framing for Haonan.
+
 external postcollection evidence seal: `external_validation/postcollection_evidence_seal.md` now records the non-evidence hash-lock step for raw JSONL logs, rollout videos, prepared configs, precollection receipt, and operator metadata after official collection and before manifest promotion.
 
 external postcollection evidence seal self-test: `results/external_postcollection_evidence_seal_self_test.md` now proves the seal builder can reach manifest-promotion readiness on a temporary complete sealed fixture while missing operator metadata, incomplete official videos, and pre-existing manifests fail without touching the real seal.

@@ -133,6 +133,7 @@ def main() -> int:
     rollout_validator_self_test = read_json(RESULTS / "external_rollout_validator_self_test.json")
     evidence_pipeline_self_test = read_json(RESULTS / "external_evidence_pipeline_self_test.json")
     reviewer_packet = read_json(RESULTS / "reviewer_response_packet_audit.json")
+    send_ready_outreach = read_json(RESULTS / "haonan_yilun_send_ready_outreach_audit.json")
     ledger = read_json(DOCS / "claim_evidence_ledger.json")
     rollout_validator_text = read_text(ROOT / "scripts" / "validate_external_rollouts.py")
     rollout_self_test_text = read_text(ROOT / "scripts" / "self_test_external_rollout_validator.py")
@@ -154,6 +155,7 @@ def main() -> int:
         "child_status": ROOT / "child_status.md",
         "reproducibility": DOCS / "reproducibility_checklist.md",
         "outreach": DOCS / "haonan_yilun_outreach_package.md",
+        "send_ready_outreach": DOCS / "haonan_yilun_send_ready_outreach.md",
         "reviewer": DOCS / "reviewer_response_packet.md",
         "closure": DOCS / "external_evidence_closure_brief.md",
     }
@@ -2302,6 +2304,33 @@ def main() -> int:
             f"not_external_evidence={reviewer_packet.get('not_external_evidence')!r}"
         ),
     )
+    send_ready_checks = {check.get("name"): check.get("passed") for check in send_ready_outreach.get("checks", []) or []}
+    add_check(
+        checks,
+        "haonan_yilun_send_ready_outreach_visible",
+        send_ready_outreach.get("version") == "haonan_yilun_send_ready_outreach_v1"
+        and send_ready_outreach.get("passed") is True
+        and send_ready_outreach.get("not_external_evidence") is True
+        and send_ready_outreach.get("current_decision") == "STRONG_REVISE"
+        and int(send_ready_outreach.get("first_email_word_count", 999) or 999) <= 190
+        and send_ready_outreach.get("primary_first_email_anchor") == "CoStream"
+        and send_ready_outreach.get("secondary_first_email_anchor") == "none"
+        and send_ready_checks.get("first_email_concise") is True
+        and send_ready_checks.get("first_email_uses_one_primary_anchor") is True
+        and send_ready_checks.get("haonan_not_proof_supplier") is True
+        and send_ready_checks.get("yilun_access_motive_absent") is True
+        and "Do not pitch Haonan as responsible for supplying the missing proof." in texts["send_ready_outreach"]
+        and "Do not mention Yilun as the outreach motive." in texts["send_ready_outreach"]
+        and "CoStream as the only first-email paper anchor" in texts["README"]
+        and "Haonan/Yilun send-ready outreach" in texts["final_audit"]
+        and "Haonan/Yilun send-ready outreach" in texts["readiness_audit"]
+        and "Haonan/Yilun send-ready outreach" in texts["reproducibility"],
+        (
+            f"words={send_ready_outreach.get('first_email_word_count')!r}, "
+            f"primary={send_ready_outreach.get('primary_first_email_anchor')!r}, "
+            f"secondary={send_ready_outreach.get('secondary_first_email_anchor')!r}"
+        ),
+    )
     claim_names = {str(claim.get("name", "")) for claim in ledger.get("permitted_claims", []) if isinstance(claim, dict)}
     add_check(
         checks,
@@ -2372,8 +2401,9 @@ def main() -> int:
             "external_config_materialization_claim",
             "external_config_materialization_self_test_claim",
             "reviewer_response_packet_claim",
+            "haonan_yilun_send_ready_outreach_claim",
         }.issubset(claim_names),
-        f"missing={sorted({'local_planner_edge_policy_claim', 'local_failure_memory_adaptation_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_operator_handoff_bundle_self_test_claim', 'external_evidence_preflight_self_test_claim', 'external_execution_readiness_self_test_claim', 'external_operator_release_bundle_claim', 'external_operator_release_bundle_self_test_claim', 'external_collection_machine_bootstrap_claim', 'external_collection_machine_bootstrap_self_test_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_provenance_packet_self_test_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'external_backend_integration_packet_self_test_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'external_collection_job_packet_claim', 'external_collection_job_packet_self_test_claim', 'external_config_manifest_packet_claim', 'external_config_manifest_packet_self_test_claim', 'external_config_evidence_hash_gate_claim', 'external_rollout_evidence_packet_claim', 'external_rollout_evidence_packet_self_test_claim', 'external_strict_video_evidence_gate_claim', 'external_ablation_collection_packet_claim', 'external_ablation_collection_packet_self_test_claim', 'external_evidence_intake_ledger_claim', 'external_evidence_intake_ledger_self_test_claim', 'external_precollection_manifest_draft_claim', 'external_precollection_manifest_draft_self_test_claim', 'external_precollection_freeze_receipt_claim', 'external_precollection_freeze_receipt_self_test_claim', 'external_postcollection_evidence_seal_claim', 'external_postcollection_evidence_seal_self_test_claim', 'external_postcollection_seal_consistency_gate_claim', 'external_postcollection_seal_consistency_self_test_claim', 'external_acquisition_packet_self_test_claim', 'external_evidence_closure_brief_claim', 'external_evidence_closure_brief_self_test_claim', 'external_method_implementation_packet_claim', 'external_method_implementation_packet_self_test_claim', 'external_baseline_contract_self_test_claim', 'external_method_config_materialization_claim', 'external_method_config_materialization_self_test_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'external_config_materialization_self_test_claim', 'reviewer_response_packet_claim'} - claim_names)}",
+        f"missing={sorted({'local_planner_edge_policy_claim', 'local_failure_memory_adaptation_claim', 'local_model_release_claim', 'external_platform_probe_claim', 'maniskill_task_binding_probe_claim', 'maniskill_env_smoke_probe_claim', 'maniskill_fidelity_metadata_probe_claim', 'external_operator_packet_claim', 'external_operator_handoff_bundle_claim', 'external_operator_handoff_bundle_self_test_claim', 'external_evidence_preflight_self_test_claim', 'external_execution_readiness_self_test_claim', 'external_operator_release_bundle_claim', 'external_operator_release_bundle_self_test_claim', 'external_collection_machine_bootstrap_claim', 'external_collection_machine_bootstrap_self_test_claim', 'external_analysis_plan_claim', 'external_platform_onboarding_claim', 'external_fidelity_provenance_packet_claim', 'external_fidelity_provenance_packet_self_test_claim', 'external_fidelity_acceptance_draft_claim', 'external_fidelity_acceptance_materializer_claim', 'external_backend_integration_packet_claim', 'external_backend_integration_packet_self_test_claim', 'maniskill_reference_backend_claim', 'maniskill_reference_collection_preflight_claim', 'external_runner_backend_probe_claim', 'external_pilot_smoke_packet_claim', 'maniskill_pilot_runtime_liveness_claim', 'maniskill_render_video_preflight_claim', 'maniskill_render_machine_qualification_claim', 'external_collection_job_packet_claim', 'external_collection_job_packet_self_test_claim', 'external_config_manifest_packet_claim', 'external_config_manifest_packet_self_test_claim', 'external_config_evidence_hash_gate_claim', 'external_rollout_evidence_packet_claim', 'external_rollout_evidence_packet_self_test_claim', 'external_strict_video_evidence_gate_claim', 'external_ablation_collection_packet_claim', 'external_ablation_collection_packet_self_test_claim', 'external_evidence_intake_ledger_claim', 'external_evidence_intake_ledger_self_test_claim', 'external_precollection_manifest_draft_claim', 'external_precollection_manifest_draft_self_test_claim', 'external_precollection_freeze_receipt_claim', 'external_precollection_freeze_receipt_self_test_claim', 'external_postcollection_evidence_seal_claim', 'external_postcollection_evidence_seal_self_test_claim', 'external_postcollection_seal_consistency_gate_claim', 'external_postcollection_seal_consistency_self_test_claim', 'external_acquisition_packet_self_test_claim', 'external_evidence_closure_brief_claim', 'external_evidence_closure_brief_self_test_claim', 'external_method_implementation_packet_claim', 'external_method_implementation_packet_self_test_claim', 'external_baseline_contract_self_test_claim', 'external_method_config_materialization_claim', 'external_method_config_materialization_self_test_claim', 'external_method_reference_provenance_claim', 'external_manifest_assembly_checklist_claim', 'external_manifest_builder_self_test_claim', 'external_config_materialization_claim', 'external_config_materialization_self_test_claim', 'reviewer_response_packet_claim', 'haonan_yilun_send_ready_outreach_claim'} - claim_names)}",
     )
 
     required_terms_by_file = {
@@ -3067,6 +3097,14 @@ def main() -> int:
             "official video write guard",
             "official JSONL write guard",
             "atomic official evidence promotion",
+        ],
+        "send_ready_outreach": [
+            "Not evidence: `true`.",
+            "Mention CoStream as the primary fit anchor",
+            "Do not pitch Haonan as responsible for supplying the missing proof.",
+            "Do not mention Yilun as the outreach motive.",
+            "adaptive physical world/action models for embodied agents",
+            "189",
         ],
     }
     for name, terms in required_terms_by_file.items():

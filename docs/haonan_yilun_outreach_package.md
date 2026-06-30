@@ -44,6 +44,8 @@ That is the bridge to Yilun. It should sound like compositional world/action mod
 
 Do not start by attaching the full generated PDF alone.
 
+Use `docs/haonan_yilun_send_ready_outreach.md` as the actual first-contact source. This send-ready layer is intentionally shorter than this planning document: it uses CoStream as the only first-email paper anchor, keeps the first email under 190 words, preserves the 17/21 STRONG_REVISE boundary, and does not frame Haonan as responsible for supplying the missing proof.
+
 Send:
 
 - A short email.

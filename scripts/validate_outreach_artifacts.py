@@ -1,5 +1,6 @@
 from pathlib import Path
 import subprocess
+import json
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -59,6 +60,34 @@ def main() -> None:
     ):
         if required not in package_text:
             fail(f"haonan/yilun outreach package missing required framing: {required}")
+
+    send_ready = ROOT / "docs" / "haonan_yilun_send_ready_outreach.md"
+    send_ready_audit = ROOT / "results" / "haonan_yilun_send_ready_outreach_audit.json"
+    if not send_ready.exists():
+        fail(f"missing send-ready outreach packet: {send_ready}")
+    if not send_ready_audit.exists():
+        fail(f"missing send-ready outreach audit: {send_ready_audit}")
+    payload = json.loads(send_ready_audit.read_text(encoding="utf-8"))
+    if payload.get("version") != "haonan_yilun_send_ready_outreach_v1":
+        fail("send-ready outreach audit version mismatch")
+    if payload.get("passed") is not True:
+        fail("send-ready outreach audit did not pass")
+    if payload.get("not_external_evidence") is not True:
+        fail("send-ready outreach audit must remain non-evidence")
+    if int(payload.get("first_email_word_count", 999) or 999) > 190:
+        fail("send-ready first email is too long")
+    if payload.get("primary_first_email_anchor") != "CoStream" or payload.get("secondary_first_email_anchor") != "none":
+        fail("send-ready first email must use only CoStream as the paper anchor")
+    checks = {check.get("name"): check.get("passed") for check in payload.get("checks", [])}
+    for required in (
+        "first_email_concise",
+        "first_email_uses_one_primary_anchor",
+        "first_contact_forbidden_phrases_absent",
+        "haonan_not_proof_supplier",
+        "yilun_access_motive_absent",
+    ):
+        if checks.get(required) is not True:
+            fail(f"send-ready outreach audit missing passing check: {required}")
 
     print("Outreach artifact validation passed: one-page memo=1 page, four-page preview=4 pages.")
 

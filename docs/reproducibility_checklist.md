@@ -5,6 +5,8 @@
 - GitHub validation workflow: `.github/workflows/paper119-validation.yml`
 - Manuscript entry point: `scripts/generate_manuscript.py`
 - Artifact validator: `scripts/validate_submission_artifacts.py`
+- Haonan/Yilun send-ready outreach builder: `scripts/build_haonan_yilun_send_ready_outreach.py`
+  - Durable report: `results/haonan_yilun_send_ready_outreach_audit.md`
 - Local falsification validator: `scripts/audit_local_falsification.py`
 - Holdout robustness validator: `scripts/audit_holdout_robustness.py`
 - Diagnostic mechanism validator: `scripts/audit_diagnostic_mechanism.py`

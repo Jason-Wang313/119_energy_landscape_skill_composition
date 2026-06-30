@@ -100,6 +100,7 @@ Why strong-revise:
 - The external operator handoff bundle hash-lists the operator-facing validation files and excludes rollout logs, videos, checkpoints, local dry-run artifacts, placeholder media, and real evidence manifests.
 - The reviewer response packet maps hostile objections to exact local evidence, allowed claims, remaining gates, and one-paper Haonan/Yilun outreach guidance while preserving STRONG_REVISE.
 - The outreach package now frames Haonan's role as fit/falsification advice around CoStream-style behavior composition, not as responsibility for supplying the missing proof.
+- The Haonan/Yilun send-ready outreach packet gives the actual first-contact email, keeps CoStream as the only first-email paper anchor, caps the email at 189 words, preserves the 17/21 STRONG_REVISE boundary, and avoids proof-burden framing for Haonan.
 - Numeric integrity, PDF placement, page-count, and visual QA checks pass.
 
 Why not ready:

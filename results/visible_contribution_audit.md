@@ -97,6 +97,7 @@ The External operator release bundle self-test documents transfer-package fail-c
 - `pass` `failure_memory_adaptation_visible`: signatures=2210, frontiers=1667, corr=0.9574193753223077, breach_delta=-0.08288240682870371
 - `pass` `local_model_release_visible`: release_hash='546D8DA38D310FBB51EBFC15C41DFD7A9058EC1631EA60019501378FD487A57D', local_model_release_ready=True, external_evidence_ready=False
 - `pass` `reviewer_response_packet_visible`: entries=12, not_external_evidence=True
+- `pass` `haonan_yilun_send_ready_outreach_visible`: words=189, primary='CoStream', secondary='none'
 - `pass` `ledger_tracks_new_visible_claims`: missing=[]
 - `pass` `README_current_visible_contribution_terms`: missing=[]
 - `pass` `final_audit_current_visible_contribution_terms`: missing=[]
@@ -106,4 +107,5 @@ The External operator release bundle self-test documents transfer-package fail-c
 - `pass` `child_status_current_visible_contribution_terms`: missing=[]
 - `pass` `outreach_current_visible_contribution_terms`: missing=[]
 - `pass` `reviewer_current_visible_contribution_terms`: missing=[]
+- `pass` `send_ready_outreach_current_visible_contribution_terms`: missing=[]
 - `pass` `public_pdf_metadata_matches_canonical_artifact`: sha=AE310705B235339B73987C6E2DBD31439C50F78ADD364D5593302A9733D83A5B, size=469674, missing_sha=[], missing_size=[]

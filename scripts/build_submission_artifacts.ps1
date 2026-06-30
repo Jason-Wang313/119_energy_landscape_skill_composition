@@ -244,6 +244,10 @@ try {
         Invoke-Native python scripts\build_reviewer_response_packet.py
     }
 
+    Invoke-Step "Build Haonan/Yilun send-ready outreach" {
+        Invoke-Native python scripts\build_haonan_yilun_send_ready_outreach.py
+    }
+
     Invoke-Step "Audit visible contribution docs" {
         Invoke-Native python scripts\audit_visible_contribution.py
     }
