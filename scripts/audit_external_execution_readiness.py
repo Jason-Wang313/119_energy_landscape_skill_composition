@@ -1112,6 +1112,14 @@ def main() -> int:
     )
     add_check(checks, "external_ablation_collection_packet_ready", ablation_ok, ablation_detail)
     ablation_checks = {check.get("name"): check.get("passed") for check in ablation_packet.get("checks", []) or []}
+    ablation_self_ok, ablation_self_test, ablation_self_detail = passed_json(
+        RESULTS / "external_ablation_collection_packet_self_test.json",
+        version="external_ablation_collection_packet_self_test_v1",
+    )
+    add_check(checks, "external_ablation_collection_packet_self_test_ready", ablation_self_ok, ablation_self_detail)
+    ablation_self_checks = {
+        check.get("name"): check.get("passed") for check in ablation_self_test.get("checks", []) or []
+    }
     add_check(
         checks,
         "external_ablation_collection_not_evidence",
@@ -1131,7 +1139,15 @@ def main() -> int:
         and int(ablation_packet.get("expected_ablation_records", 0) or 0) >= 600
         and ablation_checks.get("every_required_ablation_has_work_order") is True
         and ablation_checks.get("required_ablations_match_strict_audit") is True
+        and ablation_checks.get("work_orders_are_actionable_and_artifact_bound") is True
         and ablation_checks.get("operator_commands_cover_collection_manifest_rollout_and_strict_evidence") is True
+        and ablation_self_test.get("passed") is True
+        and ablation_self_test.get("temporary_packet_ready") is True
+        and ablation_self_test.get("work_order_artifact_command_drift_rejected") is True
+        and ablation_self_test.get("strict_command_drift_rejected") is True
+        and ablation_self_test.get("real_outputs_untouched") is True
+        and ablation_self_checks.get("temporary_ablation_collection_packet_ready_but_non_evidence") is True
+        and ablation_self_checks.get("real_ablation_packet_outputs_untouched") is True
         and (EXTERNAL / "ablation_collection_packet.json").exists()
         and (EXTERNAL / "ablation_collection_packet.md").exists()
         and (EXTERNAL / "ablation_collection_work_orders.csv").exists(),
@@ -1643,6 +1659,7 @@ def main() -> int:
         EXTERNAL / "ablation_collection_packet.json",
         EXTERNAL / "ablation_collection_packet.md",
         EXTERNAL / "ablation_collection_work_orders.csv",
+        RESULTS / "external_ablation_collection_packet_self_test.md",
         EXTERNAL / "method_implementation_packet.json",
         EXTERNAL / "method_implementation_packet.md",
         EXTERNAL / "method_implementation_work_orders.csv",
@@ -1814,6 +1831,7 @@ def main() -> int:
         "external_rollout_evidence_covers_raw_log_blocker",
         "external_rollout_evidence_gate_order",
         "external_ablation_collection_packet_ready",
+        "external_ablation_collection_packet_self_test_ready",
         "external_ablation_collection_not_evidence",
         "external_ablation_collection_covers_strict_ablation_blocker",
         "external_evidence_intake_ledger_ready",

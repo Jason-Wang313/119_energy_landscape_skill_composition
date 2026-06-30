@@ -511,12 +511,17 @@
       "passed": true
     },
     {
+      "detail": "passed",
+      "name": "external_ablation_collection_packet_self_test_ready",
+      "passed": true
+    },
+    {
       "detail": "not_external_evidence=True, manifest_ablation_evidence_ready=False, strict_external_evidence_ready=False",
       "name": "external_ablation_collection_not_evidence",
       "passed": true
     },
     {
-      "detail": "work_order_count=5, expected_ablation_records=600, checks={'packet_is_non_evidence_and_fail_closed': True, 'collection_plan_loaded': True, 'task_and_reset_budget_preserved': True, 'required_ablations_match_strict_audit': True, 'every_required_ablation_has_work_order': True, 'work_orders_use_local_reference_variants': True, 'manifest_template_declares_ablation_booleans': True, 'operator_commands_cover_collection_manifest_rollout_and_strict_evidence': True, 'no_real_manifest_written': True}",
+      "detail": "work_order_count=5, expected_ablation_records=600, checks={'packet_is_non_evidence_and_fail_closed': True, 'collection_plan_loaded': True, 'task_and_reset_budget_preserved': True, 'required_ablations_match_strict_audit': True, 'every_required_ablation_has_work_order': True, 'work_orders_use_local_reference_variants': True, 'work_orders_are_actionable_and_artifact_bound': True, 'manifest_template_declares_ablation_booleans': True, 'operator_commands_cover_collection_manifest_rollout_and_strict_evidence': True, 'no_real_manifest_written': True}",
       "name": "external_ablation_collection_covers_strict_ablation_blocker",
       "passed": true
     },
@@ -746,7 +751,7 @@
       "passed": true
     },
     {
-      "detail": "included_file_count=355, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 116, 'method_config_candidate': 11, 'operator_command_source': 53, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "included_file_count=358, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 118, 'method_config_candidate': 11, 'operator_command_source': 54, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "external_operator_handoff_bundle_hash_manifest",
       "passed": true
     },

@@ -1,4 +1,5 @@
 {
+  "ablation_collection_packet_ready": true,
   "audit_version": "external_ablation_collection_audit_v1",
   "blocking_missing": [
     "manifest.ablations.basin_overlap is not true with manifest-declared external ablation evidence",
@@ -9,7 +10,7 @@
   ],
   "checks": [
     {
-      "detail": "writes only packet/audit/work-order files",
+      "detail": "not_external_evidence=True, strict_external_evidence_ready=False, manifest_ablation_evidence_ready=False",
       "name": "packet_is_non_evidence_and_fail_closed",
       "passed": true
     },
@@ -19,23 +20,28 @@
       "passed": true
     },
     {
-      "detail": "tasks=['peg_place_regrasp', 'drawer_to_pick_transfer', 'door_open_navigation', 'cable_route_insert'], resets_per_task=30, expected_records=600",
+      "detail": "tasks=['peg_place_regrasp', 'drawer_to_pick_transfer', 'door_open_navigation', 'cable_route_insert'], resets_per_task=30, packet_expected=600, recomputed_expected=600",
       "name": "task_and_reset_budget_preserved",
       "passed": true
     },
     {
-      "detail": "strict_missing=['basin_overlap', 'barrier_height', 'descent_continuity', 'risk_calibration', 'seam_repair']",
+      "detail": "strict_missing=['basin_overlap', 'barrier_height', 'descent_continuity', 'risk_calibration', 'seam_repair'], packet_ablation_ids=['barrier_height', 'basin_overlap', 'descent_continuity', 'risk_calibration', 'seam_repair']",
       "name": "required_ablations_match_strict_audit",
       "passed": true
     },
     {
-      "detail": "work_orders=5",
+      "detail": "work_orders=5, ids=['barrier_height', 'basin_overlap', 'descent_continuity', 'risk_calibration', 'seam_repair']",
       "name": "every_required_ablation_has_work_order",
       "passed": true
     },
     {
-      "detail": "local ablation variants are present in results/ablation_metrics.csv",
+      "detail": "local ablation variants are present in results/ablation_metrics.csv and bound in work orders",
       "name": "work_orders_use_local_reference_variants",
+      "passed": true
+    },
+    {
+      "detail": "each work order binds same configs/resets/interfaces/budget, JSONL/video artifacts, manifest ablation booleans, and strict acceptance commands",
+      "name": "work_orders_are_actionable_and_artifact_bound",
       "passed": true
     },
     {
@@ -112,5 +118,72 @@
   ],
   "version": "external_ablation_collection_audit_v1",
   "work_order_count": 5,
+  "work_orders": [
+    {
+      "ablation": "basin_overlap",
+      "acceptance_commands": "python scripts\\build_external_ablation_collection_packet.py | python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map | python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map | python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD> | python scripts\\audit_external_postcollection_seal_consistency.py | python scripts\\build_external_manifest.py --write --check-video-paths | python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict | python scripts\\audit_external_evidence.py --strict",
+      "component_removed": "basin-overlap posterior",
+      "expected_records": 120,
+      "external_variant": "minus_basin_overlap",
+      "id": "collect_ablation_basin_overlap",
+      "local_reference_variant": "minus_basin_overlap",
+      "operator_input": "run this ablated variant on the same accepted task configs, skill library, reset ids, initial-state hashes, observation interface, and compute budget as the primary method",
+      "paired_resets_per_task": 30,
+      "required_artifacts": "external_validation/logs/<task_family>.jsonl; external_validation/videos/<task_family>/<run_id>_<ablation>.mp4; external_validation/manifest.json ablations.basin_overlap=true",
+      "task_families": "peg_place_regrasp;drawer_to_pick_transfer;door_open_navigation;cable_route_insert"
+    },
+    {
+      "ablation": "barrier_height",
+      "acceptance_commands": "python scripts\\build_external_ablation_collection_packet.py | python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map | python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map | python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD> | python scripts\\audit_external_postcollection_seal_consistency.py | python scripts\\build_external_manifest.py --write --check-video-paths | python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict | python scripts\\audit_external_evidence.py --strict",
+      "component_removed": "barrier-height term",
+      "expected_records": 120,
+      "external_variant": "minus_barrier_height",
+      "id": "collect_ablation_barrier_height",
+      "local_reference_variant": "minus_barrier_height",
+      "operator_input": "run this ablated variant on the same accepted task configs, skill library, reset ids, initial-state hashes, observation interface, and compute budget as the primary method",
+      "paired_resets_per_task": 30,
+      "required_artifacts": "external_validation/logs/<task_family>.jsonl; external_validation/videos/<task_family>/<run_id>_<ablation>.mp4; external_validation/manifest.json ablations.barrier_height=true",
+      "task_families": "peg_place_regrasp;drawer_to_pick_transfer;door_open_navigation;cable_route_insert"
+    },
+    {
+      "ablation": "descent_continuity",
+      "acceptance_commands": "python scripts\\build_external_ablation_collection_packet.py | python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map | python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map | python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD> | python scripts\\audit_external_postcollection_seal_consistency.py | python scripts\\build_external_manifest.py --write --check-video-paths | python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict | python scripts\\audit_external_evidence.py --strict",
+      "component_removed": "descent-continuity term",
+      "expected_records": 120,
+      "external_variant": "minus_descent_continuity",
+      "id": "collect_ablation_descent_continuity",
+      "local_reference_variant": "minus_descent_continuity",
+      "operator_input": "run this ablated variant on the same accepted task configs, skill library, reset ids, initial-state hashes, observation interface, and compute budget as the primary method",
+      "paired_resets_per_task": 30,
+      "required_artifacts": "external_validation/logs/<task_family>.jsonl; external_validation/videos/<task_family>/<run_id>_<ablation>.mp4; external_validation/manifest.json ablations.descent_continuity=true",
+      "task_families": "peg_place_regrasp;drawer_to_pick_transfer;door_open_navigation;cable_route_insert"
+    },
+    {
+      "ablation": "risk_calibration",
+      "acceptance_commands": "python scripts\\build_external_ablation_collection_packet.py | python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map | python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map | python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD> | python scripts\\audit_external_postcollection_seal_consistency.py | python scripts\\build_external_manifest.py --write --check-video-paths | python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict | python scripts\\audit_external_evidence.py --strict",
+      "component_removed": "risk calibration",
+      "expected_records": 120,
+      "external_variant": "minus_calibration",
+      "id": "collect_ablation_risk_calibration",
+      "local_reference_variant": "minus_calibration",
+      "operator_input": "run this ablated variant on the same accepted task configs, skill library, reset ids, initial-state hashes, observation interface, and compute budget as the primary method",
+      "paired_resets_per_task": 30,
+      "required_artifacts": "external_validation/logs/<task_family>.jsonl; external_validation/videos/<task_family>/<run_id>_<ablation>.mp4; external_validation/manifest.json ablations.risk_calibration=true",
+      "task_families": "peg_place_regrasp;drawer_to_pick_transfer;door_open_navigation;cable_route_insert"
+    },
+    {
+      "ablation": "seam_repair",
+      "acceptance_commands": "python scripts\\build_external_ablation_collection_packet.py | python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map | python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map | python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD> | python scripts\\audit_external_postcollection_seal_consistency.py | python scripts\\build_external_manifest.py --write --check-video-paths | python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict | python scripts\\audit_external_evidence.py --strict",
+      "component_removed": "high-energy seam repair",
+      "expected_records": 120,
+      "external_variant": "minus_high_energy_repair",
+      "id": "collect_ablation_seam_repair",
+      "local_reference_variant": "minus_high_energy_repair",
+      "operator_input": "run this ablated variant on the same accepted task configs, skill library, reset ids, initial-state hashes, observation interface, and compute budget as the primary method",
+      "paired_resets_per_task": 30,
+      "required_artifacts": "external_validation/logs/<task_family>.jsonl; external_validation/videos/<task_family>/<run_id>_<ablation>.mp4; external_validation/manifest.json ablations.seam_repair=true",
+      "task_families": "peg_place_regrasp;drawer_to_pick_transfer;door_open_navigation;cable_route_insert"
+    }
+  ],
   "work_orders_path": "external_validation/ablation_collection_work_orders.csv"
 }

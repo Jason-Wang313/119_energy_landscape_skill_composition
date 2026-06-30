@@ -182,6 +182,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_rollout_evidence_packet.py",
         SCRIPTS / "self_test_external_rollout_evidence_packet.py",
         SCRIPTS / "build_external_ablation_collection_packet.py",
+        SCRIPTS / "self_test_external_ablation_collection_packet.py",
         SCRIPTS / "build_external_evidence_intake_ledger.py",
         SCRIPTS / "build_external_precollection_freeze_receipt.py",
         SCRIPTS / "build_external_postcollection_evidence_seal.py",
@@ -261,6 +262,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_rollout_evidence_packet_self_test.md",
         RESULTS / "external_ablation_collection_audit.json",
         RESULTS / "external_ablation_collection_audit.md",
+        RESULTS / "external_ablation_collection_packet_self_test.json",
+        RESULTS / "external_ablation_collection_packet_self_test.md",
         RESULTS / "external_evidence_intake_ledger_audit.json",
         RESULTS / "external_evidence_intake_ledger_audit.md",
         RESULTS / "external_precollection_freeze_receipt_audit.json",
@@ -422,6 +425,10 @@ def build_payload() -> dict[str, Any]:
         "external_rollout_evidence_packet_self_test_v1",
     )
     ablation_packet = require_payload(RESULTS / "external_ablation_collection_audit.json", "external_ablation_collection_audit_v1")
+    ablation_packet_self_test = require_payload(
+        RESULTS / "external_ablation_collection_packet_self_test.json",
+        "external_ablation_collection_packet_self_test_v1",
+    )
     evidence_intake = require_payload(RESULTS / "external_evidence_intake_ledger_audit.json", "external_evidence_intake_ledger_v1")
     precollection_freeze = require_payload(
         RESULTS / "external_precollection_freeze_receipt_audit.json",
@@ -999,6 +1006,7 @@ def build_payload() -> dict[str, Any]:
         and int(ablation_packet.get("work_order_count", 0) or 0) == 5
         and int(ablation_packet.get("expected_ablation_records", 0) or 0) >= 600
         and ablation_checks.get("every_required_ablation_has_work_order") is True
+        and ablation_checks.get("work_orders_are_actionable_and_artifact_bound") is True
         and ablation_checks.get("operator_commands_cover_collection_manifest_rollout_and_strict_evidence") is True
         and "external_validation/ablation_collection_packet.json" in paths
         and "external_validation/ablation_collection_packet.md" in paths
@@ -1009,6 +1017,29 @@ def build_payload() -> dict[str, Any]:
             f"work_order_count={ablation_packet.get('work_order_count')!r}, "
             f"expected_ablation_records={ablation_packet.get('expected_ablation_records')!r}, "
             f"manifest_ablation_evidence_ready={ablation_packet.get('manifest_ablation_evidence_ready')!r}"
+        ),
+    )
+    ablation_self_checks = {
+        check.get("name"): check.get("passed") for check in ablation_packet_self_test.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "ablation_collection_packet_self_test_included",
+        ablation_packet_self_test.get("passed") is True
+        and ablation_packet_self_test.get("not_external_evidence") is True
+        and ablation_packet_self_test.get("temporary_packet_ready") is True
+        and ablation_packet_self_test.get("work_order_artifact_command_drift_rejected") is True
+        and ablation_packet_self_test.get("strict_command_drift_rejected") is True
+        and ablation_packet_self_test.get("real_outputs_untouched") is True
+        and ablation_self_checks.get("temporary_ablation_collection_packet_ready_but_non_evidence") is True
+        and ablation_self_checks.get("real_ablation_packet_outputs_untouched") is True
+        and "results/external_ablation_collection_packet_self_test.json" in paths
+        and "results/external_ablation_collection_packet_self_test.md" in paths
+        and "scripts/self_test_external_ablation_collection_packet.py" in paths,
+        (
+            f"temporary_packet_ready={ablation_packet_self_test.get('temporary_packet_ready')!r}, "
+            f"work_order_artifact_command_drift_rejected={ablation_packet_self_test.get('work_order_artifact_command_drift_rejected')!r}, "
+            f"strict_command_drift_rejected={ablation_packet_self_test.get('strict_command_drift_rejected')!r}"
         ),
     )
     intake_checks = {check.get("name"): check.get("passed") for check in evidence_intake.get("checks", []) or []}

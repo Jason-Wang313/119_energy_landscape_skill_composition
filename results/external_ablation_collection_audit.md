@@ -53,12 +53,13 @@ python scripts\audit_external_evidence.py --strict
 
 ## Checks
 
-- `pass` `packet_is_non_evidence_and_fail_closed`: writes only packet/audit/work-order files
+- `pass` `packet_is_non_evidence_and_fail_closed`: not_external_evidence=True, strict_external_evidence_ready=False, manifest_ablation_evidence_ready=False
 - `pass` `collection_plan_loaded`: passed=True, not_external_evidence=True
-- `pass` `task_and_reset_budget_preserved`: tasks=['peg_place_regrasp', 'drawer_to_pick_transfer', 'door_open_navigation', 'cable_route_insert'], resets_per_task=30, expected_records=600
-- `pass` `required_ablations_match_strict_audit`: strict_missing=['basin_overlap', 'barrier_height', 'descent_continuity', 'risk_calibration', 'seam_repair']
-- `pass` `every_required_ablation_has_work_order`: work_orders=5
-- `pass` `work_orders_use_local_reference_variants`: local ablation variants are present in results/ablation_metrics.csv
+- `pass` `task_and_reset_budget_preserved`: tasks=['peg_place_regrasp', 'drawer_to_pick_transfer', 'door_open_navigation', 'cable_route_insert'], resets_per_task=30, packet_expected=600, recomputed_expected=600
+- `pass` `required_ablations_match_strict_audit`: strict_missing=['basin_overlap', 'barrier_height', 'descent_continuity', 'risk_calibration', 'seam_repair'], packet_ablation_ids=['barrier_height', 'basin_overlap', 'descent_continuity', 'risk_calibration', 'seam_repair']
+- `pass` `every_required_ablation_has_work_order`: work_orders=5, ids=['barrier_height', 'basin_overlap', 'descent_continuity', 'risk_calibration', 'seam_repair']
+- `pass` `work_orders_use_local_reference_variants`: local ablation variants are present in results/ablation_metrics.csv and bound in work orders
+- `pass` `work_orders_are_actionable_and_artifact_bound`: each work order binds same configs/resets/interfaces/budget, JSONL/video artifacts, manifest ablation booleans, and strict acceptance commands
 - `pass` `manifest_template_declares_ablation_booleans`: manifest_ablation_keys=['barrier_height', 'basin_overlap', 'descent_continuity', 'risk_calibration', 'seam_repair']
 - `pass` `operator_commands_cover_collection_manifest_rollout_and_strict_evidence`: strict ablation commands preserve collection-to-manifest gate order
 - `pass` `no_real_manifest_written`: external_validation/manifest.json remains absent before real evidence

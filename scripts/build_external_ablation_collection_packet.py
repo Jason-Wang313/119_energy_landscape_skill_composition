@@ -132,6 +132,192 @@ def build_work_orders(collection: dict[str, Any]) -> list[dict[str, Any]]:
     return orders
 
 
+def required_ablation_ids() -> set[str]:
+    return {row["id"] for row in REQUIRED_ABLATIONS}
+
+
+def order_map(work_orders: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    return {
+        str(order.get("ablation", "")): order
+        for order in work_orders
+        if isinstance(order, dict) and str(order.get("ablation", ""))
+    }
+
+
+def work_orders_are_actionable(work_orders: list[dict[str, Any]], task_families: list[str], resets_per_task: int) -> bool:
+    orders_by_ablation = order_map(work_orders)
+    required_fragments = (
+        "same accepted task configs",
+        "skill library",
+        "reset ids",
+        "initial-state hashes",
+        "observation interface",
+        "compute budget",
+    )
+    required_command_fragments = (
+        "real_collection_runner.py",
+        "build_external_postcollection_evidence_seal.py",
+        "audit_external_postcollection_seal_consistency.py",
+        "build_external_manifest.py --write",
+        "validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "audit_external_evidence.py --strict",
+    )
+    for row in REQUIRED_ABLATIONS:
+        order = orders_by_ablation.get(row["id"])
+        if not order:
+            return False
+        operator_input = str(order.get("operator_input", ""))
+        required_artifacts = str(order.get("required_artifacts", ""))
+        commands = str(order.get("acceptance_commands", ""))
+        task_field = str(order.get("task_families", ""))
+        expected_records = int(order.get("expected_records", 0) or 0)
+        if row["external_variant"] != order.get("external_variant"):
+            return False
+        if row["local_reference_variant"] != order.get("local_reference_variant"):
+            return False
+        if expected_records != len(task_families) * resets_per_task:
+            return False
+        if not all(task in task_field for task in task_families):
+            return False
+        if not all(fragment in operator_input for fragment in required_fragments):
+            return False
+        if "external_validation/logs/<task_family>.jsonl" not in required_artifacts:
+            return False
+        if "external_validation/videos/<task_family>/<run_id>_<ablation>.mp4" not in required_artifacts:
+            return False
+        if f"external_validation/manifest.json ablations.{row['id']}=true" not in required_artifacts:
+            return False
+        if not all(fragment in commands for fragment in required_command_fragments):
+            return False
+    return True
+
+
+def audit_packet(
+    packet: dict[str, Any],
+    collection: dict[str, Any],
+    evidence: dict[str, Any],
+    manifest_template: dict[str, Any],
+) -> dict[str, Any]:
+    tasks = collection_tasks(collection)
+    task_families = [str(task.get("task_family", "")) for task in tasks if str(task.get("task_family", ""))]
+    resets_per_task = min((int(task.get("episodes_per_method", 0) or 0) for task in tasks), default=0)
+    recomputed_expected_records = len(task_families) * resets_per_task * len(REQUIRED_ABLATIONS)
+    missing = strict_missing_ablations(evidence)
+    manifest_ablations = manifest_template.get("ablations", {})
+    manifest_ablations = manifest_ablations if isinstance(manifest_ablations, dict) else {}
+    work_orders = [order for order in packet.get("work_orders", []) or [] if isinstance(order, dict)]
+    packet_ablation_ids = {str(row.get("id", "")) for row in packet.get("required_ablations", []) or []}
+    local_ablation_csv = ROOT / "results" / "ablation_metrics.csv"
+
+    checks: list[dict[str, Any]] = []
+    add_check(
+        checks,
+        "packet_is_non_evidence_and_fail_closed",
+        packet.get("not_external_evidence") is True
+        and packet.get("strict_external_evidence_ready") is False
+        and packet.get("manifest_ablation_evidence_ready") is False,
+        (
+            f"not_external_evidence={packet.get('not_external_evidence')!r}, "
+            f"strict_external_evidence_ready={packet.get('strict_external_evidence_ready')!r}, "
+            f"manifest_ablation_evidence_ready={packet.get('manifest_ablation_evidence_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "collection_plan_loaded",
+        collection.get("passed") is True and collection.get("not_external_evidence") is True,
+        f"passed={collection.get('passed')!r}, not_external_evidence={collection.get('not_external_evidence')!r}",
+    )
+    add_check(
+        checks,
+        "task_and_reset_budget_preserved",
+        len(task_families) >= 4
+        and resets_per_task >= 30
+        and recomputed_expected_records >= 600
+        and int(packet.get("expected_ablation_records", 0) or 0) == recomputed_expected_records
+        and packet.get("task_families") == task_families,
+        (
+            f"tasks={task_families}, resets_per_task={resets_per_task}, "
+            f"packet_expected={packet.get('expected_ablation_records')!r}, "
+            f"recomputed_expected={recomputed_expected_records}"
+        ),
+    )
+    add_check(
+        checks,
+        "required_ablations_match_strict_audit",
+        set(missing) == required_ablation_ids()
+        and packet_ablation_ids == required_ablation_ids()
+        and set(packet.get("blocking_missing", []) or [])
+        == {
+            f"manifest.ablations.{name} is not true with manifest-declared external ablation evidence"
+            for name in missing
+        },
+        f"strict_missing={missing}, packet_ablation_ids={sorted(packet_ablation_ids)}",
+    )
+    add_check(
+        checks,
+        "every_required_ablation_has_work_order",
+        set(order_map(work_orders)) == required_ablation_ids()
+        and int(packet.get("work_order_count", 0) or 0) == len(REQUIRED_ABLATIONS),
+        f"work_orders={len(work_orders)}, ids={sorted(order_map(work_orders))}",
+    )
+    add_check(
+        checks,
+        "work_orders_use_local_reference_variants",
+        local_ablation_csv.exists()
+        and all(row["local_reference_variant"] in local_ablation_csv.read_text(encoding="utf-8") for row in REQUIRED_ABLATIONS)
+        and all(
+            order_map(work_orders).get(row["id"], {}).get("local_reference_variant") == row["local_reference_variant"]
+            for row in REQUIRED_ABLATIONS
+        ),
+        "local ablation variants are present in results/ablation_metrics.csv and bound in work orders",
+    )
+    add_check(
+        checks,
+        "work_orders_are_actionable_and_artifact_bound",
+        work_orders_are_actionable(work_orders, task_families, resets_per_task),
+        "each work order binds same configs/resets/interfaces/budget, JSONL/video artifacts, manifest ablation booleans, and strict acceptance commands",
+    )
+    add_check(
+        checks,
+        "manifest_template_declares_ablation_booleans",
+        all(name in manifest_ablations for name in required_ablation_ids())
+        and all(manifest_ablations.get(name) is False for name in required_ablation_ids()),
+        f"manifest_ablation_keys={sorted(manifest_ablations)}",
+    )
+    command_text = "\n".join(str(command) for command in packet.get("operator_commands", []) or [])
+    add_check(
+        checks,
+        "operator_commands_cover_collection_manifest_rollout_and_strict_evidence",
+        all(
+            term in command_text
+            for term in (
+                "real_collection_runner.py",
+                "build_external_postcollection_evidence_seal.py",
+                "audit_external_postcollection_seal_consistency.py",
+                "build_external_manifest.py",
+                "validate_external_rollouts.py",
+                "audit_external_evidence.py",
+            )
+        ),
+        "strict ablation commands preserve collection-to-manifest gate order",
+    )
+    add_check(
+        checks,
+        "no_real_manifest_written",
+        not (EXTERNAL / "manifest.json").exists(),
+        "external_validation/manifest.json remains absent before real evidence",
+    )
+
+    passed = all(check["passed"] for check in checks)
+    return {
+        **packet,
+        "passed": passed,
+        "ablation_collection_packet_ready": passed,
+        "checks": checks,
+    }
+
+
 def write_csv(rows: list[dict[str, Any]]) -> None:
     WORK_ORDERS_CSV.parent.mkdir(exist_ok=True)
     fieldnames = [
@@ -190,7 +376,6 @@ def main() -> int:
     collection = read_json(RESULTS / "external_collection_plan.json")
     evidence = read_json(RESULTS / "external_evidence_audit.json")
     manifest_template = read_json(EXTERNAL / "manifest_template.json")
-    local_ablation_csv = ROOT / "results" / "ablation_metrics.csv"
 
     tasks = collection_tasks(collection)
     task_families = [str(task.get("task_family", "")) for task in tasks if str(task.get("task_family", ""))]
@@ -198,77 +383,11 @@ def main() -> int:
     work_orders = build_work_orders(collection)
     expected_records = sum(int(order["expected_records"]) for order in work_orders)
     missing = strict_missing_ablations(evidence)
-    manifest_ablations = manifest_template.get("ablations", {})
-    manifest_ablations = manifest_ablations if isinstance(manifest_ablations, dict) else {}
 
-    checks: list[dict[str, Any]] = []
-    add_check(checks, "packet_is_non_evidence_and_fail_closed", True, "writes only packet/audit/work-order files")
-    add_check(
-        checks,
-        "collection_plan_loaded",
-        collection.get("passed") is True and collection.get("not_external_evidence") is True,
-        f"passed={collection.get('passed')!r}, not_external_evidence={collection.get('not_external_evidence')!r}",
-    )
-    add_check(
-        checks,
-        "task_and_reset_budget_preserved",
-        len(task_families) >= 4 and resets_per_task >= 30 and expected_records >= 600,
-        f"tasks={task_families}, resets_per_task={resets_per_task}, expected_records={expected_records}",
-    )
-    add_check(
-        checks,
-        "required_ablations_match_strict_audit",
-        set(missing) == {row["id"] for row in REQUIRED_ABLATIONS},
-        f"strict_missing={missing}",
-    )
-    add_check(
-        checks,
-        "every_required_ablation_has_work_order",
-        {order["ablation"] for order in work_orders} == {row["id"] for row in REQUIRED_ABLATIONS},
-        f"work_orders={len(work_orders)}",
-    )
-    add_check(
-        checks,
-        "work_orders_use_local_reference_variants",
-        local_ablation_csv.exists()
-        and all(row["local_reference_variant"] in local_ablation_csv.read_text(encoding="utf-8") for row in REQUIRED_ABLATIONS),
-        "local ablation variants are present in results/ablation_metrics.csv",
-    )
-    add_check(
-        checks,
-        "manifest_template_declares_ablation_booleans",
-        all(name in manifest_ablations for name in {row["id"] for row in REQUIRED_ABLATIONS}),
-        f"manifest_ablation_keys={sorted(manifest_ablations)}",
-    )
-    command_text = "\n".join(STRICT_COMMANDS)
-    add_check(
-        checks,
-        "operator_commands_cover_collection_manifest_rollout_and_strict_evidence",
-        all(
-            term in command_text
-            for term in (
-                "real_collection_runner.py",
-                "build_external_postcollection_evidence_seal.py",
-                "audit_external_postcollection_seal_consistency.py",
-                "build_external_manifest.py",
-                "validate_external_rollouts.py",
-                "audit_external_evidence.py",
-            )
-        ),
-        "strict ablation commands preserve collection-to-manifest gate order",
-    )
-    add_check(
-        checks,
-        "no_real_manifest_written",
-        not (EXTERNAL / "manifest.json").exists(),
-        "external_validation/manifest.json remains absent before real evidence",
-    )
-
-    passed = all(check["passed"] for check in checks)
-    payload = {
+    payload = audit_packet(
+        {
         "version": PACKET_VERSION,
         "audit_version": AUDIT_VERSION,
-        "passed": passed,
         "not_external_evidence": True,
         "strict_external_evidence_ready": False,
         "manifest_ablation_evidence_ready": False,
@@ -280,13 +399,18 @@ def main() -> int:
         "expected_ablation_records": expected_records,
         "work_order_count": len(work_orders),
         "work_orders_path": rel(WORK_ORDERS_CSV),
+        "work_orders": work_orders,
         "operator_commands": STRICT_COMMANDS,
         "blocking_missing": [
             f"manifest.ablations.{name} is not true with manifest-declared external ablation evidence"
             for name in missing
         ],
-        "checks": checks,
-    }
+        },
+        collection,
+        evidence,
+        manifest_template,
+    )
+    passed = payload["passed"]
 
     EXTERNAL.mkdir(exist_ok=True)
     RESULTS.mkdir(exist_ok=True)

@@ -144,6 +144,7 @@ def main():
         "scripts\\self_test_external_config_manifest_packet.py",
         "scripts\\build_external_rollout_evidence_packet.py",
         "scripts\\build_external_ablation_collection_packet.py",
+        "scripts\\self_test_external_ablation_collection_packet.py",
         "scripts\\build_external_evidence_intake_ledger.py",
         "scripts\\build_external_precollection_manifest_draft.py",
         "scripts\\build_external_precollection_freeze_receipt.py",
@@ -255,6 +256,7 @@ def main():
         "python scripts/build_external_config_manifest_packet.py",
         "python scripts/build_external_rollout_evidence_packet.py",
         "python scripts/build_external_ablation_collection_packet.py",
+        "python scripts/self_test_external_ablation_collection_packet.py",
         "python scripts/build_external_evidence_intake_ledger.py",
         "python scripts/build_external_precollection_manifest_draft.py",
         "python scripts/build_external_precollection_freeze_receipt.py",
@@ -3737,18 +3739,24 @@ def main():
     ablation_orders_path = EXTERNAL / "ablation_collection_work_orders.csv"
     ablation_audit_path = RESULTS / "external_ablation_collection_audit.json"
     ablation_audit_md_path = RESULTS / "external_ablation_collection_audit.md"
+    ablation_self_test_path = RESULTS / "external_ablation_collection_packet_self_test.json"
+    ablation_self_test_md_path = RESULTS / "external_ablation_collection_packet_self_test.md"
     for path in (
         ROOT / "scripts" / "build_external_ablation_collection_packet.py",
+        ROOT / "scripts" / "self_test_external_ablation_collection_packet.py",
         ablation_packet_path,
         ablation_packet_md_path,
         ablation_orders_path,
         ablation_audit_path,
         ablation_audit_md_path,
+        ablation_self_test_path,
+        ablation_self_test_md_path,
     ):
         if not path.exists():
             fail(f"missing external ablation collection packet artifact: {path}")
     ablation_packet = json.loads(ablation_packet_path.read_text(encoding="utf-8"))
     ablation_audit = json.loads(ablation_audit_path.read_text(encoding="utf-8"))
+    ablation_self_test = json.loads(ablation_self_test_path.read_text(encoding="utf-8"))
     required_ablation_ids = {
         "basin_overlap",
         "barrier_height",
@@ -3766,6 +3774,8 @@ def main():
             fail(f"external ablation collection {label} version mismatch")
         if payload.get("passed") is not True:
             fail(f"external ablation collection {label} did not pass")
+        if payload.get("ablation_collection_packet_ready") is not True:
+            fail(f"external ablation collection {label} must declare packet readiness")
         if payload.get("not_external_evidence") is not True:
             fail(f"external ablation collection {label} must declare that it is not evidence")
         if payload.get("strict_external_evidence_ready") is not False:
@@ -3798,12 +3808,54 @@ def main():
         "required_ablations_match_strict_audit",
         "every_required_ablation_has_work_order",
         "work_orders_use_local_reference_variants",
+        "work_orders_are_actionable_and_artifact_bound",
         "manifest_template_declares_ablation_booleans",
         "operator_commands_cover_collection_manifest_rollout_and_strict_evidence",
         "no_real_manifest_written",
     ):
         if ablation_checks.get(required_check) is not True:
             fail(f"external ablation collection audit missing passing check: {required_check}")
+    if ablation_self_test.get("version") != "external_ablation_collection_packet_self_test_v1":
+        fail("external ablation collection packet self-test version mismatch")
+    if ablation_self_test.get("passed") is not True:
+        fail("external ablation collection packet self-test did not pass")
+    if ablation_self_test.get("not_external_evidence") is not True:
+        fail("external ablation collection packet self-test must declare that it is not evidence")
+    if ablation_self_test.get("strict_external_evidence_ready") is not False:
+        fail("external ablation collection packet self-test must keep strict external evidence false")
+    for field in (
+        "temporary_packet_ready",
+        "missing_work_order_rejected",
+        "premature_evidence_promotion_rejected",
+        "collection_budget_shrink_rejected",
+        "strict_missing_ablation_drift_rejected",
+        "local_reference_variant_drift_rejected",
+        "manifest_ablation_boolean_omission_rejected",
+        "work_order_artifact_command_drift_rejected",
+        "strict_command_drift_rejected",
+        "real_manifest_write_rejected",
+        "packet_file_deletion_rejected",
+        "real_outputs_untouched",
+    ):
+        if ablation_self_test.get(field) is not True:
+            fail(f"external ablation collection packet self-test field must be true: {field}")
+    ablation_self_checks = {check.get("name"): check.get("passed") for check in ablation_self_test.get("checks", [])}
+    for required_check in (
+        "temporary_ablation_collection_packet_ready_but_non_evidence",
+        "missing_ablation_work_order_rejected",
+        "premature_evidence_promotion_rejected",
+        "collection_budget_shrink_rejected",
+        "strict_missing_ablation_drift_rejected",
+        "local_reference_variant_drift_rejected",
+        "manifest_ablation_boolean_omission_rejected",
+        "work_order_artifact_command_drift_rejected",
+        "strict_command_drift_rejected",
+        "real_manifest_write_rejected",
+        "packet_file_deletion_rejected",
+        "real_ablation_packet_outputs_untouched",
+    ):
+        if ablation_self_checks.get(required_check) is not True:
+            fail(f"external ablation collection packet self-test missing passing check: {required_check}")
 
     intake_json_path = EXTERNAL / "evidence_intake_ledger.json"
     intake_md_path = EXTERNAL / "evidence_intake_ledger.md"
@@ -4320,6 +4372,7 @@ def main():
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.md",
         RESULTS / "external_ablation_collection_audit.md",
+        RESULTS / "external_ablation_collection_packet_self_test.md",
         RESULTS / "external_evidence_intake_ledger_audit.md",
         RESULTS / "external_pilot_smoke_audit.md",
         RESULTS / "external_pilot_smoke_packet_audit.md",
@@ -4954,6 +5007,7 @@ def main():
         "config_manifest_packet_included",
         "rollout_evidence_packet_included",
         "ablation_collection_packet_included",
+        "ablation_collection_packet_self_test_included",
         "evidence_intake_ledger_included",
         "precollection_manifest_draft_included",
         "precollection_freeze_receipt_included",

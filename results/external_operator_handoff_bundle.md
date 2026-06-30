@@ -4,7 +4,7 @@ Passed: `true`.
 Not evidence: `true`.
 Strict evidence ready: `false`.
 Start state: `DO_NOT_COLLECT_YET`.
-Included files: `358`.
+Included files: `361`.
 
 This is a hash-listed handoff manifest for an independent validation operator. It intentionally does not package rollout logs, videos, checkpoints, local dry-run artifacts, placeholder media, or `external_validation/manifest.json`. It is a non-evidence checklist for what to send before a real robot or accepted high-fidelity simulator run.
 
@@ -63,9 +63,9 @@ Post-collection strict gates:
 
 - `baseline_spec`: `12`
 - `config_template`: `4`
-- `generated_non_evidence_report`: `118`
+- `generated_non_evidence_report`: `120`
 - `method_config_candidate`: `11`
-- `operator_command_source`: `54`
+- `operator_command_source`: `55`
 - `operator_facing_input`: `86`
 - `prepared_config_input`: `4`
 - `reference_adapter`: `60`
@@ -83,14 +83,14 @@ Post-collection strict gates:
 
 ## Included Files
 
-- `README.md` (operator_facing_input, 33008 bytes, sha256 `2B11B0D87E7214F49BE8C86678C6CBE1AE513567040B205FE8204D33C00D165C`)
+- `README.md` (operator_facing_input, 33116 bytes, sha256 `E817FDC90570159F8BDBC0D16D1D2330FE1327FE1D61A1D4A3FD21CFAC3B17A2`)
 - `docs/haonan_yilun_outreach_package.md` (operator_facing_input, 14198 bytes, sha256 `62C8BFD6CAEAF3D3F4A44A9B74B6B6E0D420FCBD59925A8A3C867586D716F0B8`)
 - `docs/independent_validation_protocol.md` (operator_facing_input, 21796 bytes, sha256 `7EDFEE348BE624FC1BA8818A88D526CC53B3632F3D31A1500A19F9C5A868FC2E`)
-- `docs/reproducibility_checklist.md` (operator_facing_input, 24316 bytes, sha256 `78932852EA5E775B2333FB3050475628D37C4E9DF587F15C116F63FD035A659C`)
-- `docs/submission_readiness_decision.md` (operator_facing_input, 25119 bytes, sha256 `06AB081C906436C5E728558CB911D32F4EDAFAA5D7F7D6F59D13E244E03F14B6`)
+- `docs/reproducibility_checklist.md` (operator_facing_input, 24503 bytes, sha256 `FA1F70179E130C8BEECDAE3C3458184AA482BD0185B4616ED134720C1FE076D0`)
+- `docs/submission_readiness_decision.md` (operator_facing_input, 25288 bytes, sha256 `39D12145D4C4E2AC4FBCB7C1DF994C00791003EEDB89662A9C84F73D186BC4B3`)
 - `external_validation/README.md` (operator_facing_input, 34698 bytes, sha256 `5E0E6D9D7D06DC4AB8F664ACC65BEEAEE65799B48D82753722812C08BBFB261B`)
-- `external_validation/ablation_collection_packet.json` (operator_facing_input, 5212 bytes, sha256 `93E9ED0730D12385B9C02230FC10B0469D4EEDCE85EFA58FF83ADB6D0FE6E0EA`)
-- `external_validation/ablation_collection_packet.md` (operator_facing_input, 3695 bytes, sha256 `BBA79EF72B352B4799A1EE7322BC1A20A0E996F71C9CCB8DF2F98307B455ED99`)
+- `external_validation/ablation_collection_packet.json` (operator_facing_input, 15553 bytes, sha256 `5B7814EF0C0555B0148B40B2D5E2B9DB1069C9BC1E1686C96E1411B1FA36D94E`)
+- `external_validation/ablation_collection_packet.md` (operator_facing_input, 4221 bytes, sha256 `CE3703F13541AAFB56EA072107D224E585DBFCB3025B97C9940A6DCEA536D545`)
 - `external_validation/ablation_collection_work_orders.csv` (operator_facing_input, 8153 bytes, sha256 `B441B51BAA4DA00DEC488C05E11EF8D381DF1B2D742024936691A12B16CBB1B7`)
 - `external_validation/adapter_acceptance_fixtures.csv` (operator_facing_input, 6081 bytes, sha256 `D03B5D89EE71FEA723CCC37A7092CD725574382CCC88C229784D7D5CE0CA8F54`)
 - `external_validation/adapter_acceptance_fixtures.json` (operator_facing_input, 41085 bytes, sha256 `9EE0526CF98600195B1E5257F9177C69346D2F3593ED582D67D3CB5797984D08`)
@@ -269,8 +269,10 @@ Post-collection strict gates:
 - `external_validation/task_cards/drawer_to_pick_transfer.md` (task_card, 1377 bytes, sha256 `0C335887FC667DB914B0C95B05B3C4EAFEFAE1A01D99195E8DBF39FFD4A302FC`)
 - `external_validation/task_cards/peg_place_regrasp.md` (task_card, 1372 bytes, sha256 `357F6A44637AD1D55E6E98775B60640FE0E7C0A32FE0C1707FC5863C00D3CDB9`)
 - `requirements.txt` (operator_facing_input, 89 bytes, sha256 `A2D11E893CA2585FFC7D208B887FADAD3D48F376565BD9A6E662FC968F3BF028`)
-- `results/external_ablation_collection_audit.json` (generated_non_evidence_report, 5211 bytes, sha256 `42DBE738EC9F7787C52F7A50B456BEEFA872ACECD813E66CA5855608684E4679`)
-- `results/external_ablation_collection_audit.md` (generated_non_evidence_report, 3695 bytes, sha256 `BBA79EF72B352B4799A1EE7322BC1A20A0E996F71C9CCB8DF2F98307B455ED99`)
+- `results/external_ablation_collection_audit.json` (generated_non_evidence_report, 15552 bytes, sha256 `586E5A58D35A79EAB496934C9FD2C09421B364CAC09F05C722FD0552A841A885`)
+- `results/external_ablation_collection_audit.md` (generated_non_evidence_report, 4221 bytes, sha256 `CE3703F13541AAFB56EA072107D224E585DBFCB3025B97C9940A6DCEA536D545`)
+- `results/external_ablation_collection_packet_self_test.json` (generated_non_evidence_report, 5078 bytes, sha256 `30FD2E9624834B38B24343B2D547964CC878043FE15AF38F42005731CFC23952`)
+- `results/external_ablation_collection_packet_self_test.md` (generated_non_evidence_report, 3402 bytes, sha256 `CA4711AC594E3A04C9B8C93E026C2B747DA1E8439CB4C481436B479D97A198B8`)
 - `results/external_acquisition_packet.json` (generated_non_evidence_report, 59292 bytes, sha256 `E979B897017D6AC8E42EC50212331A6BD599AF243739889BFC06491B65C367C6`)
 - `results/external_acquisition_packet.md` (generated_non_evidence_report, 36117 bytes, sha256 `9BAD100EECFC75C195232634DE7D7EEB1BF439799B3853AEDCC3549352AB9F90`)
 - `results/external_adapter_contract_audit.json` (generated_non_evidence_report, 3130 bytes, sha256 `D61D6618070F133A1D7CC78921B0EDB9AF0EA4B8ED530745BAC9E5EC0BA2EC26`)
@@ -313,8 +315,8 @@ Post-collection strict gates:
 - `results/external_evidence_preflight.md` (generated_non_evidence_report, 4745 bytes, sha256 `B68911C22003E7E03E48D7486AB58F53AD10457F0C25ABCD47A134E37A247892`)
 - `results/external_evidence_preflight_self_test.json` (generated_non_evidence_report, 1979 bytes, sha256 `C3C990BFBEAE0869391A438CBAAA21E703B1D19B6B2A4476A0ED09F0B620159E`)
 - `results/external_evidence_preflight_self_test.md` (generated_non_evidence_report, 1935 bytes, sha256 `56651DAF3A7D8D04D58F11CB96CF9CC12F6ABCA1D385952B74A24A7DDF302EC6`)
-- `results/external_execution_readiness_audit.json` (generated_non_evidence_report, 43606 bytes, sha256 `6D4EADCCB3CB24C52D0674DDC0D0E85D29A9804308916965684B1CB433BAEF18`)
-- `results/external_execution_readiness_audit.md` (generated_non_evidence_report, 33962 bytes, sha256 `94426969874E17F7349DFDB4B0879C2D116C384447B2CAF80A57ABB715AA9FB2`)
+- `results/external_execution_readiness_audit.json` (generated_non_evidence_report, 43795 bytes, sha256 `B244EA39BC220032A03C550D49ECCE9034D6C5755BF09B8F07AB555272E513F0`)
+- `results/external_execution_readiness_audit.md` (generated_non_evidence_report, 34089 bytes, sha256 `69053A98B4DC9F9030076B5222A5FFD61AA2F1B4981A4EF05A1B642D847D27FB`)
 - `results/external_execution_readiness_self_test.json` (generated_non_evidence_report, 2069 bytes, sha256 `C8A4099B6CE8FC2D7AEA75B0382F67552F6B98C8F28B57F8FC73CB2290DC4218`)
 - `results/external_execution_readiness_self_test.md` (generated_non_evidence_report, 2015 bytes, sha256 `9CBEEBA007F62474D332CC662595E8172EB297CB1434D19306D4FD74E72DE3FE`)
 - `results/external_fidelity_acceptance_audit.json` (generated_non_evidence_report, 9807 bytes, sha256 `23846A8DFE65737A9EFB04A4231D05ADE15749DAED64DE6AFE5F466F941AA3C5`)
@@ -400,7 +402,7 @@ Post-collection strict gates:
 - `scripts/audit_maniskill_reference_collection_preflight.py` (operator_command_source, 8466 bytes, sha256 `A9B57E8629AF6556AF8BB31B0CD10081E1BA1BEC5FBB1178650CD587FDFFAD7B`)
 - `scripts/audit_maniskill_render_resource_sweep.py` (operator_command_source, 13151 bytes, sha256 `18B611180395204F02858123DE3D999DE23F2127738552D4C36E59114CBC14E8`)
 - `scripts/audit_maniskill_render_video_preflight.py` (operator_command_source, 34149 bytes, sha256 `8C1A9DC9ABD2322FB40AAA5970AB4B19ABBE5F978205D99C224A85A2AC3F9E8D`)
-- `scripts/build_external_ablation_collection_packet.py` (operator_command_source, 13282 bytes, sha256 `9EBCC4A29A134B7E73E1FE5722916F66CF1F89C24E78CB6FA5EEA922A77B0382`)
+- `scripts/build_external_ablation_collection_packet.py` (operator_command_source, 18684 bytes, sha256 `B3607507835C3E394A0B10F2CA73BD3C110AD46449DC1B9F27E809CB39540FD4`)
 - `scripts/build_external_acquisition_packet.py` (operator_command_source, 98463 bytes, sha256 `51D5892E36E02C0042F53C6C80A0AA5FA83A9A34AEE552B49DF7A28FADBF6BBF`)
 - `scripts/build_external_analysis_plan.py` (operator_command_source, 18694 bytes, sha256 `27C516ABD36E7B7FF1B3F11E712E5C7E18FE7F6FCFA672090BF28AE67E078CA7`)
 - `scripts/build_external_backend_integration_packet.py` (operator_command_source, 20959 bytes, sha256 `D4DEDBB66FDFE045078041987AE27C4105292AC60D22840623BD0233C197C57F`)
@@ -413,7 +415,7 @@ Post-collection strict gates:
 - `scripts/build_external_fidelity_provenance_packet.py` (operator_command_source, 23371 bytes, sha256 `992BABFC2F0B20DE876F2B66835DAB9863C8DED28E4DA075DE916A1BA8355736`)
 - `scripts/build_external_manifest.py` (operator_command_source, 33515 bytes, sha256 `FA9F3890C25B2FEA0F484520C38270BDE202F02317734563983522F3237EA09D`)
 - `scripts/build_external_method_implementation_packet.py` (operator_command_source, 57664 bytes, sha256 `C166221116A089779E0111AE13BDB75CC1625849486A1C116AF8534D264334AF`)
-- `scripts/build_external_operator_handoff_bundle.py` (operator_command_source, 92852 bytes, sha256 `B65968B160D9A1C73898A7AE60908E406E4D28B89C27B54BB01DFC5AF7C2317D`)
+- `scripts/build_external_operator_handoff_bundle.py` (operator_command_source, 94852 bytes, sha256 `E6119646D3DF8FC2653346D1DBDE613979F8BA6214684B37C1E5BB90C21BCC0E`)
 - `scripts/build_external_operator_packet.py` (operator_command_source, 71405 bytes, sha256 `2A06BF8BADB9A1BFC340309980E1A0AA45A1410E30F9BEED69E524E6A12D6C6C`)
 - `scripts/build_external_pilot_smoke_packet.py` (operator_command_source, 11266 bytes, sha256 `F3A2D24716D7DCE1D337453137191E821E1F81ADBAA8ABF446C2446E489C00CE`)
 - `scripts/build_external_platform_onboarding.py` (operator_command_source, 32058 bytes, sha256 `87CB7C475846CFCE3849B835621097DA3362DC9EBE5411794EBF13C792941AB2`)
@@ -429,6 +431,7 @@ Post-collection strict gates:
 - `scripts/probe_maniskill_env_smoke.py` (operator_command_source, 18252 bytes, sha256 `CAD9777638492EDE99F187BCFF89E1CAE85024FE5FEE8D7374AFBFC2516D4F02`)
 - `scripts/probe_maniskill_fidelity_metadata.py` (operator_command_source, 21099 bytes, sha256 `2EC0606C2AAF6E7C9B298B202748005D563BD47C5DDCC88F060A657B52DF88AB`)
 - `scripts/probe_maniskill_task_bindings.py` (operator_command_source, 12426 bytes, sha256 `AC9A26FDA7512B17AD35589525DF3A41E7C5CF28C164850C4F835466C69D92E2`)
+- `scripts/self_test_external_ablation_collection_packet.py` (operator_command_source, 19709 bytes, sha256 `1BB0221CB8543E546956C0374DB956BDE90D1224BAD59FCF008D9E4236C1B5C9`)
 - `scripts/self_test_external_backend_integration_packet.py` (operator_command_source, 20717 bytes, sha256 `3F52D905E7F103EEE1A19972FB2CD28CDD7F43CBF15E1B010EF7C9B8D0886A58`)
 - `scripts/self_test_external_baseline_contract.py` (operator_command_source, 17692 bytes, sha256 `B0BC8E8E4C7B31D6AF525613754940382A2B4CFC97D970C80C0BC7225AA478C1`)
 - `scripts/self_test_external_config_manifest_packet.py` (operator_command_source, 20765 bytes, sha256 `63009129D2131F4A26021C481C4217B1B960720628FDDCDF59C8DE9E2123E47E`)
@@ -453,7 +456,7 @@ Post-collection strict gates:
 - `pass` `external_collection_job_packet_included`: job_state='DO_NOT_START_COLLECTION_YET', steps=17, blockers=4
 - `pass` `collection_machine_bootstrap_included`: bootstrap_state='READY_TO_BOOTSTRAP_EXTERNAL_MACHINE', command='external_validation/collection_machine_bootstrap.ps1'
 - `pass` `precollection_manifest_draft_included`: configs=4, method_configs=11, method_gaps=11, rollout_gaps=8
-- `pass` `handoff_has_task_config_and_baseline_assets`: category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 118, 'method_config_candidate': 11, 'operator_command_source': 54, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}
+- `pass` `handoff_has_task_config_and_baseline_assets`: category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 120, 'method_config_candidate': 11, 'operator_command_source': 55, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}
 - `pass` `analysis_plan_included`: analysis_plan_ready=True, strict_evidence_ready=False
 - `pass` `platform_onboarding_included`: platform_onboarding_ready=True, strict_evidence_ready=False
 - `pass` `fidelity_metadata_probe_included`: strict_metadata_ready=True, primary_metadata_missing=[]
@@ -468,6 +471,7 @@ Post-collection strict gates:
 - `pass` `config_manifest_packet_included`: config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False
 - `pass` `rollout_evidence_packet_included`: rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False
 - `pass` `ablation_collection_packet_included`: work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False
+- `pass` `ablation_collection_packet_self_test_included`: temporary_packet_ready=True, work_order_artifact_command_drift_rejected=True, strict_command_drift_rejected=True
 - `pass` `evidence_intake_ledger_included`: mapped=37/37, groups=8
 - `pass` `precollection_freeze_receipt_included`: locked_artifacts=42, candidate_method_configs=11, freeze_receipt_ready=False
 - `pass` `postcollection_evidence_seal_included`: sealed_artifacts=11, records=0, videos=0, seal_ready=False
@@ -482,4 +486,4 @@ Post-collection strict gates:
 - `pass` `method_config_materialization_included`: candidate_configs=11, strict_adapter_evidence_ready=False, oracle_excluded=True
 - `pass` `operator_actions_cover_evidence_collection`: missing=[]
 - `pass` `post_collection_commands_cover_strict_gates`: commands=10
-- `pass` `file_hashes_are_recorded`: hashed_files=358
+- `pass` `file_hashes_are_recorded`: hashed_files=361

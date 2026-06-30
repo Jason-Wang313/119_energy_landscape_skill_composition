@@ -406,6 +406,11 @@
       "evidence": ["scripts/build_external_ablation_collection_packet.py", "external_validation/ablation_collection_packet.json", "external_validation/ablation_collection_packet.md", "external_validation/ablation_collection_work_orders.csv", "results/external_ablation_collection_audit.json", "results/external_ablation_collection_audit.md", "results/external_evidence_audit.json", "results/external_collection_plan.json"]
     },
     {
+      "name": "external_ablation_collection_packet_self_test_claim",
+      "claim": "The repository self-tests the External ablation collection packet in temporary copied workspaces, proving the packet remains non-evidence while missing ablation work orders, premature evidence promotion, shrunken ablation budgets, strict missing-ablation drift, local-reference variant drift, missing manifest ablation booleans, vague work-order artifacts or commands, strict command drift, real manifest writes, and deleted packet files fail closed without touching real ablation-packet outputs.",
+      "evidence": ["scripts/self_test_external_ablation_collection_packet.py", "results/external_ablation_collection_packet_self_test.json", "results/external_ablation_collection_packet_self_test.md", "scripts/build_external_ablation_collection_packet.py", "external_validation/ablation_collection_packet.json", "external_validation/ablation_collection_packet.md", "external_validation/ablation_collection_work_orders.csv", "results/external_ablation_collection_audit.json"]
+    },
+    {
       "name": "external_evidence_intake_ledger_claim",
       "claim": "The repository provides a non-evidence external evidence intake ledger that maps every current strict external-evidence failure to its operator artifact, source packet, strict gate, and completion test while strict external evidence remains false.",
       "evidence": ["scripts/build_external_evidence_intake_ledger.py", "external_validation/evidence_intake_ledger.json", "external_validation/evidence_intake_ledger.md", "external_validation/evidence_intake_ledger.csv", "results/external_evidence_intake_ledger_audit.json", "results/external_evidence_intake_ledger_audit.md", "results/external_evidence_audit.json", "external_validation/manifest_template.json"]
