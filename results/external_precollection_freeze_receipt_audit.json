@@ -208,7 +208,7 @@
       "passed": true
     },
     {
-      "detail": "commit='d9d7a93d829effca0338e739edafa7b3e21d0d03', skill_hash='F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802'",
+      "detail": "commit='7f043f463b8bc02c882ec148ddde1f7e912a40a7', skill_hash='F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802'",
       "name": "checkout_and_skill_hash_recorded",
       "passed": true
     },

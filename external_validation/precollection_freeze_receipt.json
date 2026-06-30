@@ -160,54 +160,44 @@
   "collection_machine": "",
   "current_checkout": {
     "clean_checkout": false,
-    "code_commit": "d9d7a93d829effca0338e739edafa7b3e21d0d03",
+    "code_commit": "7f043f463b8bc02c882ec148ddde1f7e912a40a7",
     "dirty_status_lines": [
-      "M external_validation/evidence_intake_ledger.csv",
-      " M external_validation/evidence_intake_ledger.json",
-      " M external_validation/evidence_intake_ledger.md",
-      " M external_validation/fidelity_acceptance_draft.json",
-      " M external_validation/fidelity_acceptance_draft.md",
-      " M external_validation/fidelity_provenance_packet.json",
-      " M external_validation/fidelity_provenance_packet.md",
-      " M external_validation/fidelity_provenance_work_orders.csv",
+      "M .github/workflows/paper119-validation.yml",
+      " M README.md",
+      " M child_status.md",
+      " M docs/claim_evidence_ledger.json",
+      " M docs/final_audit.md",
+      " M docs/haonan_yilun_outreach_package.md",
+      " M docs/reproducibility_checklist.md",
+      " M docs/submission_readiness_audit_v5.md",
+      " M docs/submission_readiness_decision.md",
+      " M docs/submission_version_log.md",
       " M external_validation/manifest_precollection_draft.json",
-      " M external_validation/manifest_precollection_draft.md",
-      " M external_validation/platform_onboarding_packet.json",
-      " M external_validation/platform_onboarding_packet.md",
-      " M external_validation/render_failure_remediation_work_orders.csv",
-      " M external_validation/render_machine_qualification_packet.md",
-      " M results/external_evidence_intake_ledger_audit.json",
-      " M results/external_evidence_intake_ledger_audit.md",
-      " M results/external_fidelity_acceptance_audit.json",
-      " M results/external_fidelity_acceptance_audit.md",
-      " M results/external_fidelity_acceptance_draft_audit.json",
-      " M results/external_fidelity_acceptance_draft_audit.md",
-      " M results/external_fidelity_acceptance_self_test.json",
-      " M results/external_fidelity_acceptance_self_test.md",
-      " M results/external_fidelity_provenance_audit.json",
-      " M results/external_fidelity_provenance_audit.md",
-      " M results/external_precollection_manifest_draft_audit.json",
-      " M results/fidelity_acceptance_materialization_plan.json",
-      " M results/fidelity_acceptance_materialization_plan.md",
-      " M results/maniskill_render_failure_remediation.json",
-      " M results/maniskill_render_failure_remediation.md",
-      " M results/maniskill_render_machine_qualification.json",
-      " M results/maniskill_render_machine_qualification.md",
-      " M scripts/audit_external_execution_readiness.py",
-      " M scripts/audit_external_fidelity_acceptance.py",
-      " M scripts/build_external_acquisition_packet.py",
-      " M scripts/build_external_collection_job_packet.py",
-      " M scripts/build_external_evidence_intake_ledger.py",
-      " M scripts/build_external_fidelity_acceptance_draft.py",
-      " M scripts/build_external_fidelity_provenance_packet.py",
-      " M scripts/build_external_operator_packet.py",
-      " M scripts/build_external_platform_onboarding.py",
-      " M scripts/build_external_precollection_manifest_draft.py",
-      " M scripts/build_maniskill_render_machine_qualification.py",
-      " M scripts/materialize_fidelity_acceptance.py",
-      " M scripts/self_test_external_evidence_pipeline.py",
-      " M scripts/self_test_external_fidelity_acceptance.py",
-      " M scripts/validate_submission_artifacts.py"
+      " M external_validation/method_config_materialization_plan.json",
+      " M external_validation/method_config_materialization_plan.md",
+      " M external_validation/postcollection_evidence_seal.csv",
+      " M external_validation/postcollection_evidence_seal.json",
+      " M external_validation/postcollection_evidence_seal.md",
+      " M external_validation/precollection_freeze_receipt.csv",
+      " M external_validation/precollection_freeze_receipt.json",
+      " M external_validation/precollection_freeze_receipt.md",
+      " M results/external_method_config_materialization_audit.json",
+      " M results/external_method_config_materialization_audit.md",
+      " M results/external_precollection_freeze_receipt_audit.json",
+      " M results/external_precollection_freeze_receipt_audit.md",
+      " M results/external_precollection_freeze_receipt_self_test.json",
+      " M results/external_precollection_freeze_receipt_self_test.md",
+      " M results/external_precollection_manifest_draft_self_test.json",
+      " M results/external_precollection_manifest_draft_self_test.md",
+      " M scripts/audit_submission_readiness_gap.py",
+      " M scripts/audit_visible_contribution.py",
+      " M scripts/build_external_operator_handoff_bundle.py",
+      " M scripts/build_submission_artifacts.ps1",
+      " M scripts/materialize_external_method_configs.py",
+      " M scripts/validate_submission_artifacts.py",
+      "?? results/external_method_config_materialization_self_test.json",
+      "?? results/external_method_config_materialization_self_test.md",
+      "?? scripts/self_test_external_method_config_materialization.py"
     ],
     "skill_library_hash": "F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802"
   },
@@ -234,7 +224,7 @@
       "path": "external_validation/manifest_precollection_draft.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "0CEA5A80DCAB8942D78F110C16BF7032AA62BBFC120DA7DCFAC5C42F2551AC2D"
+      "sha256": "8C993B9FD0AEFD072FE81D052808BB20691B497B725877C7D1D13B2802A91D29"
     },
     {
       "exists": true,
@@ -269,14 +259,14 @@
       "path": "external_validation/evidence_intake_ledger.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "A34133E4B58D01490A3D0D0786E7A5FE52352F7F645D16EC657B2D519D6A6DBE"
+      "sha256": "BA2A6A50BCFB44FDF7531CF71BCBEBB68D3E9B3D8851F75BB5F11CED1F8D24D9"
     },
     {
       "exists": true,
       "path": "external_validation/evidence_intake_ledger.md",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "FA9C782BB76805252EF226F7FD3B4977D8A36B84C0BA59094D0E92CD50A2FF89"
+      "sha256": "8E8E11E9AA7A949FC3C34FE40B5F64D960178E8285C1D794415CFDF44BAB0F87"
     },
     {
       "exists": true,
@@ -339,7 +329,7 @@
       "path": "results/external_config_manifest_audit.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "71888C39980962B4AAE8E67DC2338CEB8F2DBA603BC85DF0BF6B50BE7720EF92"
+      "sha256": "A46DED8E5FF2E9E9FAB155569F9FA4FD8FDA633E062962180781B9DCB360D972"
     },
     {
       "exists": true,
@@ -353,14 +343,14 @@
       "path": "results/external_evidence_intake_ledger_audit.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "A34133E4B58D01490A3D0D0786E7A5FE52352F7F645D16EC657B2D519D6A6DBE"
+      "sha256": "BA2A6A50BCFB44FDF7531CF71BCBEBB68D3E9B3D8851F75BB5F11CED1F8D24D9"
     },
     {
       "exists": true,
       "path": "results/external_precollection_manifest_draft_audit.json",
       "required_before_collection": true,
       "role": "core_precollection_artifact",
-      "sha256": "07EE4E9808332F06F3161609A98533A848963DA41D0312F7147AF7FDEC465D42"
+      "sha256": "5EA5219C264B754DCDEB65B3DC107C99FCF834E6909BF707082ABCB537A548BF"
     },
     {
       "exists": true,
@@ -395,14 +385,14 @@
       "path": "external_validation/method_config_materialization_plan.json",
       "required_before_collection": true,
       "role": "method_config_materialization_artifact",
-      "sha256": "46924247617A3D86168888FA411EA957C82C1992FB66D82BC00CB87AAE9E153F"
+      "sha256": "BD209F79FB82612573D745A9E394858B25787B82A9DAA9B38694E6279E31F9FB"
     },
     {
       "exists": true,
       "path": "external_validation/method_config_materialization_plan.md",
       "required_before_collection": true,
       "role": "method_config_materialization_artifact",
-      "sha256": "5BB83B2C4B1601858113FD2F8F9203B469EF2BC3C9AA37880E23FBAA384A1D53"
+      "sha256": "EE02B6996F22C1F4FB47AF876B57DA980245CABB8B41027F4C8D4EBBF3C651D9"
     },
     {
       "exists": true,
@@ -416,14 +406,14 @@
       "path": "results/external_method_config_materialization_audit.json",
       "required_before_collection": true,
       "role": "method_config_materialization_artifact",
-      "sha256": "5DC60C246B1C8CCF6D20F780F5D97B46E016C548EFCFDD72EE7E6925A4EDD7F2"
+      "sha256": "9AD446480FF0179BFD791DEFB24203C4DEDA83D33D29D69A3FB525452372007E"
     },
     {
       "exists": true,
       "path": "results/external_method_config_materialization_audit.md",
       "required_before_collection": true,
       "role": "method_config_materialization_artifact",
-      "sha256": "9FE77F7B1D8976A4AA3A7A60FB26431D8733D1698EBC5CEE23C16676CBE13C7A"
+      "sha256": "ABEA5CABFD6ACE447CBB141086C8AC658EF0D8209806091F06B85C4B2E209200"
     },
     {
       "exists": true,

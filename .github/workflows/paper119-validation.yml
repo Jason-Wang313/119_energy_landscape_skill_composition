@@ -121,6 +121,9 @@ jobs:
       - name: Materialize external method config candidates
         run: python scripts/materialize_external_method_configs.py
 
+      - name: Self-test external method config materialization
+        run: python scripts/self_test_external_method_config_materialization.py
+
       - name: Plan external config materialization
         run: python scripts/materialize_external_configs.py
 

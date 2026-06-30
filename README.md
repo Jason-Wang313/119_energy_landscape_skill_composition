@@ -120,6 +120,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External method implementation audit: `results/external_method_implementation_audit.md`
 - External method implementation packet self-test: `results/external_method_implementation_packet_self_test.md`
 - External method config materialization audit: `results/external_method_config_materialization_audit.md`
+- External method config materialization self-test: `results/external_method_config_materialization_self_test.md`
 - External method reference provenance: `external_validation/method_reference_provenance.csv`
 - Method manifest cutover checklist: `external_validation/method_manifest_cutover_checklist.md`
 - Independent validation route: `external_validation/independent_validation_route.md`

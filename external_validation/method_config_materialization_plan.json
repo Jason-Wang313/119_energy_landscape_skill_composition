@@ -19,7 +19,7 @@
       "passed": true
     },
     {
-      "detail": "all candidate config hashes recompute",
+      "detail": "hash_mismatches=[]",
       "name": "candidate_hashes_match_written_files",
       "passed": true
     },
@@ -36,6 +36,21 @@
     {
       "detail": "official evidence paths remain absent before real collection",
       "name": "no_real_manifest_logs_videos_or_checkpoints_written",
+      "passed": true
+    },
+    {
+      "detail": "content_failures=[]",
+      "name": "candidate_config_contents_remain_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "baseline_failures=[]",
+      "name": "baseline_spec_hashes_match_current_files",
+      "passed": true
+    },
+    {
+      "detail": "csv_rows=11, records=11, csv_failures=[]",
+      "name": "candidate_manifest_csv_matches_records",
       "passed": true
     }
   ],

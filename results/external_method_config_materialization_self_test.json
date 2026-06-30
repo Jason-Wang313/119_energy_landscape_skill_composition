@@ -1,0 +1,93 @@
+{
+  "adapter_evidence_promotion_rejected": true,
+  "baseline_spec_hash_drift_rejected": true,
+  "candidate_csv_drift_rejected": true,
+  "candidate_evidence_content_drift_rejected": true,
+  "candidate_file_hash_drift_rejected": true,
+  "checks": [
+    {
+      "detail": "status=0, candidate_config_count=11",
+      "name": "temporary_method_config_materialization_ready_but_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "premature_evidence_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "missing_candidate_record_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "oracle_candidate_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "candidate_file_hash_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "manifest_stub_hash_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "candidate_evidence_content_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "source_method_packet_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "adapter_evidence_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "baseline_spec_hash_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "candidate_csv_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "real_manifest_write_rejected",
+      "passed": true
+    },
+    {
+      "detail": "required temporary materialization output check detects deleted candidate CSV",
+      "name": "materialization_file_deletion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "tracked=17, changed=[]",
+      "name": "real_method_config_materialization_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "manifest_stub_hash_drift_rejected": true,
+  "materialization_file_deletion_rejected": true,
+  "missing_candidate_record_rejected": true,
+  "not_external_evidence": true,
+  "oracle_candidate_rejected": true,
+  "passed": true,
+  "premature_evidence_promotion_rejected": true,
+  "real_manifest_write_rejected": true,
+  "real_outputs_untouched": true,
+  "source_method_packet_drift_rejected": true,
+  "strict_adapter_evidence_ready": false,
+  "strict_external_evidence_ready": false,
+  "temporary_materialization_ready": true,
+  "version": "external_method_config_materialization_self_test_v1"
+}

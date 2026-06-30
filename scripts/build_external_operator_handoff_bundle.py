@@ -198,6 +198,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_method_implementation_packet.py",
         SCRIPTS / "self_test_external_method_implementation_packet.py",
         SCRIPTS / "materialize_external_method_configs.py",
+        SCRIPTS / "self_test_external_method_config_materialization.py",
         SCRIPTS / "materialize_external_configs.py",
         SCRIPTS / "build_external_baseline_contract.py",
         SCRIPTS / "self_test_external_baseline_contract.py",
@@ -298,6 +299,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_method_implementation_packet_self_test.md",
         RESULTS / "external_method_config_materialization_audit.json",
         RESULTS / "external_method_config_materialization_audit.md",
+        RESULTS / "external_method_config_materialization_self_test.json",
+        RESULTS / "external_method_config_materialization_self_test.md",
         RESULTS / "independent_validation_route_audit.json",
         RESULTS / "independent_validation_route_audit.md",
         RESULTS / "external_blind_eval_audit.json",
@@ -469,6 +472,10 @@ def build_payload() -> dict[str, Any]:
     method_config_materialization = require_payload(
         RESULTS / "external_method_config_materialization_audit.json",
         "external_method_config_materialization_audit_v1",
+    )
+    method_config_materialization_self_test = require_payload(
+        RESULTS / "external_method_config_materialization_self_test.json",
+        "external_method_config_materialization_self_test_v1",
     )
     pilot_smoke = require_payload(RESULTS / "external_pilot_smoke_packet_audit.json", "external_pilot_smoke_packet_audit_v1")
     render_preflight = require_payload(RESULTS / "maniskill_render_video_preflight_audit.json", "maniskill_render_video_preflight_audit_v2")
@@ -1469,6 +1476,9 @@ def build_payload() -> dict[str, Any]:
         and method_config_checks.get("manifest_stubs_bind_checkpoint_config_hashes") is True
         and method_config_checks.get("independent_implementation_still_required") is True
         and method_config_checks.get("no_real_manifest_logs_videos_or_checkpoints_written") is True
+        and method_config_checks.get("candidate_config_contents_remain_non_evidence") is True
+        and method_config_checks.get("baseline_spec_hashes_match_current_files") is True
+        and method_config_checks.get("candidate_manifest_csv_matches_records") is True
         and "external_validation/method_config_materialization_plan.json" in paths
         and "external_validation/method_config_materialization_plan.md" in paths
         and "external_validation/method_config_candidates.csv" in paths
@@ -1480,6 +1490,32 @@ def build_payload() -> dict[str, Any]:
             f"candidate_configs={method_config_materialization.get('candidate_config_count')!r}, "
             f"strict_adapter_evidence_ready={method_config_materialization.get('strict_adapter_evidence_ready')!r}, "
             f"oracle_excluded={method_config_materialization.get('oracle_excluded')!r}"
+        ),
+    )
+    method_config_self_checks = {
+        check.get("name"): check.get("passed") for check in method_config_materialization_self_test.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "method_config_materialization_self_test_included",
+        method_config_materialization_self_test.get("passed") is True
+        and method_config_materialization_self_test.get("not_external_evidence") is True
+        and method_config_materialization_self_test.get("temporary_materialization_ready") is True
+        and method_config_materialization_self_test.get("missing_candidate_record_rejected") is True
+        and method_config_materialization_self_test.get("oracle_candidate_rejected") is True
+        and method_config_materialization_self_test.get("candidate_file_hash_drift_rejected") is True
+        and method_config_materialization_self_test.get("candidate_evidence_content_drift_rejected") is True
+        and method_config_materialization_self_test.get("adapter_evidence_promotion_rejected") is True
+        and method_config_materialization_self_test.get("real_outputs_untouched") is True
+        and method_config_self_checks.get("temporary_method_config_materialization_ready_but_non_evidence") is True
+        and method_config_self_checks.get("real_method_config_materialization_outputs_untouched") is True
+        and "results/external_method_config_materialization_self_test.json" in paths
+        and "results/external_method_config_materialization_self_test.md" in paths
+        and "scripts/self_test_external_method_config_materialization.py" in paths,
+        (
+            f"temporary_materialization_ready={method_config_materialization_self_test.get('temporary_materialization_ready')!r}, "
+            f"candidate_hash_drift={method_config_materialization_self_test.get('candidate_file_hash_drift_rejected')!r}, "
+            f"real_outputs_untouched={method_config_materialization_self_test.get('real_outputs_untouched')!r}"
         ),
     )
     add_check(
@@ -1583,6 +1619,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_method_implementation_packet_self_test.json",
             "results/external_baseline_contract_audit.json",
             "results/external_baseline_contract_self_test.json",
+            "results/external_method_config_materialization_self_test.json",
             "results/external_precollection_freeze_receipt_audit.json",
             "results/external_postcollection_evidence_seal_audit.json",
             "results/external_postcollection_seal_consistency_audit.json",

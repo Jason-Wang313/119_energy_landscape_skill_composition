@@ -28,7 +28,10 @@ These candidate method configs make the future `checkpoint_or_config_path` and `
 - `pass` `materialization_is_non_evidence`: candidate method configs are not manifest evidence and do not write logs, videos, checkpoints, or manifest
 - `pass` `source_method_packet_ready`: packet_ready=True, strict=False
 - `pass` `candidate_configs_cover_non_oracle_methods`: records=11, missing=[], oracle=False
-- `pass` `candidate_hashes_match_written_files`: all candidate config hashes recompute
+- `pass` `candidate_hashes_match_written_files`: hash_mismatches=[]
 - `pass` `manifest_stubs_bind_checkpoint_config_hashes`: every manifest stub binds checkpoint_or_config_hash to the candidate config artifact
 - `pass` `independent_implementation_still_required`: adapter_evidence_passed=False, adapters=0
 - `pass` `no_real_manifest_logs_videos_or_checkpoints_written`: official evidence paths remain absent before real collection
+- `pass` `candidate_config_contents_remain_non_evidence`: content_failures=[]
+- `pass` `baseline_spec_hashes_match_current_files`: baseline_failures=[]
+- `pass` `candidate_manifest_csv_matches_records`: csv_rows=11, records=11, csv_failures=[]

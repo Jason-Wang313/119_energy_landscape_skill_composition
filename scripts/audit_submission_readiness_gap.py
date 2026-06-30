@@ -162,6 +162,12 @@ def main() -> int:
     method_config_materialization = (
         read_json(method_config_materialization_path) if method_config_materialization_path.exists() else {}
     )
+    method_config_materialization_self_test_path = RESULTS / "external_method_config_materialization_self_test.json"
+    method_config_materialization_self_test = (
+        read_json(method_config_materialization_self_test_path)
+        if method_config_materialization_self_test_path.exists()
+        else {}
+    )
     presentation_path = RESULTS / "presentation_quality_audit.json"
     presentation = read_json(presentation_path) if presentation_path.exists() else {}
     figure_readability_path = RESULTS / "figure_readability_audit.json"
@@ -370,6 +376,9 @@ def main() -> int:
             ROOT / "scripts" / "self_test_external_method_implementation_packet.py",
             RESULTS / "external_method_implementation_packet_self_test.json",
             RESULTS / "external_method_implementation_packet_self_test.md",
+            ROOT / "scripts" / "self_test_external_method_config_materialization.py",
+            RESULTS / "external_method_config_materialization_self_test.json",
+            RESULTS / "external_method_config_materialization_self_test.md",
             ROOT / "scripts" / "self_test_external_config_manifest_packet.py",
             RESULTS / "external_config_manifest_packet_self_test.json",
             RESULTS / "external_config_manifest_packet_self_test.md",
@@ -450,6 +459,9 @@ def main() -> int:
             "scripts/self_test_external_method_implementation_packet.py",
             "results/external_method_implementation_packet_self_test.json",
             "results/external_method_implementation_packet_self_test.md",
+            "scripts/self_test_external_method_config_materialization.py",
+            "results/external_method_config_materialization_self_test.json",
+            "results/external_method_config_materialization_self_test.md",
             "scripts/self_test_external_config_manifest_packet.py",
             "results/external_config_manifest_packet_self_test.json",
             "results/external_config_manifest_packet_self_test.md",
@@ -984,6 +996,16 @@ def main() -> int:
         and method_config_checks.get("manifest_stubs_bind_checkpoint_config_hashes") is True
         and method_config_checks.get("independent_implementation_still_required") is True
         and method_config_checks.get("no_real_manifest_logs_videos_or_checkpoints_written") is True
+        and method_config_checks.get("candidate_config_contents_remain_non_evidence") is True
+        and method_config_checks.get("baseline_spec_hashes_match_current_files") is True
+        and method_config_checks.get("candidate_manifest_csv_matches_records") is True
+        and method_config_materialization_self_test.get("passed") is True
+        and method_config_materialization_self_test.get("version") == "external_method_config_materialization_self_test_v1"
+        and method_config_materialization_self_test.get("not_external_evidence") is True
+        and method_config_materialization_self_test.get("temporary_materialization_ready") is True
+        and method_config_materialization_self_test.get("candidate_file_hash_drift_rejected") is True
+        and method_config_materialization_self_test.get("candidate_evidence_content_drift_rejected") is True
+        and method_config_materialization_self_test.get("real_outputs_untouched") is True
         and handoff_bundle.get("passed") is True
         and handoff_bundle.get("version") == "external_operator_handoff_bundle_v1"
         and handoff_bundle.get("not_external_evidence") is True
@@ -1002,6 +1024,7 @@ def main() -> int:
         and handoff_checks.get("precollection_manifest_draft_self_test_included") is True
         and handoff_checks.get("method_implementation_packet_included") is True
         and handoff_checks.get("method_config_materialization_included") is True
+        and handoff_checks.get("method_config_materialization_self_test_included") is True
         and handoff_checks.get("file_hashes_are_recorded") is True
         and collection_job.get("passed") is True
         and collection_job.get("version") == "external_collection_job_packet_audit_v1"
@@ -1092,6 +1115,8 @@ def main() -> int:
                 RESULTS / "external_method_implementation_packet_self_test.md",
                 RESULTS / "external_method_config_materialization_audit.json",
                 RESULTS / "external_method_config_materialization_audit.md",
+                RESULTS / "external_method_config_materialization_self_test.json",
+                RESULTS / "external_method_config_materialization_self_test.md",
                 EXTERNAL / "collection_job_packet.json",
                 EXTERNAL / "collection_job_packet.md",
                 EXTERNAL / "collection_job_commands.ps1",
@@ -1192,6 +1217,8 @@ def main() -> int:
             "results/external_method_implementation_packet_self_test.md",
             "results/external_method_config_materialization_audit.json",
             "results/external_method_config_materialization_audit.md",
+            "results/external_method_config_materialization_self_test.json",
+            "results/external_method_config_materialization_self_test.md",
             "external_validation/collection_job_packet.json",
             "external_validation/collection_job_packet.md",
             "external_validation/collection_job_commands.ps1",

@@ -163,6 +163,7 @@ def main():
         "scripts\\validate_external_adapters.py",
         "scripts\\build_external_method_implementation_packet.py",
         "scripts\\materialize_external_method_configs.py",
+        "scripts\\self_test_external_method_config_materialization.py",
         "scripts\\self_test_external_adapter_evidence.py",
         "scripts\\build_external_manifest.py --allow-missing",
         "scripts\\self_test_external_manifest_builder.py",
@@ -283,6 +284,7 @@ def main():
         "python scripts/self_test_external_backend_integration_packet.py",
         "python scripts/build_external_method_implementation_packet.py",
         "python scripts/materialize_external_method_configs.py",
+        "python scripts/self_test_external_method_config_materialization.py",
         "python scripts/build_external_acquisition_packet.py",
         "python scripts/self_test_external_acquisition_packet.py",
         "python scripts/build_external_operator_packet.py",
@@ -2168,12 +2170,16 @@ def main():
         RESULTS / "external_method_config_materialization_audit.json",
         RESULTS / "external_method_config_materialization_audit.md",
         ROOT / "scripts" / "materialize_external_method_configs.py",
+        ROOT / "scripts" / "self_test_external_method_config_materialization.py",
+        RESULTS / "external_method_config_materialization_self_test.json",
+        RESULTS / "external_method_config_materialization_self_test.md",
     ]
     for path in method_config_paths:
         if not path.exists():
             fail(f"missing external method config materialization artifact: {path}")
     method_config_plan = json.loads((EXTERNAL / "method_config_materialization_plan.json").read_text(encoding="utf-8"))
     method_config_audit = json.loads((RESULTS / "external_method_config_materialization_audit.json").read_text(encoding="utf-8"))
+    method_config_self_test = json.loads((RESULTS / "external_method_config_materialization_self_test.json").read_text(encoding="utf-8"))
     if method_config_plan.get("version") != "external_method_config_materialization_plan_v1":
         fail("external method config materialization plan version mismatch")
     if method_config_audit.get("version") != "external_method_config_materialization_audit_v1":
@@ -2243,9 +2249,37 @@ def main():
         "manifest_stubs_bind_checkpoint_config_hashes",
         "independent_implementation_still_required",
         "no_real_manifest_logs_videos_or_checkpoints_written",
+        "candidate_config_contents_remain_non_evidence",
+        "baseline_spec_hashes_match_current_files",
+        "candidate_manifest_csv_matches_records",
     ):
         if method_config_checks.get(required_check) is not True:
             fail(f"external method config materialization audit missing passing check: {required_check}")
+    if method_config_self_test.get("version") != "external_method_config_materialization_self_test_v1":
+        fail("external method config materialization self-test version mismatch")
+    if method_config_self_test.get("passed") is not True:
+        fail("external method config materialization self-test did not pass")
+    if method_config_self_test.get("not_external_evidence") is not True:
+        fail("external method config materialization self-test must declare that it is not evidence")
+    if method_config_self_test.get("temporary_materialization_ready") is not True:
+        fail("external method config materialization self-test must build a temporary non-evidence materialization")
+    for required_field in (
+        "premature_evidence_promotion_rejected",
+        "missing_candidate_record_rejected",
+        "oracle_candidate_rejected",
+        "candidate_file_hash_drift_rejected",
+        "manifest_stub_hash_drift_rejected",
+        "candidate_evidence_content_drift_rejected",
+        "source_method_packet_drift_rejected",
+        "adapter_evidence_promotion_rejected",
+        "baseline_spec_hash_drift_rejected",
+        "candidate_csv_drift_rejected",
+        "real_manifest_write_rejected",
+        "materialization_file_deletion_rejected",
+        "real_outputs_untouched",
+    ):
+        if method_config_self_test.get(required_field) is not True:
+            fail(f"external method config materialization self-test missing passing field: {required_field}")
 
     manifest_builder_report_path = RESULTS / "external_manifest_builder_report.json"
     if not manifest_builder_report_path.exists():
@@ -5111,6 +5145,7 @@ def main():
         "method_implementation_packet_included",
         "baseline_contract_self_test_included",
         "method_config_materialization_included",
+        "method_config_materialization_self_test_included",
         "operator_actions_cover_evidence_collection",
         "post_collection_commands_cover_strict_gates",
         "file_hashes_are_recorded",
@@ -6319,6 +6354,7 @@ def main():
         "method_implementation_packet_visible",
         "baseline_contract_self_test_visible",
         "external_method_config_materialization_visible",
+        "external_method_config_materialization_self_test_visible",
         "maniskill_pilot_runtime_liveness_visible",
         "materializer_guard_visible",
         "planner_edge_policy_visible",

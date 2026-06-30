@@ -38,6 +38,15 @@ def read_json(path: Path) -> dict[str, Any]:
         raise SystemExit(f"invalid JSON in {rel(path)}: {exc}") from exc
 
 
+def maybe_read_json(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+
+
 def require_payload(path: Path, version: str) -> dict[str, Any]:
     payload = read_json(path)
     if payload.get("version") != version:
@@ -64,6 +73,35 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
 
 def add_check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str) -> None:
     checks.append({"name": name, "passed": bool(passed), "detail": detail})
+
+
+def csv_rows(path: Path) -> list[dict[str, str]]:
+    if not path.exists():
+        return []
+    with path.open(newline="", encoding="utf-8") as handle:
+        return list(csv.DictReader(handle))
+
+
+def write_candidate_csv(records: list[dict[str, Any]]) -> None:
+    OUT_CSV.parent.mkdir(parents=True, exist_ok=True)
+    with OUT_CSV.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=[
+                "method",
+                "evidence_role",
+                "config_path",
+                "config_sha256",
+                "baseline_spec_path",
+                "baseline_spec_sha256",
+                "strict_gate",
+                "blocking_until_real_evidence",
+                "operator_action",
+            ],
+        )
+        writer.writeheader()
+        for record in records:
+            writer.writerow({key: record[key] for key in writer.fieldnames})
 
 
 def load_specs() -> list[dict[str, Any]]:
@@ -193,29 +231,50 @@ def build_payload() -> dict[str, Any]:
             }
         )
 
-    with OUT_CSV.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(
-            handle,
-            fieldnames=[
-                "method",
-                "evidence_role",
-                "config_path",
-                "config_sha256",
-                "baseline_spec_path",
-                "baseline_spec_sha256",
-                "strict_gate",
-                "blocking_until_real_evidence",
-                "operator_action",
-            ],
-        )
-        writer.writeheader()
-        for record in records:
-            writer.writerow({key: record[key] for key in writer.fieldnames})
-
-    checks: list[dict[str, Any]] = []
+    write_candidate_csv(records)
     methods = {record["method"] for record in records}
+    payload = {
+        "version": VERSION,
+        "not_external_evidence": True,
+        "strict_adapter_evidence_ready": False,
+        "strict_external_evidence_ready": False,
+        "candidate_config_count": len(records),
+        "oracle_excluded": ORACLE_METHOD not in methods,
+        "candidate_config_dir": rel(METHOD_CONFIG_DIR),
+        "candidate_manifest_csv": rel(OUT_CSV),
+        "source_method_packet": "external_validation/method_implementation_packet.json",
+        "source_adapter_evidence_audit": "results/external_adapter_contract_evidence_audit.json",
+        "records": records,
+    }
+    audit = audit_packet(payload, method_packet, method_audit, adapter_evidence)
+    return {
+        **payload,
+        "passed": audit["passed"],
+        "checks": audit["checks"],
+        "failed_checks": audit["failed_checks"],
+    }
+
+
+def audit_packet(
+    payload: dict[str, Any],
+    method_packet: dict[str, Any],
+    method_audit: dict[str, Any],
+    adapter_evidence: dict[str, Any],
+) -> dict[str, Any]:
+    checks: list[dict[str, Any]] = []
+    records = [record for record in payload.get("records", []) or [] if isinstance(record, dict)]
+    methods = {str(record.get("method", "")) for record in records if record.get("method")}
     work_order_methods = {order.get("method") for order in method_packet.get("work_orders", []) or []}
-    add_check(checks, "materialization_is_non_evidence", True, "candidate method configs are not manifest evidence and do not write logs, videos, checkpoints, or manifest")
+    csv_by_method = {row.get("method"): row for row in csv_rows(OUT_CSV)}
+
+    add_check(
+        checks,
+        "materialization_is_non_evidence",
+        payload.get("not_external_evidence") is True
+        and payload.get("strict_adapter_evidence_ready") is False
+        and payload.get("strict_external_evidence_ready") is False,
+        "candidate method configs are not manifest evidence and do not write logs, videos, checkpoints, or manifest",
+    )
     add_check(
         checks,
         "source_method_packet_ready",
@@ -228,25 +287,38 @@ def build_payload() -> dict[str, Any]:
     add_check(
         checks,
         "candidate_configs_cover_non_oracle_methods",
-        len(records) >= 11 and methods == work_order_methods and ORACLE_METHOD not in methods,
+        len(records) >= 11
+        and int(payload.get("candidate_config_count", 0) or 0) == len(records)
+        and methods == work_order_methods
+        and ORACLE_METHOD not in methods
+        and payload.get("oracle_excluded") is True,
         f"records={len(records)}, missing={sorted(work_order_methods - methods)}, oracle={ORACLE_METHOD in methods}",
     )
+    hash_mismatches = []
+    for record in records:
+        config_path = ROOT / str(record.get("config_path", ""))
+        if not config_path.exists() or sha256_file(config_path) != record.get("config_sha256"):
+            hash_mismatches.append(str(record.get("method", "")))
     add_check(
         checks,
         "candidate_hashes_match_written_files",
-        all((ROOT / record["config_path"]).exists() and sha256_file(ROOT / record["config_path"]) == record["config_sha256"] for record in records),
-        "all candidate config hashes recompute",
+        not hash_mismatches and len(records) >= 11,
+        f"hash_mismatches={hash_mismatches}",
     )
     add_check(
         checks,
         "manifest_stubs_bind_checkpoint_config_hashes",
-        all(record["manifest_stub"]["checkpoint_or_config_hash"] == record["config_sha256"] for record in records),
+        all(
+            record.get("manifest_stub", {}).get("checkpoint_or_config_path") == record.get("config_path")
+            and record.get("manifest_stub", {}).get("checkpoint_or_config_hash") == record.get("config_sha256")
+            for record in records
+        ),
         "every manifest stub binds checkpoint_or_config_hash to the candidate config artifact",
     )
     add_check(
         checks,
         "independent_implementation_still_required",
-        all("<operator" in record["manifest_stub"]["implementation_provenance"]["implementation_origin"] for record in records)
+        all("<operator" in str(record.get("manifest_stub", {}).get("implementation_provenance", {}).get("implementation_origin", "")) for record in records)
         and adapter_evidence.get("passed") is False
         and adapter_evidence.get("adapter_count") == 0,
         f"adapter_evidence_passed={adapter_evidence.get('passed')!r}, adapters={adapter_evidence.get('adapter_count')!r}",
@@ -260,21 +332,62 @@ def build_payload() -> dict[str, Any]:
         and not any((EXTERNAL / "checkpoints").glob("*")),
         "official evidence paths remain absent before real collection",
     )
-
+    content_failures = []
+    baseline_failures = []
+    csv_failures = []
+    for record in records:
+        method = str(record.get("method", ""))
+        config_path = ROOT / str(record.get("config_path", ""))
+        config = maybe_read_json(config_path)
+        contract = config.get("candidate_runtime_contract", {}) or {}
+        if not (
+            config.get("version") == CONFIG_VERSION
+            and config.get("method") == method
+            and config.get("evidence_status") == "candidate_config_not_manifest_evidence"
+            and config.get("operator_acceptance_required") is True
+            and config.get("manifest_declaration_required") is True
+            and config.get("rollout_log_binding_required") is True
+            and config.get("strict_adapter_evidence_ready") is False
+            and contract.get("oracle_access") is False
+            and contract.get("uses_reference_adapter") is False
+            and contract.get("uses_scaffold_template") is False
+            and contract.get("uses_eval_outcome_tuning") is False
+        ):
+            content_failures.append(method)
+        baseline_path = ROOT / str(record.get("baseline_spec_path", ""))
+        if not baseline_path.exists() or sha256_file(baseline_path) != record.get("baseline_spec_sha256"):
+            baseline_failures.append(method)
+        csv_row = csv_by_method.get(method, {})
+        if csv_row.get("config_path") != record.get("config_path") or csv_row.get("config_sha256") != record.get("config_sha256"):
+            csv_failures.append(method)
+    add_check(
+        checks,
+        "candidate_config_contents_remain_non_evidence",
+        not content_failures and len(records) >= 11,
+        f"content_failures={content_failures}",
+    )
+    add_check(
+        checks,
+        "baseline_spec_hashes_match_current_files",
+        not baseline_failures and len(records) >= 11,
+        f"baseline_failures={baseline_failures}",
+    )
+    add_check(
+        checks,
+        "candidate_manifest_csv_matches_records",
+        not csv_failures and len(csv_by_method) == len(records) and len(records) >= 11,
+        f"csv_rows={len(csv_by_method)}, records={len(records)}, csv_failures={csv_failures}",
+    )
     passed = all(check["passed"] for check in checks)
     return {
-        "version": VERSION,
+        "version": AUDIT_VERSION,
+        "packet_version": payload.get("version"),
         "passed": passed,
         "not_external_evidence": True,
         "strict_adapter_evidence_ready": False,
         "strict_external_evidence_ready": False,
         "candidate_config_count": len(records),
         "oracle_excluded": ORACLE_METHOD not in methods,
-        "candidate_config_dir": rel(METHOD_CONFIG_DIR),
-        "candidate_manifest_csv": rel(OUT_CSV),
-        "source_method_packet": "external_validation/method_implementation_packet.json",
-        "source_adapter_evidence_audit": "results/external_adapter_contract_evidence_audit.json",
-        "records": records,
         "checks": checks,
         "failed_checks": [check for check in checks if not check["passed"]],
     }

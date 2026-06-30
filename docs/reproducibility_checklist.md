@@ -62,6 +62,8 @@
   - Durable report: `results/external_method_implementation_packet_self_test.md`
 - External method config materialization builder: `scripts/materialize_external_method_configs.py`
   - Emits candidate method configs and hashes: `external_validation/method_config_materialization_plan.md`, `external_validation/method_config_candidates.csv`, `external_validation/method_config_candidates/*.json`, and `results/external_method_config_materialization_audit.md`
+- External method config materialization self-test: `scripts/self_test_external_method_config_materialization.py`
+  - Durable report: `results/external_method_config_materialization_self_test.md`
 - External adapter scaffold builder: `scripts/build_external_adapter_scaffolds.py`
 - External reference adapter builder: `scripts/build_external_reference_adapters.py`
 - External local dry-run builder: `scripts/build_external_local_dry_run.py`

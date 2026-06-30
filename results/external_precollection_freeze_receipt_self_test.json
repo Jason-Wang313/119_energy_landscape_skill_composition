@@ -31,7 +31,7 @@
       "passed": true
     },
     {
-      "detail": "receipt_before=749eef27814c1616ddf2842be921d0296934b1ed41041aa9214288351e3d8a93, receipt_after=749eef27814c1616ddf2842be921d0296934b1ed41041aa9214288351e3d8a93, audit_before=44f317afe1b38cb51d39103f215507a84dbac014e6690b7dc4c8e49b6356df85, audit_after=44f317afe1b38cb51d39103f215507a84dbac014e6690b7dc4c8e49b6356df85",
+      "detail": "receipt_before=c0e805f70f38d08243a011764e42f786b9e7db4a00b8f72e68a18b7e6e771794, receipt_after=c0e805f70f38d08243a011764e42f786b9e7db4a00b8f72e68a18b7e6e771794, audit_before=f7608495670bf7e6d7ed0e655853fa47059769549e725c98c35f9f1374e71bf4, audit_after=f7608495670bf7e6d7ed0e655853fa47059769549e725c98c35f9f1374e71bf4",
       "name": "real_precollection_freeze_reports_not_overwritten",
       "passed": true
     }

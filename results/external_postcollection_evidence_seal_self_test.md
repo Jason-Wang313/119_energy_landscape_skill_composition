@@ -16,4 +16,4 @@ This self-test builds temporary postcollection seal fixtures and exercises the s
 - `pass` `missing_operator_metadata_rejected`: seal_ready=False, operator_check=False
 - `pass` `incomplete_video_set_rejected`: seal_ready=False, records=3, videos=2
 - `pass` `manifest_present_rejected_before_promotion`: seal_ready=False, manifest_exists=True
-- `pass` `real_postcollection_seal_reports_not_overwritten`: seal_before=8438c9260339d4a63051f3cdc0afdc918ee091f70cb77cde53f2a84164a954cd, seal_after=8438c9260339d4a63051f3cdc0afdc918ee091f70cb77cde53f2a84164a954cd, audit_before=d0f4d0ed189b831f0477cc0d61fa7a7e3c541b711852b25fcd12ca7fd721cfa7, audit_after=d0f4d0ed189b831f0477cc0d61fa7a7e3c541b711852b25fcd12ca7fd721cfa7
+- `pass` `real_postcollection_seal_reports_not_overwritten`: seal_before=93b1e2c1b1bf26434acf344da8a8412380efe3a985f4126661a5e563fd2cb03d, seal_after=93b1e2c1b1bf26434acf344da8a8412380efe3a985f4126661a5e563fd2cb03d, audit_before=d0f4d0ed189b831f0477cc0d61fa7a7e3c541b711852b25fcd12ca7fd721cfa7, audit_after=d0f4d0ed189b831f0477cc0d61fa7a7e3c541b711852b25fcd12ca7fd721cfa7

@@ -31,12 +31,12 @@
   "run_id": "paper119_external_validation_run",
   "seal_artifacts": [
     {
-      "bytes": 13739,
+      "bytes": 28005,
       "exists": true,
       "path": "external_validation/precollection_freeze_receipt.json",
       "required_for_real_seal": true,
       "role": "precollection_freeze_receipt",
-      "sha256": "BA83851CBF42CA36DEEFE2A178A144DB7EE3143396CBA97E41FFC85307AC7B36"
+      "sha256": "C0E805F70F38D08243A011764E42F786B9E7DB4A00B8F72E68A18B7E6E771794"
     },
     {
       "bytes": 710130,
@@ -79,12 +79,12 @@
       "sha256": "7F6A5967DE10AC5A49200726082D0600A3EF70984B94DC414A35AA90BD97CCAC"
     },
     {
-      "bytes": 25296,
+      "bytes": 44176,
       "exists": true,
       "path": "external_validation/manifest_precollection_draft.json",
       "required_for_real_seal": true,
       "role": "precollection_manifest_draft",
-      "sha256": "9C258D7C091FA40B2AF9753931276D359F73CC8B03CBDBB15C4516C3A90A8B12"
+      "sha256": "8C993B9FD0AEFD072FE81D052808BB20691B497B725877C7D1D13B2802A91D29"
     },
     {
       "bytes": 2034,
