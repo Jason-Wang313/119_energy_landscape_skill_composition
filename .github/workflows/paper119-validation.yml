@@ -259,6 +259,9 @@ jobs:
       - name: Self-test external collection machine bootstrap
         run: python scripts/self_test_external_collection_machine_bootstrap.py
 
+      - name: Build independent validation launch ticket
+        run: python scripts/build_independent_validation_launch_ticket.py
+
       - name: Build external operator handoff bundle
         run: python scripts/build_external_operator_handoff_bundle.py
 

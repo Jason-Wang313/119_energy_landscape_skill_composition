@@ -4,6 +4,7 @@
     "child_status": "child_status.md",
     "closure": "docs/external_evidence_closure_brief.md",
     "final_audit": "docs/final_audit.md",
+    "launch_ticket": "docs/independent_validation_launch_ticket.md",
     "outreach": "docs/haonan_yilun_outreach_package.md",
     "readiness_audit": "docs/submission_readiness_audit_v5.md",
     "readiness_decision": "docs/submission_readiness_decision.md",
@@ -44,7 +45,7 @@
       "passed": true
     },
     {
-      "detail": "files=382, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=387, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -89,7 +90,12 @@
       "passed": true
     },
     {
-      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=382, archive_written=False",
+      "detail": "launch_state='DO_NOT_START_COLLECTION_YET', render_state='DO_NOT_COLLECT_RENDER_MACHINE', haonan_dependency=False",
+      "name": "independent_validation_launch_ticket_visible",
+      "passed": true
+    },
+    {
+      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=387, archive_written=False",
       "name": "external_operator_release_bundle_visible",
       "passed": true
     },

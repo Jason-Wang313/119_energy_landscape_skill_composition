@@ -76,14 +76,19 @@
       "evidence": ["scripts/self_test_external_evidence_closure_brief.py", "results/external_evidence_closure_brief_self_test.json", "results/external_evidence_closure_brief_self_test.md"]
     },
     {
+      "name": "independent_validation_launch_ticket_claim",
+      "claim": "The repository provides a non-evidence independent validation launch ticket that converts the four remaining external-evidence blockers into an operator-facing issue body with no-go states, Windows/Linux bootstrap and collection commands, upload expectations, close criteria, and an explicit non-Haonan proof route.",
+      "evidence": ["scripts/build_independent_validation_launch_ticket.py", "docs/independent_validation_launch_ticket.md", "external_validation/independent_validation_launch_ticket.md", "results/independent_validation_launch_ticket_audit.json", "results/independent_validation_launch_ticket_audit.md", "results/external_collection_job_packet_audit.json", "results/external_collection_machine_bootstrap_audit.json", "results/maniskill_render_machine_qualification.json"]
+    },
+    {
       "name": "submission_readiness_gap_claim",
       "claim": "The repository includes a requirement-level gap audit that maps the active submission objective to satisfied, missing, and human-polish requirements and currently reports the objective as incomplete.",
       "evidence": ["scripts/audit_submission_readiness_gap.py", "results/submission_readiness_gap_audit.json", "results/submission_readiness_gap_audit.md", "docs/submission_readiness_audit_v5.md"]
     },
     {
       "name": "visible_contribution_claim",
-      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, outreach package, send-ready outreach packet, reviewer response packet, and closure brief synchronized with the current planner-edge policy audit, failure-memory adaptation audit, materializer, fidelity materializer checkout self-test, operator packet, collection machine bootstrap, fidelity acceptance draft, strict fidelity acceptance provenance gate, tracked reference route, strict config evidence hash gate, prepared task-config binding, strict full-method coverage gate, strict rollout sample-count gate, strict paired-panel gate, strict rollout uniqueness gate, confidence-gated external rollout statistics, final rollout confidence summary gate, official video write guard, official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, reset-timeout triage sidecar, backend reset substage markers, render failure remediation packet, atomic official evidence promotion, release-package internal-artifact rejection, final release artifact hash recomputation, external evidence closure brief, external evidence closure brief self-test, adapter acceptance fixtures, tracked candidate method-config binding, reference-adapter provenance, strict reference-adapter rejection gate, strict checkpoint/config artifact gate, strict fairness-contract binding gate, outreach stance, and readiness boundary.",
-      "evidence": ["scripts/audit_visible_contribution.py", "README.md", "docs/final_audit.md", "docs/submission_readiness_decision.md", "docs/submission_readiness_audit_v5.md", "docs/submission_version_log.md", "child_status.md", "docs/haonan_yilun_outreach_package.md", "docs/haonan_yilun_send_ready_outreach.md", "docs/reviewer_response_packet.md"]
+      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, outreach package, send-ready outreach packet, reviewer response packet, closure brief, and independent validation launch ticket synchronized with the current planner-edge policy audit, failure-memory adaptation audit, materializer, fidelity materializer checkout self-test, operator packet, collection machine bootstrap, fidelity acceptance draft, strict fidelity acceptance provenance gate, tracked reference route, strict config evidence hash gate, prepared task-config binding, strict full-method coverage gate, strict rollout sample-count gate, strict paired-panel gate, strict rollout uniqueness gate, confidence-gated external rollout statistics, final rollout confidence summary gate, official video write guard, official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, reset-timeout triage sidecar, backend reset substage markers, render failure remediation packet, atomic official evidence promotion, release-package internal-artifact rejection, final release artifact hash recomputation, external evidence closure brief, external evidence closure brief self-test, adapter acceptance fixtures, tracked candidate method-config binding, reference-adapter provenance, strict reference-adapter rejection gate, strict checkpoint/config artifact gate, strict fairness-contract binding gate, outreach stance, and readiness boundary.",
+      "evidence": ["scripts/audit_visible_contribution.py", "README.md", "docs/final_audit.md", "docs/submission_readiness_decision.md", "docs/submission_readiness_audit_v5.md", "docs/submission_version_log.md", "child_status.md", "docs/haonan_yilun_outreach_package.md", "docs/haonan_yilun_send_ready_outreach.md", "docs/reviewer_response_packet.md", "docs/independent_validation_launch_ticket.md", "results/independent_validation_launch_ticket_audit.json"]
     },
     {
       "name": "reviewer_response_packet_claim",
@@ -569,6 +574,7 @@
     "docs/local_model_release.md",
     "docs/reviewer_response_packet.md",
     "docs/external_evidence_closure_brief.md",
+    "docs/independent_validation_launch_ticket.md",
     "docs/submission_readiness_decision.md",
     "docs/submission_readiness_audit_v5.md",
     "docs/submission_version_log.md",
@@ -584,6 +590,7 @@
     "external_validation/evidence_intake_ledger.md",
     "external_validation/method_implementation_packet.md",
     "external_validation/method_manifest_cutover_checklist.md",
+    "external_validation/independent_validation_launch_ticket.md",
     "external_validation/README.md",
     "results/external_analysis_plan_audit.md",
     "results/external_platform_onboarding_audit.md",
@@ -598,6 +605,7 @@
     "results/external_evidence_intake_ledger_audit.md",
     "results/external_evidence_closure_brief.md",
     "results/external_evidence_closure_brief_self_test.md",
+    "results/independent_validation_launch_ticket_audit.md",
     "results/external_method_implementation_audit.md",
     "results/maniskill_render_video_preflight_audit.md",
     "results/maniskill_render_resource_sweep.md",

@@ -51,6 +51,8 @@ External collection machine bootstrap: `external_validation/collection_machine_b
 
 External collection machine bootstrap self-test: `results/external_collection_machine_bootstrap_self_test.md` mutation-tests the guarded probe-only bootstrap and rejects missing sources, source evidence drift, premature collection go-state, local-machine promotion, unsafe evidence-writing commands, missing confirmation, install-guidance drift, and premature manifest/log/video outputs without touching the real bootstrap outputs.
 
+Independent validation launch ticket: `docs/independent_validation_launch_ticket.md`, `external_validation/independent_validation_launch_ticket.md`, and `results/independent_validation_launch_ticket_audit.md` now turn the four strict external blockers into a copyable operator issue body with `DO_NOT_START_COLLECTION_YET`, `DO_NOT_COLLECT_RENDER_MACHINE`, guarded Windows/Linux commands, close criteria, and a non-Haonan proof route while remaining non-evidence.
+
 External operator handoff bundle self-test: `results/external_operator_handoff_bundle_self_test.md` mutation-tests the no-evidence handoff and rejects missing source packets, no-go drift, acquisition blocker drift, premature strict-evidence readiness, missing included files, forbidden evidence paths, premature real manifests, and omitted collection-job/bootstrap packets without touching the real handoff outputs.
 
 External operator release bundle: `results/external_operator_release_bundle_plan.md` now recomputes the handoff hash manifest and prepares a deterministic transfer-archive command while leaving archive writing disabled by default and excluding real evidence paths.

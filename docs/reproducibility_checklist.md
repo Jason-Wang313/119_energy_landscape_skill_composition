@@ -94,6 +94,9 @@
 - External collection machine bootstrap builder: `scripts/build_external_collection_machine_bootstrap.py`
 - External collection machine bootstrap self-test: `scripts/self_test_external_collection_machine_bootstrap.py`
   - Durable report: `results/external_collection_machine_bootstrap_self_test.md`
+- Independent validation launch ticket builder: `scripts/build_independent_validation_launch_ticket.py`
+  - Durable report: `results/independent_validation_launch_ticket_audit.md`
+  - Operator copy: `external_validation/independent_validation_launch_ticket.md`
 - External operator handoff bundle builder: `scripts/build_external_operator_handoff_bundle.py`
 - External operator handoff bundle self-test: `scripts/self_test_external_operator_handoff_bundle.py`
   - Durable report: `results/external_operator_handoff_bundle_self_test.md`

@@ -78,7 +78,9 @@ def build_file_manifest() -> dict[str, str]:
         DOCS / "reproducibility_checklist.md",
         DOCS / "haonan_yilun_outreach_package.md",
         DOCS / "external_evidence_closure_brief.md",
+        DOCS / "independent_validation_launch_ticket.md",
         EXTERNAL / "README.md",
+        EXTERNAL / "independent_validation_launch_ticket.md",
         EXTERNAL / "collection_runbook.md",
         EXTERNAL / "operator_record_sheet.csv",
         EXTERNAL / "blind_evaluation_protocol.md",
@@ -169,6 +171,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_acquisition_packet.py",
         SCRIPTS / "build_external_evidence_closure_brief.py",
         SCRIPTS / "self_test_external_evidence_closure_brief.py",
+        SCRIPTS / "build_independent_validation_launch_ticket.py",
         SCRIPTS / "build_external_analysis_plan.py",
         SCRIPTS / "build_external_platform_onboarding.py",
         SCRIPTS / "build_external_collection_machine_bootstrap.py",
@@ -237,6 +240,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_evidence_closure_brief.md",
         RESULTS / "external_evidence_closure_brief_self_test.json",
         RESULTS / "external_evidence_closure_brief_self_test.md",
+        RESULTS / "independent_validation_launch_ticket_audit.json",
+        RESULTS / "independent_validation_launch_ticket_audit.md",
         RESULTS / "external_collection_plan.json",
         RESULTS / "external_collection_plan.md",
         RESULTS / "external_analysis_plan_audit.json",
@@ -414,6 +419,10 @@ def build_payload() -> dict[str, Any]:
         RESULTS / "external_evidence_closure_brief_self_test.json",
         "external_evidence_closure_brief_self_test_v1",
     )
+    launch_ticket = require_payload(
+        RESULTS / "independent_validation_launch_ticket_audit.json",
+        "independent_validation_launch_ticket_v1",
+    )
     preflight = require_payload(RESULTS / "external_evidence_preflight.json", "external_evidence_preflight_v1")
     release = require_payload(RESULTS / "external_release_package_audit.json", "external_release_package_audit_v1")
     pairing = require_payload(RESULTS / "external_pairing_integrity_audit.json", "external_pairing_integrity_audit_v1")
@@ -563,6 +572,30 @@ def build_payload() -> dict[str, Any]:
             f"closure_items={len(closure_brief.get('closure_items', []) or [])}, "
             f"haonan_dependency={closure_brief.get('haonan_dependency')!r}, "
             f"self_test={closure_brief_self_test.get('passed')!r}"
+        ),
+    )
+    launch_checks = {check.get("name"): check.get("passed") for check in launch_ticket.get("checks", []) or []}
+    add_check(
+        checks,
+        "independent_validation_launch_ticket_included",
+        launch_ticket.get("passed") is True
+        and launch_ticket.get("not_external_evidence") is True
+        and launch_ticket.get("strict_external_evidence_ready") is False
+        and launch_ticket.get("launch_state") == "DO_NOT_START_COLLECTION_YET"
+        and launch_ticket.get("render_collection_state") == "DO_NOT_COLLECT_RENDER_MACHINE"
+        and launch_ticket.get("haonan_dependency") is False
+        and launch_checks.get("exact_four_external_blockers_named") is True
+        and launch_checks.get("source_packets_fail_closed") is True
+        and launch_checks.get("issue_body_contains_copy_paste_commands") is True
+        and "docs/independent_validation_launch_ticket.md" in paths
+        and "external_validation/independent_validation_launch_ticket.md" in paths
+        and "results/independent_validation_launch_ticket_audit.json" in paths
+        and "results/independent_validation_launch_ticket_audit.md" in paths
+        and "scripts/build_independent_validation_launch_ticket.py" in paths,
+        (
+            f"launch_state={launch_ticket.get('launch_state')!r}, "
+            f"render_state={launch_ticket.get('render_collection_state')!r}, "
+            f"haonan_dependency={launch_ticket.get('haonan_dependency')!r}"
         ),
     )
     add_check(
@@ -1672,6 +1705,7 @@ def build_payload() -> dict[str, Any]:
             "results/external_acquisition_packet.json",
             "results/external_evidence_closure_brief.json",
             "results/external_evidence_closure_brief_self_test.json",
+            "results/independent_validation_launch_ticket_audit.json",
             "results/external_analysis_plan_audit.json",
             "results/external_platform_onboarding_audit.json",
             "results/maniskill_fidelity_metadata_probe.json",

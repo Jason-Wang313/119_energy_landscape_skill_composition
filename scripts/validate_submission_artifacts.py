@@ -181,6 +181,7 @@ def main():
         "scripts\\self_test_external_collection_job_packet.py",
         "scripts\\build_external_collection_machine_bootstrap.py",
         "scripts\\self_test_external_collection_machine_bootstrap.py",
+        "scripts\\build_independent_validation_launch_ticket.py",
         "scripts\\build_external_operator_handoff_bundle.py",
         "scripts\\self_test_external_operator_handoff_bundle.py",
         "scripts\\build_external_operator_release_bundle.py",
@@ -299,6 +300,7 @@ def main():
         "python scripts/self_test_external_collection_job_packet.py",
         "python scripts/build_external_collection_machine_bootstrap.py",
         "python scripts/self_test_external_collection_machine_bootstrap.py",
+        "python scripts/build_independent_validation_launch_ticket.py",
         "python scripts/build_external_operator_handoff_bundle.py",
         "python scripts/self_test_external_operator_handoff_bundle.py",
         "python scripts/build_external_operator_release_bundle.py",
@@ -5257,6 +5259,79 @@ def main():
         if not any(command_fragment in command for command in post_commands):
             fail(f"external operator packet missing post-collection gate: {command_fragment}")
 
+    launch_doc_path = DOCS / "independent_validation_launch_ticket.md"
+    launch_external_path = EXTERNAL / "independent_validation_launch_ticket.md"
+    launch_audit_path = RESULTS / "independent_validation_launch_ticket_audit.json"
+    launch_audit_md_path = RESULTS / "independent_validation_launch_ticket_audit.md"
+    for path in (
+        ROOT / "scripts" / "build_independent_validation_launch_ticket.py",
+        launch_doc_path,
+        launch_external_path,
+        launch_audit_path,
+        launch_audit_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing independent validation launch ticket artifact: {path}")
+    launch_audit = json.loads(launch_audit_path.read_text(encoding="utf-8"))
+    if launch_audit.get("version") != "independent_validation_launch_ticket_v1":
+        fail("independent validation launch ticket version mismatch")
+    if launch_audit.get("passed") is not True:
+        fail("independent validation launch ticket audit did not pass")
+    if launch_audit.get("not_external_evidence") is not True:
+        fail("independent validation launch ticket must declare that it is not evidence")
+    if launch_audit.get("strict_external_evidence_ready") is not False:
+        fail("independent validation launch ticket must keep strict external evidence false")
+    if launch_audit.get("launch_state") != "DO_NOT_START_COLLECTION_YET":
+        fail("independent validation launch ticket must preserve DO_NOT_START_COLLECTION_YET")
+    if launch_audit.get("render_collection_state") != "DO_NOT_COLLECT_RENDER_MACHINE":
+        fail("independent validation launch ticket must preserve the render-machine no-go state")
+    if launch_audit.get("haonan_dependency") is not False:
+        fail("independent validation launch ticket must not depend on Haonan for proof")
+    launch_readiness = launch_audit.get("readiness", {}) or {}
+    if launch_readiness.get("current_decision") != "STRONG_REVISE":
+        fail("independent validation launch ticket must preserve STRONG_REVISE")
+    if int(launch_readiness.get("satisfied_requirements", 0) or 0) != 17:
+        fail("independent validation launch ticket must preserve 17 satisfied requirements")
+    if int(launch_readiness.get("total_requirements", 0) or 0) != 21:
+        fail("independent validation launch ticket must preserve 21 total requirements")
+    if int(launch_readiness.get("blocking_missing_requirements", 0) or 0) != 4:
+        fail("independent validation launch ticket must preserve four blocking external-evidence gaps")
+    launch_checks = {check.get("name"): check.get("passed") for check in launch_audit.get("checks", [])}
+    for required_check in (
+        "ticket_is_non_evidence",
+        "readiness_boundary_current",
+        "exact_four_external_blockers_named",
+        "source_packets_fail_closed",
+        "command_files_exist_for_windows_and_linux",
+        "collection_guardrails_visible",
+        "render_machine_no_go_visible",
+        "haonan_not_required",
+        "acceptance_criteria_close_all_blockers",
+        "source_checks_reused",
+        "issue_body_contains_copy_paste_commands",
+        "operator_copy_matches_docs_copy",
+        "no_real_manifest_written",
+    ):
+        if launch_checks.get(required_check) is not True:
+            fail(f"independent validation launch ticket missing passing check: {required_check}")
+    if launch_doc_path.read_text(encoding="utf-8") != launch_external_path.read_text(encoding="utf-8"):
+        fail("independent validation launch ticket docs and operator copies must match")
+    launch_text = launch_doc_path.read_text(encoding="utf-8")
+    for fragment in (
+        "Not evidence: `true`.",
+        "DO_NOT_START_COLLECTION_YET",
+        "DO_NOT_COLLECT_RENDER_MACHINE",
+        "Haonan is not required for proof",
+        "Do not pitch Haonan as responsible for supplying the missing proof.",
+        "python scripts\\audit_external_evidence.py --strict",
+        ".\\external_validation\\collection_machine_bootstrap.ps1",
+        "./external_validation/collection_machine_bootstrap.sh",
+        ".\\external_validation\\collection_job_commands.ps1",
+        "./external_validation/collection_job_commands.sh",
+    ):
+        if fragment not in launch_text:
+            fail(f"independent validation launch ticket missing fragment: {fragment}")
+
     handoff_bundle_path = RESULTS / "external_operator_handoff_bundle.json"
     if not handoff_bundle_path.exists():
         fail("missing results/external_operator_handoff_bundle.json; run scripts/build_external_operator_handoff_bundle.py")
@@ -5289,10 +5364,21 @@ def main():
     if int(category_counts.get("baseline_spec", 0) or 0) < 12:
         fail("external operator handoff bundle must include baseline specs")
     handoff_checks = {entry.get("name"): entry.get("passed") for entry in handoff_bundle.get("checks", [])}
+    handoff_paths = {str(record.get("path", "")) for record in handoff_bundle.get("included_files", []) if isinstance(record, dict)}
+    for required_path in (
+        "docs/independent_validation_launch_ticket.md",
+        "external_validation/independent_validation_launch_ticket.md",
+        "results/independent_validation_launch_ticket_audit.json",
+        "results/independent_validation_launch_ticket_audit.md",
+        "scripts/build_independent_validation_launch_ticket.py",
+    ):
+        if required_path not in handoff_paths:
+            fail(f"external operator handoff bundle missing independent launch ticket path: {required_path}")
     for required_check in (
         "operator_packet_is_no_go_non_evidence",
         "acquisition_maps_all_remaining_blockers",
         "closure_brief_maps_minimum_proof_package",
+        "independent_validation_launch_ticket_included",
         "strict_evidence_gates_remain_fail_closed",
         "bundle_files_exist",
         "bundle_excludes_rollout_evidence_artifacts",

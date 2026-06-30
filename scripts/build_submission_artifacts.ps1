@@ -183,6 +183,7 @@ try {
         Invoke-Native python scripts\self_test_external_collection_job_packet.py
         Invoke-Native python scripts\build_external_collection_machine_bootstrap.py
         Invoke-Native python scripts\self_test_external_collection_machine_bootstrap.py
+        Invoke-Native python scripts\build_independent_validation_launch_ticket.py
         Invoke-Native python scripts\build_external_operator_handoff_bundle.py
         Invoke-Native python scripts\self_test_external_operator_handoff_bundle.py
         Invoke-Native python scripts\build_external_operator_release_bundle.py
