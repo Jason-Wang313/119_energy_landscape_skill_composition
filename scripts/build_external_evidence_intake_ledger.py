@@ -174,6 +174,167 @@ def build_rows(evidence: dict[str, Any]) -> tuple[list[dict[str, str]], list[str
     return rows, sorted(unmapped)
 
 
+def group_counts(rows: list[dict[str, str]]) -> dict[str, int]:
+    return {
+        group: sum(1 for row in rows if row.get("closure_group") == group)
+        for group in sorted(GROUPS)
+    }
+
+
+def rows_are_actionable(rows: list[dict[str, str]], evidence: dict[str, Any]) -> bool:
+    failures = {str(row.get("name", "")): str(row.get("detail", "")) for row in blocking_failures(evidence)}
+    for row in rows:
+        failure_name = str(row.get("failure_name", ""))
+        closure_group = str(row.get("closure_group", ""))
+        if failure_name not in failures:
+            return False
+        if closure_group not in GROUPS:
+            return False
+        if str(row.get("current_detail", "")) != failures[failure_name]:
+            return False
+        if str(row.get("evidence_ready_now", "")) != "false":
+            return False
+        for key in ("operator_artifacts", "source_packet", "strict_gate", "completion_test"):
+            if not str(row.get(key, "")).strip():
+                return False
+        spec = GROUPS[closure_group]
+        for key in ("operator_artifacts", "source_packet", "strict_gate", "completion_test"):
+            if str(row.get(key, "")) != spec[key]:
+                return False
+    return True
+
+
+def audit_packet(
+    packet: dict[str, Any],
+    evidence: dict[str, Any],
+    collection: dict[str, Any],
+    manifest_template: dict[str, Any],
+    rollout_packet: dict[str, Any],
+    config_packet: dict[str, Any],
+    method_packet: dict[str, Any],
+    ablation_packet: dict[str, Any],
+    fidelity_packet: dict[str, Any],
+) -> dict[str, Any]:
+    rows = [row for row in packet.get("rows", []) or [] if isinstance(row, dict)]
+    current_rows, unmapped = build_rows(evidence)
+    required_groups = set(GROUPS)
+    groups_present = {str(row.get("closure_group", "")) for row in rows}
+    current_failures = {str(row.get("name", "")) for row in blocking_failures(evidence)}
+    row_failures = {str(row.get("failure_name", "")) for row in rows}
+    closure_groups = [group for group in packet.get("closure_groups", []) or [] if isinstance(group, dict)]
+    closure_group_names = {str(group.get("name", "")) for group in closure_groups}
+
+    checks: list[dict[str, Any]] = []
+    add_check(
+        checks,
+        "ledger_is_non_evidence_and_fail_closed",
+        packet.get("not_external_evidence") is True
+        and packet.get("strict_external_evidence_ready") is False
+        and all(str(row.get("evidence_ready_now", "")) == "false" for row in rows),
+        (
+            f"not_external_evidence={packet.get('not_external_evidence')!r}, "
+            f"strict_external_evidence_ready={packet.get('strict_external_evidence_ready')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "strict_external_evidence_is_currently_missing",
+        evidence.get("submission_ready") is False
+        and len(blocking_failures(evidence)) >= 30
+        and int(packet.get("blocking_failure_count", 0) or 0) == len(blocking_failures(evidence)),
+        (
+            f"submission_ready={evidence.get('submission_ready')!r}, "
+            f"failures={len(blocking_failures(evidence))}, "
+            f"packet_failures={packet.get('blocking_failure_count')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "every_blocking_failure_is_mapped",
+        not unmapped
+        and len(current_rows) == len(blocking_failures(evidence))
+        and len(rows) == len(blocking_failures(evidence))
+        and row_failures == current_failures
+        and int(packet.get("mapped_failure_count", 0) or 0) == len(rows)
+        and not packet.get("unmapped_failures"),
+        (
+            f"unmapped={unmapped}, packet_unmapped={packet.get('unmapped_failures')!r}, "
+            f"mapped={len(rows)}, failures={len(blocking_failures(evidence))}"
+        ),
+    )
+    add_check(
+        checks,
+        "all_required_closure_groups_present",
+        required_groups.issubset(groups_present)
+        and required_groups.issubset(closure_group_names)
+        and all(
+            int(group.get("failure_count", 0) or 0) == sum(1 for row in rows if row.get("closure_group") == group.get("name"))
+            for group in closure_groups
+        ),
+        f"missing={sorted(required_groups - groups_present)}, closure_group_names={sorted(closure_group_names)}",
+    )
+    add_check(
+        checks,
+        "source_packets_loaded",
+        collection.get("passed") is True
+        and rollout_packet.get("passed") is True
+        and config_packet.get("passed") is True
+        and method_packet.get("passed") is True
+        and ablation_packet.get("passed") is True
+        and fidelity_packet.get("passed") is True,
+        "collection, rollout, config, method, ablation, and fidelity packets loaded",
+    )
+    add_check(
+        checks,
+        "manifest_template_declares_expected_evidence_fields",
+        manifest_template.get("version") == "external_validation_v1"
+        and isinstance(manifest_template.get("tasks"), list)
+        and isinstance(manifest_template.get("methods"), list)
+        and isinstance(manifest_template.get("release_artifacts"), dict)
+        and isinstance(manifest_template.get("ablations"), dict),
+        "manifest template has version, tasks, methods, release_artifacts, and ablations",
+    )
+    command_text = "\n".join(str(command) for command in packet.get("operator_commands", []) or [])
+    add_check(
+        checks,
+        "strict_command_spine_covers_final_evidence_path",
+        all(
+            fragment in command_text
+            for fragment in (
+                "audit_external_fidelity_acceptance.py --strict",
+                "validate_external_configs.py --strict",
+                "validate_external_adapters.py --strict",
+                "audit_external_collection_readiness.py --strict",
+                "build_external_precollection_freeze_receipt.py",
+                "real_collection_runner.py",
+                "build_external_postcollection_evidence_seal.py",
+                "audit_external_postcollection_seal_consistency.py",
+                "build_external_manifest.py --write --check-video-paths",
+                "validate_external_rollouts.py --write-results --check-video-paths --strict",
+                "audit_external_pairing_integrity.py --strict",
+                "audit_external_release_package.py --strict",
+                "audit_external_evidence.py --strict",
+            )
+        ),
+        "strict command spine covers fidelity, configs, adapters, collection, manifest, rollouts, pairing, release, and final evidence",
+    )
+    add_check(
+        checks,
+        "rows_are_actionable_and_source_bound",
+        rows_are_actionable(rows, evidence),
+        "each ledger row mirrors the current strict failure detail, closure group, source packet, strict gate, completion test, and evidence_ready_now=false",
+    )
+    add_check(
+        checks,
+        "no_real_manifest_written",
+        not (EXTERNAL / "manifest.json").exists(),
+        "external_validation/manifest.json remains absent before real evidence",
+    )
+
+    passed = all(check["passed"] for check in checks)
+    return {**packet, "passed": passed, "checks": checks}
+
+
 def write_csv(rows: list[dict[str, str]]) -> None:
     OUT_CSV.parent.mkdir(exist_ok=True)
     fieldnames = [
@@ -241,117 +402,42 @@ def main() -> int:
 
     rows, unmapped = build_rows(evidence)
     groups_present = sorted({row["closure_group"] for row in rows})
-    required_groups = set(GROUPS)
-    group_counts = {
-        group: sum(1 for row in rows if row["closure_group"] == group)
-        for group in sorted(required_groups)
-    }
-
-    checks: list[dict[str, Any]] = []
-    add_check(
-        checks,
-        "ledger_is_non_evidence_and_fail_closed",
-        True,
-        "writes only ledger/audit files and keeps strict_external_evidence_ready=false",
-    )
-    add_check(
-        checks,
-        "strict_external_evidence_is_currently_missing",
-        evidence.get("submission_ready") is False
-        and len(blocking_failures(evidence)) >= 30,
-        f"submission_ready={evidence.get('submission_ready')!r}, failures={len(blocking_failures(evidence))}",
-    )
-    add_check(
-        checks,
-        "every_blocking_failure_is_mapped",
-        not unmapped and len(rows) == len(blocking_failures(evidence)),
-        f"unmapped={unmapped}, mapped={len(rows)}, failures={len(blocking_failures(evidence))}",
-    )
-    add_check(
-        checks,
-        "all_required_closure_groups_present",
-        required_groups.issubset(set(groups_present)),
-        f"missing={sorted(required_groups - set(groups_present))}",
-    )
-    add_check(
-        checks,
-        "source_packets_loaded",
-        collection.get("passed") is True
-        and rollout_packet.get("passed") is True
-        and config_packet.get("passed") is True
-        and method_packet.get("passed") is True
-        and ablation_packet.get("passed") is True
-        and fidelity_packet.get("passed") is True,
-        "collection, rollout, config, method, ablation, and fidelity packets loaded",
-    )
-    add_check(
-        checks,
-        "manifest_template_declares_expected_evidence_fields",
-        manifest_template.get("version") == "external_validation_v1"
-        and isinstance(manifest_template.get("tasks"), list)
-        and isinstance(manifest_template.get("methods"), list)
-        and isinstance(manifest_template.get("release_artifacts"), dict)
-        and isinstance(manifest_template.get("ablations"), dict),
-        "manifest template has version, tasks, methods, release_artifacts, and ablations",
-    )
-    command_text = "\n".join(STRICT_COMMANDS)
-    add_check(
-        checks,
-        "strict_command_spine_covers_final_evidence_path",
-        all(
-            fragment in command_text
-            for fragment in (
-                "audit_external_fidelity_acceptance.py --strict",
-                "validate_external_configs.py --strict",
-                "validate_external_adapters.py --strict",
-                "audit_external_collection_readiness.py --strict",
-                "build_external_precollection_freeze_receipt.py",
-                "real_collection_runner.py",
-                "build_external_postcollection_evidence_seal.py",
-                "audit_external_postcollection_seal_consistency.py",
-                "build_external_manifest.py --write --check-video-paths",
-                "validate_external_rollouts.py --write-results --check-video-paths --strict",
-                "audit_external_pairing_integrity.py --strict",
-                "audit_external_release_package.py --strict",
-                "audit_external_evidence.py --strict",
-            )
-        ),
-        "strict command spine covers fidelity, configs, adapters, collection, manifest, rollouts, pairing, release, and final evidence",
-    )
-    add_check(
-        checks,
-        "no_real_manifest_written",
-        not (EXTERNAL / "manifest.json").exists(),
-        "external_validation/manifest.json remains absent before real evidence",
-    )
-
-    passed = all(check["passed"] for check in checks)
+    counts = group_counts(rows)
     closure_groups = [
         {
             "name": group,
-            "failure_count": group_counts[group],
+            "failure_count": counts[group],
             "source_packet": GROUPS[group]["source_packet"],
             "strict_gate": GROUPS[group]["strict_gate"],
         }
-        for group in sorted(group_counts)
+        for group in sorted(counts)
     ]
-    payload = {
-        "version": VERSION,
-        "passed": passed,
-        "not_external_evidence": True,
-        "strict_external_evidence_ready": False,
-        "blocking_failure_count": len(blocking_failures(evidence)),
-        "mapped_failure_count": len(rows),
-        "unmapped_failures": unmapped,
-        "closure_groups": closure_groups,
-        "rows": rows,
-        "operator_commands": STRICT_COMMANDS,
-        "source_external_evidence_audit": rel(RESULTS / "external_evidence_audit.json"),
-        "source_manifest_template": rel(EXTERNAL / "manifest_template.json"),
-        "ledger_path": rel(OUT_MD),
-        "ledger_csv_path": rel(OUT_CSV),
-        "checks": checks,
-    }
+    payload = audit_packet(
+        {
+            "version": VERSION,
+            "not_external_evidence": True,
+            "strict_external_evidence_ready": False,
+            "blocking_failure_count": len(blocking_failures(evidence)),
+            "mapped_failure_count": len(rows),
+            "unmapped_failures": unmapped,
+            "closure_groups": closure_groups,
+            "rows": rows,
+            "operator_commands": STRICT_COMMANDS,
+            "source_external_evidence_audit": rel(RESULTS / "external_evidence_audit.json"),
+            "source_manifest_template": rel(EXTERNAL / "manifest_template.json"),
+            "ledger_path": rel(OUT_MD),
+            "ledger_csv_path": rel(OUT_CSV),
+        },
+        evidence,
+        collection,
+        manifest_template,
+        rollout_packet,
+        config_packet,
+        method_packet,
+        ablation_packet,
+        fidelity_packet,
+    )
+    passed = payload["passed"]
 
     write_csv(rows)
     OUT_JSON.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")

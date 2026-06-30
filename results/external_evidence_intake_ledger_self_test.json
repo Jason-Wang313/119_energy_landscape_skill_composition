@@ -1,0 +1,96 @@
+{
+  "checks": [
+    {
+      "detail": "status=0, mapped=37/37",
+      "name": "temporary_evidence_intake_ledger_ready_but_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "missing_ledger_row_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "premature_evidence_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "unmapped_failure_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "closure_group_omission_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "source_packet_failure_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "manifest_template_omission_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "row_source_completion_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "strict_command_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "real_manifest_write_rejected",
+      "passed": true
+    },
+    {
+      "detail": "required temporary ledger output check detects deleted evidence-intake CSV",
+      "name": "ledger_file_deletion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "before={'external_validation/evidence_intake_ledger.json': 'ba2a6a50bcfb44fdf7531cf71bcbebb68d3e9b3d8851f75bb5f11ced1f8d24d9', 'external_validation/evidence_intake_ledger.md': '8e8e11e9aa7a949fc3c34fe40b5f64d960178e8285c1d794415cfdf44bab0f87', 'external_validation/evidence_intake_ledger.csv': '92ce1249896d06559b8c6199716a841a8f08ed883222b1c617325e07d9826d71', 'results/external_evidence_intake_ledger_audit.json': 'ba2a6a50bcfb44fdf7531cf71bcbebb68d3e9b3d8851f75bb5f11ced1f8d24d9', 'results/external_evidence_intake_ledger_audit.md': '8e8e11e9aa7a949fc3c34fe40b5f64d960178e8285c1d794415cfdf44bab0f87', 'external_validation/manifest.json': None}, after={'external_validation/evidence_intake_ledger.json': 'ba2a6a50bcfb44fdf7531cf71bcbebb68d3e9b3d8851f75bb5f11ced1f8d24d9', 'external_validation/evidence_intake_ledger.md': '8e8e11e9aa7a949fc3c34fe40b5f64d960178e8285c1d794415cfdf44bab0f87', 'external_validation/evidence_intake_ledger.csv': '92ce1249896d06559b8c6199716a841a8f08ed883222b1c617325e07d9826d71', 'results/external_evidence_intake_ledger_audit.json': 'ba2a6a50bcfb44fdf7531cf71bcbebb68d3e9b3d8851f75bb5f11ced1f8d24d9', 'results/external_evidence_intake_ledger_audit.md': '8e8e11e9aa7a949fc3c34fe40b5f64d960178e8285c1d794415cfdf44bab0f87', 'external_validation/manifest.json': None}",
+      "name": "real_evidence_intake_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "closure_group_omission_rejected": true,
+  "ledger_file_deletion_rejected": true,
+  "manifest_template_omission_rejected": true,
+  "missing_ledger_row_rejected": true,
+  "not_external_evidence": true,
+  "passed": true,
+  "premature_evidence_promotion_rejected": true,
+  "real_manifest_write_rejected": true,
+  "real_output_hashes_after": {
+    "external_validation/evidence_intake_ledger.csv": "92ce1249896d06559b8c6199716a841a8f08ed883222b1c617325e07d9826d71",
+    "external_validation/evidence_intake_ledger.json": "ba2a6a50bcfb44fdf7531cf71bcbebb68d3e9b3d8851f75bb5f11ced1f8d24d9",
+    "external_validation/evidence_intake_ledger.md": "8e8e11e9aa7a949fc3c34fe40b5f64d960178e8285c1d794415cfdf44bab0f87",
+    "external_validation/manifest.json": null,
+    "results/external_evidence_intake_ledger_audit.json": "ba2a6a50bcfb44fdf7531cf71bcbebb68d3e9b3d8851f75bb5f11ced1f8d24d9",
+    "results/external_evidence_intake_ledger_audit.md": "8e8e11e9aa7a949fc3c34fe40b5f64d960178e8285c1d794415cfdf44bab0f87"
+  },
+  "real_output_hashes_before": {
+    "external_validation/evidence_intake_ledger.csv": "92ce1249896d06559b8c6199716a841a8f08ed883222b1c617325e07d9826d71",
+    "external_validation/evidence_intake_ledger.json": "ba2a6a50bcfb44fdf7531cf71bcbebb68d3e9b3d8851f75bb5f11ced1f8d24d9",
+    "external_validation/evidence_intake_ledger.md": "8e8e11e9aa7a949fc3c34fe40b5f64d960178e8285c1d794415cfdf44bab0f87",
+    "external_validation/manifest.json": null,
+    "results/external_evidence_intake_ledger_audit.json": "ba2a6a50bcfb44fdf7531cf71bcbebb68d3e9b3d8851f75bb5f11ced1f8d24d9",
+    "results/external_evidence_intake_ledger_audit.md": "8e8e11e9aa7a949fc3c34fe40b5f64d960178e8285c1d794415cfdf44bab0f87"
+  },
+  "real_outputs_untouched": true,
+  "row_source_completion_drift_rejected": true,
+  "source_packet_failure_rejected": true,
+  "strict_command_drift_rejected": true,
+  "strict_external_evidence_ready": false,
+  "temporary_ledger_ready": true,
+  "unmapped_failure_rejected": true,
+  "version": "external_evidence_intake_ledger_self_test_v1"
+}

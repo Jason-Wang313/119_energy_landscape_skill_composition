@@ -102,11 +102,12 @@ python scripts\audit_external_evidence.py --strict
 
 ## Checks
 
-- `pass` `ledger_is_non_evidence_and_fail_closed`: writes only ledger/audit files and keeps strict_external_evidence_ready=false
-- `pass` `strict_external_evidence_is_currently_missing`: submission_ready=False, failures=37
-- `pass` `every_blocking_failure_is_mapped`: unmapped=[], mapped=37, failures=37
-- `pass` `all_required_closure_groups_present`: missing=[]
+- `pass` `ledger_is_non_evidence_and_fail_closed`: not_external_evidence=True, strict_external_evidence_ready=False
+- `pass` `strict_external_evidence_is_currently_missing`: submission_ready=False, failures=37, packet_failures=37
+- `pass` `every_blocking_failure_is_mapped`: unmapped=[], packet_unmapped=[], mapped=37, failures=37
+- `pass` `all_required_closure_groups_present`: missing=[], closure_group_names=['ablations', 'fidelity_acceptance', 'manifest_contract', 'methods_baselines', 'oracle_boundary', 'pairing_release', 'rollout_logs_videos_metrics', 'task_configs']
 - `pass` `source_packets_loaded`: collection, rollout, config, method, ablation, and fidelity packets loaded
 - `pass` `manifest_template_declares_expected_evidence_fields`: manifest template has version, tasks, methods, release_artifacts, and ablations
 - `pass` `strict_command_spine_covers_final_evidence_path`: strict command spine covers fidelity, configs, adapters, collection, manifest, rollouts, pairing, release, and final evidence
+- `pass` `rows_are_actionable_and_source_bound`: each ledger row mirrors the current strict failure detail, closure group, source packet, strict gate, completion test, and evidence_ready_now=false
 - `pass` `no_real_manifest_written`: external_validation/manifest.json remains absent before real evidence

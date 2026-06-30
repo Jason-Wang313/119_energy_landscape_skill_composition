@@ -146,6 +146,7 @@ def main():
         "scripts\\build_external_ablation_collection_packet.py",
         "scripts\\self_test_external_ablation_collection_packet.py",
         "scripts\\build_external_evidence_intake_ledger.py",
+        "scripts\\self_test_external_evidence_intake_ledger.py",
         "scripts\\build_external_precollection_manifest_draft.py",
         "scripts\\build_external_precollection_freeze_receipt.py",
         "scripts\\self_test_external_precollection_freeze_receipt.py",
@@ -258,6 +259,7 @@ def main():
         "python scripts/build_external_ablation_collection_packet.py",
         "python scripts/self_test_external_ablation_collection_packet.py",
         "python scripts/build_external_evidence_intake_ledger.py",
+        "python scripts/self_test_external_evidence_intake_ledger.py",
         "python scripts/build_external_precollection_manifest_draft.py",
         "python scripts/build_external_precollection_freeze_receipt.py",
         "python scripts/self_test_external_precollection_freeze_receipt.py",
@@ -3862,17 +3864,23 @@ def main():
     intake_csv_path = EXTERNAL / "evidence_intake_ledger.csv"
     intake_audit_path = RESULTS / "external_evidence_intake_ledger_audit.json"
     intake_audit_md_path = RESULTS / "external_evidence_intake_ledger_audit.md"
+    intake_self_test_path = RESULTS / "external_evidence_intake_ledger_self_test.json"
+    intake_self_test_md_path = RESULTS / "external_evidence_intake_ledger_self_test.md"
     for path in (
         ROOT / "scripts" / "build_external_evidence_intake_ledger.py",
+        ROOT / "scripts" / "self_test_external_evidence_intake_ledger.py",
         intake_json_path,
         intake_md_path,
         intake_csv_path,
         intake_audit_path,
         intake_audit_md_path,
+        intake_self_test_path,
+        intake_self_test_md_path,
     ):
         if not path.exists():
             fail(f"missing external evidence intake ledger artifact: {path}")
     intake_ledger = json.loads(intake_audit_path.read_text(encoding="utf-8"))
+    intake_self_test = json.loads(intake_self_test_path.read_text(encoding="utf-8"))
     if intake_ledger.get("version") != "external_evidence_intake_ledger_v1":
         fail("external evidence intake ledger version mismatch")
     if intake_ledger.get("passed") is not True:
@@ -3898,10 +3906,52 @@ def main():
         "source_packets_loaded",
         "manifest_template_declares_expected_evidence_fields",
         "strict_command_spine_covers_final_evidence_path",
+        "rows_are_actionable_and_source_bound",
         "no_real_manifest_written",
     ):
         if intake_checks.get(required_check) is not True:
             fail(f"external evidence intake ledger missing passing check: {required_check}")
+    if intake_self_test.get("version") != "external_evidence_intake_ledger_self_test_v1":
+        fail("external evidence intake ledger self-test version mismatch")
+    if intake_self_test.get("passed") is not True:
+        fail("external evidence intake ledger self-test did not pass")
+    if intake_self_test.get("not_external_evidence") is not True:
+        fail("external evidence intake ledger self-test must declare that it is not evidence")
+    if intake_self_test.get("strict_external_evidence_ready") is not False:
+        fail("external evidence intake ledger self-test must keep strict external evidence false")
+    for field in (
+        "temporary_ledger_ready",
+        "missing_ledger_row_rejected",
+        "premature_evidence_promotion_rejected",
+        "unmapped_failure_rejected",
+        "closure_group_omission_rejected",
+        "source_packet_failure_rejected",
+        "manifest_template_omission_rejected",
+        "row_source_completion_drift_rejected",
+        "strict_command_drift_rejected",
+        "real_manifest_write_rejected",
+        "ledger_file_deletion_rejected",
+        "real_outputs_untouched",
+    ):
+        if intake_self_test.get(field) is not True:
+            fail(f"external evidence intake ledger self-test field must be true: {field}")
+    intake_self_checks = {check.get("name"): check.get("passed") for check in intake_self_test.get("checks", [])}
+    for required_check in (
+        "temporary_evidence_intake_ledger_ready_but_non_evidence",
+        "missing_ledger_row_rejected",
+        "premature_evidence_promotion_rejected",
+        "unmapped_failure_rejected",
+        "closure_group_omission_rejected",
+        "source_packet_failure_rejected",
+        "manifest_template_omission_rejected",
+        "row_source_completion_drift_rejected",
+        "strict_command_drift_rejected",
+        "real_manifest_write_rejected",
+        "ledger_file_deletion_rejected",
+        "real_evidence_intake_outputs_untouched",
+    ):
+        if intake_self_checks.get(required_check) is not True:
+            fail(f"external evidence intake ledger self-test missing passing check: {required_check}")
 
     if not (ROOT / "scripts" / "self_test_external_rollout_validator.py").exists():
         fail("missing scripts/self_test_external_rollout_validator.py")
@@ -5009,6 +5059,7 @@ def main():
         "ablation_collection_packet_included",
         "ablation_collection_packet_self_test_included",
         "evidence_intake_ledger_included",
+        "evidence_intake_ledger_self_test_included",
         "precollection_manifest_draft_included",
         "precollection_freeze_receipt_included",
         "postcollection_evidence_seal_included",

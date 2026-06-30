@@ -145,6 +145,7 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_ablation_collection_not_evidence`: not_external_evidence=True, manifest_ablation_evidence_ready=False, strict_external_evidence_ready=False
 - `pass` `external_ablation_collection_covers_strict_ablation_blocker`: work_order_count=5, expected_ablation_records=600, checks={'packet_is_non_evidence_and_fail_closed': True, 'collection_plan_loaded': True, 'task_and_reset_budget_preserved': True, 'required_ablations_match_strict_audit': True, 'every_required_ablation_has_work_order': True, 'work_orders_use_local_reference_variants': True, 'work_orders_are_actionable_and_artifact_bound': True, 'manifest_template_declares_ablation_booleans': True, 'operator_commands_cover_collection_manifest_rollout_and_strict_evidence': True, 'no_real_manifest_written': True}
 - `pass` `external_evidence_intake_ledger_ready`: passed
+- `pass` `external_evidence_intake_ledger_self_test_ready`: passed
 - `pass` `external_evidence_intake_ledger_not_evidence`: not_external_evidence=True, strict_external_evidence_ready=False
 - `pass` `external_evidence_intake_ledger_maps_all_strict_failures`: mapped=37/37, groups=8
 - `pass` `baseline_contract_ready`: passed
@@ -189,7 +190,7 @@ This audit checks whether the package is ready for an independent external valid
 - `pass` `external_operator_handoff_bundle_ready`: passed
 - `pass` `external_operator_handoff_bundle_not_evidence`: not_external_evidence=True, strict_evidence_ready=False, handoff_bundle_ready=True, start_state='DO_NOT_COLLECT_YET'
 - `pass` `external_operator_handoff_bundle_excludes_evidence_paths`: forbidden_included_paths=[]
-- `pass` `external_operator_handoff_bundle_hash_manifest`: included_file_count=358, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 118, 'method_config_candidate': 11, 'operator_command_source': 54, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}
+- `pass` `external_operator_handoff_bundle_hash_manifest`: included_file_count=361, category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 120, 'method_config_candidate': 11, 'operator_command_source': 55, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}
 - `pass` `strict_evidence_gates_remain_not_ready`: external_submission_ready=False, rollout_passed=False, config_passed=False, adapter_passed=False
 - `pass` `operator_packet_paths_exist`: missing=[]
 - `pass` `task_cards_ge_4`: task_cards=4

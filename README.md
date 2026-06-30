@@ -155,6 +155,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External ablation collection packet self-test: `results/external_ablation_collection_packet_self_test.md`
 - External evidence intake ledger: `external_validation/evidence_intake_ledger.md`
 - External evidence intake audit: `results/external_evidence_intake_ledger_audit.md`
+- External evidence intake ledger self-test: `results/external_evidence_intake_ledger_self_test.md`
 - External precollection manifest draft: `external_validation/manifest_precollection_draft.md`
 - External precollection manifest draft candidate method-config hash bindings: `external_validation/manifest_precollection_draft.md`
 - External precollection manifest draft audit: `results/external_precollection_manifest_draft_audit.md`

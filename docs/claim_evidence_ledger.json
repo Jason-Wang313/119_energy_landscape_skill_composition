@@ -416,6 +416,11 @@
       "evidence": ["scripts/build_external_evidence_intake_ledger.py", "external_validation/evidence_intake_ledger.json", "external_validation/evidence_intake_ledger.md", "external_validation/evidence_intake_ledger.csv", "results/external_evidence_intake_ledger_audit.json", "results/external_evidence_intake_ledger_audit.md", "results/external_evidence_audit.json", "external_validation/manifest_template.json"]
     },
     {
+      "name": "external_evidence_intake_ledger_self_test_claim",
+      "claim": "The repository self-tests the External evidence intake ledger in temporary copied workspaces, proving the ledger remains non-evidence while missing blocker rows, premature evidence promotion, unmapped strict failures, missing closure groups, failing source packets, manifest-template omissions, stale row source/completion fields, strict command drift, real manifest writes, and deleted ledger files fail closed without touching real evidence-intake outputs.",
+      "evidence": ["scripts/self_test_external_evidence_intake_ledger.py", "results/external_evidence_intake_ledger_self_test.json", "results/external_evidence_intake_ledger_self_test.md", "scripts/build_external_evidence_intake_ledger.py", "external_validation/evidence_intake_ledger.json", "external_validation/evidence_intake_ledger.md", "external_validation/evidence_intake_ledger.csv", "results/external_evidence_intake_ledger_audit.json"]
+    },
+    {
       "name": "external_baseline_contract_claim",
       "claim": "The repository provides a non-evidence baseline implementation contract, method matrix, and per-method adapter specs, while explicitly recording that independent non-oracle implementations are still missing.",
       "evidence": ["scripts/build_external_baseline_contract.py", "external_validation/baseline_implementation_contract.md", "external_validation/baseline_implementation_matrix.csv", "external_validation/baseline_specs/barrier_certified_energy_composer_v5.json", "external_validation/baseline_specs/oracle_basin_composer.json", "results/external_baseline_contract_audit.json", "results/external_baseline_contract_audit.md"]

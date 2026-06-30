@@ -1164,6 +1164,14 @@ def main() -> int:
     )
     add_check(checks, "external_evidence_intake_ledger_ready", intake_ok, intake_detail)
     intake_checks = {check.get("name"): check.get("passed") for check in intake_ledger.get("checks", []) or []}
+    intake_self_ok, intake_self_test, intake_self_detail = passed_json(
+        RESULTS / "external_evidence_intake_ledger_self_test.json",
+        version="external_evidence_intake_ledger_self_test_v1",
+    )
+    add_check(checks, "external_evidence_intake_ledger_self_test_ready", intake_self_ok, intake_self_detail)
+    intake_self_checks = {
+        check.get("name"): check.get("passed") for check in intake_self_test.get("checks", []) or []
+    }
     add_check(
         checks,
         "external_evidence_intake_ledger_not_evidence",
@@ -1183,6 +1191,15 @@ def main() -> int:
         and intake_checks.get("every_blocking_failure_is_mapped") is True
         and intake_checks.get("all_required_closure_groups_present") is True
         and intake_checks.get("strict_command_spine_covers_final_evidence_path") is True
+        and intake_checks.get("rows_are_actionable_and_source_bound") is True
+        and intake_self_test.get("passed") is True
+        and intake_self_test.get("temporary_ledger_ready") is True
+        and intake_self_test.get("unmapped_failure_rejected") is True
+        and intake_self_test.get("row_source_completion_drift_rejected") is True
+        and intake_self_test.get("strict_command_drift_rejected") is True
+        and intake_self_test.get("real_outputs_untouched") is True
+        and intake_self_checks.get("temporary_evidence_intake_ledger_ready_but_non_evidence") is True
+        and intake_self_checks.get("real_evidence_intake_outputs_untouched") is True
         and (EXTERNAL / "evidence_intake_ledger.json").exists()
         and (EXTERNAL / "evidence_intake_ledger.md").exists()
         and (EXTERNAL / "evidence_intake_ledger.csv").exists(),
@@ -1692,6 +1709,7 @@ def main() -> int:
         RESULTS / "external_rollout_evidence_audit.md",
         RESULTS / "external_ablation_collection_audit.md",
         RESULTS / "external_evidence_intake_ledger_audit.md",
+        RESULTS / "external_evidence_intake_ledger_self_test.md",
         RESULTS / "external_precollection_manifest_draft_audit.md",
         RESULTS / "external_precollection_freeze_receipt_audit.md",
         RESULTS / "external_postcollection_evidence_seal_audit.md",
@@ -1835,6 +1853,7 @@ def main() -> int:
         "external_ablation_collection_not_evidence",
         "external_ablation_collection_covers_strict_ablation_blocker",
         "external_evidence_intake_ledger_ready",
+        "external_evidence_intake_ledger_self_test_ready",
         "external_evidence_intake_ledger_not_evidence",
         "external_evidence_intake_ledger_maps_all_strict_failures",
         "baseline_contract_ready",

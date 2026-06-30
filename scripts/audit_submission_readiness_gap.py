@@ -88,6 +88,8 @@ def main() -> int:
     ablation_collection_self_test = (
         read_json(ablation_collection_self_test_path) if ablation_collection_self_test_path.exists() else {}
     )
+    evidence_intake_self_test_path = RESULTS / "external_evidence_intake_ledger_self_test.json"
+    evidence_intake_self_test = read_json(evidence_intake_self_test_path) if evidence_intake_self_test_path.exists() else {}
     baseline_contract_path = RESULTS / "external_baseline_contract_audit.json"
     baseline_contract = read_json(baseline_contract_path) if baseline_contract_path.exists() else {}
     baseline_contract_self_test_path = RESULTS / "external_baseline_contract_self_test.json"
@@ -376,6 +378,9 @@ def main() -> int:
             ROOT / "scripts" / "self_test_external_ablation_collection_packet.py",
             RESULTS / "external_ablation_collection_packet_self_test.json",
             RESULTS / "external_ablation_collection_packet_self_test.md",
+            ROOT / "scripts" / "self_test_external_evidence_intake_ledger.py",
+            RESULTS / "external_evidence_intake_ledger_self_test.json",
+            RESULTS / "external_evidence_intake_ledger_self_test.md",
             ROOT / "scripts" / "self_test_external_evidence_pipeline.py",
             RESULTS / "external_rollout_validator_self_test.json",
             RESULTS / "external_rollout_validator_self_test.md",
@@ -450,6 +455,9 @@ def main() -> int:
             "scripts/self_test_external_ablation_collection_packet.py",
             "results/external_ablation_collection_packet_self_test.json",
             "results/external_ablation_collection_packet_self_test.md",
+            "scripts/self_test_external_evidence_intake_ledger.py",
+            "results/external_evidence_intake_ledger_self_test.json",
+            "results/external_evidence_intake_ledger_self_test.md",
             "scripts/self_test_external_rollout_validator.py",
             "results/external_rollout_validator_self_test.json",
             "results/external_rollout_validator_self_test.md",
@@ -570,6 +578,13 @@ def main() -> int:
         and ablation_collection_self_test.get("work_order_artifact_command_drift_rejected") is True
         and ablation_collection_self_test.get("strict_command_drift_rejected") is True
         and ablation_collection_self_test.get("real_outputs_untouched") is True
+        and evidence_intake_self_test.get("passed") is True
+        and evidence_intake_self_test.get("not_external_evidence") is True
+        and evidence_intake_self_test.get("temporary_ledger_ready") is True
+        and evidence_intake_self_test.get("unmapped_failure_rejected") is True
+        and evidence_intake_self_test.get("row_source_completion_drift_rejected") is True
+        and evidence_intake_self_test.get("strict_command_drift_rejected") is True
+        and evidence_intake_self_test.get("real_outputs_untouched") is True
         and collection_readiness.get("passed") is True
         and collection_readiness.get("collection_ready") is False
         and pairing_integrity.get("passed") is True
@@ -610,6 +625,9 @@ def main() -> int:
             "scripts/self_test_external_ablation_collection_packet.py",
             "results/external_ablation_collection_packet_self_test.json",
             "results/external_ablation_collection_packet_self_test.md",
+            "scripts/self_test_external_evidence_intake_ledger.py",
+            "results/external_evidence_intake_ledger_self_test.json",
+            "results/external_evidence_intake_ledger_self_test.md",
             "results/external_fidelity_acceptance_audit.json",
             "results/independent_validation_route_audit.json",
             "results/external_blind_eval_audit.json",
@@ -803,6 +821,9 @@ def main() -> int:
     ablation_self_checks = {
         check.get("name"): check.get("passed") for check in ablation_collection_self_test.get("checks", []) or []
     }
+    evidence_intake_self_checks = {
+        check.get("name"): check.get("passed") for check in evidence_intake_self_test.get("checks", []) or []
+    }
     method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", [])}
     method_self_checks = {check.get("name"): check.get("passed") for check in method_implementation_self_test.get("checks", [])}
     method_config_checks = {
@@ -958,6 +979,7 @@ def main() -> int:
         and handoff_checks.get("config_manifest_packet_included") is True
         and handoff_checks.get("rollout_evidence_packet_included") is True
         and handoff_checks.get("ablation_collection_packet_self_test_included") is True
+        and handoff_checks.get("evidence_intake_ledger_self_test_included") is True
         and handoff_checks.get("method_implementation_packet_included") is True
         and handoff_checks.get("method_config_materialization_included") is True
         and handoff_checks.get("file_hashes_are_recorded") is True
@@ -1004,6 +1026,7 @@ def main() -> int:
                 ROOT / "scripts" / "build_external_rollout_evidence_packet.py",
                 ROOT / "scripts" / "self_test_external_rollout_evidence_packet.py",
                 ROOT / "scripts" / "self_test_external_ablation_collection_packet.py",
+                ROOT / "scripts" / "self_test_external_evidence_intake_ledger.py",
                 ROOT / "scripts" / "build_external_method_implementation_packet.py",
                 ROOT / "scripts" / "self_test_external_method_implementation_packet.py",
                 ROOT / "scripts" / "materialize_external_method_configs.py",
@@ -1039,6 +1062,8 @@ def main() -> int:
                 RESULTS / "external_rollout_evidence_packet_self_test.md",
                 RESULTS / "external_ablation_collection_packet_self_test.json",
                 RESULTS / "external_ablation_collection_packet_self_test.md",
+                RESULTS / "external_evidence_intake_ledger_self_test.json",
+                RESULTS / "external_evidence_intake_ledger_self_test.md",
                 RESULTS / "external_method_implementation_audit.json",
                 RESULTS / "external_method_implementation_audit.md",
                 RESULTS / "external_method_implementation_packet_self_test.json",
@@ -1099,6 +1124,7 @@ def main() -> int:
             "scripts/build_external_rollout_evidence_packet.py",
             "scripts/self_test_external_rollout_evidence_packet.py",
             "scripts/self_test_external_ablation_collection_packet.py",
+            "scripts/self_test_external_evidence_intake_ledger.py",
             "scripts/build_external_method_implementation_packet.py",
             "scripts/self_test_external_method_implementation_packet.py",
             "scripts/materialize_external_method_configs.py",
@@ -1134,6 +1160,8 @@ def main() -> int:
             "results/external_rollout_evidence_packet_self_test.md",
             "results/external_ablation_collection_packet_self_test.json",
             "results/external_ablation_collection_packet_self_test.md",
+            "results/external_evidence_intake_ledger_self_test.json",
+            "results/external_evidence_intake_ledger_self_test.md",
             "results/external_method_implementation_audit.json",
             "results/external_method_implementation_audit.md",
             "results/external_method_implementation_packet_self_test.json",

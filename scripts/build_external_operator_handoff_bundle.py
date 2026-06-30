@@ -184,6 +184,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_ablation_collection_packet.py",
         SCRIPTS / "self_test_external_ablation_collection_packet.py",
         SCRIPTS / "build_external_evidence_intake_ledger.py",
+        SCRIPTS / "self_test_external_evidence_intake_ledger.py",
         SCRIPTS / "build_external_precollection_freeze_receipt.py",
         SCRIPTS / "build_external_postcollection_evidence_seal.py",
         SCRIPTS / "audit_external_postcollection_seal_consistency.py",
@@ -266,6 +267,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_ablation_collection_packet_self_test.md",
         RESULTS / "external_evidence_intake_ledger_audit.json",
         RESULTS / "external_evidence_intake_ledger_audit.md",
+        RESULTS / "external_evidence_intake_ledger_self_test.json",
+        RESULTS / "external_evidence_intake_ledger_self_test.md",
         RESULTS / "external_precollection_freeze_receipt_audit.json",
         RESULTS / "external_precollection_freeze_receipt_audit.md",
         RESULTS / "external_postcollection_evidence_seal_audit.json",
@@ -430,6 +433,10 @@ def build_payload() -> dict[str, Any]:
         "external_ablation_collection_packet_self_test_v1",
     )
     evidence_intake = require_payload(RESULTS / "external_evidence_intake_ledger_audit.json", "external_evidence_intake_ledger_v1")
+    evidence_intake_self_test = require_payload(
+        RESULTS / "external_evidence_intake_ledger_self_test.json",
+        "external_evidence_intake_ledger_self_test_v1",
+    )
     precollection_freeze = require_payload(
         RESULTS / "external_precollection_freeze_receipt_audit.json",
         "external_precollection_freeze_receipt_audit_v1",
@@ -1054,6 +1061,7 @@ def build_payload() -> dict[str, Any]:
         and not evidence_intake.get("unmapped_failures")
         and intake_checks.get("every_blocking_failure_is_mapped") is True
         and intake_checks.get("strict_command_spine_covers_final_evidence_path") is True
+        and intake_checks.get("rows_are_actionable_and_source_bound") is True
         and "external_validation/evidence_intake_ledger.json" in paths
         and "external_validation/evidence_intake_ledger.md" in paths
         and "external_validation/evidence_intake_ledger.csv" in paths
@@ -1063,6 +1071,30 @@ def build_payload() -> dict[str, Any]:
             f"mapped={evidence_intake.get('mapped_failure_count')!r}/"
             f"{evidence_intake.get('blocking_failure_count')!r}, "
             f"groups={len(evidence_intake.get('closure_groups', []) or [])}"
+        ),
+    )
+    intake_self_checks = {
+        check.get("name"): check.get("passed") for check in evidence_intake_self_test.get("checks", []) or []
+    }
+    add_check(
+        checks,
+        "evidence_intake_ledger_self_test_included",
+        evidence_intake_self_test.get("passed") is True
+        and evidence_intake_self_test.get("not_external_evidence") is True
+        and evidence_intake_self_test.get("temporary_ledger_ready") is True
+        and evidence_intake_self_test.get("unmapped_failure_rejected") is True
+        and evidence_intake_self_test.get("row_source_completion_drift_rejected") is True
+        and evidence_intake_self_test.get("strict_command_drift_rejected") is True
+        and evidence_intake_self_test.get("real_outputs_untouched") is True
+        and intake_self_checks.get("temporary_evidence_intake_ledger_ready_but_non_evidence") is True
+        and intake_self_checks.get("real_evidence_intake_outputs_untouched") is True
+        and "results/external_evidence_intake_ledger_self_test.json" in paths
+        and "results/external_evidence_intake_ledger_self_test.md" in paths
+        and "scripts/self_test_external_evidence_intake_ledger.py" in paths,
+        (
+            f"temporary_ledger_ready={evidence_intake_self_test.get('temporary_ledger_ready')!r}, "
+            f"unmapped_failure_rejected={evidence_intake_self_test.get('unmapped_failure_rejected')!r}, "
+            f"strict_command_drift_rejected={evidence_intake_self_test.get('strict_command_drift_rejected')!r}"
         ),
     )
     freeze_checks = {check.get("name"): check.get("passed") for check in precollection_freeze.get("checks", []) or []}
