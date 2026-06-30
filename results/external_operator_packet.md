@@ -79,9 +79,9 @@ The materializer is the guarded promotion path from the draft to `external_valid
 - Strict fidelity evidence ready: `false`
 - Missing operator text fields: `12`
 - Missing confirmation flags: `3`
-- Plan-generation checkout commit: `d9d7a93d829effca0338e739edafa7b3e21d0d03`
+- Plan-generation checkout commit: `8242a93661319da5e1eec86a74e6a6c09cc629a4`
 - Plan-generation skill-library hash: `62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1`
-- Plan-generation checkout clean: `false`
+- Plan-generation checkout clean: `true`
 
 Dry-run plan command:
 
@@ -137,16 +137,16 @@ python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --
 Renderer profile retest commands:
 
 ```powershell
-python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend cpu --shader-pack minimal
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 1 --width 128 --height 128 --render-backend cpu --shader-pack minimal
 ```
 ```powershell
-python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend gpu --shader-pack minimal
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 1 --width 128 --height 128 --render-backend gpu --shader-pack minimal
 ```
 ```powershell
-python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend sapien_cuda --shader-pack minimal
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 1 --width 128 --height 128 --render-backend sapien_cuda --shader-pack minimal
 ```
 ```powershell
-python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4 --width 64 --height 64 --render-backend cpu --shader-pack minimal
+python scripts\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend cpu --shader-pack minimal
 ```
 
 ## ManiSkill Render Resource Sweep

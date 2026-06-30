@@ -175,31 +175,9 @@
   "fidelity_acceptance_materializer": {
     "acceptance_write_ready": false,
     "current_checkout": {
-      "clean_checkout": false,
-      "code_commit": "d9d7a93d829effca0338e739edafa7b3e21d0d03",
-      "dirty_status_lines": [
-        "M external_validation/fidelity_acceptance_draft.json",
-        " M external_validation/fidelity_acceptance_draft.md",
-        " M results/external_fidelity_acceptance_draft_audit.json",
-        " M results/external_fidelity_acceptance_draft_audit.md",
-        " M results/external_fidelity_acceptance_self_test.json",
-        " M results/external_fidelity_acceptance_self_test.md",
-        " M scripts/audit_external_execution_readiness.py",
-        " M scripts/audit_external_fidelity_acceptance.py",
-        " M scripts/build_external_acquisition_packet.py",
-        " M scripts/build_external_collection_job_packet.py",
-        " M scripts/build_external_evidence_intake_ledger.py",
-        " M scripts/build_external_fidelity_acceptance_draft.py",
-        " M scripts/build_external_fidelity_provenance_packet.py",
-        " M scripts/build_external_operator_packet.py",
-        " M scripts/build_external_platform_onboarding.py",
-        " M scripts/build_external_precollection_manifest_draft.py",
-        " M scripts/build_maniskill_render_machine_qualification.py",
-        " M scripts/materialize_fidelity_acceptance.py",
-        " M scripts/self_test_external_evidence_pipeline.py",
-        " M scripts/self_test_external_fidelity_acceptance.py",
-        " M scripts/validate_submission_artifacts.py"
-      ],
+      "clean_checkout": true,
+      "code_commit": "8242a93661319da5e1eec86a74e6a6c09cc629a4",
+      "dirty_status_lines": [],
       "skill_library_hash": "62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1"
     },
     "missing_confirmation_count": 3,
@@ -1052,10 +1030,10 @@
       "initial_render_start"
     ],
     "renderer_profile_retest_commands": [
-      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend cpu --shader-pack minimal",
-      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend gpu --shader-pack minimal",
-      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 1 --width 64 --height 64 --render-backend sapien_cuda --shader-pack minimal",
-      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4 --width 64 --height 64 --render-backend cpu --shader-pack minimal"
+      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 1 --width 128 --height 128 --render-backend cpu --shader-pack minimal",
+      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 1 --width 128 --height 128 --render-backend gpu --shader-pack minimal",
+      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 1 --width 128 --height 128 --render-backend sapien_cuda --shader-pack minimal",
+      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend cpu --shader-pack minimal"
     ],
     "strict_external_evidence_ready": false
   },

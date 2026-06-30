@@ -18,4 +18,4 @@ This is a tooling-only mutation test. It runs the acquisition packet builder in 
 - `pass` `unmapped_blocker_rejected`: status=1, gap_check=False, mapped_check=False
 - `pass` `premature_manifest_rejected`: status=1, no_manifest_check=False
 - `pass` `collection_readiness_drift_rejected`: status=1, collection_check=False
-- `pass` `real_repository_acquisition_outputs_untouched`: json_before=e979b897017d6ac8e42ec50212331a6bd599af243739889bfc06491b65c367c6, json_after=e979b897017d6ac8e42ec50212331a6bd599af243739889bfc06491b65c367c6, md_before=9bad100eecfc75c195232634de7d7eeb1bf439799b3853aedcc3549352ab9f90, md_after=9bad100eecfc75c195232634de7d7eeb1bf439799b3853aedcc3549352ab9f90
+- `pass` `real_repository_acquisition_outputs_untouched`: json_before=81c138917a4cee3f39bfb429448056da14e22cda8e390c65c12fa0141f428c85, json_after=81c138917a4cee3f39bfb429448056da14e22cda8e390c65c12fa0141f428c85, md_before=6b2bdbdbd25c74f1c770d743573543d5e99e6d2eb3adb1a77013213bf8205ff9, md_after=6b2bdbdbd25c74f1c770d743573543d5e99e6d2eb3adb1a77013213bf8205ff9

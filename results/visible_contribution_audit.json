@@ -137,7 +137,7 @@
       "passed": true
     },
     {
-      "detail": "write_enabled=False, acceptance_write_ready=False, commit='d9d7a93d829effca0338e739edafa7b3e21d0d03', skill_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1', clean=False, dirty_count=21",
+      "detail": "write_enabled=False, acceptance_write_ready=False, commit='8242a93661319da5e1eec86a74e6a6c09cc629a4', skill_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1', clean=True, dirty_count=0",
       "name": "fidelity_acceptance_materializer_visible",
       "passed": true
     },

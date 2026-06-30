@@ -41,7 +41,7 @@
       "passed": true
     },
     {
-      "detail": "before={'results/external_execution_readiness_audit.json': '9eb50dd07cca5d9bb1696f65a614111ab0e5fb305ad26eaca3175e7156e00a7f', 'results/external_execution_readiness_audit.md': 'ed312f76a25c1a5592b76987bb42bbfe2c71a335ed374d8f7ee01cf51ff156e9', 'external_validation/manifest.json': None}, after={'results/external_execution_readiness_audit.json': '9eb50dd07cca5d9bb1696f65a614111ab0e5fb305ad26eaca3175e7156e00a7f', 'results/external_execution_readiness_audit.md': 'ed312f76a25c1a5592b76987bb42bbfe2c71a335ed374d8f7ee01cf51ff156e9', 'external_validation/manifest.json': None}",
+      "detail": "before={'results/external_execution_readiness_audit.json': 'b8ae025b89878e5f8626f264035dbdcd334876bff44d5ea10057f698cedb259e', 'results/external_execution_readiness_audit.md': '6bb7e866e6191e8368adddf53d794edf628d6caf8805e48ae207ce9a280bacc2', 'external_validation/manifest.json': None}, after={'results/external_execution_readiness_audit.json': 'b8ae025b89878e5f8626f264035dbdcd334876bff44d5ea10057f698cedb259e', 'results/external_execution_readiness_audit.md': '6bb7e866e6191e8368adddf53d794edf628d6caf8805e48ae207ce9a280bacc2', 'external_validation/manifest.json': None}",
       "name": "real_execution_outputs_untouched",
       "passed": true
     }

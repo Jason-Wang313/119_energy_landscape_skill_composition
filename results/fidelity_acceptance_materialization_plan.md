@@ -16,10 +16,10 @@ python scripts\materialize_fidelity_acceptance.py --operator-name-or-lab <indepe
 
 ## Plan-Generation Checkout Guard
 
-- Plan-generation code commit: `d9d7a93d829effca0338e739edafa7b3e21d0d03`
+- Plan-generation code commit: `8242a93661319da5e1eec86a74e6a6c09cc629a4`
 - Plan-generation skill-library hash: `62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1`
-- Plan-generation checkout clean: `false`
-- Plan-generation dirty status lines: `21`
+- Plan-generation checkout clean: `true`
+- Plan-generation dirty status lines: `0`
 
 These values are a dry-run snapshot. The write path recomputes the checkout at runtime and requires the supplied `--code-commit` and `--skill-library-hash` to match that clean checkout before writing `external_validation/fidelity_acceptance.json`.
 
@@ -51,9 +51,9 @@ These values are a dry-run snapshot. The write path recomputes the checkout at r
 - `pass` `operator_text_required_before_write`: write=False, missing_text=['independent operator/lab identity', 'accepted robot/simulator machine identity', 'contact solver, friction model, and dynamics justification', 'sim/control timestep and substeps per control step', 'paired-reset replay verification', 'real or benchmark calibration basis', 'accepted or replaced task-binding decision', 'operator acceptance-gate signoff', 'known limitations for the accepted route', 'date on which platform acceptance was locked', 'code commit used for collection', 'SHA256 hash for the skill/baseline library']
 - `pass` `confirmation_flags_required_before_write`: write=False, missing_confirmations=['confirm_real_platform', 'confirm_independent_operator', 'confirm_render_backed_videos']
 - `pass` `write_requires_complete_operator_signoff`: write=False, acceptance_write_ready=False
-- `pass` `current_checkout_hashes_recorded`: current_commit='d9d7a93d829effca0338e739edafa7b3e21d0d03', current_skill_library_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1'
-- `pass` `write_requires_clean_checkout`: write=False, dirty_status_count=21
-- `pass` `write_requires_current_code_commit_and_skill_hash`: write=False, supplied_commit='', current_commit='d9d7a93d829effca0338e739edafa7b3e21d0d03', supplied_skill_hash='', current_skill_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1'
+- `pass` `current_checkout_hashes_recorded`: current_commit='8242a93661319da5e1eec86a74e6a6c09cc629a4', current_skill_library_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1'
+- `pass` `write_requires_clean_checkout`: write=False, dirty_status_count=0
+- `pass` `write_requires_current_code_commit_and_skill_hash`: write=False, supplied_commit='', current_commit='8242a93661319da5e1eec86a74e6a6c09cc629a4', supplied_skill_hash='', current_skill_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1'
 - `pass` `default_run_does_not_write_real_acceptance_or_manifest`: write=False, acceptance_exists=False, manifest_exists=False
 - `pass` `gates_accepted_only_after_confirmations`: acceptance_write_ready=False, gate_statuses=['operator_unaccepted', 'operator_unaccepted', 'operator_unaccepted', 'operator_unaccepted', 'operator_unaccepted']
 - `pass` `strict_evidence_remains_external_to_materializer`: materializer can write provenance, but strict audits and manifest evidence still decide readiness

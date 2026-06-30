@@ -40,7 +40,7 @@ The External operator release bundle self-test documents transfer-package fail-c
 - `pass` `fidelity_provenance_packet_visible`: fidelity_provenance_packet_ready=True, strict_fidelity_evidence_ready=False, strict_external_evidence_ready=False
 - `pass` `fidelity_provenance_packet_self_test_visible`: temporary_ready=True, strict_command_drift_rejected=True, real_untouched=True
 - `pass` `fidelity_acceptance_draft_visible`: draft_ready=True, remaining_operator_inputs=9, acceptance_ready=False
-- `pass` `fidelity_acceptance_materializer_visible`: write_enabled=False, acceptance_write_ready=False, commit='d9d7a93d829effca0338e739edafa7b3e21d0d03', skill_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1', clean=False, dirty_count=21
+- `pass` `fidelity_acceptance_materializer_visible`: write_enabled=False, acceptance_write_ready=False, commit='8242a93661319da5e1eec86a74e6a6c09cc629a4', skill_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1', clean=True, dirty_count=0
 - `pass` `fidelity_acceptance_materializer_self_test_visible`: checks={'matching_clean_checkout_writes_temp_acceptance': True, 'stale_commit_rejected_without_temp_write': True, 'mismatched_skill_hash_rejected_without_temp_write': True, 'dirty_checkout_rejected_without_temp_write': True, 'pycache_excluded_from_skill_library_hash': True, 'real_acceptance_file_not_touched': True}
 - `pass` `backend_integration_packet_visible`: backend_integration_packet_ready=True, strict_backend_ready=False
 - `pass` `backend_integration_packet_self_test_visible`: temporary_ready=True, strict_command_drift_rejected=True, real_untouched=True

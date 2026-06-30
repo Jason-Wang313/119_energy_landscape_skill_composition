@@ -1591,18 +1591,18 @@
       "sha256": "CA4711AC594E3A04C9B8C93E026C2B747DA1E8439CB4C481436B479D97A198B8"
     },
     {
-      "bytes": 59292,
+      "bytes": 59304,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.json",
-      "sha256": "E979B897017D6AC8E42EC50212331A6BD599AF243739889BFC06491B65C367C6"
+      "sha256": "81C138917A4CEE3F39BFB429448056DA14E22CDA8E390C65C12FA0141F428C85"
     },
     {
-      "bytes": 36117,
+      "bytes": 36129,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_acquisition_packet.md",
-      "sha256": "9BAD100EECFC75C195232634DE7D7EEB1BF439799B3853AEDCC3549352AB9F90"
+      "sha256": "6B2BDBDBD25C74F1C770D743573543D5E99E6D2EB3ADB1A77013213BF8205FF9"
     },
     {
       "bytes": 3130,
@@ -1913,32 +1913,32 @@
       "sha256": "56651DAF3A7D8D04D58F11CB96CF9CC12F6ABCA1D385952B74A24A7DDF302EC6"
     },
     {
-      "bytes": 44267,
+      "bytes": 44265,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.json",
-      "sha256": "9EB50DD07CCA5D9BB1696F65A614111AB0E5FB305AD26EACA3175E7156E00A7F"
+      "sha256": "B8AE025B89878E5F8626F264035DBDCD334876BFF44D5EA10057F698CEDB259E"
     },
     {
-      "bytes": 34375,
+      "bytes": 34373,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_audit.md",
-      "sha256": "ED312F76A25C1A5592B76987BB42BBFE2C71A335ED374D8F7EE01CF51FF156E9"
+      "sha256": "6BB7E866E6191E8368ADDDF53D794EDF628D6CAF8805E48AE207CE9A280BACC2"
     },
     {
       "bytes": 2457,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_self_test.json",
-      "sha256": "CFA3F9590136EAADFBE0F38CB758236D366C0CA8C7577CBD0A3A4E2BAA3701CB"
+      "sha256": "8A36F2EF3DABCAF3567009AEAF9B3CA6B69EB95597785AC6CEB3B0B42472F5DD"
     },
     {
       "bytes": 2324,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_execution_readiness_self_test.md",
-      "sha256": "783D03CBCC75DA5E94C19C2718609D36B9C56B42224E98AD86492E07AFEF24E9"
+      "sha256": "B70593AD1C52CFAA40EE196E83F6AC0A346E5A041C3C522921B1BC221E9191AA"
     },
     {
       "bytes": 9807,
@@ -2067,18 +2067,18 @@
       "sha256": "292524B8333A2755E2314324E3201A64F8AA2FA584E5EEFFF37262B2442C064D"
     },
     {
-      "bytes": 62046,
+      "bytes": 60708,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.json",
-      "sha256": "20C0C78B75DAA0511617A64B2D18625FB3715592118828BF013895B0F5B5A9ED"
+      "sha256": "447311F26752746D5B73E9454ADA8B6B1B5E8F08AEE84B7663A0F51B3EFCC1DD"
     },
     {
-      "bytes": 29112,
+      "bytes": 29123,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/external_operator_packet.md",
-      "sha256": "CFE29BDAD74411141D33744CDB16CE90DBABEB8326324E93B91C69A0D830F38C"
+      "sha256": "4E0DC50F472891D2559A7B23EA8885747E459AFEFC55FA108403043F44B1B7C6"
     },
     {
       "bytes": 525,
@@ -2305,18 +2305,18 @@
       "sha256": "1920465D2991DE966CBEFF7C2C4C708A197B801F4FDB08435E18D4EC009D2B7A"
     },
     {
-      "bytes": 9209,
+      "bytes": 7902,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/fidelity_acceptance_materialization_plan.json",
-      "sha256": "6A7D96A5F604DB5FAD8283FC5418CC97DB11C365637EB2CF1F9211C9FD527479"
+      "sha256": "DB2A03DA3C14C49B566E716B3A3C00055B5E990CCE1ED04171C30C5FDCCFFFEE"
     },
     {
-      "bytes": 5840,
+      "bytes": 5837,
       "category": "generated_non_evidence_report",
       "exists": true,
       "path": "results/fidelity_acceptance_materialization_plan.md",
-      "sha256": "A6B9435F3C7FBF9B8632D396EB599B4A1341E0EA4354BD6786832169E753698B"
+      "sha256": "572A7B01E90B901065142A09BBE2416E0F1E190463D0F96CA208E8536BA5078E"
     },
     {
       "bytes": 8182,
