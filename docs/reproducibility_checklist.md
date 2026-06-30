@@ -34,6 +34,8 @@
 - External backend integration packet builder: `scripts/build_external_backend_integration_packet.py`
 - External config manifest packet builder: `scripts/build_external_config_manifest_packet.py`
 - External rollout evidence packet builder: `scripts/build_external_rollout_evidence_packet.py`
+- External rollout evidence packet self-test: `scripts/self_test_external_rollout_evidence_packet.py`
+  - Durable report: `results/external_rollout_evidence_packet_self_test.md`
 - External ablation collection packet builder: `scripts/build_external_ablation_collection_packet.py`
 - External evidence intake ledger builder: `scripts/build_external_evidence_intake_ledger.py`
 - External collection readiness validator: `scripts/audit_external_collection_readiness.py`

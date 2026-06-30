@@ -145,6 +145,7 @@ Artifact rule: keep the numbered PDF in Downloads only; do not copy it to the vi
 - External config manifest audit: `results/external_config_manifest_audit.md`
 - External rollout evidence packet: `external_validation/rollout_evidence_packet.md`
 - External rollout evidence audit: `results/external_rollout_evidence_audit.md`
+- External rollout evidence packet self-test: `results/external_rollout_evidence_packet_self_test.md`
 - Strict MP4 video evidence gate: `scripts/validate_external_rollouts.py`
 - External ablation collection packet: `external_validation/ablation_collection_packet.md`
 - External ablation collection audit: `results/external_ablation_collection_audit.md`

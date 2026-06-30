@@ -42,7 +42,7 @@
       "passed": true
     },
     {
-      "detail": "files=342, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=345, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -77,7 +77,7 @@
       "passed": true
     },
     {
-      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=342, archive_written=False",
+      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=345, archive_written=False",
       "name": "external_operator_release_bundle_visible",
       "passed": true
     },
@@ -239,6 +239,11 @@
     {
       "detail": "rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False",
       "name": "rollout_evidence_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "temporary_ready=True, tasks_rejected=True, real_untouched=True",
+      "name": "rollout_evidence_packet_self_test_visible",
       "passed": true
     },
     {

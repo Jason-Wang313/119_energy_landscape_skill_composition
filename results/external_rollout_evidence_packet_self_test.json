@@ -1,0 +1,77 @@
+{
+  "checks": [
+    {
+      "detail": "status=0, passed=True, expected=1440, observed=0",
+      "name": "temporary_rollout_packet_ready_but_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "task_order_check=False",
+      "name": "missing_task_work_orders_rejected",
+      "passed": true
+    },
+    {
+      "detail": "non_evidence_check=False",
+      "name": "premature_evidence_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "manifest_error_check=False",
+      "name": "manifest_schema_error_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "observed_record_check=False",
+      "name": "observed_record_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "budget_check=False",
+      "name": "collection_budget_shrink_rejected",
+      "passed": true
+    },
+    {
+      "detail": "command_check=False",
+      "name": "strict_command_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "downstream_gate_check=False",
+      "name": "downstream_gate_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "real_output_check=False",
+      "name": "real_output_write_rejected",
+      "passed": true
+    },
+    {
+      "detail": "changed=[]",
+      "name": "real_rollout_packet_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "collection_budget_shrink_rejected": true,
+  "downstream_gate_promotion_rejected": true,
+  "manifest_schema_error_drift_rejected": true,
+  "missing_task_work_orders_rejected": true,
+  "not_external_evidence": true,
+  "observed_record_drift_rejected": true,
+  "passed": true,
+  "premature_evidence_promotion_rejected": true,
+  "real_output_hashes": {
+    "external_validation/manifest.json": null,
+    "external_validation/rollout_evidence_packet.json": "90e5146448f7d9cfac24742e123dfba91a6f00a1b3c4937d54b10e28ffa03e79",
+    "external_validation/rollout_evidence_packet.md": "a22d860c7ac83f885d68926f1cfd976f2e8d747bfac1d6a433ae7817b1220cc2",
+    "external_validation/rollout_evidence_work_orders.csv": "7ee1db977abe2c371e0892342bce0589582e9fde47aa8e101f32ab9db4245125",
+    "results/external_rollout_evidence_audit.json": "46e851eedf315d592f1df5bff09fee9fb328cf47e9b7e7511b5e9a2ac976b03a",
+    "results/external_rollout_evidence_audit.md": "4b1f04f3be6024753737b613769ea2dd15f1aec7172f028555456a9598d91800"
+  },
+  "real_output_write_rejected": true,
+  "real_outputs_untouched": true,
+  "strict_command_drift_rejected": true,
+  "strict_external_evidence_ready": false,
+  "strict_rollout_evidence_ready": false,
+  "temporary_packet_ready": true,
+  "version": "external_rollout_evidence_packet_self_test_v1"
+}

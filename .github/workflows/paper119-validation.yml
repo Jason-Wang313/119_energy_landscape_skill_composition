@@ -172,6 +172,9 @@ jobs:
       - name: Build external rollout evidence packet
         run: python scripts/build_external_rollout_evidence_packet.py
 
+      - name: Self-test external rollout evidence packet
+        run: python scripts/self_test_external_rollout_evidence_packet.py
+
       - name: Build external ablation collection packet
         run: python scripts/build_external_ablation_collection_packet.py
 

@@ -51,6 +51,8 @@ External operator release bundle self-test: `results/external_operator_release_b
 
 External evidence preflight self-test: `results/external_evidence_preflight_self_test.md` proves the current no-manifest route stays fail-closed, a complete temporary 1,440-record package can reach `READY_FOR_STRICT_AUDIT`, and incomplete logs, placeholder videos, template configs, scaffold implementations, and real-output overwrites are rejected without promoting real evidence.
 
+External rollout evidence packet self-test: `results/external_rollout_evidence_packet_self_test.md` mutation-tests the rollout packet in temporary copied workspaces and rejects missing task JSONL/video work orders, premature evidence promotion, missing-manifest signal drift, fake observed-record drift, shrunken collection budgets, strict-command drift, downstream gate promotion, and accidental manifest/log/video writes without touching real rollout packet outputs.
+
 External execution readiness self-test: `results/external_execution_readiness_self_test.md` proves the top-level execution gate remains executable but non-evidence while missing operator packets, missing required packet files, premature manifests, strict-evidence promotion, and Haonan-dependence drift fail closed without touching real execution-readiness outputs.
 
 Fidelity materializer checkout guard: `results/fidelity_acceptance_materialization_plan.md` now records the current checkout commit and a cache-independent baseline-library hash, and the write path rejects stale commits, mismatched hashes, and dirty checkouts before `external_validation/fidelity_acceptance.json` can be created.

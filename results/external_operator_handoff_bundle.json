@@ -3,9 +3,9 @@
   "category_counts": {
     "baseline_spec": 12,
     "config_template": 4,
-    "generated_non_evidence_report": 108,
+    "generated_non_evidence_report": 110,
     "method_config_candidate": 11,
-    "operator_command_source": 48,
+    "operator_command_source": 49,
     "operator_facing_input": 86,
     "prepared_config_input": 4,
     "reference_adapter": 60,
@@ -59,7 +59,7 @@
       "passed": true
     },
     {
-      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 108, 'method_config_candidate': 11, 'operator_command_source': 48, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 110, 'method_config_candidate': 11, 'operator_command_source': 49, 'operator_facing_input': 86, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "handoff_has_task_config_and_baseline_assets",
       "passed": true
     },
@@ -189,7 +189,7 @@
       "passed": true
     },
     {
-      "detail": "hashed_files=342",
+      "detail": "hashed_files=345",
       "name": "file_hashes_are_recorded",
       "passed": true
     }
@@ -204,14 +204,14 @@
     "placeholder_not_external_evidence"
   ],
   "handoff_bundle_ready": true,
-  "included_file_count": 342,
+  "included_file_count": 345,
   "included_files": [
     {
-      "bytes": 32500,
+      "bytes": 32602,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "6219CE3DF9743D6A668C539F2A820A874EA15FF7DB2DC416E6296CDD77B0CB56"
+      "sha256": "62E9298B52B35ACA6D35231DAE380B3216133144A7B7C7CFE524AF940138175A"
     },
     {
       "bytes": 14198,
@@ -228,18 +228,18 @@
       "sha256": "7EDFEE348BE624FC1BA8818A88D526CC53B3632F3D31A1500A19F9C5A868FC2E"
     },
     {
-      "bytes": 23429,
+      "bytes": 23607,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/reproducibility_checklist.md",
-      "sha256": "C7F9963F0BC171409CF7B8E3B1AF51EB6DF3E9B05EC84493FBFF699710A7FB56"
+      "sha256": "0D7205803B347E02E109ADE85B6E3417CE678DFD9533F99392ADFF5761D1D094"
     },
     {
-      "bytes": 22626,
+      "bytes": 23433,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "169F8C3C8BCEF68458BCC9DD12E35ACC2CB55B133B317E6B7EF66D11BF46D8A9"
+      "sha256": "DF5A70F9C5547E62647B5B00274E4A8954322A1D8AC02485DCB45087951BA018"
     },
     {
       "bytes": 34698,
@@ -2083,6 +2083,20 @@
       "sha256": "4B1F04F3BE6024753737B613769EA2DD15F1AEC7172F028555456A9598D91800"
     },
     {
+      "bytes": 2713,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_rollout_evidence_packet_self_test.json",
+      "sha256": "5284BF4024EEC09653DDCB8F33992BBE71EBCDD21181CBBBFBCBB3AD4588F3F4"
+    },
+    {
+      "bytes": 1822,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_rollout_evidence_packet_self_test.md",
+      "sha256": "13BC71E7E3312394418F2B85E5D298302CAB539442183A2547CE3AC8923A43D7"
+    },
+    {
       "bytes": 4028,
       "category": "generated_non_evidence_report",
       "exists": true,
@@ -2440,11 +2454,11 @@
       "sha256": "C166221116A089779E0111AE13BDB75CC1625849486A1C116AF8534D264334AF"
     },
     {
-      "bytes": 79891,
+      "bytes": 81640,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "864F76CD5937B4488690257696AEA585B77FEBA61FFBF4C6E3AAC11158DC30DF"
+      "sha256": "5883637F58E64B8C305969941A9C06CAB4CC2DCD02D5DF01441EDF53D0D66E38"
     },
     {
       "bytes": 71405,
@@ -2578,6 +2592,13 @@
       "exists": true,
       "path": "scripts/self_test_external_method_implementation_packet.py",
       "sha256": "6033FA1D708803B9ED1C8CE5E579A3CFB822B8BED4B137A27AE72C38A4C8C4A1"
+    },
+    {
+      "bytes": 18852,
+      "category": "operator_command_source",
+      "exists": true,
+      "path": "scripts/self_test_external_rollout_evidence_packet.py",
+      "sha256": "8DEB0903A57E335E25EF4BF73CC476070BF5B28E7A1067F61A81DC3F25CBB6EF"
     },
     {
       "bytes": 31757,
@@ -3253,6 +3274,7 @@
     "results/maniskill_backend_readiness_audit.json",
     "results/external_config_manifest_audit.json",
     "results/external_rollout_evidence_audit.json",
+    "results/external_rollout_evidence_packet_self_test.json",
     "results/external_pilot_smoke_packet_audit.json",
     "results/external_pilot_smoke_audit.json",
     "results/maniskill_render_video_preflight_audit.json",

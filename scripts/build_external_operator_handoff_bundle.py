@@ -177,6 +177,7 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_backend_integration_packet.py",
         SCRIPTS / "build_external_config_manifest_packet.py",
         SCRIPTS / "build_external_rollout_evidence_packet.py",
+        SCRIPTS / "self_test_external_rollout_evidence_packet.py",
         SCRIPTS / "build_external_ablation_collection_packet.py",
         SCRIPTS / "build_external_evidence_intake_ledger.py",
         SCRIPTS / "build_external_precollection_freeze_receipt.py",
@@ -245,6 +246,8 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_config_manifest_audit.md",
         RESULTS / "external_rollout_evidence_audit.json",
         RESULTS / "external_rollout_evidence_audit.md",
+        RESULTS / "external_rollout_evidence_packet_self_test.json",
+        RESULTS / "external_rollout_evidence_packet_self_test.md",
         RESULTS / "external_ablation_collection_audit.json",
         RESULTS / "external_ablation_collection_audit.md",
         RESULTS / "external_evidence_intake_ledger_audit.json",
@@ -389,6 +392,10 @@ def build_payload() -> dict[str, Any]:
     maniskill_preflight = require_payload(RESULTS / "maniskill_reference_collection_preflight_audit.json", "maniskill_reference_collection_preflight_audit_v1")
     config_manifest = require_payload(RESULTS / "external_config_manifest_audit.json", "external_config_manifest_audit_v1")
     rollout_evidence = require_payload(RESULTS / "external_rollout_evidence_audit.json", "external_rollout_evidence_audit_v1")
+    rollout_evidence_self_test = require_payload(
+        RESULTS / "external_rollout_evidence_packet_self_test.json",
+        "external_rollout_evidence_packet_self_test_v1",
+    )
     ablation_packet = require_payload(RESULTS / "external_ablation_collection_audit.json", "external_ablation_collection_audit_v1")
     evidence_intake = require_payload(RESULTS / "external_evidence_intake_ledger_audit.json", "external_evidence_intake_ledger_v1")
     precollection_freeze = require_payload(
@@ -828,6 +835,10 @@ def build_payload() -> dict[str, Any]:
         ),
     )
     rollout_evidence_checks = {check.get("name"): check.get("passed") for check in rollout_evidence.get("checks", []) or []}
+    rollout_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in rollout_evidence_self_test.get("checks", []) or []
+    }
     add_check(
         checks,
         "rollout_evidence_packet_included",
@@ -838,11 +849,25 @@ def build_payload() -> dict[str, Any]:
         and rollout_evidence.get("strict_external_evidence_ready") is False
         and rollout_evidence_checks.get("task_work_orders_cover_all_planned_tasks") is True
         and rollout_evidence_checks.get("strict_commands_cover_collection_manifest_rollout_pairing_release_evidence") is True
+        and rollout_evidence_self_test.get("passed") is True
+        and rollout_evidence_self_test.get("not_external_evidence") is True
+        and rollout_evidence_self_test.get("temporary_packet_ready") is True
+        and rollout_evidence_self_test.get("missing_task_work_orders_rejected") is True
+        and rollout_evidence_self_test.get("premature_evidence_promotion_rejected") is True
+        and rollout_evidence_self_test.get("manifest_schema_error_drift_rejected") is True
+        and rollout_evidence_self_test.get("strict_command_drift_rejected") is True
+        and rollout_evidence_self_test.get("real_output_write_rejected") is True
+        and rollout_evidence_self_test.get("real_outputs_untouched") is True
+        and rollout_self_checks.get("temporary_rollout_packet_ready_but_non_evidence") is True
+        and rollout_self_checks.get("real_rollout_packet_outputs_untouched") is True
         and "external_validation/rollout_evidence_packet.json" in paths
         and "external_validation/rollout_evidence_packet.md" in paths
         and "external_validation/rollout_evidence_work_orders.csv" in paths
         and "results/external_rollout_evidence_audit.json" in paths
-        and "scripts/build_external_rollout_evidence_packet.py" in paths,
+        and "results/external_rollout_evidence_packet_self_test.json" in paths
+        and "results/external_rollout_evidence_packet_self_test.md" in paths
+        and "scripts/build_external_rollout_evidence_packet.py" in paths
+        and "scripts/self_test_external_rollout_evidence_packet.py" in paths,
         (
             f"rollout_evidence_packet_ready={rollout_evidence.get('rollout_evidence_packet_ready')!r}, "
             f"strict_rollout_evidence_ready={rollout_evidence.get('strict_rollout_evidence_ready')!r}, "
@@ -1286,6 +1311,7 @@ def build_payload() -> dict[str, Any]:
             "results/maniskill_backend_readiness_audit.json",
             "results/external_config_manifest_audit.json",
             "results/external_rollout_evidence_audit.json",
+            "results/external_rollout_evidence_packet_self_test.json",
             "results/external_pilot_smoke_packet_audit.json",
             "results/external_pilot_smoke_audit.json",
             "results/maniskill_render_video_preflight_audit.json",

@@ -5593,6 +5593,9 @@ def main():
         rollout_orders_path,
         rollout_audit_path,
         rollout_audit_md_path,
+        ROOT / "scripts" / "self_test_external_rollout_evidence_packet.py",
+        RESULTS / "external_rollout_evidence_packet_self_test.json",
+        RESULTS / "external_rollout_evidence_packet_self_test.md",
     ):
         if not path.exists():
             fail(f"missing external rollout evidence packet artifact: {path}")
@@ -5657,6 +5660,46 @@ def main():
     ):
         if rollout_checks.get(required_check) is not True:
             fail(f"external rollout evidence audit missing passing check: {required_check}")
+    rollout_self_test = json.loads((RESULTS / "external_rollout_evidence_packet_self_test.json").read_text(encoding="utf-8"))
+    if rollout_self_test.get("version") != "external_rollout_evidence_packet_self_test_v1":
+        fail("external rollout evidence packet self-test version mismatch")
+    if rollout_self_test.get("passed") is not True:
+        fail("external rollout evidence packet self-test did not pass")
+    if rollout_self_test.get("not_external_evidence") is not True:
+        fail("external rollout evidence packet self-test must declare that it is not evidence")
+    if rollout_self_test.get("strict_rollout_evidence_ready") is not False:
+        fail("external rollout evidence packet self-test must not claim strict rollout evidence")
+    if rollout_self_test.get("strict_external_evidence_ready") is not False:
+        fail("external rollout evidence packet self-test must not claim strict external evidence")
+    for required_flag in (
+        "temporary_packet_ready",
+        "missing_task_work_orders_rejected",
+        "premature_evidence_promotion_rejected",
+        "manifest_schema_error_drift_rejected",
+        "observed_record_drift_rejected",
+        "collection_budget_shrink_rejected",
+        "strict_command_drift_rejected",
+        "downstream_gate_promotion_rejected",
+        "real_output_write_rejected",
+        "real_outputs_untouched",
+    ):
+        if rollout_self_test.get(required_flag) is not True:
+            fail(f"external rollout evidence packet self-test missing true flag: {required_flag}")
+    rollout_self_checks = {check.get("name"): check.get("passed") for check in rollout_self_test.get("checks", []) or []}
+    for required_check in (
+        "temporary_rollout_packet_ready_but_non_evidence",
+        "missing_task_work_orders_rejected",
+        "premature_evidence_promotion_rejected",
+        "manifest_schema_error_drift_rejected",
+        "observed_record_drift_rejected",
+        "collection_budget_shrink_rejected",
+        "strict_command_drift_rejected",
+        "downstream_gate_promotion_rejected",
+        "real_output_write_rejected",
+        "real_rollout_packet_outputs_untouched",
+    ):
+        if rollout_self_checks.get(required_check) is not True:
+            fail(f"external rollout evidence packet self-test missing passing check: {required_check}")
 
     expected_files = {
         "dataset_summary": RESULTS / "dataset_summary.csv",

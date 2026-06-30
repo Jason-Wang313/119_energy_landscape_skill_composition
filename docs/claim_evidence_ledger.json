@@ -341,6 +341,11 @@
       "evidence": ["scripts/build_external_rollout_evidence_packet.py", "external_validation/rollout_evidence_packet.json", "external_validation/rollout_evidence_packet.md", "external_validation/rollout_evidence_work_orders.csv", "results/external_rollout_evidence_audit.json", "results/external_rollout_evidence_audit.md", "results/external_rollout_metrics.json", "results/external_evidence_preflight.json"]
     },
     {
+      "name": "external_rollout_evidence_packet_self_test_claim",
+      "claim": "The repository self-tests the External rollout evidence packet in temporary copied workspaces, proving the packet remains non-evidence while missing task-specific JSONL/video work orders, premature strict-evidence promotion, loss of the missing-manifest rollout-metrics signal, fake observed-record drift, shrunken collection budgets, strict command drift, downstream gate promotion, and accidental manifest/log/video writes fail closed without touching real rollout packet outputs.",
+      "evidence": ["scripts/self_test_external_rollout_evidence_packet.py", "results/external_rollout_evidence_packet_self_test.json", "results/external_rollout_evidence_packet_self_test.md", "scripts/build_external_rollout_evidence_packet.py", "external_validation/rollout_evidence_packet.json", "results/external_rollout_evidence_audit.json", "results/external_rollout_metrics.json"]
+    },
+    {
       "name": "external_strict_video_evidence_gate_claim",
       "claim": "The repository provides a strict MP4 video evidence gate that rejects missing, placeholder, diagnostic, staged, backup/internal, non-MP4-like, undersized, or out-of-manifest video paths when strict external rollout validation is enabled.",
       "evidence": ["scripts/validate_external_rollouts.py", "scripts/self_test_external_rollout_validator.py", "scripts/self_test_external_evidence_pipeline.py", "results/external_rollout_metrics.json", "results/external_rollout_evidence_audit.json"]
