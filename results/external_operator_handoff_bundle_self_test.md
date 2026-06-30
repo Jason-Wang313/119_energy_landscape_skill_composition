@@ -19,7 +19,7 @@ This is a tooling-only mutation test. It rebuilds the operator handoff bundle in
 
 ## Checks
 
-- `pass` `temporary_fixture_builds_current_handoff_bundle`: status=0, files=375, start_state='DO_NOT_COLLECT_YET'
+- `pass` `temporary_fixture_builds_current_handoff_bundle`: status=0, files=382, start_state='DO_NOT_COLLECT_YET'
 - `pass` `missing_source_rejected`: status=1, error='missing results/external_operator_packet.json'
 - `pass` `no_go_drift_rejected`: status=1, no_go_check=False
 - `pass` `acquisition_blocker_drift_rejected`: status=1, acquisition_check=False
@@ -29,4 +29,4 @@ This is a tooling-only mutation test. It rebuilds the operator handoff bundle in
 - `pass` `premature_manifest_rejected`: status=1, manifest_check=False
 - `pass` `missing_collection_job_rejected`: status=1, job_check=False
 - `pass` `missing_machine_bootstrap_rejected`: status=1, bootstrap_check=False
-- `pass` `real_repository_handoff_outputs_untouched`: before={'results/external_operator_handoff_bundle.json': 'f90c13fc0e9ff13e211484b38080104b13c4d2299c3de8cfe9ac8e3ccf1782c5', 'results/external_operator_handoff_bundle.md': 'f6884ce0abfceceedf5dae0e441010c04ad9946a633acb6144c0eb97acbed6d8'}, after={'results/external_operator_handoff_bundle.json': 'f90c13fc0e9ff13e211484b38080104b13c4d2299c3de8cfe9ac8e3ccf1782c5', 'results/external_operator_handoff_bundle.md': 'f6884ce0abfceceedf5dae0e441010c04ad9946a633acb6144c0eb97acbed6d8'}
+- `pass` `real_repository_handoff_outputs_untouched`: before={'results/external_operator_handoff_bundle.json': 'da55fa387bf710c38c3855cef376040804e14b2b30b69d716037bd37957eeffa', 'results/external_operator_handoff_bundle.md': '1de3092ce43ddec2519900b73613b15b41fb9b36d63c127169d55522b5dc9a26'}, after={'results/external_operator_handoff_bundle.json': 'da55fa387bf710c38c3855cef376040804e14b2b30b69d716037bd37957eeffa', 'results/external_operator_handoff_bundle.md': '1de3092ce43ddec2519900b73613b15b41fb9b36d63c127169d55522b5dc9a26'}

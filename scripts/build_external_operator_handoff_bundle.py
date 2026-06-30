@@ -77,6 +77,7 @@ def build_file_manifest() -> dict[str, str]:
         DOCS / "submission_readiness_decision.md",
         DOCS / "reproducibility_checklist.md",
         DOCS / "haonan_yilun_outreach_package.md",
+        DOCS / "external_evidence_closure_brief.md",
         EXTERNAL / "README.md",
         EXTERNAL / "collection_runbook.md",
         EXTERNAL / "operator_record_sheet.csv",
@@ -166,6 +167,8 @@ def build_file_manifest() -> dict[str, str]:
         SCRIPTS / "build_external_operator_handoff_bundle.py",
         SCRIPTS / "build_external_operator_packet.py",
         SCRIPTS / "build_external_acquisition_packet.py",
+        SCRIPTS / "build_external_evidence_closure_brief.py",
+        SCRIPTS / "self_test_external_evidence_closure_brief.py",
         SCRIPTS / "build_external_analysis_plan.py",
         SCRIPTS / "build_external_platform_onboarding.py",
         SCRIPTS / "build_external_collection_machine_bootstrap.py",
@@ -230,6 +233,10 @@ def build_file_manifest() -> dict[str, str]:
         RESULTS / "external_operator_packet.md",
         RESULTS / "external_acquisition_packet.json",
         RESULTS / "external_acquisition_packet.md",
+        RESULTS / "external_evidence_closure_brief.json",
+        RESULTS / "external_evidence_closure_brief.md",
+        RESULTS / "external_evidence_closure_brief_self_test.json",
+        RESULTS / "external_evidence_closure_brief_self_test.md",
         RESULTS / "external_collection_plan.json",
         RESULTS / "external_collection_plan.md",
         RESULTS / "external_analysis_plan_audit.json",
@@ -402,6 +409,11 @@ def forbidden_hits(paths: list[str]) -> list[str]:
 def build_payload() -> dict[str, Any]:
     operator = require_payload(RESULTS / "external_operator_packet.json", "external_operator_packet_v1")
     acquisition = require_payload(RESULTS / "external_acquisition_packet.json", "external_acquisition_packet_v1")
+    closure_brief = require_payload(RESULTS / "external_evidence_closure_brief.json", "external_evidence_closure_brief_v1")
+    closure_brief_self_test = require_payload(
+        RESULTS / "external_evidence_closure_brief_self_test.json",
+        "external_evidence_closure_brief_self_test_v1",
+    )
     preflight = require_payload(RESULTS / "external_evidence_preflight.json", "external_evidence_preflight_v1")
     release = require_payload(RESULTS / "external_release_package_audit.json", "external_release_package_audit_v1")
     pairing = require_payload(RESULTS / "external_pairing_integrity_audit.json", "external_pairing_integrity_audit_v1")
@@ -535,6 +547,23 @@ def build_payload() -> dict[str, Any]:
         and acquisition.get("not_external_evidence") is True
         and len(acquisition.get("missing_requirements", []) or []) == 4,
         f"missing_requirements={len(acquisition.get('missing_requirements', []) or [])}",
+    )
+    add_check(
+        checks,
+        "closure_brief_maps_minimum_proof_package",
+        closure_brief.get("passed") is True
+        and closure_brief.get("not_external_evidence") is True
+        and closure_brief.get("strict_external_evidence_ready") is False
+        and closure_brief.get("haonan_dependency") is False
+        and len(closure_brief.get("closure_items", []) or []) == 4
+        and closure_brief_self_test.get("passed") is True
+        and closure_brief_self_test.get("temporary_fixture_ready") is True
+        and closure_brief_self_test.get("haonan_dependent_route_rejected") is True,
+        (
+            f"closure_items={len(closure_brief.get('closure_items', []) or [])}, "
+            f"haonan_dependency={closure_brief.get('haonan_dependency')!r}, "
+            f"self_test={closure_brief_self_test.get('passed')!r}"
+        ),
     )
     add_check(
         checks,
@@ -1641,6 +1670,8 @@ def build_payload() -> dict[str, Any]:
         "source_reports": [
             "results/external_operator_packet.json",
             "results/external_acquisition_packet.json",
+            "results/external_evidence_closure_brief.json",
+            "results/external_evidence_closure_brief_self_test.json",
             "results/external_analysis_plan_audit.json",
             "results/external_platform_onboarding_audit.json",
             "results/maniskill_fidelity_metadata_probe.json",

@@ -238,6 +238,12 @@ jobs:
       - name: Self-test external acquisition packet
         run: python scripts/self_test_external_acquisition_packet.py
 
+      - name: Build external evidence closure brief
+        run: python scripts/build_external_evidence_closure_brief.py
+
+      - name: Self-test external evidence closure brief
+        run: python scripts/self_test_external_evidence_closure_brief.py
+
       - name: Build external operator packet
         run: python scripts/build_external_operator_packet.py
 

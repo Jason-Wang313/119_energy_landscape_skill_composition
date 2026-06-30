@@ -176,6 +176,8 @@ try {
         Invoke-Native python scripts\self_test_external_postcollection_seal_consistency.py
         Invoke-Native python scripts\build_external_acquisition_packet.py
         Invoke-Native python scripts\self_test_external_acquisition_packet.py
+        Invoke-Native python scripts\build_external_evidence_closure_brief.py
+        Invoke-Native python scripts\self_test_external_evidence_closure_brief.py
         Invoke-Native python scripts\build_external_operator_packet.py
         Invoke-Native python scripts\build_external_collection_job_packet.py
         Invoke-Native python scripts\self_test_external_collection_job_packet.py

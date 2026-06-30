@@ -3,10 +3,10 @@
   "category_counts": {
     "baseline_spec": 12,
     "config_template": 4,
-    "generated_non_evidence_report": 128,
+    "generated_non_evidence_report": 132,
     "method_config_candidate": 11,
-    "operator_command_source": 59,
-    "operator_facing_input": 88,
+    "operator_command_source": 61,
+    "operator_facing_input": 89,
     "prepared_config_input": 4,
     "reference_adapter": 60,
     "runner_backend_template": 5,
@@ -21,6 +21,11 @@
     {
       "detail": "missing_requirements=4",
       "name": "acquisition_maps_all_remaining_blockers",
+      "passed": true
+    },
+    {
+      "detail": "closure_items=4, haonan_dependency=False, self_test=True",
+      "name": "closure_brief_maps_minimum_proof_package",
       "passed": true
     },
     {
@@ -64,7 +69,7 @@
       "passed": true
     },
     {
-      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 128, 'method_config_candidate': 11, 'operator_command_source': 59, 'operator_facing_input': 88, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
+      "detail": "category_counts={'baseline_spec': 12, 'config_template': 4, 'generated_non_evidence_report': 132, 'method_config_candidate': 11, 'operator_command_source': 61, 'operator_facing_input': 89, 'prepared_config_input': 4, 'reference_adapter': 60, 'runner_backend_template': 5, 'task_card': 4}",
       "name": "handoff_has_task_config_and_baseline_assets",
       "passed": true
     },
@@ -229,7 +234,7 @@
       "passed": true
     },
     {
-      "detail": "hashed_files=375",
+      "detail": "hashed_files=382",
       "name": "file_hashes_are_recorded",
       "passed": true
     }
@@ -244,21 +249,28 @@
     "placeholder_not_external_evidence"
   ],
   "handoff_bundle_ready": true,
-  "included_file_count": 375,
+  "included_file_count": 382,
   "included_files": [
     {
-      "bytes": 33681,
+      "bytes": 34307,
       "category": "operator_facing_input",
       "exists": true,
       "path": "README.md",
-      "sha256": "B1B69502BB6FFA7F47DA52033F250A6B4B0B53B64B71058390F895EFED81BE12"
+      "sha256": "04117C5A9B71B76AA60A386A54A5A4DF37D8F0907181A72A698DFE3BD767DC83"
     },
     {
-      "bytes": 14419,
+      "bytes": 11318,
+      "category": "operator_facing_input",
+      "exists": true,
+      "path": "docs/external_evidence_closure_brief.md",
+      "sha256": "7A284EC84C024910358918C31EFBF71D21B42FBF5C8E572CF35634802304CFAA"
+    },
+    {
+      "bytes": 14456,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/haonan_yilun_outreach_package.md",
-      "sha256": "956DAA727BC6A4FC1174B4AD5574A25CDF67AF7B4DCA60EF139603534BEDA63A"
+      "sha256": "CC84C4111E3DDB2BC0B5F39824DCE5C5298BE9A05C1EBE547AC24853B95AEF0F"
     },
     {
       "bytes": 21796,
@@ -268,18 +280,18 @@
       "sha256": "7EDFEE348BE624FC1BA8818A88D526CC53B3632F3D31A1500A19F9C5A868FC2E"
     },
     {
-      "bytes": 25459,
+      "bytes": 25728,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/reproducibility_checklist.md",
-      "sha256": "939A3A80EA17D256E31D57894899EDDB5DFF41476C16A6014D8C66A33EF336BB"
+      "sha256": "463628DDFB6258E38950A14E59BE6FCDC4D6BE1DB942B08F9F539507BC379D91"
     },
     {
-      "bytes": 26553,
+      "bytes": 26943,
       "category": "operator_facing_input",
       "exists": true,
       "path": "docs/submission_readiness_decision.md",
-      "sha256": "05BDB66AF1C7246F06C6F7AAFE8F9F01104A42CF1D45F03479F8112343102845"
+      "sha256": "068E06301680B69A2D6B903AC5A06D8D18CA8A97C8F3EA2DC8734A6AF2AA5971"
     },
     {
       "bytes": 34698,
@@ -1857,6 +1869,34 @@
       "sha256": "4CC337580323BADB03441EE8478DDDEF19CC9857F1B0B032264B78DB6A947DF7"
     },
     {
+      "bytes": 14730,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_evidence_closure_brief.json",
+      "sha256": "32F1C65535FBDDD5561B851836268EC9E15D2ECCF7FC10617CF4C0F25DD881A3"
+    },
+    {
+      "bytes": 11318,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_evidence_closure_brief.md",
+      "sha256": "7A284EC84C024910358918C31EFBF71D21B42FBF5C8E572CF35634802304CFAA"
+    },
+    {
+      "bytes": 1900,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_evidence_closure_brief_self_test.json",
+      "sha256": "B1F71ABFFDA61CA54AC32090175E432215AF5BCEF7AF9FB0FEC3CDF59971B66C"
+    },
+    {
+      "bytes": 1695,
+      "category": "generated_non_evidence_report",
+      "exists": true,
+      "path": "results/external_evidence_closure_brief_self_test.md",
+      "sha256": "F91532B6AA1FCE8411F78942F739AA7380CBBB18666020EA91DAF95D2EA9FD3F"
+    },
+    {
       "bytes": 43816,
       "category": "generated_non_evidence_report",
       "exists": true,
@@ -2606,6 +2646,13 @@
       "sha256": "2C52F840F30A0D6DE34F473952EEA0245C1B122E2FFF71BB6D652890F8095DD6"
     },
     {
+      "bytes": 23131,
+      "category": "operator_command_source",
+      "exists": true,
+      "path": "scripts/build_external_evidence_closure_brief.py",
+      "sha256": "7AEE21F03D0C5DD4D120432E4699BF79644CF54BEACEC0478F8F42DC061326D1"
+    },
+    {
       "bytes": 24156,
       "category": "operator_command_source",
       "exists": true,
@@ -2641,11 +2688,11 @@
       "sha256": "C166221116A089779E0111AE13BDB75CC1625849486A1C116AF8534D264334AF"
     },
     {
-      "bytes": 105443,
+      "bytes": 107165,
       "category": "operator_command_source",
       "exists": true,
       "path": "scripts/build_external_operator_handoff_bundle.py",
-      "sha256": "0E187D7AE27DAE5561867F64A7BA211CE108D4A390E833AFCB43839D7598D401"
+      "sha256": "5A664242DEE44A244FD78059FA555294DB51F448B17C18E44EE5593E3CE5A4F8"
     },
     {
       "bytes": 71405,
@@ -2786,6 +2833,13 @@
       "exists": true,
       "path": "scripts/self_test_external_config_materialization.py",
       "sha256": "DAA183552AEBFA55954764BB0040DD0C2F7EAFA38E8C6CAD5EE2A342C1B10893"
+    },
+    {
+      "bytes": 12399,
+      "category": "operator_command_source",
+      "exists": true,
+      "path": "scripts/self_test_external_evidence_closure_brief.py",
+      "sha256": "288677748D45A2F27FCB298B30D56C714DB2FFDD9903DB471E9630C4BED0FDFE"
     },
     {
       "bytes": 19856,
@@ -3514,6 +3568,8 @@
   "source_reports": [
     "results/external_operator_packet.json",
     "results/external_acquisition_packet.json",
+    "results/external_evidence_closure_brief.json",
+    "results/external_evidence_closure_brief_self_test.json",
     "results/external_analysis_plan_audit.json",
     "results/external_platform_onboarding_audit.json",
     "results/maniskill_fidelity_metadata_probe.json",

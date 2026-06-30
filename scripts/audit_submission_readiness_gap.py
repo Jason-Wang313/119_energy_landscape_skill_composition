@@ -144,6 +144,12 @@ def main() -> int:
     release_package = read_json(release_package_path) if release_package_path.exists() else {}
     acquisition_packet_path = RESULTS / "external_acquisition_packet.json"
     acquisition_packet = read_json(acquisition_packet_path) if acquisition_packet_path.exists() else {}
+    closure_brief_path = RESULTS / "external_evidence_closure_brief.json"
+    closure_brief = read_json(closure_brief_path) if closure_brief_path.exists() else {}
+    closure_brief_self_test_path = RESULTS / "external_evidence_closure_brief_self_test.json"
+    closure_brief_self_test = (
+        read_json(closure_brief_self_test_path) if closure_brief_self_test_path.exists() else {}
+    )
     handoff_bundle_path = RESULTS / "external_operator_handoff_bundle.json"
     handoff_bundle = read_json(handoff_bundle_path) if handoff_bundle_path.exists() else {}
     collection_job_path = RESULTS / "external_collection_job_packet_audit.json"
@@ -359,6 +365,9 @@ def main() -> int:
             ROOT / "scripts" / "self_test_external_acquisition_packet.py",
             RESULTS / "external_acquisition_packet_self_test.json",
             RESULTS / "external_acquisition_packet_self_test.md",
+            ROOT / "scripts" / "self_test_external_evidence_closure_brief.py",
+            RESULTS / "external_evidence_closure_brief_self_test.json",
+            RESULTS / "external_evidence_closure_brief_self_test.md",
             ROOT / "scripts" / "self_test_external_collection_job_packet.py",
             RESULTS / "external_collection_job_packet_self_test.json",
             RESULTS / "external_collection_job_packet_self_test.md",
@@ -445,6 +454,9 @@ def main() -> int:
             "scripts/self_test_external_acquisition_packet.py",
             "results/external_acquisition_packet_self_test.json",
             "results/external_acquisition_packet_self_test.md",
+            "scripts/self_test_external_evidence_closure_brief.py",
+            "results/external_evidence_closure_brief_self_test.json",
+            "results/external_evidence_closure_brief_self_test.md",
             "scripts/self_test_external_collection_job_packet.py",
             "results/external_collection_job_packet_self_test.json",
             "results/external_collection_job_packet_self_test.md",
@@ -878,6 +890,8 @@ def main() -> int:
     collection_job_checks = {check.get("name"): check.get("passed") for check in collection_job.get("checks", [])}
     machine_bootstrap_checks = {check.get("name"): check.get("passed") for check in machine_bootstrap.get("checks", [])}
     operator_release_checks = {check.get("name"): check.get("passed") for check in operator_release.get("checks", [])}
+    closure_checks = {check.get("name"): check.get("passed") for check in closure_brief.get("checks", [])}
+    closure_self_checks = {check.get("name"): check.get("passed") for check in closure_brief_self_test.get("checks", [])}
     acquisition_packet_ok = (
         acquisition_packet.get("passed") is True
         and acquisition_packet.get("version") == "external_acquisition_packet_v1"
@@ -893,6 +907,28 @@ def main() -> int:
         and acquisition_checks.get("method_implementation_packet_ready") is True
         and acquisition_checks.get("post_collection_strict_commands_cover_all_gates") is True
         and acquisition_checks.get("no_real_manifest_written") is True
+        and closure_brief.get("passed") is True
+        and closure_brief.get("version") == "external_evidence_closure_brief_v1"
+        and closure_brief.get("not_external_evidence") is True
+        and closure_brief.get("strict_external_evidence_ready") is False
+        and closure_brief.get("haonan_dependency") is False
+        and len(closure_brief.get("closure_items", []) or []) == 4
+        and closure_checks.get("exact_four_submission_blockers_mapped") is True
+        and closure_checks.get("command_spine_covers_all_strict_gates") is True
+        and closure_checks.get("independent_route_not_haonan_dependent") is True
+        and closure_checks.get("no_real_manifest_written_before_external_evidence") is True
+        and closure_brief_self_test.get("passed") is True
+        and closure_brief_self_test.get("version") == "external_evidence_closure_brief_self_test_v1"
+        and closure_brief_self_test.get("not_external_evidence") is True
+        and closure_brief_self_test.get("temporary_fixture_ready") is True
+        and closure_brief_self_test.get("unmapped_blocker_rejected") is True
+        and closure_brief_self_test.get("premature_manifest_rejected") is True
+        and closure_brief_self_test.get("missing_linux_command_spine_rejected") is True
+        and closure_brief_self_test.get("haonan_dependent_route_rejected") is True
+        and closure_brief_self_test.get("missing_source_packet_rejected") is True
+        and closure_brief_self_test.get("real_outputs_untouched") is True
+        and closure_self_checks.get("temporary_fixture_builds_current_closure_brief") is True
+        and closure_self_checks.get("real_repository_closure_outputs_untouched") is True
         and backend_integration.get("passed") is True
         and backend_integration.get("not_external_evidence") is True
         and backend_integration.get("backend_integration_packet_ready") is True
@@ -1091,6 +1127,7 @@ def main() -> int:
         and exists_all(
             [
                 ROOT / "scripts" / "build_external_acquisition_packet.py",
+                ROOT / "scripts" / "build_external_evidence_closure_brief.py",
                 ROOT / "scripts" / "build_external_collection_job_packet.py",
                 ROOT / "scripts" / "build_external_collection_machine_bootstrap.py",
                 ROOT / "scripts" / "build_external_operator_handoff_bundle.py",
@@ -1122,6 +1159,12 @@ def main() -> int:
                 EXTERNAL / "method_config_candidates.csv",
                 RESULTS / "external_acquisition_packet.json",
                 RESULTS / "external_acquisition_packet.md",
+                RESULTS / "external_evidence_closure_brief.json",
+                RESULTS / "external_evidence_closure_brief.md",
+                DOCS / "external_evidence_closure_brief.md",
+                ROOT / "scripts" / "self_test_external_evidence_closure_brief.py",
+                RESULTS / "external_evidence_closure_brief_self_test.json",
+                RESULTS / "external_evidence_closure_brief_self_test.md",
                 RESULTS / "external_backend_integration_audit.json",
                 RESULTS / "external_backend_integration_audit.md",
                 RESULTS / "external_backend_integration_packet_self_test.json",
@@ -1198,6 +1241,7 @@ def main() -> int:
         status="satisfied" if acquisition_packet_ok else "missing",
         evidence=[
             "scripts/build_external_acquisition_packet.py",
+            "scripts/build_external_evidence_closure_brief.py",
             "scripts/build_external_collection_job_packet.py",
             "scripts/build_external_collection_machine_bootstrap.py",
             "scripts/build_external_operator_handoff_bundle.py",
@@ -1229,6 +1273,12 @@ def main() -> int:
             "external_validation/method_config_candidates.csv",
             "results/external_acquisition_packet.json",
             "results/external_acquisition_packet.md",
+            "results/external_evidence_closure_brief.json",
+            "results/external_evidence_closure_brief.md",
+            "docs/external_evidence_closure_brief.md",
+            "scripts/self_test_external_evidence_closure_brief.py",
+            "results/external_evidence_closure_brief_self_test.json",
+            "results/external_evidence_closure_brief_self_test.md",
             "results/external_backend_integration_audit.json",
             "results/external_backend_integration_audit.md",
             "results/external_backend_integration_packet_self_test.json",

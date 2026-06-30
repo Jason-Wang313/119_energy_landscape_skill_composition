@@ -82,6 +82,9 @@
 - External evidence acquisition packet builder: `scripts/build_external_acquisition_packet.py`
 - External acquisition packet self-test: `scripts/self_test_external_acquisition_packet.py`
   - Durable report: `results/external_acquisition_packet_self_test.md`
+- External evidence closure brief builder: `scripts/build_external_evidence_closure_brief.py`
+- External evidence closure brief self-test: `scripts/self_test_external_evidence_closure_brief.py`
+  - Durable report: `results/external_evidence_closure_brief_self_test.md`
 - External operator packet builder: `scripts/build_external_operator_packet.py`
 - External collection job packet builder: `scripts/build_external_collection_job_packet.py`
 - External collection job packet self-test: `scripts/self_test_external_collection_job_packet.py`

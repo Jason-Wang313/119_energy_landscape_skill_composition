@@ -2,6 +2,7 @@
   "audited_files": {
     "README": "README.md",
     "child_status": "child_status.md",
+    "closure": "docs/external_evidence_closure_brief.md",
     "final_audit": "docs/final_audit.md",
     "outreach": "docs/haonan_yilun_outreach_package.md",
     "readiness_audit": "docs/submission_readiness_audit_v5.md",
@@ -42,7 +43,7 @@
       "passed": true
     },
     {
-      "detail": "files=375, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "detail": "files=382, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
       "name": "operator_handoff_bundle_visible",
       "passed": true
     },
@@ -54,6 +55,16 @@
     {
       "detail": "fixture_ready=True, missing_source_rejected=True, unmapped_blocker_rejected=True, manifest_rejected=True, collection_drift_rejected=True",
       "name": "external_acquisition_packet_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "blockers=4, items=4, haonan_dependency=False",
+      "name": "external_evidence_closure_brief_visible",
+      "passed": true
+    },
+    {
+      "detail": "fixture_ready=True, unmapped_rejected=True, haonan_rejected=True",
+      "name": "external_evidence_closure_brief_self_test_visible",
       "passed": true
     },
     {
@@ -77,7 +88,7 @@
       "passed": true
     },
     {
-      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=375, archive_written=False",
+      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=382, archive_written=False",
       "name": "external_operator_release_bundle_visible",
       "passed": true
     },

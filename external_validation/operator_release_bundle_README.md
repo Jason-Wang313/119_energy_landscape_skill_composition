@@ -3,7 +3,7 @@
 This is a non-evidence shipping manifest for the independent operator handoff package.
 
 Bundle state: `READY_TO_SEND_OPERATOR_PACKAGE`.
-Included handoff files: `375`.
+Included handoff files: `382`.
 Strict external evidence ready: `false`.
 
 Do not add official rollout logs, videos, checkpoints, local dry-run records, placeholder media, or `external_validation/manifest.json` to this release bundle.

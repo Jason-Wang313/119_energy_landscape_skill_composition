@@ -1,0 +1,253 @@
+{
+  "blocking_missing_requirements": 4,
+  "checks": [
+    {
+      "detail": "objective_complete=False, decision='STRONG_REVISE', strict=False",
+      "name": "brief_is_non_evidence_and_currently_incomplete",
+      "passed": true
+    },
+    {
+      "detail": "missing=['Independent real-robot or accepted high-fidelity external validation evidence', 'External rollout metrics recomputed from raw JSONL logs', 'Manifest-declared real task configs replace non-evidence templates', 'Manifest-declared independent non-oracle baseline evidence and fairness contract']",
+      "name": "exact_four_submission_blockers_mapped",
+      "passed": true
+    },
+    {
+      "detail": "items=4",
+      "name": "closure_items_are_concrete",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "command_spine_covers_all_strict_gates",
+      "passed": true
+    },
+    {
+      "detail": "route_check=True",
+      "name": "independent_route_not_haonan_dependent",
+      "passed": true
+    },
+    {
+      "detail": "acquisition=True, execution=True, intake=37/37, release='READY_TO_SEND_OPERATOR_PACKAGE'",
+      "name": "source_packets_ready_but_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "job=True, bootstrap=True",
+      "name": "collection_spines_exist_for_windows_and_linux",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json absent before real evidence",
+      "name": "no_real_manifest_written_before_external_evidence",
+      "passed": true
+    }
+  ],
+  "closure_items": [
+    {
+      "closure_id": "accepted_fidelity_and_manifest",
+      "completion_test": "accepted fidelity provenance exists, the official manifest exists, and the final strict external evidence audit no longer reports fidelity or manifest blockers",
+      "current_blocker": "strict external evidence audit is NOT_READY; real manifest/log/video/checkpoint evidence and accepted robot/simulator fidelity provenance are missing",
+      "evidence_ready_now": false,
+      "mapped_operator_actions": [
+        "platform_probe",
+        "task_binding_probe",
+        "env_smoke_probe",
+        "fidelity_metadata_probe",
+        "platform_onboarding",
+        "fidelity_provenance_packet",
+        "backend_integration_packet",
+        "maniskill_reference_backend_audit",
+        "maniskill_reference_collection_preflight",
+        "fidelity_acceptance_draft",
+        "fidelity_acceptance_materializer",
+        "rollout_evidence_packet",
+        "backend_module",
+        "platform_fidelity",
+        "pilot_smoke_packet",
+        "maniskill_render_video_preflight",
+        "maniskill_render_resource_sweep",
+        "maniskill_pilot_runtime_liveness",
+        "maniskill_render_machine_qualification",
+        "ablation_collection_packet",
+        "evidence_intake_ledger",
+        "precollection_freeze_receipt",
+        "run_collection",
+        "postcollection_evidence_seal",
+        "postcollection_seal_consistency_gate",
+        "manifest_and_release"
+      ],
+      "operator_inputs": [
+        "independent operator or lab identity",
+        "accepted robot or high-fidelity simulator machine",
+        "contact solver, friction model, timing, observation, controller, and asset provenance",
+        "render-backed video readiness and paired-reset replay acceptance",
+        "current clean code commit and skill-library hash"
+      ],
+      "proof_artifacts": [
+        "external_validation/fidelity_acceptance.json",
+        "external_validation/manifest.json",
+        "external_validation/platform_onboarding_packet.json",
+        "external_validation/precollection_freeze_receipt.json",
+        "external_validation/postcollection_evidence_seal.json"
+      ],
+      "requirement": "Independent real-robot or accepted high-fidelity external validation evidence",
+      "strict_gates": [
+        "python scripts\\materialize_fidelity_acceptance.py ... --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
+        "python scripts\\audit_external_fidelity_acceptance.py --strict",
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\audit_external_evidence.py --strict"
+      ]
+    },
+    {
+      "closure_id": "raw_rollouts_videos_and_metrics",
+      "completion_test": "strict rollout validation recomputes metrics from raw JSONL logs and the final audit agrees with the manifest metrics",
+      "current_blocker": "strict rollout validation does not pass because external_validation/manifest.json and raw logs are missing",
+      "evidence_ready_now": false,
+      "mapped_operator_actions": [
+        "rollout_evidence_packet",
+        "ablation_collection_packet",
+        "evidence_intake_ledger",
+        "precollection_freeze_receipt",
+        "run_collection",
+        "postcollection_evidence_seal",
+        "postcollection_seal_consistency_gate",
+        "strict_rollout_recompute"
+      ],
+      "operator_inputs": [
+        "paired resets for every task/method panel",
+        "official JSONL rows written only by the checked runner path",
+        "render-backed MP4 videos for success and failure evidence",
+        "manifest-declared task, method, config, and policy/config hashes"
+      ],
+      "proof_artifacts": [
+        "external_validation/logs/*.jsonl",
+        "external_validation/videos/<task_family>/*.mp4",
+        "results/external_rollout_metrics.json",
+        "results/external_rollout_metrics.md"
+      ],
+      "requirement": "External rollout metrics recomputed from raw JSONL logs",
+      "strict_gates": [
+        "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ]
+    },
+    {
+      "closure_id": "manifest_bound_task_configs",
+      "completion_test": "strict config evidence passes against manifest-declared config files and hashes rather than template or local-dry-run configs",
+      "current_blocker": "strict config evidence audit has no real manifest-declared configs",
+      "evidence_ready_now": false,
+      "mapped_operator_actions": [
+        "config_manifest_packet",
+        "evidence_intake_ledger",
+        "precollection_freeze_receipt",
+        "real_task_configs",
+        "postcollection_evidence_seal",
+        "postcollection_seal_consistency_gate",
+        "manifest_and_release"
+      ],
+      "operator_inputs": [
+        "accepted backend task binding for each task family",
+        "real platform timing and query-budget fields",
+        "manifest config_path/config_hash fields matching the collected logs"
+      ],
+      "proof_artifacts": [
+        "external_validation/configs/peg_place_regrasp.json",
+        "external_validation/configs/drawer_to_pick_transfer.json",
+        "external_validation/configs/door_open_navigation.json",
+        "external_validation/configs/cable_route_insert.json",
+        "external_validation/manifest.json"
+      ],
+      "requirement": "Manifest-declared real task configs replace non-evidence templates",
+      "strict_gates": [
+        "python scripts\\materialize_external_configs.py --platform-type <real_robot|high_fidelity_sim> --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
+        "python scripts\\validate_external_configs.py --strict",
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\audit_external_evidence.py --strict"
+      ]
+    },
+    {
+      "closure_id": "independent_methods_and_fairness_contract",
+      "completion_test": "strict adapter evidence passes and the final audit accepts the independent non-oracle method evidence plus fairness contract",
+      "current_blocker": "baseline contract still reports manifest-declared independent non-oracle evidence as missing; strict adapter contract evidence audit has no passing manifest-declared real implementations",
+      "evidence_ready_now": false,
+      "mapped_operator_actions": [
+        "method_implementation_packet",
+        "evidence_intake_ledger",
+        "precollection_freeze_receipt",
+        "real_method_implementations",
+        "postcollection_evidence_seal",
+        "postcollection_seal_consistency_gate",
+        "strict_adapter_evidence"
+      ],
+      "operator_inputs": [
+        "real non-oracle implementation/config/checkpoint path for every required method",
+        "checkpoint_or_config_hash values backed by real artifacts, not implementation source",
+        "matching JSONL policy_or_config_hash values",
+        "shared skill library, observation interface, compute budget, and paired-reset contract hashes"
+      ],
+      "proof_artifacts": [
+        "external_validation/method_implementation_work_orders.csv",
+        "external_validation/method_manifest_cutover_checklist.csv",
+        "external_validation/method_config_candidates.csv",
+        "external_validation/manifest.json",
+        "external_validation/checkpoints_or_configs/<method>.*"
+      ],
+      "requirement": "Manifest-declared independent non-oracle baseline evidence and fairness contract",
+      "strict_gates": [
+        "python scripts\\build_external_baseline_contract.py",
+        "python scripts\\validate_external_adapters.py --strict",
+        "python scripts\\audit_external_release_package.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ]
+    }
+  ],
+  "command_spine": [
+    "python scripts\\probe_external_platform.py --strict",
+    "python scripts\\probe_maniskill_task_bindings.py --strict",
+    "python scripts\\probe_maniskill_env_smoke.py --strict",
+    "python scripts\\probe_maniskill_fidelity_metadata.py --strict",
+    "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend <accepted_backend> --shader-pack <accepted_shader_pack> --profile-matrix --profile-matrix-max-envs 1 --timeout-diagnosis-seconds 180 --timeout-diagnosis-width 64 --timeout-diagnosis-height 64",
+    "python scripts\\materialize_external_configs.py --platform-type <real_robot|high_fidelity_sim> --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
+    "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
+    "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
+    "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+    "python scripts\\audit_external_postcollection_seal_consistency.py",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\validate_external_adapters.py --strict",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_evidence.py --strict",
+    "python scripts\\audit_submission_readiness_gap.py"
+  ],
+  "current_decision": "STRONG_REVISE",
+  "failed_checks": [],
+  "haonan_dependency": false,
+  "missing_requirements": [
+    "Independent real-robot or accepted high-fidelity external validation evidence",
+    "External rollout metrics recomputed from raw JSONL logs",
+    "Manifest-declared real task configs replace non-evidence templates",
+    "Manifest-declared independent non-oracle baseline evidence and fairness contract"
+  ],
+  "not_external_evidence": true,
+  "objective_complete": false,
+  "passed": true,
+  "primary_independent_route": "maniskill_sapien_primary",
+  "satisfied_requirements": 17,
+  "source_packets": {
+    "external_acquisition_packet": "results/external_acquisition_packet.json",
+    "external_evidence_intake_ledger": "results/external_evidence_intake_ledger_audit.json",
+    "external_execution_readiness": "results/external_execution_readiness_audit.json",
+    "operator_release_bundle": "results/external_operator_release_bundle_plan.json",
+    "submission_readiness_gap": "results/submission_readiness_gap_audit.json"
+  },
+  "strict_external_evidence_ready": false,
+  "total_requirements": 21,
+  "version": "external_evidence_closure_brief_v1"
+}

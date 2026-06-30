@@ -174,6 +174,8 @@ def main():
         "scripts\\self_test_external_evidence_preflight.py",
         "scripts\\build_external_acquisition_packet.py",
         "scripts\\self_test_external_acquisition_packet.py",
+        "scripts\\build_external_evidence_closure_brief.py",
+        "scripts\\self_test_external_evidence_closure_brief.py",
         "scripts\\build_external_operator_packet.py",
         "scripts\\build_external_collection_job_packet.py",
         "scripts\\self_test_external_collection_job_packet.py",
@@ -289,6 +291,8 @@ def main():
         "python scripts/self_test_external_method_config_materialization.py",
         "python scripts/build_external_acquisition_packet.py",
         "python scripts/self_test_external_acquisition_packet.py",
+        "python scripts/build_external_evidence_closure_brief.py",
+        "python scripts/self_test_external_evidence_closure_brief.py",
         "python scripts/build_external_operator_packet.py",
         "python scripts/build_external_collection_job_packet.py",
         "python scripts/self_test_external_collection_job_packet.py",
@@ -4566,6 +4570,128 @@ def main():
     ):
         if acquisition_self_checks.get(required_check) is not True:
             fail(f"external acquisition packet self-test missing passing check: {required_check}")
+
+    closure_path = RESULTS / "external_evidence_closure_brief.json"
+    closure_md_path = RESULTS / "external_evidence_closure_brief.md"
+    closure_doc_path = DOCS / "external_evidence_closure_brief.md"
+    closure_self_test_path = RESULTS / "external_evidence_closure_brief_self_test.json"
+    closure_self_test_md_path = RESULTS / "external_evidence_closure_brief_self_test.md"
+    for path in (
+        ROOT / "scripts" / "build_external_evidence_closure_brief.py",
+        ROOT / "scripts" / "self_test_external_evidence_closure_brief.py",
+        closure_path,
+        closure_md_path,
+        closure_doc_path,
+        closure_self_test_path,
+        closure_self_test_md_path,
+    ):
+        if not path.exists():
+            fail(f"missing external evidence closure brief artifact: {path}")
+    closure = json.loads(closure_path.read_text(encoding="utf-8"))
+    if closure.get("version") != "external_evidence_closure_brief_v1":
+        fail("external evidence closure brief version mismatch")
+    if closure.get("passed") is not True:
+        fail("external evidence closure brief did not pass")
+    if closure.get("not_external_evidence") is not True:
+        fail("external evidence closure brief must declare that it is not evidence")
+    if closure.get("strict_external_evidence_ready") is not False:
+        fail("external evidence closure brief must keep strict evidence false")
+    if closure.get("haonan_dependency") is not False:
+        fail("external evidence closure brief must preserve the non-Haonan validation route")
+    expected_closure_requirements = [
+        "Independent real-robot or accepted high-fidelity external validation evidence",
+        "External rollout metrics recomputed from raw JSONL logs",
+        "Manifest-declared real task configs replace non-evidence templates",
+        "Manifest-declared independent non-oracle baseline evidence and fairness contract",
+    ]
+    if closure.get("missing_requirements") != expected_closure_requirements:
+        fail("external evidence closure brief must map exactly the four current submission blockers")
+    closure_items = closure.get("closure_items", []) or []
+    if len(closure_items) != 4:
+        fail("external evidence closure brief must contain four closure items")
+    if any(item.get("evidence_ready_now") is not False for item in closure_items):
+        fail("external evidence closure brief must not claim any closure item is evidence-ready")
+    closure_text = "\n".join(closure.get("command_spine", []) or [])
+    for fragment in (
+        "probe_external_platform.py --strict",
+        "probe_maniskill_task_bindings.py --strict",
+        "probe_maniskill_env_smoke.py --strict",
+        "probe_maniskill_fidelity_metadata.py --strict",
+        "audit_maniskill_render_video_preflight.py",
+        "materialize_external_configs.py",
+        "audit_external_backend_contract.py --strict",
+        "materialize_fidelity_acceptance.py",
+        "--confirm-independent-operator",
+        "audit_external_collection_readiness.py --strict",
+        "build_external_precollection_freeze_receipt.py",
+        "real_collection_runner.py",
+        "build_external_postcollection_evidence_seal.py",
+        "audit_external_postcollection_seal_consistency.py",
+        "build_external_manifest.py --write --check-video-paths",
+        "validate_external_configs.py --strict",
+        "validate_external_adapters.py --strict",
+        "validate_external_rollouts.py",
+        "audit_external_pairing_integrity.py --strict",
+        "audit_external_release_package.py --strict",
+        "audit_external_evidence.py --strict",
+        "audit_submission_readiness_gap.py",
+    ):
+        if fragment not in closure_text:
+            fail(f"external evidence closure brief command spine missing fragment: {fragment}")
+    closure_checks = {check.get("name"): check.get("passed") for check in closure.get("checks", [])}
+    for required_check in (
+        "brief_is_non_evidence_and_currently_incomplete",
+        "exact_four_submission_blockers_mapped",
+        "closure_items_are_concrete",
+        "command_spine_covers_all_strict_gates",
+        "independent_route_not_haonan_dependent",
+        "source_packets_ready_but_not_evidence",
+        "collection_spines_exist_for_windows_and_linux",
+        "no_real_manifest_written_before_external_evidence",
+    ):
+        if closure_checks.get(required_check) is not True:
+            fail(f"external evidence closure brief missing passing check: {required_check}")
+    closure_doc_text = closure_doc_path.read_text(encoding="utf-8")
+    for term in (
+        "Minimum Proof Package",
+        "Chronological Command Spine",
+        "Do not pitch Haonan as responsible for supplying the missing proof",
+        "independent operator",
+    ):
+        if term not in closure_doc_text:
+            fail(f"external evidence closure brief doc missing term: {term}")
+    closure_self_test = json.loads(closure_self_test_path.read_text(encoding="utf-8"))
+    if closure_self_test.get("version") != "external_evidence_closure_brief_self_test_v1":
+        fail("external evidence closure brief self-test version mismatch")
+    if closure_self_test.get("passed") is not True:
+        fail("external evidence closure brief self-test did not pass")
+    if closure_self_test.get("not_external_evidence") is not True:
+        fail("external evidence closure brief self-test must declare that it is not evidence")
+    if closure_self_test.get("strict_external_evidence_ready") is not False:
+        fail("external evidence closure brief self-test must keep strict evidence false")
+    for field in (
+        "temporary_fixture_ready",
+        "unmapped_blocker_rejected",
+        "premature_manifest_rejected",
+        "missing_linux_command_spine_rejected",
+        "haonan_dependent_route_rejected",
+        "missing_source_packet_rejected",
+        "real_outputs_untouched",
+    ):
+        if closure_self_test.get(field) is not True:
+            fail(f"external evidence closure brief self-test field must be true: {field}")
+    closure_self_checks = {check.get("name"): check.get("passed") for check in closure_self_test.get("checks", [])}
+    for required_check in (
+        "temporary_fixture_builds_current_closure_brief",
+        "unmapped_fifth_blocker_rejected",
+        "premature_manifest_rejected",
+        "missing_linux_command_spine_rejected",
+        "haonan_dependent_route_rejected",
+        "missing_source_packet_rejected",
+        "real_repository_closure_outputs_untouched",
+    ):
+        if closure_self_checks.get(required_check) is not True:
+            fail(f"external evidence closure brief self-test missing passing check: {required_check}")
     acquisition_render = acquisition.get("render_video_preflight", {}) or {}
     if acquisition_render.get("render_video_ready") is False:
         if not (acquisition_render.get("renderer_failure_classes", []) or []):
@@ -5116,6 +5242,7 @@ def main():
     for required_check in (
         "operator_packet_is_no_go_non_evidence",
         "acquisition_maps_all_remaining_blockers",
+        "closure_brief_maps_minimum_proof_package",
         "strict_evidence_gates_remain_fail_closed",
         "bundle_files_exist",
         "bundle_excludes_rollout_evidence_artifacts",

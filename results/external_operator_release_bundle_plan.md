@@ -4,8 +4,8 @@ Passed: `true`.
 Not evidence: `true`.
 Strict external evidence ready: `false`.
 Bundle state: `READY_TO_SEND_OPERATOR_PACKAGE`.
-Included handoff files: `375`.
-Payload bytes: `5092810`.
+Included handoff files: `382`.
+Payload bytes: `5172345`.
 Archive written: `false`.
 Archive path: `results/paper119_external_operator_release_bundle.zip`.
 Manifest CSV: `external_validation/operator_release_bundle_manifest.csv`.
@@ -23,10 +23,10 @@ python scripts\build_external_operator_release_bundle.py --write-archive
 
 - `baseline_spec`: `12`
 - `config_template`: `4`
-- `generated_non_evidence_report`: `128`
+- `generated_non_evidence_report`: `132`
 - `method_config_candidate`: `11`
-- `operator_command_source`: `59`
-- `operator_facing_input`: `88`
+- `operator_command_source`: `61`
+- `operator_facing_input`: `89`
 - `prepared_config_input`: `4`
 - `reference_adapter`: `60`
 - `runner_backend_template`: `5`
@@ -39,7 +39,7 @@ python scripts\build_external_operator_release_bundle.py --write-archive
 - `pass` `collection_job_packet_present_in_handoff`: job_state='DO_NOT_START_COLLECTION_YET', packet_in_paths=True
 - `pass` `handoff_hashes_recomputed`: missing=[], mismatched=[]
 - `pass` `forbidden_evidence_paths_excluded`: forbidden=[]
-- `pass` `release_manifest_covers_all_handoff_files`: records=375, handoff_count=375
+- `pass` `release_manifest_covers_all_handoff_files`: records=382, handoff_count=382
 - `pass` `archive_writer_is_explicit_and_optional`: default mode writes only plan files; archive writing requires --write-archive
 - `pass` `no_real_manifest_written`: external_validation/manifest.json absent before real evidence
 - `pass` `archive_not_written_by_default`: use --write-archive to create the transfer zip
