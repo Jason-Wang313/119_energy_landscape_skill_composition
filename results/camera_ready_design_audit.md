@@ -2,9 +2,9 @@
 
 Passed: `true`.
 Not evidence: `true`.
-Pages: `14`.
+Pages: `13`.
 Render DPI: `70`.
-Foreground density range: `0.0312` to `0.1715`.
+Foreground density range: `0.0826` to `0.1718`.
 Minimum edge margin: `27` px.
 
 This audit renders every PDF page and checks for nonblank pages, reasonable density, page margins, contrast, and selected text anchors. It is a camera-ready presentation check only; it does not substitute for external validation.
@@ -14,8 +14,8 @@ This audit renders every PDF page and checks for nonblank pages, reasonable dens
 - `pass` `paper_pdf_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\paper\main.pdf
 - `pass` `canonical_pdf_exists`: C:\Users\wangz\Downloads\119.pdf
 - `pass` `canonical_matches_paper_pdf`: paper/main.pdf vs Downloads/119.pdf
-- `pass` `page_count_compact`: pages=14, expected=8-18
-- `pass` `rendered_page_count_matches_pdf`: rendered=14, pages=14
+- `pass` `page_count_compact`: pages=13, expected=8-18
+- `pass` `rendered_page_count_matches_pdf`: rendered=13, pages=13
 - `pass` `render_resolution_ok`: low_resolution_pages=[]
 - `pass` `no_blank_pages`: blank_pages=[]
 - `pass` `no_overdense_pages`: overdense_pages=[]

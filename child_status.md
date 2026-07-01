@@ -3,9 +3,9 @@
 Current stage: v5 expanded submission audit terminal
 Last update: 2026-06-30 13:04:52 +08:00
 PDF: C:/Users/wangz/Downloads/119.pdf
-PDF SHA256: `9C2FADFAA36C21BA5465581B68207BAE7720A18BED7FA15F7111A6931D1B9A79`
-PDF size: `396432` bytes.
-PDF pages: 14
+PDF SHA256: `21D468E4AC3DC8E2705F1CE43536557FD8118049058EFE8F9A95F811C01B4582`
+PDF size: `406598` bytes.
+PDF pages: 13
 Desktop copy present: no
 GitHub: https://github.com/Jason-Wang313/119_energy_landscape_skill_composition
 Submission-hardening version: v5_expanded

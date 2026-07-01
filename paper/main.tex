@@ -1,20 +1,30 @@
 \documentclass{article}
 \usepackage{iclr2026_conference,times}
 \input{math_commands.tex}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\definecolor{PaperLinkBlue}{HTML}{1F5FBF}
+\definecolor{TableHeader}{HTML}{E8F0F8}
+\definecolor{TableBand}{HTML}{F7FAFC}
+\definecolor{TableProposed}{HTML}{EAF6EF}
+\definecolor{TableBaseline}{HTML}{FFF4DE}
+\definecolor{TableOracle}{HTML}{EEF1F6}
+\definecolor{TableRule}{HTML}{A9BDD1}
+\definecolor{TableGreen}{HTML}{257A4E}
+\definecolor{TableRed}{HTML}{A33A3A}
 \usepackage{hyperref}
 \usepackage{url}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{xcolor}
 \usepackage{microtype}
 \usepackage{enumitem}
-\hypersetup{hidelinks}
+\hypersetup{colorlinks=true,linkcolor=PaperLinkBlue,citecolor=PaperLinkBlue,urlcolor=PaperLinkBlue}
 \setlist[itemize]{leftmargin=1.2em,itemsep=0.15em,topsep=0.2em}
-\setlength{\textfloatsep}{0.7em plus 0.1em minus 0.2em}
-\setlength{\floatsep}{0.6em plus 0.1em minus 0.2em}
-\setlength{\intextsep}{0.7em plus 0.1em minus 0.2em}
+\setlength{\textfloatsep}{0.45em plus 0.1em minus 0.2em}
+\setlength{\floatsep}{0.45em plus 0.1em minus 0.2em}
+\setlength{\intextsep}{0.45em plus 0.1em minus 0.2em}
 \raggedbottom
 \title{Local World/Action Models\\for Robot Skill Seams}
 \author{Anonymous Authors}
@@ -45,11 +55,11 @@ The model output is therefore not just a compatibility number. It is a compact a
 This gives a bounded claim. When basin overlap, barrier height, and descent continuity are identifiable enough to reject bad seams and preserve useful ones, a barrier-certified implementation can make skill composition more reliable. Its value is not only higher success, but more structured failure information: the planner can learn which transitions are reliable, which require repair or a diagnostic probe, and which should be avoided. The key loop is simple: predict the local consequence before execution, choose a transition-level response, observe the outcome, and update the edge memory that future plans query. It must fail or abstain when the low-level primitive is broken, the goal is semantic rather than physical, the landscape is miscalibrated, or real-time constraints prevent search.
 \section{Evaluation Protocol}
 The evaluation protocol is fixed before interpreting final results. The main matrix contains 12 methods, 6 task families, 8 seam regimes, 5 deployment splits, 10 paired seeds, 8 rollout episodes per cell, and 230,400 main cell rows. Ablations add 38,400 cells, stress sweeps add 161,280 cells, and fixed-risk tests add 107,520 cells. The previous proposed method remains a named baseline. The protocol measures both composition outcomes and seam-model behavior: predicted risk, diagnostic label, decision, realized breach, and planner-edge update.
-\begin{table}[t]\centering\small\resizebox{\linewidth}{!}{\input{generated_gate_table.tex}}\caption{Local evidence gates used for the seam-composition audit. External robot or high-fidelity validation is evaluated separately.}\label{tab:gates}\end{table}
+\begin{table}[t]\centering\footnotesize\resizebox{0.92\linewidth}{!}{\input{generated_gate_table.tex}}\caption{Local evidence gates used for the seam-composition audit. External robot or high-fidelity validation is evaluated separately.}\label{tab:gates}\end{table}
 \section{Main Results}
 The strongest non-oracle comparator is proposed\_energy\_landscape\_composer\_v4\_1. The proposed composer improves hard success by 0.08460 and hard utility by 0.23517; paired hard-utility wins are 10/10. The oracle remains stronger with success 0.90967 and utility 1.13988, so the local problem is not solved. The intended readout is therefore not only success; it is whether a seam action model can preserve useful skill edges while refusing or redirecting seams that its own predictions mark as unsafe, and whether those decisions produce planner-facing evidence that changes later composition choices.
-\begin{table}[t]\centering\small\resizebox{\linewidth}{!}{\input{generated_main_table.tex}}\caption{Hard-slice aggregate results. Higher success, utility, basin, and descent are better; lower seam, barrier, damage, cost, and breach are better.}\label{tab:main}\end{table}
-\begin{table}[t]\centering\small\resizebox{\linewidth}{!}{\input{generated_pairwise_table.tex}}\caption{Paired proposed-minus-baseline hard-slice differences.}\label{tab:pairwise}\end{table}
+\begin{table}[t]\centering\scriptsize\resizebox{\linewidth}{!}{\input{generated_main_table.tex}}\caption{Hard-slice aggregate results. Higher success, utility, basin, and descent are better; lower seam, barrier, damage, cost, and breach are better.}\label{tab:main}\end{table}
+\begin{table}[t]\centering\footnotesize\resizebox{0.96\linewidth}{!}{\input{generated_pairwise_table.tex}}\caption{Paired proposed-minus-baseline hard-slice differences.}\label{tab:pairwise}\end{table}
 \begin{figure}[t]\centering\includegraphics[width=0.88\linewidth]{../figures/energy_landscape_composition_hard_success_v5.pdf}\caption{Hard-slice success under energy-seam stress.}\label{fig:hard}\end{figure}
 \begin{figure}[t]\centering\includegraphics[width=0.82\linewidth]{../figures/energy_landscape_composition_utility_risk_v5.pdf}\caption{Composition utility is reported against realized seam breach.}\label{fig:utilityrisk}\end{figure}
 \section{Diagnostics, Ablations, And Fixed Risk}
@@ -57,8 +67,8 @@ The proposed composer reduces seam failure by -0.04912, barrier violation by -0.
 \begin{table}[t]\centering\small\resizebox{\linewidth}{!}{\input{generated_ablation_table.tex}}\caption{Ablations under combined seam stress.}\label{tab:ablation}\end{table}
 \begin{table}[t]\centering\small\resizebox{0.94\linewidth}{!}{\input{generated_stress_table.tex}}\caption{Maximum stress endpoint.}\label{tab:stress}\end{table}
 \begin{table}[t]\centering\small\resizebox{0.94\linewidth}{!}{\input{generated_fixed_risk_table.tex}}\caption{Fixed-risk audit at seam-risk budget 0.15.}\label{tab:fixed}\end{table}
-\begin{figure}[t]\centering\includegraphics[width=\linewidth]{../figures/energy_landscape_composition_ablation_v5.pdf}\caption{Removing v5 energy-seam components weakens the composer.}\label{fig:ablation}\end{figure}
-\begin{figure}[t]\centering\includegraphics[width=0.86\linewidth]{../figures/energy_landscape_composition_stress_sweep_v5.pdf}\caption{Stress sweep over seam discontinuity and hidden barriers.}\label{fig:stress}\end{figure}
+\begin{figure}[t]\centering\includegraphics[width=0.94\linewidth]{../figures/energy_landscape_composition_ablation_v5.pdf}\caption{Removing v5 energy-seam components weakens the composer.}\label{fig:ablation}\end{figure}
+\begin{figure}[t]\centering\includegraphics[width=0.80\linewidth]{../figures/energy_landscape_composition_stress_sweep_v5.pdf}\caption{Stress sweep over seam discontinuity and hidden barriers.}\label{fig:stress}\end{figure}
 \begin{figure}[t]\centering\includegraphics[width=0.86\linewidth]{../figures/energy_landscape_composition_fixed_risk_v5.pdf}\caption{Fixed-risk gated utility as the declared seam-risk budget changes.}\label{fig:fixed}\end{figure}
 \begin{figure}[t]\centering\includegraphics[width=0.86\linewidth]{../figures/energy_landscape_composition_fixed_coverage_v5.pdf}\caption{Coverage is separate from seam breach.}\label{fig:coverage}\end{figure}
 \subsection{Diagnostic Mechanism Audit}

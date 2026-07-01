@@ -1,18 +1,18 @@
 # Presentation Quality Audit
 
 Passed: `true`.
-PDF pages: `14`.
-PDF size: `396432` bytes.
+PDF pages: `13`.
+PDF size: `406598` bytes.
 
 This audit checks presentation polish and artifact hygiene. It does not substitute for real external validation.
 
 ## Checks
 
-- `pass` `pdf_page_count_compact`: pages=14, expected=8-18
+- `pass` `pdf_page_count_compact`: pages=13, expected=8-18
 - `pass` `pdf_letter_size`: page_size='612 x 792 pts (letter)'
-- `pass` `pdf_size_reasonable`: bytes=396432
+- `pass` `pdf_size_reasonable`: bytes=406598
 - `pass` `canonical_matches_paper_pdf`: paper/main.pdf vs Downloads/119.pdf
-- `pass` `pdf_text_extractable`: text_chars=46271
+- `pass` `pdf_text_extractable`: text_chars=45539
 - `pass` `section_present_Motivation`: Motivation
 - `pass` `section_present_Problem Setup`: Problem Setup
 - `pass` `section_present_Skill Seams As Local World/Action Models`: Skill Seams As Local World/Action Models
@@ -27,7 +27,7 @@ This audit checks presentation polish and artifact hygiene. It does not substitu
 - `pass` `scope_boundary_visible`: abstract boundary
 - `pass` `no_internal_status_leaks_in_pdf`: leaks=[]
 - `pass` `no_removed_appendix_tail_in_tex`: leaks=[], appendix=False
-- `pass` `hidden_links_configured`: hidelinks
+- `pass` `blue_links_configured`: blue citation/reference/URL links
 - `pass` `vector_figures_only_in_manuscript`: no PNG includes in main.tex
 - `pass` `figure_pdf_exists_skill_seam_action_model_overview_v5`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\figures\skill_seam_action_model_overview_v5.pdf bytes=22161
 - `pass` `figure_png_companion_exists_skill_seam_action_model_overview_v5`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\figures\skill_seam_action_model_overview_v5.png bytes=143735

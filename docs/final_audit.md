@@ -26,7 +26,7 @@ Continuation audit additions:
 - Related-work audit: `results/related_work_audit.md` checks citation coverage, novelty-boundary rows, and outreach/validation boundary wording across 12 required areas.
 - Reference integrity audit: `results/reference_integrity_audit.md` checks BibTeX fields, DOI/arXiv identifiers, recent primary-source metadata, and Haonan/Yilun-adjacent author coverage.
 - Manuscript readability audit: `results/manuscript_readability_audit.md` checks central framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and stale manual-polish blocker removal.
-- Presentation quality audit: `results/presentation_quality_audit.md` checks PDF structure, source/log hygiene, hidden links, vector figures, canonical artifact parity, and internal-status leak prevention.
+- Presentation quality audit: `results/presentation_quality_audit.md` checks PDF structure, source/log hygiene, blue citation/reference links, vector figures, canonical artifact parity, and internal-status leak prevention.
 - Figure readability audit: `results/figure_readability_audit.md` checks all seven main figure PNG companions for render resolution, foreground density, contrast, edge margins, color detail, and manuscript references.
 - Camera-ready design audit: `results/camera_ready_design_audit.md` renders all current PDF pages and checks page density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
 - Numeric integrity: validator passed with no missing required outputs, invalid numeric values, or artifact-placement violations.
@@ -40,9 +40,9 @@ Continuation audit additions:
 - Full local build script: `scripts/build_submission_artifacts.ps1`.
 - GitHub validation workflow: `.github/workflows/paper119-validation.yml` runs the core runner/readiness/submission/outreach validators on pushed branches and pull requests, with the repository PDF used as the CI canonical artifact.
 - Canonical PDF: `C:/Users/wangz/Downloads/119.pdf`.
-- PDF SHA256: `9C2FADFAA36C21BA5465581B68207BAE7720A18BED7FA15F7111A6931D1B9A79`.
-- PDF size: `396432` bytes.
-- PDF pages: `14`.
+- PDF SHA256: `21D468E4AC3DC8E2705F1CE43536557FD8118049058EFE8F9A95F811C01B4582`.
+- PDF size: `406598` bytes.
+- PDF pages: `13`.
 - Desktop PDF copy: absent.
 - Visual QA: final title page, overview page, main result figures, fixed-risk figures, and outreach preview figure page inspected after the reframing/figure pass.
 - Independent validation protocol: `docs/independent_validation_protocol.md`.

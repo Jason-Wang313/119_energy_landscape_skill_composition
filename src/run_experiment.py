@@ -510,6 +510,145 @@ def latex_table(path, header, rows, align=None):
         handle.write(r"\end{tabular}" + "\n")
 
 
+GATE_DISPLAY = {
+    "ablation_success_margin_ge_0.015": "Ablation success",
+    "ablation_utility_margin_ge_0.030": "Ablation utility",
+    "barrier_violation_delta_le_-0.020": "Barrier reduction",
+    "basin_alignment_delta_ge_0.030": "Basin alignment",
+    "composition_cost_delta_le_0": "Composition cost",
+    "damage_rate_delta_le_-0.005": "Damage reduction",
+    "descent_continuity_delta_ge_0.030": "Descent continuity",
+    "failure_cases_ge_24": "Boundary cases",
+    "hard_success_margin_ge_0.030": "Hard success margin",
+    "hard_utility_margin_ge_0.050": "Hard utility margin",
+    "paired_hard_utility_wins_ge_8": "Paired utility wins",
+    "realized_seam_breach_delta_le_-0.020": "Seam breach reduction",
+    "risk_calibration_error_delta_le_-0.010": "Risk calibration",
+    "seam_failure_delta_le_-0.020": "Seam failure reduction",
+    "stress_endpoint_success_margin_ge_0.030": "Stress endpoint",
+    "strict_fixed_risk_breach_le_0.020": "Fixed-risk breach",
+    "strict_fixed_risk_coverage_ge_0.550": "Fixed-risk coverage",
+}
+
+
+def gate_label(name):
+    return GATE_DISPLAY.get(str(name), str(name).replace("_", " "))
+
+
+def status_badge(ok):
+    if ok:
+        return r"\textcolor{TableGreen}{\textbf{pass}}"
+    return r"\textcolor{TableRed}{\textbf{fail}}"
+
+
+def decisive_badge(value):
+    return r"\textcolor{TableGreen}{\textbf{yes}}" if str(value) == "yes" else r"\textcolor{TableRed}{\textbf{no}}"
+
+
+def maybe_bold(value, bold=False):
+    return rf"\textbf{{{value}}}" if bold else value
+
+
+def styled_table_begin(handle, spec):
+    handle.write(r"\begingroup" + "\n")
+    handle.write(r"\setlength{\tabcolsep}{3pt}" + "\n")
+    handle.write(r"\renewcommand{\arraystretch}{1.08}" + "\n")
+    handle.write(r"\arrayrulecolor{TableRule}" + "\n")
+    handle.write(r"\begin{tabular}{" + spec + "}\n")
+
+
+def styled_table_end(handle):
+    handle.write(r"\bottomrule" + "\n")
+    handle.write(r"\end{tabular}" + "\n")
+    handle.write(r"\arrayrulecolor{black}" + "\n")
+    handle.write(r"\endgroup" + "\n")
+
+
+def write_gate_table(path, gates):
+    items = [(gate_label(gate), ok) for gate, ok in sorted(gates.items())]
+    pairs = [items[index : index + 2] for index in range(0, len(items), 2)]
+    with path.open("w", encoding="utf-8") as handle:
+        styled_table_begin(handle, r"@{}p{0.37\linewidth}c@{\hspace{0.9em}}p{0.37\linewidth}c@{}")
+        handle.write(r"\rowcolor{TableHeader}" + "\n")
+        handle.write(r"\textbf{local gate} & \textbf{status} & \textbf{local gate} & \textbf{status} \\" + "\n")
+        handle.write(r"\midrule" + "\n")
+        for row_index, pair in enumerate(pairs):
+            if row_index % 2 == 1:
+                handle.write(r"\rowcolor{TableBand}" + "\n")
+            left = pair[0]
+            if len(pair) == 2:
+                right = pair[1]
+                handle.write(
+                    f"{latex_escape(left[0])} & {status_badge(left[1])} & {latex_escape(right[0])} & {status_badge(right[1])} \\\\\n"
+                )
+            else:
+                handle.write(f"{latex_escape(left[0])} & {status_badge(left[1])} &  &  \\\\\n")
+        styled_table_end(handle)
+
+
+def write_main_table(path, hard_metrics):
+    with path.open("w", encoding="utf-8") as handle:
+        styled_table_begin(handle, r"@{}p{0.23\linewidth}ccccccccc@{}")
+        handle.write(r"\rowcolor{TableHeader}" + "\n")
+        handle.write(
+            r"\textbf{method} & \textbf{succ.} & \textbf{utility} & \textbf{seam} & \textbf{barrier} & \textbf{basin} & \textbf{descent} & \textbf{damage} & \textbf{cost} & \textbf{breach} \\" + "\n"
+        )
+        handle.write(r"\midrule" + "\n")
+        for row_index, row in enumerate(hard_metrics):
+            method = str(row["method"])
+            if method == PROPOSED:
+                handle.write(r"\rowcolor{TableProposed}" + "\n")
+            elif method == OLD_V4:
+                handle.write(r"\rowcolor{TableBaseline}" + "\n")
+            elif method == ORACLE:
+                handle.write(r"\rowcolor{TableOracle}" + "\n")
+            elif row_index % 2 == 1:
+                handle.write(r"\rowcolor{TableBand}" + "\n")
+            bold = method in {PROPOSED, OLD_V4, ORACLE}
+            values = [
+                maybe_bold(latex_escape(method_label(method)), bold),
+                maybe_bold(fmt_ci(as_float(row, "mean_success"), as_float(row, "ci95_success")), bold),
+                maybe_bold(fmt_ci(as_float(row, "mean_composition_utility"), as_float(row, "ci95_composition_utility")), bold),
+                f"{as_float(row, 'mean_seam_failure_rate'):.3f}",
+                f"{as_float(row, 'mean_barrier_violation_rate'):.3f}",
+                f"{as_float(row, 'mean_basin_alignment'):.3f}",
+                f"{as_float(row, 'mean_descent_continuity'):.3f}",
+                f"{as_float(row, 'mean_damage_rate'):.3f}",
+                f"{as_float(row, 'mean_composition_cost'):.3f}",
+                f"{as_float(row, 'mean_realized_seam_breach'):.3f}",
+            ]
+            handle.write(" & ".join(values) + r" \\" + "\n")
+        styled_table_end(handle)
+
+
+def write_pairwise_table(path, pairwise):
+    with path.open("w", encoding="utf-8") as handle:
+        styled_table_begin(handle, r"@{}p{0.36\linewidth}cccc@{}")
+        handle.write(r"\rowcolor{TableHeader}" + "\n")
+        handle.write(
+            r"\textbf{baseline} & \textbf{succ. diff} & \textbf{utility diff} & \textbf{utility wins} & \textbf{decisive} \\" + "\n"
+        )
+        handle.write(r"\midrule" + "\n")
+        for row_index, row in enumerate(pairwise):
+            baseline = str(row["baseline"])
+            if baseline == OLD_V4:
+                handle.write(r"\rowcolor{TableBaseline}" + "\n")
+            elif baseline == ORACLE:
+                handle.write(r"\rowcolor{TableOracle}" + "\n")
+            elif row_index % 2 == 1:
+                handle.write(r"\rowcolor{TableBand}" + "\n")
+            bold = baseline in {OLD_V4, ORACLE}
+            values = [
+                maybe_bold(latex_escape(method_label(baseline)), bold),
+                maybe_bold(fmt_ci(row["mean_success_diff"], row["ci95_success_diff"]), bold),
+                maybe_bold(fmt_ci(row["mean_utility_diff"], row["ci95_utility_diff"]), bold),
+                maybe_bold(f"{row['paired_utility_wins']}/10", bold),
+                decisive_badge(row["decisive"]),
+            ]
+            handle.write(" & ".join(values) + r" \\" + "\n")
+        styled_table_end(handle)
+
+
 def fmt_ci(m, c):
     return f"{float(m):.3f} $\\pm$ {float(c):.3f}"
 
@@ -1087,9 +1226,9 @@ def main():
     }
     (RESULTS / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8")
 
-    latex_table(PAPER / "generated_gate_table.tex", ["gate", "status"], [[latex_escape(g), "pass" if ok else "fail"] for g, ok in sorted(gates.items())], align="lp{0.14\\linewidth}")
-    latex_table(PAPER / "generated_main_table.tex", ["method", "succ.", "utility", "seam", "barrier", "basin", "descent", "damage", "cost", "breach"], [[latex_escape(r["method"]), fmt_ci(as_float(r, "mean_success"), as_float(r, "ci95_success")), fmt_ci(as_float(r, "mean_composition_utility"), as_float(r, "ci95_composition_utility")), f"{as_float(r, 'mean_seam_failure_rate'):.3f}", f"{as_float(r, 'mean_barrier_violation_rate'):.3f}", f"{as_float(r, 'mean_basin_alignment'):.3f}", f"{as_float(r, 'mean_descent_continuity'):.3f}", f"{as_float(r, 'mean_damage_rate'):.3f}", f"{as_float(r, 'mean_composition_cost'):.3f}", f"{as_float(r, 'mean_realized_seam_breach'):.3f}"] for r in hard_metrics])
-    latex_table(PAPER / "generated_pairwise_table.tex", ["baseline", "succ. diff", "utility diff", "utility wins", "decisive"], [[latex_escape(r["baseline"]), fmt_ci(r["mean_success_diff"], r["ci95_success_diff"]), fmt_ci(r["mean_utility_diff"], r["ci95_utility_diff"]), f"{r['paired_utility_wins']}/10", str(r["decisive"])] for r in pairwise])
+    write_gate_table(PAPER / "generated_gate_table.tex", gates)
+    write_main_table(PAPER / "generated_main_table.tex", hard_metrics)
+    write_pairwise_table(PAPER / "generated_pairwise_table.tex", pairwise)
     latex_table(PAPER / "generated_ablation_table.tex", ["ablation", "success", "utility", "interpretation"], [[latex_escape(r["ablation"]), fmt_ci(as_float(r, "mean_mean_success"), as_float(r, "ci95_mean_success")), fmt_ci(as_float(r, "mean_mean_composition_utility"), as_float(r, "ci95_mean_composition_utility")), latex_escape(r["interpretation"])] for r in ab_metrics])
     max_stress = sorted([r for r in stress_metrics if abs(float(r["stress_level"]) - 1.0) < 1e-9], key=lambda r: as_float(r, "mean_composition_utility"), reverse=True)
     latex_table(PAPER / "generated_stress_table.tex", ["method", "success", "utility", "seam", "barrier", "breach"], [[latex_escape(r["method"]), fmt_ci(as_float(r, "mean_success"), as_float(r, "ci95_success")), fmt_ci(as_float(r, "mean_composition_utility"), as_float(r, "ci95_composition_utility")), f"{as_float(r, 'mean_seam_failure_rate'):.3f}", f"{as_float(r, 'mean_barrier_violation_rate'):.3f}", f"{as_float(r, 'mean_realized_seam_breach'):.3f}"] for r in max_stress])

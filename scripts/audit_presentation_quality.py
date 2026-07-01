@@ -153,7 +153,14 @@ def main() -> int:
     missing_tex_phrases = [phrase for phrase in FORBIDDEN_PDF_PHRASES if phrase in tex]
     has_appendix = r"\appendix" in tex
     add_check(checks, "no_removed_appendix_tail_in_tex", not missing_tex_phrases and not has_appendix, f"leaks={missing_tex_phrases}, appendix={has_appendix}")
-    add_check(checks, "hidden_links_configured", r"\hypersetup{hidelinks}" in tex, "hidelinks")
+    link_color_configured = (
+        "colorlinks=true" in tex
+        and "linkcolor=PaperLinkBlue" in tex
+        and "citecolor=PaperLinkBlue" in tex
+        and "urlcolor=PaperLinkBlue" in tex
+        and r"\definecolor{PaperLinkBlue}" in tex
+    )
+    add_check(checks, "blue_links_configured", link_color_configured, "blue citation/reference/URL links")
     add_check(checks, "vector_figures_only_in_manuscript", ".png}" not in tex, "no PNG includes in main.tex")
 
     for stem in EXPECTED_FIGURE_STEMS:

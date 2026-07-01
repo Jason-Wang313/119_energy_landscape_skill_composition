@@ -6657,8 +6657,16 @@ def main():
         numeric_finiteness(path)
 
     tex = (PAPER / "main.tex").read_text(encoding="utf-8")
-    if r"\hypersetup{hidelinks}" not in tex:
-        fail("hidden citation/link configuration missing")
+    link_color_terms = [
+        r"\definecolor{PaperLinkBlue}",
+        "colorlinks=true",
+        "linkcolor=PaperLinkBlue",
+        "citecolor=PaperLinkBlue",
+        "urlcolor=PaperLinkBlue",
+    ]
+    missing_link_color_terms = [term for term in link_color_terms if term not in tex]
+    if missing_link_color_terms:
+        fail(f"blue citation/reference link configuration missing: {missing_link_color_terms}")
     framing_terms = [
         "local world/action model for skill seams",
         "compact predictive interface between a skill library and a planner",
