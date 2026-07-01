@@ -1,0 +1,291 @@
+{
+  "checks": [
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\paper\\main.pdf",
+      "name": "paper_pdf_exists",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\Downloads\\119.pdf",
+      "name": "canonical_pdf_exists",
+      "passed": true
+    },
+    {
+      "detail": "paper/main.pdf vs Downloads/119.pdf",
+      "name": "canonical_matches_paper_pdf",
+      "passed": true
+    },
+    {
+      "detail": "pages=13, expected=8-18",
+      "name": "page_count_compact",
+      "passed": true
+    },
+    {
+      "detail": "rendered=13, pages=13",
+      "name": "rendered_page_count_matches_pdf",
+      "passed": true
+    },
+    {
+      "detail": "low_resolution_pages=[]",
+      "name": "render_resolution_ok",
+      "passed": true
+    },
+    {
+      "detail": "blank_pages=[]",
+      "name": "no_blank_pages",
+      "passed": true
+    },
+    {
+      "detail": "overdense_pages=[]",
+      "name": "no_overdense_pages",
+      "passed": true
+    },
+    {
+      "detail": "clipped_pages=[]",
+      "name": "no_edge_clipped_pages",
+      "passed": true
+    },
+    {
+      "detail": "weak_contrast_pages=[]",
+      "name": "page_contrast_ok",
+      "passed": true
+    },
+    {
+      "detail": "weak_main_density=[]",
+      "name": "main_pages_have_enough_content",
+      "passed": true
+    },
+    {
+      "detail": "weak_main_contrast=[]",
+      "name": "main_pages_have_enough_contrast",
+      "passed": true
+    },
+    {
+      "detail": "sparse_pages=[]",
+      "name": "sparse_pages_bounded",
+      "passed": true
+    },
+    {
+      "detail": "title_and_abstract",
+      "name": "text_anchor_title_and_abstract",
+      "passed": true
+    },
+    {
+      "detail": "decision_quality_page",
+      "name": "text_anchor_decision_quality_page",
+      "passed": true
+    },
+    {
+      "detail": "predictive_calibration_page",
+      "name": "text_anchor_predictive_calibration_page",
+      "passed": true
+    },
+    {
+      "detail": "stress_and_fixed_risk_page",
+      "name": "text_anchor_stress_and_fixed_risk_page",
+      "passed": true
+    },
+    {
+      "detail": "scope_boundary_full_text",
+      "name": "text_anchor_scope_boundary_full_text",
+      "passed": true
+    }
+  ],
+  "density_summary": {
+    "maximum": 0.17183455200261924,
+    "mean": 0.13385370931589421,
+    "minimum": 0.08257994106733603,
+    "sparse_pages": []
+  },
+  "failed_checks": [],
+  "minimum_edge_margin_px": 27,
+  "not_external_evidence": true,
+  "page_metrics": [
+    {
+      "edge_margins_px": {
+        "bottom": 32,
+        "left": 71,
+        "minimum": 27,
+        "right": 104,
+        "top": 27
+      },
+      "foreground_fraction": 0.14518825712103023,
+      "height": 770,
+      "luminance_std": 0.1635764758222818,
+      "page": 1,
+      "width": 595
+    },
+    {
+      "edge_margins_px": {
+        "bottom": 32,
+        "left": 71,
+        "minimum": 27,
+        "right": 104,
+        "top": 27
+      },
+      "foreground_fraction": 0.171507148313871,
+      "height": 770,
+      "luminance_std": 0.17688653150800798,
+      "page": 2,
+      "width": 595
+    },
+    {
+      "edge_margins_px": {
+        "bottom": 31,
+        "left": 71,
+        "minimum": 27,
+        "right": 104,
+        "top": 27
+      },
+      "foreground_fraction": 0.17183455200261924,
+      "height": 770,
+      "luminance_std": 0.15342053179474835,
+      "page": 3,
+      "width": 595
+    },
+    {
+      "edge_margins_px": {
+        "bottom": 32,
+        "left": 71,
+        "minimum": 27,
+        "right": 104,
+        "top": 27
+      },
+      "foreground_fraction": 0.14402924806286152,
+      "height": 770,
+      "luminance_std": 0.14306903969597795,
+      "page": 4,
+      "width": 595
+    },
+    {
+      "edge_margins_px": {
+        "bottom": 31,
+        "left": 71,
+        "minimum": 27,
+        "right": 105,
+        "top": 27
+      },
+      "foreground_fraction": 0.1446054785550584,
+      "height": 770,
+      "luminance_std": 0.14693774072519908,
+      "page": 5,
+      "width": 595
+    },
+    {
+      "edge_margins_px": {
+        "bottom": 31,
+        "left": 71,
+        "minimum": 27,
+        "right": 104,
+        "top": 27
+      },
+      "foreground_fraction": 0.09486194477791117,
+      "height": 770,
+      "luminance_std": 0.1411842798411286,
+      "page": 6,
+      "width": 595
+    },
+    {
+      "edge_margins_px": {
+        "bottom": 31,
+        "left": 71,
+        "minimum": 27,
+        "right": 104,
+        "top": 27
+      },
+      "foreground_fraction": 0.11404561824729892,
+      "height": 770,
+      "luminance_std": 0.1601194570540237,
+      "page": 7,
+      "width": 595
+    },
+    {
+      "edge_margins_px": {
+        "bottom": 31,
+        "left": 71,
+        "minimum": 27,
+        "right": 105,
+        "top": 27
+      },
+      "foreground_fraction": 0.11795918367346939,
+      "height": 770,
+      "luminance_std": 0.1227717449577863,
+      "page": 8,
+      "width": 595
+    },
+    {
+      "edge_margins_px": {
+        "bottom": 31,
+        "left": 71,
+        "minimum": 27,
+        "right": 105,
+        "top": 27
+      },
+      "foreground_fraction": 0.08257994106733603,
+      "height": 770,
+      "luminance_std": 0.10855807255541473,
+      "page": 9,
+      "width": 595
+    },
+    {
+      "edge_margins_px": {
+        "bottom": 31,
+        "left": 71,
+        "minimum": 27,
+        "right": 104,
+        "top": 27
+      },
+      "foreground_fraction": 0.13580486740150605,
+      "height": 770,
+      "luminance_std": 0.16968845162953117,
+      "page": 10,
+      "width": 595
+    },
+    {
+      "edge_margins_px": {
+        "bottom": 32,
+        "left": 71,
+        "minimum": 27,
+        "right": 104,
+        "top": 27
+      },
+      "foreground_fraction": 0.16932009167303286,
+      "height": 770,
+      "luminance_std": 0.17774336097921695,
+      "page": 11,
+      "width": 595
+    },
+    {
+      "edge_margins_px": {
+        "bottom": 32,
+        "left": 71,
+        "minimum": 27,
+        "right": 104,
+        "top": 27
+      },
+      "foreground_fraction": 0.13499508894466877,
+      "height": 770,
+      "luminance_std": 0.15644815468658246,
+      "page": 12,
+      "width": 595
+    },
+    {
+      "edge_margins_px": {
+        "bottom": 31,
+        "left": 71,
+        "minimum": 27,
+        "right": 104,
+        "top": 27
+      },
+      "foreground_fraction": 0.11336680126596092,
+      "height": 770,
+      "luminance_std": 0.1446536018591128,
+      "page": 13,
+      "width": 595
+    }
+  ],
+  "pages": 13,
+  "passed": true,
+  "render_dpi": 70,
+  "version": "camera_ready_design_audit_v1"
+}

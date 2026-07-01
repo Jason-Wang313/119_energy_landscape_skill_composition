@@ -1,0 +1,93 @@
+{
+  "archive_entry_count": 0,
+  "archive_path": "results/paper119_external_operator_release_bundle.zip",
+  "archive_root": "paper119_external_operator_release_bundle",
+  "archive_sha256": "",
+  "archive_size_bytes": 0,
+  "archive_write_command": "python scripts\\build_external_operator_release_bundle.py --write-archive",
+  "archive_write_enabled": false,
+  "archive_written": false,
+  "bundle_state": "READY_TO_SEND_OPERATOR_PACKAGE",
+  "category_counts": {
+    "baseline_spec": 12,
+    "config_template": 4,
+    "generated_non_evidence_report": 138,
+    "method_config_candidate": 11,
+    "operator_command_source": 64,
+    "operator_facing_input": 96,
+    "prepared_config_input": 4,
+    "reference_adapter": 60,
+    "runner_backend_template": 5,
+    "task_card": 4
+  },
+  "checks": [
+    {
+      "detail": "release bundle is a transfer package only",
+      "name": "release_bundle_is_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "passed=True, start_state='DO_NOT_COLLECT_YET', strict=False",
+      "name": "source_handoff_bundle_ready",
+      "passed": true
+    },
+    {
+      "detail": "job_state='DO_NOT_START_COLLECTION_YET', packet_in_paths=True",
+      "name": "collection_job_packet_present_in_handoff",
+      "passed": true
+    },
+    {
+      "detail": "missing=[], mismatched=[]",
+      "name": "handoff_hashes_recomputed",
+      "passed": true
+    },
+    {
+      "detail": "forbidden=[]",
+      "name": "forbidden_evidence_paths_excluded",
+      "passed": true
+    },
+    {
+      "detail": "records=398, handoff_count=398",
+      "name": "release_manifest_covers_all_handoff_files",
+      "passed": true
+    },
+    {
+      "detail": "default mode writes only plan files; archive writing requires --write-archive",
+      "name": "archive_writer_is_explicit_and_optional",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json absent before real evidence",
+      "name": "no_real_manifest_written",
+      "passed": true
+    },
+    {
+      "detail": "use --write-archive to create the transfer zip",
+      "name": "archive_not_written_by_default",
+      "passed": true
+    }
+  ],
+  "failed_checks": [],
+  "forbidden_path_parts": [
+    "external_validation/checkpoints/",
+    "external_validation/local_dry_run/",
+    "external_validation/logs/",
+    "external_validation/manifest.json",
+    "external_validation/videos/",
+    "paper119_external_operator_release_bundle.zip",
+    "placeholder_not_external_evidence"
+  ],
+  "forbidden_paths": [],
+  "included_file_count": 398,
+  "manifest_csv": "external_validation/operator_release_bundle_manifest.csv",
+  "mismatched_hashes": [],
+  "missing_files": [],
+  "not_external_evidence": true,
+  "passed": true,
+  "release_readme": "external_validation/operator_release_bundle_README.md",
+  "source_collection_job": "results/external_collection_job_packet_audit.json",
+  "source_handoff_bundle": "results/external_operator_handoff_bundle.json",
+  "strict_external_evidence_ready": false,
+  "total_payload_bytes": 5380227,
+  "version": "external_operator_release_bundle_plan_v1"
+}

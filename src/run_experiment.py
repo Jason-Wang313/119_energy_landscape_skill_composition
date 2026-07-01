@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import json
 import math
+import textwrap
 import zlib
 from collections import defaultdict
 from pathlib import Path
@@ -12,6 +13,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.lines import Line2D
+from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
 
 VERSION = "v5_expanded"
@@ -65,7 +68,7 @@ STALE_RESULTS = [
 for name in STALE_RESULTS:
     (RESULTS / name).unlink(missing_ok=True)
 
-for pattern in ("energy_landscape_composition_*", "generated_*"):
+for pattern in ("energy_landscape_composition_*", "skill_seam_action_model_*", "generated_*"):
     for path in FIGURES.glob(pattern):
         if path.is_file():
             path.unlink()
@@ -133,6 +136,120 @@ METRIC_NAMES = (
     "composition_utility",
 )
 
+DIAGNOSTIC_FIELDS = (
+    "diagnostic_label",
+    "seam_decision",
+    "planner_edge_update",
+)
+
+PALETTE = {
+    "ink": "#1f2933",
+    "muted": "#637381",
+    "grid": "#d8dee8",
+    "paper": "#fbfcfe",
+    "proposed": "#c85d45",
+    "previous": "#5d8fb5",
+    "oracle": "#73a36b",
+    "baseline": "#9ab6cf",
+    "baseline_dark": "#6f95b4",
+    "gold": "#c7a65b",
+    "risk": "#b85f6a",
+    "safe": "#6f9f78",
+}
+
+METHOD_DISPLAY = {
+    PROPOSED: "Proposed seam model",
+    OLD_V4: "Prior v4.1",
+    ORACLE: "Oracle upper bound",
+    "greedy_module_sequence": "Greedy sequence",
+    "behavior_cloned_skill_chain": "BC skill chain",
+    "option_graph_planner": "Option graph",
+    "diffusion_skill_stitcher": "Diffusion stitcher",
+    "cem_trajectory_composer": "CEM composer",
+    "residual_rl_composer": "Residual RL",
+    "energy_compatibility_heuristic": "Energy heuristic",
+    "tamp_feasibility_screen": "TAMP screen",
+    "stable_dmp_handoff": "Stable DMP",
+}
+
+ABLATION_DISPLAY = {
+    "full_barrier_certified_energy_composer": "Full seam model",
+    "minus_terminal_sampler": "No terminal sampler",
+    "minus_contact_mode_guard": "No contact guard",
+    "minus_high_energy_repair": "No high-energy repair",
+    "minus_descent_continuity": "No descent term",
+    "minus_barrier_height": "No barrier term",
+    "minus_basin_overlap": "No basin posterior",
+    "minus_fixed_risk_gate": "No fixed-risk gate",
+    "minus_calibration": "No calibration",
+    "compatibility_only_heuristic": "Compatibility only",
+}
+
+
+def method_label(name: object) -> str:
+    text = str(name)
+    return METHOD_DISPLAY.get(text, text.replace("_", " "))
+
+
+def ablation_label(name: object) -> str:
+    text = str(name)
+    return ABLATION_DISPLAY.get(text, text.replace("_", " "))
+
+
+def method_color(name: object) -> str:
+    text = str(name)
+    if text == PROPOSED:
+        return PALETTE["proposed"]
+    if text == OLD_V4:
+        return PALETTE["previous"]
+    if text == ORACLE:
+        return PALETTE["oracle"]
+    return PALETTE["baseline"]
+
+
+def wrap_label(text: str, width: int = 18) -> str:
+    return "\n".join(textwrap.wrap(text, width=width, break_long_words=False))
+
+
+def configure_plot_style() -> None:
+    plt.rcParams.update(
+        {
+            "font.family": "DejaVu Sans",
+            "font.size": 9,
+            "axes.titlesize": 11,
+            "axes.labelsize": 9,
+            "xtick.labelsize": 8,
+            "ytick.labelsize": 8,
+            "legend.fontsize": 8,
+            "figure.facecolor": "white",
+            "axes.facecolor": PALETTE["paper"],
+            "axes.edgecolor": "#b8c2cc",
+            "axes.linewidth": 0.8,
+            "grid.color": PALETTE["grid"],
+            "grid.linewidth": 0.65,
+            "savefig.facecolor": "white",
+        }
+    )
+
+
+def polish_axes(ax, *, xgrid: bool = True, ygrid: bool = False) -> None:
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_color("#c3ccd6")
+    ax.spines["bottom"].set_color("#c3ccd6")
+    ax.tick_params(colors=PALETTE["ink"], length=3, width=0.7)
+    ax.set_axisbelow(True)
+    if xgrid:
+        ax.grid(axis="x", alpha=0.75)
+    if ygrid:
+        ax.grid(axis="y", alpha=0.75)
+
+
+def save_figure(fig, stem: str) -> None:
+    fig.savefig(FIGURES / f"{stem}.pdf", bbox_inches="tight")
+    fig.savefig(FIGURES / f"{stem}.png", dpi=260, bbox_inches="tight")
+    plt.close(fig)
+
 
 def stable_seed(*parts: object) -> int:
     code = BASE_SEED
@@ -186,6 +303,74 @@ def dataset_rows() -> list[dict[str, object]]:
     return rows
 
 
+def seam_diagnostic(
+    *,
+    regime_name: str,
+    split_name: str,
+    seam_fail: float,
+    barrier_violation: float,
+    basin: float,
+    descent: float,
+    damage: float,
+    cost: float,
+    energy_error: float,
+    calibration: float,
+    abstention: float,
+    predicted_risk: float,
+    realized_breach: float,
+) -> tuple[str, str, str]:
+    seam_fail = round(seam_fail, 6)
+    barrier_violation = round(barrier_violation, 6)
+    basin = round(basin, 6)
+    descent = round(descent, 6)
+    damage = round(damage, 6)
+    cost = round(cost, 6)
+    energy_error = round(energy_error, 6)
+    calibration = round(calibration, 6)
+    abstention = round(abstention, 6)
+    predicted_risk = round(predicted_risk, 6)
+    realized_breach = round(realized_breach, 6)
+
+    scores = {
+        "basin_mismatch": max(0.0, 0.77 - basin) / 0.16 + 0.25 * seam_fail,
+        "high_barrier": max(0.0, barrier_violation - 0.07) / 0.07 + max(0.0, realized_breach - 0.09) / 0.08,
+        "contact_mode_discontinuity": max(0.0, 0.77 - descent) / 0.16 + 0.20 * barrier_violation,
+        "model_uncertainty": max(0.0, energy_error - 0.095) / 0.045 + max(0.0, calibration - 0.055) / 0.035,
+        "missing_bridge_skill": max(0.0, cost - 0.19) / 0.055 + max(0.0, abstention - 0.095) / 0.04 + 0.12 * seam_fail,
+    }
+    if split_name == "long_horizon_chain":
+        label = "missing_bridge_skill"
+    else:
+        label = {
+            "narrow_basin": "basin_mismatch",
+            "high_barrier": "high_barrier",
+            "contact_mode_transition": "contact_mode_discontinuity",
+            "nonconvex_energy": "model_uncertainty",
+            "partial_observability": "model_uncertainty",
+            "dynamics_mismatch": "model_uncertainty",
+        }.get(regime_name, max(scores, key=lambda key: (scores[key], key)))
+
+    if predicted_risk <= 0.095 and basin >= 0.71 and descent >= 0.70:
+        decision = "accept"
+    elif predicted_risk >= 0.155 or damage >= 0.071:
+        decision = "abstain"
+    elif label == "missing_bridge_skill":
+        decision = "transition"
+    elif label in {"basin_mismatch", "high_barrier", "contact_mode_discontinuity"}:
+        decision = "repair"
+    else:
+        decision = "probe"
+
+    update = {
+        "accept": "increase_edge_confidence",
+        "repair": "mark_bridge_required",
+        "probe": "request_diagnostic_sample",
+        "abstain": "suppress_edge",
+        "transition": "prefer_alternate_edge",
+    }[decision]
+    return label, decision, update
+
+
 def cell_metric(method, task, regime, split, seed, episode, stress_level: float | None = None):
     method_name = method["name"]
     level = 0.0 if stress_level is None else float(stress_level)
@@ -234,6 +419,21 @@ def cell_metric(method, task, regime, split, seed, episode, stress_level: float 
         - 0.52 * calibration
         - 0.18 * abstention
     )
+    diagnostic_label, seam_decision, planner_edge_update = seam_diagnostic(
+        regime_name=regime["name"],
+        split_name=split["name"],
+        seam_fail=seam_fail,
+        barrier_violation=barrier_violation,
+        basin=basin,
+        descent=descent,
+        damage=damage,
+        cost=cost,
+        energy_error=energy_error,
+        calibration=calibration,
+        abstention=abstention,
+        predicted_risk=predicted_risk,
+        realized_breach=realized_breach,
+    )
 
     return {
         "method": method_name,
@@ -255,6 +455,9 @@ def cell_metric(method, task, regime, split, seed, episode, stress_level: float 
         "predicted_seam_risk": predicted_risk,
         "realized_seam_breach": realized_breach,
         "composition_utility": utility,
+        "diagnostic_label": diagnostic_label,
+        "seam_decision": seam_decision,
+        "planner_edge_update": planner_edge_update,
     }
 
 
@@ -305,6 +508,145 @@ def latex_table(path, header, rows, align=None):
             handle.write(" & ".join(row) + r" \\" + "\n")
         handle.write(r"\bottomrule" + "\n")
         handle.write(r"\end{tabular}" + "\n")
+
+
+GATE_DISPLAY = {
+    "ablation_success_margin_ge_0.015": "Ablation success",
+    "ablation_utility_margin_ge_0.030": "Ablation utility",
+    "barrier_violation_delta_le_-0.020": "Barrier reduction",
+    "basin_alignment_delta_ge_0.030": "Basin alignment",
+    "composition_cost_delta_le_0": "Composition cost",
+    "damage_rate_delta_le_-0.005": "Damage reduction",
+    "descent_continuity_delta_ge_0.030": "Descent continuity",
+    "failure_cases_ge_24": "Boundary cases",
+    "hard_success_margin_ge_0.030": "Hard success margin",
+    "hard_utility_margin_ge_0.050": "Hard utility margin",
+    "paired_hard_utility_wins_ge_8": "Paired utility wins",
+    "realized_seam_breach_delta_le_-0.020": "Seam breach reduction",
+    "risk_calibration_error_delta_le_-0.010": "Risk calibration",
+    "seam_failure_delta_le_-0.020": "Seam failure reduction",
+    "stress_endpoint_success_margin_ge_0.030": "Stress endpoint",
+    "strict_fixed_risk_breach_le_0.020": "Fixed-risk breach",
+    "strict_fixed_risk_coverage_ge_0.550": "Fixed-risk coverage",
+}
+
+
+def gate_label(name):
+    return GATE_DISPLAY.get(str(name), str(name).replace("_", " "))
+
+
+def status_badge(ok):
+    if ok:
+        return r"\textcolor{TableGreen}{\textbf{pass}}"
+    return r"\textcolor{TableRed}{\textbf{fail}}"
+
+
+def decisive_badge(value):
+    return r"\textcolor{TableGreen}{\textbf{yes}}" if str(value) == "yes" else r"\textcolor{TableRed}{\textbf{no}}"
+
+
+def maybe_bold(value, bold=False):
+    return rf"\textbf{{{value}}}" if bold else value
+
+
+def styled_table_begin(handle, spec):
+    handle.write(r"\begingroup" + "\n")
+    handle.write(r"\setlength{\tabcolsep}{3pt}" + "\n")
+    handle.write(r"\renewcommand{\arraystretch}{1.08}" + "\n")
+    handle.write(r"\arrayrulecolor{TableRule}" + "\n")
+    handle.write(r"\begin{tabular}{" + spec + "}\n")
+
+
+def styled_table_end(handle):
+    handle.write(r"\bottomrule" + "\n")
+    handle.write(r"\end{tabular}" + "\n")
+    handle.write(r"\arrayrulecolor{black}" + "\n")
+    handle.write(r"\endgroup" + "\n")
+
+
+def write_gate_table(path, gates):
+    items = [(gate_label(gate), ok) for gate, ok in sorted(gates.items())]
+    pairs = [items[index : index + 2] for index in range(0, len(items), 2)]
+    with path.open("w", encoding="utf-8") as handle:
+        styled_table_begin(handle, r"@{}p{0.37\linewidth}c@{\hspace{0.9em}}p{0.37\linewidth}c@{}")
+        handle.write(r"\rowcolor{TableHeader}" + "\n")
+        handle.write(r"\textbf{local gate} & \textbf{status} & \textbf{local gate} & \textbf{status} \\" + "\n")
+        handle.write(r"\midrule" + "\n")
+        for row_index, pair in enumerate(pairs):
+            if row_index % 2 == 1:
+                handle.write(r"\rowcolor{TableBand}" + "\n")
+            left = pair[0]
+            if len(pair) == 2:
+                right = pair[1]
+                handle.write(
+                    f"{latex_escape(left[0])} & {status_badge(left[1])} & {latex_escape(right[0])} & {status_badge(right[1])} \\\\\n"
+                )
+            else:
+                handle.write(f"{latex_escape(left[0])} & {status_badge(left[1])} &  &  \\\\\n")
+        styled_table_end(handle)
+
+
+def write_main_table(path, hard_metrics):
+    with path.open("w", encoding="utf-8") as handle:
+        styled_table_begin(handle, r"@{}p{0.23\linewidth}ccccccccc@{}")
+        handle.write(r"\rowcolor{TableHeader}" + "\n")
+        handle.write(
+            r"\textbf{method} & \textbf{succ.} & \textbf{utility} & \textbf{seam} & \textbf{barrier} & \textbf{basin} & \textbf{descent} & \textbf{damage} & \textbf{cost} & \textbf{breach} \\" + "\n"
+        )
+        handle.write(r"\midrule" + "\n")
+        for row_index, row in enumerate(hard_metrics):
+            method = str(row["method"])
+            if method == PROPOSED:
+                handle.write(r"\rowcolor{TableProposed}" + "\n")
+            elif method == OLD_V4:
+                handle.write(r"\rowcolor{TableBaseline}" + "\n")
+            elif method == ORACLE:
+                handle.write(r"\rowcolor{TableOracle}" + "\n")
+            elif row_index % 2 == 1:
+                handle.write(r"\rowcolor{TableBand}" + "\n")
+            bold = method in {PROPOSED, OLD_V4, ORACLE}
+            values = [
+                maybe_bold(latex_escape(method_label(method)), bold),
+                maybe_bold(fmt_ci(as_float(row, "mean_success"), as_float(row, "ci95_success")), bold),
+                maybe_bold(fmt_ci(as_float(row, "mean_composition_utility"), as_float(row, "ci95_composition_utility")), bold),
+                f"{as_float(row, 'mean_seam_failure_rate'):.3f}",
+                f"{as_float(row, 'mean_barrier_violation_rate'):.3f}",
+                f"{as_float(row, 'mean_basin_alignment'):.3f}",
+                f"{as_float(row, 'mean_descent_continuity'):.3f}",
+                f"{as_float(row, 'mean_damage_rate'):.3f}",
+                f"{as_float(row, 'mean_composition_cost'):.3f}",
+                f"{as_float(row, 'mean_realized_seam_breach'):.3f}",
+            ]
+            handle.write(" & ".join(values) + r" \\" + "\n")
+        styled_table_end(handle)
+
+
+def write_pairwise_table(path, pairwise):
+    with path.open("w", encoding="utf-8") as handle:
+        styled_table_begin(handle, r"@{}p{0.36\linewidth}cccc@{}")
+        handle.write(r"\rowcolor{TableHeader}" + "\n")
+        handle.write(
+            r"\textbf{baseline} & \textbf{succ. diff} & \textbf{utility diff} & \textbf{utility wins} & \textbf{decisive} \\" + "\n"
+        )
+        handle.write(r"\midrule" + "\n")
+        for row_index, row in enumerate(pairwise):
+            baseline = str(row["baseline"])
+            if baseline == OLD_V4:
+                handle.write(r"\rowcolor{TableBaseline}" + "\n")
+            elif baseline == ORACLE:
+                handle.write(r"\rowcolor{TableOracle}" + "\n")
+            elif row_index % 2 == 1:
+                handle.write(r"\rowcolor{TableBand}" + "\n")
+            bold = baseline in {OLD_V4, ORACLE}
+            values = [
+                maybe_bold(latex_escape(method_label(baseline)), bold),
+                maybe_bold(fmt_ci(row["mean_success_diff"], row["ci95_success_diff"]), bold),
+                maybe_bold(fmt_ci(row["mean_utility_diff"], row["ci95_utility_diff"]), bold),
+                maybe_bold(f"{row['paired_utility_wins']}/10", bold),
+                decisive_badge(row["decisive"]),
+            ]
+            handle.write(" & ".join(values) + r" \\" + "\n")
+        styled_table_end(handle)
 
 
 def fmt_ci(m, c):
@@ -405,79 +747,258 @@ def failure_case_rows():
 
 
 def make_figures(hard_metrics, ablation_metrics, stress_metrics, fixed_metrics, strongest_name):
-    ordered = sorted(hard_metrics, key=lambda r: as_float(r, "mean_composition_utility"), reverse=True)
-    labels = [str(r["method"]) for r in ordered]
-    colors = ["#cd5f44" if x == PROPOSED else ("#7da768" if x == ORACLE else "#7aa6c2") for x in labels]
-    plt.figure(figsize=(11, 5.2))
-    plt.bar(range(len(labels)), [as_float(r, "mean_success") for r in ordered], yerr=[as_float(r, "ci95_success") for r in ordered], color=colors, capsize=3)
-    plt.xticks(range(len(labels)), [x.replace("_", "\n") for x in labels], fontsize=7)
-    plt.ylabel("hard-slice success")
-    plt.ylim(0, 1)
-    plt.title("Energy-seam certification improves skill composition")
-    plt.tight_layout()
-    plt.savefig(FIGURES / "energy_landscape_composition_hard_success_v5.png", dpi=180)
-    plt.close()
+    configure_plot_style()
 
-    plt.figure(figsize=(7.8, 5.0))
+    fig, ax = plt.subplots(figsize=(9.8, 4.6))
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.axis("off")
+
+    def box(x, y, w, h, title, body, face, edge):
+        patch = FancyBboxPatch(
+            (x, y),
+            w,
+            h,
+            boxstyle="round,pad=0.016,rounding_size=0.025",
+            facecolor=face,
+            edgecolor=edge,
+            linewidth=1.2,
+        )
+        ax.add_patch(patch)
+        ax.text(x + 0.025, y + h - 0.08, title, color=PALETTE["ink"], fontsize=10, fontweight="bold", va="top")
+        ax.text(x + 0.025, y + h - 0.18, body, color=PALETTE["muted"], fontsize=8.3, va="top", linespacing=1.25)
+
+    def arrow(x0, y0, x1, y1, color=PALETTE["muted"], rad=0.0):
+        ax.add_patch(
+            FancyArrowPatch(
+                (x0, y0),
+                (x1, y1),
+                connectionstyle=f"arc3,rad={rad}",
+                arrowstyle="-|>",
+                mutation_scale=12,
+                linewidth=1.3,
+                color=color,
+            )
+        )
+
+    box(0.04, 0.55, 0.18, 0.26, "Skill i", "terminal samples\ncontact trace", "#eef4f9", "#9ab6cf")
+    box(0.30, 0.45, 0.28, 0.36, "Seam action model", "predict basin overlap\nbarrier exposure\ndescent continuity\nrepair cost + risk", "#fff7eb", "#d5a353")
+    box(0.76, 0.55, 0.18, 0.26, "Skill j", "basin + controller\ndescent check", "#eef7ef", "#91b687")
+    box(0.30, 0.05, 0.28, 0.28, "Failure memory", "accepted/rejected seams\nfailure labels + planning priors", "#f4f1fb", "#a79ac7")
+
+    decisions = [
+        ("accept", 0.67, 0.77, PALETTE["safe"]),
+        ("repair", 0.67, 0.66, PALETTE["gold"]),
+        ("probe", 0.67, 0.55, PALETTE["previous"]),
+        ("abstain", 0.67, 0.44, PALETTE["risk"]),
+        ("transition", 0.67, 0.33, PALETTE["muted"]),
+    ]
+    for label, x, y, color in decisions:
+        ax.text(
+            x,
+            y,
+            label,
+            ha="center",
+            va="center",
+            fontsize=8.5,
+            color="white",
+            bbox={"boxstyle": "round,pad=0.28,rounding_size=0.12", "facecolor": color, "edgecolor": "none"},
+        )
+
+    arrow(0.22, 0.66, 0.30, 0.66)
+    arrow(0.58, 0.66, 0.76, 0.66)
+    arrow(0.54, 0.45, 0.62, 0.35, PALETTE["gold"], rad=-0.1)
+    arrow(0.44, 0.45, 0.44, 0.32, PALETTE["muted"])
+    arrow(0.32, 0.19, 0.16, 0.55, PALETTE["muted"], rad=-0.25)
+    ax.text(
+        0.04,
+        0.90,
+        "Skill-seam action model for reliable behavior composition",
+        fontsize=12,
+        fontweight="bold",
+        color=PALETTE["ink"],
+    )
+    ax.text(
+        0.04,
+        0.85,
+        "The contribution is the reliability layer at the handoff, not a new low-level controller.",
+        fontsize=9,
+        color=PALETTE["muted"],
+    )
+    save_figure(fig, "skill_seam_action_model_overview_v5")
+
+    ordered = sorted(hard_metrics, key=lambda r: as_float(r, "mean_composition_utility"), reverse=True)
+    ordered_plot = list(reversed(ordered))
+    fig, ax = plt.subplots(figsize=(7.6, 5.0))
+    y = np.arange(len(ordered_plot))
+    values = [as_float(r, "mean_success") for r in ordered_plot]
+    errors = [as_float(r, "ci95_success") for r in ordered_plot]
+    labels = [method_label(r["method"]) for r in ordered_plot]
+    colors = [method_color(r["method"]) for r in ordered_plot]
+    ax.barh(y, values, xerr=errors, color=colors, edgecolor="white", linewidth=0.8, capsize=2.5, height=0.68)
+    ax.set_yticks(y)
+    ax.set_yticklabels(labels)
+    ax.set_xlim(0.20, 0.95)
+    ax.set_xlabel("hard-slice success")
+    ax.set_title("Barrier-certified seam model improves hard handoffs", loc="left", fontweight="bold")
+    polish_axes(ax)
+    for idx, value in enumerate(values):
+        ax.text(value + 0.012, idx, f"{value:.3f}", va="center", ha="left", fontsize=8, color=PALETTE["ink"])
+    predecessor_value = next(as_float(r, "mean_success") for r in ordered if str(r["method"]) == strongest_name)
+    predecessor_y = labels.index(method_label(strongest_name))
+    ax.axvline(predecessor_value, color=PALETTE["previous"], linestyle=(0, (4, 3)), linewidth=1.0, alpha=0.75)
+    ax.text(
+        predecessor_value + 0.030,
+        predecessor_y - 0.48,
+        "strongest non-oracle\npredecessor",
+        color=PALETTE["previous"],
+        fontsize=7.5,
+        ha="left",
+        va="top",
+    )
+    save_figure(fig, "energy_landscape_composition_hard_success_v5")
+
+    fig, ax = plt.subplots(figsize=(6.7, 4.7))
     for row in ordered:
         label = str(row["method"])
-        plt.scatter(as_float(row, "mean_realized_seam_breach"), as_float(row, "mean_composition_utility"), s=90 if label in {PROPOSED, strongest_name, ORACLE} else 46, color="#cd5f44" if label == PROPOSED else ("#7da768" if label == ORACLE else "#7aa6c2"))
+        size = 120 if label in {PROPOSED, strongest_name, ORACLE} else 55
+        alpha = 1.0 if label in {PROPOSED, strongest_name, ORACLE, "energy_compatibility_heuristic"} else 0.68
+        ax.scatter(
+            as_float(row, "mean_realized_seam_breach"),
+            as_float(row, "mean_composition_utility"),
+            s=size,
+            color=method_color(label),
+            edgecolor="white",
+            linewidth=0.8,
+            alpha=alpha,
+            zorder=3 if label in {PROPOSED, strongest_name, ORACLE} else 2,
+        )
         if label in {PROPOSED, strongest_name, ORACLE, "energy_compatibility_heuristic"}:
-            plt.text(as_float(row, "mean_realized_seam_breach") + 0.002, as_float(row, "mean_composition_utility"), label.replace("_", " "), fontsize=8)
-    plt.xlabel("realized seam breach")
-    plt.ylabel("composition utility")
-    plt.title("Utility is reported against seam breach")
-    plt.tight_layout()
-    plt.savefig(FIGURES / "energy_landscape_composition_utility_risk_v5.png", dpi=180)
-    plt.close()
+            dx = 0.012 if label != ORACLE else 0.008
+            dy = 0.025 if label == PROPOSED else (0.018 if label == strongest_name else 0.0)
+            ax.text(
+                as_float(row, "mean_realized_seam_breach") + dx,
+                as_float(row, "mean_composition_utility") + dy,
+                wrap_label(method_label(label), 15),
+                fontsize=8,
+                color=PALETTE["ink"],
+                va="center",
+            )
+    ax.axvline(0.15, color=PALETTE["risk"], linestyle=(0, (4, 3)), linewidth=1.0, alpha=0.75)
+    ax.text(0.153, 1.05, "fixed-risk\nbudget 0.15", color=PALETTE["risk"], fontsize=7.5, va="top")
+    ax.annotate(
+        "better",
+        xy=(0.065, 1.04),
+        xytext=(0.18, 0.82),
+        arrowprops={"arrowstyle": "->", "color": PALETTE["muted"], "lw": 1.0},
+        color=PALETTE["muted"],
+        fontsize=8,
+    )
+    ax.set_xlabel("realized seam breach (lower is better)")
+    ax.set_ylabel("composition utility (higher is better)")
+    ax.set_title("Utility is reported with realized seam breach", loc="left", fontweight="bold")
+    ax.set_xlim(0.00, 0.58)
+    ax.set_ylim(-0.55, 1.22)
+    polish_axes(ax)
+    save_figure(fig, "energy_landscape_composition_utility_risk_v5")
 
     ab_ordered = sorted(ablation_metrics, key=lambda r: as_float(r, "mean_mean_composition_utility"), reverse=True)
-    plt.figure(figsize=(10.5, 4.8))
-    plt.bar(range(len(ab_ordered)), [as_float(r, "mean_mean_success") for r in ab_ordered], yerr=[as_float(r, "ci95_mean_success") for r in ab_ordered], color="#d6a34f", capsize=3)
-    plt.xticks(range(len(ab_ordered)), [str(r["ablation"]).replace("_", "\n") for r in ab_ordered], fontsize=7)
-    plt.ylabel("combined-stress success")
-    plt.ylim(0.45, 0.95)
-    plt.title("Ablations of the energy-seam composer")
-    plt.tight_layout()
-    plt.savefig(FIGURES / "energy_landscape_composition_ablation_v5.png", dpi=180)
-    plt.close()
+    full_row = next(r for r in ab_ordered if str(r["ablation"]) == "full_barrier_certified_energy_composer")
+    full_utility = as_float(full_row, "mean_mean_composition_utility")
+    removed = [r for r in ab_ordered if str(r["ablation"]) != "full_barrier_certified_energy_composer"]
+    removed.sort(key=lambda r: full_utility - as_float(r, "mean_mean_composition_utility"))
+    fig, ax = plt.subplots(figsize=(7.3, 4.5))
+    y = np.arange(len(removed))
+    drops = [full_utility - as_float(r, "mean_mean_composition_utility") for r in removed]
+    ax.barh(y, drops, color=PALETTE["gold"], edgecolor="white", linewidth=0.8, height=0.68)
+    ax.set_yticks(y)
+    ax.set_yticklabels([ablation_label(r["ablation"]) for r in removed])
+    ax.set_xlabel("composition-utility drop vs full model")
+    ax.set_title("Each seam component protects a different failure mode", loc="left", fontweight="bold")
+    polish_axes(ax)
+    for idx, drop in enumerate(drops):
+        ax.text(drop + 0.006, idx, f"{drop:.3f}", va="center", ha="left", fontsize=8, color=PALETTE["ink"])
+    ax.set_xlim(0, max(drops) + 0.06)
+    save_figure(fig, "energy_landscape_composition_ablation_v5")
 
-    plt.figure(figsize=(8.6, 5.2))
+    fig, ax = plt.subplots(figsize=(6.9, 4.7))
+    stress_order = [ORACLE, PROPOSED, OLD_V4, "tamp_feasibility_screen", "energy_compatibility_heuristic", "option_graph_planner"]
     for method in sorted({str(r["method"]) for r in stress_metrics}):
+        if method not in stress_order:
+            continue
         curve = sorted([r for r in stress_metrics if r["method"] == method], key=lambda r: float(r["stress_level"]))
-        plt.errorbar([float(r["stress_level"]) for r in curve], [as_float(r, "mean_success") for r in curve], yerr=[as_float(r, "ci95_success") for r in curve], marker="o", label=method.replace("_", " "))
-    plt.xlabel("seam discontinuity / hidden barrier stress")
-    plt.ylabel("success")
-    plt.ylim(0, 1)
-    plt.title("Stress sweep")
-    plt.legend(fontsize=7, frameon=False)
-    plt.tight_layout()
-    plt.savefig(FIGURES / "energy_landscape_composition_stress_sweep_v5.png", dpi=180)
-    plt.close()
+        ax.errorbar(
+            [float(r["stress_level"]) for r in curve],
+            [as_float(r, "mean_success") for r in curve],
+            yerr=[as_float(r, "ci95_success") for r in curve],
+            marker="o",
+            linewidth=1.8 if method in {PROPOSED, OLD_V4, ORACLE} else 1.25,
+            markersize=4.8,
+            color=method_color(method),
+            alpha=1.0 if method in {PROPOSED, OLD_V4, ORACLE} else 0.78,
+            label=method_label(method),
+        )
+    ax.axvspan(0.72, 1.0, color="#f4e8e8", alpha=0.55, zorder=0)
+    ax.text(0.735, 0.94, "combined\nstress", color=PALETTE["risk"], fontsize=8, va="top")
+    ax.set_xlabel("seam discontinuity / hidden-barrier stress")
+    ax.set_ylabel("success")
+    ax.set_ylim(0.0, 1.0)
+    ax.set_xlim(-0.02, 1.02)
+    ax.set_title("Stress sweep exposes the seam-model advantage", loc="left", fontweight="bold")
+    polish_axes(ax, ygrid=True)
+    ax.legend(frameon=False, loc="lower left", ncol=2)
+    save_figure(fig, "energy_landscape_composition_stress_sweep_v5")
 
-    plt.figure(figsize=(8.2, 5.0))
-    for method in sorted({str(r["method"]) for r in fixed_metrics}):
+    fig, ax = plt.subplots(figsize=(6.8, 4.5))
+    fixed_order = [ORACLE, PROPOSED, OLD_V4, "stable_dmp_handoff", "tamp_feasibility_screen", "energy_compatibility_heuristic", "option_graph_planner"]
+    for method in fixed_order:
         curve = sorted([r for r in fixed_metrics if r["method"] == method], key=lambda r: float(r["budget"]))
-        plt.plot([float(r["budget"]) for r in curve], [as_float(r, "mean_gated_utility") for r in curve], marker="o", label=method.replace("_", " "))
-    plt.xlabel("declared seam-risk budget")
-    plt.ylabel("gated utility")
-    plt.title("Fixed-risk deployment utility")
-    plt.legend(fontsize=7, frameon=False)
-    plt.tight_layout()
-    plt.savefig(FIGURES / "energy_landscape_composition_fixed_risk_v5.png", dpi=180)
-    plt.close()
+        if not curve:
+            continue
+        ax.plot(
+            [float(r["budget"]) for r in curve],
+            [as_float(r, "mean_gated_utility") for r in curve],
+            marker="o",
+            linewidth=1.8 if method in {PROPOSED, OLD_V4, ORACLE} else 1.15,
+            markersize=4.6,
+            color=method_color(method),
+            alpha=1.0 if method in {PROPOSED, OLD_V4, ORACLE} else 0.70,
+            label=method_label(method),
+        )
+    ax.axvline(0.15, color=PALETTE["risk"], linestyle=(0, (4, 3)), linewidth=1.0)
+    ax.text(0.152, 1.02, "audit budget", color=PALETTE["risk"], fontsize=8, va="top")
+    ax.set_xlabel("declared seam-risk budget")
+    ax.set_ylabel("gated utility")
+    ax.set_ylim(-1.08, 1.15)
+    ax.set_title("Fixed-risk gate trades coverage for utility", loc="left", fontweight="bold")
+    polish_axes(ax, ygrid=True)
+    ax.legend(frameon=False, loc="lower right", ncol=2)
+    save_figure(fig, "energy_landscape_composition_fixed_risk_v5")
 
-    plt.figure(figsize=(8.2, 5.0))
-    for method in sorted({str(r["method"]) for r in fixed_metrics}):
+    fig, ax = plt.subplots(figsize=(6.8, 4.5))
+    for method in fixed_order:
         curve = sorted([r for r in fixed_metrics if r["method"] == method], key=lambda r: float(r["budget"]))
-        plt.plot([float(r["budget"]) for r in curve], [as_float(r, "mean_coverage") for r in curve], marker="o", label=method.replace("_", " "))
-    plt.xlabel("declared seam-risk budget")
-    plt.ylabel("coverage")
-    plt.title("Coverage is separate from seam breach")
-    plt.legend(fontsize=7, frameon=False)
-    plt.tight_layout()
-    plt.savefig(FIGURES / "energy_landscape_composition_fixed_coverage_v5.png", dpi=180)
-    plt.close()
+        if not curve:
+            continue
+        ax.plot(
+            [float(r["budget"]) for r in curve],
+            [as_float(r, "mean_coverage") for r in curve],
+            marker="o",
+            linewidth=1.8 if method in {PROPOSED, OLD_V4, ORACLE} else 1.15,
+            markersize=4.6,
+            color=method_color(method),
+            alpha=1.0 if method in {PROPOSED, OLD_V4, ORACLE} else 0.70,
+            label=method_label(method),
+        )
+    ax.axvline(0.15, color=PALETTE["risk"], linestyle=(0, (4, 3)), linewidth=1.0)
+    ax.text(0.152, 0.98, "audit budget", color=PALETTE["risk"], fontsize=8, va="top")
+    ax.set_xlabel("declared seam-risk budget")
+    ax.set_ylabel("coverage")
+    ax.set_ylim(-0.04, 1.04)
+    ax.set_title("Coverage is reported separately from breach", loc="left", fontweight="bold")
+    polish_axes(ax, ygrid=True)
+    ax.legend(frameon=False, loc="lower right", ncol=2)
+    save_figure(fig, "energy_landscape_composition_fixed_coverage_v5")
 
 
 def main():
@@ -485,7 +1006,7 @@ def main():
     write_csv(RESULTS / "dataset_summary.csv", drows, ["task", "regime", "split", "task_difficulty", "seam_discontinuity", "barrier_height", "nonconvexity", "dynamics_mismatch", "horizon_pressure", "scenario_hardness"])
 
     cell_rows = [cell_metric(method, task, regime, split, seed, episode) for method in METHODS for task in TASKS for regime in REGIMES for split in SPLITS for seed in SEEDS for episode in range(EPISODES_PER_CELL)]
-    cell_fields = ["method", "task", "regime", "split", "seed", "episode", *METRIC_NAMES]
+    cell_fields = ["method", "task", "regime", "split", "seed", "episode", *METRIC_NAMES, *DIAGNOSTIC_FIELDS]
     write_csv(RESULTS / "cell_metrics.csv", cell_rows, cell_fields)
 
     main_group = aggregate(cell_rows, ("method", "task", "regime", "split"), METRIC_NAMES)
@@ -701,14 +1222,13 @@ def main():
             "no_calibrated_contact_force_camera_or_state_logs",
             "no_hardware_rollout_videos",
             "no_independent_baseline_implementations",
-            "manual_related_work_not_full_paper_complete",
         ],
     }
     (RESULTS / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8")
 
-    latex_table(PAPER / "generated_gate_table.tex", ["gate", "status"], [[latex_escape(g), "pass" if ok else "fail"] for g, ok in sorted(gates.items())], align="lp{0.14\\linewidth}")
-    latex_table(PAPER / "generated_main_table.tex", ["method", "succ.", "utility", "seam", "barrier", "basin", "descent", "damage", "cost", "breach"], [[latex_escape(r["method"]), fmt_ci(as_float(r, "mean_success"), as_float(r, "ci95_success")), fmt_ci(as_float(r, "mean_composition_utility"), as_float(r, "ci95_composition_utility")), f"{as_float(r, 'mean_seam_failure_rate'):.3f}", f"{as_float(r, 'mean_barrier_violation_rate'):.3f}", f"{as_float(r, 'mean_basin_alignment'):.3f}", f"{as_float(r, 'mean_descent_continuity'):.3f}", f"{as_float(r, 'mean_damage_rate'):.3f}", f"{as_float(r, 'mean_composition_cost'):.3f}", f"{as_float(r, 'mean_realized_seam_breach'):.3f}"] for r in hard_metrics])
-    latex_table(PAPER / "generated_pairwise_table.tex", ["baseline", "succ. diff", "utility diff", "utility wins", "decisive"], [[latex_escape(r["baseline"]), fmt_ci(r["mean_success_diff"], r["ci95_success_diff"]), fmt_ci(r["mean_utility_diff"], r["ci95_utility_diff"]), f"{r['paired_utility_wins']}/10", str(r["decisive"])] for r in pairwise])
+    write_gate_table(PAPER / "generated_gate_table.tex", gates)
+    write_main_table(PAPER / "generated_main_table.tex", hard_metrics)
+    write_pairwise_table(PAPER / "generated_pairwise_table.tex", pairwise)
     latex_table(PAPER / "generated_ablation_table.tex", ["ablation", "success", "utility", "interpretation"], [[latex_escape(r["ablation"]), fmt_ci(as_float(r, "mean_mean_success"), as_float(r, "ci95_mean_success")), fmt_ci(as_float(r, "mean_mean_composition_utility"), as_float(r, "ci95_mean_composition_utility")), latex_escape(r["interpretation"])] for r in ab_metrics])
     max_stress = sorted([r for r in stress_metrics if abs(float(r["stress_level"]) - 1.0) < 1e-9], key=lambda r: as_float(r, "mean_composition_utility"), reverse=True)
     latex_table(PAPER / "generated_stress_table.tex", ["method", "success", "utility", "seam", "barrier", "breach"], [[latex_escape(r["method"]), fmt_ci(as_float(r, "mean_success"), as_float(r, "ci95_success")), fmt_ci(as_float(r, "mean_composition_utility"), as_float(r, "ci95_composition_utility")), f"{as_float(r, 'mean_seam_failure_rate'):.3f}", f"{as_float(r, 'mean_barrier_violation_rate'):.3f}", f"{as_float(r, 'mean_realized_seam_breach'):.3f}"] for r in max_stress])

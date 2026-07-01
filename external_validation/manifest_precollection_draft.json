@@ -1,0 +1,876 @@
+{
+  "candidate_method_config_count": 11,
+  "candidate_method_config_records": [
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/barrier_certified_energy_composer_v5.json",
+      "config_sha256": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872",
+      "evidence_role": "paper_method_under_test",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/barrier_certified_energy_composer_v5.json",
+      "method": "barrier_certified_energy_composer_v5",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/behavior_cloned_skill_chain.json",
+      "config_sha256": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/behavior_cloned_skill_chain.json",
+      "method": "behavior_cloned_skill_chain",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/cem_trajectory_composer.json",
+      "config_sha256": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/cem_trajectory_composer.json",
+      "method": "cem_trajectory_composer",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/diffusion_skill_stitcher.json",
+      "config_sha256": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/diffusion_skill_stitcher.json",
+      "method": "diffusion_skill_stitcher",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/energy_compatibility_heuristic.json",
+      "config_sha256": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/energy_compatibility_heuristic.json",
+      "method": "energy_compatibility_heuristic",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/greedy_module_sequence.json",
+      "config_sha256": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/greedy_module_sequence.json",
+      "method": "greedy_module_sequence",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/option_graph_planner.json",
+      "config_sha256": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/option_graph_planner.json",
+      "method": "option_graph_planner",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/proposed_energy_landscape_composer_v4_1.json",
+      "config_sha256": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3",
+      "evidence_role": "paper_predecessor_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/proposed_energy_landscape_composer_v4_1.json",
+      "method": "proposed_energy_landscape_composer_v4_1",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/residual_rl_composer.json",
+      "config_sha256": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/residual_rl_composer.json",
+      "method": "residual_rl_composer",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/stable_dmp_handoff.json",
+      "config_sha256": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/stable_dmp_handoff.json",
+      "method": "stable_dmp_handoff",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "config_exists": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/tamp_feasibility_screen.json",
+      "config_sha256": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB",
+      "evidence_role": "independent_non_oracle_method",
+      "manifest_declaration_required": true,
+      "manifest_stub_checkpoint_or_config_hash": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB",
+      "manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/tamp_feasibility_screen.json",
+      "method": "tamp_feasibility_screen",
+      "operator_acceptance_required": true,
+      "recomputed_config_sha256": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB",
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    }
+  ],
+  "claim": "A barrier-certified energy composer improves skill composition when basin overlap, barrier height, descent continuity, repair cost, and seam-risk calibration are estimable at the handoff.",
+  "cutover_commands": [
+    "python scripts\\build_external_precollection_manifest_draft.py",
+    "python scripts\\materialize_fidelity_acceptance.py --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --code-commit <commit> --skill-library-hash <sha256> --write <operator fields>",
+    "python scripts\\audit_external_fidelity_acceptance.py --strict",
+    "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path>",
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
+    "python scripts\\self_test_external_precollection_freeze_receipt.py",
+    "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+    "python scripts\\audit_external_postcollection_seal_consistency.py",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\validate_external_adapters.py --strict",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "draft_only": true,
+  "forbidden_promotion_without": [
+    "accepted fidelity acceptance file from an independent operator",
+    "manifest-declared JSONL logs and render-backed videos",
+    "manifest-declared non-oracle implementation/checkpoint hashes",
+    "release artifact hashes for code, configs, logs, videos, and checkpoints",
+    "strict rollout, pairing, config, adapter, release, and evidence gates passing"
+  ],
+  "log_schema": "external_validation/log_schema_v1.json",
+  "manifest_assembly_blocking_count": 28,
+  "manifest_assembly_blocking_items": [
+    {
+      "current_state": "missing",
+      "item": "accepted_fidelity_provenance",
+      "phase": "platform_fidelity",
+      "required_path": "external_validation/fidelity_acceptance.json",
+      "strict_gate": "python scripts\\audit_external_fidelity_acceptance.py --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "code_commit_and_skill_library_hash",
+      "phase": "run_identity",
+      "required_path": "manifest.code_commit; manifest.skill_library_hash",
+      "strict_gate": "python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "peg_place_regrasp_jsonl",
+      "phase": "rollout_logs",
+      "required_path": "external_validation/logs/peg_place_regrasp.jsonl",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "peg_place_regrasp_videos",
+      "phase": "rollout_videos",
+      "required_path": "external_validation/videos/peg_place_regrasp",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "drawer_to_pick_transfer_jsonl",
+      "phase": "rollout_logs",
+      "required_path": "external_validation/logs/drawer_to_pick_transfer.jsonl",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "drawer_to_pick_transfer_videos",
+      "phase": "rollout_videos",
+      "required_path": "external_validation/videos/drawer_to_pick_transfer",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "door_open_navigation_jsonl",
+      "phase": "rollout_logs",
+      "required_path": "external_validation/logs/door_open_navigation.jsonl",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "door_open_navigation_videos",
+      "phase": "rollout_videos",
+      "required_path": "external_validation/videos/door_open_navigation",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "cable_route_insert_jsonl",
+      "phase": "rollout_logs",
+      "required_path": "external_validation/logs/cable_route_insert.jsonl",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "missing",
+      "item": "cable_route_insert_videos",
+      "phase": "rollout_videos",
+      "required_path": "external_validation/videos/cable_route_insert",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
+      "item": "greedy_module_sequence",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
+      "item": "behavior_cloned_skill_chain",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
+      "item": "option_graph_planner",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
+      "item": "tamp_feasibility_screen",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
+      "item": "stable_dmp_handoff",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
+      "item": "diffusion_skill_stitcher",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
+      "item": "cem_trajectory_composer",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
+      "item": "residual_rl_composer",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
+      "item": "energy_compatibility_heuristic",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
+      "item": "proposed_energy_landscape_composer_v4_1",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "implementation=missing_path; checkpoint_or_config=missing_path; manifest_hash=missing; provenance=present",
+      "item": "barrier_certified_energy_composer_v5",
+      "phase": "method_implementations",
+      "required_path": "",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict"
+    },
+    {
+      "current_state": "entries=0",
+      "item": "logs",
+      "phase": "release_artifacts",
+      "required_path": "manifest.release_artifacts.logs",
+      "strict_gate": "python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "current_state": "entries=0",
+      "item": "videos",
+      "phase": "release_artifacts",
+      "required_path": "manifest.release_artifacts.videos",
+      "strict_gate": "python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "current_state": "entries=0",
+      "item": "checkpoints",
+      "phase": "release_artifacts",
+      "required_path": "manifest.release_artifacts.checkpoints",
+      "strict_gate": "python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "current_state": "records_loaded=0; schema_errors=4",
+      "item": "schema_valid_records",
+      "phase": "rollout_metrics",
+      "required_path": "manifest-declared JSONL logs",
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "current_state": "episodes=0; success_margin=None; utility_margin=None",
+      "item": "primary_thresholds",
+      "phase": "rollout_metrics",
+      "required_path": "manifest.metrics",
+      "strict_gate": "python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "current_state": "not_ready_without_real_manifest_logs",
+      "item": "paired_reset_integrity",
+      "phase": "final_strict_gates",
+      "required_path": "external_validation/logs/*.jsonl",
+      "strict_gate": "python scripts\\audit_external_pairing_integrity.py --strict"
+    },
+    {
+      "current_state": "warnings=11; schema_errors=4",
+      "item": "final_external_evidence_gate",
+      "phase": "final_strict_gates",
+      "required_path": "external_validation/manifest.json",
+      "strict_gate": "python scripts\\audit_external_evidence.py --strict"
+    }
+  ],
+  "method_gap_count": 11,
+  "method_gaps": [
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
+      ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/greedy_module_sequence.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/greedy_module_sequence.json",
+      "candidate_promotable_after_operator_acceptance": true,
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "greedy_module_sequence"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
+      ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/behavior_cloned_skill_chain.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/behavior_cloned_skill_chain.json",
+      "candidate_promotable_after_operator_acceptance": true,
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "behavior_cloned_skill_chain"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
+      ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/option_graph_planner.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/option_graph_planner.json",
+      "candidate_promotable_after_operator_acceptance": true,
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "option_graph_planner"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
+      ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/tamp_feasibility_screen.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/tamp_feasibility_screen.json",
+      "candidate_promotable_after_operator_acceptance": true,
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "tamp_feasibility_screen"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
+      ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/stable_dmp_handoff.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/stable_dmp_handoff.json",
+      "candidate_promotable_after_operator_acceptance": true,
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "stable_dmp_handoff"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
+      ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/diffusion_skill_stitcher.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/diffusion_skill_stitcher.json",
+      "candidate_promotable_after_operator_acceptance": true,
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "diffusion_skill_stitcher"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
+      ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/cem_trajectory_composer.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/cem_trajectory_composer.json",
+      "candidate_promotable_after_operator_acceptance": true,
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "cem_trajectory_composer"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
+      ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/residual_rl_composer.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/residual_rl_composer.json",
+      "candidate_promotable_after_operator_acceptance": true,
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "residual_rl_composer"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
+      ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/energy_compatibility_heuristic.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/energy_compatibility_heuristic.json",
+      "candidate_promotable_after_operator_acceptance": true,
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "energy_compatibility_heuristic"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
+      ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/proposed_energy_landscape_composer_v4_1.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/proposed_energy_landscape_composer_v4_1.json",
+      "candidate_promotable_after_operator_acceptance": true,
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "proposed_energy_landscape_composer_v4_1"
+    },
+    {
+      "blocking_missing": [
+        "implementation_path",
+        "independent_operator_provenance",
+        "manifest_method_declaration",
+        "rollout_policy_hash_binding"
+      ],
+      "candidate_checkpoint_or_config_prefill_available": true,
+      "candidate_config_exists": true,
+      "candidate_config_hash": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872",
+      "candidate_config_hash_matches": true,
+      "candidate_config_path": "external_validation/method_config_candidates/barrier_certified_energy_composer_v5.json",
+      "candidate_manifest_stub_checkpoint_or_config_hash": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872",
+      "candidate_manifest_stub_checkpoint_or_config_path": "external_validation/method_config_candidates/barrier_certified_energy_composer_v5.json",
+      "candidate_promotable_after_operator_acceptance": true,
+      "checkpoint_or_config_exists": false,
+      "checkpoint_or_config_hash": "",
+      "checkpoint_or_config_path": "",
+      "implementation": "",
+      "implementation_exists": false,
+      "implementation_hash": "",
+      "method": "barrier_certified_energy_composer_v5"
+    }
+  ],
+  "missing_rollout_artifact_count": 8,
+  "not_external_evidence": true,
+  "official_manifest_absent_at_build": true,
+  "official_manifest_exists": false,
+  "official_manifest_path": "external_validation/manifest.json",
+  "precollection_manifest_draft_ready": true,
+  "prepared_config_count": 4,
+  "prepared_config_records": [
+    {
+      "config_exists": true,
+      "config_hash": "021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9",
+      "config_path": "external_validation/configs/peg_place_regrasp.json",
+      "strict_validation_passed_if_manifest_declared": true,
+      "task_family": "peg_place_regrasp",
+      "validation_errors": []
+    },
+    {
+      "config_exists": true,
+      "config_hash": "1288223014CB9D9285E4249B2FA607FFC16EBEE20B6F44E0241B63E88233E471",
+      "config_path": "external_validation/configs/drawer_to_pick_transfer.json",
+      "strict_validation_passed_if_manifest_declared": true,
+      "task_family": "drawer_to_pick_transfer",
+      "validation_errors": []
+    },
+    {
+      "config_exists": true,
+      "config_hash": "13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61",
+      "config_path": "external_validation/configs/door_open_navigation.json",
+      "strict_validation_passed_if_manifest_declared": true,
+      "task_family": "door_open_navigation",
+      "validation_errors": []
+    },
+    {
+      "config_exists": true,
+      "config_hash": "8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E",
+      "config_path": "external_validation/configs/cable_route_insert.json",
+      "strict_validation_passed_if_manifest_declared": true,
+      "task_family": "cable_route_insert",
+      "validation_errors": []
+    }
+  ],
+  "ready_to_write_official_manifest": false,
+  "rollout_artifact_gaps": [
+    {
+      "blocking_until_real_evidence": true,
+      "kind": "jsonl_log",
+      "path": "external_validation/logs/peg_place_regrasp.jsonl",
+      "present": false,
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "kind": "video_dir",
+      "path": "external_validation/videos/peg_place_regrasp",
+      "present": false,
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "kind": "jsonl_log",
+      "path": "external_validation/logs/drawer_to_pick_transfer.jsonl",
+      "present": false,
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "task_family": "drawer_to_pick_transfer"
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "kind": "video_dir",
+      "path": "external_validation/videos/drawer_to_pick_transfer",
+      "present": false,
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "task_family": "drawer_to_pick_transfer"
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "kind": "jsonl_log",
+      "path": "external_validation/logs/door_open_navigation.jsonl",
+      "present": false,
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "task_family": "door_open_navigation"
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "kind": "video_dir",
+      "path": "external_validation/videos/door_open_navigation",
+      "present": false,
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "task_family": "door_open_navigation"
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "kind": "jsonl_log",
+      "path": "external_validation/logs/cable_route_insert.jsonl",
+      "present": false,
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "task_family": "cable_route_insert"
+    },
+    {
+      "blocking_until_real_evidence": true,
+      "kind": "video_dir",
+      "path": "external_validation/videos/cable_route_insert",
+      "present": false,
+      "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "task_family": "cable_route_insert"
+    }
+  ],
+  "route": "high_fidelity_sim",
+  "source_reports": [
+    {
+      "exists": true,
+      "path": "results/external_manifest_builder_report.json",
+      "sha256": "E42AA95FC6891B19A22EA26DDB1249D711A1D85C7531F906D476F3AF738FE852"
+    },
+    {
+      "exists": true,
+      "path": "results/external_config_manifest_audit.json",
+      "sha256": "A46DED8E5FF2E9E9FAB155569F9FA4FD8FDA633E062962180781B9DCB360D972"
+    },
+    {
+      "exists": true,
+      "path": "results/external_rollout_evidence_audit.json",
+      "sha256": "46E851EEDF315D592F1DF5BFF09FEE9FB328CF47E9B7E7511B5E9A2AC976B03A"
+    },
+    {
+      "exists": true,
+      "path": "results/external_ablation_collection_audit.json",
+      "sha256": "586E5A58D35A79EAB496934C9FD2C09421B364CAC09F05C722FD0552A841A885"
+    },
+    {
+      "exists": true,
+      "path": "results/external_evidence_intake_ledger_audit.json",
+      "sha256": "BA2A6A50BCFB44FDF7531CF71BCBEBB68D3E9B3D8851F75BB5F11CED1F8D24D9"
+    },
+    {
+      "exists": true,
+      "path": "results/external_method_implementation_audit.json",
+      "sha256": "F8AA15870753DC4E6B4F681ACEF956A4C49ADAF3A12A98C32091582474021FAC"
+    },
+    {
+      "exists": true,
+      "path": "results/external_method_config_materialization_audit.json",
+      "sha256": "9AD446480FF0179BFD791DEFB24203C4DEDA83D33D29D69A3FB525452372007E"
+    },
+    {
+      "exists": true,
+      "path": "results/external_collection_readiness_audit.json",
+      "sha256": "8AC215A38BD0E7BBF44A20C547A4ED43CDD76960DCE679ADAF46B24D8C02422E"
+    },
+    {
+      "exists": true,
+      "path": "results/maniskill_render_machine_qualification.json",
+      "sha256": "6C63AC79D94BFC129C68F78C335120CA7A621B44BAEA49889258C3BB12777AAD"
+    }
+  ],
+  "strict_config_evidence_ready": false,
+  "strict_external_evidence_ready": false,
+  "task_count": 4,
+  "task_manifest_entries_with_hashes": [
+    {
+      "config_hash": "021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9",
+      "config_path": "external_validation/configs/peg_place_regrasp.json",
+      "episodes_per_method": 30,
+      "log_jsonl": "external_validation/logs/peg_place_regrasp.jsonl",
+      "manifest_declared_ready_if_promoted": true,
+      "notes": "",
+      "platform_name": "",
+      "platform_type": "high_fidelity_sim",
+      "task_family": "peg_place_regrasp",
+      "video_dir": "external_validation/videos/peg_place_regrasp"
+    },
+    {
+      "config_hash": "1288223014CB9D9285E4249B2FA607FFC16EBEE20B6F44E0241B63E88233E471",
+      "config_path": "external_validation/configs/drawer_to_pick_transfer.json",
+      "episodes_per_method": 30,
+      "log_jsonl": "external_validation/logs/drawer_to_pick_transfer.jsonl",
+      "manifest_declared_ready_if_promoted": true,
+      "notes": "",
+      "platform_name": "",
+      "platform_type": "high_fidelity_sim",
+      "task_family": "drawer_to_pick_transfer",
+      "video_dir": "external_validation/videos/drawer_to_pick_transfer"
+    },
+    {
+      "config_hash": "13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61",
+      "config_path": "external_validation/configs/door_open_navigation.json",
+      "episodes_per_method": 30,
+      "log_jsonl": "external_validation/logs/door_open_navigation.jsonl",
+      "manifest_declared_ready_if_promoted": true,
+      "notes": "",
+      "platform_name": "",
+      "platform_type": "high_fidelity_sim",
+      "task_family": "door_open_navigation",
+      "video_dir": "external_validation/videos/door_open_navigation"
+    },
+    {
+      "config_hash": "8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E",
+      "config_path": "external_validation/configs/cable_route_insert.json",
+      "episodes_per_method": 30,
+      "log_jsonl": "external_validation/logs/cable_route_insert.jsonl",
+      "manifest_declared_ready_if_promoted": true,
+      "notes": "",
+      "platform_name": "",
+      "platform_type": "high_fidelity_sim",
+      "task_family": "cable_route_insert",
+      "video_dir": "external_validation/videos/cable_route_insert"
+    }
+  ],
+  "version": "external_precollection_manifest_draft_v1",
+  "would_promote_to_manifest_version": "external_validation_v1"
+}

@@ -1,0 +1,147 @@
+{
+  "checks": [
+    {
+      "detail": "adapter scaffolds are templates only",
+      "name": "not_external_evidence_declared",
+      "passed": true
+    },
+    {
+      "detail": "method_count=12",
+      "name": "method_count_ge_12",
+      "passed": true
+    },
+    {
+      "detail": "non_oracle=11",
+      "name": "non_oracle_scaffold_count_ge_11",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "scaffold_files_exist",
+      "passed": true
+    },
+    {
+      "detail": "all adapter functions present",
+      "name": "required_api_present",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "scaffold_markers_present",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "templates_raise_not_implemented",
+      "passed": true
+    },
+    {
+      "detail": "bad=[]",
+      "name": "metadata_marks_scaffold_only",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\baseline_adapter_scaffold.md",
+      "name": "summary_exists",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\baselines\\README.md",
+      "name": "baselines_readme_exists",
+      "passed": true
+    }
+  ],
+  "entries": [
+    {
+      "adapter": "external_validation/baselines/barrier_certified_energy_composer_v5/adapter_template.py",
+      "metadata": "external_validation/baselines/barrier_certified_energy_composer_v5/adapter_metadata.json",
+      "method": "barrier_certified_energy_composer_v5",
+      "readme": "external_validation/baselines/barrier_certified_energy_composer_v5/README.md",
+      "status": "scaffold_only_missing_external_source"
+    },
+    {
+      "adapter": "external_validation/baselines/behavior_cloned_skill_chain/adapter_template.py",
+      "metadata": "external_validation/baselines/behavior_cloned_skill_chain/adapter_metadata.json",
+      "method": "behavior_cloned_skill_chain",
+      "readme": "external_validation/baselines/behavior_cloned_skill_chain/README.md",
+      "status": "scaffold_only_missing_external_source"
+    },
+    {
+      "adapter": "external_validation/baselines/cem_trajectory_composer/adapter_template.py",
+      "metadata": "external_validation/baselines/cem_trajectory_composer/adapter_metadata.json",
+      "method": "cem_trajectory_composer",
+      "readme": "external_validation/baselines/cem_trajectory_composer/README.md",
+      "status": "scaffold_only_missing_external_source"
+    },
+    {
+      "adapter": "external_validation/baselines/diffusion_skill_stitcher/adapter_template.py",
+      "metadata": "external_validation/baselines/diffusion_skill_stitcher/adapter_metadata.json",
+      "method": "diffusion_skill_stitcher",
+      "readme": "external_validation/baselines/diffusion_skill_stitcher/README.md",
+      "status": "scaffold_only_missing_external_source"
+    },
+    {
+      "adapter": "external_validation/baselines/energy_compatibility_heuristic/adapter_template.py",
+      "metadata": "external_validation/baselines/energy_compatibility_heuristic/adapter_metadata.json",
+      "method": "energy_compatibility_heuristic",
+      "readme": "external_validation/baselines/energy_compatibility_heuristic/README.md",
+      "status": "scaffold_only_missing_external_source"
+    },
+    {
+      "adapter": "external_validation/baselines/greedy_module_sequence/adapter_template.py",
+      "metadata": "external_validation/baselines/greedy_module_sequence/adapter_metadata.json",
+      "method": "greedy_module_sequence",
+      "readme": "external_validation/baselines/greedy_module_sequence/README.md",
+      "status": "scaffold_only_missing_external_source"
+    },
+    {
+      "adapter": "external_validation/baselines/option_graph_planner/adapter_template.py",
+      "metadata": "external_validation/baselines/option_graph_planner/adapter_metadata.json",
+      "method": "option_graph_planner",
+      "readme": "external_validation/baselines/option_graph_planner/README.md",
+      "status": "scaffold_only_missing_external_source"
+    },
+    {
+      "adapter": "external_validation/baselines/oracle_basin_composer/adapter_template.py",
+      "metadata": "external_validation/baselines/oracle_basin_composer/adapter_metadata.json",
+      "method": "oracle_basin_composer",
+      "readme": "external_validation/baselines/oracle_basin_composer/README.md",
+      "status": "post_hoc_upper_bound_only"
+    },
+    {
+      "adapter": "external_validation/baselines/proposed_energy_landscape_composer_v4_1/adapter_template.py",
+      "metadata": "external_validation/baselines/proposed_energy_landscape_composer_v4_1/adapter_metadata.json",
+      "method": "proposed_energy_landscape_composer_v4_1",
+      "readme": "external_validation/baselines/proposed_energy_landscape_composer_v4_1/README.md",
+      "status": "scaffold_only_missing_external_source"
+    },
+    {
+      "adapter": "external_validation/baselines/residual_rl_composer/adapter_template.py",
+      "metadata": "external_validation/baselines/residual_rl_composer/adapter_metadata.json",
+      "method": "residual_rl_composer",
+      "readme": "external_validation/baselines/residual_rl_composer/README.md",
+      "status": "scaffold_only_missing_external_source"
+    },
+    {
+      "adapter": "external_validation/baselines/stable_dmp_handoff/adapter_template.py",
+      "metadata": "external_validation/baselines/stable_dmp_handoff/adapter_metadata.json",
+      "method": "stable_dmp_handoff",
+      "readme": "external_validation/baselines/stable_dmp_handoff/README.md",
+      "status": "scaffold_only_missing_external_source"
+    },
+    {
+      "adapter": "external_validation/baselines/tamp_feasibility_screen/adapter_template.py",
+      "metadata": "external_validation/baselines/tamp_feasibility_screen/adapter_metadata.json",
+      "method": "tamp_feasibility_screen",
+      "readme": "external_validation/baselines/tamp_feasibility_screen/README.md",
+      "status": "scaffold_only_missing_external_source"
+    }
+  ],
+  "implementations_ready": false,
+  "method_count": 12,
+  "non_oracle_scaffold_count": 11,
+  "not_external_evidence": true,
+  "passed": true,
+  "summary": "external_validation/baseline_adapter_scaffold.md",
+  "version": "external_adapter_scaffold_audit_v1"
+}

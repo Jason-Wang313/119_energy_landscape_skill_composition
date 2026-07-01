@@ -1,0 +1,40 @@
+{
+  "version": "maniskill_task_bindings_v1",
+  "not_external_evidence": true,
+  "primary_route": "maniskill_sapien_primary",
+  "purpose": "Bind Paper 119 external task families to concrete ManiSkill/SAPIEN environment candidates before high-fidelity collection. These bindings are registry/provenance checks only; they are not rollout evidence.",
+  "bindings": [
+    {
+      "task_family": "peg_place_regrasp",
+      "primary_env_id": "PegInsertionSide-v1",
+      "support_env_ids": [],
+      "binding_strength": "direct_contact_candidate",
+      "requires_operator_fidelity_acceptance": true,
+      "rationale": "PegInsertionSide exposes contact-rich peg insertion geometry and resettable peg pose for the proposed skill-seam handoff."
+    },
+    {
+      "task_family": "drawer_to_pick_transfer",
+      "primary_env_id": "OpenCabinetDrawer-v1",
+      "support_env_ids": ["PickCube-v1", "PickSingleYCB-v1"],
+      "binding_strength": "composite_contact_candidate",
+      "requires_operator_fidelity_acceptance": true,
+      "rationale": "OpenCabinetDrawer supplies the articulated drawer/contact mode; a pick environment is listed as the downstream grasp proxy that the backend must bind under shared reset provenance."
+    },
+    {
+      "task_family": "door_open_navigation",
+      "primary_env_id": "OpenCabinetDoor-v1",
+      "support_env_ids": [],
+      "binding_strength": "partial_contact_candidate",
+      "requires_operator_fidelity_acceptance": true,
+      "rationale": "OpenCabinetDoor supplies hinge/contact dynamics for the first skill; the backend must document the downstream transition/navigability proxy before evidence can count."
+    },
+    {
+      "task_family": "cable_route_insert",
+      "primary_env_id": "PullCubeTool-v1",
+      "support_env_ids": ["InsertFlower-v1"],
+      "binding_strength": "surrogate_contact_candidate",
+      "requires_operator_fidelity_acceptance": true,
+      "rationale": "ManiSkill does not expose a literal cable-routing task in the installed registry; PullCubeTool/InsertFlower are explicit contact-rich surrogates that require operator acceptance or replacement by a real cable environment."
+    }
+  ]
+}

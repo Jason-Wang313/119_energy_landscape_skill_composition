@@ -1,0 +1,128 @@
+{
+  "attachment_sequence": [
+    {
+      "do_not_send": [
+        "full generated PDF as the only artifact",
+        "operator-release bundle",
+        "long validation artifact catalog",
+        "many Haonan/Yilun paper references"
+      ],
+      "send": [
+        "outreach/paper119_one_page_memo.pdf",
+        "outreach/paper119_four_page_preview.pdf"
+      ],
+      "stage": "first_email"
+    },
+    {
+      "do_not_send": [
+        "raw logs or videos before real evidence exists",
+        "any claim that strict external evidence has passed"
+      ],
+      "send": [
+        "docs/external_evidence_closure_brief.md",
+        "results/external_operator_packet.md",
+        "external_validation/operator_release_bundle_README.md"
+      ],
+      "stage": "after_interest"
+    }
+  ],
+  "checks": [
+    {
+      "detail": "document declares non-evidence",
+      "name": "not_external_evidence_declared",
+      "passed": true
+    },
+    {
+      "detail": "satisfied=17, blockers=4, objective_complete=False",
+      "name": "readiness_boundary_current",
+      "passed": true
+    },
+    {
+      "detail": "decision='STRONG_REVISE'",
+      "name": "decision_boundary_current",
+      "passed": true
+    },
+    {
+      "detail": "haonan_dependency=False, strict=False",
+      "name": "closure_route_not_haonan_dependent",
+      "passed": true
+    },
+    {
+      "detail": "passed=True",
+      "name": "reviewer_packet_available",
+      "passed": true
+    },
+    {
+      "detail": "passed=True",
+      "name": "visible_contribution_current",
+      "passed": true
+    },
+    {
+      "detail": "words=189",
+      "name": "first_email_concise",
+      "passed": true
+    },
+    {
+      "detail": "CoStream=1, secondary_hits=[]",
+      "name": "first_email_uses_one_primary_anchor",
+      "passed": true
+    },
+    {
+      "detail": "hits=[]",
+      "name": "first_contact_forbidden_phrases_absent",
+      "passed": true
+    },
+    {
+      "detail": "proof-burden boundary present",
+      "name": "haonan_not_proof_supplier",
+      "passed": true
+    },
+    {
+      "detail": "Yilun access motive excluded from first email",
+      "name": "yilun_access_motive_absent",
+      "passed": true
+    },
+    {
+      "detail": "send=['outreach/paper119_one_page_memo.pdf', 'outreach/paper119_four_page_preview.pdf']",
+      "name": "first_wave_attachments_exist",
+      "passed": true
+    },
+    {
+      "detail": "send=['docs/external_evidence_closure_brief.md', 'results/external_operator_packet.md', 'external_validation/operator_release_bundle_README.md']",
+      "name": "followup_artifacts_exist",
+      "passed": true
+    },
+    {
+      "detail": "agenda phrase present",
+      "name": "agenda_identity_visible",
+      "passed": true
+    },
+    {
+      "detail": "long package remains available",
+      "name": "private_reasoning_layer_preserved",
+      "passed": true
+    }
+  ],
+  "constraints": {
+    "current_status_line": "17/21 readiness, 4 blocking external-evidence gaps, STRONG_REVISE",
+    "haonan_role": "fit/falsification advice and possible collaboration, not supplier of the missing proof",
+    "max_first_email_words": 190,
+    "primary_first_email_anchor": "CoStream",
+    "secondary_first_email_anchor": "none",
+    "yilun_route": "only discuss Yilun if Haonan engages on the scientific fit; do not mention access as a motive"
+  },
+  "current_decision": "STRONG_REVISE",
+  "failed_checks": [],
+  "first_email_word_count": 189,
+  "not_external_evidence": true,
+  "packet": "docs/haonan_yilun_send_ready_outreach.md",
+  "passed": true,
+  "primary_first_email_anchor": "CoStream",
+  "readiness": {
+    "blocking_missing_requirements": 4,
+    "satisfied_requirements": 17,
+    "total_requirements": 21
+  },
+  "secondary_first_email_anchor": "none",
+  "version": "haonan_yilun_send_ready_outreach_v1"
+}

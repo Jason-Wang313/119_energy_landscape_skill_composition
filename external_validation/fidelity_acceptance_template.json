@@ -1,0 +1,116 @@
+{
+  "version": "paper119_fidelity_acceptance_template_v1",
+  "not_external_evidence": true,
+  "template_only": true,
+  "route": "high_fidelity_sim",
+  "purpose": "Template for documenting why an external robot or simulator is credible enough to validate Paper 119 without relying on Haonan Chen or any target collaborator.",
+  "platform": {
+    "platform_type": "high_fidelity_sim",
+    "platform_name": "FILL_AFTER_PLATFORM_SELECTION",
+    "platform_version": "FILL_AFTER_PLATFORM_SELECTION",
+    "physics_engine": "FILL_AFTER_PLATFORM_SELECTION",
+    "contact_solver": "FILL_AFTER_PLATFORM_SELECTION",
+    "timestep_seconds": "FILL_AFTER_PLATFORM_SELECTION",
+    "substeps_per_control_step": "FILL_AFTER_PLATFORM_SELECTION",
+    "robot_model_source": "FILL_AFTER_PLATFORM_SELECTION",
+    "asset_sources": [
+      "FILL_AFTER_PLATFORM_SELECTION"
+    ],
+    "sensor_modalities": [
+      "state",
+      "camera",
+      "contact_or_force"
+    ],
+    "state_observation_channels": [
+      "terminal_state",
+      "object_pose",
+      "robot_pose"
+    ],
+    "contact_or_force_channels": [
+      "contact_events",
+      "normal_force_or_proxy"
+    ]
+  },
+  "qualification": {
+    "pre_registered_before_rollouts": true,
+    "deterministic_paired_resets": true,
+    "shared_skill_library": true,
+    "same_observation_interface": true,
+    "same_compute_budget": true,
+    "no_privileged_state_for_non_oracle": true,
+    "raw_jsonl_is_source_of_truth": true,
+    "videos_tied_to_run_ids": true,
+    "failed_and_abstained_runs_logged": true,
+    "operator_independence_statement": "FILL_AFTER_PLATFORM_SELECTION",
+    "contact_dynamics_justification": "FILL_AFTER_PLATFORM_SELECTION",
+    "paired_reset_replay_test": "FILL_AFTER_PLATFORM_SELECTION",
+    "real_or_benchmark_calibration_basis": "FILL_AFTER_PLATFORM_SELECTION",
+    "known_limitations": "FILL_AFTER_PLATFORM_SELECTION"
+  },
+  "task_fidelity": [
+    {
+      "task_family": "peg_place_regrasp",
+      "seam_observable": true,
+      "contact_or_dynamics_property": "insertion contact and regrasp basin transition",
+      "minimum_required_signal": "peg/object pose plus contact or force proxy",
+      "failure_modes_visible_on_video": true
+    },
+    {
+      "task_family": "drawer_to_pick_transfer",
+      "seam_observable": true,
+      "contact_or_dynamics_property": "drawer joint/contact and reachable grasp basin",
+      "minimum_required_signal": "drawer joint state, object pose, and contact or force proxy",
+      "failure_modes_visible_on_video": true
+    },
+    {
+      "task_family": "door_open_navigation",
+      "seam_observable": true,
+      "contact_or_dynamics_property": "door hinge/contact transition into navigation start set",
+      "minimum_required_signal": "door state, base pose, clearance, and contact or force proxy",
+      "failure_modes_visible_on_video": true
+    },
+    {
+      "task_family": "cable_route_insert",
+      "seam_observable": true,
+      "contact_or_dynamics_property": "deformable/contact-rich cable state before insertion",
+      "minimum_required_signal": "endpoint pose, cable state proxy, and contact or force proxy",
+      "failure_modes_visible_on_video": true
+    }
+  ],
+  "provenance": {
+    "operator_name_or_lab": "FILL_AFTER_PLATFORM_SELECTION",
+    "operator_not_target_collaborator": true,
+    "date_locked": "FILL_AFTER_PLATFORM_SELECTION",
+    "code_commit": "",
+    "skill_library_hash": "",
+    "manifest_path": "external_validation/manifest.json",
+    "artifact_hash_policy": "sha256"
+  },
+  "acceptance_gates": [
+    {
+      "name": "platform_provenance_complete",
+      "status": "uncollected",
+      "evidence": "platform name, version, physics/contact details, robot/assets, sensors, and timestep are filled before rollouts"
+    },
+    {
+      "name": "paired_reset_replay_verified",
+      "status": "uncollected",
+      "evidence": "the same scene, seed, skill pair, and initial-state hash can be replayed for every method"
+    },
+    {
+      "name": "contact_failure_observable",
+      "status": "uncollected",
+      "evidence": "each task logs state plus contact/force proxy and records videos for successes, failures, repairs, and abstentions"
+    },
+    {
+      "name": "non_oracle_methods_fair",
+      "status": "uncollected",
+      "evidence": "all non-oracle methods share skills, observations, reset IDs, and compute budget, with no hidden future state"
+    },
+    {
+      "name": "raw_logs_drive_metrics",
+      "status": "uncollected",
+      "evidence": "manifest metrics are recomputed from JSONL logs by validate_external_rollouts.py"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "checks": [
+    {
+      "detail": "passed=True, config_count=4",
+      "name": "synthetic_strict_configs_pass",
+      "passed": true
+    },
+    {
+      "detail": "config_count=4",
+      "name": "synthetic_manifest_entries_cover_tasks",
+      "passed": true
+    },
+    {
+      "detail": "passed=True, config_count=4, checks={'config_schema_exists': True, 'config_schema_version': True, 'manifest_exists': True, 'manifest_config_entries_present': True, 'configs_pass_validation': True}",
+      "name": "prepared_task_configs_pass_strict_with_temp_manifest",
+      "passed": true
+    },
+    {
+      "detail": "prepared_tasks=4, config_results=4",
+      "name": "prepared_task_config_methods_match_collection_tasks",
+      "passed": true
+    },
+    {
+      "detail": "passed=False, checks={'config_schema_exists': True, 'config_schema_version': True, 'manifest_exists': False, 'manifest_config_entries_present': False, 'configs_pass_validation': False}",
+      "name": "missing_manifest_fails_strict",
+      "passed": true
+    },
+    {
+      "detail": "passed=False, errors=['manifest config_hash does not match config_path']",
+      "name": "stale_manifest_config_hash_fails_strict",
+      "passed": true
+    },
+    {
+      "detail": "failed_configs=4",
+      "name": "template_configs_rejected_as_strict_evidence",
+      "passed": true
+    },
+    {
+      "detail": "before=7396c0d98cf0ec1a9eb5525fbd75b90e9615d4cb923ab480b6bfcafa45624d69, after=7396c0d98cf0ec1a9eb5525fbd75b90e9615d4cb923ab480b6bfcafa45624d69",
+      "name": "real_config_evidence_report_not_overwritten",
+      "passed": true
+    }
+  ],
+  "missing_manifest_ready": false,
+  "not_external_evidence": true,
+  "passed": true,
+  "prepared_config_count": 4,
+  "prepared_config_fixture_ready": true,
+  "prepared_config_tasks": [
+    "peg_place_regrasp",
+    "drawer_to_pick_transfer",
+    "door_open_navigation",
+    "cable_route_insert"
+  ],
+  "real_config_evidence_report_after": "7396c0d98cf0ec1a9eb5525fbd75b90e9615d4cb923ab480b6bfcafa45624d69",
+  "real_config_evidence_report_before": "7396c0d98cf0ec1a9eb5525fbd75b90e9615d4cb923ab480b6bfcafa45624d69",
+  "stale_config_hash_ready": false,
+  "synthetic_config_evidence_ready": true,
+  "template_config_evidence_ready": false,
+  "version": "external_config_evidence_self_test_v1"
+}

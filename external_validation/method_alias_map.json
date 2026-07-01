@@ -1,0 +1,87 @@
+{
+  "aliases": [
+    {
+      "alias": "method_00",
+      "alias_hash": "13CBB404FF7DCA47CF1E6DD19064496DCA2BF296C3B65B34E9B4B1002DF64A78",
+      "method": "cem_trajectory_composer"
+    },
+    {
+      "alias": "method_01",
+      "alias_hash": "5F2538688A1530256E85DFAB4453F8F03152B93BCFED34BA70EB929A5B7A947D",
+      "method": "diffusion_skill_stitcher"
+    },
+    {
+      "alias": "method_02",
+      "alias_hash": "706DAF44EBB1BBD087555BF27744065650F103B4797D906CAB292FE4D6C3F213",
+      "method": "tamp_feasibility_screen"
+    },
+    {
+      "alias": "method_03",
+      "alias_hash": "FC70BF8321F4E405D082647510C0BA5F92BE3F52D067C04E7ED0A0847B4189C1",
+      "method": "oracle_basin_composer"
+    },
+    {
+      "alias": "method_04",
+      "alias_hash": "4029812C92ABD7E38AA5F740C19D95411747D1E5A09D1B1544525AD20BACD4DE",
+      "method": "option_graph_planner"
+    },
+    {
+      "alias": "method_05",
+      "alias_hash": "B74ADC46AD6560CD99B6E6B45B4F2A55E8A5277F8D502EF087F9D25D5A41C213",
+      "method": "energy_compatibility_heuristic"
+    },
+    {
+      "alias": "method_06",
+      "alias_hash": "9FD039870C6A7C13CA4742E38BAA93460ADEEDC9D4CF9501BF4EA7F6E113442C",
+      "method": "proposed_energy_landscape_composer_v4_1"
+    },
+    {
+      "alias": "method_07",
+      "alias_hash": "A6812E5A09DCE6B94DB03FD8F9EB645AFAD02E98695D52BE54CFB353CB6E5376",
+      "method": "behavior_cloned_skill_chain"
+    },
+    {
+      "alias": "method_08",
+      "alias_hash": "81F00223C4ACF3C65BC42866AE6C0A39BE5F43803B37891FFF5F9C72EBEFBDC4",
+      "method": "residual_rl_composer"
+    },
+    {
+      "alias": "method_09",
+      "alias_hash": "F5C7AF897B1DB31E499540CE9B8589210183739D5125ED7D2B78A8F93B34C405",
+      "method": "greedy_module_sequence"
+    },
+    {
+      "alias": "method_10",
+      "alias_hash": "EEF0FCE87854BD97E5EA195FE54146780AAECD97EADBE34081920611B5AD1DCA",
+      "method": "barrier_certified_energy_composer_v5"
+    },
+    {
+      "alias": "method_11",
+      "alias_hash": "86539F9599C6CCEA67973ADB637BA7F076209ED8B2B7F402A772E8C9999DA1F0",
+      "method": "stable_dmp_handoff"
+    }
+  ],
+  "analysis_lock": {
+    "breach_gate": 0.02,
+    "coverage_gate": 0.55,
+    "fixed_risk_budget": 0.15,
+    "paired_win_rate_gate": 0.7,
+    "primary_method": "barrier_certified_energy_composer_v5",
+    "strongest_non_oracle_selected_after_all_methods": true,
+    "success_margin_gate": 0.05,
+    "utility_margin_gate": 0.08
+  },
+  "expected_records": 1440,
+  "method_count": 12,
+  "not_external_evidence": true,
+  "purpose": "Method alias map for blinded external collection; seal until logs/videos/configs/checkpoints are frozen.",
+  "seal_conditions": [
+    "Do not reveal aliases to the operator until all JSONL logs and videos are written.",
+    "Do not tune any method after alias assignment.",
+    "Do not edit aggregate metrics by hand; recompute them from JSONL logs.",
+    "Freeze config, checkpoint, implementation, and skill-library hashes before unblinding."
+  ],
+  "seed_hash": "329A999B4BB725C5269FA65829CD750B5414F3FE8AB5B7701969CA2D7819DA05",
+  "source_collection_plan": "results/external_collection_plan.json",
+  "version": "external_blind_eval_plan_v1"
+}

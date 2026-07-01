@@ -1,0 +1,72 @@
+{
+  "checks": [
+    {
+      "detail": "not_external_evidence=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False",
+      "name": "packet_is_non_evidence_and_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "passed=True, write_enabled=False",
+      "name": "materialization_plan_ready_but_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "config_count=4",
+      "name": "template_audit_passes",
+      "passed": true
+    },
+    {
+      "detail": "passed=False, config_count=0",
+      "name": "strict_config_evidence_still_fails_without_manifest",
+      "passed": true
+    },
+    {
+      "detail": "packet_tasks=['cable_route_insert', 'door_open_navigation', 'drawer_to_pick_transfer', 'peg_place_regrasp'], manifest_tasks=['cable_route_insert', 'door_open_navigation', 'drawer_to_pick_transfer', 'peg_place_regrasp']",
+      "name": "manifest_template_declares_all_collection_tasks",
+      "passed": true
+    },
+    {
+      "detail": "hashes=['021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9', '1288223014CB9D9285E4249B2FA607FFC16EBEE20B6F44E0241B63E88233E471', '13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61', '8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E']",
+      "name": "prepared_config_files_have_hashes",
+      "passed": true
+    },
+    {
+      "detail": "errors={}",
+      "name": "prepared_configs_pass_strict_schema_if_manifest_declared",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "work_orders_cover_config_to_manifest_path",
+      "passed": true
+    },
+    {
+      "detail": "commands=['python scripts\\\\build_external_config_manifest_packet.py', 'python scripts\\\\materialize_external_configs.py --platform-type <real_robot|high_fidelity_sim> --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write', 'python scripts\\\\build_external_manifest.py --write --check-video-paths', 'python scripts\\\\validate_external_configs.py --strict', 'python scripts\\\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\\\configs --run-id <specific_run_id> --unsealed-alias-map', 'python scripts\\\\audit_external_release_package.py --strict', 'python scripts\\\\audit_external_evidence.py --strict']",
+      "name": "strict_commands_cover_config_manifest_release_and_evidence",
+      "passed": true
+    },
+    {
+      "detail": "collection_ready=False, real_task_configs_ready=True, manifest_exists=False",
+      "name": "collection_readiness_preserves_config_boundary",
+      "passed": true
+    },
+    {
+      "detail": "manifest_paths=['external_validation/configs/cable_route_insert.json', 'external_validation/configs/door_open_navigation.json', 'external_validation/configs/drawer_to_pick_transfer.json', 'external_validation/configs/peg_place_regrasp.json']",
+      "name": "manifest_template_paths_match_prepared_configs",
+      "passed": true
+    },
+    {
+      "detail": "packet_json=True, packet_md=True, csv=True",
+      "name": "packet_files_written",
+      "passed": true
+    }
+  ],
+  "config_manifest_packet_ready": true,
+  "failed_checks": [],
+  "manifest_declared_config_ready": false,
+  "not_external_evidence": true,
+  "passed": true,
+  "source_packet": "external_validation/config_manifest_packet.json",
+  "strict_config_evidence_ready": false,
+  "version": "external_config_manifest_audit_v1"
+}

@@ -1,0 +1,154 @@
+{
+  "build_command": "python scripts\\build_external_precollection_manifest_draft.py",
+  "candidate_method_config_count": 11,
+  "checks": [
+    {
+      "detail": "external_validation/manifest_precollection_draft.json",
+      "name": "draft_json_written_to_precollection_path",
+      "passed": true
+    },
+    {
+      "detail": "draft is non-evidence and cannot write the official manifest",
+      "name": "draft_marked_non_evidence_and_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json",
+      "name": "official_manifest_absent",
+      "passed": true
+    },
+    {
+      "detail": "configs=4",
+      "name": "prepared_config_hashes_prefilled",
+      "passed": true
+    },
+    {
+      "detail": "prepared=4/4, task_paths_match=True, mismatches=[], extra=[]",
+      "name": "prepared_config_hashes_match_current_files",
+      "passed": true
+    },
+    {
+      "detail": "candidate_method_configs=11",
+      "name": "candidate_method_configs_prefilled",
+      "passed": true
+    },
+    {
+      "detail": "candidate_method_configs=11/11, mismatches=[], extra=[]",
+      "name": "candidate_method_configs_match_current_plan",
+      "passed": true
+    },
+    {
+      "detail": "method_gaps=11",
+      "name": "method_gaps_bind_candidate_configs",
+      "passed": true
+    },
+    {
+      "detail": "candidate config hashes do not replace independent implementations, provenance, manifest declaration, or rollout log binding",
+      "name": "method_gaps_still_require_independent_evidence",
+      "passed": true
+    },
+    {
+      "detail": "method_gap_count=11",
+      "name": "method_gaps_remain_blocking",
+      "passed": true
+    },
+    {
+      "detail": "missing_rollout_artifact_count=8",
+      "name": "rollout_artifacts_remain_blocking",
+      "passed": true
+    },
+    {
+      "detail": "blocking=28",
+      "name": "manifest_assembly_blockers_preserved",
+      "passed": true
+    },
+    {
+      "detail": "sources=9",
+      "name": "source_reports_hash_listed",
+      "passed": true
+    },
+    {
+      "detail": "sources=9/9, mismatches=[], extra=[]",
+      "name": "source_reports_match_current_files",
+      "passed": true
+    },
+    {
+      "detail": "materialize_fidelity_acceptance.py",
+      "name": "cutover_command_contains_materialize_fidelity_acceptance",
+      "passed": true
+    },
+    {
+      "detail": "audit_external_collection_readiness.py --strict",
+      "name": "cutover_command_contains_audit_external_collection_readiness",
+      "passed": true
+    },
+    {
+      "detail": "build_external_precollection_freeze_receipt.py",
+      "name": "cutover_command_contains_build_external_precollection_freeze_receipt",
+      "passed": true
+    },
+    {
+      "detail": "real_collection_runner.py",
+      "name": "cutover_command_contains_real_collection_runner",
+      "passed": true
+    },
+    {
+      "detail": "build_external_postcollection_evidence_seal.py",
+      "name": "cutover_command_contains_build_external_postcollection_evidence_seal",
+      "passed": true
+    },
+    {
+      "detail": "audit_external_postcollection_seal_consistency.py",
+      "name": "cutover_command_contains_audit_external_postcollection_seal_consistency",
+      "passed": true
+    },
+    {
+      "detail": "build_external_manifest.py --write --check-video-paths",
+      "name": "cutover_command_contains_build_external_manifest",
+      "passed": true
+    },
+    {
+      "detail": "validate_external_rollouts.py --write-results --check-video-paths --strict",
+      "name": "cutover_command_contains_validate_external_rollouts",
+      "passed": true
+    },
+    {
+      "detail": "audit_external_evidence.py --strict",
+      "name": "cutover_command_contains_audit_external_evidence",
+      "passed": true
+    }
+  ],
+  "cutover_commands": [
+    "python scripts\\build_external_precollection_manifest_draft.py",
+    "python scripts\\materialize_fidelity_acceptance.py --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --code-commit <commit> --skill-library-hash <sha256> --write <operator fields>",
+    "python scripts\\audit_external_fidelity_acceptance.py --strict",
+    "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path>",
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
+    "python scripts\\self_test_external_precollection_freeze_receipt.py",
+    "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+    "python scripts\\audit_external_postcollection_seal_consistency.py",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\validate_external_adapters.py --strict",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "draft_md_path": "external_validation/manifest_precollection_draft.md",
+  "draft_path": "external_validation/manifest_precollection_draft.json",
+  "draft_ready": true,
+  "manifest_assembly_blocking_count": 28,
+  "method_gap_count": 11,
+  "missing_rollout_artifact_count": 8,
+  "not_external_evidence": true,
+  "official_manifest_exists": false,
+  "passed": true,
+  "prepared_config_count": 4,
+  "strict_config_evidence_ready": false,
+  "strict_external_evidence_ready": false,
+  "task_count": 4,
+  "version": "external_precollection_manifest_draft_audit_v1"
+}

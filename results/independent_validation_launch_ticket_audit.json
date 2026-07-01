@@ -1,0 +1,124 @@
+{
+  "checks": [
+    {
+      "detail": "ticket declares non-evidence",
+      "name": "ticket_is_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "decision='STRONG_REVISE', satisfied=17, missing=4, blocking=4",
+      "name": "readiness_boundary_current",
+      "passed": true
+    },
+    {
+      "detail": "gap=['Independent real-robot or accepted high-fidelity external validation evidence', 'External rollout metrics recomputed from raw JSONL logs', 'Manifest-declared real task configs replace non-evidence templates', 'Manifest-declared independent non-oracle baseline evidence and fairness contract'], closure=['Independent real-robot or accepted high-fidelity external validation evidence', 'External rollout metrics recomputed from raw JSONL logs', 'Manifest-declared real task configs replace non-evidence templates', 'Manifest-declared independent non-oracle baseline evidence and fairness contract']",
+      "name": "exact_four_external_blockers_named",
+      "passed": true
+    },
+    {
+      "detail": "closure_strict=False, job_state='DO_NOT_START_COLLECTION_YET', bootstrap_state='READY_TO_BOOTSTRAP_EXTERNAL_MACHINE', execution_strict=False",
+      "name": "source_packets_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "operator_files_exist=9/9",
+      "name": "command_files_exist_for_windows_and_linux",
+      "passed": true
+    },
+    {
+      "detail": "explicit confirmation and manifest guardrails are visible",
+      "name": "collection_guardrails_visible",
+      "passed": true
+    },
+    {
+      "detail": "qualification_state='DO_NOT_COLLECT_RENDER_MACHINE'",
+      "name": "render_machine_no_go_visible",
+      "passed": true
+    },
+    {
+      "detail": "ready='QUALIFIED_FOR_RENDER_BACKED_PILOT', fail='DO_NOT_COLLECT_RENDER_MACHINE', host_state='RENDER_HOST_NOT_QUALIFIED'",
+      "name": "render_state_vocabulary_is_consistent",
+      "passed": true
+    },
+    {
+      "detail": "haonan_dependency=False",
+      "name": "haonan_not_required",
+      "passed": true
+    },
+    {
+      "detail": "ticket close criteria map to all four blockers",
+      "name": "acceptance_criteria_close_all_blockers",
+      "passed": true
+    },
+    {
+      "detail": "source audit checks are still passing",
+      "name": "source_checks_reused",
+      "passed": true
+    },
+    {
+      "detail": "Windows and Linux bootstrap/collection commands are present",
+      "name": "issue_body_contains_copy_paste_commands",
+      "passed": true
+    },
+    {
+      "detail": "render_host_brief_passed=True",
+      "name": "render_host_brief_attached_to_issue",
+      "passed": true
+    },
+    {
+      "detail": "docs=docs/independent_validation_launch_ticket.md, external=external_validation/independent_validation_launch_ticket.md",
+      "name": "operator_copy_matches_docs_copy",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json absent before external evidence",
+      "name": "no_real_manifest_written",
+      "passed": true
+    }
+  ],
+  "failed_checks": [],
+  "haonan_dependency": false,
+  "launch_state": "DO_NOT_START_COLLECTION_YET",
+  "not_external_evidence": true,
+  "operator_files": [
+    "external_validation/collection_machine_bootstrap.md",
+    "external_validation/collection_machine_bootstrap.ps1",
+    "external_validation/collection_machine_bootstrap.sh",
+    "external_validation/collection_job_packet.md",
+    "external_validation/collection_job_commands.ps1",
+    "external_validation/collection_job_commands.sh",
+    "docs/external_evidence_closure_brief.md",
+    "external_validation/operator_release_bundle_README.md",
+    "external_validation/render_host_qualification_brief.md"
+  ],
+  "passed": true,
+  "readiness": {
+    "blocking_missing_requirements": 4,
+    "current_decision": "STRONG_REVISE",
+    "satisfied_requirements": 17,
+    "total_requirements": 21
+  },
+  "render_collection_state": "DO_NOT_COLLECT_RENDER_MACHINE",
+  "source_artifacts": {
+    "closure_brief": "results/external_evidence_closure_brief.json",
+    "collection_job": "results/external_collection_job_packet_audit.json",
+    "execution_readiness": "results/external_execution_readiness_audit.json",
+    "machine_bootstrap": "results/external_collection_machine_bootstrap_audit.json",
+    "readiness_gap": "results/submission_readiness_gap_audit.json",
+    "render_host_brief": "results/maniskill_render_host_qualification_brief_audit.json",
+    "render_machine": "results/maniskill_render_machine_qualification.json",
+    "render_machine_self_test": "results/maniskill_render_machine_qualification_self_test.json"
+  },
+  "strict_blockers": [
+    "Independent real-robot or accepted high-fidelity external validation evidence",
+    "External rollout metrics recomputed from raw JSONL logs",
+    "Manifest-declared real task configs replace non-evidence templates",
+    "Manifest-declared independent non-oracle baseline evidence and fairness contract"
+  ],
+  "strict_external_evidence_ready": false,
+  "ticket_paths": [
+    "docs/independent_validation_launch_ticket.md",
+    "external_validation/independent_validation_launch_ticket.md"
+  ],
+  "version": "independent_validation_launch_ticket_v1"
+}

@@ -1,0 +1,52 @@
+{
+  "checks": [
+    {
+      "detail": "strict_evidence_ready=False",
+      "name": "packet_is_non_evidence_and_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "quarantine_root=external_validation/pilot_smoke",
+      "name": "quarantine_dirs_are_separate_from_official_evidence",
+      "passed": true
+    },
+    {
+      "detail": "records=2",
+      "name": "runner_backend_probe_already_exercises_actual_runner",
+      "passed": true
+    },
+    {
+      "detail": "commands=['python scripts\\\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\\\configs --output-log-dir external_validation\\\\pilot_smoke\\\\logs --video-dir external_validation\\\\pilot_smoke\\\\videos --run-id paper119_pilot_smoke_<platform>_<date> --unsealed-alias-map --force', 'python external_validation\\\\runner\\\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\\\configs --output-log-dir external_validation\\\\pilot_smoke\\\\logs --video-dir external_validation\\\\pilot_smoke\\\\videos --run-id paper119_pilot_smoke_<platform>_<date> --unsealed-alias-map --max-rows 12 --force', 'python scripts\\\\audit_external_pilot_smoke.py --strict --expected-records 12 --check-video-paths', 'Remove or archive external_validation\\\\pilot_smoke before official collection; pilot logs/videos must never be listed in external_validation\\\\manifest.json']",
+      "name": "pilot_commands_preserve_gate_order",
+      "passed": true
+    },
+    {
+      "detail": "passed=True, records=0",
+      "name": "pilot_audit_reports_non_evidence_state",
+      "passed": true
+    },
+    {
+      "detail": "collection_ready=False",
+      "name": "collection_readiness_remains_official_gate",
+      "passed": true
+    },
+    {
+      "detail": "json=True, md=True, csv=True",
+      "name": "packet_files_written",
+      "passed": true
+    }
+  ],
+  "commands": [
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\pilot_smoke\\logs --video-dir external_validation\\pilot_smoke\\videos --run-id paper119_pilot_smoke_<platform>_<date> --unsealed-alias-map --force",
+    "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\pilot_smoke\\logs --video-dir external_validation\\pilot_smoke\\videos --run-id paper119_pilot_smoke_<platform>_<date> --unsealed-alias-map --max-rows 12 --force",
+    "python scripts\\audit_external_pilot_smoke.py --strict --expected-records 12 --check-video-paths",
+    "Remove or archive external_validation\\pilot_smoke before official collection; pilot logs/videos must never be listed in external_validation\\manifest.json"
+  ],
+  "not_external_evidence": true,
+  "passed": true,
+  "pilot_rows": 12,
+  "pilot_smoke_packet_ready": true,
+  "quarantine_root": "external_validation/pilot_smoke",
+  "strict_evidence_ready": false,
+  "version": "external_pilot_smoke_packet_audit_v1"
+}

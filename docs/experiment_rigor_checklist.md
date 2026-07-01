@@ -12,6 +12,40 @@
 - [x] Fixed-risk deployment audit reports coverage, breach, gated success, gated utility, and pairwise comparisons.
 - [x] 24 failure cases documented.
 - [x] Terminal gates computed in `results/summary.json` and `results/summary.txt`.
-- [x] 25-page PDF, BibTeX warning count zero, log warning scan clean, visual QA complete.
+- [x] Compact 13-page PDF, vector/PDF main figures with PNG companions, BibTeX warning count zero, log warning scan clean, visual QA complete.
+- [x] Machine-checkable external evidence audit exists and currently fails until real/high-fidelity artifacts are supplied.
+- [x] External manifest builder exists and currently writes a non-evidence readiness report until real logs, videos, configs, and checkpoints are supplied.
+- [x] External collection plan exists and currently expands the high-fidelity route into 1,440 required JSONL records while remaining non-evidence.
+- [x] Independent validation route matrix exists and names a primary ManiSkill/SAPIEN public-simulator route, MuJoCo/robosuite and Isaac Sim/Isaac Lab secondary routes, and a third-party robot-lab route while remaining non-evidence.
+- [x] External fidelity acceptance template and audit define the robot/simulator provenance, contact/dynamics, paired-reset replay, operator independence, and hash requirements that must clear before the high-fidelity route can count as evidence.
+- [x] External collection runbook, operator record sheet, task cards, config templates, and runbook audit exist for the 1,440-record route while remaining non-evidence.
+- [x] External blinded evaluation protocol, randomized alias operator sheet, sealed method-alias map, and blind-eval audit exist for the same 1,440-record route while remaining non-evidence.
+- [x] External execution readiness audit and platform qualification checklist verify that the independent operator packet is runnable while still preserving the strict missing-evidence boundary.
+- [x] External config schema and template audit exist; strict config evidence validation remains blocked until real manifest-declared configs replace templates.
+- [x] External baseline implementation contract, method matrix, per-method specs, and audit exist while explicitly marking the independent non-oracle implementations as still missing.
+- [x] External baseline adapter scaffolds exist and are rejected as evidence by the strict audit unless replaced with real independent implementations.
+- [x] External reference adapters exist for all 12 methods and pass the adapter contract as implementation-only artifacts, without being counted as rollout evidence.
+- [x] External local dry run converts frozen local rows into 20,640 schema-compatible JSONL records and recomputes external-style metrics while explicitly remaining non-evidence.
+- [x] External adapter contract validator checks the seam-model API shape, proposal fields, log fields, and hash reporting; strict mode remains blocked until manifest-declared real implementations replace scaffolds.
+- [x] Scaffold guard self-test verifies that scaffold-only adapters are detected while ordinary replacement files are not falsely rejected.
+- [x] Raw external rollout JSONL schema and metric recomputation validator exist and currently fail until a real manifest/log package is supplied.
+- [x] Synthetic self-test verifies the external rollout validator's metric recomputation and missing-field failure path without creating evidence.
+- [x] Full-pipeline synthetic self-test verifies that the strict external gate can reach READY on a temporary complete fixture while leaving the real repository evidence state untouched.
+- [x] Claim/evidence ledger and claim-boundary audit exist so the package cannot silently overclaim deployment or ICLR-main readiness.
+- [x] Submission readiness gap audit maps the active objective to requirement-level satisfied, missing, and human-polish states without declaring completion.
+- [x] Local falsification audit checks abstention gaming, search-cost gaming, risk monotonicity, positive task-regime margins, and the remaining oracle gap from episode-level hard-slice rows.
+- [x] Holdout robustness audit checks task-family, seam-regime, split, task-regime, and hash-fold local robustness without treating it as external evidence.
+- [x] Diagnostic mechanism audit checks exported failure labels, seam decisions, and planner-edge updates without treating them as external evidence.
+- [x] Comparative decision-quality audit checks accepted-seam coverage, non-abstain quality, recovered predecessor-abstained accepts, and shared-abstention breach changes without treating them as external evidence.
+- [x] Seam prediction calibration audit checks ECE10, max bin gap, risk-breach correlation, monotone risk deciles, and decision relevance without treating them as external evidence.
+- [x] Manuscript number audit checks that reported margins, row counts, table values, local falsification numbers, diagnostic mechanism numbers, decision-quality numbers, and holdout robustness numbers match generated result files.
+- [x] Related-work audit checks citation coverage, novelty-boundary rows, and outreach/validation boundary wording across 12 required areas.
+- [x] Reference integrity audit checks BibTeX fields, DOI/arXiv identifiers, recent primary-source metadata, and Haonan/Yilun-adjacent author coverage.
+- [x] Manuscript readability audit checks central framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and stale manual-polish blocker removal.
+- [x] Presentation quality audit checks PDF structure, source/log hygiene, blue citation/reference links, vector figures, canonical artifact parity, and internal-status leak prevention.
+- [x] Figure readability audit checks raster companion resolution, foreground density, contrast, edge margins, color detail, and manuscript references for all seven main figures.
+- [x] Camera-ready design audit renders all current PDF pages and checks page density, contrast, margins, sparse-page count, and selected text anchors.
+- [x] Single local build script regenerates experiments, manuscript, PDF, audits, and outreach artifacts.
+- [x] Related-work coverage matrix exists for the main novelty boundary and outreach-adjacent work.
 
 Residual risk: all evidence remains local. Real robot or external high-fidelity validation is still required before an ICLR-main submission claim.

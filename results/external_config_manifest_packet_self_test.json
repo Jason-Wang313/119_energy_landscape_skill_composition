@@ -1,0 +1,95 @@
+{
+  "checks": [
+    {
+      "detail": "status=0, passed=True, tasks=4, configs=4",
+      "name": "temporary_config_manifest_packet_ready_but_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "work_order_check=False",
+      "name": "missing_task_work_orders_rejected",
+      "passed": true
+    },
+    {
+      "detail": "non_evidence_check=False",
+      "name": "premature_evidence_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "materialization_check=False",
+      "name": "materialization_write_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "template_check=False",
+      "name": "template_audit_shrink_rejected",
+      "passed": true
+    },
+    {
+      "detail": "strict_config_check=False",
+      "name": "strict_config_evidence_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "manifest_task_check=False",
+      "name": "manifest_task_omission_rejected",
+      "passed": true
+    },
+    {
+      "detail": "hash_check=False",
+      "name": "prepared_config_hash_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "validation_check=False",
+      "name": "prepared_config_validation_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "command_check=False",
+      "name": "strict_command_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "manifest_write_check=False",
+      "name": "real_manifest_write_rejected",
+      "passed": true
+    },
+    {
+      "detail": "path_check=False",
+      "name": "manifest_path_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "changed=[]",
+      "name": "real_config_manifest_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "manifest_declared_config_ready": false,
+  "manifest_path_drift_rejected": true,
+  "manifest_task_omission_rejected": true,
+  "materialization_write_drift_rejected": true,
+  "missing_task_work_orders_rejected": true,
+  "not_external_evidence": true,
+  "passed": true,
+  "premature_evidence_promotion_rejected": true,
+  "prepared_config_hash_drift_rejected": true,
+  "prepared_config_validation_drift_rejected": true,
+  "real_manifest_write_rejected": true,
+  "real_output_hashes": {
+    "external_validation/config_manifest_packet.json": "c2343059481f025643aa423598ffc975e02a0e23a64e12b5736109658272c49f",
+    "external_validation/config_manifest_packet.md": "920aeaf0c567ddc48affd382b5405de001ba0828eeca3e46bd3f65ab4ecb396b",
+    "external_validation/config_manifest_work_orders.csv": "3ac4e5eac96afe64dcef3e3abe25235fb7bac9d3b7bf106b58fd27c2c601a06e",
+    "external_validation/manifest.json": null,
+    "results/external_config_manifest_audit.json": "a46ded8e5ff2e9e9fab155569f9fa4fd8fda633e062962180781b9dcb360d972",
+    "results/external_config_manifest_audit.md": "f2f65f83dd6ea9a14bbcfdfc21604551d29aca5bb6bc34b0465d388f1c88e3f7"
+  },
+  "real_outputs_untouched": true,
+  "strict_command_drift_rejected": true,
+  "strict_config_evidence_promotion_rejected": true,
+  "strict_config_evidence_ready": false,
+  "template_audit_shrink_rejected": true,
+  "temporary_packet_ready": true,
+  "version": "external_config_manifest_packet_self_test_v1"
+}

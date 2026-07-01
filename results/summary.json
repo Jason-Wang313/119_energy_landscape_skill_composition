@@ -59,8 +59,7 @@
     "no_released_skill_energy_or_policy_checkpoint",
     "no_calibrated_contact_force_camera_or_state_logs",
     "no_hardware_rollout_videos",
-    "no_independent_baseline_implementations",
-    "manual_related_work_not_full_paper_complete"
+    "no_independent_baseline_implementations"
   ],
   "oracle": "oracle_basin_composer",
   "previous_method": "proposed_energy_landscape_composer_v4_1",

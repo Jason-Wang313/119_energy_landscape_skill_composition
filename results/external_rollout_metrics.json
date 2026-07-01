@@ -1,0 +1,11 @@
+{
+  "passed": false,
+  "schema_errors": [
+    "missing manifest C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\manifest.json"
+  ],
+  "summary": {
+    "episodes": 0,
+    "version": "external_rollout_metrics_v1"
+  },
+  "threshold_checks": []
+}

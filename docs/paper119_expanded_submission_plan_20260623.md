@@ -2,7 +2,7 @@
 
 Paper: `energy_landscape_skill_composition`
 
-Target: expand the current 4-page v4.1 package into a 25+ page v5 hostile-review submission artifact with stronger theory, stronger experiments, real citations, bright boxed clickable citation links, and honest terminal status.
+Target: expand the current 4-page v4.1 package into a 25+ page v5 hostile-review submission artifact with stronger theory, stronger experiments, real citations, clean conference-style citation handling, and honest terminal status.
 
 ## Non-Negotiables
 
@@ -35,7 +35,7 @@ Target: expand the current 4-page v4.1 package into a 25+ page v5 hostile-review
 
 ## Planned Documentation
 
-- Update child status docs and create a v5 readiness audit, terminal audit, validation script, and manuscript generator.
+- Update child status docs and create a v5 readiness audit, terminal audit, validation script, manuscript generator, and independent external execution-readiness packet.
 - Remove stale v4.1-only terminal plan/audit files after v5 artifacts exist.
 - Update root ledgers only after validation, visual QA, and GitHub push succeed.
 

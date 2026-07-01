@@ -1,0 +1,287 @@
+{
+  "ablations": {
+    "barrier_height": false,
+    "basin_overlap": false,
+    "descent_continuity": false,
+    "risk_calibration": false,
+    "seam_repair": false
+  },
+  "claim": "Local dry run of the external evidence schema; not a robot or accepted high-fidelity validation claim.",
+  "local_dry_run_only": true,
+  "log_schema": "external_validation/log_schema_v1.json",
+  "methods": [
+    {
+      "checkpoint_or_config_hash": "f1fa85f75e73a10a9839328fc17ec84b8b9d101abb1df45e8d1a1ca60e241e04",
+      "checkpoint_or_config_path": "external_validation/local_dry_run/checkpoints/greedy_module_sequence.sha256",
+      "implementation": "external_validation/baselines/greedy_module_sequence/adapter.py",
+      "name": "greedy_module_sequence"
+    },
+    {
+      "checkpoint_or_config_hash": "337ddddb00dd4162825b28d6c63fae180ce1acf670520db68d8e0eeb3c696903",
+      "checkpoint_or_config_path": "external_validation/local_dry_run/checkpoints/behavior_cloned_skill_chain.sha256",
+      "implementation": "external_validation/baselines/behavior_cloned_skill_chain/adapter.py",
+      "name": "behavior_cloned_skill_chain"
+    },
+    {
+      "checkpoint_or_config_hash": "5957e70baaf15439ad8db510660f86f160055f0fcb50b4b8201d990a2c7c56cb",
+      "checkpoint_or_config_path": "external_validation/local_dry_run/checkpoints/option_graph_planner.sha256",
+      "implementation": "external_validation/baselines/option_graph_planner/adapter.py",
+      "name": "option_graph_planner"
+    },
+    {
+      "checkpoint_or_config_hash": "650275b5ad2049ae6690be7dbff1a9fbb37352c276c126fcd49d79b274c0de00",
+      "checkpoint_or_config_path": "external_validation/local_dry_run/checkpoints/diffusion_skill_stitcher.sha256",
+      "implementation": "external_validation/baselines/diffusion_skill_stitcher/adapter.py",
+      "name": "diffusion_skill_stitcher"
+    },
+    {
+      "checkpoint_or_config_hash": "5ba7730cad18675eb1197d76d7ce377003b1dfa260c532c78735134739002f40",
+      "checkpoint_or_config_path": "external_validation/local_dry_run/checkpoints/cem_trajectory_composer.sha256",
+      "implementation": "external_validation/baselines/cem_trajectory_composer/adapter.py",
+      "name": "cem_trajectory_composer"
+    },
+    {
+      "checkpoint_or_config_hash": "57da744d8adfece2017e8db56b7e8e8da7cf0305b90ae651f6cc8416a37aef35",
+      "checkpoint_or_config_path": "external_validation/local_dry_run/checkpoints/residual_rl_composer.sha256",
+      "implementation": "external_validation/baselines/residual_rl_composer/adapter.py",
+      "name": "residual_rl_composer"
+    },
+    {
+      "checkpoint_or_config_hash": "954e91b23fa0a9e9bc5096591a65dc31f2433010319060c9f7a8f1a44b8ca8cb",
+      "checkpoint_or_config_path": "external_validation/local_dry_run/checkpoints/energy_compatibility_heuristic.sha256",
+      "implementation": "external_validation/baselines/energy_compatibility_heuristic/adapter.py",
+      "name": "energy_compatibility_heuristic"
+    },
+    {
+      "checkpoint_or_config_hash": "e7de4c2d588ffbc282bb2a58b5c75c7e94f746a240e9e5941fb00828c8a941c8",
+      "checkpoint_or_config_path": "external_validation/local_dry_run/checkpoints/tamp_feasibility_screen.sha256",
+      "implementation": "external_validation/baselines/tamp_feasibility_screen/adapter.py",
+      "name": "tamp_feasibility_screen"
+    },
+    {
+      "checkpoint_or_config_hash": "e6932fa4bc8477ca654b69d414c6632375883d64c6106c89d4871212d1bc3361",
+      "checkpoint_or_config_path": "external_validation/local_dry_run/checkpoints/stable_dmp_handoff.sha256",
+      "implementation": "external_validation/baselines/stable_dmp_handoff/adapter.py",
+      "name": "stable_dmp_handoff"
+    },
+    {
+      "checkpoint_or_config_hash": "30cb796f381c3d83c4c843e3a0828681c655397941399ce642e1368e9fc5d36f",
+      "checkpoint_or_config_path": "external_validation/local_dry_run/checkpoints/proposed_energy_landscape_composer_v4_1.sha256",
+      "implementation": "external_validation/baselines/proposed_energy_landscape_composer_v4_1/adapter.py",
+      "name": "proposed_energy_landscape_composer_v4_1"
+    },
+    {
+      "checkpoint_or_config_hash": "4236bf4dfee578b84733ca3f245b18fbcc637b285242f6f01090f26d22380bcc",
+      "checkpoint_or_config_path": "external_validation/local_dry_run/checkpoints/barrier_certified_energy_composer_v5.sha256",
+      "implementation": "external_validation/baselines/barrier_certified_energy_composer_v5/adapter.py",
+      "name": "barrier_certified_energy_composer_v5"
+    },
+    {
+      "checkpoint_or_config_hash": "34621a6942dcb81cccc281985d74a69d115ada8ade7516461b66328b7573a5fb",
+      "checkpoint_or_config_path": "external_validation/local_dry_run/checkpoints/oracle_basin_composer.sha256",
+      "implementation": "post_hoc_upper_bound",
+      "name": "oracle_basin_composer"
+    }
+  ],
+  "metrics": {
+    "external_success_margin": 0.08313953488372094,
+    "external_task_families": 4,
+    "external_utility_margin": 0.23096796860465119,
+    "fixed_risk_breach": 0.0,
+    "fixed_risk_budget": 0.15,
+    "fixed_risk_coverage": 0.6098837209302326,
+    "oracle_reported": true,
+    "oracle_stronger_or_saturated_explained": true,
+    "paired_win_rate": 0.8622093023255814,
+    "positive_task_families": 4
+  },
+  "not_external_evidence": true,
+  "paired_resets": true,
+  "release_artifacts": {
+    "checkpoints": [
+      {
+        "path": "external_validation/local_dry_run/checkpoints/greedy_module_sequence.sha256",
+        "sha256": "84461B004FEF5722153957845263E9690530D393E0F4C70623E84DB7240DBDEE"
+      },
+      {
+        "path": "external_validation/local_dry_run/checkpoints/behavior_cloned_skill_chain.sha256",
+        "sha256": "92B3AF70469BEBBD9556FF8A54ED204CB5F5BCC78519CC417B8EB30B1F4786BE"
+      },
+      {
+        "path": "external_validation/local_dry_run/checkpoints/option_graph_planner.sha256",
+        "sha256": "6AA88EB4EA548B281ABDA8ED1CD65E086576A6ACD24861A504D732E9FFCCD929"
+      },
+      {
+        "path": "external_validation/local_dry_run/checkpoints/diffusion_skill_stitcher.sha256",
+        "sha256": "06A56A060F95260ABC7663D920FD53F0C56756DB27561FE512925EAE09FA88F4"
+      },
+      {
+        "path": "external_validation/local_dry_run/checkpoints/cem_trajectory_composer.sha256",
+        "sha256": "000405E120A68AE0F1692851F0BAAB8E29BBE42BF0636399986E0D1306DEEA10"
+      },
+      {
+        "path": "external_validation/local_dry_run/checkpoints/residual_rl_composer.sha256",
+        "sha256": "771ABCBBA4F16C962FE0226E706D8FD52F8DB1F6568BDB0FBBA033CE1415D179"
+      },
+      {
+        "path": "external_validation/local_dry_run/checkpoints/energy_compatibility_heuristic.sha256",
+        "sha256": "6DAA4389753A2450C4EA25FC74FF71764983E5CDF5C060BDD62A917DAF852C2F"
+      },
+      {
+        "path": "external_validation/local_dry_run/checkpoints/tamp_feasibility_screen.sha256",
+        "sha256": "013134BA76F8D19A999D8B2B389611B5715FD96D1B15CA75ABDAE6FF73FD9D38"
+      },
+      {
+        "path": "external_validation/local_dry_run/checkpoints/stable_dmp_handoff.sha256",
+        "sha256": "4E2C0C981BF118CA064772570B87DA6F127AC5DE9D26AF2E424A2332B36E811C"
+      },
+      {
+        "path": "external_validation/local_dry_run/checkpoints/proposed_energy_landscape_composer_v4_1.sha256",
+        "sha256": "697732B19B6DBD5433B7358B1210CDAB985D244A376968E00E9B750E6810CDB2"
+      },
+      {
+        "path": "external_validation/local_dry_run/checkpoints/barrier_certified_energy_composer_v5.sha256",
+        "sha256": "3326366216AC2C78E2F06BB0A7A869363F5CB39ECF8CBF3EC1F09B037F366A13"
+      },
+      {
+        "path": "external_validation/local_dry_run/checkpoints/oracle_basin_composer.sha256",
+        "sha256": "564FEB532B54C1264D88169AC6AE21670B0D39C91A0BAF7410FBC662817F15C2"
+      }
+    ],
+    "code": [
+      {
+        "path": "external_validation/baselines/greedy_module_sequence/adapter.py",
+        "sha256": "8C9F465960077E3B8A67DC398B236C2C1C0E4F253E51366A56EA77E5ED5CC963"
+      },
+      {
+        "path": "external_validation/baselines/behavior_cloned_skill_chain/adapter.py",
+        "sha256": "9B3548FB33CAB6503F8BF9F6189FEDC2177897E83C3FDF2D657CA6E1019F4890"
+      },
+      {
+        "path": "external_validation/baselines/option_graph_planner/adapter.py",
+        "sha256": "BA19AC254B64D5F79600E44EE88A748FC237D3910BA592014D732E632535B22D"
+      },
+      {
+        "path": "external_validation/baselines/diffusion_skill_stitcher/adapter.py",
+        "sha256": "B16C610BCB5906C72BFD7495792D5635546513E91BC44CAC98C9C5DA3F3177BF"
+      },
+      {
+        "path": "external_validation/baselines/cem_trajectory_composer/adapter.py",
+        "sha256": "81B7FFAE412D296A7A5E9D0ADEF0BBE2031FB4D4FB08B65DD6408F1101668FDB"
+      },
+      {
+        "path": "external_validation/baselines/residual_rl_composer/adapter.py",
+        "sha256": "5B72C98DC049FC0476451EE9E89A0F94D2E50DC1B20AF7CB327D6A60404919FF"
+      },
+      {
+        "path": "external_validation/baselines/energy_compatibility_heuristic/adapter.py",
+        "sha256": "C59B9E9BA7621A12731D0228488B990593915A23A884FC2042842D550637FC59"
+      },
+      {
+        "path": "external_validation/baselines/tamp_feasibility_screen/adapter.py",
+        "sha256": "1664C0DB0B62CAAE96F3BB2DDE13956797A82FC00BFA11D12C8F2E06C51C6AA9"
+      },
+      {
+        "path": "external_validation/baselines/stable_dmp_handoff/adapter.py",
+        "sha256": "3C16F0F4178F4F9A6FA6EEB88CF0CC7EB5A78890351C0EB2DDCFBCF6BC031F89"
+      },
+      {
+        "path": "external_validation/baselines/proposed_energy_landscape_composer_v4_1/adapter.py",
+        "sha256": "ADE2084726B6A6DE7B2F90DFA6A1C4F5D2614551079E978AF9B849A794C6A540"
+      },
+      {
+        "path": "external_validation/baselines/barrier_certified_energy_composer_v5/adapter.py",
+        "sha256": "DFECC8475DFE638A5F23B7941CEB00C1F8094EF2256BE60F20CA6F817341859B"
+      }
+    ],
+    "configs": [
+      {
+        "path": "external_validation/local_dry_run/configs/peg_place_regrasp.json",
+        "sha256": "482DEEEA01C6C07494CDA8A1DE931DE77B644CB17E8C1ED46A57C541D0E20B1D"
+      },
+      {
+        "path": "external_validation/local_dry_run/configs/drawer_to_pick_transfer.json",
+        "sha256": "34F3DE3E521D6F2550F642E12DD497510EA927CD28E216261063F72AC48F1FF4"
+      },
+      {
+        "path": "external_validation/local_dry_run/configs/door_open_navigation.json",
+        "sha256": "3CE8530DD9851693D5DC83E4E50927AC6988A0C3387EAF76DA730680416152DF"
+      },
+      {
+        "path": "external_validation/local_dry_run/configs/cable_route_insert.json",
+        "sha256": "9150E4AEB161196EF36FB4777241066997A2D7954CC1351F1A5EAEDE46E0FF13"
+      }
+    ],
+    "logs": [
+      {
+        "path": "external_validation/local_dry_run/logs/peg_place_regrasp.jsonl",
+        "sha256": "6A77AF33D1ED629419C244228D675228AA3E353BB063B01A74A6AECEC5A1A671"
+      },
+      {
+        "path": "external_validation/local_dry_run/logs/drawer_to_pick_transfer.jsonl",
+        "sha256": "76BE00CD3CADD22DCC0FF79AA0BB2009B04566FD9D18FDF6E8B9FF295F6F22A3"
+      },
+      {
+        "path": "external_validation/local_dry_run/logs/door_open_navigation.jsonl",
+        "sha256": "97C794D4B6E94B0886696C4D1DDF9899F4423246B04CA4480CEFB9EA8190C169"
+      },
+      {
+        "path": "external_validation/local_dry_run/logs/cable_route_insert.jsonl",
+        "sha256": "353425928AE0FA86C6C5AE667C0CAA9CF29E117164D2F3B8E62BFD9052CA247B"
+      }
+    ],
+    "videos": []
+  },
+  "route": "high_fidelity_sim",
+  "same_compute_budget": true,
+  "same_initial_states": true,
+  "same_observation_interface": true,
+  "shared_skill_library": true,
+  "tasks": [
+    {
+      "config_hash": "482DEEEA01C6C07494CDA8A1DE931DE77B644CB17E8C1ED46A57C541D0E20B1D",
+      "config_path": "external_validation/local_dry_run/configs/peg_place_regrasp.json",
+      "episodes_per_method": 430,
+      "log_jsonl": "external_validation/local_dry_run/logs/peg_place_regrasp.jsonl",
+      "notes": "Local dry run generated from results/cell_metrics.csv; not external validation evidence.",
+      "platform_name": "LocalFrozenSuite-v5-DRY-RUN-NOT-EVIDENCE",
+      "platform_type": "high_fidelity_sim",
+      "task_family": "peg_place_regrasp",
+      "video_dir": "external_validation/local_dry_run/videos/peg_place_regrasp"
+    },
+    {
+      "config_hash": "34F3DE3E521D6F2550F642E12DD497510EA927CD28E216261063F72AC48F1FF4",
+      "config_path": "external_validation/local_dry_run/configs/drawer_to_pick_transfer.json",
+      "episodes_per_method": 430,
+      "log_jsonl": "external_validation/local_dry_run/logs/drawer_to_pick_transfer.jsonl",
+      "notes": "Local dry run generated from results/cell_metrics.csv; not external validation evidence.",
+      "platform_name": "LocalFrozenSuite-v5-DRY-RUN-NOT-EVIDENCE",
+      "platform_type": "high_fidelity_sim",
+      "task_family": "drawer_to_pick_transfer",
+      "video_dir": "external_validation/local_dry_run/videos/drawer_to_pick_transfer"
+    },
+    {
+      "config_hash": "3CE8530DD9851693D5DC83E4E50927AC6988A0C3387EAF76DA730680416152DF",
+      "config_path": "external_validation/local_dry_run/configs/door_open_navigation.json",
+      "episodes_per_method": 430,
+      "log_jsonl": "external_validation/local_dry_run/logs/door_open_navigation.jsonl",
+      "notes": "Local dry run generated from results/cell_metrics.csv; not external validation evidence.",
+      "platform_name": "LocalFrozenSuite-v5-DRY-RUN-NOT-EVIDENCE",
+      "platform_type": "high_fidelity_sim",
+      "task_family": "door_open_navigation",
+      "video_dir": "external_validation/local_dry_run/videos/door_open_navigation"
+    },
+    {
+      "config_hash": "9150E4AEB161196EF36FB4777241066997A2D7954CC1351F1A5EAEDE46E0FF13",
+      "config_path": "external_validation/local_dry_run/configs/cable_route_insert.json",
+      "episodes_per_method": 430,
+      "log_jsonl": "external_validation/local_dry_run/logs/cable_route_insert.jsonl",
+      "notes": "Local dry run generated from results/cell_metrics.csv; not external validation evidence.",
+      "platform_name": "LocalFrozenSuite-v5-DRY-RUN-NOT-EVIDENCE",
+      "platform_type": "high_fidelity_sim",
+      "task_family": "cable_route_insert",
+      "video_dir": "external_validation/local_dry_run/videos/cable_route_insert"
+    }
+  ],
+  "version": "external_validation_v1"
+}

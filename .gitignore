@@ -1,4 +1,6 @@
 __pycache__/
+**/__pycache__/
+*.pyc
 *.aux
 *.bbl
 *.blg
@@ -6,3 +8,5 @@ __pycache__/
 *.out
 *.fdb_latexmk
 *.fls
+external_validation/pilot_runtime_guard/
+external_validation/local_dry_run/videos/**/*.mp4

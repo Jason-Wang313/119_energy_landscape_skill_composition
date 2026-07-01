@@ -1,0 +1,16 @@
+{
+  "adapter_api": {
+    "initialize": "load method config/checkpoint and declare method_name, version, and hashes",
+    "log": "emit predicted risk, diagnosis, decision, repair action, policy/config hash, and timing for the episode JSONL record",
+    "propose": "given shared observation, terminal samples, skill_i, skill_j, and compute budget, return seam decision and optional repair",
+    "reset": "clear method-local state between paired resets unless the method explicitly models online memory and logs it"
+  },
+  "implementation_status": "scaffold_only_missing_external_source",
+  "method": "residual_rl_composer",
+  "not_external_evidence": true,
+  "replacement_required_before_evidence": true,
+  "required_entrypoint": "apply_residual_repair_policy",
+  "role": "learned residual repair baseline",
+  "scaffold_only": true,
+  "version": "paper119_external_adapter_scaffold_v1"
+}

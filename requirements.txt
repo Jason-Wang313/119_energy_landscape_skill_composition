@@ -1,3 +1,5 @@
 # Python standard library only for experiments.
 numpy
 matplotlib
+imageio
+imageio-ffmpeg

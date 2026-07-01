@@ -1,0 +1,96 @@
+{
+  "checks": [
+    {
+      "detail": "status=0, passed=True, expected_records=600",
+      "name": "temporary_ablation_collection_packet_ready_but_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "missing_ablation_work_order_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "premature_evidence_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "collection_budget_shrink_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "strict_missing_ablation_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "local_reference_variant_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "manifest_ablation_boolean_omission_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "work_order_artifact_command_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "strict_command_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "check=False",
+      "name": "real_manifest_write_rejected",
+      "passed": true
+    },
+    {
+      "detail": "required temporary packet output check detects deleted ablation work-order CSV",
+      "name": "packet_file_deletion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "before={'external_validation/ablation_collection_packet.json': '5b7814ef0c0555b0148b40b2d5e2b9db1069c9bc1e1686c96e1411b1fa36d94e', 'external_validation/ablation_collection_packet.md': 'ce3703f13541aafb56ea072107d224e585dbfcb3025b97c9940a6dcea536d545', 'external_validation/ablation_collection_work_orders.csv': 'b441b51baa4da00dec488c05e11ef8d381df1b2d742024936691a12b16cbb1b7', 'results/external_ablation_collection_audit.json': '586e5a58d35a79eab496934c9fd2c09421b364cac09f05c722fd0552a841a885', 'results/external_ablation_collection_audit.md': 'ce3703f13541aafb56ea072107d224e585dbfcb3025b97c9940a6dcea536d545', 'external_validation/manifest.json': None}, after={'external_validation/ablation_collection_packet.json': '5b7814ef0c0555b0148b40b2d5e2b9db1069c9bc1e1686c96e1411b1fa36d94e', 'external_validation/ablation_collection_packet.md': 'ce3703f13541aafb56ea072107d224e585dbfcb3025b97c9940a6dcea536d545', 'external_validation/ablation_collection_work_orders.csv': 'b441b51baa4da00dec488c05e11ef8d381df1b2d742024936691a12b16cbb1b7', 'results/external_ablation_collection_audit.json': '586e5a58d35a79eab496934c9fd2c09421b364cac09f05c722fd0552a841a885', 'results/external_ablation_collection_audit.md': 'ce3703f13541aafb56ea072107d224e585dbfcb3025b97c9940a6dcea536d545', 'external_validation/manifest.json': None}",
+      "name": "real_ablation_packet_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "collection_budget_shrink_rejected": true,
+  "local_reference_variant_drift_rejected": true,
+  "manifest_ablation_boolean_omission_rejected": true,
+  "missing_work_order_rejected": true,
+  "not_external_evidence": true,
+  "packet_file_deletion_rejected": true,
+  "passed": true,
+  "premature_evidence_promotion_rejected": true,
+  "real_manifest_write_rejected": true,
+  "real_output_hashes_after": {
+    "external_validation/ablation_collection_packet.json": "5b7814ef0c0555b0148b40b2d5e2b9db1069c9bc1e1686c96e1411b1fa36d94e",
+    "external_validation/ablation_collection_packet.md": "ce3703f13541aafb56ea072107d224e585dbfcb3025b97c9940a6dcea536d545",
+    "external_validation/ablation_collection_work_orders.csv": "b441b51baa4da00dec488c05e11ef8d381df1b2d742024936691a12b16cbb1b7",
+    "external_validation/manifest.json": null,
+    "results/external_ablation_collection_audit.json": "586e5a58d35a79eab496934c9fd2c09421b364cac09f05c722fd0552a841a885",
+    "results/external_ablation_collection_audit.md": "ce3703f13541aafb56ea072107d224e585dbfcb3025b97c9940a6dcea536d545"
+  },
+  "real_output_hashes_before": {
+    "external_validation/ablation_collection_packet.json": "5b7814ef0c0555b0148b40b2d5e2b9db1069c9bc1e1686c96e1411b1fa36d94e",
+    "external_validation/ablation_collection_packet.md": "ce3703f13541aafb56ea072107d224e585dbfcb3025b97c9940a6dcea536d545",
+    "external_validation/ablation_collection_work_orders.csv": "b441b51baa4da00dec488c05e11ef8d381df1b2d742024936691a12b16cbb1b7",
+    "external_validation/manifest.json": null,
+    "results/external_ablation_collection_audit.json": "586e5a58d35a79eab496934c9fd2c09421b364cac09f05c722fd0552a841a885",
+    "results/external_ablation_collection_audit.md": "ce3703f13541aafb56ea072107d224e585dbfcb3025b97c9940a6dcea536d545"
+  },
+  "real_outputs_untouched": true,
+  "strict_command_drift_rejected": true,
+  "strict_external_evidence_ready": false,
+  "strict_missing_ablation_drift_rejected": true,
+  "temporary_packet_ready": true,
+  "version": "external_ablation_collection_packet_self_test_v1",
+  "work_order_artifact_command_drift_rejected": true
+}

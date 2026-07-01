@@ -1,0 +1,323 @@
+name: Paper 119 Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+      - "codex/**"
+
+jobs:
+  validate-paper119:
+    runs-on: ubuntu-latest
+    env:
+      PAPER119_CANONICAL_PDF: paper/main.pdf
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Compile Python entry points
+        run: python -m compileall -q src scripts external_validation/runner
+
+      - name: Audit planner-edge policy quality
+        run: python scripts/audit_planner_edge_policy.py
+
+      - name: Audit failure-memory adaptation
+        run: python scripts/audit_failure_memory_adaptation.py
+
+      - name: Build local model release card
+        run: python scripts/build_local_model_release.py
+
+      - name: Audit external runner harness
+        run: python scripts/audit_external_runner_harness.py
+
+      - name: Audit external backend contract
+        run: python scripts/audit_external_backend_contract.py
+
+      - name: Audit ManiSkill reference backend readiness
+        run: python scripts/audit_maniskill_backend_readiness.py
+
+      - name: Audit ManiSkill reference collection preflight
+        run: python scripts/audit_maniskill_reference_collection_preflight.py
+
+      - name: Audit external collection readiness
+        run: python scripts/audit_external_collection_readiness.py
+
+      - name: Build external backend integration packet
+        run: python scripts/build_external_backend_integration_packet.py
+
+      - name: Self-test external backend integration packet
+        run: python scripts/self_test_external_backend_integration_packet.py
+
+      - name: Self-test external backend contract
+        run: python scripts/self_test_external_backend_contract.py
+
+      - name: Audit external fidelity acceptance
+        run: python scripts/audit_external_fidelity_acceptance.py
+
+      - name: Self-test external fidelity acceptance
+        run: python scripts/self_test_external_fidelity_acceptance.py
+
+      - name: Self-test external runner backend path
+        run: python scripts/self_test_external_runner_backend.py
+
+      - name: Self-test external collection preflight
+        run: python scripts/self_test_external_collection_preflight.py
+
+      - name: Audit external pilot smoke
+        run: python scripts/audit_external_pilot_smoke.py
+
+      - name: Build external pilot smoke packet
+        run: python scripts/build_external_pilot_smoke_packet.py
+
+      - name: Audit ManiSkill render-video preflight
+        run: python scripts/audit_maniskill_render_video_preflight.py --timeout-seconds 30 --max-envs 4 --profile-matrix --profile-matrix-max-envs 1
+
+      - name: Audit ManiSkill pilot runtime liveness
+        run: python scripts/audit_maniskill_pilot_runtime_liveness.py
+
+      - name: Audit external evidence preflight
+        run: python scripts/audit_external_evidence_preflight.py
+
+      - name: Self-test external evidence preflight
+        run: python scripts/self_test_external_evidence_preflight.py
+
+      - name: Self-test external config evidence
+        run: python scripts/self_test_external_config_evidence.py
+
+      - name: Build external baseline contract
+        run: python scripts/build_external_baseline_contract.py
+
+      - name: Self-test external baseline contract
+        run: python scripts/self_test_external_baseline_contract.py
+
+      - name: Self-test external adapter evidence
+        run: python scripts/self_test_external_adapter_evidence.py
+
+      - name: Build external method implementation packet
+        run: python scripts/build_external_method_implementation_packet.py
+
+      - name: Self-test external method implementation packet
+        run: python scripts/self_test_external_method_implementation_packet.py
+
+      - name: Materialize external method config candidates
+        run: python scripts/materialize_external_method_configs.py
+
+      - name: Self-test external method config materialization
+        run: python scripts/self_test_external_method_config_materialization.py
+
+      - name: Plan external config materialization
+        run: python scripts/materialize_external_configs.py
+
+      - name: Self-test external config materialization
+        run: python scripts/self_test_external_config_materialization.py
+
+      - name: Build external config manifest packet
+        run: python scripts/build_external_config_manifest_packet.py
+
+      - name: Self-test external config manifest packet
+        run: python scripts/self_test_external_config_manifest_packet.py
+
+      - name: Build external analysis plan
+        run: python scripts/build_external_analysis_plan.py
+
+      - name: Probe external platform environment
+        run: python scripts/probe_external_platform.py
+
+      - name: Probe ManiSkill task bindings
+        run: python scripts/probe_maniskill_task_bindings.py
+
+      - name: Probe ManiSkill environment smoke
+        run: python scripts/probe_maniskill_env_smoke.py
+
+      - name: Probe ManiSkill fidelity metadata
+        run: python scripts/probe_maniskill_fidelity_metadata.py
+
+      - name: Build ManiSkill render machine qualification
+        run: python scripts/build_maniskill_render_machine_qualification.py
+
+      - name: Build ManiSkill render host qualification brief
+        run: python scripts/build_maniskill_render_host_qualification_brief.py
+
+      - name: Self-test ManiSkill render machine qualification
+        run: python scripts/self_test_maniskill_render_machine_qualification.py
+
+      - name: Build external platform onboarding
+        run: python scripts/build_external_platform_onboarding.py
+
+      - name: Build external fidelity provenance packet
+        run: python scripts/build_external_fidelity_provenance_packet.py
+
+      - name: Self-test external fidelity provenance packet
+        run: python scripts/self_test_external_fidelity_provenance_packet.py
+
+      - name: Build external fidelity acceptance draft
+        run: python scripts/build_external_fidelity_acceptance_draft.py
+
+      - name: Plan fidelity acceptance materialization
+        run: python scripts/materialize_fidelity_acceptance.py
+
+      - name: Self-test fidelity acceptance materializer
+        run: python scripts/self_test_fidelity_acceptance_materializer.py
+
+      - name: Audit external release package
+        run: python scripts/audit_external_release_package.py
+
+      - name: Self-test external manifest builder
+        run: python scripts/self_test_external_manifest_builder.py
+
+      - name: Validate external rollouts
+        run: python scripts/validate_external_rollouts.py --write-results
+
+      - name: Audit external pairing integrity
+        run: python scripts/audit_external_pairing_integrity.py
+
+      - name: Audit external evidence
+        run: python scripts/audit_external_evidence.py
+
+      - name: Build external rollout evidence packet
+        run: python scripts/build_external_rollout_evidence_packet.py
+
+      - name: Self-test external rollout evidence packet
+        run: python scripts/self_test_external_rollout_evidence_packet.py
+
+      - name: Build external ablation collection packet
+        run: python scripts/build_external_ablation_collection_packet.py
+
+      - name: Self-test external ablation collection packet
+        run: python scripts/self_test_external_ablation_collection_packet.py
+
+      - name: Build external evidence intake ledger
+        run: python scripts/build_external_evidence_intake_ledger.py
+
+      - name: Build external operator return package contract
+        run: python scripts/build_external_operator_return_package_contract.py
+
+      - name: Self-test external evidence intake ledger
+        run: python scripts/self_test_external_evidence_intake_ledger.py
+
+      - name: Build external precollection manifest draft
+        run: python scripts/build_external_precollection_manifest_draft.py
+
+      - name: Self-test external precollection manifest draft
+        run: python scripts/self_test_external_precollection_manifest_draft.py
+
+      - name: Build external precollection freeze receipt
+        run: python scripts/build_external_precollection_freeze_receipt.py
+
+      - name: Self-test external precollection freeze receipt
+        run: python scripts/self_test_external_precollection_freeze_receipt.py
+
+      - name: Build external postcollection evidence seal
+        run: python scripts/build_external_postcollection_evidence_seal.py
+
+      - name: Self-test external postcollection evidence seal
+        run: python scripts/self_test_external_postcollection_evidence_seal.py
+
+      - name: Audit external postcollection seal consistency
+        run: python scripts/audit_external_postcollection_seal_consistency.py
+
+      - name: Self-test external postcollection seal consistency
+        run: python scripts/self_test_external_postcollection_seal_consistency.py
+
+      - name: Build external acquisition packet
+        run: python scripts/build_external_acquisition_packet.py
+
+      - name: Self-test external acquisition packet
+        run: python scripts/self_test_external_acquisition_packet.py
+
+      - name: Build external evidence closure brief
+        run: python scripts/build_external_evidence_closure_brief.py
+
+      - name: Self-test external evidence closure brief
+        run: python scripts/self_test_external_evidence_closure_brief.py
+
+      - name: Build external operator packet
+        run: python scripts/build_external_operator_packet.py
+
+      - name: Build external collection job packet
+        run: python scripts/build_external_collection_job_packet.py
+
+      - name: Self-test external collection job packet
+        run: python scripts/self_test_external_collection_job_packet.py
+
+      - name: Build external collection machine bootstrap
+        run: python scripts/build_external_collection_machine_bootstrap.py
+
+      - name: Self-test external collection machine bootstrap
+        run: python scripts/self_test_external_collection_machine_bootstrap.py
+
+      - name: Build independent validation launch ticket
+        run: python scripts/build_independent_validation_launch_ticket.py
+
+      - name: Build external operator handoff bundle
+        run: python scripts/build_external_operator_handoff_bundle.py
+
+      - name: Self-test external operator handoff bundle
+        run: python scripts/self_test_external_operator_handoff_bundle.py
+
+      - name: Build external operator release bundle plan
+        run: python scripts/build_external_operator_release_bundle.py
+
+      - name: Self-test external operator release bundle
+        run: python scripts/self_test_external_operator_release_bundle.py
+
+      - name: Self-test external release package
+        run: python scripts/self_test_external_release_package.py
+
+      - name: Self-test external pairing integrity
+        run: python scripts/self_test_external_pairing_integrity.py
+
+      - name: Self-test external rollout validator
+        run: python scripts/self_test_external_rollout_validator.py
+
+      - name: Self-test external evidence pipeline
+        run: python scripts/self_test_external_evidence_pipeline.py
+
+      - name: Audit external execution readiness
+        run: python scripts/audit_external_execution_readiness.py
+
+      - name: Self-test external execution readiness
+        run: python scripts/self_test_external_execution_readiness.py
+
+      - name: Audit claim boundary before readiness gap
+        run: python scripts/audit_claim_boundary.py
+
+      - name: Audit submission readiness gap
+        run: python scripts/audit_submission_readiness_gap.py
+
+      - name: Build reviewer response packet
+        run: python scripts/build_reviewer_response_packet.py
+
+      - name: Build Haonan/Yilun send-ready outreach
+        run: python scripts/build_haonan_yilun_send_ready_outreach.py
+
+      - name: Audit visible contribution docs
+        run: python scripts/audit_visible_contribution.py
+
+      - name: Audit claim boundary after visible docs
+        run: python scripts/audit_claim_boundary.py
+
+      - name: Validate submission artifacts
+        run: python scripts/validate_submission_artifacts.py
+
+      - name: Validate outreach artifacts
+        run: python scripts/validate_outreach_artifacts.py

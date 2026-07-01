@@ -1,0 +1,115 @@
+# External Evidence Audit
+
+Submission ready: `false`.
+Manifest: `C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\external_validation\manifest.json`.
+
+## Blocking Failures
+
+- `manifest_exists`: external_validation/manifest.json is missing
+- `external_fidelity_acceptance_ready`: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'
+- `external_adapter_contract_evidence_passed`: passed=False, adapters=0
+- `external_config_evidence_passed`: passed=False, configs=0
+- `manifest_version`: version=None
+- `manifest_declares_log_schema`: log_schema=''
+- `validation_route`: route='', counts={'real_robot': 0, 'high_fidelity_sim': 0, 'mixed': 0}
+- `shared_skill_library`: shared_skill_library=None
+- `same_initial_states`: same_initial_states=None
+- `same_observation_interface`: same_observation_interface=None
+- `same_compute_budget`: same_compute_budget=None
+- `paired_resets`: paired_resets=None
+- `valid_task_families`: invalid=[], families=[]
+- `episodes_per_method`: weak=[]
+- `episode_log_schema`: no task logs declared
+- `task_video_dirs`: missing=[]
+- `required_methods`: missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'oracle_basin_composer', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen']
+- `independent_method_implementations`: missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen']
+- `external_success_margin`: value=None, threshold=0.05
+- `external_utility_margin`: value=None, threshold=0.08
+- `paired_win_rate`: value=None, threshold=0.7
+- `fixed_risk_breach`: value=None, threshold=0.02
+- `fixed_risk_coverage`: value=None, threshold=0.55
+- `positive_task_family_coverage`: positive=0, total=0
+- `external_rollout_metrics_passed`: passed=False, episodes=0
+- `external_rollout_confidence_gates_passed`: version=None, all_primary=None, missing=['external_success_margin', 'external_utility_margin', 'fixed_risk_breach', 'fixed_risk_coverage', 'paired_win_rate'], failing=[], positive_task_gate=None
+- `external_pairing_integrity_ready`: pairing_ready=False, blocking_missing_count=1
+- `external_release_package_ready`: release_package_ready=False, blocking_missing_count=1
+- `manifest_metrics_match_rollout`: external_success_margin: manifest=None, rollout=None; external_utility_margin: manifest=None, rollout=None; paired_win_rate: manifest=None, rollout=None; fixed_risk_breach: manifest=None, rollout=None
+- `oracle_reported`: oracle_reported=None
+- `oracle_boundary`: oracle_stronger_or_saturated_explained=None
+- `external_ablations`: missing=['basin_overlap', 'barrier_height', 'descent_continuity', 'risk_calibration', 'seam_repair']
+- `release_code`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+- `release_configs`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+- `release_logs`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+- `release_videos`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+- `release_checkpoints`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+
+## All Checks
+
+- `fail` `manifest_exists`: external_validation/manifest.json is missing
+- `pass` `template_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\external_validation\manifest_template.json
+- `pass` `log_schema_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\external_validation\log_schema_v1.json
+- `pass` `rollout_validator_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\scripts\validate_external_rollouts.py
+- `pass` `external_rollout_metrics_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\results\external_rollout_metrics.json
+- `pass` `external_rollout_metrics_version`: version='external_rollout_metrics_v1'
+- `pass` `fidelity_acceptance_audit_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\results\external_fidelity_acceptance_audit.json
+- `pass` `fidelity_acceptance_audit_version`: version='external_fidelity_acceptance_audit_v1'
+- `pass` `fidelity_acceptance_contract_passed`: passed=True
+- `fail` `external_fidelity_acceptance_ready`: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'
+- `pass` `blind_eval_audit_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\results\external_blind_eval_audit.json
+- `pass` `blind_eval_audit_version`: version='external_blind_eval_plan_v1'
+- `pass` `blind_eval_plan_passed`: passed=True
+- `pass` `blind_eval_no_method_leak`: blinded operator sheet checked for method-name leakage
+- `pass` `baseline_contract_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\results\external_baseline_contract_audit.json
+- `pass` `baseline_contract_version`: version='external_baseline_contract_audit_v1'
+- `pass` `baseline_contract_is_not_evidence`: not_external_evidence=True
+- `pass` `adapter_scaffold_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\results\external_adapter_scaffold_audit.json
+- `pass` `adapter_scaffold_version`: version='external_adapter_scaffold_audit_v1'
+- `pass` `adapter_scaffold_is_not_evidence`: not_external_evidence=True
+- `pass` `adapter_contract_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\results\external_adapter_contract_audit.json
+- `pass` `adapter_contract_version`: version='external_adapter_contract_audit_v1'
+- `pass` `adapter_contract_passed`: passed=True, adapters=11
+- `pass` `adapter_contract_is_not_evidence`: not_external_evidence=True
+- `pass` `adapter_contract_evidence_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\results\external_adapter_contract_evidence_audit.json
+- `fail` `external_adapter_contract_evidence_passed`: passed=False, adapters=0
+- `pass` `config_schema_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\external_validation\config_schema_v1.json
+- `pass` `config_template_audit_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\results\external_config_template_audit.json
+- `pass` `config_template_audit_version`: version='external_config_template_audit_v1'
+- `pass` `config_template_audit_passed`: passed=True
+- `pass` `config_template_audit_not_evidence`: not_external_evidence=True
+- `pass` `config_evidence_audit_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\results\external_config_evidence_audit.json
+- `fail` `external_config_evidence_passed`: passed=False, configs=0
+- `fail` `manifest_version`: version=None
+- `fail` `manifest_declares_log_schema`: log_schema=''
+- `fail` `validation_route`: route='', counts={'real_robot': 0, 'high_fidelity_sim': 0, 'mixed': 0}
+- `fail` `shared_skill_library`: shared_skill_library=None
+- `fail` `same_initial_states`: same_initial_states=None
+- `fail` `same_observation_interface`: same_observation_interface=None
+- `fail` `same_compute_budget`: same_compute_budget=None
+- `fail` `paired_resets`: paired_resets=None
+- `fail` `valid_task_families`: invalid=[], families=[]
+- `fail` `episodes_per_method`: weak=[]
+- `fail` `episode_log_schema`: no task logs declared
+- `fail` `task_video_dirs`: missing=[]
+- `fail` `required_methods`: missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'oracle_basin_composer', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen']
+- `fail` `independent_method_implementations`: missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen']
+- `fail` `external_success_margin`: value=None, threshold=0.05
+- `fail` `external_utility_margin`: value=None, threshold=0.08
+- `fail` `paired_win_rate`: value=None, threshold=0.7
+- `fail` `fixed_risk_breach`: value=None, threshold=0.02
+- `fail` `fixed_risk_coverage`: value=None, threshold=0.55
+- `fail` `positive_task_family_coverage`: positive=0, total=0
+- `fail` `external_rollout_metrics_passed`: passed=False, episodes=0
+- `fail` `external_rollout_confidence_gates_passed`: version=None, all_primary=None, missing=['external_success_margin', 'external_utility_margin', 'fixed_risk_breach', 'fixed_risk_coverage', 'paired_win_rate'], failing=[], positive_task_gate=None
+- `pass` `external_pairing_integrity_audit_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\results\external_pairing_integrity_audit.json
+- `fail` `external_pairing_integrity_ready`: pairing_ready=False, blocking_missing_count=1
+- `pass` `external_release_package_audit_exists`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\results\external_release_package_audit.json
+- `fail` `external_release_package_ready`: release_package_ready=False, blocking_missing_count=1
+- `fail` `manifest_metrics_match_rollout`: external_success_margin: manifest=None, rollout=None; external_utility_margin: manifest=None, rollout=None; paired_win_rate: manifest=None, rollout=None; fixed_risk_breach: manifest=None, rollout=None
+- `fail` `oracle_reported`: oracle_reported=None
+- `fail` `oracle_boundary`: oracle_stronger_or_saturated_explained=None
+- `fail` `external_ablations`: missing=['basin_overlap', 'barrier_height', 'descent_continuity', 'risk_calibration', 'seam_repair']
+- `fail` `release_code`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+- `fail` `release_configs`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+- `fail` `release_logs`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+- `fail` `release_videos`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]
+- `fail` `release_checkpoints`: entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]

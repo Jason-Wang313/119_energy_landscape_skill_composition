@@ -1,0 +1,455 @@
+{
+  "backend_progress_stages": [
+    {
+      "env_id": "PegInsertionSide-v1",
+      "scene_id": "peg_place_regrasp_reset_000",
+      "seed": 0,
+      "stage": "reset_scene_begin",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "env_id": "PegInsertionSide-v1",
+      "stage": "ensure_env_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "env_id": "PegInsertionSide-v1",
+      "stage": "import_mani_skill_start"
+    },
+    {
+      "env_id": "PegInsertionSide-v1",
+      "stage": "import_mani_skill_done"
+    },
+    {
+      "env_id": "PegInsertionSide-v1",
+      "render_backend": "cpu",
+      "render_height": 128,
+      "render_width": 128,
+      "shader_pack": "minimal",
+      "stage": "make_env_start"
+    },
+    {
+      "env_id": "PegInsertionSide-v1",
+      "stage": "make_env_done",
+      "used_render_kwargs": true
+    },
+    {
+      "env_id": "PegInsertionSide-v1",
+      "stage": "ensure_env_done",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "env_id": "PegInsertionSide-v1",
+      "seed": 0,
+      "stage": "env_reset_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "env_id": "PegInsertionSide-v1",
+      "info_keys": [
+        "elapsed_steps",
+        "peg_head_pos_at_hole",
+        "reconfigure",
+        "success"
+      ],
+      "seed": 0,
+      "stage": "env_reset_done",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "env_id": "PegInsertionSide-v1",
+      "stage": "initial_video_frame_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "env_id": "PegInsertionSide-v1",
+      "frame_count": 0,
+      "render_attempted": true,
+      "render_error": "RuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "stage": "initial_video_frame_done",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "env_id": "PegInsertionSide-v1",
+      "stage": "reset_scene_return",
+      "task_family": "peg_place_regrasp"
+    }
+  ],
+  "blocking_missing": [
+    "bounded ManiSkill reference runner reached record_video_start, but the official video guard rejected the diagnostic fallback sidecar before any JSONL row could be written; render-backed RGB video remains unavailable, so use an accepted GPU/render machine or fix the renderer before official collection"
+  ],
+  "checks": [
+    {
+      "detail": "the guard writes only a liveness report and quarantined pilot_runtime_guard outputs",
+      "name": "runtime_guard_is_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "log_dir=external_validation/pilot_runtime_guard/logs, video_dir=external_validation/pilot_runtime_guard/videos",
+      "name": "quarantine_paths_are_not_official_evidence",
+      "passed": true
+    },
+    {
+      "detail": "timeout_seconds=60, timed_out=False, returncode=1",
+      "name": "bounded_runner_subprocess_exercised",
+      "passed": true
+    },
+    {
+      "detail": "last_progress_stage='record_video_start'",
+      "name": "collection_progress_markers_recorded",
+      "passed": true
+    },
+    {
+      "detail": "last_progress_stage='record_video_start', last_backend_progress_stage='reset_scene_return'",
+      "name": "backend_reset_substage_markers_recorded",
+      "passed": true
+    },
+    {
+      "detail": "pilot_runtime_ready=False",
+      "name": "timeout_or_result_recorded_as_readiness_state",
+      "passed": true
+    },
+    {
+      "detail": "records=0, videos=0, schema_errors=0",
+      "name": "ready_requires_schema_valid_records_and_videos",
+      "passed": true
+    },
+    {
+      "detail": "runner_io_ready=False, diagnostic_fallbacks=1",
+      "name": "runner_io_ready_allows_only_quarantined_diagnostic_fallback",
+      "passed": true
+    },
+    {
+      "detail": "diagnostic_sidecar_rejected_before_jsonl_write=True, records=0, returncode=1",
+      "name": "official_guard_rejects_diagnostic_before_jsonl_write",
+      "passed": true
+    },
+    {
+      "detail": "diagnostic_sidecar_paths_quarantined=True, diagnostic_fallbacks=1",
+      "name": "diagnostic_rejection_paths_are_quarantined",
+      "passed": true
+    },
+    {
+      "detail": "render_video_ready=False, pilot_runtime_ready=False, diagnostic_fallbacks=1",
+      "name": "diagnostic_fallback_does_not_mark_render_ready",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json remains absent",
+      "name": "no_real_manifest_written",
+      "passed": true
+    },
+    {
+      "detail": "triage_status=RESET_SCENE_TIMEOUT_TRIAGE_NOT_APPLICABLE, strict_external_evidence_ready=False",
+      "name": "reset_timeout_triage_is_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "reset_timeout=False, task_family='peg_place_regrasp', method='energy_compatibility_heuristic', env_id='PegInsertionSide-v1', backend_stage='reset_scene_return'",
+      "name": "reset_timeout_triage_context_recorded",
+      "passed": true
+    },
+    {
+      "detail": "reset_timeout=False, actions=7",
+      "name": "reset_timeout_operator_actions_present",
+      "passed": true
+    }
+  ],
+  "collection_progress_stages": [
+    {
+      "max_rows": 1,
+      "rows": 1,
+      "stage": "rows_loaded"
+    },
+    {
+      "backend_module": "external_validation/runner/maniskill_reference_backend.py",
+      "stage": "backend_create_start"
+    },
+    {
+      "stage": "backend_created"
+    },
+    {
+      "stage": "backend_contract_validated"
+    },
+    {
+      "platform_name": "ManiSkill-SAPIEN-reference-backend",
+      "platform_type": "high_fidelity_sim",
+      "stage": "platform_provenance_loaded"
+    },
+    {
+      "method_alias": "method_05",
+      "row_index": 1,
+      "scene_id": "peg_place_regrasp_reset_000",
+      "stage": "row_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "row_index": 1,
+      "stage": "load_task_config_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "row_index": 1,
+      "stage": "load_task_config_done",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "reset_scene_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "reset_scene_done",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "capture_observation_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "capture_observation_done",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "terminal_samples_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "samples": 8,
+      "stage": "terminal_samples_done",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "run_method_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "run_method_done",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "execute_skill_pair_start",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "execute_skill_pair_done",
+      "task_family": "peg_place_regrasp"
+    },
+    {
+      "method": "energy_compatibility_heuristic",
+      "row_index": 1,
+      "stage": "record_video_start",
+      "task_family": "peg_place_regrasp"
+    }
+  ],
+  "command": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\python.exe -u external_validation/runner/real_collection_runner.py --backend-module external_validation/runner/maniskill_reference_backend.py --task-config-dir external_validation/configs --output-log-dir external_validation/pilot_runtime_guard/logs --video-dir external_validation/pilot_runtime_guard/videos --run-id paper119_pilot_runtime_guard_local --unsealed-alias-map --max-rows 1 --force",
+  "diagnostic_sidecar_paths_quarantined": true,
+  "diagnostic_sidecar_rejected_before_jsonl_write": true,
+  "diagnostic_video_fallback_files": [],
+  "diagnostic_video_fallbacks": [
+    "external_validation/pilot_runtime_guard/videos/peg_place_regrasp/paper119_blind_peg_place_regrasp_r000_method_05.4D84DD563A0C.staging.mp4.diagnostic.json"
+  ],
+  "failure_summary": "official video guard rejected diagnostic fallback sidecar before JSONL write after progress stage record_video_start",
+  "last_backend_progress_stage": "reset_scene_return",
+  "last_progress_stage": "record_video_start",
+  "log_dir": "external_validation/pilot_runtime_guard/logs",
+  "log_files": [],
+  "max_rows": 1,
+  "not_external_evidence": true,
+  "official_video_guard_blocked_diagnostic_fallback": true,
+  "passed": true,
+  "pilot_runtime_ready": false,
+  "readiness_state": "PILOT_RUNTIME_NOT_READY",
+  "records_observed": 0,
+  "render_backend": "cpu",
+  "render_height": 128,
+  "render_video_ready": false,
+  "render_width": 128,
+  "reported_diagnostic_sidecars": [
+    "external_validation/pilot_runtime_guard/videos/peg_place_regrasp/paper119_blind_peg_place_regrasp_r000_method_05.4D84DD563A0C.staging.mp4.diagnostic.json"
+  ],
+  "reset_timeout_triage": {
+    "accepted_task_binding_ready": false,
+    "backend_progress_stages": [
+      {
+        "env_id": "PegInsertionSide-v1",
+        "scene_id": "peg_place_regrasp_reset_000",
+        "seed": 0,
+        "stage": "reset_scene_begin",
+        "task_family": "peg_place_regrasp"
+      },
+      {
+        "env_id": "PegInsertionSide-v1",
+        "stage": "ensure_env_start",
+        "task_family": "peg_place_regrasp"
+      },
+      {
+        "env_id": "PegInsertionSide-v1",
+        "stage": "import_mani_skill_start"
+      },
+      {
+        "env_id": "PegInsertionSide-v1",
+        "stage": "import_mani_skill_done"
+      },
+      {
+        "env_id": "PegInsertionSide-v1",
+        "render_backend": "cpu",
+        "render_height": 128,
+        "render_width": 128,
+        "shader_pack": "minimal",
+        "stage": "make_env_start"
+      },
+      {
+        "env_id": "PegInsertionSide-v1",
+        "stage": "make_env_done",
+        "used_render_kwargs": true
+      },
+      {
+        "env_id": "PegInsertionSide-v1",
+        "stage": "ensure_env_done",
+        "task_family": "peg_place_regrasp"
+      },
+      {
+        "env_id": "PegInsertionSide-v1",
+        "seed": 0,
+        "stage": "env_reset_start",
+        "task_family": "peg_place_regrasp"
+      },
+      {
+        "env_id": "PegInsertionSide-v1",
+        "info_keys": [
+          "elapsed_steps",
+          "peg_head_pos_at_hole",
+          "reconfigure",
+          "success"
+        ],
+        "seed": 0,
+        "stage": "env_reset_done",
+        "task_family": "peg_place_regrasp"
+      },
+      {
+        "env_id": "PegInsertionSide-v1",
+        "stage": "initial_video_frame_start",
+        "task_family": "peg_place_regrasp"
+      },
+      {
+        "env_id": "PegInsertionSide-v1",
+        "frame_count": 0,
+        "render_attempted": true,
+        "render_error": "RuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+        "stage": "initial_video_frame_done",
+        "task_family": "peg_place_regrasp"
+      },
+      {
+        "env_id": "PegInsertionSide-v1",
+        "stage": "reset_scene_return",
+        "task_family": "peg_place_regrasp"
+      }
+    ],
+    "binding_strength": "direct_contact_candidate",
+    "blind_run_id": "paper119_blind_peg_place_regrasp_r000_method_05",
+    "compute_budget": {
+      "same_for_all_non_oracle_methods": true,
+      "simulator_query_budget": 4096,
+      "wall_clock_seconds": 120
+    },
+    "config_hash": "A731AFA16ED0ECD963A053C84EA0421363B8340EF8EA92F87D21F6F7099E5501",
+    "config_path": "external_validation/configs/peg_place_regrasp.json",
+    "evidence_boundary": "This triage report is a pre-collection work order only. It cannot satisfy strict external evidence, cannot write external_validation/manifest.json, and cannot promote quarantined pilot outputs.",
+    "expected_log_jsonl": "external_validation/logs/peg_place_regrasp.jsonl",
+    "expected_video_path": "external_validation/videos/peg_place_regrasp/paper119_blind_peg_place_regrasp_r000_method_05.mp4",
+    "failure_summary": "official video guard rejected diagnostic fallback sidecar before JSONL write after progress stage record_video_start",
+    "fixed_risk_budget": 0.15,
+    "gate_commands": [
+      "python scripts\\audit_maniskill_backend_readiness.py",
+      "python scripts\\audit_maniskill_render_video_preflight.py --profile-matrix --timeout-diagnosis-seconds 30",
+      "python scripts\\build_maniskill_render_machine_qualification.py",
+      "python scripts\\audit_maniskill_reference_collection_preflight.py",
+      "python scripts\\audit_external_collection_readiness.py --backend-module external_validation\\runner\\maniskill_reference_backend.py --unsealed-alias-map --run-id maniskill_sapien_reference_preflight_protocol_v1"
+    ],
+    "last_backend_progress_stage": "reset_scene_return",
+    "last_progress_stage": "record_video_start",
+    "method_alias": "method_05",
+    "method_alias_hash": "B74ADC46AD6560CD99B6E6B45B4F2A55E8A5277F8D502EF087F9D25D5A41C213",
+    "method_name": "energy_compatibility_heuristic",
+    "not_external_evidence": true,
+    "observation_interface": {
+      "camera_logging_required": true,
+      "contact_or_force_logging_required": true,
+      "state_logging_required": true
+    },
+    "operator_next_actions": [
+      "Rerun the liveness audit on the exact candidate collection machine with the intended render backend, shader pack, and timeout, and keep outputs under external_validation/pilot_runtime_guard only.",
+      "Run python scripts\\audit_maniskill_render_video_preflight.py --profile-matrix --timeout-diagnosis-seconds 30 before retrying official collection for peg_place_regrasp/PegInsertionSide-v1/energy_compatibility_heuristic.",
+      "Run python scripts\\build_maniskill_render_machine_qualification.py and do not collect official evidence until the exact machine is qualified for render-backed RGB MP4 export and pilot liveness.",
+      "Inspect the bound task config, primary_env_id, installed ManiSkill assets, reset seed, and SAPIEN renderer logs for the reset-scene target peg_place_regrasp/PegInsertionSide-v1/energy_compatibility_heuristic.",
+      "Use last_backend_progress_stage to decide whether the next fix belongs to import/package setup, gym.make construction, env.reset/assets, or initial render capture.",
+      "If reset still hangs, replace or rebind the task in external_validation/fidelity_acceptance.json only after independent operator signoff, then rerun collection readiness before any official rollout.",
+      "Do not promote quarantined pilot logs, diagnostic videos, fallback sidecars, or partial reset attempts into external_validation/manifest.json."
+    ],
+    "paired_reset_count": 30,
+    "pilot_runtime_ready": false,
+    "primary_env_id": "PegInsertionSide-v1",
+    "primary_route": "maniskill_sapien_primary",
+    "render_backend": "cpu",
+    "render_height": 128,
+    "render_video_ready": false,
+    "render_width": 128,
+    "requires_operator_fidelity_acceptance": true,
+    "reset_protocol": {
+      "initial_state_hash_required": true,
+      "paired_resets": true,
+      "reset_count": 30,
+      "scene_id_template": "peg_place_regrasp_reset_{index:03d}"
+    },
+    "reset_timeout": false,
+    "row_index": 1,
+    "runner_io_ready": false,
+    "scene_id": "peg_place_regrasp_reset_000",
+    "seam_under_test": "terminal peg pose must lie inside the next insertion or regrasp basin",
+    "seed": "0",
+    "shader_pack": "minimal",
+    "skill_i": "place_peg_on_fixture",
+    "skill_j": "regrasp_for_insertion",
+    "strict_external_evidence_ready": false,
+    "task_family": "peg_place_regrasp",
+    "timed_out": false,
+    "timeout_seconds": 60,
+    "triage_status": "RESET_SCENE_TIMEOUT_TRIAGE_NOT_APPLICABLE",
+    "version": "maniskill_pilot_reset_timeout_triage_v1"
+  },
+  "reset_timeout_triage_json": "results/maniskill_pilot_reset_timeout_triage.json",
+  "reset_timeout_triage_md": "results/maniskill_pilot_reset_timeout_triage.md",
+  "returncode": 1,
+  "run_id": "paper119_pilot_runtime_guard_local",
+  "runner_io_ready": false,
+  "schema_errors": [],
+  "shader_pack": "minimal",
+  "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\nbackend produced diagnostic fallback video sidecar, which cannot be official evidence: C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\pilot_runtime_guard\\videos\\peg_place_regrasp\\paper119_blind_peg_place_regrasp_r000_method_05.4D84DD563A0C.staging.mp4.diagnostic.json\n",
+  "stdout_tail": "grasp\"}\nPAPER119_MANISKILL_BACKEND_STAGE {\"env_id\": \"PegInsertionSide-v1\", \"frame_count\": 0, \"render_attempted\": true, \"render_error\": \"RuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory\", \"stage\": \"initial_video_frame_done\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_MANISKILL_BACKEND_STAGE {\"env_id\": \"PegInsertionSide-v1\", \"stage\": \"reset_scene_return\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"reset_scene_done\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"capture_observation_start\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"capture_observation_done\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"terminal_samples_start\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"samples\": 8, \"stage\": \"terminal_samples_done\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"run_method_start\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"run_method_done\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"execute_skill_pair_start\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"execute_skill_pair_done\", \"task_family\": \"peg_place_regrasp\"}\nPAPER119_COLLECTION_STAGE {\"method\": \"energy_compatibility_heuristic\", \"row_index\": 1, \"stage\": \"record_video_start\", \"task_family\": \"peg_place_regrasp\"}\n",
+  "strict_external_evidence_ready": false,
+  "timed_out": false,
+  "timeout_seconds": 60,
+  "version": "maniskill_pilot_runtime_liveness_audit_v1",
+  "video_dir": "external_validation/pilot_runtime_guard/videos",
+  "videos_written": 0
+}

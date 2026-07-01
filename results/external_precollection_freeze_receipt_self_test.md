@@ -1,0 +1,21 @@
+# External Precollection Freeze Receipt Self-Test
+
+Passed: `true`.
+Not evidence: `true`.
+Synthetic freeze ready: `true`.
+Missing backend rejected: `true`.
+Placeholder run rejected: `true`.
+Missing lock artifact rejected: `true`.
+Dirty checkout rejected: `true`.
+
+This self-test builds temporary precollection freeze fixtures and exercises the receipt builder directly. It proves a complete backend/config/operator/run-id/clean-checkout fixture can reach collection readiness, while missing backend selection, placeholder run identity, missing lock artifacts, and dirty checkout remain fail-closed without overwriting the real receipt or audit.
+
+## Checks
+
+- `pass` `synthetic_complete_freeze_reaches_collection_readiness`: freeze_ready=True, ready_to_collect=True, locked=42, missing=[]
+- `pass` `synthetic_ready_checks_cover_hashes_identity_and_order`: ready_checks={'receipt_is_non_evidence_and_fail_closed': True, 'core_lock_artifacts_hashed': True, 'prepared_task_configs_hashed': True, 'method_config_materialization_artifacts_hashed': True, 'candidate_method_configs_hashed': True, 'candidate_method_config_hashes_match_plan': True, 'candidate_method_configs_remain_non_evidence': True, 'backend_module_still_operator_supplied': True, 'run_identity_still_operator_supplied': True, 'operator_metadata_still_required': True, 'checkout_and_skill_hash_recorded': True, 'strict_sequence_places_receipt_before_collection': True, 'strict_sequence_places_seal_consistency_before_manifest': True, 'receipt_references_manifest_rollout_release_final_gates': True, 'source_state_preserves_external_blockers': True, 'no_real_manifest_written': True}
+- `pass` `missing_backend_selection_rejected`: freeze_ready=False, missing=['selected_backend_module'], checks={'receipt_is_non_evidence_and_fail_closed': True, 'core_lock_artifacts_hashed': True, 'prepared_task_configs_hashed': True, 'method_config_materialization_artifacts_hashed': True, 'candidate_method_configs_hashed': True, 'candidate_method_config_hashes_match_plan': True, 'candidate_method_configs_remain_non_evidence': True, 'backend_module_still_operator_supplied': True, 'run_identity_still_operator_supplied': False, 'operator_metadata_still_required': False, 'checkout_and_skill_hash_recorded': True, 'strict_sequence_places_receipt_before_collection': True, 'strict_sequence_places_seal_consistency_before_manifest': True, 'receipt_references_manifest_rollout_release_final_gates': True, 'source_state_preserves_external_blockers': False, 'no_real_manifest_written': True}
+- `pass` `placeholder_run_identity_rejected`: freeze_ready=False, run_id='paper119_external_validation_run', unsealed=False
+- `pass` `missing_lock_artifact_rejected`: missing=['external_validation/method_manifest_cutover_checklist.md'], checks={'receipt_is_non_evidence_and_fail_closed': True, 'core_lock_artifacts_hashed': False, 'prepared_task_configs_hashed': True, 'method_config_materialization_artifacts_hashed': True, 'candidate_method_configs_hashed': True, 'candidate_method_config_hashes_match_plan': True, 'candidate_method_configs_remain_non_evidence': True, 'backend_module_still_operator_supplied': False, 'run_identity_still_operator_supplied': False, 'operator_metadata_still_required': False, 'checkout_and_skill_hash_recorded': True, 'strict_sequence_places_receipt_before_collection': True, 'strict_sequence_places_seal_consistency_before_manifest': True, 'receipt_references_manifest_rollout_release_final_gates': True, 'source_state_preserves_external_blockers': False, 'no_real_manifest_written': True}
+- `pass` `dirty_checkout_rejected`: checkout={'code_commit': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'clean_checkout': False, 'dirty_status_lines': [' M synthetic_dirty_marker.py'], 'skill_library_hash': '33837112821128563B99E66688C4A2307ECD0BA5D59B6AD512EBD380C3DF3267'}
+- `pass` `real_precollection_freeze_reports_not_overwritten`: receipt_before=c0e805f70f38d08243a011764e42f786b9e7db4a00b8f72e68a18b7e6e771794, receipt_after=c0e805f70f38d08243a011764e42f786b9e7db4a00b8f72e68a18b7e6e771794, audit_before=f7608495670bf7e6d7ed0e655853fa47059769549e725c98c35f9f1374e71bf4, audit_after=f7608495670bf7e6d7ed0e655853fa47059769549e725c98c35f9f1374e71bf4

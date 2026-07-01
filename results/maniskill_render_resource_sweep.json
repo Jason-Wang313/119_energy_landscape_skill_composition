@@ -1,0 +1,418 @@
+{
+  "any_render_video_ready": false,
+  "checks": [
+    {
+      "detail": "sweep writes only quarantine outputs and audit files",
+      "name": "resource_sweep_is_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "profiles=3",
+      "name": "profiles_loaded",
+      "passed": true
+    },
+    {
+      "detail": "env_rows=[{'task_family': 'peg_place_regrasp', 'env_id': 'PegInsertionSide-v1'}]",
+      "name": "primary_env_loaded",
+      "passed": true
+    },
+    {
+      "detail": "records=3",
+      "name": "each_probe_has_terminal_status",
+      "passed": true
+    },
+    {
+      "detail": "sweep_root=external_validation/render_resource_sweep",
+      "name": "quarantine_paths_are_not_official_evidence",
+      "passed": true
+    },
+    {
+      "detail": "any_ready=False, classes=['vulkan_descriptor_pool_exhaustion']",
+      "name": "descriptor_pool_failure_classified_or_render_ready",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json remains absent",
+      "name": "no_real_manifest_written",
+      "passed": true
+    }
+  ],
+  "descriptor_pool_failure_persists_at_minimum_resolution": true,
+  "failed_checks": [],
+  "max_envs": 1,
+  "not_external_evidence": true,
+  "passed": true,
+  "record_count": 3,
+  "records": [
+    {
+      "command": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\python.exe -u -c <render_probe_code> PegInsertionSide-v1 16 16 0 C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\render_resource_sweep\\videos\\peg_place_regrasp\\PegInsertionSide-v1_render_preflight_resource_cpu_minimal_16x16.mp4 cpu minimal",
+      "env_id": "PegInsertionSide-v1",
+      "error": "vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "error_type": "RuntimeError",
+      "failure_progress_stage": "initial_render_start",
+      "height": 16,
+      "last_progress_stage": "close_done",
+      "made_env": true,
+      "mp4_ok": false,
+      "not_external_evidence": true,
+      "output_path": "external_validation/render_resource_sweep/videos/peg_place_regrasp/PegInsertionSide-v1_render_preflight_resource_cpu_minimal_16x16.mp4",
+      "parsed_marker": true,
+      "profile": "cpu/minimal/16x16",
+      "progress_stages": [
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "cpu",
+          "shader_pack": "minimal",
+          "stage": "start",
+          "time": 1782753433.696
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "cpu",
+          "shader_pack": "minimal",
+          "stage": "import_start",
+          "time": 1782753433.696
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "cpu",
+          "shader_pack": "minimal",
+          "stage": "import_done",
+          "time": 1782753457.267
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "cpu",
+          "shader_pack": "minimal",
+          "stage": "make_env_start",
+          "time": 1782753457.267
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "cpu",
+          "shader_pack": "minimal",
+          "stage": "make_env_done",
+          "time": 1782753461.603
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "cpu",
+          "shader_pack": "minimal",
+          "stage": "reset_start",
+          "time": 1782753461.603
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "cpu",
+          "shader_pack": "minimal",
+          "stage": "initial_render_start",
+          "time": 1782753462.188
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "error": "vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+          "error_type": "RuntimeError",
+          "render_backend": "cpu",
+          "shader_pack": "minimal",
+          "stage": "error",
+          "time": 1782753462.382
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "cpu",
+          "shader_pack": "minimal",
+          "stage": "close_start",
+          "time": 1782753462.382
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "cpu",
+          "shader_pack": "minimal",
+          "stage": "close_done",
+          "time": 1782753462.595
+        }
+      ],
+      "render_backend": "cpu",
+      "render_ok": false,
+      "render_video_ready": false,
+      "renderer_failure_class": "vulkan_descriptor_pool_exhaustion",
+      "reset_ok": true,
+      "resource_sweep": true,
+      "returncode": 0,
+      "seed": 0,
+      "shader_pack": "minimal",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n",
+      "stdout_tail": ":allocateDescriptorSetsUnique: ErrorOutOfPoolMemory\", \"error_type\": \"RuntimeError\", \"render_backend\": \"cpu\", \"shader_pack\": \"minimal\", \"stage\": \"error\", \"time\": 1782753462.382}\nPAPER119_RENDER_STAGE {\"env_id\": \"PegInsertionSide-v1\", \"render_backend\": \"cpu\", \"shader_pack\": \"minimal\", \"stage\": \"close_start\", \"time\": 1782753462.382}\nPAPER119_RENDER_STAGE {\"env_id\": \"PegInsertionSide-v1\", \"render_backend\": \"cpu\", \"shader_pack\": \"minimal\", \"stage\": \"close_done\", \"time\": 1782753462.595}\nPAPER119_RENDER_PREFLIGHT {\"env_id\": \"PegInsertionSide-v1\", \"error\": \"vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory\", \"error_type\": \"RuntimeError\", \"height\": 16, \"made_env\": true, \"mp4_ok\": false, \"render_backend\": \"cpu\", \"render_ok\": false, \"reset_ok\": true, \"seed\": 0, \"shader_pack\": \"minimal\", \"step_ok\": false, \"traceback_tail\": \"    return self.env.render()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\envs\\\\sapien_env.py\\\", line 1431, in render\\n    res = self.render_rgb_array()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\envs\\\\sapien_env.py\\\", line 1377, in render_rgb_array\\n    render_images = self.scene.get_human_render_camera_images(camera_name)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\envs\\\\scene.py\\\", line 1167, in get_human_render_camera_images\\n    camera.capture()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\sensors\\\\camera.py\\\", line 188, in capture\\n    self.camera.take_picture()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\structs\\\\render_camera.py\\\", line 273, in take_picture\\n    self._render_cameras[0].take_picture()\\nRuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory\", \"video_path\": \"\", \"video_size_bytes\": 0, \"width\": 16}\n",
+      "step_ok": false,
+      "task_family": "peg_place_regrasp",
+      "terminal_progress_stage": "close_done",
+      "timed_out": false,
+      "traceback_tail": "    return self.env.render()\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\envs\\sapien_env.py\", line 1431, in render\n    res = self.render_rgb_array()\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\envs\\sapien_env.py\", line 1377, in render_rgb_array\n    render_images = self.scene.get_human_render_camera_images(camera_name)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\envs\\scene.py\", line 1167, in get_human_render_camera_images\n    camera.capture()\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\sensors\\camera.py\", line 188, in capture\n    self.camera.take_picture()\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\structs\\render_camera.py\", line 273, in take_picture\n    self._render_cameras[0].take_picture()\nRuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "video_path": "",
+      "video_size_bytes": 0,
+      "width": 16
+    },
+    {
+      "command": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\python.exe -u -c <render_probe_code> PegInsertionSide-v1 16 16 0 C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\render_resource_sweep\\videos\\peg_place_regrasp\\PegInsertionSide-v1_render_preflight_resource_gpu_minimal_16x16.mp4 gpu minimal",
+      "env_id": "PegInsertionSide-v1",
+      "error": "vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "error_type": "RuntimeError",
+      "failure_progress_stage": "initial_render_start",
+      "height": 16,
+      "last_progress_stage": "close_done",
+      "made_env": true,
+      "mp4_ok": false,
+      "not_external_evidence": true,
+      "output_path": "external_validation/render_resource_sweep/videos/peg_place_regrasp/PegInsertionSide-v1_render_preflight_resource_gpu_minimal_16x16.mp4",
+      "parsed_marker": true,
+      "profile": "gpu/minimal/16x16",
+      "progress_stages": [
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "gpu",
+          "shader_pack": "minimal",
+          "stage": "start",
+          "time": 1782753465.064
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "gpu",
+          "shader_pack": "minimal",
+          "stage": "import_start",
+          "time": 1782753465.064
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "gpu",
+          "shader_pack": "minimal",
+          "stage": "import_done",
+          "time": 1782753488.058
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "gpu",
+          "shader_pack": "minimal",
+          "stage": "make_env_start",
+          "time": 1782753488.058
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "gpu",
+          "shader_pack": "minimal",
+          "stage": "make_env_done",
+          "time": 1782753492.537
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "gpu",
+          "shader_pack": "minimal",
+          "stage": "reset_start",
+          "time": 1782753492.537
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "gpu",
+          "shader_pack": "minimal",
+          "stage": "initial_render_start",
+          "time": 1782753492.896
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "error": "vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+          "error_type": "RuntimeError",
+          "render_backend": "gpu",
+          "shader_pack": "minimal",
+          "stage": "error",
+          "time": 1782753492.932
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "gpu",
+          "shader_pack": "minimal",
+          "stage": "close_start",
+          "time": 1782753492.933
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "gpu",
+          "shader_pack": "minimal",
+          "stage": "close_done",
+          "time": 1782753493.15
+        }
+      ],
+      "render_backend": "gpu",
+      "render_ok": false,
+      "render_video_ready": false,
+      "renderer_failure_class": "vulkan_descriptor_pool_exhaustion",
+      "reset_ok": true,
+      "resource_sweep": true,
+      "returncode": 0,
+      "seed": 0,
+      "shader_pack": "minimal",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-30 01:18:08,707 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stdout_tail": "::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory\", \"error_type\": \"RuntimeError\", \"render_backend\": \"gpu\", \"shader_pack\": \"minimal\", \"stage\": \"error\", \"time\": 1782753492.932}\nPAPER119_RENDER_STAGE {\"env_id\": \"PegInsertionSide-v1\", \"render_backend\": \"gpu\", \"shader_pack\": \"minimal\", \"stage\": \"close_start\", \"time\": 1782753492.933}\nPAPER119_RENDER_STAGE {\"env_id\": \"PegInsertionSide-v1\", \"render_backend\": \"gpu\", \"shader_pack\": \"minimal\", \"stage\": \"close_done\", \"time\": 1782753493.15}\nPAPER119_RENDER_PREFLIGHT {\"env_id\": \"PegInsertionSide-v1\", \"error\": \"vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory\", \"error_type\": \"RuntimeError\", \"height\": 16, \"made_env\": true, \"mp4_ok\": false, \"render_backend\": \"gpu\", \"render_ok\": false, \"reset_ok\": true, \"seed\": 0, \"shader_pack\": \"minimal\", \"step_ok\": false, \"traceback_tail\": \"    return self.env.render()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\envs\\\\sapien_env.py\\\", line 1431, in render\\n    res = self.render_rgb_array()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\envs\\\\sapien_env.py\\\", line 1377, in render_rgb_array\\n    render_images = self.scene.get_human_render_camera_images(camera_name)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\envs\\\\scene.py\\\", line 1167, in get_human_render_camera_images\\n    camera.capture()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\sensors\\\\camera.py\\\", line 188, in capture\\n    self.camera.take_picture()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\structs\\\\render_camera.py\\\", line 273, in take_picture\\n    self._render_cameras[0].take_picture()\\nRuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory\", \"video_path\": \"\", \"video_size_bytes\": 0, \"width\": 16}\n",
+      "step_ok": false,
+      "task_family": "peg_place_regrasp",
+      "terminal_progress_stage": "close_done",
+      "timed_out": false,
+      "traceback_tail": "    return self.env.render()\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\envs\\sapien_env.py\", line 1431, in render\n    res = self.render_rgb_array()\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\envs\\sapien_env.py\", line 1377, in render_rgb_array\n    render_images = self.scene.get_human_render_camera_images(camera_name)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\envs\\scene.py\", line 1167, in get_human_render_camera_images\n    camera.capture()\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\sensors\\camera.py\", line 188, in capture\n    self.camera.take_picture()\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\structs\\render_camera.py\", line 273, in take_picture\n    self._render_cameras[0].take_picture()\nRuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "video_path": "",
+      "video_size_bytes": 0,
+      "width": 16
+    },
+    {
+      "command": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\python.exe -u -c <render_probe_code> PegInsertionSide-v1 16 16 0 C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\render_resource_sweep\\videos\\peg_place_regrasp\\PegInsertionSide-v1_render_preflight_resource_sapien_cuda_minimal_16x16.mp4 sapien_cuda minimal",
+      "env_id": "PegInsertionSide-v1",
+      "error": "vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "error_type": "RuntimeError",
+      "failure_progress_stage": "initial_render_start",
+      "height": 16,
+      "last_progress_stage": "close_done",
+      "made_env": true,
+      "mp4_ok": false,
+      "not_external_evidence": true,
+      "output_path": "external_validation/render_resource_sweep/videos/peg_place_regrasp/PegInsertionSide-v1_render_preflight_resource_sapien_cuda_minimal_16x16.mp4",
+      "parsed_marker": true,
+      "profile": "sapien_cuda/minimal/16x16",
+      "progress_stages": [
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "sapien_cuda",
+          "shader_pack": "minimal",
+          "stage": "start",
+          "time": 1782753495.759
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "sapien_cuda",
+          "shader_pack": "minimal",
+          "stage": "import_start",
+          "time": 1782753495.759
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "sapien_cuda",
+          "shader_pack": "minimal",
+          "stage": "import_done",
+          "time": 1782753517.493
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "sapien_cuda",
+          "shader_pack": "minimal",
+          "stage": "make_env_start",
+          "time": 1782753517.493
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "sapien_cuda",
+          "shader_pack": "minimal",
+          "stage": "make_env_done",
+          "time": 1782753521.331
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "sapien_cuda",
+          "shader_pack": "minimal",
+          "stage": "reset_start",
+          "time": 1782753521.331
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "sapien_cuda",
+          "shader_pack": "minimal",
+          "stage": "initial_render_start",
+          "time": 1782753521.795
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "error": "vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+          "error_type": "RuntimeError",
+          "render_backend": "sapien_cuda",
+          "shader_pack": "minimal",
+          "stage": "error",
+          "time": 1782753521.828
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "sapien_cuda",
+          "shader_pack": "minimal",
+          "stage": "close_start",
+          "time": 1782753521.829
+        },
+        {
+          "env_id": "PegInsertionSide-v1",
+          "render_backend": "sapien_cuda",
+          "shader_pack": "minimal",
+          "stage": "close_done",
+          "time": 1782753522.073
+        }
+      ],
+      "render_backend": "sapien_cuda",
+      "render_ok": false,
+      "render_video_ready": false,
+      "renderer_failure_class": "vulkan_descriptor_pool_exhaustion",
+      "reset_ok": true,
+      "resource_sweep": true,
+      "returncode": 0,
+      "seed": 0,
+      "shader_pack": "minimal",
+      "stderr_tail": "C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\sapien\\wrapper\\pinocchio_model.py:299: UserWarning: pinnochio package is not installed, robotics functionalities will not be available\n  warnings.warn(\n\u001b[33;1m2026-06-30 01:18:37,910 - mani_skill  - WARNING - Requested to use render device \"sapien_cuda\", but CUDA device was not found. Falling back to \"cpu\" device. Rendering might be disabled.\u001b[0m\n",
+      "stdout_tail": "rrorOutOfPoolMemory\", \"error_type\": \"RuntimeError\", \"render_backend\": \"sapien_cuda\", \"shader_pack\": \"minimal\", \"stage\": \"error\", \"time\": 1782753521.828}\nPAPER119_RENDER_STAGE {\"env_id\": \"PegInsertionSide-v1\", \"render_backend\": \"sapien_cuda\", \"shader_pack\": \"minimal\", \"stage\": \"close_start\", \"time\": 1782753521.829}\nPAPER119_RENDER_STAGE {\"env_id\": \"PegInsertionSide-v1\", \"render_backend\": \"sapien_cuda\", \"shader_pack\": \"minimal\", \"stage\": \"close_done\", \"time\": 1782753522.073}\nPAPER119_RENDER_PREFLIGHT {\"env_id\": \"PegInsertionSide-v1\", \"error\": \"vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory\", \"error_type\": \"RuntimeError\", \"height\": 16, \"made_env\": true, \"mp4_ok\": false, \"render_backend\": \"sapien_cuda\", \"render_ok\": false, \"reset_ok\": true, \"seed\": 0, \"shader_pack\": \"minimal\", \"step_ok\": false, \"traceback_tail\": \"    return self.env.render()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\envs\\\\sapien_env.py\\\", line 1431, in render\\n    res = self.render_rgb_array()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\envs\\\\sapien_env.py\\\", line 1377, in render_rgb_array\\n    render_images = self.scene.get_human_render_camera_images(camera_name)\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\envs\\\\scene.py\\\", line 1167, in get_human_render_camera_images\\n    camera.capture()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\sensors\\\\camera.py\\\", line 188, in capture\\n    self.camera.take_picture()\\n  File \\\"C:\\\\Users\\\\wangz\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python310\\\\lib\\\\site-packages\\\\mani_skill\\\\utils\\\\structs\\\\render_camera.py\\\", line 273, in take_picture\\n    self._render_cameras[0].take_picture()\\nRuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory\", \"video_path\": \"\", \"video_size_bytes\": 0, \"width\": 16}\n",
+      "step_ok": false,
+      "task_family": "peg_place_regrasp",
+      "terminal_progress_stage": "close_done",
+      "timed_out": false,
+      "traceback_tail": "    return self.env.render()\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\envs\\sapien_env.py\", line 1431, in render\n    res = self.render_rgb_array()\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\envs\\sapien_env.py\", line 1377, in render_rgb_array\n    render_images = self.scene.get_human_render_camera_images(camera_name)\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\envs\\scene.py\", line 1167, in get_human_render_camera_images\n    camera.capture()\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\sensors\\camera.py\", line 188, in capture\n    self.camera.take_picture()\n  File \"C:\\Users\\wangz\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\mani_skill\\utils\\structs\\render_camera.py\", line 273, in take_picture\n    self._render_cameras[0].take_picture()\nRuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "video_path": "",
+      "video_size_bytes": 0,
+      "width": 16
+    }
+  ],
+  "renderer_failure_classes": [
+    "vulkan_descriptor_pool_exhaustion"
+  ],
+  "renderer_failure_stages": [
+    "initial_render_start"
+  ],
+  "strict_external_evidence_ready": false,
+  "sweep_root": "external_validation/render_resource_sweep",
+  "sweep_spec": "cpu:minimal:16x16,gpu:minimal:16x16,sapien_cuda:minimal:16x16",
+  "timeout_seconds": 45,
+  "version": "maniskill_render_resource_sweep_v1",
+  "video_dir": "external_validation/render_resource_sweep/videos",
+  "work_orders": [
+    {
+      "acceptance": "at least one accepted renderer profile writes a render-backed RGB MP4 without diagnostic fallback",
+      "command": "python scripts\\audit_maniskill_render_resource_sweep.py --timeout-seconds 45 --max-envs 1",
+      "id": "resource_min_resolution_retest",
+      "notes": "profiles=cpu/minimal/16x16, gpu/minimal/16x16, sapien_cuda/minimal/16x16; failure_classes=vulkan_descriptor_pool_exhaustion",
+      "owner": "independent_operator",
+      "status": "blocked_until_renderer_resource_path_passes"
+    },
+    {
+      "acceptance": "record exact GPU/Vulkan/SAPIEN/ManiSkill provenance for the collection machine",
+      "command": "python scripts\\probe_external_platform.py --strict",
+      "id": "accepted_machine_driver_probe",
+      "notes": "compare driver/runtime provenance against this local failing machine",
+      "owner": "independent_operator",
+      "status": "required_before_fidelity_acceptance"
+    },
+    {
+      "acceptance": "all four primary task families write render-backed MP4s on the accepted machine",
+      "command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend <accepted_backend> --shader-pack <accepted_shader_pack> --profile-matrix",
+      "id": "render_backed_video_gate",
+      "notes": "resource sweep cannot replace the four-task render preflight",
+      "owner": "jason_or_operator",
+      "status": "must_remain_enforced"
+    },
+    {
+      "acceptance": "diagnostic fallback sidecars and quarantined sweep media are absent from external_validation/manifest.json",
+      "command": "python scripts\\validate_external_rollouts.py --strict --write-results",
+      "id": "diagnostic_fallback_exclusion",
+      "notes": "sweep outputs stay under external_validation/render_resource_sweep",
+      "owner": "jason_or_operator",
+      "status": "must_remain_enforced"
+    }
+  ]
+}

@@ -1,0 +1,283 @@
+{
+  "manifest": "external_validation/local_dry_run/manifest.json",
+  "not_external_evidence": true,
+  "passed": true,
+  "schema_errors": [],
+  "source": "results/cell_metrics.csv",
+  "summary": {
+    "episodes": 20640,
+    "external_success_margin": 0.08313953488372094,
+    "external_task_families": 4,
+    "external_utility_margin": 0.23096796860465119,
+    "fixed_risk_breach": 0.0,
+    "fixed_risk_budget": 0.15,
+    "fixed_risk_coverage": 0.6098837209302326,
+    "method_summary": {
+      "barrier_certified_energy_composer_v5": {
+        "episodes": 1720,
+        "realized_seam_breach": 0.004651162790697674,
+        "seam_failure": 0.0,
+        "success": 0.8075581395348838,
+        "utility": 0.9197997372093023
+      },
+      "behavior_cloned_skill_chain": {
+        "episodes": 1720,
+        "realized_seam_breach": 1.0,
+        "seam_failure": 1.0,
+        "success": 0.375,
+        "utility": -0.22987602441860466
+      },
+      "cem_trajectory_composer": {
+        "episodes": 1720,
+        "realized_seam_breach": 1.0,
+        "seam_failure": 0.9994186046511628,
+        "success": 0.5930232558139535,
+        "utility": 0.1926603761627907
+      },
+      "diffusion_skill_stitcher": {
+        "episodes": 1720,
+        "realized_seam_breach": 1.0,
+        "seam_failure": 1.0,
+        "success": 0.5412790697674419,
+        "utility": 0.10382381802325581
+      },
+      "energy_compatibility_heuristic": {
+        "episodes": 1720,
+        "realized_seam_breach": 1.0,
+        "seam_failure": 0.8755813953488372,
+        "success": 0.6441860465116279,
+        "utility": 0.3595066941860465
+      },
+      "greedy_module_sequence": {
+        "episodes": 1720,
+        "realized_seam_breach": 1.0,
+        "seam_failure": 1.0,
+        "success": 0.3267441860465116,
+        "utility": -0.3776663523255814
+      },
+      "option_graph_planner": {
+        "episodes": 1720,
+        "realized_seam_breach": 1.0,
+        "seam_failure": 1.0,
+        "success": 0.47732558139534886,
+        "utility": -7.57476744186064e-05
+      },
+      "oracle_basin_composer": {
+        "episodes": 1720,
+        "realized_seam_breach": 0.0,
+        "seam_failure": 0.0,
+        "success": 0.8953488372093024,
+        "utility": 1.1480757040697673
+      },
+      "proposed_energy_landscape_composer_v4_1": {
+        "episodes": 1720,
+        "realized_seam_breach": 0.6656976744186046,
+        "seam_failure": 0.035465116279069765,
+        "success": 0.7244186046511628,
+        "utility": 0.6888317686046511
+      },
+      "residual_rl_composer": {
+        "episodes": 1720,
+        "realized_seam_breach": 1.0,
+        "seam_failure": 0.9866279069767442,
+        "success": 0.5854651162790697,
+        "utility": 0.22051079244186048
+      },
+      "stable_dmp_handoff": {
+        "episodes": 1720,
+        "realized_seam_breach": 0.9843023255813953,
+        "seam_failure": 0.6744186046511628,
+        "success": 0.6656976744186046,
+        "utility": 0.4503963087209302
+      },
+      "tamp_feasibility_screen": {
+        "episodes": 1720,
+        "realized_seam_breach": 0.9965116279069768,
+        "seam_failure": 0.7552325581395349,
+        "success": 0.6459302325581395,
+        "utility": 0.4004682261627907
+      }
+    },
+    "methods": [
+      "barrier_certified_energy_composer_v5",
+      "behavior_cloned_skill_chain",
+      "cem_trajectory_composer",
+      "diffusion_skill_stitcher",
+      "energy_compatibility_heuristic",
+      "greedy_module_sequence",
+      "option_graph_planner",
+      "oracle_basin_composer",
+      "proposed_energy_landscape_composer_v4_1",
+      "residual_rl_composer",
+      "stable_dmp_handoff",
+      "tamp_feasibility_screen"
+    ],
+    "paired_comparison_count": 1720,
+    "paired_win_rate": 0.8622093023255814,
+    "positive_task_families": 4,
+    "primary_method": "barrier_certified_energy_composer_v5",
+    "statistical_confidence": {
+      "accepted_proposed_episode_count": 1049,
+      "all_primary_confidence_gates_passed": true,
+      "bootstrap_replicates": 1000,
+      "bootstrap_seed": 119,
+      "confidence_level": 0.95,
+      "metrics": {
+        "external_success_margin": {
+          "bootstrap_replicates": 1000,
+          "ci_high": 0.11104651162790698,
+          "ci_low": 0.053488372093023255,
+          "confidence_level": 0.95,
+          "direction": "greater_or_equal",
+          "estimate": 0.08313953488372093,
+          "n": 1720,
+          "passed": true,
+          "threshold": 0.05
+        },
+        "external_utility_margin": {
+          "bootstrap_replicates": 1000,
+          "ci_high": 0.258358562238372,
+          "ci_low": 0.20419821783430253,
+          "confidence_level": 0.95,
+          "direction": "greater_or_equal",
+          "estimate": 0.23096796860465116,
+          "n": 1720,
+          "passed": true,
+          "threshold": 0.08
+        },
+        "fixed_risk_breach": {
+          "bootstrap_replicates": 1000,
+          "ci_high": 0.0,
+          "ci_low": 0.0,
+          "confidence_level": 0.95,
+          "direction": "less_or_equal",
+          "estimate": 0.0,
+          "n": 1049,
+          "passed": true,
+          "threshold": 0.02
+        },
+        "fixed_risk_coverage": {
+          "bootstrap_replicates": 1000,
+          "ci_high": 0.6337209302325582,
+          "ci_low": 0.5860319767441861,
+          "confidence_level": 0.95,
+          "direction": "greater_or_equal",
+          "estimate": 0.6098837209302326,
+          "n": 1720,
+          "passed": true,
+          "threshold": 0.55
+        },
+        "paired_win_rate": {
+          "bootstrap_replicates": 1000,
+          "ci_high": 0.8773255813953489,
+          "ci_low": 0.8459302325581395,
+          "confidence_level": 0.95,
+          "direction": "greater_or_equal",
+          "estimate": 0.8622093023255814,
+          "n": 1720,
+          "passed": true,
+          "threshold": 0.7
+        }
+      },
+      "paired_comparison_count": 1720,
+      "positive_task_families_gate": {
+        "direction": "greater_or_equal",
+        "estimate": 4,
+        "passed": true,
+        "threshold": 3
+      },
+      "proposed_episode_count": 1720,
+      "strongest_external_baseline": "proposed_energy_landscape_composer_v4_1",
+      "version": "external_statistical_confidence_v1"
+    },
+    "strongest_external_baseline": "proposed_energy_landscape_composer_v4_1",
+    "task_families": [
+      "cable_route_insert",
+      "door_open_navigation",
+      "drawer_to_pick_transfer",
+      "peg_place_regrasp"
+    ],
+    "task_summary": {
+      "cable_route_insert": {
+        "baseline_episodes": 430,
+        "primary_episodes": 430,
+        "primary_success": 0.8162790697674419,
+        "strongest_baseline_success": 0.7372093023255814,
+        "success_margin": 0.07906976744186056
+      },
+      "door_open_navigation": {
+        "baseline_episodes": 430,
+        "primary_episodes": 430,
+        "primary_success": 0.8069767441860465,
+        "strongest_baseline_success": 0.7302325581395349,
+        "success_margin": 0.07674418604651156
+      },
+      "drawer_to_pick_transfer": {
+        "baseline_episodes": 430,
+        "primary_episodes": 430,
+        "primary_success": 0.7976744186046512,
+        "strongest_baseline_success": 0.7162790697674418,
+        "success_margin": 0.08139534883720934
+      },
+      "peg_place_regrasp": {
+        "baseline_episodes": 430,
+        "primary_episodes": 430,
+        "primary_success": 0.8093023255813954,
+        "strongest_baseline_success": 0.713953488372093,
+        "success_margin": 0.09534883720930232
+      }
+    },
+    "version": "external_rollout_metrics_v1"
+  },
+  "threshold_checks": [
+    {
+      "message": "external_success_margin: value=0.08313953488372094, threshold=0.05",
+      "passed": true
+    },
+    {
+      "message": "external_utility_margin: value=0.23096796860465119, threshold=0.08",
+      "passed": true
+    },
+    {
+      "message": "paired_win_rate: value=0.8622093023255814, threshold=0.7",
+      "passed": true
+    },
+    {
+      "message": "fixed_risk_coverage: value=0.6098837209302326, threshold=0.55",
+      "passed": true
+    },
+    {
+      "message": "fixed_risk_breach: value=0.0, threshold=0.02",
+      "passed": true
+    },
+    {
+      "message": "positive_task_families: value=4, threshold=3",
+      "passed": true
+    },
+    {
+      "message": "external_success_margin_confidence_gate: estimate=0.08313953488372093, ci95=[0.053488372093023255, 0.11104651162790698], threshold=0.05, direction=greater_or_equal",
+      "passed": true
+    },
+    {
+      "message": "external_utility_margin_confidence_gate: estimate=0.23096796860465116, ci95=[0.20419821783430253, 0.258358562238372], threshold=0.08, direction=greater_or_equal",
+      "passed": true
+    },
+    {
+      "message": "paired_win_rate_confidence_gate: estimate=0.8622093023255814, ci95=[0.8459302325581395, 0.8773255813953489], threshold=0.7, direction=greater_or_equal",
+      "passed": true
+    },
+    {
+      "message": "fixed_risk_coverage_confidence_gate: estimate=0.6098837209302326, ci95=[0.5860319767441861, 0.6337209302325582], threshold=0.55, direction=greater_or_equal",
+      "passed": true
+    },
+    {
+      "message": "fixed_risk_breach_confidence_gate: estimate=0.0, ci95=[0.0, 0.0], threshold=0.02, direction=less_or_equal",
+      "passed": true
+    },
+    {
+      "message": "positive_task_families_confidence_gate: value=4, threshold=3",
+      "passed": true
+    }
+  ],
+  "version": "external_local_dry_run_metrics_v1"
+}

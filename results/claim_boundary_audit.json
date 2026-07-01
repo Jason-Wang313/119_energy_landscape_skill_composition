@@ -1,0 +1,92 @@
+{
+  "checks": [
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\docs\\claim_evidence_ledger.json",
+      "name": "ledger_exists",
+      "passed": true
+    },
+    {
+      "detail": "version='claim_evidence_ledger_v1'",
+      "name": "ledger_version",
+      "passed": true
+    },
+    {
+      "detail": "current_decision='STRONG_REVISE'",
+      "name": "ledger_decision",
+      "passed": true
+    },
+    {
+      "detail": "iclr_main_ready=False",
+      "name": "ledger_iclr_boundary",
+      "passed": true
+    },
+    {
+      "detail": "scope_gate_pass=False",
+      "name": "ledger_scope_boundary",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\results\\summary.json",
+      "name": "summary_exists",
+      "passed": true
+    },
+    {
+      "detail": "terminal_decision='STRONG_REVISE'",
+      "name": "summary_decision",
+      "passed": true
+    },
+    {
+      "detail": "iclr_main_ready=False",
+      "name": "summary_not_iclr_ready",
+      "passed": true
+    },
+    {
+      "detail": "scope_gate_pass=False",
+      "name": "summary_scope_gate_false",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\results\\external_evidence_audit.json",
+      "name": "external_audit_exists",
+      "passed": true
+    },
+    {
+      "detail": "submission_ready=False",
+      "name": "external_not_ready",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\results\\external_rollout_metrics.json",
+      "name": "rollout_metrics_exists",
+      "passed": true
+    },
+    {
+      "detail": "passed=False",
+      "name": "rollout_not_passed",
+      "passed": true
+    },
+    {
+      "detail": "all evidence paths exist",
+      "name": "permitted_claim_evidence_paths_exist",
+      "passed": true
+    },
+    {
+      "detail": "all required boundary phrases present",
+      "name": "required_boundary_phrases",
+      "passed": true
+    },
+    {
+      "detail": "all audited files exist",
+      "name": "audited_text_files_exist",
+      "passed": true
+    },
+    {
+      "detail": "no forbidden overclaim patterns found",
+      "name": "no_forbidden_overclaims",
+      "passed": true
+    }
+  ],
+  "forbidden_hits": [],
+  "passed": true,
+  "version": "claim_boundary_audit_v1"
+}

@@ -1,0 +1,118 @@
+{
+  "baseline": "proposed_energy_landscape_composer_v4_1",
+  "checks": [
+    {
+      "detail": "local paired hard-row decision audit only",
+      "name": "not_external_evidence_declared",
+      "passed": true
+    },
+    {
+      "detail": "paired_hard_rows=13440",
+      "name": "paired_hard_rows_ge_10000",
+      "passed": true
+    },
+    {
+      "detail": "coverage=0.403943",
+      "name": "proposed_accept_coverage_ge_0_35",
+      "passed": true
+    },
+    {
+      "detail": "delta=0.403943",
+      "name": "accept_coverage_beats_baseline_by_0_25",
+      "passed": true
+    },
+    {
+      "detail": "breach_rate=0.000000",
+      "name": "proposed_accept_breach_rate_le_0_005",
+      "passed": true
+    },
+    {
+      "detail": "delta=0.159801",
+      "name": "non_abstain_utility_delta_ge_0_10",
+      "passed": true
+    },
+    {
+      "detail": "delta=-0.051035",
+      "name": "non_abstain_breach_delta_le_minus_0_03",
+      "passed": true
+    },
+    {
+      "detail": "pairs=3850",
+      "name": "recovered_accept_pairs_ge_3000",
+      "passed": true
+    },
+    {
+      "detail": "delta=0.242606",
+      "name": "recovered_accept_utility_delta_ge_0_15",
+      "passed": true
+    },
+    {
+      "detail": "delta=0.091429",
+      "name": "recovered_accept_success_delta_ge_0_05",
+      "passed": true
+    },
+    {
+      "detail": "delta=-0.077194",
+      "name": "recovered_accept_breach_delta_le_minus_0_05",
+      "passed": true
+    },
+    {
+      "detail": "breach_rate=0.000000",
+      "name": "recovered_accept_proposed_breach_rate_le_0_005",
+      "passed": true
+    },
+    {
+      "detail": "delta=-0.078027",
+      "name": "both_abstain_breach_delta_le_minus_0_05",
+      "passed": true
+    }
+  ],
+  "failed_checks": [],
+  "fixed_risk_budget": 0.15,
+  "metrics": {
+    "accept_coverage_delta": 0.40394345238095236,
+    "baseline_accept_coverage": 0.0,
+    "baseline_accept_mean_breach": 0.0,
+    "baseline_decision_counts": {
+      "abstain": 11857,
+      "probe": 5,
+      "repair": 1134,
+      "transition": 444
+    },
+    "baseline_non_abstain_breach": 0.13336170941250788,
+    "baseline_non_abstain_coverage": 0.1177827380952381,
+    "baseline_non_abstain_utility": 0.7755129810486419,
+    "both_abstain_breach_delta": -0.078026921537858,
+    "both_abstain_pairs": 5098,
+    "hard_rows_per_method": 13440,
+    "non_abstain_breach_delta": -0.05103523536862825,
+    "non_abstain_utility_delta": 0.1598008176565494,
+    "paired_hard_rows": 13440,
+    "proposed_abstain_risk": 0.12539094194940184,
+    "proposed_accept_breach_rate": 0.0,
+    "proposed_accept_coverage": 0.40394345238095236,
+    "proposed_accept_mean_breach": 0.07603346969976055,
+    "proposed_accept_risk": 0.08052639252164302,
+    "proposed_decision_counts": {
+      "abstain": 5099,
+      "accept": 5429,
+      "probe": 1333,
+      "repair": 801,
+      "transition": 778
+    },
+    "proposed_non_abstain_breach": 0.08232647404387963,
+    "proposed_non_abstain_coverage": 0.6206101190476191,
+    "proposed_non_abstain_utility": 0.9353137987051913,
+    "recovered_accept_baseline_breach_rate": 0.8096103896103896,
+    "recovered_accept_breach_delta": -0.07719448909090909,
+    "recovered_accept_pairs": 3850,
+    "recovered_accept_proposed_breach_rate": 0.0,
+    "recovered_accept_success_delta": 0.09142857142857141,
+    "recovered_accept_utility_delta": 0.24260612415584415
+  },
+  "not_external_evidence": true,
+  "passed": true,
+  "proposed": "barrier_certified_energy_composer_v5",
+  "scope": "local_synthetic_hard_slice_only",
+  "version": "decision_quality_audit_v1"
+}

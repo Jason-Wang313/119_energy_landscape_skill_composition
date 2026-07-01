@@ -1,0 +1,53 @@
+{
+  "checks": [
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\config_schema_v1.json",
+      "name": "config_schema_exists",
+      "passed": true
+    },
+    {
+      "detail": "version='external_config_schema_v1'",
+      "name": "config_schema_version",
+      "passed": true
+    },
+    {
+      "detail": "templates=4",
+      "name": "template_count_ge_4",
+      "passed": true
+    },
+    {
+      "detail": "failed=0",
+      "name": "configs_pass_validation",
+      "passed": true
+    }
+  ],
+  "config_count": 4,
+  "config_results": [
+    {
+      "errors": [],
+      "passed": true,
+      "path": "external_validation/config_templates/cable_route_insert.json"
+    },
+    {
+      "errors": [],
+      "passed": true,
+      "path": "external_validation/config_templates/door_open_navigation.json"
+    },
+    {
+      "errors": [],
+      "passed": true,
+      "path": "external_validation/config_templates/drawer_to_pick_transfer.json"
+    },
+    {
+      "errors": [],
+      "passed": true,
+      "path": "external_validation/config_templates/peg_place_regrasp.json"
+    }
+  ],
+  "failed_configs": [],
+  "not_external_evidence": true,
+  "passed": true,
+  "schema": "external_validation/config_schema_v1.json",
+  "strict": false,
+  "version": "external_config_template_audit_v1"
+}

@@ -1,0 +1,145 @@
+{
+  "gates": [
+    {
+      "detail": "paired_hard_rows=13440",
+      "name": "paired_hard_rows_ge_10000",
+      "passed": true
+    },
+    {
+      "detail": "abstention_delta=0.006485, utility_margin=0.235170",
+      "name": "not_abstention_gaming",
+      "passed": true
+    },
+    {
+      "detail": "composition_cost_delta=-0.045838, cost_normalized_utility_margin=0.218098",
+      "name": "not_cost_or_search_gaming",
+      "passed": true
+    },
+    {
+      "detail": "monotone=True, risk_breach_corr=0.970670, risk_seam_corr=0.960829",
+      "name": "risk_orders_realized_failures",
+      "passed": true
+    },
+    {
+      "detail": "risk_calibration_error_delta=-0.010549",
+      "name": "calibration_improves_over_strongest",
+      "passed": true
+    },
+    {
+      "detail": "success=42/42, utility=42/42",
+      "name": "positive_all_task_regime_slices",
+      "passed": true
+    },
+    {
+      "detail": "utility_pair_win_rate=0.855060",
+      "name": "paired_utility_win_rate_ge_0_80",
+      "passed": true
+    },
+    {
+      "detail": "oracle_success_gap=0.10796130952380956, oracle_utility_gap=0.2516057890625",
+      "name": "oracle_gap_visible",
+      "passed": true
+    },
+    {
+      "detail": "failure_case_count=24",
+      "name": "failure_cases_ge_24",
+      "passed": true
+    }
+  ],
+  "metrics": {
+    "abstention_delta": 0.006485290922619041,
+    "baseline_abstention": 0.09778688288690476,
+    "composition_cost_delta": -0.045838446726190474,
+    "cost_normalized_utility_margin": 0.2180981121938346,
+    "failure_case_count": 24,
+    "oracle_success_gap": 0.10796130952380956,
+    "oracle_utility_gap": 0.2516057890625,
+    "paired_hard_rows": 13440,
+    "proposed_abstention": 0.1042721738095238,
+    "regime_margins": {
+      "groups": 7,
+      "min_success_margin": 0.07395833333333335,
+      "min_utility_group": [
+        "narrow_basin"
+      ],
+      "min_utility_margin": 0.21657606666666662,
+      "positive_success_groups": 7,
+      "positive_utility_groups": 7
+    },
+    "risk_bins": [
+      {
+        "bin": 1,
+        "mean_predicted_seam_risk": 0.07093252752976191,
+        "mean_realized_seam_breach": 0.06728538095238096,
+        "rows": 2688
+      },
+      {
+        "bin": 2,
+        "mean_predicted_seam_risk": 0.08983714955357143,
+        "mean_realized_seam_breach": 0.08453025855654762,
+        "rows": 2688
+      },
+      {
+        "bin": 3,
+        "mean_predicted_seam_risk": 0.09916182886904762,
+        "mean_realized_seam_breach": 0.09196272135416667,
+        "rows": 2688
+      },
+      {
+        "bin": 4,
+        "mean_predicted_seam_risk": 0.10969794010416667,
+        "mean_realized_seam_breach": 0.10112670982142857,
+        "rows": 2688
+      },
+      {
+        "bin": 5,
+        "mean_predicted_seam_risk": 0.14182168861607142,
+        "mean_realized_seam_breach": 0.13050952120535714,
+        "rows": 2688
+      }
+    ],
+    "risk_bins_monotone": true,
+    "risk_breach_correlation": 0.9706696256256748,
+    "risk_calibration_error_delta": -0.01054897306547619,
+    "risk_seam_failure_correlation": 0.9608285390612525,
+    "split_margins": {
+      "groups": 4,
+      "min_success_margin": 0.07738095238095233,
+      "min_utility_group": [
+        "shifted_objects"
+      ],
+      "min_utility_margin": 0.22917789434523805,
+      "positive_success_groups": 4,
+      "positive_utility_groups": 4
+    },
+    "strongest_non_oracle": "proposed_energy_landscape_composer_v4_1",
+    "success_margin": 0.08459821428571435,
+    "task_margins": {
+      "groups": 6,
+      "min_success_margin": 0.05446428571428574,
+      "min_utility_group": [
+        "drawer_to_pick_transfer"
+      ],
+      "min_utility_margin": 0.2045622401785715,
+      "positive_success_groups": 6,
+      "positive_utility_groups": 6
+    },
+    "task_regime_margins": {
+      "groups": 42,
+      "min_success_margin": 0.02187500000000009,
+      "min_utility_group": [
+        "door_open_navigation",
+        "narrow_basin"
+      ],
+      "min_utility_margin": 0.17255934374999993,
+      "positive_success_groups": 42,
+      "positive_utility_groups": 42
+    },
+    "utility_margin": 0.23517014761904764,
+    "utility_pair_win_rate": 0.8550595238095238
+  },
+  "not_external_evidence": true,
+  "passed": true,
+  "scope": "local_synthetic_hard_slice_only",
+  "version": "local_falsification_audit_v1"
+}

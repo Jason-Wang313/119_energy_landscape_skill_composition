@@ -1,0 +1,87 @@
+{
+  "adapter_evidence_promotion_rejected": true,
+  "checkpoint_hash_shortcut_rejected": true,
+  "checks": [
+    {
+      "detail": "status=0, passed=True, packet_ready=True, strict=False",
+      "name": "temporary_method_packet_ready_but_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "work_order_check=False",
+      "name": "missing_work_order_rejected",
+      "passed": true
+    },
+    {
+      "detail": "oracle_check=False",
+      "name": "oracle_work_order_rejected",
+      "passed": true
+    },
+    {
+      "detail": "shortcut_check=False",
+      "name": "reference_adapter_shortcut_rejected",
+      "passed": true
+    },
+    {
+      "detail": "hash_binding_check=False",
+      "name": "checkpoint_hash_shortcut_rejected",
+      "passed": true
+    },
+    {
+      "detail": "fairness_check=False",
+      "name": "fairness_binding_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "fixture_contract_check=False",
+      "name": "fixture_contract_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "cutover_check=False",
+      "name": "cutover_shortcut_rejected",
+      "passed": true
+    },
+    {
+      "detail": "strict_command_check=False",
+      "name": "strict_command_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "adapter_evidence_check=False",
+      "name": "adapter_evidence_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "changed=[]",
+      "name": "real_method_packet_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "cutover_shortcut_rejected": true,
+  "fairness_binding_drift_rejected": true,
+  "fixture_contract_drift_rejected": true,
+  "missing_work_order_rejected": true,
+  "not_external_evidence": true,
+  "oracle_work_order_rejected": true,
+  "passed": true,
+  "real_output_hashes": {
+    "external_validation/adapter_acceptance_fixtures.csv": "d03b5d89ee71fea723ccc37a7092cd725574382ccc88c229784d7d5ce0ca8f54",
+    "external_validation/adapter_acceptance_fixtures.json": "9ee0526cf98600195b1e5257f9177c69346d2f3593ed582d67d3cb5797984d08",
+    "external_validation/adapter_acceptance_fixtures.md": "ee98ffb8e3767687273702abad34e29af5ecdcf5a67c17a545657ccb11ab2ef0",
+    "external_validation/method_implementation_packet.json": "a7d425325142127bb94219e86f7c446634733081908c7b3e2370545f94856f4f",
+    "external_validation/method_implementation_packet.md": "3de09e528aefce8cd40f93781902c4eb69f9d79770c744d9c80d479657b46375",
+    "external_validation/method_implementation_work_orders.csv": "a3823158957383f5eac54ff2ac0d5e21440e2034fcfac05fb75b91add2798e79",
+    "external_validation/method_manifest_cutover_checklist.csv": "a7c212c2f99abfe921d5c5128446e1de908996c5b789d9bff6f2b5da926df899",
+    "external_validation/method_manifest_cutover_checklist.md": "d21f7033199ca20ba8610bac8777e385ec1790fbf2a447b25ef1d12883942765",
+    "external_validation/method_reference_provenance.csv": "7f6a5967de10ac5a49200726082d0600a3ef70984b94dc414a35aa90bd97ccac",
+    "results/external_method_implementation_audit.json": "f8aa15870753dc4e6b4f681acef956a4c49adaf3a12a98c32091582474021fac",
+    "results/external_method_implementation_audit.md": "8a318351dc5aa27c081ab65be30e28aa60115da7b416076cee74b5892754c313"
+  },
+  "real_outputs_untouched": true,
+  "reference_adapter_shortcut_rejected": true,
+  "strict_adapter_evidence_ready": false,
+  "strict_command_drift_rejected": true,
+  "temporary_packet_ready": true,
+  "version": "external_method_implementation_packet_self_test_v1"
+}

@@ -1,0 +1,11 @@
+\begin{tabular}{p{0.25\linewidth}p{0.56\linewidth}p{0.09\linewidth}}
+\toprule
+audit target & local diagnostic evidence & verdict \\
+\midrule
+diagnostic labels & 0 label-rule mismatches over 230,400 local rows; 5/5 failure labels observed in proposed hard rows & pass \\
+seam decisions & 0 decision-rule mismatches; 5/5 decisions observed: abstain, accept, probe, repair, transition & pass \\
+accept gate & accepted seams have mean breach 0.076 vs 0.108 for non-accepted seams & pass \\
+abstain gate & abstained seams have mean predicted risk 0.125 vs 0.081 for accepted seams & pass \\
+action reasons & reason purity: repair 1.000, probe 1.000, transition 1.000 & pass \\
+\bottomrule
+\end{tabular}

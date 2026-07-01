@@ -1,0 +1,50 @@
+{
+  "compute_budget": {
+    "same_for_all_non_oracle_methods": true,
+    "simulator_query_budget": "FILL_AFTER_PLATFORM_SELECTION",
+    "wall_clock_seconds": "FILL_AFTER_PLATFORM_SELECTION"
+  },
+  "config_schema": "external_validation/config_schema_v1.json",
+  "fixed_risk_budget": 0.15,
+  "must_log": [
+    "initial_state_hash",
+    "terminal_sample_set_hash",
+    "basin_estimate",
+    "barrier_score",
+    "descent_continuity_score",
+    "predicted_seam_risk",
+    "decision",
+    "failure_diagnosis",
+    "success",
+    "realized_seam_breach",
+    "utility",
+    "video_path",
+    "policy_or_config_hash"
+  ],
+  "not_external_evidence": true,
+  "observation_interface": {
+    "camera_logging_required": true,
+    "contact_or_force_logging_required": true,
+    "state_logging_required": true
+  },
+  "paired_reset_count": 30,
+  "platform_name": "FILL_AFTER_PLATFORM_SELECTION",
+  "platform_type": "high_fidelity_sim",
+  "required_fidelity_checks": [
+    "drawer joint friction",
+    "handle contact",
+    "object pose logging"
+  ],
+  "reset_protocol": {
+    "initial_state_hash_required": true,
+    "paired_resets": true,
+    "reset_count": 30,
+    "scene_id_template": "drawer_to_pick_transfer_reset_{index:03d}"
+  },
+  "seam_under_test": "drawer contact and terminal handle pose must leave a reachable grasp basin",
+  "skill_i": "open_drawer_to_clearance",
+  "skill_j": "pick_object_from_drawer",
+  "task_family": "drawer_to_pick_transfer",
+  "template_only": true,
+  "version": "paper119_external_config_template_v1"
+}

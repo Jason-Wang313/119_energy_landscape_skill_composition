@@ -1,0 +1,144 @@
+{
+  "bootstrap_state": "READY_TO_BOOTSTRAP_EXTERNAL_MACHINE",
+  "bootstrap_steps": [
+    {
+      "command": "python scripts\\probe_external_platform.py --strict",
+      "evidence_boundary": "non_evidence_machine_probe",
+      "order": 1
+    },
+    {
+      "command": "python scripts\\probe_maniskill_task_bindings.py --strict",
+      "evidence_boundary": "non_evidence_machine_probe",
+      "order": 2
+    },
+    {
+      "command": "python scripts\\probe_maniskill_env_smoke.py --strict",
+      "evidence_boundary": "non_evidence_machine_probe",
+      "order": 3
+    },
+    {
+      "command": "python scripts\\probe_maniskill_fidelity_metadata.py --strict",
+      "evidence_boundary": "non_evidence_machine_probe",
+      "order": 4
+    },
+    {
+      "command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend <accepted_backend> --shader-pack <accepted_shader_pack> --profile-matrix --profile-matrix-max-envs 1 --timeout-diagnosis-seconds 180 --timeout-diagnosis-width 64 --timeout-diagnosis-height 64",
+      "evidence_boundary": "non_evidence_machine_probe",
+      "order": 5
+    },
+    {
+      "command": "python scripts\\audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 180 --render-backend <accepted_backend> --shader-pack <accepted_shader_pack> --render-width 128 --render-height 128",
+      "evidence_boundary": "non_evidence_machine_probe",
+      "order": 6
+    },
+    {
+      "command": "python scripts\\build_maniskill_render_machine_qualification.py",
+      "evidence_boundary": "non_evidence_machine_probe",
+      "order": 7
+    }
+  ],
+  "checks": [
+    {
+      "detail": "machine bootstrap probes only; it does not write official logs, videos, manifests, or acceptance files",
+      "name": "bootstrap_packet_is_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "ready=True, strict=False",
+      "name": "source_platform_onboarding_ready",
+      "passed": true
+    },
+    {
+      "detail": "job_state='DO_NOT_START_COLLECTION_YET', strict=False",
+      "name": "source_collection_job_still_no_go",
+      "passed": true
+    },
+    {
+      "detail": "qualified=False, state='DO_NOT_COLLECT_RENDER_MACHINE'",
+      "name": "local_machine_not_promoted",
+      "passed": true
+    },
+    {
+      "detail": "bootstrap command file covers platform, task, env, metadata, render, pilot, and qualification probes",
+      "name": "bootstrap_commands_cover_machine_render_and_liveness",
+      "passed": true
+    },
+    {
+      "detail": "PowerShell and Bash bootstrap command files require explicit bootstrap-only confirmation before running probes",
+      "name": "bootstrap_requires_explicit_confirmation",
+      "passed": true
+    },
+    {
+      "detail": "forbidden_fragments=[]",
+      "name": "bootstrap_script_is_probe_only",
+      "passed": true
+    },
+    {
+      "detail": "crlf_count=0, lf_count=77",
+      "name": "bash_command_file_uses_lf_line_endings",
+      "passed": true
+    },
+    {
+      "detail": "optional installer covers local package deps, ManiSkill/SAPIEN dependency path, Torch, and video encoding",
+      "name": "install_guidance_mentions_core_optional_stack",
+      "passed": true
+    },
+    {
+      "detail": "manifest/log/video evidence files remain absent before official collection",
+      "name": "no_real_outputs_written",
+      "passed": true
+    }
+  ],
+  "command_file": "external_validation/collection_machine_bootstrap.ps1",
+  "command_files": [
+    "external_validation/collection_machine_bootstrap.ps1",
+    "external_validation/collection_machine_bootstrap.sh"
+  ],
+  "current_local_state": {
+    "env_smoke_ready": true,
+    "fidelity_metadata_ready": true,
+    "missing_asset_ids": [
+      "oakink-v2",
+      "ycb"
+    ],
+    "pilot_runtime_ready": false,
+    "primary_route_install_ready": true,
+    "render_machine_qualified": false,
+    "render_machine_state": "DO_NOT_COLLECT_RENDER_MACHINE",
+    "render_video_ready": false,
+    "renderer_failure_classes": [
+      "vulkan_descriptor_pool_exhaustion"
+    ],
+    "task_binding_ready": true
+  },
+  "failed_checks": [],
+  "linux_command_file": "external_validation/collection_machine_bootstrap.sh",
+  "not_external_evidence": true,
+  "operator_preconditions": [
+    "Use an independent GPU/Vulkan collection machine or robot-lab machine, not the current failing local render path.",
+    "Run this bootstrap before materializing fidelity acceptance or official collection.",
+    "Do not proceed unless render-machine qualification reports render_machine_qualified=true and pilot_runtime_ready=true with zero diagnostic fallbacks.",
+    "After bootstrap success, use the guarded collection job packet for fidelity acceptance, strict readiness, official collection, postcollection sealing, manifest promotion, and final strict audits."
+  ],
+  "packet_version": "external_collection_machine_bootstrap_v1",
+  "passed": true,
+  "remaining_submission_blockers": [
+    "accepted real-robot or high-fidelity simulator evidence",
+    "external rollout metrics recomputed from raw JSONL logs",
+    "manifest-declared real task configs",
+    "manifest-declared independent non-oracle baseline evidence"
+  ],
+  "source_reports": [
+    "results/external_platform_onboarding_audit.json",
+    "results/external_platform_probe.json",
+    "results/maniskill_task_binding_probe.json",
+    "results/maniskill_env_smoke_probe.json",
+    "results/maniskill_fidelity_metadata_probe.json",
+    "results/maniskill_render_video_preflight_audit.json",
+    "results/maniskill_pilot_runtime_liveness_audit.json",
+    "results/maniskill_render_machine_qualification.json",
+    "results/external_collection_job_packet_audit.json"
+  ],
+  "strict_external_evidence_ready": false,
+  "version": "external_collection_machine_bootstrap_audit_v1"
+}

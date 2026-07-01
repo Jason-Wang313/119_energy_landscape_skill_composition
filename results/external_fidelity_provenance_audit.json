@@ -1,0 +1,75 @@
+{
+  "acceptance_ready": false,
+  "blocking_missing_count": 17,
+  "checks": [
+    {
+      "detail": "not_external_evidence=True, strict_fidelity_evidence_ready=False, strict_external_evidence_ready=False",
+      "name": "packet_is_non_evidence_and_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "acceptance_ready=False, blocking_missing_count=17",
+      "name": "fidelity_acceptance_contract_ready_but_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "platform_onboarding_ready=True, strict_evidence_ready=False",
+      "name": "platform_onboarding_packet_ready",
+      "passed": true
+    },
+    {
+      "detail": "primary_route_install_ready=True, missing=[]",
+      "name": "external_platform_probe_ready",
+      "passed": true
+    },
+    {
+      "detail": "primary_route='maniskill_sapien_primary', collection_ready=False",
+      "name": "independent_route_and_collection_still_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "platform_fields=12, qualification_fields=14, gates=5, tasks=4",
+      "name": "template_declares_required_platform_and_gate_fields",
+      "passed": true
+    },
+    {
+      "detail": "missing_orders=[]",
+      "name": "work_orders_cover_fidelity_blockers",
+      "passed": true
+    },
+    {
+      "detail": "actionable_orders=6, required_orders=6, final_gate_blocks=17",
+      "name": "work_orders_are_actionable_and_artifact_bound",
+      "passed": true
+    },
+    {
+      "detail": "python scripts\\build_external_fidelity_provenance_packet.py\npython scripts\\build_external_platform_onboarding.py\npython scripts\\probe_external_platform.py --strict\npython scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write\npython scripts\\audit_external_fidelity_acceptance.py --strict\npython scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map\npython scripts\\build_external_manifest.py --write --check-video-paths\npython scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict\npython scripts\\audit_external_evidence.py --strict",
+      "name": "strict_commands_cover_fidelity_manifest_collection_and_evidence",
+      "passed": true
+    },
+    {
+      "detail": "version='paper119_fidelity_acceptance_template_v1', template_only=True",
+      "name": "acceptance_template_not_real_evidence",
+      "passed": true
+    },
+    {
+      "detail": "acceptance_exists=False, manifest_exists=False",
+      "name": "no_real_acceptance_or_manifest_written",
+      "passed": true
+    },
+    {
+      "detail": "packet_json=True, packet_md=True, csv=True",
+      "name": "packet_files_written",
+      "passed": true
+    }
+  ],
+  "failed_checks": [],
+  "fidelity_provenance_packet_ready": true,
+  "not_external_evidence": true,
+  "packet_path": "external_validation/fidelity_provenance_packet.json",
+  "passed": true,
+  "strict_external_evidence_ready": false,
+  "strict_fidelity_evidence_ready": false,
+  "version": "external_fidelity_provenance_audit_v1",
+  "work_orders_path": "external_validation/fidelity_provenance_work_orders.csv"
+}

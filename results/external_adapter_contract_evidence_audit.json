@@ -1,0 +1,76 @@
+{
+  "adapter_count": 0,
+  "adapter_results": [],
+  "checks": [
+    {
+      "detail": "spec_methods=12",
+      "name": "baseline_specs_present",
+      "passed": true
+    },
+    {
+      "detail": "temporary good/bad adapters behaved as expected",
+      "name": "contract_self_test_passed",
+      "passed": true
+    },
+    {
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\log_schema_v1.json",
+      "name": "log_schema_exists",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json missing",
+      "name": "manifest_exists",
+      "passed": false
+    },
+    {
+      "detail": "entries=0",
+      "name": "manifest_implementation_entries_present",
+      "passed": false
+    },
+    {
+      "detail": "missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen']",
+      "name": "manifest_declares_all_required_non_oracle_methods",
+      "passed": false
+    },
+    {
+      "detail": "duplicates=[], malformed=[]",
+      "name": "manifest_has_no_duplicate_or_malformed_non_oracle_methods",
+      "passed": true
+    },
+    {
+      "detail": "missing_implementations=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen']",
+      "name": "manifest_implementation_entries_cover_required_non_oracle_methods",
+      "passed": false
+    },
+    {
+      "detail": "missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen'], missing_implementations=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen'], missing_checkpoint_or_config=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen']",
+      "name": "manifest_checkpoint_or_config_artifacts_declared",
+      "passed": false
+    },
+    {
+      "detail": "missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen'], missing_implementations=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen'], errors=[]",
+      "name": "manifest_required_hashes_match_artifacts",
+      "passed": false
+    },
+    {
+      "detail": "missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen'], missing_implementations=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen'], errors=[]",
+      "name": "manifest_independent_provenance_declared",
+      "passed": false
+    },
+    {
+      "detail": "missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen'], missing_implementations=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen'], errors=['external_validation/manifest.json is missing']",
+      "name": "manifest_fairness_contract_bound_to_methods",
+      "passed": false
+    },
+    {
+      "detail": "failed=0",
+      "name": "adapter_results_passed",
+      "passed": false
+    }
+  ],
+  "failed_adapters": [],
+  "not_external_evidence": false,
+  "passed": false,
+  "strict": true,
+  "version": "external_adapter_contract_evidence_audit_v2"
+}

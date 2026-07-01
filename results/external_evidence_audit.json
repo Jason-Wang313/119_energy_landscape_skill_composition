@@ -1,0 +1,640 @@
+{
+  "blocking_failures": [
+    {
+      "blocking": true,
+      "detail": "external_validation/manifest.json is missing",
+      "name": "manifest_exists",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'",
+      "name": "external_fidelity_acceptance_ready",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "passed=False, adapters=0",
+      "name": "external_adapter_contract_evidence_passed",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "passed=False, configs=0",
+      "name": "external_config_evidence_passed",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "version=None",
+      "name": "manifest_version",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "log_schema=''",
+      "name": "manifest_declares_log_schema",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "route='', counts={'real_robot': 0, 'high_fidelity_sim': 0, 'mixed': 0}",
+      "name": "validation_route",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "shared_skill_library=None",
+      "name": "shared_skill_library",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "same_initial_states=None",
+      "name": "same_initial_states",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "same_observation_interface=None",
+      "name": "same_observation_interface",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "same_compute_budget=None",
+      "name": "same_compute_budget",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "paired_resets=None",
+      "name": "paired_resets",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "invalid=[], families=[]",
+      "name": "valid_task_families",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "weak=[]",
+      "name": "episodes_per_method",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "no task logs declared",
+      "name": "episode_log_schema",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "missing=[]",
+      "name": "task_video_dirs",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'oracle_basin_composer', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen']",
+      "name": "required_methods",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen']",
+      "name": "independent_method_implementations",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "value=None, threshold=0.05",
+      "name": "external_success_margin",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "value=None, threshold=0.08",
+      "name": "external_utility_margin",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "value=None, threshold=0.7",
+      "name": "paired_win_rate",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "value=None, threshold=0.02",
+      "name": "fixed_risk_breach",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "value=None, threshold=0.55",
+      "name": "fixed_risk_coverage",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "positive=0, total=0",
+      "name": "positive_task_family_coverage",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "passed=False, episodes=0",
+      "name": "external_rollout_metrics_passed",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "version=None, all_primary=None, missing=['external_success_margin', 'external_utility_margin', 'fixed_risk_breach', 'fixed_risk_coverage', 'paired_win_rate'], failing=[], positive_task_gate=None",
+      "name": "external_rollout_confidence_gates_passed",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "pairing_ready=False, blocking_missing_count=1",
+      "name": "external_pairing_integrity_ready",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "release_package_ready=False, blocking_missing_count=1",
+      "name": "external_release_package_ready",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "external_success_margin: manifest=None, rollout=None; external_utility_margin: manifest=None, rollout=None; paired_win_rate: manifest=None, rollout=None; fixed_risk_breach: manifest=None, rollout=None",
+      "name": "manifest_metrics_match_rollout",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "oracle_reported=None",
+      "name": "oracle_reported",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "oracle_stronger_or_saturated_explained=None",
+      "name": "oracle_boundary",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "missing=['basin_overlap', 'barrier_height', 'descent_continuity', 'risk_calibration', 'seam_repair']",
+      "name": "external_ablations",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
+      "name": "release_code",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
+      "name": "release_configs",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
+      "name": "release_logs",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
+      "name": "release_videos",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
+      "name": "release_checkpoints",
+      "passed": false
+    }
+  ],
+  "checks": [
+    {
+      "blocking": true,
+      "detail": "external_validation/manifest.json is missing",
+      "name": "manifest_exists",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\manifest_template.json",
+      "name": "template_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\log_schema_v1.json",
+      "name": "log_schema_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\scripts\\validate_external_rollouts.py",
+      "name": "rollout_validator_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\results\\external_rollout_metrics.json",
+      "name": "external_rollout_metrics_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "version='external_rollout_metrics_v1'",
+      "name": "external_rollout_metrics_version",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\results\\external_fidelity_acceptance_audit.json",
+      "name": "fidelity_acceptance_audit_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "version='external_fidelity_acceptance_audit_v1'",
+      "name": "fidelity_acceptance_audit_version",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "passed=True",
+      "name": "fidelity_acceptance_contract_passed",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'",
+      "name": "external_fidelity_acceptance_ready",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\results\\external_blind_eval_audit.json",
+      "name": "blind_eval_audit_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "version='external_blind_eval_plan_v1'",
+      "name": "blind_eval_audit_version",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "passed=True",
+      "name": "blind_eval_plan_passed",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "blinded operator sheet checked for method-name leakage",
+      "name": "blind_eval_no_method_leak",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\results\\external_baseline_contract_audit.json",
+      "name": "baseline_contract_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "version='external_baseline_contract_audit_v1'",
+      "name": "baseline_contract_version",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "not_external_evidence=True",
+      "name": "baseline_contract_is_not_evidence",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\results\\external_adapter_scaffold_audit.json",
+      "name": "adapter_scaffold_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "version='external_adapter_scaffold_audit_v1'",
+      "name": "adapter_scaffold_version",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "not_external_evidence=True",
+      "name": "adapter_scaffold_is_not_evidence",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\results\\external_adapter_contract_audit.json",
+      "name": "adapter_contract_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "version='external_adapter_contract_audit_v1'",
+      "name": "adapter_contract_version",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "passed=True, adapters=11",
+      "name": "adapter_contract_passed",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "not_external_evidence=True",
+      "name": "adapter_contract_is_not_evidence",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\results\\external_adapter_contract_evidence_audit.json",
+      "name": "adapter_contract_evidence_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "passed=False, adapters=0",
+      "name": "external_adapter_contract_evidence_passed",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\config_schema_v1.json",
+      "name": "config_schema_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\results\\external_config_template_audit.json",
+      "name": "config_template_audit_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "version='external_config_template_audit_v1'",
+      "name": "config_template_audit_version",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "passed=True",
+      "name": "config_template_audit_passed",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "not_external_evidence=True",
+      "name": "config_template_audit_not_evidence",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\results\\external_config_evidence_audit.json",
+      "name": "config_evidence_audit_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "passed=False, configs=0",
+      "name": "external_config_evidence_passed",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "version=None",
+      "name": "manifest_version",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "log_schema=''",
+      "name": "manifest_declares_log_schema",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "route='', counts={'real_robot': 0, 'high_fidelity_sim': 0, 'mixed': 0}",
+      "name": "validation_route",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "shared_skill_library=None",
+      "name": "shared_skill_library",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "same_initial_states=None",
+      "name": "same_initial_states",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "same_observation_interface=None",
+      "name": "same_observation_interface",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "same_compute_budget=None",
+      "name": "same_compute_budget",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "paired_resets=None",
+      "name": "paired_resets",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "invalid=[], families=[]",
+      "name": "valid_task_families",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "weak=[]",
+      "name": "episodes_per_method",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "no task logs declared",
+      "name": "episode_log_schema",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "missing=[]",
+      "name": "task_video_dirs",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'oracle_basin_composer', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen']",
+      "name": "required_methods",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen']",
+      "name": "independent_method_implementations",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "value=None, threshold=0.05",
+      "name": "external_success_margin",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "value=None, threshold=0.08",
+      "name": "external_utility_margin",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "value=None, threshold=0.7",
+      "name": "paired_win_rate",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "value=None, threshold=0.02",
+      "name": "fixed_risk_breach",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "value=None, threshold=0.55",
+      "name": "fixed_risk_coverage",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "positive=0, total=0",
+      "name": "positive_task_family_coverage",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "passed=False, episodes=0",
+      "name": "external_rollout_metrics_passed",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "version=None, all_primary=None, missing=['external_success_margin', 'external_utility_margin', 'fixed_risk_breach', 'fixed_risk_coverage', 'paired_win_rate'], failing=[], positive_task_gate=None",
+      "name": "external_rollout_confidence_gates_passed",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\results\\external_pairing_integrity_audit.json",
+      "name": "external_pairing_integrity_audit_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "pairing_ready=False, blocking_missing_count=1",
+      "name": "external_pairing_integrity_ready",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\results\\external_release_package_audit.json",
+      "name": "external_release_package_audit_exists",
+      "passed": true
+    },
+    {
+      "blocking": true,
+      "detail": "release_package_ready=False, blocking_missing_count=1",
+      "name": "external_release_package_ready",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "external_success_margin: manifest=None, rollout=None; external_utility_margin: manifest=None, rollout=None; paired_win_rate: manifest=None, rollout=None; fixed_risk_breach: manifest=None, rollout=None",
+      "name": "manifest_metrics_match_rollout",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "oracle_reported=None",
+      "name": "oracle_reported",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "oracle_stronger_or_saturated_explained=None",
+      "name": "oracle_boundary",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "missing=['basin_overlap', 'barrier_height', 'descent_continuity', 'risk_calibration', 'seam_repair']",
+      "name": "external_ablations",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
+      "name": "release_code",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
+      "name": "release_configs",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
+      "name": "release_logs",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
+      "name": "release_videos",
+      "passed": false
+    },
+    {
+      "blocking": true,
+      "detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
+      "name": "release_checkpoints",
+      "passed": false
+    }
+  ],
+  "manifest_exists": false,
+  "manifest_path": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\manifest.json",
+  "submission_ready": false,
+  "version": "external_evidence_audit_v1"
+}

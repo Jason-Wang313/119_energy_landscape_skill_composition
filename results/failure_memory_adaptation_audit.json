@@ -1,0 +1,126 @@
+{
+  "baseline": "proposed_energy_landscape_composer_v4_1",
+  "baseline_metrics": {
+    "frontiers_covered": 1680,
+    "future_predicted_risk_mae": 0.014830875337186897,
+    "high_memory_future_breach": 0.20311301793981482,
+    "high_memory_future_success": 0.6979166666666666,
+    "high_memory_future_utility": 0.5483878229166667,
+    "high_memory_observed_breach": 0.20381538773148147,
+    "low_memory_future_breach": 0.1422883057484568,
+    "low_memory_future_success": 0.7403549382716049,
+    "low_memory_future_utility": 0.7514917501929013,
+    "low_memory_observed_breach": 0.14186826871141975,
+    "memory_breach_future_breach_correlation": 0.9801725101799805,
+    "memory_breach_mae": 0.0039568455684007705,
+    "memory_signature_count": 1730,
+    "memory_utility_future_utility_correlation": 0.06878311341271975,
+    "quartile_size": 432,
+    "regime_groups": 7,
+    "split_groups": 4,
+    "task_groups": 6
+  },
+  "checks": [
+    {
+      "detail": "local few-shot memory audit only",
+      "name": "not_external_evidence_declared",
+      "passed": true
+    },
+    {
+      "detail": "signatures=2210",
+      "name": "proposed_memory_signatures_ge_2000",
+      "passed": true
+    },
+    {
+      "detail": "frontiers=1667",
+      "name": "proposed_frontiers_covered_ge_1600",
+      "passed": true
+    },
+    {
+      "detail": "tasks=6, regimes=7, splits=4",
+      "name": "memory_covers_all_tasks_regimes_splits",
+      "passed": true
+    },
+    {
+      "detail": "corr=0.957419",
+      "name": "observed_breach_predicts_future_breach",
+      "passed": true
+    },
+    {
+      "detail": "mae=0.004586",
+      "name": "memory_breach_mae_le_0_006",
+      "passed": true
+    },
+    {
+      "detail": "improvement=0.002795",
+      "name": "memory_beats_future_risk_mae_by_0_002",
+      "passed": true
+    },
+    {
+      "detail": "gap=0.046379",
+      "name": "high_memory_risk_predicts_higher_future_breach",
+      "passed": true
+    },
+    {
+      "detail": "gap=-0.160191",
+      "name": "high_memory_risk_predicts_lower_future_utility",
+      "passed": true
+    },
+    {
+      "detail": "gap=-0.036232",
+      "name": "high_memory_risk_predicts_lower_future_success",
+      "passed": true
+    },
+    {
+      "detail": "delta=-0.082882",
+      "name": "v5_high_memory_breach_lower_than_predecessor",
+      "passed": true
+    },
+    {
+      "detail": "delta=0.247856",
+      "name": "v5_high_memory_utility_higher_than_predecessor",
+      "passed": true
+    }
+  ],
+  "comparison": {
+    "high_memory_future_breach_delta": -0.08288240682870371,
+    "high_memory_future_success_delta": 0.07971014492753625,
+    "high_memory_future_utility_delta": 0.24785560703502418,
+    "memory_breach_mae_delta": 0.0006295394617651419
+  },
+  "failed_checks": [],
+  "not_external_evidence": true,
+  "observed_episode_rule": "episodes 0-3 form memory; episodes 4-7 are held out",
+  "passed": true,
+  "proposed": "barrier_certified_energy_composer_v5",
+  "proposed_metrics": {
+    "frontiers_covered": 1667,
+    "future_predicted_risk_mae": 0.007381841365007542,
+    "high_low_future_breach_gap": 0.04637877566425121,
+    "high_low_future_success_gap": -0.036231884057971064,
+    "high_low_future_utility_gap": -0.16019056597222225,
+    "high_memory_future_breach": 0.12023061111111111,
+    "high_memory_future_success": 0.7776268115942029,
+    "high_memory_future_utility": 0.7962434299516908,
+    "high_memory_observed_breach": 0.12151259525966183,
+    "low_memory_future_breach": 0.0738518354468599,
+    "low_memory_future_success": 0.813858695652174,
+    "low_memory_future_utility": 0.9564339959239131,
+    "low_memory_observed_breach": 0.07229561262077294,
+    "memory_breach_future_breach_correlation": 0.9574193753223077,
+    "memory_breach_mae": 0.004586385030165912,
+    "memory_mae_improvement_over_future_predicted_risk": 0.0027954563348416292,
+    "memory_signature_count": 2210,
+    "memory_utility_future_utility_correlation": 0.07630656198972509,
+    "quartile_size": 552,
+    "regime_groups": 7,
+    "split_groups": 4,
+    "task_groups": 6
+  },
+  "scope": "local_synthetic_hard_slice_observed_to_heldout_signature_memory_only",
+  "signature": [
+    "diagnostic_label",
+    "planner_edge_update"
+  ],
+  "version": "failure_memory_adaptation_audit_v1"
+}

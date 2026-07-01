@@ -1,0 +1,93 @@
+{
+  "checks": [
+    {
+      "detail": "external_validation/config_schema_v1.json",
+      "name": "schema_exists",
+      "passed": true
+    },
+    {
+      "detail": "version='external_config_schema_v1'",
+      "name": "schema_version",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/config_templates",
+      "name": "template_dir_exists",
+      "passed": true
+    },
+    {
+      "detail": "templates=4",
+      "name": "template_count_ge_4",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/configs",
+      "name": "output_dir_exists",
+      "passed": true
+    },
+    {
+      "detail": "path=external_validation/maniskill_task_bindings.json, bindings=4",
+      "name": "task_binding_file_ready",
+      "passed": true
+    },
+    {
+      "detail": "write=False, confirm_real_platform=False",
+      "name": "write_requires_explicit_flag",
+      "passed": true
+    },
+    {
+      "detail": "failed=[]",
+      "name": "materialized_payloads_validate",
+      "passed": true
+    }
+  ],
+  "confirm_real_platform": false,
+  "files_written": [],
+  "materialization_ready_for_operator": true,
+  "materialized_configs": [
+    {
+      "errors": [],
+      "output_path": "external_validation/configs/cable_route_insert.json",
+      "passed": true,
+      "task_family": "cable_route_insert",
+      "template_path": "external_validation/config_templates/cable_route_insert.json"
+    },
+    {
+      "errors": [],
+      "output_path": "external_validation/configs/door_open_navigation.json",
+      "passed": true,
+      "task_family": "door_open_navigation",
+      "template_path": "external_validation/config_templates/door_open_navigation.json"
+    },
+    {
+      "errors": [],
+      "output_path": "external_validation/configs/drawer_to_pick_transfer.json",
+      "passed": true,
+      "task_family": "drawer_to_pick_transfer",
+      "template_path": "external_validation/config_templates/drawer_to_pick_transfer.json"
+    },
+    {
+      "errors": [],
+      "output_path": "external_validation/configs/peg_place_regrasp.json",
+      "passed": true,
+      "task_family": "peg_place_regrasp",
+      "template_path": "external_validation/config_templates/peg_place_regrasp.json"
+    }
+  ],
+  "not_external_evidence": true,
+  "operator_write_command": "python scripts\\materialize_external_configs.py --platform-type <real_robot|high_fidelity_sim> --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
+  "output_dir": "external_validation/configs",
+  "paired_reset_count": 30,
+  "passed": true,
+  "platform_name": "DRY_RUN_PLATFORM_NOT_EVIDENCE",
+  "platform_type": "high_fidelity_sim",
+  "schema": "external_validation/config_schema_v1.json",
+  "simulator_query_budget": 100,
+  "strict_config_evidence_ready": false,
+  "task_binding_file": "external_validation/maniskill_task_bindings.json",
+  "task_count": 4,
+  "template_dir": "external_validation/config_templates",
+  "version": "external_config_materialization_plan_v1",
+  "wall_clock_seconds": 30,
+  "write_enabled": false
+}

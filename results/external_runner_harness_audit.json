@@ -1,0 +1,101 @@
+{
+  "actual_execution_ready": false,
+  "checks": [
+    {
+      "detail": "missing=[]",
+      "name": "runner_files_exist",
+      "passed": true
+    },
+    {
+      "detail": "missing_api=[]",
+      "name": "backend_contract_api_complete",
+      "passed": true
+    },
+    {
+      "detail": "template base raises NotImplementedError",
+      "name": "backend_contract_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "stable hash helpers",
+      "name": "backend_contract_has_hash_helpers",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "runner_references_required_contracts",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "runner_rejects_diagnostic_or_non_mp4_videos_before_jsonl_write",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "runner_rejects_schema_invalid_records_before_jsonl_write",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "runner_promotes_jsonl_only_after_batch_success",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "runner_promotes_videos_and_jsonl_only_after_batch_success",
+      "passed": true
+    },
+    {
+      "detail": "runner writes JSONL/video only; manifest remains separate",
+      "name": "runner_does_not_write_manifest",
+      "passed": true
+    },
+    {
+      "detail": "templates=4",
+      "name": "backend_templates_count",
+      "passed": true
+    },
+    {
+      "detail": "all route templates are fail-closed",
+      "name": "backend_templates_are_template_only",
+      "passed": true
+    },
+    {
+      "detail": "{\n  \"alias_map_loaded\": false,\n  \"dry_run\": true,\n  \"method_aliases\": [\n    \"method_04\",\n    \"method_05\",\n    \"method_08\"\n  ],\n  \"not_external_evidence\": true,\n  \"rows_checked\": 3,\n  \"task_config_paths\": [\n    \"external_validation/configs/peg_place_regrasp.json\"\n  ],\n  \"task_families\": [\n    \"peg_pl",
+      "name": "runner_dry_run_passes_without_writes",
+      "passed": true
+    },
+    {
+      "detail": "backend has TEMPLATE_ONLY=True and cannot collect evidence\n",
+      "name": "runner_rejects_template_backend_for_actual_collection",
+      "passed": true
+    },
+    {
+      "detail": "README keeps evidence boundary",
+      "name": "readme_declares_not_evidence",
+      "passed": true
+    },
+    {
+      "detail": "strict validation commands documented",
+      "name": "readme_has_strict_commands",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json absent before real evidence",
+      "name": "no_real_manifest_written",
+      "passed": true
+    }
+  ],
+  "missing_for_actual_execution": [
+    "non-template backend module",
+    "strict real configs in external_validation/configs",
+    "intentional alias unsealing at execution time",
+    "official MP4-like videos and schema-valid real JSONL logs promoted together only after batch success",
+    "manifest-declared hashes and strict evidence audits"
+  ],
+  "not_external_evidence": true,
+  "passed": true,
+  "runner_harness_ready": true,
+  "version": "external_runner_harness_audit_v1"
+}

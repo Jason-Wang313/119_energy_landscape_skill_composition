@@ -1,0 +1,46 @@
+{
+  "checks": [
+    {
+      "detail": "contract_failures=[], evidence_failures=[]",
+      "name": "synthetic_strict_acceptance_ready",
+      "passed": true
+    },
+    {
+      "detail": "manifest_task_coverage_when_present=True",
+      "name": "synthetic_route_task_count",
+      "passed": true
+    },
+    {
+      "detail": "modalities=True, contact_channels=True",
+      "name": "synthetic_platform_modalities",
+      "passed": true
+    },
+    {
+      "detail": "ready=True, not_draft=True, strict_external=True, date=True, commit=True, precollection_confirmations=True, postcollection_deferred=True, materialized=True",
+      "name": "synthetic_strict_provenance_guards",
+      "passed": true
+    },
+    {
+      "detail": "template_ready=False",
+      "name": "template_acceptance_fails_strict_evidence",
+      "passed": true
+    },
+    {
+      "detail": "ready=False, strict_external=False, date=False, commit=False, precollection_confirmations=False, postcollection_deferred=False, materialized=False",
+      "name": "template_strict_provenance_guards_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "before=44a74216804348a545706b23acbf66f5f2bb12acdb66c4a98c4101c3c3334582, after=44a74216804348a545706b23acbf66f5f2bb12acdb66c4a98c4101c3c3334582",
+      "name": "real_fidelity_report_not_overwritten",
+      "passed": true
+    }
+  ],
+  "not_external_evidence": true,
+  "passed": true,
+  "real_fidelity_report_after": "44a74216804348a545706b23acbf66f5f2bb12acdb66c4a98c4101c3c3334582",
+  "real_fidelity_report_before": "44a74216804348a545706b23acbf66f5f2bb12acdb66c4a98c4101c3c3334582",
+  "synthetic_acceptance_ready": true,
+  "template_acceptance_ready": false,
+  "version": "external_fidelity_acceptance_self_test_v1"
+}

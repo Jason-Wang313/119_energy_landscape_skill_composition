@@ -1,0 +1,502 @@
+{
+  "audited_files": {
+    "README": "README.md",
+    "child_status": "child_status.md",
+    "closure": "docs/external_evidence_closure_brief.md",
+    "final_audit": "docs/final_audit.md",
+    "launch_ticket": "docs/independent_validation_launch_ticket.md",
+    "outreach": "docs/haonan_yilun_outreach_package.md",
+    "readiness_audit": "docs/submission_readiness_audit_v5.md",
+    "readiness_decision": "docs/submission_readiness_decision.md",
+    "reproducibility": "docs/reproducibility_checklist.md",
+    "reviewer": "docs/reviewer_response_packet.md",
+    "send_ready_outreach": "docs/haonan_yilun_send_ready_outreach.md",
+    "version_log": "docs/submission_version_log.md"
+  },
+  "checks": [
+    {
+      "detail": "path=C:\\Users\\wangz\\Downloads\\119.pdf, sha=21D468E4AC3DC8E2705F1CE43536557FD8118049058EFE8F9A95F811C01B4582, size=406598",
+      "name": "canonical_pdf_metadata_available",
+      "passed": true
+    },
+    {
+      "detail": "paper_sha=21D468E4AC3DC8E2705F1CE43536557FD8118049058EFE8F9A95F811C01B4582, canonical_sha=21D468E4AC3DC8E2705F1CE43536557FD8118049058EFE8F9A95F811C01B4582",
+      "name": "paper_pdf_matches_canonical",
+      "passed": true
+    },
+    {
+      "detail": "objective_complete=False, satisfied=17, blocking=4",
+      "name": "readiness_gap_state_visible",
+      "passed": true
+    },
+    {
+      "detail": "start_state='DO_NOT_COLLECT_YET', blocking_missing_count=4",
+      "name": "operator_packet_no_go_visible",
+      "passed": true
+    },
+    {
+      "detail": "backend='external_validation\\\\runner\\\\maniskill_reference_backend.py', run_id='maniskill_sapien_reference_preflight_protocol_v1', blocking=[\"reference_fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'\"]",
+      "name": "collection_readiness_tracked_reference_route_visible",
+      "passed": true
+    },
+    {
+      "detail": "backend='external_validation\\\\runner\\\\maniskill_reference_backend.py', run_id='maniskill_sapien_reference_preflight_protocol_v1', blocking=[\"fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'\"]",
+      "name": "operator_packet_tracked_reference_route_visible",
+      "passed": true
+    },
+    {
+      "detail": "files=398, forbidden=[], start_state='DO_NOT_COLLECT_YET'",
+      "name": "operator_handoff_bundle_visible",
+      "passed": true
+    },
+    {
+      "detail": "fixture_ready=True, no_go_drift_rejected=True, strict_drift_rejected=True, forbidden_rejected=True",
+      "name": "external_operator_handoff_bundle_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "fixture_ready=True, missing_source_rejected=True, unmapped_blocker_rejected=True, manifest_rejected=True, collection_drift_rejected=True",
+      "name": "external_acquisition_packet_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "blockers=4, items=4, haonan_dependency=False",
+      "name": "external_evidence_closure_brief_visible",
+      "passed": true
+    },
+    {
+      "detail": "fixture_ready=True, unmapped_rejected=True, haonan_rejected=True",
+      "name": "external_evidence_closure_brief_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "job_state='DO_NOT_START_COLLECTION_YET', steps=17, blockers=4",
+      "name": "external_collection_job_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "fixture_ready=True, missing_source_rejected=True, source_drift_rejected=True, manifest_rejected=True, ready_state_rejected=True, unsafe_command_rejected=True",
+      "name": "external_collection_job_packet_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "bootstrap_state='READY_TO_BOOTSTRAP_EXTERNAL_MACHINE', command='external_validation/collection_machine_bootstrap.ps1'",
+      "name": "external_collection_machine_bootstrap_visible",
+      "passed": true
+    },
+    {
+      "detail": "fixture_ready=True, missing_source_rejected=True, job_go_rejected=True, local_promotion_rejected=True, unsafe_command_rejected=True",
+      "name": "external_collection_machine_bootstrap_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "launch_state='DO_NOT_START_COLLECTION_YET', render_state='DO_NOT_COLLECT_RENDER_MACHINE', haonan_dependency=False",
+      "name": "independent_validation_launch_ticket_visible",
+      "passed": true
+    },
+    {
+      "detail": "bundle_state='READY_TO_SEND_OPERATOR_PACKAGE', files=398, archive_written=False",
+      "name": "external_operator_release_bundle_visible",
+      "passed": true
+    },
+    {
+      "detail": "fixture_ready=True, archive_ready=True, forbidden_rejected=True, real_untouched=True",
+      "name": "external_operator_release_bundle_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "validation_command_count=47, route_gates=True, gate_order=True",
+      "name": "external_runbook_route_gates_visible",
+      "passed": true
+    },
+    {
+      "detail": "analysis_plan_ready=True, strict_evidence_ready=False",
+      "name": "analysis_plan_visible",
+      "passed": true
+    },
+    {
+      "detail": "primary_route_install_ready=True, missing=[]",
+      "name": "platform_probe_visible",
+      "passed": true
+    },
+    {
+      "detail": "strict_task_binding_install_ready=True, missing=[]",
+      "name": "maniskill_task_binding_probe_visible",
+      "passed": true
+    },
+    {
+      "detail": "strict_env_smoke_ready=True, primary_reset_missing=[]",
+      "name": "maniskill_env_smoke_probe_visible",
+      "passed": true
+    },
+    {
+      "detail": "strict_metadata_ready=True, primary_metadata_missing=[]",
+      "name": "maniskill_fidelity_metadata_probe_visible",
+      "passed": true
+    },
+    {
+      "detail": "platform_onboarding_ready=True, strict_evidence_ready=False",
+      "name": "platform_onboarding_visible",
+      "passed": true
+    },
+    {
+      "detail": "fidelity_provenance_packet_ready=True, strict_fidelity_evidence_ready=False, strict_external_evidence_ready=False",
+      "name": "fidelity_provenance_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "temporary_ready=True, strict_command_drift_rejected=True, real_untouched=True",
+      "name": "fidelity_provenance_packet_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "draft_ready=True, remaining_operator_inputs=9, acceptance_ready=False",
+      "name": "fidelity_acceptance_draft_visible",
+      "passed": true
+    },
+    {
+      "detail": "write_enabled=False, acceptance_write_ready=False, commit='8242a93661319da5e1eec86a74e6a6c09cc629a4', skill_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1', clean=True, dirty_count=0",
+      "name": "fidelity_acceptance_materializer_visible",
+      "passed": true
+    },
+    {
+      "detail": "checks={'matching_clean_checkout_writes_temp_acceptance': True, 'stale_commit_rejected_without_temp_write': True, 'mismatched_skill_hash_rejected_without_temp_write': True, 'dirty_checkout_rejected_without_temp_write': True, 'pycache_excluded_from_skill_library_hash': True, 'real_acceptance_file_not_touched': True}",
+      "name": "fidelity_acceptance_materializer_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "backend_integration_packet_ready=True, strict_backend_ready=False",
+      "name": "backend_integration_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "temporary_ready=True, strict_command_drift_rejected=True, real_untouched=True",
+      "name": "backend_integration_packet_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "backend_contract_ready=True, video_writer_ready=True, render_backend='cpu', shader_pack='minimal', official_collection_ready=False, strict_external_evidence_ready=False",
+      "name": "maniskill_reference_backend_visible",
+      "passed": true
+    },
+    {
+      "detail": "contract_ready=True, collection_ready=False, blocking=[\"fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'\"]",
+      "name": "maniskill_reference_collection_preflight_visible",
+      "passed": true
+    },
+    {
+      "detail": "synthetic_ready=True, reference_ready=True, blockers=[]",
+      "name": "external_collection_preflight_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "temporary_complete_fixture_ready=True, incomplete_log_rejected=True, placeholder_video_rejected=True, template_config_rejected=True, scaffold_implementation_rejected=True",
+      "name": "external_evidence_preflight_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "temporary_fixture_execution_ready=True, missing_linux_bootstrap_rejected=True, strict_evidence_promotion_rejected=True, haonan_dependence_drift_rejected=True",
+      "name": "external_execution_readiness_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "records_written=2, schema_errors=[]",
+      "name": "runner_backend_probe_visible",
+      "passed": true
+    },
+    {
+      "detail": "runner refuses diagnostic/non-MP4/undersized/out-of-dir videos before official JSONL writes",
+      "name": "official_video_write_guard_visible",
+      "passed": true
+    },
+    {
+      "detail": "runner refuses schema-invalid rollout records before official JSONL writes",
+      "name": "official_jsonl_write_guard_visible",
+      "passed": true
+    },
+    {
+      "detail": "runner preserves official JSONL logs and videos when a selected batch fails before promotion",
+      "name": "atomic_official_jsonl_promotion_visible",
+      "passed": true
+    },
+    {
+      "detail": "pilot_smoke_packet_ready=True, strict_evidence_ready=False",
+      "name": "pilot_smoke_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, render_backend='cpu', shader_pack='minimal', timed_out=False, records=0, videos=0, diagnostic_fallbacks=1, diagnostic_rejected=True, last_stage='record_video_start', last_backend_stage='reset_scene_return', reset_triage_status='RESET_SCENE_TIMEOUT_TRIAGE_NOT_APPLICABLE', failure_summary='official video guard rejected diagnostic fallback sidecar before JSONL write after progress stage record_video_start'",
+      "name": "maniskill_pilot_runtime_liveness_visible",
+      "passed": true
+    },
+    {
+      "detail": "render_video_ready=False, render_backend='cpu', shader_pack='minimal', failure_stages=['initial_render_start', 'initial_render_start', 'initial_render_start', 'initial_render_start'], terminal_stages=['close_done', 'close_done', 'close_done', 'close_done'], envs=4, blocking=['render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done); OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done); OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done); PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done)']",
+      "name": "maniskill_render_video_preflight_visible",
+      "passed": true
+    },
+    {
+      "detail": "classes=['vulkan_descriptor_pool_exhaustion'], remediation=5",
+      "name": "renderer_failure_classifier_visible",
+      "passed": true
+    },
+    {
+      "detail": "any_ready=False, records=3, classes=['vulkan_descriptor_pool_exhaustion']",
+      "name": "render_resource_sweep_visible",
+      "passed": true
+    },
+    {
+      "detail": "state='RENDER_REMEDIATION_REQUIRED', errors=['RuntimeError: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory'], work_orders=['collection_readiness_gate', 'diagnostic_fallback_exclusion', 'fidelity_acceptance_after_render_ready', 'pilot_liveness_retest', 'render_profile_matrix_retest', 'renderer_platform_probe']",
+      "name": "render_failure_remediation_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "host_state='RENDER_HOST_NOT_QUALIFIED', collection_state='DO_NOT_COLLECT_RENDER_MACHINE', sources=['https://maniskill.readthedocs.io/en/latest/user_guide/getting_started/installation.html', 'https://sapien.ucsd.edu/docs/latest/index.html', 'https://registry.khronos.org/vulkan/specs/latest/man/html/vkAllocateDescriptorSets.html']",
+      "name": "maniskill_render_host_qualification_brief_visible",
+      "passed": true
+    },
+    {
+      "detail": "ready='QUALIFIED_FOR_RENDER_BACKED_PILOT', fail_closed='DO_NOT_COLLECT_RENDER_MACHINE', fallback_rejected=True, real_untouched=True",
+      "name": "render_machine_qualification_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "temporary_plan_ready=True, confirmed_write_fixture_ready=True, real_outputs_untouched=True",
+      "name": "external_config_materialization_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False",
+      "name": "config_manifest_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "temporary_ready=True, manifest_omission_rejected=True, real_untouched=True",
+      "name": "config_manifest_packet_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "strict config validation recomputes manifest-declared task-config hashes and rejects stale config_path/config_hash pairs",
+      "name": "strict_config_evidence_hash_gate_visible",
+      "passed": true
+    },
+    {
+      "detail": "rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False",
+      "name": "rollout_evidence_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "temporary_ready=True, tasks_rejected=True, real_untouched=True",
+      "name": "rollout_evidence_packet_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "strict rollout validation rejects placeholder/diagnostic/staged/backup/non-MP4 video paths, incomplete method sets, duplicate rows/videos, weak sample counts, mispaired method panels, stale task configs, manifest method-hash mismatches, weak confidence bounds, and missing final confidence summaries",
+      "name": "strict_video_evidence_gate_visible",
+      "passed": true
+    },
+    {
+      "detail": "records=1440, confidence=True, weak_rejected=True, real_untouched=True",
+      "name": "external_rollout_validator_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "synthetic_ready=True, records=1440, prepared_configs=True, candidate_configs=True, confidence_rejected=True, release_rejected=True, real_untouched=True/True",
+      "name": "external_evidence_pipeline_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "release_package_ready=False, bad_release_package_ready=False",
+      "name": "release_package_internal_artifact_rejection_visible",
+      "passed": true
+    },
+    {
+      "detail": "work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False",
+      "name": "ablation_collection_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "temporary_packet_ready=True, work_order_artifact_command_drift_rejected=True, real_outputs_untouched=True",
+      "name": "ablation_collection_packet_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "mapped=37/37, strict_external_evidence_ready=False",
+      "name": "evidence_intake_ledger_visible",
+      "passed": true
+    },
+    {
+      "detail": "temporary_ledger_ready=True, unmapped_failure_rejected=True, real_outputs_untouched=True",
+      "name": "evidence_intake_ledger_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "items=28, expected_records=1440, missing=56",
+      "name": "external_operator_return_package_contract_visible",
+      "passed": true
+    },
+    {
+      "detail": "prepared_configs=4, method_configs=11, method_gaps=11, rollout_gaps=8, official_manifest_exists=False",
+      "name": "precollection_manifest_draft_visible",
+      "passed": true
+    },
+    {
+      "detail": "temporary_draft_ready=True, candidate_hash_drift=True, source_report_drift=True",
+      "name": "precollection_manifest_draft_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "locked_artifacts=42, candidate_method_configs=11, freeze_receipt_ready=False, strict_external_evidence_ready=False",
+      "name": "precollection_freeze_receipt_visible",
+      "passed": true
+    },
+    {
+      "detail": "synthetic_ready=True, missing_backend=True, placeholder_run=True, missing_lock=True, dirty_checkout=True",
+      "name": "precollection_freeze_receipt_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "sealed_artifacts=11, records=0, videos=0, seal_ready=False, manifest_promotion=False",
+      "name": "postcollection_evidence_seal_visible",
+      "passed": true
+    },
+    {
+      "detail": "synthetic_ready=True, metadata_rejected=True, videos_rejected=True, manifest_rejected=True",
+      "name": "postcollection_evidence_seal_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "matched=11, records=0, videos=0, consistency_ready=False",
+      "name": "postcollection_seal_consistency_gate_visible",
+      "passed": true
+    },
+    {
+      "detail": "synthetic_ready=True, drift_rejected=True, extra_rejected=True",
+      "name": "postcollection_seal_consistency_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "method_implementation_packet_ready=True, strict_adapter_evidence_ready=False",
+      "name": "method_implementation_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "temporary_ready=True, missing_rejected=True, oracle_rejected=True, real_untouched=True",
+      "name": "method_implementation_packet_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "implementations_ready=False, release_evidence=True, self_test=True",
+      "name": "baseline_contract_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "candidate_configs=11, strict_adapter_evidence_ready=False, oracle_excluded=True",
+      "name": "external_method_config_materialization_visible",
+      "passed": true
+    },
+    {
+      "detail": "temporary_materialization_ready=True, candidate_hash_drift=True, real_outputs_untouched=True",
+      "name": "external_method_config_materialization_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "scaffold_dir=True, scaffold_template=True, ordinary_false_positive=False, real_untouched=True",
+      "name": "adapter_scaffold_guard_self_test_visible",
+      "passed": true
+    },
+    {
+      "detail": "tracked_candidate_config_fixture_ready=True, reference_adapter_evidence_ready=False, leaky_provenance_ready=False, implementation_hash_only_ready=False, fairness_mismatch_ready=False, check=True",
+      "name": "strict_reference_adapter_rejection_gate_visible",
+      "passed": true
+    },
+    {
+      "detail": "write_enabled=False, not_external_evidence=True",
+      "name": "materializer_guard_visible",
+      "passed": true
+    },
+    {
+      "detail": "frontiers=1680, utility_delta=0.231317169047619, breach_delta=-0.07518194761904762",
+      "name": "planner_edge_policy_visible",
+      "passed": true
+    },
+    {
+      "detail": "signatures=2210, frontiers=1667, corr=0.9574193753223077, breach_delta=-0.08288240682870371",
+      "name": "failure_memory_adaptation_visible",
+      "passed": true
+    },
+    {
+      "detail": "release_hash='546D8DA38D310FBB51EBFC15C41DFD7A9058EC1631EA60019501378FD487A57D', local_model_release_ready=True, external_evidence_ready=False",
+      "name": "local_model_release_visible",
+      "passed": true
+    },
+    {
+      "detail": "entries=12, not_external_evidence=True",
+      "name": "reviewer_response_packet_visible",
+      "passed": true
+    },
+    {
+      "detail": "words=189, primary='CoStream', secondary='none'",
+      "name": "haonan_yilun_send_ready_outreach_visible",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "ledger_tracks_new_visible_claims",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "README_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "final_audit_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "readiness_decision_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "readiness_audit_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "version_log_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "child_status_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "outreach_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "reviewer_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "send_ready_outreach_current_visible_contribution_terms",
+      "passed": true
+    },
+    {
+      "detail": "sha=21D468E4AC3DC8E2705F1CE43536557FD8118049058EFE8F9A95F811C01B4582, size=406598, missing_sha=[], missing_size=[]",
+      "name": "public_pdf_metadata_matches_canonical_artifact",
+      "passed": true
+    }
+  ],
+  "failed_checks": [],
+  "not_external_evidence": true,
+  "passed": true,
+  "version": "visible_contribution_audit_v1"
+}

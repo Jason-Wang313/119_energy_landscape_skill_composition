@@ -1,0 +1,62 @@
+{
+  "checks": [
+    {
+      "detail": "status=0, passed=True, execution_ready=True, strict=False",
+      "name": "temporary_fixture_execution_packet_ready_but_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "status=1, operator_ready=False",
+      "name": "missing_operator_packet_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, paths_exist=False",
+      "name": "missing_required_packet_file_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, paths_exist=False",
+      "name": "missing_linux_bootstrap_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, paths_exist=False",
+      "name": "missing_linux_collection_job_command_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, no_real_manifest=False",
+      "name": "premature_manifest_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, strict=True, gates_not_ready=False",
+      "name": "strict_evidence_promotion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, independent=False",
+      "name": "haonan_dependence_drift_rejected",
+      "passed": true
+    },
+    {
+      "detail": "before={'results/external_execution_readiness_audit.json': 'b496cef5b6a4347d6fc9eaaa18a198175e07ccbcbc6c577da33a7499536249f8', 'results/external_execution_readiness_audit.md': '97b0197a422e572eb49622bb1ea1c62831fb240146e22a5ca625fdd8fdfd92b6', 'external_validation/manifest.json': None}, after={'results/external_execution_readiness_audit.json': 'b496cef5b6a4347d6fc9eaaa18a198175e07ccbcbc6c577da33a7499536249f8', 'results/external_execution_readiness_audit.md': '97b0197a422e572eb49622bb1ea1c62831fb240146e22a5ca625fdd8fdfd92b6', 'external_validation/manifest.json': None}",
+      "name": "real_execution_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "haonan_dependence_drift_rejected": true,
+  "missing_linux_bootstrap_rejected": true,
+  "missing_linux_collection_job_command_rejected": true,
+  "missing_operator_packet_rejected": true,
+  "missing_required_packet_file_rejected": true,
+  "not_external_evidence": true,
+  "passed": true,
+  "premature_manifest_rejected": true,
+  "real_outputs_untouched": true,
+  "strict_evidence_promotion_rejected": true,
+  "strict_external_evidence_ready": false,
+  "temporary_fixture_execution_ready": true,
+  "version": "external_execution_readiness_self_test_v1"
+}

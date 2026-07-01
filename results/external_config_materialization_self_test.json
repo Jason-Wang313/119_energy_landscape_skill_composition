@@ -1,0 +1,56 @@
+{
+  "checks": [
+    {
+      "detail": "status=0, task_count=4, written=0",
+      "name": "temporary_config_materialization_plan_ready_but_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "status=0, files_written=4, temp_files=4",
+      "name": "confirmed_temp_write_materializes_schema_valid_configs",
+      "passed": true
+    },
+    {
+      "detail": "status=1, written=0",
+      "name": "write_without_confirmation_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, written=0",
+      "name": "placeholder_platform_write_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, written=0",
+      "name": "template_token_write_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, task_binding_check=False",
+      "name": "missing_task_binding_file_rejected",
+      "passed": true
+    },
+    {
+      "detail": "second confirmed fixture write without --force is rejected",
+      "name": "overwrite_without_force_rejected",
+      "passed": true
+    },
+    {
+      "detail": "tracked=7, changed=[]",
+      "name": "real_config_materialization_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "confirmed_write_fixture_ready": true,
+  "missing_task_binding_rejected": true,
+  "not_external_evidence": true,
+  "overwrite_without_force_rejected": true,
+  "passed": true,
+  "placeholder_platform_write_rejected": true,
+  "real_outputs_untouched": true,
+  "strict_config_evidence_ready": false,
+  "template_token_write_rejected": true,
+  "temporary_plan_ready": true,
+  "version": "external_config_materialization_self_test_v1",
+  "write_without_confirm_rejected": true
+}

@@ -1,0 +1,51 @@
+{
+  "checks": [
+    {
+      "detail": "status=0, blockers=4",
+      "name": "temporary_fixture_builds_current_closure_brief",
+      "passed": true
+    },
+    {
+      "detail": "status=1, exact_four=False",
+      "name": "unmapped_fifth_blocker_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, no_manifest=False",
+      "name": "premature_manifest_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, command_spines=False",
+      "name": "missing_linux_command_spine_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, route_check=False",
+      "name": "haonan_dependent_route_rejected",
+      "passed": true
+    },
+    {
+      "detail": "status=1, payload_written=False",
+      "name": "missing_source_packet_rejected",
+      "passed": true
+    },
+    {
+      "detail": "before={'json': '32f1c65535fbddd5561b851836268ec9e15d2eccf7fc10617cf4c0f25dd881a3', 'md': '7a284ec84c024910358918c31efbf71d21b42fbf5c8e572cf35634802304cfaa', 'doc': '7a284ec84c024910358918c31efbf71d21b42fbf5c8e572cf35634802304cfaa'}, after={'json': '32f1c65535fbddd5561b851836268ec9e15d2eccf7fc10617cf4c0f25dd881a3', 'md': '7a284ec84c024910358918c31efbf71d21b42fbf5c8e572cf35634802304cfaa', 'doc': '7a284ec84c024910358918c31efbf71d21b42fbf5c8e572cf35634802304cfaa'}",
+      "name": "real_repository_closure_outputs_untouched",
+      "passed": true
+    }
+  ],
+  "failed_checks": [],
+  "haonan_dependent_route_rejected": true,
+  "missing_linux_command_spine_rejected": true,
+  "missing_source_packet_rejected": true,
+  "not_external_evidence": true,
+  "passed": true,
+  "premature_manifest_rejected": true,
+  "real_outputs_untouched": true,
+  "strict_external_evidence_ready": false,
+  "temporary_fixture_ready": true,
+  "unmapped_blocker_rejected": true,
+  "version": "external_evidence_closure_brief_self_test_v1"
+}

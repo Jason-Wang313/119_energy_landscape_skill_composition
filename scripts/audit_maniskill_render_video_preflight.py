@@ -1,0 +1,788 @@
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+import textwrap
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+EXTERNAL = ROOT / "external_validation"
+RESULTS = ROOT / "results"
+PREFLIGHT_ROOT = EXTERNAL / "render_video_preflight"
+VIDEO_DIR = PREFLIGHT_ROOT / "videos"
+OUT_JSON = RESULTS / "maniskill_render_video_preflight_audit.json"
+OUT_MD = RESULTS / "maniskill_render_video_preflight_audit.md"
+VERSION = "maniskill_render_video_preflight_audit_v2"
+CLEANUP_STAGES = {"close_start", "close_done", "close_error"}
+
+
+def rel(path: Path) -> str:
+    try:
+        return path.resolve().relative_to(ROOT.resolve()).as_posix()
+    except ValueError:
+        return str(path)
+
+
+def read_json(path: Path) -> dict[str, Any]:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise SystemExit(f"invalid JSON in {path}: {exc}") from exc
+
+
+def add_check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str) -> None:
+    checks.append({"name": name, "passed": bool(passed), "detail": detail})
+
+
+def is_under(path: Path, parent: Path) -> bool:
+    try:
+        path.resolve().relative_to(parent.resolve())
+        return True
+    except ValueError:
+        return False
+
+
+def clean_ansi(text: str) -> str:
+    return re.sub(r"\x1b\[[0-9;]*m", "", text)
+
+
+def coerce_output(value: Any) -> str:
+    if isinstance(value, str):
+        return value
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
+    return ""
+
+
+def clear_preflight_outputs() -> None:
+    if PREFLIGHT_ROOT.exists():
+        resolved = PREFLIGHT_ROOT.resolve()
+        expected = (EXTERNAL / "render_video_preflight").resolve()
+        if resolved != expected:
+            raise SystemExit(f"refusing to clear unexpected preflight path: {resolved}")
+        shutil.rmtree(PREFLIGHT_ROOT)
+    VIDEO_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def primary_envs() -> list[dict[str, str]]:
+    payload = read_json(EXTERNAL / "maniskill_task_bindings.json")
+    rows: list[dict[str, str]] = []
+    for binding in payload.get("bindings", []) or []:
+        if not isinstance(binding, dict):
+            continue
+        task_family = str(binding.get("task_family", "")).strip()
+        env_id = str(binding.get("primary_env_id", "")).strip()
+        if task_family and env_id:
+            rows.append({"task_family": task_family, "env_id": env_id})
+    return rows
+
+
+def render_probe_code() -> str:
+    return textwrap.dedent(
+        r"""
+        import json
+        import sys
+        import time
+        import traceback
+        from pathlib import Path
+
+        env_id = sys.argv[1]
+        width = int(sys.argv[2])
+        height = int(sys.argv[3])
+        seed = int(sys.argv[4])
+        output_path = Path(sys.argv[5])
+        render_backend = sys.argv[6]
+        shader_pack = sys.argv[7]
+
+        payload = {
+            "env_id": env_id,
+            "width": width,
+            "height": height,
+            "seed": seed,
+            "render_backend": render_backend,
+            "shader_pack": shader_pack,
+            "made_env": False,
+            "reset_ok": False,
+            "step_ok": False,
+            "render_ok": False,
+            "mp4_ok": False,
+            "video_path": "",
+            "video_size_bytes": 0,
+            "error_type": "",
+            "error": "",
+            "traceback_tail": "",
+        }
+        env = None
+        def emit_stage(stage, **extra):
+            marker_payload = {
+                "stage": stage,
+                "env_id": env_id,
+                "render_backend": render_backend,
+                "shader_pack": shader_pack,
+                "time": round(time.time(), 3),
+            }
+            marker_payload.update(extra)
+            print("PAPER119_RENDER_STAGE " + json.dumps(marker_payload, sort_keys=True), flush=True)
+
+        try:
+            emit_stage("start")
+            emit_stage("import_start")
+            import gymnasium as gym
+            import mani_skill  # noqa: F401
+            from external_validation.runner.maniskill_reference_backend import _as_uint8_rgb_frame, write_mp4
+
+            emit_stage("import_done")
+            kwargs = {
+                "obs_mode": "state",
+                "render_mode": "rgb_array",
+                "render_backend": render_backend,
+                "sensor_configs": {"width": width, "height": height, "shader_pack": shader_pack},
+                "human_render_camera_configs": {"width": width, "height": height, "shader_pack": shader_pack},
+            }
+            try:
+                emit_stage("make_env_start")
+                env = gym.make(env_id, **kwargs)
+            except TypeError:
+                emit_stage("make_env_retry_without_render_kwargs")
+                env = gym.make(env_id, obs_mode="state", render_mode="rgb_array")
+            payload["made_env"] = True
+            emit_stage("make_env_done")
+            emit_stage("reset_start")
+            env.reset(seed=seed)
+            payload["reset_ok"] = True
+            frames = []
+            emit_stage("initial_render_start")
+            frame = env.render()
+            frames.append(_as_uint8_rgb_frame(frame))
+            payload["render_ok"] = True
+            emit_stage("initial_render_done")
+            try:
+                emit_stage("step_start")
+                env.step(env.action_space.sample())
+                payload["step_ok"] = True
+                emit_stage("step_done")
+                emit_stage("post_step_render_start")
+                frame = env.render()
+                frames.append(_as_uint8_rgb_frame(frame))
+                emit_stage("post_step_render_done")
+            except Exception as step_exc:  # noqa: BLE001 - preflight reports environment-specific step/render issues.
+                payload["step_error"] = f"{type(step_exc).__name__}: {step_exc}"
+                emit_stage("step_or_post_step_render_error", error=payload["step_error"])
+            emit_stage("mp4_write_start", frames=len(frames))
+            written = write_mp4(output_path, frames, fps=4)
+            payload["mp4_ok"] = True
+            payload["video_path"] = str(written).replace("\\", "/")
+            payload["video_size_bytes"] = output_path.stat().st_size if output_path.exists() else 0
+            emit_stage("mp4_write_done", video_size_bytes=payload["video_size_bytes"])
+        except Exception as exc:  # noqa: BLE001 - all renderer failures are data for this preflight.
+            payload["error_type"] = type(exc).__name__
+            payload["error"] = str(exc)
+            payload["traceback_tail"] = "\n".join(traceback.format_exc().splitlines()[-12:])
+            emit_stage("error", error_type=payload["error_type"], error=payload["error"])
+        finally:
+            try:
+                if env is not None:
+                    emit_stage("close_start")
+                    env.close()
+                    emit_stage("close_done")
+            except Exception as close_exc:  # noqa: BLE001
+                payload["close_error"] = f"{type(close_exc).__name__}: {close_exc}"
+                emit_stage("close_error", error=payload["close_error"])
+            print("PAPER119_RENDER_PREFLIGHT " + json.dumps(payload, sort_keys=True))
+        """
+    )
+
+
+def parse_marker(stdout: str) -> dict[str, Any] | None:
+    marker = "PAPER119_RENDER_PREFLIGHT "
+    for line in reversed(stdout.splitlines()):
+        if line.startswith(marker):
+            try:
+                payload = json.loads(line[len(marker) :])
+            except json.JSONDecodeError:
+                return None
+            return payload if isinstance(payload, dict) else None
+    return None
+
+
+def parse_progress_stages(stdout: str) -> list[dict[str, Any]]:
+    marker = "PAPER119_RENDER_STAGE "
+    stages: list[dict[str, Any]] = []
+    for line in stdout.splitlines():
+        if not line.startswith(marker):
+            continue
+        try:
+            payload = json.loads(line[len(marker) :])
+        except json.JSONDecodeError:
+            continue
+        if isinstance(payload, dict):
+            stages.append(payload)
+    return stages
+
+
+def progress_stage_name(stage: dict[str, Any]) -> str:
+    return str(stage.get("stage", "") or "")
+
+
+def last_non_cleanup_stage(progress_stages: list[dict[str, Any]], end_index: int | None = None) -> str:
+    stages = progress_stages if end_index is None else progress_stages[:end_index]
+    for stage in reversed(stages):
+        name = progress_stage_name(stage)
+        if name and name not in CLEANUP_STAGES:
+            return name
+    return ""
+
+
+def failure_progress_stage(progress_stages: list[dict[str, Any]], timed_out: bool) -> str:
+    for index, stage in enumerate(progress_stages):
+        if progress_stage_name(stage) == "error":
+            return last_non_cleanup_stage(progress_stages, index) or "error"
+    if timed_out:
+        return last_non_cleanup_stage(progress_stages)
+    return ""
+
+
+def display_command(command: list[str]) -> str:
+    if len(command) >= 4 and command[2] == "-c":
+        return " ".join([*command[:3], "<render_probe_code>", *command[4:]])
+    return " ".join(command[:2] + ["<render_probe_code>", *command[3:]])
+
+
+def run_probe(row: dict[str, str], args: argparse.Namespace) -> dict[str, Any]:
+    env_id = row["env_id"]
+    task_family = row["task_family"]
+    profile_label = str(getattr(args, "profile_label", "") or "").strip()
+    suffix = f"_{profile_label}" if profile_label else ""
+    target = VIDEO_DIR / task_family / f"{env_id.replace('/', '_')}_render_preflight{suffix}.mp4"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    command = [
+        sys.executable,
+        "-u",
+        "-c",
+        render_probe_code(),
+        env_id,
+        str(args.width),
+        str(args.height),
+        str(args.seed),
+        str(target),
+        str(args.render_backend),
+        str(args.shader_pack),
+    ]
+    env = os.environ.copy()
+    env.setdefault("SAPIEN_RENDERER_DEVICE", args.renderer_device)
+    env["PAPER119_MANISKILL_RENDER_BACKEND"] = str(args.render_backend)
+    env["PAPER119_MANISKILL_SHADER_PACK"] = str(args.shader_pack)
+    env["PAPER119_MANISKILL_RENDER_WIDTH"] = str(args.width)
+    env["PAPER119_MANISKILL_RENDER_HEIGHT"] = str(args.height)
+    try:
+        proc = subprocess.run(
+            command,
+            cwd=ROOT,
+            env=env,
+            text=True,
+            capture_output=True,
+            timeout=args.timeout_seconds,
+        )
+        timed_out = False
+        stdout = coerce_output(proc.stdout)
+        stderr = coerce_output(proc.stderr)
+        returncode: int | None = proc.returncode
+    except subprocess.TimeoutExpired as exc:
+        timed_out = True
+        stdout = coerce_output(exc.stdout)
+        stderr = coerce_output(exc.stderr)
+        returncode = None
+
+    marker_payload = parse_marker(stdout) or {}
+    progress_stages = parse_progress_stages(stdout)
+    last_progress_stage = progress_stage_name(progress_stages[-1]) if progress_stages else ""
+    failure_stage = failure_progress_stage(progress_stages, timed_out)
+    record: dict[str, Any] = {
+        "task_family": task_family,
+        "env_id": env_id,
+        "command": display_command(command),
+        "timed_out": timed_out,
+        "returncode": returncode,
+        "stdout_tail": stdout[-2000:],
+        "stderr_tail": stderr[-2000:],
+        "progress_stages": progress_stages[-40:],
+        "last_progress_stage": last_progress_stage,
+        "terminal_progress_stage": last_progress_stage,
+        "failure_progress_stage": failure_stage,
+        "parsed_marker": bool(marker_payload),
+        "output_path": rel(target),
+        "render_backend": str(args.render_backend),
+        "shader_pack": str(args.shader_pack),
+        "width": int(args.width),
+        "height": int(args.height),
+        "seed": int(args.seed),
+        "not_external_evidence": True,
+    }
+    record.update(marker_payload)
+    record["last_progress_stage"] = last_progress_stage
+    record["terminal_progress_stage"] = last_progress_stage
+    record["failure_progress_stage"] = failure_stage
+    if timed_out:
+        record["error_type"] = "TimeoutExpired"
+        suffix = f" after progress stage {failure_stage or last_progress_stage}" if (failure_stage or last_progress_stage) else ""
+        record["error"] = f"render preflight exceeded {args.timeout_seconds} seconds{suffix}"
+    if not record.get("error") and returncode not in (0, None):
+        cleaned = clean_ansi(stderr)
+        runtime_errors = [line.strip() for line in cleaned.splitlines() if "RuntimeError:" in line]
+        record["error_type"] = "RuntimeError" if runtime_errors else f"returncode_{returncode}"
+        record["error"] = runtime_errors[-1] if runtime_errors else f"subprocess exited with {returncode}"
+    record["render_video_ready"] = bool(
+        record.get("mp4_ok")
+        and not record.get("timed_out")
+        and returncode == 0
+        and Path(str(record.get("video_path", ""))).exists()
+    )
+    return record
+
+
+def parse_profile_spec(spec: str) -> list[tuple[str, str]]:
+    profiles: list[tuple[str, str]] = []
+    seen: set[tuple[str, str]] = set()
+    for raw_item in spec.split(","):
+        item = raw_item.strip()
+        if not item:
+            continue
+        if ":" in item:
+            backend, shader_pack = item.split(":", 1)
+        else:
+            backend, shader_pack = item, "minimal"
+        profile = (backend.strip(), shader_pack.strip())
+        if not profile[0] or not profile[1] or profile in seen:
+            continue
+        seen.add(profile)
+        profiles.append(profile)
+    return profiles
+
+
+def run_profile_matrix(env_rows: list[dict[str, str]], args: argparse.Namespace) -> list[dict[str, Any]]:
+    records: list[dict[str, Any]] = []
+    profile_rows = env_rows[: max(1, args.profile_matrix_max_envs)]
+    for render_backend, shader_pack in parse_profile_spec(args.profile_matrix_spec):
+        profile_args = argparse.Namespace(**vars(args))
+        profile_args.render_backend = render_backend
+        profile_args.shader_pack = shader_pack
+        profile_args.profile_label = f"{render_backend}_{shader_pack}".replace("/", "_")
+        for row in profile_rows:
+            record = run_probe(row, profile_args)
+            record["profile"] = f"{render_backend}/{shader_pack}"
+            record["profile_render_backend"] = render_backend
+            record["profile_shader_pack"] = shader_pack
+            record["renderer_failure_class"] = "" if record.get("render_video_ready") else classify_render_failure(record)
+            records.append(record)
+    return records
+
+
+def run_timeout_diagnosis(records: list[dict[str, Any]], args: argparse.Namespace) -> list[dict[str, Any]]:
+    if int(args.timeout_diagnosis_seconds) <= 0:
+        return []
+    timed_out_envs = [
+        {"task_family": str(record.get("task_family", "")), "env_id": str(record.get("env_id", ""))}
+        for record in records
+        if record.get("timed_out") and record.get("task_family") and record.get("env_id")
+    ]
+    diagnosis_rows = timed_out_envs[: max(0, int(args.timeout_diagnosis_max_envs))]
+    diagnosis_records: list[dict[str, Any]] = []
+    for row in diagnosis_rows:
+        diagnosis_args = argparse.Namespace(**vars(args))
+        diagnosis_args.timeout_seconds = int(args.timeout_diagnosis_seconds)
+        diagnosis_args.width = int(args.timeout_diagnosis_width)
+        diagnosis_args.height = int(args.timeout_diagnosis_height)
+        diagnosis_args.profile_label = "timeout_diagnosis"
+        record = run_probe(row, diagnosis_args)
+        record["timeout_diagnosis"] = True
+        record["renderer_failure_class"] = "" if record.get("render_video_ready") else classify_render_failure(record)
+        diagnosis_records.append(record)
+    return diagnosis_records
+
+
+def summarize_blocker(records: list[dict[str, Any]]) -> str:
+    failed = [record for record in records if not record.get("render_video_ready")]
+    if not failed:
+        return ""
+    fragments = []
+    for record in failed[:4]:
+        error = str(record.get("error") or record.get("error_type") or "no render-backed MP4")
+        failure_stage = str(record.get("failure_progress_stage", "") or "")
+        terminal_stage = str(record.get("terminal_progress_stage") or record.get("last_progress_stage") or "")
+        stage_parts = []
+        if failure_stage:
+            stage_parts.append(f"failure stage: {failure_stage}")
+        if terminal_stage and terminal_stage != failure_stage:
+            stage_parts.append(f"terminal stage: {terminal_stage}")
+        stage_suffix = f" ({', '.join(stage_parts)})" if stage_parts else ""
+        fragments.append(f"{record.get('env_id')}: {error}{stage_suffix}")
+    return "render-backed MP4 preflight is not ready on this machine; " + "; ".join(fragments)
+
+
+def summarize_timeout_diagnosis(records: list[dict[str, Any]]) -> str:
+    if not records:
+        return ""
+    fragments = []
+    for record in records[:3]:
+        failure_class = str(record.get("renderer_failure_class") or "unknown_render_failure")
+        error = str(record.get("error") or record.get("error_type") or "no diagnostic error")
+        fragments.append(f"{record.get('env_id')}: {failure_class}: {error}")
+    return "timeout diagnosis retest found " + "; ".join(fragments)
+
+
+def classify_render_failure(record: dict[str, Any]) -> str:
+    text = " ".join(
+        str(record.get(key, ""))
+        for key in ("error", "error_type", "traceback_tail", "stderr_tail", "stdout_tail")
+    )
+    if "allocateDescriptorSetsUnique" in text or "ErrorOutOfPoolMemory" in text:
+        return "vulkan_descriptor_pool_exhaustion"
+    if "TimeoutExpired" in text or record.get("timed_out"):
+        return "render_timeout"
+    if "render did not return an RGB-like frame" in text:
+        return "non_rgb_render_output"
+    if record.get("made_env") is not True:
+        return "environment_construction_failure"
+    if record.get("reset_ok") is not True:
+        return "environment_reset_failure"
+    if record.get("mp4_ok") is not True:
+        return "mp4_writer_or_render_capture_failure"
+    return "unknown_render_failure"
+
+
+def remediation_for_failure_classes(failure_classes: list[str]) -> list[str]:
+    if not failure_classes:
+        return []
+    commands = [
+        "Do not use diagnostic fallback videos as external evidence; rerun this preflight on the exact accepted collection machine.",
+        "Record Python, ManiSkill, SAPIEN, GPU/Vulkan, render backend, shader pack, and driver provenance with scripts\\probe_external_platform.py before fidelity acceptance.",
+    ]
+    if "vulkan_descriptor_pool_exhaustion" in failure_classes:
+        commands.extend(
+            [
+                "Treat vk::Device::allocateDescriptorSetsUnique/ErrorOutOfPoolMemory as a renderer-resource blocker for this machine, not as rollout evidence failure.",
+                "Retest one primary environment at a time with explicit renderer profiles before official collection: cpu/minimal, gpu/minimal, and sapien_cuda/minimal.",
+                "Use a machine whose SAPIEN/Vulkan renderer can capture RGB frames for all four primary task families before promoting fidelity acceptance.",
+            ]
+        )
+    if "render_timeout" in failure_classes:
+        commands.append("Increase --timeout-seconds only after confirming the renderer is making progress and output directories remain quarantined.")
+    if "non_rgb_render_output" in failure_classes:
+        commands.append("Inspect camera and human_render_camera_configs; strict videos require RGB-like frames, not state-shaped arrays.")
+    return commands
+
+
+def profile_retest_commands(args: argparse.Namespace) -> list[str]:
+    commands = []
+    for backend in ("cpu", "gpu", "sapien_cuda"):
+        commands.append(
+            "python scripts\\audit_maniskill_render_video_preflight.py "
+            f"--timeout-seconds {args.timeout_seconds} --max-envs 1 "
+            f"--width {args.width} --height {args.height} "
+            f"--render-backend {backend} --shader-pack {args.shader_pack}"
+        )
+    commands.append(
+        "python scripts\\audit_maniskill_render_video_preflight.py "
+        f"--timeout-seconds {args.timeout_seconds} --max-envs 4 "
+        f"--width {args.width} --height {args.height} "
+        f"--render-backend {args.render_backend} --shader-pack {args.shader_pack}"
+    )
+    return commands
+
+
+def write_md(payload: dict[str, Any]) -> None:
+    lines = [
+        "# ManiSkill Render-Video Preflight Audit",
+        "",
+        f"Passed: `{str(payload['passed']).lower()}`.",
+        "Not evidence: `true`.",
+        f"Render video ready: `{str(payload['render_video_ready']).lower()}`.",
+        f"Strict external evidence ready: `{str(payload['strict_external_evidence_ready']).lower()}`.",
+        f"Output directory: `{payload['output_dir']}`.",
+        "",
+        "This preflight tests whether the selected ManiSkill/SAPIEN runtime can export render-backed RGB MP4 files before any official external collection. It is not rollout evidence, does not write the real manifest, and does not replace fidelity acceptance or strict rollout audits.",
+        "",
+        "## Blocking Missing",
+        "",
+    ]
+    for blocker in payload["blocking_missing"] or ["none"]:
+        lines.append(f"- {blocker}")
+    lines.extend(
+        [
+            "",
+            "## Renderer Failure Classifier",
+            "",
+            f"- Failure classes: `{payload['renderer_failure_classes']}`",
+            f"- Failure stages: `{payload.get('renderer_failure_stages', [])}`",
+            f"- Operator remediation items: `{len(payload['operator_remediation'])}`",
+            "",
+        ]
+    )
+    for item in payload["operator_remediation"] or ["none"]:
+        lines.append(f"- {item}")
+    lines.extend(["", "## Renderer Profile Retest Commands", ""])
+    for command in payload["renderer_profile_retest_commands"]:
+        lines.extend(["```powershell", command, "```"])
+    matrix_records = payload.get("profile_matrix_records", []) or []
+    lines.extend(["", "## Renderer Profile Matrix", ""])
+    if not matrix_records:
+        lines.append("- `not_run`")
+    for record in matrix_records:
+        status = "ready" if record.get("render_video_ready") else "not_ready"
+        error = str(record.get("error") or record.get("error_type") or "")
+        lines.append(
+            f"- `{status}` `{record.get('profile')}` / `{record.get('env_id')}`: "
+            f"made_env={record.get('made_env')}, reset_ok={record.get('reset_ok')}, "
+            f"render_ok={record.get('render_ok')}, mp4_ok={record.get('mp4_ok')}, "
+            f"error={error!r}, failure_stage={record.get('failure_progress_stage')!r}, "
+            f"terminal_stage={record.get('terminal_progress_stage')!r}"
+        )
+    lines.extend(["", "## Environment Results", ""])
+    for record in payload["env_records"]:
+        status = "ready" if record.get("render_video_ready") else "not_ready"
+        error = str(record.get("error") or record.get("error_type") or "")
+        lines.append(
+            f"- `{status}` `{record.get('task_family')}` / `{record.get('env_id')}`: "
+            f"made_env={record.get('made_env')}, reset_ok={record.get('reset_ok')}, "
+            f"render_ok={record.get('render_ok')}, mp4_ok={record.get('mp4_ok')}, "
+            f"error={error!r}, failure_stage={record.get('failure_progress_stage')!r}, "
+            f"terminal_stage={record.get('terminal_progress_stage')!r}"
+        )
+    diagnosis_records = payload.get("timeout_diagnosis_records", []) or []
+    lines.extend(["", "## Timeout Diagnosis Retest", ""])
+    if not diagnosis_records:
+        lines.append("- `not_run`")
+    for record in diagnosis_records:
+        status = "ready" if record.get("render_video_ready") else "not_ready"
+        error = str(record.get("error") or record.get("error_type") or "")
+        lines.append(
+            f"- `{status}` `{record.get('task_family')}` / `{record.get('env_id')}`: "
+            f"class={record.get('renderer_failure_class')}, made_env={record.get('made_env')}, "
+            f"reset_ok={record.get('reset_ok')}, render_ok={record.get('render_ok')}, "
+            f"mp4_ok={record.get('mp4_ok')}, error={error!r}, "
+            f"failure_stage={record.get('failure_progress_stage')!r}, "
+            f"terminal_stage={record.get('terminal_progress_stage')!r}"
+        )
+    lines.extend(["", "## Checks", ""])
+    for check in payload["checks"]:
+        status = "pass" if check["passed"] else "fail"
+        lines.append(f"- `{status}` `{check['name']}`: {check['detail']}")
+    OUT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Probe render-backed ManiSkill MP4 export without creating evidence.")
+    parser.add_argument("--timeout-seconds", type=int, default=45)
+    parser.add_argument("--width", type=int, default=64)
+    parser.add_argument("--height", type=int, default=64)
+    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--renderer-device", default="cpu")
+    parser.add_argument("--render-backend", default="cpu")
+    parser.add_argument("--shader-pack", default="minimal")
+    parser.add_argument("--max-envs", type=int, default=4)
+    parser.add_argument("--profile-matrix", action="store_true")
+    parser.add_argument("--profile-matrix-max-envs", type=int, default=1)
+    parser.add_argument("--profile-matrix-spec", default="cpu:minimal,gpu:minimal,sapien_cuda:minimal")
+    parser.add_argument("--timeout-diagnosis-seconds", type=int, default=0)
+    parser.add_argument("--timeout-diagnosis-max-envs", type=int, default=1)
+    parser.add_argument("--timeout-diagnosis-width", type=int, default=32)
+    parser.add_argument("--timeout-diagnosis-height", type=int, default=32)
+    args = parser.parse_args()
+
+    RESULTS.mkdir(exist_ok=True)
+    clear_preflight_outputs()
+    env_rows = primary_envs()[: max(1, args.max_envs)]
+    records = [run_probe(row, args) for row in env_rows]
+    for record in records:
+        record["renderer_failure_class"] = "" if record.get("render_video_ready") else classify_render_failure(record)
+    timeout_diagnosis_records = run_timeout_diagnosis(records, args)
+    profile_matrix_records = run_profile_matrix(env_rows, args) if args.profile_matrix else []
+    render_ready = bool(records) and all(record.get("render_video_ready") for record in records)
+    blocking = [] if render_ready else [summarize_blocker(records) or "no ManiSkill primary environments were render-probed"]
+    diagnosis_summary = summarize_timeout_diagnosis(timeout_diagnosis_records)
+    if diagnosis_summary and not render_ready:
+        blocking.append(diagnosis_summary)
+    all_failure_records = [*records, *timeout_diagnosis_records, *profile_matrix_records]
+    failure_classes = sorted(
+        {str(record.get("renderer_failure_class")) for record in all_failure_records if record.get("renderer_failure_class")}
+    )
+    failure_stages = sorted(
+        {
+            str(record.get("failure_progress_stage"))
+            for record in all_failure_records
+            if not record.get("render_video_ready") and record.get("failure_progress_stage")
+        }
+    )
+    operator_remediation = remediation_for_failure_classes(failure_classes)
+    retest_commands = profile_retest_commands(args)
+
+    checks: list[dict[str, Any]] = []
+    add_check(checks, "render_preflight_is_non_evidence", True, "preflight writes only quarantine outputs and audit files")
+    add_check(
+        checks,
+        "quarantine_paths_are_not_official_evidence",
+        is_under(VIDEO_DIR, PREFLIGHT_ROOT)
+        and not is_under(VIDEO_DIR, EXTERNAL / "videos")
+        and not (EXTERNAL / "manifest.json").exists(),
+        f"video_dir={rel(VIDEO_DIR)}",
+    )
+    add_check(checks, "primary_envs_loaded", len(env_rows) >= 1, f"envs={len(env_rows)}")
+    add_check(
+        checks,
+        "each_probe_has_terminal_status",
+        bool(records) and all(record.get("timed_out") or record.get("parsed_marker") for record in records),
+        f"records={len(records)}",
+    )
+    add_check(
+        checks,
+        "render_progress_markers_recorded",
+        all((not record.get("timed_out")) or record.get("last_progress_stage") for record in records),
+        f"last_stages={[record.get('last_progress_stage') for record in records]}",
+    )
+    add_check(
+        checks,
+        "render_readiness_recorded_without_overclaim",
+        isinstance(render_ready, bool),
+        f"render_video_ready={render_ready}",
+    )
+    add_check(
+        checks,
+        "blocking_summary_present_when_not_ready",
+        render_ready or bool(blocking and blocking[0]),
+        f"blocking={blocking}",
+    )
+    add_check(
+        checks,
+        "renderer_failure_class_recorded_when_not_ready",
+        render_ready or bool(failure_classes),
+        f"classes={failure_classes}",
+    )
+    add_check(
+        checks,
+        "renderer_failure_stage_recorded_when_not_ready",
+        render_ready
+        or all(
+            bool(record.get("failure_progress_stage"))
+            for record in records
+            if not record.get("render_video_ready")
+        ),
+        f"failure_stages={[record.get('failure_progress_stage') for record in records]}",
+    )
+    add_check(
+        checks,
+        "operator_remediation_present_when_not_ready",
+        render_ready or len(operator_remediation) >= 2,
+        f"items={len(operator_remediation)}",
+    )
+    add_check(
+        checks,
+        "profile_retest_commands_cover_renderer_backends",
+        all(fragment in "\n".join(retest_commands) for fragment in ("--render-backend cpu", "--render-backend gpu", "--render-backend sapien_cuda")),
+        "\n".join(retest_commands),
+    )
+    profile_backends = sorted({str(record.get("profile_render_backend")) for record in profile_matrix_records})
+    add_check(
+        checks,
+        "profile_matrix_records_renderer_backends",
+        (not args.profile_matrix) or all(backend in profile_backends for backend in ("cpu", "gpu", "sapien_cuda")),
+        f"profile_matrix={args.profile_matrix}, backends={profile_backends}",
+    )
+    add_check(
+        checks,
+        "profile_matrix_terminal_status",
+        (not args.profile_matrix)
+        or (
+            len(profile_matrix_records) >= 3
+            and all(record.get("timed_out") or record.get("parsed_marker") for record in profile_matrix_records)
+        ),
+        f"profile_matrix_records={len(profile_matrix_records)}",
+    )
+    add_check(
+        checks,
+        "profile_matrix_quarantined_non_evidence",
+        all(record.get("not_external_evidence") is True and is_under(Path(str(record.get("output_path", ""))), PREFLIGHT_ROOT) for record in profile_matrix_records),
+        f"profile_matrix_records={len(profile_matrix_records)}",
+    )
+    add_check(
+        checks,
+        "timeout_diagnosis_quarantined_non_evidence",
+        all(
+            record.get("not_external_evidence") is True
+            and record.get("timeout_diagnosis") is True
+            and is_under(Path(str(record.get("output_path", ""))), PREFLIGHT_ROOT)
+            for record in timeout_diagnosis_records
+        ),
+        f"timeout_diagnosis_records={len(timeout_diagnosis_records)}",
+    )
+    add_check(
+        checks,
+        "timeout_diagnosis_terminal_status",
+        (not timeout_diagnosis_records)
+        or all(record.get("timed_out") or record.get("parsed_marker") for record in timeout_diagnosis_records),
+        f"timeout_diagnosis_records={len(timeout_diagnosis_records)}",
+    )
+    add_check(
+        checks,
+        "no_real_manifest_written",
+        not (EXTERNAL / "manifest.json").exists(),
+        "external_validation/manifest.json remains absent",
+    )
+    passed = all(check["passed"] for check in checks)
+    payload = {
+        "version": VERSION,
+        "passed": passed,
+        "not_external_evidence": True,
+        "strict_external_evidence_ready": False,
+        "render_video_ready": render_ready,
+        "render_ready_env_count": sum(1 for record in records if record.get("render_video_ready")),
+        "env_count": len(records),
+        "width": args.width,
+        "height": args.height,
+        "timeout_seconds": args.timeout_seconds,
+        "renderer_device": args.renderer_device,
+        "render_backend": args.render_backend,
+        "shader_pack": args.shader_pack,
+        "profile_matrix_enabled": bool(args.profile_matrix),
+        "profile_matrix_max_envs": int(args.profile_matrix_max_envs),
+        "profile_matrix_spec": args.profile_matrix_spec,
+        "profile_matrix_records": profile_matrix_records,
+        "timeout_diagnosis_seconds": int(args.timeout_diagnosis_seconds),
+        "timeout_diagnosis_max_envs": int(args.timeout_diagnosis_max_envs),
+        "timeout_diagnosis_width": int(args.timeout_diagnosis_width),
+        "timeout_diagnosis_height": int(args.timeout_diagnosis_height),
+        "timeout_diagnosis_records": timeout_diagnosis_records,
+        "output_dir": rel(PREFLIGHT_ROOT),
+        "video_dir": rel(VIDEO_DIR),
+        "blocking_missing": blocking,
+        "renderer_failure_classes": failure_classes,
+        "renderer_failure_stages": failure_stages,
+        "operator_remediation": operator_remediation,
+        "renderer_profile_retest_commands": retest_commands,
+        "env_records": records,
+        "checks": checks,
+        "failed_checks": [check for check in checks if not check["passed"]],
+    }
+    OUT_JSON.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_md(payload)
+    print(
+        "ManiSkill render-video preflight audit: "
+        f"{'PASS' if passed else 'FAIL'}; "
+        f"render_video_ready={render_ready}; "
+        f"envs={len(records)}"
+    )
+    if not render_ready:
+        print(blocking[0])
+    print(f"Wrote {OUT_JSON}")
+    print(f"Wrote {OUT_MD}")
+    return 0 if passed else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

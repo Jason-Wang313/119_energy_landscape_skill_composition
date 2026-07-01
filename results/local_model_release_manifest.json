@@ -1,0 +1,206 @@
+{
+  "boundary": [
+    "This is a frozen local mechanism and reproducibility release.",
+    "It is not a trained robot policy checkpoint.",
+    "It is not real robot or accepted high-fidelity simulator validation.",
+    "It does not satisfy external_validation/manifest.json or strict external evidence gates."
+  ],
+  "dimensions": {
+    "method_count": 12,
+    "non_oracle_method_count": 11,
+    "regime_count": 8,
+    "split_count": 5,
+    "task_count": 6
+  },
+  "does_not_release_real_robot_checkpoint": true,
+  "does_not_release_trained_robot_policy": true,
+  "external_evidence_ready": false,
+  "identity": "Local world/action model for robot skill seams: predict handoff failure, diagnose why, choose repair/probe/abstain/transition, and update planner edge beliefs.",
+  "local_model_release_ready": true,
+  "method_parameter_hashes": {
+    "barrier_certified_energy_composer_v5": "A70B9C802BAD07FE8621791EA8EA125EBD81B2DD877270DEC7CE89839A43D4E4",
+    "behavior_cloned_skill_chain": "F6B8E242E67B9D540D942C6E8E7CC6354275FE7FD21F685D9366733FD3AEF3E9",
+    "cem_trajectory_composer": "8CC7A45589BAA2D296F7A2E80A237B91603D19B4504822061EE62684ED1D012C",
+    "diffusion_skill_stitcher": "7186B8724F669ED06A40012F576E302D2289186AED2C03065D2C881551BEDB38",
+    "energy_compatibility_heuristic": "8A71D34986C30A37A8DE189F06A68EE50428CCA0B109DD9B6B7DEDBBB27257E3",
+    "greedy_module_sequence": "4AB4A18CEDE4B5C114C9FE9930804784D123C12409267E5AD5333DD917649607",
+    "option_graph_planner": "BF45B19BB37E9533C4C9B652D86DD5762CB8755BDB32E731EDDEB2E46FCFF15F",
+    "oracle_basin_composer": "3E42DF71DF790689360690A58A8B9830A13900775BF2821AF3778E66E9925C4B",
+    "proposed_energy_landscape_composer_v4_1": "B8D20200EDCAE26D51E5941B2550E31D8B8059981EFBA2B0C849D20182E577DC",
+    "residual_rl_composer": "F79EA5758E4DDCE4F52F3F86E7C7099C34AF502FD312BB31D77FE731E7CB7496",
+    "stable_dmp_handoff": "06EBE3AE25ABDF65611BCB300EDB57FEF5F6642677BEC96A184AF08B7C180B7D",
+    "tamp_feasibility_screen": "F70D92BF17932C9EF930C5BEDBD8E51E1D8C131BD3A547A03968C6EE8C2774E3"
+  },
+  "not_external_evidence": true,
+  "proposed_method": {
+    "name": "barrier_certified_energy_composer_v5",
+    "parameter_hash": "A70B9C802BAD07FE8621791EA8EA125EBD81B2DD877270DEC7CE89839A43D4E4",
+    "parameters": {
+      "barrier_sens": 0.04,
+      "basin_base": 0.8,
+      "basin_sens": 0.036,
+      "cert": 0.82,
+      "clean": 0.882,
+      "cost_base": 0.202,
+      "cost_sens": 0.022,
+      "descent_base": 0.79,
+      "descent_sens": 0.034,
+      "horizon_sens": 0.03,
+      "name": "barrier_certified_energy_composer_v5",
+      "repair": 0.9,
+      "risk_base": 0.054,
+      "risk_sens": 0.024,
+      "seam_sens": 0.094,
+      "shift_sens": 0.034
+    }
+  },
+  "reference_adapter_artifacts": [
+    {
+      "exists": true,
+      "path": "external_validation/baselines/common_reference_adapter.py",
+      "sha256": "9FC13A8FFA1120279C68CAA335C8095D128AA5AA1E04D25355A64AA7C32C140A"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/baselines/barrier_certified_energy_composer_v5/adapter.py",
+      "sha256": "DFECC8475DFE638A5F23B7941CEB00C1F8094EF2256BE60F20CA6F817341859B"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/baselines/barrier_certified_energy_composer_v5/reference_adapter_metadata.json",
+      "sha256": "43927773BC52B3BA31376C956CEC5269715957DFDFCE8EE3E209DCEEFE8EF092"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/reference_adapter_report.md",
+      "sha256": "F64B68656335697769F9E7E60F19D974CF5D36D118D94B1296A7368CF49F4C2C"
+    }
+  ],
+  "regimes": [
+    "nominal",
+    "narrow_basin",
+    "high_barrier",
+    "nonconvex_energy",
+    "contact_mode_transition",
+    "partial_observability",
+    "dynamics_mismatch",
+    "combined_seam_stress"
+  ],
+  "release_hash": "546D8DA38D310FBB51EBFC15C41DFD7A9058EC1631EA60019501378FD487A57D",
+  "result_artifacts": [
+    {
+      "exists": true,
+      "path": "results/summary.json",
+      "sha256": "7ADB1AB6EDE6A7861046B0CC0131EC1C1D2104BA57E7B958D82967790A56379D"
+    },
+    {
+      "exists": true,
+      "path": "results/hard_aggregate_metrics.csv",
+      "rows": 12,
+      "sha256": "9D8A91A5A3ECFD710B1D2B34B87E0A6E21B2AEE4800504078AAD2D101EA0F687"
+    },
+    {
+      "exists": true,
+      "path": "results/hard_pairwise_stats.csv",
+      "rows": 11,
+      "sha256": "B9996221D1DF0FCC2A76D2660FAAC138A01A04E89C85C5F6155A1800E3DE7BEA"
+    },
+    {
+      "exists": true,
+      "path": "results/ablation_metrics.csv",
+      "rows": 10,
+      "sha256": "6A9735FBA761E276632AC6BF3EB64649C95C7B33884094459B80C65607F814B2"
+    },
+    {
+      "exists": true,
+      "path": "results/fixed_risk_metrics.csv",
+      "rows": 28,
+      "sha256": "31D91ADEC4EBB1FE6A7E0F0A096BCCBEC64FF60DF2F5DE582672381C2A3B0D12"
+    },
+    {
+      "exists": true,
+      "path": "results/planner_edge_policy_audit.json",
+      "sha256": "817A4483C10936022E7193AABFF793945FE8EF79792AA6604D4F91421FB2EA49"
+    },
+    {
+      "exists": true,
+      "path": "results/failure_memory_adaptation_audit.json",
+      "sha256": "FF81D1851CE4B05B15D0CB08E7554A1A744608FFEE0AF9F4E3BE07918AF6B4BE"
+    },
+    {
+      "exists": true,
+      "path": "results/seam_prediction_calibration_audit.json",
+      "sha256": "4500788F97ADBA1F67B687A1425A0EE9C86B5ED63FBE6067FB0EB16D11C3668F"
+    },
+    {
+      "exists": true,
+      "path": "results/diagnostic_mechanism_audit.json",
+      "sha256": "5886CBE305054111D8F8E9223FFB1E3A6F8321FDCE2354ADE28B1C7BD8EAF6D7"
+    },
+    {
+      "exists": true,
+      "path": "results/decision_quality_audit.json",
+      "sha256": "E935B87D07269A857F73DCC746D8B5A4362F138DE463E69D246ACF9E7B47F92C"
+    },
+    {
+      "exists": true,
+      "path": "results/holdout_robustness_audit.json",
+      "sha256": "FA137E34EFBDB93BE6468CCDD1A88FC93D4F433B8510AD7C3161142E2674E847"
+    },
+    {
+      "exists": true,
+      "path": "results/local_falsification_audit.json",
+      "sha256": "3F858594AFAC12D929BB9C7E7F640B527AE0494E308764F675597CF687DDCD15"
+    }
+  ],
+  "source": {
+    "base_seed": 11920265,
+    "episodes_per_cell": 8,
+    "path": "src/run_experiment.py",
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "sha256": "9F54FB0C4BCC0B74E4ED8FFB8AF3CFBE8777E5C615148FDCD90834A78F777E92",
+    "version": "v5_expanded"
+  },
+  "splits": [
+    "in_distribution",
+    "new_skill_pair",
+    "shifted_objects",
+    "long_horizon_chain",
+    "combined_stress"
+  ],
+  "summary_state": {
+    "iclr_main_ready": false,
+    "local_gates_pass": true,
+    "missing_scope_evidence": [
+      "no_real_robot_rollouts",
+      "no_accepted_high_fidelity_skill_composition_simulation",
+      "no_released_skill_energy_or_policy_checkpoint",
+      "no_calibrated_contact_force_camera_or_state_logs",
+      "no_hardware_rollout_videos",
+      "no_independent_baseline_implementations"
+    ],
+    "scope_gate_pass": false,
+    "strongest_non_oracle": "proposed_energy_landscape_composer_v4_1",
+    "terminal_decision": "STRONG_REVISE"
+  },
+  "tasks": [
+    "peg_place_regrasp",
+    "drawer_to_pick_transfer",
+    "mobile_push_then_grasp",
+    "tool_use_handover",
+    "door_open_navigation",
+    "cable_route_insert"
+  ],
+  "version": "paper119_local_model_release_v1"
+}

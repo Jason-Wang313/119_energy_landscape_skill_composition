@@ -1,0 +1,430 @@
+{
+  "checks": [
+    {
+      "detail": "local hard-slice predictive-validity audit only",
+      "name": "not_external_evidence_declared",
+      "passed": true
+    },
+    {
+      "detail": "rows=13440",
+      "name": "proposed_rows_ge_10000",
+      "passed": true
+    },
+    {
+      "detail": "ece10=0.007207",
+      "name": "ece_10_le_0_010",
+      "passed": true
+    },
+    {
+      "detail": "max_gap=0.012758",
+      "name": "max_bin_gap_le_0_015",
+      "passed": true
+    },
+    {
+      "detail": "mean_predicted=0.102290, mean_realized=0.095083",
+      "name": "mean_risk_gap_le_0_010",
+      "passed": true
+    },
+    {
+      "detail": "corr=0.970670",
+      "name": "risk_breach_correlation_ge_0_90",
+      "passed": true
+    },
+    {
+      "detail": "spearman=0.950331",
+      "name": "risk_breach_spearman_ge_0_90",
+      "passed": true
+    },
+    {
+      "detail": "10/10 ordered deciles have nondecreasing realized breach",
+      "name": "decile_breach_monotone",
+      "passed": true
+    },
+    {
+      "detail": "breach_delta=0.079525",
+      "name": "highest_lowest_decile_breach_gap_ge_0_07",
+      "passed": true
+    },
+    {
+      "detail": "utility_delta=-0.251150",
+      "name": "highest_lowest_decile_utility_delta_le_minus_0_20",
+      "passed": true
+    },
+    {
+      "detail": "delta=-0.007583, baseline_ece=0.014790",
+      "name": "ece_improves_over_strongest_baseline_by_0_005",
+      "passed": true
+    },
+    {
+      "detail": "accept=0.080526, abstain=0.125391",
+      "name": "accept_risk_lower_than_abstain_risk_by_0_03",
+      "passed": true
+    }
+  ],
+  "derived": {
+    "accept_abstain_predicted_risk_delta": -0.04486454942775882,
+    "ece_delta_vs_strongest_baseline": -0.007583188318452382,
+    "highest_lowest_decile_breach_delta": 0.0795251681547619,
+    "highest_lowest_decile_utility_delta": -0.2511498794642857
+  },
+  "failed_checks": [],
+  "not_external_evidence": true,
+  "oracle_metrics": {
+    "bins": [
+      {
+        "absolute_calibration_gap": 0.0022945550595238097,
+        "bin": 1,
+        "composition_utility": 1.206987511904762,
+        "mean_predicted_seam_risk": 0.005673255952380952,
+        "mean_realized_seam_breach": 0.007967811011904762,
+        "rows": 1344,
+        "success_rate": 0.8921130952380952
+      },
+      {
+        "absolute_calibration_gap": 0.0011058407738095237,
+        "bin": 2,
+        "composition_utility": 1.1955768422619049,
+        "mean_predicted_seam_risk": 0.01919677306547619,
+        "mean_realized_seam_breach": 0.020302613839285714,
+        "rows": 1344,
+        "success_rate": 0.9159226190476191
+      },
+      {
+        "absolute_calibration_gap": 6.739211309523749e-05,
+        "bin": 3,
+        "composition_utility": 1.167901050595238,
+        "mean_predicted_seam_risk": 0.027153744047619048,
+        "mean_realized_seam_breach": 0.02708635193452381,
+        "rows": 1344,
+        "success_rate": 0.9084821428571429
+      },
+      {
+        "absolute_calibration_gap": 0.0006671183035714262,
+        "bin": 4,
+        "composition_utility": 1.1682485223214285,
+        "mean_predicted_seam_risk": 0.032116962797619046,
+        "mean_realized_seam_breach": 0.03144984449404762,
+        "rows": 1344,
+        "success_rate": 0.9188988095238095
+      },
+      {
+        "absolute_calibration_gap": 0.001627163690476191,
+        "bin": 5,
+        "composition_utility": 1.1627624002976191,
+        "mean_predicted_seam_risk": 0.03633827232142857,
+        "mean_realized_seam_breach": 0.03471110863095238,
+        "rows": 1344,
+        "success_rate": 0.9203869047619048
+      },
+      {
+        "absolute_calibration_gap": 0.0020936934523809528,
+        "bin": 6,
+        "composition_utility": 1.1356187686011905,
+        "mean_predicted_seam_risk": 0.040254319940476194,
+        "mean_realized_seam_breach": 0.03816062648809524,
+        "rows": 1344,
+        "success_rate": 0.9010416666666666
+      },
+      {
+        "absolute_calibration_gap": 0.003173657738095234,
+        "bin": 7,
+        "composition_utility": 1.1397851808035715,
+        "mean_predicted_seam_risk": 0.04491724776785714,
+        "mean_realized_seam_breach": 0.041743590029761905,
+        "rows": 1344,
+        "success_rate": 0.9151785714285714
+      },
+      {
+        "absolute_calibration_gap": 0.004017039434523813,
+        "bin": 8,
+        "composition_utility": 1.1232694389880953,
+        "mean_predicted_seam_risk": 0.05123186160714286,
+        "mean_realized_seam_breach": 0.04721482217261905,
+        "rows": 1344,
+        "success_rate": 0.9129464285714286
+      },
+      {
+        "absolute_calibration_gap": 0.004813222470238097,
+        "bin": 9,
+        "composition_utility": 1.0589135833333334,
+        "mean_predicted_seam_risk": 0.06714996205357143,
+        "mean_realized_seam_breach": 0.062336739583333335,
+        "rows": 1344,
+        "success_rate": 0.8928571428571429
+      },
+      {
+        "absolute_calibration_gap": 0.0073199627976190396,
+        "bin": 10,
+        "composition_utility": 1.0396992633928572,
+        "mean_predicted_seam_risk": 0.08750932514880952,
+        "mean_realized_seam_breach": 0.08018936235119048,
+        "rows": 1344,
+        "success_rate": 0.9188988095238095
+      }
+    ],
+    "bins_monotone_realized_breach": true,
+    "expected_calibration_error_10": 0.002717964583333333,
+    "highest_decile_realized_breach": 0.08018936235119048,
+    "highest_decile_utility": 1.0396992633928572,
+    "lowest_decile_realized_breach": 0.007967811011904762,
+    "lowest_decile_utility": 1.206987511904762,
+    "max_calibration_error_10": 0.0073199627976190396,
+    "mean_absolute_row_error": 0.005012966666666667,
+    "mean_predicted_seam_risk": 0.041154172470238094,
+    "mean_realized_seam_breach": 0.03911628705357143,
+    "risk_breach_correlation": 0.9660017583732387,
+    "risk_breach_spearman": 0.9434768641773938,
+    "rows": 13440
+  },
+  "passed": true,
+  "proposed": "barrier_certified_energy_composer_v5",
+  "proposed_decision_metrics": {
+    "abstain": {
+      "composition_utility": 0.8113164706805256,
+      "mean_predicted_seam_risk": 0.12539094194940184,
+      "mean_realized_seam_breach": 0.11595004961757208,
+      "rows": 5099
+    },
+    "accept": {
+      "composition_utility": 0.9476680173144225,
+      "mean_predicted_seam_risk": 0.08052639252164302,
+      "mean_realized_seam_breach": 0.07603346969976055,
+      "rows": 5429
+    },
+    "probe": {
+      "composition_utility": 0.8997946346586647,
+      "mean_predicted_seam_risk": 0.10369090322580646,
+      "mean_realized_seam_breach": 0.09570058364591148,
+      "rows": 1333
+    },
+    "repair": {
+      "composition_utility": 0.9118921235955056,
+      "mean_predicted_seam_risk": 0.10154189013732834,
+      "mean_realized_seam_breach": 0.0926716379525593,
+      "rows": 801
+    },
+    "transition": {
+      "composition_utility": 0.9340756940874037,
+      "mean_predicted_seam_risk": 0.1011303650385604,
+      "mean_realized_seam_breach": 0.09267423264781491,
+      "rows": 778
+    }
+  },
+  "proposed_metrics": {
+    "bins": [
+      {
+        "absolute_calibration_gap": 0.002707593750000001,
+        "bin": 1,
+        "composition_utility": 0.9904354255952381,
+        "mean_predicted_seam_risk": 0.06332477901785714,
+        "mean_realized_seam_breach": 0.06061718526785714,
+        "rows": 1344,
+        "success_rate": 0.8117559523809523
+      },
+      {
+        "absolute_calibration_gap": 0.004586699404761904,
+        "bin": 2,
+        "composition_utility": 0.9531591793154762,
+        "mean_predicted_seam_risk": 0.07854027604166666,
+        "mean_realized_seam_breach": 0.07395357663690476,
+        "rows": 1344,
+        "success_rate": 0.8132440476190477
+      },
+      {
+        "absolute_calibration_gap": 0.005039180803571436,
+        "bin": 3,
+        "composition_utility": 0.9267951235119047,
+        "mean_predicted_seam_risk": 0.08722022470238096,
+        "mean_realized_seam_breach": 0.08218104389880952,
+        "rows": 1344,
+        "success_rate": 0.8087797619047619
+      },
+      {
+        "absolute_calibration_gap": 0.005574601190476189,
+        "bin": 4,
+        "composition_utility": 0.9237870186011905,
+        "mean_predicted_seam_risk": 0.0924540744047619,
+        "mean_realized_seam_breach": 0.08687947321428571,
+        "rows": 1344,
+        "success_rate": 0.8162202380952381
+      },
+      {
+        "absolute_calibration_gap": 0.00681015848214285,
+        "bin": 5,
+        "composition_utility": 0.9170289516369048,
+        "mean_predicted_seam_risk": 0.09694638169642857,
+        "mean_realized_seam_breach": 0.09013622321428572,
+        "rows": 1344,
+        "success_rate": 0.8169642857142857
+      },
+      {
+        "absolute_calibration_gap": 0.007588056547619057,
+        "bin": 6,
+        "composition_utility": 0.876816244047619,
+        "mean_predicted_seam_risk": 0.10137727604166667,
+        "mean_realized_seam_breach": 0.09378921949404762,
+        "rows": 1344,
+        "success_rate": 0.7849702380952381
+      },
+      {
+        "absolute_calibration_gap": 0.007890270833333338,
+        "bin": 7,
+        "composition_utility": 0.899308865327381,
+        "mean_predicted_seam_risk": 0.10632728422619048,
+        "mean_realized_seam_breach": 0.09843701339285714,
+        "rows": 1344,
+        "success_rate": 0.8199404761904762
+      },
+      {
+        "absolute_calibration_gap": 0.009252189732142854,
+        "bin": 8,
+        "composition_utility": 0.8514156800595238,
+        "mean_predicted_seam_risk": 0.11306859598214286,
+        "mean_realized_seam_breach": 0.10381640625,
+        "rows": 1344,
+        "success_rate": 0.7864583333333334
+      },
+      {
+        "absolute_calibration_gap": 0.009866131696428568,
+        "bin": 9,
+        "composition_utility": 0.8046726376488095,
+        "mean_predicted_seam_risk": 0.1307428206845238,
+        "mean_realized_seam_breach": 0.12087668898809524,
+        "rows": 1344,
+        "success_rate": 0.7872023809523809
+      },
+      {
+        "absolute_calibration_gap": 0.012758203125000006,
+        "bin": 10,
+        "composition_utility": 0.7392855461309524,
+        "mean_predicted_seam_risk": 0.15290055654761905,
+        "mean_realized_seam_breach": 0.14014235342261905,
+        "rows": 1344,
+        "success_rate": 0.7715773809523809
+      }
+    ],
+    "bins_monotone_realized_breach": true,
+    "expected_calibration_error_10": 0.007207308556547621,
+    "highest_decile_realized_breach": 0.14014235342261905,
+    "highest_decile_utility": 0.7392855461309524,
+    "lowest_decile_realized_breach": 0.06061718526785714,
+    "lowest_decile_utility": 0.9904354255952381,
+    "max_calibration_error_10": 0.012758203125000006,
+    "mean_absolute_row_error": 0.007912463764880952,
+    "mean_predicted_seam_risk": 0.1022902269345238,
+    "mean_realized_seam_breach": 0.0950829183779762,
+    "risk_breach_correlation": 0.9706696256256748,
+    "risk_breach_spearman": 0.950330922294805,
+    "rows": 13440
+  },
+  "scope": "local_synthetic_hard_slice_only",
+  "strongest_baseline_metrics": {
+    "bins": [
+      {
+        "absolute_calibration_gap": 0.009981761160714281,
+        "bin": 1,
+        "composition_utility": 0.778637462797619,
+        "mean_predicted_seam_risk": 0.14192871726190476,
+        "mean_realized_seam_breach": 0.13194695610119048,
+        "rows": 1344,
+        "success_rate": 0.7410714285714286
+      },
+      {
+        "absolute_calibration_gap": 0.011951331101190482,
+        "bin": 2,
+        "composition_utility": 0.7336291436011905,
+        "mean_predicted_seam_risk": 0.15948320089285714,
+        "mean_realized_seam_breach": 0.14753186979166666,
+        "rows": 1344,
+        "success_rate": 0.7395833333333334
+      },
+      {
+        "absolute_calibration_gap": 0.012642684523809511,
+        "bin": 3,
+        "composition_utility": 0.6971060476190476,
+        "mean_predicted_seam_risk": 0.16895877678571428,
+        "mean_realized_seam_breach": 0.15631609226190477,
+        "rows": 1344,
+        "success_rate": 0.7269345238095238
+      },
+      {
+        "absolute_calibration_gap": 0.013389982142857138,
+        "bin": 4,
+        "composition_utility": 0.6718484270833334,
+        "mean_predicted_seam_risk": 0.1745085587797619,
+        "mean_realized_seam_breach": 0.16111857663690476,
+        "rows": 1344,
+        "success_rate": 0.7120535714285714
+      },
+      {
+        "absolute_calibration_gap": 0.014340401041666673,
+        "bin": 5,
+        "composition_utility": 0.6713184613095238,
+        "mean_predicted_seam_risk": 0.17936686011904762,
+        "mean_realized_seam_breach": 0.16502645907738095,
+        "rows": 1344,
+        "success_rate": 0.7202380952380952
+      },
+      {
+        "absolute_calibration_gap": 0.015134607142857165,
+        "bin": 6,
+        "composition_utility": 0.6514435171130952,
+        "mean_predicted_seam_risk": 0.1844705349702381,
+        "mean_realized_seam_breach": 0.16933592782738094,
+        "rows": 1344,
+        "success_rate": 0.7098214285714286
+      },
+      {
+        "absolute_calibration_gap": 0.015322154017857137,
+        "bin": 7,
+        "composition_utility": 0.6528527648809523,
+        "mean_predicted_seam_risk": 0.1900719613095238,
+        "mean_realized_seam_breach": 0.17474980729166667,
+        "rows": 1344,
+        "success_rate": 0.7254464285714286
+      },
+      {
+        "absolute_calibration_gap": 0.016787950892857145,
+        "bin": 8,
+        "composition_utility": 0.6178340431547619,
+        "mean_predicted_seam_risk": 0.19719113467261906,
+        "mean_realized_seam_breach": 0.18040318377976192,
+        "rows": 1344,
+        "success_rate": 0.7053571428571429
+      },
+      {
+        "absolute_calibration_gap": 0.017665422619047605,
+        "bin": 9,
+        "composition_utility": 0.5661455989583334,
+        "mean_predicted_seam_risk": 0.2175183794642857,
+        "mean_realized_seam_breach": 0.1998529568452381,
+        "rows": 1344,
+        "success_rate": 0.7068452380952381
+      },
+      {
+        "absolute_calibration_gap": 0.020688674107142868,
+        "bin": 10,
+        "composition_utility": 0.49018772916666664,
+        "mean_predicted_seam_risk": 0.24169794717261905,
+        "mean_realized_seam_breach": 0.22100927306547619,
+        "rows": 1344,
+        "success_rate": 0.6837797619047619
+      }
+    ],
+    "bins_monotone_realized_breach": true,
+    "expected_calibration_error_10": 0.014790496875000003,
+    "highest_decile_realized_breach": 0.22100927306547619,
+    "highest_decile_utility": 0.49018772916666664,
+    "lowest_decile_realized_breach": 0.13194695610119048,
+    "lowest_decile_utility": 0.778637462797619,
+    "max_calibration_error_10": 0.020688674107142868,
+    "mean_absolute_row_error": 0.014822253571428572,
+    "mean_predicted_seam_risk": 0.18551960714285715,
+    "mean_realized_seam_breach": 0.17072911026785714,
+    "risk_breach_correlation": 0.9762862675195928,
+    "risk_breach_spearman": 0.9585848032672493,
+    "rows": 13440
+  },
+  "strongest_non_oracle": "proposed_energy_landscape_composer_v4_1",
+  "version": "seam_prediction_calibration_audit_v1"
+}

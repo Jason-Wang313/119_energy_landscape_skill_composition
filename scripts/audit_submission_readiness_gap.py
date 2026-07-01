@@ -1,0 +1,1474 @@
+from __future__ import annotations
+
+import json
+import os
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+RESULTS = ROOT / "results"
+DOCS = ROOT / "docs"
+PAPER = ROOT / "paper"
+OUTREACH = ROOT / "outreach"
+EXTERNAL = ROOT / "external_validation"
+
+OUT_JSON = RESULTS / "submission_readiness_gap_audit.json"
+OUT_MD = RESULTS / "submission_readiness_gap_audit.md"
+
+
+def configured_path(env_name: str, default: str) -> Path:
+    path = Path(os.environ.get(env_name, default))
+    return path if path.is_absolute() else ROOT / path
+
+
+def read_json(path: Path) -> dict[str, Any]:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise SystemExit(f"invalid JSON in {path}: {exc}") from exc
+
+
+def add_requirement(
+    rows: list[dict[str, Any]],
+    *,
+    requirement: str,
+    status: str,
+    evidence: list[str],
+    blocker: str,
+    submission_blocking: bool,
+) -> None:
+    if status not in {"satisfied", "missing", "partial", "human_polish"}:
+        raise ValueError(f"unknown status: {status}")
+    rows.append(
+        {
+            "requirement": requirement,
+            "status": status,
+            "evidence": evidence,
+            "blocker": blocker,
+            "submission_blocking": bool(submission_blocking),
+        }
+    )
+
+
+def exists_all(paths: list[Path]) -> bool:
+    return all(path.exists() for path in paths)
+
+
+def passed_json(path: Path) -> bool:
+    return path.exists() and read_json(path).get("passed") is True
+
+
+def main() -> int:
+    RESULTS.mkdir(exist_ok=True)
+    requirements: list[dict[str, Any]] = []
+    canonical_pdf = configured_path("PAPER119_CANONICAL_PDF", "C:/Users/wangz/Downloads/119.pdf")
+
+    summary_path = RESULTS / "summary.json"
+    summary = read_json(summary_path) if summary_path.exists() else {}
+    external_audit_path = RESULTS / "external_evidence_audit.json"
+    external_audit = read_json(external_audit_path) if external_audit_path.exists() else {}
+    rollout_metrics_path = RESULTS / "external_rollout_metrics.json"
+    rollout_metrics = read_json(rollout_metrics_path) if rollout_metrics_path.exists() else {}
+    config_evidence_path = RESULTS / "external_config_evidence_audit.json"
+    config_evidence = read_json(config_evidence_path) if config_evidence_path.exists() else {}
+    config_manifest_path = RESULTS / "external_config_manifest_audit.json"
+    config_manifest = read_json(config_manifest_path) if config_manifest_path.exists() else {}
+    config_manifest_self_test_path = RESULTS / "external_config_manifest_packet_self_test.json"
+    config_manifest_self_test = (
+        read_json(config_manifest_self_test_path) if config_manifest_self_test_path.exists() else {}
+    )
+    rollout_evidence_path = RESULTS / "external_rollout_evidence_audit.json"
+    rollout_evidence = read_json(rollout_evidence_path) if rollout_evidence_path.exists() else {}
+    rollout_evidence_self_test_path = RESULTS / "external_rollout_evidence_packet_self_test.json"
+    rollout_evidence_self_test = (
+        read_json(rollout_evidence_self_test_path) if rollout_evidence_self_test_path.exists() else {}
+    )
+    ablation_collection_self_test_path = RESULTS / "external_ablation_collection_packet_self_test.json"
+    ablation_collection_self_test = (
+        read_json(ablation_collection_self_test_path) if ablation_collection_self_test_path.exists() else {}
+    )
+    evidence_intake_self_test_path = RESULTS / "external_evidence_intake_ledger_self_test.json"
+    evidence_intake_self_test = read_json(evidence_intake_self_test_path) if evidence_intake_self_test_path.exists() else {}
+    precollection_manifest_self_test_path = RESULTS / "external_precollection_manifest_draft_self_test.json"
+    precollection_manifest_self_test = (
+        read_json(precollection_manifest_self_test_path) if precollection_manifest_self_test_path.exists() else {}
+    )
+    baseline_contract_path = RESULTS / "external_baseline_contract_audit.json"
+    baseline_contract = read_json(baseline_contract_path) if baseline_contract_path.exists() else {}
+    baseline_contract_self_test_path = RESULTS / "external_baseline_contract_self_test.json"
+    baseline_contract_self_test = (
+        read_json(baseline_contract_self_test_path) if baseline_contract_self_test_path.exists() else {}
+    )
+    adapter_contract_evidence_path = RESULTS / "external_adapter_contract_evidence_audit.json"
+    adapter_contract_evidence = read_json(adapter_contract_evidence_path) if adapter_contract_evidence_path.exists() else {}
+    execution_readiness_path = RESULTS / "external_execution_readiness_audit.json"
+    execution_readiness = read_json(execution_readiness_path) if execution_readiness_path.exists() else {}
+    execution_readiness_self_test_path = RESULTS / "external_execution_readiness_self_test.json"
+    execution_readiness_self_test = (
+        read_json(execution_readiness_self_test_path) if execution_readiness_self_test_path.exists() else {}
+    )
+    analysis_plan_path = RESULTS / "external_analysis_plan_audit.json"
+    analysis_plan = read_json(analysis_plan_path) if analysis_plan_path.exists() else {}
+    platform_onboarding_path = RESULTS / "external_platform_onboarding_audit.json"
+    platform_onboarding = read_json(platform_onboarding_path) if platform_onboarding_path.exists() else {}
+    fidelity_provenance_path = RESULTS / "external_fidelity_provenance_audit.json"
+    fidelity_provenance = read_json(fidelity_provenance_path) if fidelity_provenance_path.exists() else {}
+    fidelity_provenance_self_test_path = RESULTS / "external_fidelity_provenance_packet_self_test.json"
+    fidelity_provenance_self_test = (
+        read_json(fidelity_provenance_self_test_path) if fidelity_provenance_self_test_path.exists() else {}
+    )
+    fidelity_acceptance_path = RESULTS / "external_fidelity_acceptance_audit.json"
+    fidelity_acceptance = read_json(fidelity_acceptance_path) if fidelity_acceptance_path.exists() else {}
+    route_audit_path = RESULTS / "independent_validation_route_audit.json"
+    route_audit = read_json(route_audit_path) if route_audit_path.exists() else {}
+    blind_eval_path = RESULTS / "external_blind_eval_audit.json"
+    blind_eval = read_json(blind_eval_path) if blind_eval_path.exists() else {}
+    runner_harness_path = RESULTS / "external_runner_harness_audit.json"
+    runner_harness = read_json(runner_harness_path) if runner_harness_path.exists() else {}
+    runner_probe_path = RESULTS / "external_runner_backend_self_test.json"
+    runner_probe = read_json(runner_probe_path) if runner_probe_path.exists() else {}
+    backend_contract_path = RESULTS / "external_backend_contract_audit.json"
+    backend_contract = read_json(backend_contract_path) if backend_contract_path.exists() else {}
+    backend_integration_path = RESULTS / "external_backend_integration_audit.json"
+    backend_integration = read_json(backend_integration_path) if backend_integration_path.exists() else {}
+    backend_integration_self_test_path = RESULTS / "external_backend_integration_packet_self_test.json"
+    backend_integration_self_test = (
+        read_json(backend_integration_self_test_path) if backend_integration_self_test_path.exists() else {}
+    )
+    collection_readiness_path = RESULTS / "external_collection_readiness_audit.json"
+    collection_readiness = read_json(collection_readiness_path) if collection_readiness_path.exists() else {}
+    pairing_integrity_path = RESULTS / "external_pairing_integrity_audit.json"
+    pairing_integrity = read_json(pairing_integrity_path) if pairing_integrity_path.exists() else {}
+    release_package_path = RESULTS / "external_release_package_audit.json"
+    release_package = read_json(release_package_path) if release_package_path.exists() else {}
+    acquisition_packet_path = RESULTS / "external_acquisition_packet.json"
+    acquisition_packet = read_json(acquisition_packet_path) if acquisition_packet_path.exists() else {}
+    closure_brief_path = RESULTS / "external_evidence_closure_brief.json"
+    closure_brief = read_json(closure_brief_path) if closure_brief_path.exists() else {}
+    closure_brief_self_test_path = RESULTS / "external_evidence_closure_brief_self_test.json"
+    closure_brief_self_test = (
+        read_json(closure_brief_self_test_path) if closure_brief_self_test_path.exists() else {}
+    )
+    handoff_bundle_path = RESULTS / "external_operator_handoff_bundle.json"
+    handoff_bundle = read_json(handoff_bundle_path) if handoff_bundle_path.exists() else {}
+    collection_job_path = RESULTS / "external_collection_job_packet_audit.json"
+    collection_job = read_json(collection_job_path) if collection_job_path.exists() else {}
+    machine_bootstrap_path = RESULTS / "external_collection_machine_bootstrap_audit.json"
+    machine_bootstrap = read_json(machine_bootstrap_path) if machine_bootstrap_path.exists() else {}
+    operator_release_path = RESULTS / "external_operator_release_bundle_plan.json"
+    operator_release = read_json(operator_release_path) if operator_release_path.exists() else {}
+    method_implementation_path = RESULTS / "external_method_implementation_audit.json"
+    method_implementation = read_json(method_implementation_path) if method_implementation_path.exists() else {}
+    method_implementation_self_test_path = RESULTS / "external_method_implementation_packet_self_test.json"
+    method_implementation_self_test = (
+        read_json(method_implementation_self_test_path) if method_implementation_self_test_path.exists() else {}
+    )
+    method_config_materialization_path = RESULTS / "external_method_config_materialization_audit.json"
+    method_config_materialization = (
+        read_json(method_config_materialization_path) if method_config_materialization_path.exists() else {}
+    )
+    method_config_materialization_self_test_path = RESULTS / "external_method_config_materialization_self_test.json"
+    method_config_materialization_self_test = (
+        read_json(method_config_materialization_self_test_path)
+        if method_config_materialization_self_test_path.exists()
+        else {}
+    )
+    config_materialization_self_test_path = RESULTS / "external_config_materialization_self_test.json"
+    config_materialization_self_test = (
+        read_json(config_materialization_self_test_path) if config_materialization_self_test_path.exists() else {}
+    )
+    presentation_path = RESULTS / "presentation_quality_audit.json"
+    presentation = read_json(presentation_path) if presentation_path.exists() else {}
+    figure_readability_path = RESULTS / "figure_readability_audit.json"
+    figure_readability = read_json(figure_readability_path) if figure_readability_path.exists() else {}
+    camera_ready_path = RESULTS / "camera_ready_design_audit.json"
+    camera_ready = read_json(camera_ready_path) if camera_ready_path.exists() else {}
+    manuscript_readability_path = RESULTS / "manuscript_readability_audit.json"
+    manuscript_readability = read_json(manuscript_readability_path) if manuscript_readability_path.exists() else {}
+    claim_path = RESULTS / "claim_boundary_audit.json"
+    claim = read_json(claim_path) if claim_path.exists() else {}
+
+    tex_path = PAPER / "main.tex"
+    tex = tex_path.read_text(encoding="utf-8") if tex_path.exists() else ""
+    outreach_package = DOCS / "haonan_yilun_outreach_package.md"
+
+    core_terms = [
+        "local world/action model for skill seams",
+        "compact predictive interface between a skill library and a planner",
+        "deliberately local form",
+        "prediction-action-update loop",
+        "planner-edge updates for future planning",
+    ]
+    add_requirement(
+        requirements,
+        requirement="Core paper framing: adaptive physical world/action model for skill seams",
+        status="satisfied" if tex and all(term in tex for term in core_terms) else "missing",
+        evidence=["paper/main.tex", "scripts/generate_manuscript.py", "scripts/validate_submission_artifacts.py"],
+        blocker="" if tex and all(term in tex for term in core_terms) else "manuscript no longer contains the required world/action skill-seam framing",
+        submission_blocking=True,
+    )
+
+    local_gate_ok = summary.get("local_gates_pass") is True and summary.get("terminal_decision") == "STRONG_REVISE"
+    add_requirement(
+        requirements,
+        requirement="Defensible bounded local mechanism claim with frozen local gates",
+        status="satisfied" if local_gate_ok else "missing",
+        evidence=["results/summary.json", "results/hard_aggregate_metrics.csv", "paper/main.tex"],
+        blocker="" if local_gate_ok else "local v5 gates or terminal decision are not in the expected bounded state",
+        submission_blocking=True,
+    )
+
+    mechanism_audits = [
+        RESULTS / "local_falsification_audit.json",
+        RESULTS / "holdout_robustness_audit.json",
+        RESULTS / "diagnostic_mechanism_audit.json",
+        RESULTS / "decision_quality_audit.json",
+        RESULTS / "planner_edge_policy_audit.json",
+        RESULTS / "failure_memory_adaptation_audit.json",
+        RESULTS / "seam_prediction_calibration_audit.json",
+        RESULTS / "manuscript_number_audit.json",
+    ]
+    local_audits_ok = all(passed_json(path) for path in mechanism_audits)
+    add_requirement(
+        requirements,
+        requirement="Local falsification, holdout, diagnostic, decision-quality, planner-edge policy, failure-memory adaptation, predictive-calibration, and number provenance audits",
+        status="satisfied" if local_audits_ok else "missing",
+        evidence=[str(path.relative_to(ROOT)).replace("/", "\\") for path in mechanism_audits],
+        blocker="" if local_audits_ok else "one or more local mechanism/provenance audits is missing or failing",
+        submission_blocking=True,
+    )
+
+    external_ready = external_audit.get("submission_ready") is True
+    add_requirement(
+        requirements,
+        requirement="Independent real-robot or accepted high-fidelity external validation evidence",
+        status="satisfied" if external_ready else "missing",
+        evidence=["results/external_evidence_audit.json", "results/external_fidelity_acceptance_audit.json", "external_validation/manifest.json"],
+        blocker="" if external_ready else "strict external evidence audit is NOT_READY; real manifest/log/video/checkpoint evidence and accepted robot/simulator fidelity provenance are missing",
+        submission_blocking=True,
+    )
+
+    rollout_ready = rollout_metrics.get("passed") is True
+    add_requirement(
+        requirements,
+        requirement="External rollout metrics recomputed from raw JSONL logs",
+        status="satisfied" if rollout_ready else "missing",
+        evidence=[
+            "results/external_rollout_metrics.json",
+            "scripts/validate_external_rollouts.py",
+            "external_validation/log_schema_v1.json",
+            "external_validation/rollout_evidence_packet.md",
+            "external_validation/rollout_evidence_work_orders.csv",
+            "results/external_rollout_evidence_audit.json",
+        ],
+        blocker="" if rollout_ready else "strict rollout validation does not pass because external_validation/manifest.json and raw logs are missing",
+        submission_blocking=True,
+    )
+
+    config_ready = config_evidence.get("passed") is True
+    add_requirement(
+        requirements,
+        requirement="Manifest-declared real task configs replace non-evidence templates",
+        status="satisfied" if config_ready else "missing",
+        evidence=[
+            "results/external_config_evidence_audit.json",
+            "external_validation/config_schema_v1.json",
+            "external_validation/config_manifest_packet.md",
+            "external_validation/config_manifest_work_orders.csv",
+            "results/external_config_manifest_audit.json",
+        ],
+        blocker="" if config_ready else "strict config evidence audit has no real manifest-declared configs",
+        submission_blocking=True,
+    )
+
+    implementations_ready = baseline_contract.get("implementations_ready") is True and adapter_contract_evidence.get("passed") is True
+    implementation_blockers = []
+    if baseline_contract.get("implementations_ready") is not True:
+        implementation_blockers.append("baseline contract still reports manifest-declared independent non-oracle evidence as missing")
+    if adapter_contract_evidence.get("passed") is not True:
+        implementation_blockers.append("strict adapter contract evidence audit has no passing manifest-declared real implementations")
+    add_requirement(
+        requirements,
+        requirement="Manifest-declared independent non-oracle baseline evidence and fairness contract",
+        status="satisfied" if implementations_ready else "missing",
+        evidence=[
+            "results/external_baseline_contract_audit.json",
+            "results/external_baseline_contract_self_test.json",
+            "results/external_adapter_contract_evidence_audit.json",
+            "external_validation/baseline_implementation_contract.md",
+        ],
+        blocker="" if implementations_ready else "; ".join(implementation_blockers),
+        submission_blocking=True,
+    )
+
+    related_ok = (
+        passed_json(RESULTS / "related_work_audit.json")
+        and passed_json(RESULTS / "reference_integrity_audit.json")
+        and manuscript_readability.get("passed") is True
+    )
+    add_requirement(
+        requirements,
+        requirement="Machine-audited related work, reference integrity, and manuscript readability",
+        status="satisfied" if related_ok else "missing",
+        evidence=["results/related_work_audit.json", "results/reference_integrity_audit.json", "results/manuscript_readability_audit.json", "docs/related_work_coverage_matrix.md"],
+        blocker="" if related_ok else "related-work, reference-integrity, or manuscript-readability audit is missing/failing",
+        submission_blocking=True,
+    )
+
+    presentation_ok = presentation.get("passed") is True and figure_readability.get("passed") is True
+    add_requirement(
+        requirements,
+        requirement="Top-conference presentation hygiene for the compiled PDF",
+        status="satisfied" if presentation_ok else "missing",
+        evidence=["results/presentation_quality_audit.json", "results/figure_readability_audit.json", "paper/main.pdf", "C:/Users/wangz/Downloads/119.pdf"],
+        blocker="" if presentation_ok else "presentation or figure-readability audit is missing/failing",
+        submission_blocking=True,
+    )
+
+    artifact_ok = exists_all([PAPER / "main.pdf", canonical_pdf]) and passed_json(RESULTS / "claim_boundary_audit.json")
+    add_requirement(
+        requirements,
+        requirement="Canonical artifact placement and overclaim prevention",
+        status="satisfied" if artifact_ok and claim.get("passed") is True else "missing",
+        evidence=["results/claim_boundary_audit.json", "paper/main.pdf", str(canonical_pdf)],
+        blocker="" if artifact_ok and claim.get("passed") is True else "canonical PDF or claim-boundary audit is missing/failing",
+        submission_blocking=True,
+    )
+
+    reproducible_ok = exists_all(
+        [
+            ROOT / "scripts" / "build_submission_artifacts.ps1",
+            ROOT / "scripts" / "build_local_model_release.py",
+            ROOT / "scripts" / "validate_submission_artifacts.py",
+            ROOT / "scripts" / "self_test_external_backend_contract.py",
+            ROOT / "scripts" / "self_test_external_config_evidence.py",
+            ROOT / "scripts" / "self_test_external_adapter_evidence.py",
+            ROOT / "scripts" / "self_test_external_fidelity_acceptance.py",
+            ROOT / "scripts" / "self_test_external_fidelity_provenance_packet.py",
+            RESULTS / "external_fidelity_provenance_packet_self_test.json",
+            RESULTS / "external_fidelity_provenance_packet_self_test.md",
+            ROOT / "scripts" / "self_test_external_backend_integration_packet.py",
+            RESULTS / "external_backend_integration_packet_self_test.json",
+            RESULTS / "external_backend_integration_packet_self_test.md",
+            ROOT / "scripts" / "self_test_external_precollection_freeze_receipt.py",
+            ROOT / "scripts" / "self_test_external_postcollection_evidence_seal.py",
+            ROOT / "scripts" / "self_test_external_postcollection_seal_consistency.py",
+            ROOT / "scripts" / "self_test_external_release_package.py",
+            ROOT / "scripts" / "self_test_external_pairing_integrity.py",
+            ROOT / "scripts" / "self_test_external_adapter_scaffold_guard.py",
+            RESULTS / "external_adapter_scaffold_guard_self_test.json",
+            RESULTS / "external_adapter_scaffold_guard_self_test.md",
+            ROOT / "scripts" / "self_test_maniskill_render_machine_qualification.py",
+            RESULTS / "maniskill_render_machine_qualification_self_test.json",
+            RESULTS / "maniskill_render_machine_qualification_self_test.md",
+            ROOT / "scripts" / "self_test_external_acquisition_packet.py",
+            RESULTS / "external_acquisition_packet_self_test.json",
+            RESULTS / "external_acquisition_packet_self_test.md",
+            ROOT / "scripts" / "self_test_external_evidence_closure_brief.py",
+            RESULTS / "external_evidence_closure_brief_self_test.json",
+            RESULTS / "external_evidence_closure_brief_self_test.md",
+            ROOT / "scripts" / "self_test_external_collection_job_packet.py",
+            RESULTS / "external_collection_job_packet_self_test.json",
+            RESULTS / "external_collection_job_packet_self_test.md",
+            ROOT / "scripts" / "self_test_external_collection_machine_bootstrap.py",
+            RESULTS / "external_collection_machine_bootstrap_self_test.json",
+            RESULTS / "external_collection_machine_bootstrap_self_test.md",
+            ROOT / "scripts" / "self_test_external_operator_handoff_bundle.py",
+            RESULTS / "external_operator_handoff_bundle_self_test.json",
+            RESULTS / "external_operator_handoff_bundle_self_test.md",
+            ROOT / "scripts" / "self_test_external_operator_release_bundle.py",
+            RESULTS / "external_operator_release_bundle_self_test.json",
+            RESULTS / "external_operator_release_bundle_self_test.md",
+            ROOT / "scripts" / "self_test_external_evidence_preflight.py",
+            RESULTS / "external_evidence_preflight_self_test.json",
+            RESULTS / "external_evidence_preflight_self_test.md",
+            ROOT / "scripts" / "self_test_external_execution_readiness.py",
+            RESULTS / "external_execution_readiness_self_test.json",
+            RESULTS / "external_execution_readiness_self_test.md",
+            ROOT / "scripts" / "self_test_external_method_implementation_packet.py",
+            RESULTS / "external_method_implementation_packet_self_test.json",
+            RESULTS / "external_method_implementation_packet_self_test.md",
+            ROOT / "scripts" / "self_test_external_method_config_materialization.py",
+            RESULTS / "external_method_config_materialization_self_test.json",
+            RESULTS / "external_method_config_materialization_self_test.md",
+            ROOT / "scripts" / "self_test_external_config_materialization.py",
+            RESULTS / "external_config_materialization_self_test.json",
+            RESULTS / "external_config_materialization_self_test.md",
+            ROOT / "scripts" / "self_test_external_config_manifest_packet.py",
+            RESULTS / "external_config_manifest_packet_self_test.json",
+            RESULTS / "external_config_manifest_packet_self_test.md",
+            ROOT / "scripts" / "self_test_external_baseline_contract.py",
+            RESULTS / "external_baseline_contract_self_test.json",
+            RESULTS / "external_baseline_contract_self_test.md",
+            ROOT / "scripts" / "self_test_external_rollout_evidence_packet.py",
+            RESULTS / "external_rollout_evidence_packet_self_test.json",
+            RESULTS / "external_rollout_evidence_packet_self_test.md",
+            ROOT / "scripts" / "self_test_external_ablation_collection_packet.py",
+            RESULTS / "external_ablation_collection_packet_self_test.json",
+            RESULTS / "external_ablation_collection_packet_self_test.md",
+            ROOT / "scripts" / "self_test_external_evidence_intake_ledger.py",
+            RESULTS / "external_evidence_intake_ledger_self_test.json",
+            RESULTS / "external_evidence_intake_ledger_self_test.md",
+            ROOT / "scripts" / "self_test_external_precollection_manifest_draft.py",
+            RESULTS / "external_precollection_manifest_draft_self_test.json",
+            RESULTS / "external_precollection_manifest_draft_self_test.md",
+            ROOT / "scripts" / "self_test_external_evidence_pipeline.py",
+            RESULTS / "external_rollout_validator_self_test.json",
+            RESULTS / "external_rollout_validator_self_test.md",
+            RESULTS / "external_evidence_pipeline_self_test.json",
+            RESULTS / "external_evidence_pipeline_self_test.md",
+            ROOT / ".github" / "workflows" / "paper119-validation.yml",
+            DOCS / "reproducibility_checklist.md",
+            DOCS / "local_model_release.md",
+            RESULTS / "local_model_release_manifest.json",
+            RESULTS / "local_model_release_audit.json",
+        ]
+    )
+    add_requirement(
+        requirements,
+        requirement="Single-command local reproducibility, GitHub CI, and validator self-tests",
+        status="satisfied" if reproducible_ok else "missing",
+        evidence=[
+            "scripts/build_submission_artifacts.ps1",
+            "scripts/build_local_model_release.py",
+            "docs/local_model_release.md",
+            "results/local_model_release_manifest.json",
+            "results/local_model_release_audit.json",
+            "scripts/validate_submission_artifacts.py",
+            "scripts/self_test_external_backend_contract.py",
+            "scripts/self_test_external_config_evidence.py",
+            "scripts/self_test_external_adapter_evidence.py",
+            "scripts/self_test_external_fidelity_acceptance.py",
+            "scripts/self_test_external_precollection_freeze_receipt.py",
+            "scripts/self_test_external_postcollection_evidence_seal.py",
+            "scripts/self_test_external_postcollection_seal_consistency.py",
+            "scripts/self_test_external_release_package.py",
+            "scripts/self_test_external_pairing_integrity.py",
+            "scripts/self_test_external_adapter_scaffold_guard.py",
+            "results/external_adapter_scaffold_guard_self_test.json",
+            "results/external_adapter_scaffold_guard_self_test.md",
+            "scripts/self_test_maniskill_render_machine_qualification.py",
+            "results/maniskill_render_machine_qualification_self_test.json",
+            "results/maniskill_render_machine_qualification_self_test.md",
+            "scripts/self_test_external_acquisition_packet.py",
+            "results/external_acquisition_packet_self_test.json",
+            "results/external_acquisition_packet_self_test.md",
+            "scripts/self_test_external_evidence_closure_brief.py",
+            "results/external_evidence_closure_brief_self_test.json",
+            "results/external_evidence_closure_brief_self_test.md",
+            "scripts/self_test_external_collection_job_packet.py",
+            "results/external_collection_job_packet_self_test.json",
+            "results/external_collection_job_packet_self_test.md",
+            "scripts/self_test_external_collection_machine_bootstrap.py",
+            "results/external_collection_machine_bootstrap_self_test.json",
+            "results/external_collection_machine_bootstrap_self_test.md",
+            "scripts/self_test_external_operator_handoff_bundle.py",
+            "results/external_operator_handoff_bundle_self_test.json",
+            "results/external_operator_handoff_bundle_self_test.md",
+            "scripts/self_test_external_operator_release_bundle.py",
+            "results/external_operator_release_bundle_self_test.json",
+            "results/external_operator_release_bundle_self_test.md",
+            "scripts/self_test_external_evidence_preflight.py",
+            "results/external_evidence_preflight_self_test.json",
+            "results/external_evidence_preflight_self_test.md",
+            "scripts/self_test_external_execution_readiness.py",
+            "results/external_execution_readiness_self_test.json",
+            "results/external_execution_readiness_self_test.md",
+            "scripts/self_test_external_method_implementation_packet.py",
+            "results/external_method_implementation_packet_self_test.json",
+            "results/external_method_implementation_packet_self_test.md",
+            "scripts/self_test_external_method_config_materialization.py",
+            "results/external_method_config_materialization_self_test.json",
+            "results/external_method_config_materialization_self_test.md",
+            "scripts/self_test_external_config_materialization.py",
+            "results/external_config_materialization_self_test.json",
+            "results/external_config_materialization_self_test.md",
+            "scripts/self_test_external_config_manifest_packet.py",
+            "results/external_config_manifest_packet_self_test.json",
+            "results/external_config_manifest_packet_self_test.md",
+            "scripts/self_test_external_baseline_contract.py",
+            "results/external_baseline_contract_self_test.json",
+            "results/external_baseline_contract_self_test.md",
+            "scripts/self_test_external_rollout_evidence_packet.py",
+            "results/external_rollout_evidence_packet_self_test.json",
+            "results/external_rollout_evidence_packet_self_test.md",
+            "scripts/self_test_external_ablation_collection_packet.py",
+            "results/external_ablation_collection_packet_self_test.json",
+            "results/external_ablation_collection_packet_self_test.md",
+            "scripts/self_test_external_evidence_intake_ledger.py",
+            "results/external_evidence_intake_ledger_self_test.json",
+            "results/external_evidence_intake_ledger_self_test.md",
+            "scripts/self_test_external_precollection_manifest_draft.py",
+            "results/external_precollection_manifest_draft_self_test.json",
+            "results/external_precollection_manifest_draft_self_test.md",
+            "scripts/self_test_external_rollout_validator.py",
+            "results/external_rollout_validator_self_test.json",
+            "results/external_rollout_validator_self_test.md",
+            "scripts/self_test_external_evidence_pipeline.py",
+            "results/external_evidence_pipeline_self_test.json",
+            "results/external_evidence_pipeline_self_test.md",
+            ".github/workflows/paper119-validation.yml",
+            "docs/reproducibility_checklist.md",
+        ],
+        blocker="" if reproducible_ok else "rebuild, CI, or validation self-test entry point is missing",
+        submission_blocking=True,
+    )
+
+    execution_packet_ok = (
+        execution_readiness.get("passed") is True
+        and execution_readiness.get("execution_packet_ready") is True
+        and execution_readiness.get("strict_evidence_ready") is False
+        and execution_readiness_self_test.get("passed") is True
+        and execution_readiness_self_test.get("not_external_evidence") is True
+        and execution_readiness_self_test.get("temporary_fixture_execution_ready") is True
+        and execution_readiness_self_test.get("strict_evidence_promotion_rejected") is True
+        and execution_readiness_self_test.get("haonan_dependence_drift_rejected") is True
+        and analysis_plan.get("passed") is True
+        and analysis_plan.get("not_external_evidence") is True
+        and analysis_plan.get("analysis_plan_ready") is True
+        and analysis_plan.get("strict_evidence_ready") is False
+        and platform_onboarding.get("passed") is True
+        and platform_onboarding.get("not_external_evidence") is True
+        and platform_onboarding.get("platform_onboarding_ready") is True
+        and platform_onboarding.get("strict_evidence_ready") is False
+        and fidelity_provenance.get("passed") is True
+        and fidelity_provenance.get("not_external_evidence") is True
+        and fidelity_provenance.get("fidelity_provenance_packet_ready") is True
+        and fidelity_provenance.get("strict_fidelity_evidence_ready") is False
+        and fidelity_provenance.get("strict_external_evidence_ready") is False
+        and fidelity_provenance_self_test.get("passed") is True
+        and fidelity_provenance_self_test.get("not_external_evidence") is True
+        and fidelity_provenance_self_test.get("temporary_packet_ready") is True
+        and fidelity_provenance_self_test.get("work_order_artifact_command_drift_rejected") is True
+        and fidelity_provenance_self_test.get("premature_evidence_promotion_rejected") is True
+        and fidelity_provenance_self_test.get("real_outputs_untouched") is True
+        and exists_all(
+            [
+                EXTERNAL / "statistical_analysis_plan.json",
+                EXTERNAL / "statistical_analysis_plan.md",
+                EXTERNAL / "platform_onboarding_packet.json",
+                EXTERNAL / "platform_onboarding_packet.md",
+                EXTERNAL / "fidelity_provenance_packet.json",
+                EXTERNAL / "fidelity_provenance_packet.md",
+                EXTERNAL / "fidelity_provenance_work_orders.csv",
+                EXTERNAL / "backend_integration_packet.json",
+                EXTERNAL / "backend_integration_packet.md",
+                EXTERNAL / "backend_integration_work_orders.csv",
+                EXTERNAL / "config_manifest_packet.json",
+                EXTERNAL / "config_manifest_packet.md",
+                EXTERNAL / "config_manifest_work_orders.csv",
+                EXTERNAL / "rollout_evidence_packet.json",
+                EXTERNAL / "rollout_evidence_packet.md",
+                EXTERNAL / "rollout_evidence_work_orders.csv",
+                EXTERNAL / "platform_qualification_checklist.md",
+                EXTERNAL / "fidelity_acceptance_template.json",
+                EXTERNAL / "independent_validation_route.md",
+                EXTERNAL / "independent_validation_route_matrix.csv",
+                EXTERNAL / "blind_evaluation_protocol.md",
+                EXTERNAL / "blinded_operator_sheet.csv",
+                EXTERNAL / "method_alias_map.json",
+                EXTERNAL / "collection_runbook.md",
+                EXTERNAL / "operator_record_sheet.csv",
+                EXTERNAL / "runner" / "README.md",
+                EXTERNAL / "runner" / "backend_contract.py",
+                EXTERNAL / "runner" / "real_collection_runner.py",
+            ]
+        )
+        and fidelity_acceptance.get("passed") is True
+        and fidelity_acceptance.get("acceptance_ready") is False
+        and route_audit.get("passed") is True
+        and route_audit.get("not_external_evidence") is True
+        and blind_eval.get("passed") is True
+        and int(blind_eval.get("row_count", 0) or 0) >= 1440
+        and runner_harness.get("passed") is True
+        and runner_harness.get("not_external_evidence") is True
+        and runner_harness.get("actual_execution_ready") is False
+        and runner_probe.get("passed") is True
+        and runner_probe.get("not_external_evidence") is True
+        and int(runner_probe.get("records_written", 0) or 0) >= 2
+        and not runner_probe.get("schema_errors")
+        and backend_contract.get("passed") is True
+        and backend_contract.get("not_external_evidence") is True
+        and backend_contract.get("backend_contract_harness_ready") is True
+        and backend_contract.get("actual_backend_ready") is False
+        and backend_integration.get("passed") is True
+        and backend_integration.get("not_external_evidence") is True
+        and backend_integration.get("backend_integration_packet_ready") is True
+        and backend_integration.get("strict_backend_ready") is False
+        and backend_integration.get("strict_evidence_ready") is False
+        and backend_integration_self_test.get("passed") is True
+        and backend_integration_self_test.get("not_external_evidence") is True
+        and backend_integration_self_test.get("temporary_packet_ready") is True
+        and backend_integration_self_test.get("work_order_artifact_command_drift_rejected") is True
+        and backend_integration_self_test.get("premature_backend_evidence_promotion_rejected") is True
+        and backend_integration_self_test.get("real_outputs_untouched") is True
+        and config_manifest.get("passed") is True
+        and config_manifest.get("not_external_evidence") is True
+        and config_manifest.get("config_manifest_packet_ready") is True
+        and config_manifest.get("strict_config_evidence_ready") is False
+        and config_manifest.get("manifest_declared_config_ready") is False
+        and config_manifest_self_test.get("passed") is True
+        and config_manifest_self_test.get("temporary_packet_ready") is True
+        and config_manifest_self_test.get("real_outputs_untouched") is True
+        and rollout_evidence.get("passed") is True
+        and rollout_evidence.get("not_external_evidence") is True
+        and rollout_evidence.get("rollout_evidence_packet_ready") is True
+        and rollout_evidence.get("strict_rollout_evidence_ready") is False
+        and rollout_evidence.get("strict_external_evidence_ready") is False
+        and ablation_collection_self_test.get("passed") is True
+        and ablation_collection_self_test.get("not_external_evidence") is True
+        and ablation_collection_self_test.get("temporary_packet_ready") is True
+        and ablation_collection_self_test.get("work_order_artifact_command_drift_rejected") is True
+        and ablation_collection_self_test.get("strict_command_drift_rejected") is True
+        and ablation_collection_self_test.get("real_outputs_untouched") is True
+        and evidence_intake_self_test.get("passed") is True
+        and evidence_intake_self_test.get("not_external_evidence") is True
+        and evidence_intake_self_test.get("temporary_ledger_ready") is True
+        and evidence_intake_self_test.get("unmapped_failure_rejected") is True
+        and evidence_intake_self_test.get("row_source_completion_drift_rejected") is True
+        and evidence_intake_self_test.get("strict_command_drift_rejected") is True
+        and evidence_intake_self_test.get("real_outputs_untouched") is True
+        and precollection_manifest_self_test.get("passed") is True
+        and precollection_manifest_self_test.get("not_external_evidence") is True
+        and precollection_manifest_self_test.get("temporary_draft_ready") is True
+        and precollection_manifest_self_test.get("candidate_method_config_hash_drift_rejected") is True
+        and precollection_manifest_self_test.get("source_report_drift_rejected") is True
+        and precollection_manifest_self_test.get("real_outputs_untouched") is True
+        and collection_readiness.get("passed") is True
+        and collection_readiness.get("collection_ready") is False
+        and pairing_integrity.get("passed") is True
+        and pairing_integrity.get("pairing_ready") is False
+        and release_package.get("passed") is True
+        and release_package.get("release_package_ready") is False
+    )
+    add_requirement(
+        requirements,
+        requirement="Independent external-validation execution packet not dependent on Haonan",
+        status="satisfied" if execution_packet_ok else "missing",
+        evidence=[
+            "results/external_execution_readiness_audit.json",
+            "scripts/self_test_external_execution_readiness.py",
+            "results/external_execution_readiness_self_test.json",
+            "results/external_execution_readiness_self_test.md",
+            "results/external_analysis_plan_audit.json",
+            "results/external_platform_onboarding_audit.json",
+            "results/external_fidelity_provenance_audit.json",
+            "scripts/self_test_external_fidelity_provenance_packet.py",
+            "results/external_fidelity_provenance_packet_self_test.json",
+            "results/external_fidelity_provenance_packet_self_test.md",
+            "external_validation/statistical_analysis_plan.json",
+            "external_validation/statistical_analysis_plan.md",
+            "external_validation/platform_onboarding_packet.json",
+            "external_validation/platform_onboarding_packet.md",
+            "external_validation/fidelity_provenance_packet.md",
+            "external_validation/fidelity_provenance_work_orders.csv",
+            "external_validation/backend_integration_packet.md",
+            "external_validation/backend_integration_work_orders.csv",
+            "scripts/self_test_external_backend_integration_packet.py",
+            "results/external_backend_integration_packet_self_test.json",
+            "results/external_backend_integration_packet_self_test.md",
+            "external_validation/config_manifest_packet.md",
+            "external_validation/config_manifest_work_orders.csv",
+            "external_validation/rollout_evidence_packet.md",
+            "external_validation/rollout_evidence_work_orders.csv",
+            "scripts/self_test_external_ablation_collection_packet.py",
+            "results/external_ablation_collection_packet_self_test.json",
+            "results/external_ablation_collection_packet_self_test.md",
+            "scripts/self_test_external_evidence_intake_ledger.py",
+            "results/external_evidence_intake_ledger_self_test.json",
+            "results/external_evidence_intake_ledger_self_test.md",
+            "scripts/self_test_external_precollection_manifest_draft.py",
+            "results/external_precollection_manifest_draft_self_test.json",
+            "results/external_precollection_manifest_draft_self_test.md",
+            "results/external_fidelity_acceptance_audit.json",
+            "results/independent_validation_route_audit.json",
+            "results/external_blind_eval_audit.json",
+            "results/external_runner_harness_audit.json",
+            "results/external_runner_backend_self_test.json",
+            "results/external_backend_contract_audit.json",
+            "results/external_backend_integration_audit.json",
+            "results/external_config_manifest_audit.json",
+            "results/external_config_manifest_packet_self_test.json",
+            "results/external_rollout_evidence_audit.json",
+            "results/external_collection_readiness_audit.json",
+            "results/external_pairing_integrity_audit.json",
+            "results/external_release_package_audit.json",
+            "external_validation/platform_qualification_checklist.md",
+            "external_validation/fidelity_acceptance_template.json",
+            "external_validation/independent_validation_route.md",
+            "external_validation/independent_validation_route_matrix.csv",
+            "external_validation/blind_evaluation_protocol.md",
+            "external_validation/blinded_operator_sheet.csv",
+            "external_validation/collection_runbook.md",
+            "external_validation/operator_record_sheet.csv",
+            "external_validation/runner/real_collection_runner.py",
+        ],
+        blocker="" if execution_packet_ok else "external execution packet audit is missing/failing or strict evidence readiness is incorrectly claimed",
+        submission_blocking=True,
+    )
+
+    release_package_ok = (
+        release_package.get("passed") is True
+        and release_package.get("version") == "external_release_package_audit_v1"
+        and release_package.get("release_package_ready") is False
+        and release_package.get("not_external_evidence") is True
+        and exists_all(
+            [
+                ROOT / "scripts" / "audit_external_release_package.py",
+                RESULTS / "external_release_package_audit.json",
+                RESULTS / "external_release_package_audit.md",
+                ROOT / "scripts" / "build_external_manifest.py",
+            ]
+        )
+    )
+    add_requirement(
+        requirements,
+        requirement="External release package hash-lock and no-local-dry-run gate",
+        status="satisfied" if release_package_ok else "missing",
+        evidence=[
+            "scripts/audit_external_release_package.py",
+            "scripts/build_external_manifest.py",
+            "results/external_release_package_audit.json",
+            "results/external_release_package_audit.md",
+        ],
+        blocker="" if release_package_ok else "external release package audit is missing/failing or incorrectly claims current evidence readiness",
+        submission_blocking=True,
+    )
+
+    pairing_ok = (
+        pairing_integrity.get("passed") is True
+        and pairing_integrity.get("version") == "external_pairing_integrity_audit_v1"
+        and pairing_integrity.get("pairing_ready") is False
+        and pairing_integrity.get("not_external_evidence") is True
+        and exists_all(
+            [
+                ROOT / "scripts" / "audit_external_pairing_integrity.py",
+                RESULTS / "external_pairing_integrity_audit.json",
+                RESULTS / "external_pairing_integrity_audit.md",
+                EXTERNAL / "log_schema_v1.json",
+            ]
+        )
+    )
+    add_requirement(
+        requirements,
+        requirement="External paired-reset fairness and method-panel integrity gate",
+        status="satisfied" if pairing_ok else "missing",
+        evidence=[
+            "scripts/audit_external_pairing_integrity.py",
+            "results/external_pairing_integrity_audit.json",
+            "results/external_pairing_integrity_audit.md",
+            "external_validation/log_schema_v1.json",
+        ],
+        blocker="" if pairing_ok else "external pairing-integrity audit is missing/failing or incorrectly claims current evidence readiness",
+        submission_blocking=True,
+    )
+
+    runner_ok = (
+        runner_harness.get("passed") is True
+        and runner_harness.get("runner_harness_ready") is True
+        and runner_harness.get("actual_execution_ready") is False
+        and runner_probe.get("passed") is True
+        and runner_probe.get("not_external_evidence") is True
+        and int(runner_probe.get("records_written", 0) or 0) >= 2
+        and not runner_probe.get("schema_errors")
+        and backend_contract.get("passed") is True
+        and backend_contract.get("backend_contract_harness_ready") is True
+        and backend_contract.get("actual_backend_ready") is False
+        and exists_all(
+            [
+                EXTERNAL / "runner" / "README.md",
+                EXTERNAL / "runner" / "backend_contract.py",
+                EXTERNAL / "runner" / "real_collection_runner.py",
+                EXTERNAL / "runner" / "backend_templates" / "maniskill_backend.py",
+                EXTERNAL / "runner" / "backend_templates" / "mujoco_robosuite_backend.py",
+                EXTERNAL / "runner" / "backend_templates" / "isaac_backend.py",
+                EXTERNAL / "runner" / "backend_templates" / "robot_lab_backend.py",
+                ROOT / "scripts" / "audit_external_backend_contract.py",
+                RESULTS / "external_backend_contract_audit.json",
+                RESULTS / "external_runner_backend_self_test.json",
+                RESULTS / "external_backend_contract_audit.md",
+                RESULTS / "external_runner_backend_self_test.md",
+            ]
+        )
+    )
+    add_requirement(
+        requirements,
+        requirement="Fail-closed external collection runner and backend qualification gate for independent evidence capture",
+        status="satisfied" if runner_ok else "missing",
+        evidence=[
+            "results/external_runner_harness_audit.json",
+            "results/external_runner_harness_audit.md",
+            "results/external_backend_contract_audit.json",
+            "results/external_backend_contract_audit.md",
+            "results/external_runner_backend_self_test.json",
+            "results/external_runner_backend_self_test.md",
+            "external_validation/runner/README.md",
+            "external_validation/runner/backend_contract.py",
+            "external_validation/runner/real_collection_runner.py",
+            "external_validation/runner/backend_templates/maniskill_backend.py",
+        ],
+        blocker="" if runner_ok else "external runner/backend contract harness is missing/failing or incorrectly claims actual execution readiness",
+        submission_blocking=True,
+    )
+
+    collection_checks = {check.get("name"): check.get("passed") for check in collection_readiness.get("checks", [])}
+    configs_audited = collection_checks.get("real_task_configs_ready") in {True, False}
+    collection_readiness_ok = (
+        collection_readiness.get("passed") is True
+        and collection_readiness.get("version") == "external_collection_readiness_audit_v1"
+        and collection_readiness.get("collection_ready") is False
+        and collection_readiness.get("not_external_evidence") is True
+        and int(collection_readiness.get("row_count", 0) or 0) >= 1440
+        and collection_checks.get("operator_sheet_row_budget") is True
+        and collection_checks.get("alias_map_complete") is True
+        and collection_checks.get("backend_module_ready") is False
+        and configs_audited
+        and collection_checks.get("fidelity_acceptance_ready") is False
+        and collection_checks.get("alias_unsealing_explicit") is False
+        and collection_checks.get("run_id_specific") is False
+        and exists_all(
+            [
+                ROOT / "scripts" / "audit_external_collection_readiness.py",
+                RESULTS / "external_collection_readiness_audit.json",
+                RESULTS / "external_collection_readiness_audit.md",
+                EXTERNAL / "blinded_operator_sheet.csv",
+                EXTERNAL / "method_alias_map.json",
+            ]
+        )
+    )
+    add_requirement(
+        requirements,
+        requirement="Actual external collection preflight gate before spending robot or simulator time",
+        status="satisfied" if collection_readiness_ok else "missing",
+        evidence=[
+            "scripts/audit_external_collection_readiness.py",
+            "results/external_collection_readiness_audit.json",
+            "results/external_collection_readiness_audit.md",
+            "external_validation/blinded_operator_sheet.csv",
+            "external_validation/method_alias_map.json",
+        ],
+        blocker="" if collection_readiness_ok else "external collection preflight audit is missing/failing or incorrectly claims actual collection readiness",
+        submission_blocking=True,
+    )
+
+    acquisition_checks = {check.get("name"): check.get("passed") for check in acquisition_packet.get("checks", [])}
+    handoff_checks = {check.get("name"): check.get("passed") for check in handoff_bundle.get("checks", [])}
+    backend_integration_checks = {check.get("name"): check.get("passed") for check in backend_integration.get("checks", [])}
+    backend_integration_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in backend_integration_self_test.get("checks", []) or []
+    }
+    fidelity_provenance_checks = {check.get("name"): check.get("passed") for check in fidelity_provenance.get("checks", [])}
+    fidelity_provenance_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in fidelity_provenance_self_test.get("checks", []) or []
+    }
+    config_manifest_checks = {check.get("name"): check.get("passed") for check in config_manifest.get("checks", [])}
+    config_manifest_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in config_manifest_self_test.get("checks", []) or []
+    }
+    config_materialization_self_checks = {
+        check.get("name"): check.get("passed")
+        for check in config_materialization_self_test.get("checks", []) or []
+    }
+    rollout_evidence_checks = {check.get("name"): check.get("passed") for check in rollout_evidence.get("checks", [])}
+    rollout_self_checks = {check.get("name"): check.get("passed") for check in rollout_evidence_self_test.get("checks", [])}
+    ablation_self_checks = {
+        check.get("name"): check.get("passed") for check in ablation_collection_self_test.get("checks", []) or []
+    }
+    evidence_intake_self_checks = {
+        check.get("name"): check.get("passed") for check in evidence_intake_self_test.get("checks", []) or []
+    }
+    method_checks = {check.get("name"): check.get("passed") for check in method_implementation.get("checks", [])}
+    method_self_checks = {check.get("name"): check.get("passed") for check in method_implementation_self_test.get("checks", [])}
+    method_config_checks = {
+        check.get("name"): check.get("passed")
+        for check in method_config_materialization.get("checks", []) or []
+    }
+    collection_job_checks = {check.get("name"): check.get("passed") for check in collection_job.get("checks", [])}
+    machine_bootstrap_checks = {check.get("name"): check.get("passed") for check in machine_bootstrap.get("checks", [])}
+    operator_release_checks = {check.get("name"): check.get("passed") for check in operator_release.get("checks", [])}
+    closure_checks = {check.get("name"): check.get("passed") for check in closure_brief.get("checks", [])}
+    closure_self_checks = {check.get("name"): check.get("passed") for check in closure_brief_self_test.get("checks", [])}
+    acquisition_packet_ok = (
+        acquisition_packet.get("passed") is True
+        and acquisition_packet.get("version") == "external_acquisition_packet_v1"
+        and acquisition_packet.get("not_external_evidence") is True
+        and acquisition_packet.get("strict_evidence_ready") is False
+        and len(acquisition_packet.get("missing_requirements", []) or []) == 4
+        and len(acquisition_packet.get("operator_actions", []) or []) >= 10
+        and acquisition_checks.get("all_missing_requirements_mapped") is True
+        and acquisition_checks.get("backend_integration_packet_ready") is True
+        and acquisition_checks.get("config_manifest_packet_ready") is True
+        and acquisition_checks.get("rollout_evidence_packet_ready") is True
+        and acquisition_checks.get("fidelity_provenance_packet_ready") is True
+        and acquisition_checks.get("method_implementation_packet_ready") is True
+        and acquisition_checks.get("post_collection_strict_commands_cover_all_gates") is True
+        and acquisition_checks.get("no_real_manifest_written") is True
+        and closure_brief.get("passed") is True
+        and closure_brief.get("version") == "external_evidence_closure_brief_v1"
+        and closure_brief.get("not_external_evidence") is True
+        and closure_brief.get("strict_external_evidence_ready") is False
+        and closure_brief.get("haonan_dependency") is False
+        and len(closure_brief.get("closure_items", []) or []) == 4
+        and closure_checks.get("exact_four_submission_blockers_mapped") is True
+        and closure_checks.get("command_spine_covers_all_strict_gates") is True
+        and closure_checks.get("independent_route_not_haonan_dependent") is True
+        and closure_checks.get("no_real_manifest_written_before_external_evidence") is True
+        and closure_brief_self_test.get("passed") is True
+        and closure_brief_self_test.get("version") == "external_evidence_closure_brief_self_test_v1"
+        and closure_brief_self_test.get("not_external_evidence") is True
+        and closure_brief_self_test.get("temporary_fixture_ready") is True
+        and closure_brief_self_test.get("unmapped_blocker_rejected") is True
+        and closure_brief_self_test.get("premature_manifest_rejected") is True
+        and closure_brief_self_test.get("missing_linux_command_spine_rejected") is True
+        and closure_brief_self_test.get("haonan_dependent_route_rejected") is True
+        and closure_brief_self_test.get("missing_source_packet_rejected") is True
+        and closure_brief_self_test.get("real_outputs_untouched") is True
+        and closure_self_checks.get("temporary_fixture_builds_current_closure_brief") is True
+        and closure_self_checks.get("real_repository_closure_outputs_untouched") is True
+        and backend_integration.get("passed") is True
+        and backend_integration.get("not_external_evidence") is True
+        and backend_integration.get("backend_integration_packet_ready") is True
+        and backend_integration.get("strict_backend_ready") is False
+        and backend_integration_checks.get("work_orders_cover_backend_to_manifest_path") is True
+        and backend_integration_checks.get("work_orders_are_actionable_and_artifact_bound") is True
+        and backend_integration_self_test.get("passed") is True
+        and backend_integration_self_test.get("version") == "external_backend_integration_packet_self_test_v1"
+        and backend_integration_self_test.get("not_external_evidence") is True
+        and backend_integration_self_test.get("temporary_packet_ready") is True
+        and backend_integration_self_test.get("missing_work_orders_rejected") is True
+        and backend_integration_self_test.get("work_order_artifact_command_drift_rejected") is True
+        and backend_integration_self_test.get("premature_backend_evidence_promotion_rejected") is True
+        and backend_integration_self_test.get("route_independence_drift_rejected") is True
+        and backend_integration_self_test.get("actual_backend_promotion_rejected") is True
+        and backend_integration_self_test.get("hook_contract_drift_rejected") is True
+        and backend_integration_self_test.get("provenance_field_drift_rejected") is True
+        and backend_integration_self_test.get("strict_command_drift_rejected") is True
+        and backend_integration_self_test.get("real_backend_file_write_rejected") is True
+        and backend_integration_self_test.get("real_outputs_untouched") is True
+        and backend_integration_self_checks.get("temporary_backend_integration_packet_ready_but_non_evidence") is True
+        and backend_integration_self_checks.get("real_backend_integration_outputs_untouched") is True
+        and fidelity_provenance.get("passed") is True
+        and fidelity_provenance.get("not_external_evidence") is True
+        and fidelity_provenance.get("fidelity_provenance_packet_ready") is True
+        and fidelity_provenance.get("strict_fidelity_evidence_ready") is False
+        and fidelity_provenance.get("strict_external_evidence_ready") is False
+        and fidelity_provenance_checks.get("work_orders_cover_fidelity_blockers") is True
+        and fidelity_provenance_checks.get("work_orders_are_actionable_and_artifact_bound") is True
+        and fidelity_provenance_self_test.get("passed") is True
+        and fidelity_provenance_self_test.get("version") == "external_fidelity_provenance_packet_self_test_v1"
+        and fidelity_provenance_self_test.get("not_external_evidence") is True
+        and fidelity_provenance_self_test.get("temporary_packet_ready") is True
+        and fidelity_provenance_self_test.get("missing_work_orders_rejected") is True
+        and fidelity_provenance_self_test.get("work_order_artifact_command_drift_rejected") is True
+        and fidelity_provenance_self_test.get("premature_evidence_promotion_rejected") is True
+        and fidelity_provenance_self_test.get("acceptance_ready_drift_rejected") is True
+        and fidelity_provenance_self_test.get("strict_command_drift_rejected") is True
+        and fidelity_provenance_self_test.get("real_acceptance_or_manifest_write_rejected") is True
+        and fidelity_provenance_self_test.get("packet_file_deletion_rejected") is True
+        and fidelity_provenance_self_test.get("real_outputs_untouched") is True
+        and fidelity_provenance_self_checks.get("temporary_fidelity_provenance_packet_ready_but_non_evidence") is True
+        and fidelity_provenance_self_checks.get("real_fidelity_provenance_outputs_untouched") is True
+        and config_materialization_self_test.get("passed") is True
+        and config_materialization_self_test.get("version") == "external_config_materialization_self_test_v1"
+        and config_materialization_self_test.get("not_external_evidence") is True
+        and config_materialization_self_test.get("strict_config_evidence_ready") is False
+        and config_materialization_self_test.get("temporary_plan_ready") is True
+        and config_materialization_self_test.get("confirmed_write_fixture_ready") is True
+        and config_materialization_self_test.get("write_without_confirm_rejected") is True
+        and config_materialization_self_test.get("placeholder_platform_write_rejected") is True
+        and config_materialization_self_test.get("template_token_write_rejected") is True
+        and config_materialization_self_test.get("missing_task_binding_rejected") is True
+        and config_materialization_self_test.get("overwrite_without_force_rejected") is True
+        and config_materialization_self_test.get("real_outputs_untouched") is True
+        and config_materialization_self_checks.get("temporary_config_materialization_plan_ready_but_non_evidence") is True
+        and config_materialization_self_checks.get("confirmed_temp_write_materializes_schema_valid_configs") is True
+        and config_materialization_self_checks.get("real_config_materialization_outputs_untouched") is True
+        and config_manifest.get("passed") is True
+        and config_manifest.get("not_external_evidence") is True
+        and config_manifest.get("config_manifest_packet_ready") is True
+        and config_manifest.get("strict_config_evidence_ready") is False
+        and config_manifest.get("manifest_declared_config_ready") is False
+        and config_manifest_checks.get("manifest_template_declares_all_collection_tasks") is True
+        and config_manifest_checks.get("work_orders_cover_config_to_manifest_path") is True
+        and config_manifest_self_test.get("passed") is True
+        and config_manifest_self_test.get("version") == "external_config_manifest_packet_self_test_v1"
+        and config_manifest_self_test.get("not_external_evidence") is True
+        and config_manifest_self_test.get("temporary_packet_ready") is True
+        and config_manifest_self_test.get("missing_task_work_orders_rejected") is True
+        and config_manifest_self_test.get("premature_evidence_promotion_rejected") is True
+        and config_manifest_self_test.get("materialization_write_drift_rejected") is True
+        and config_manifest_self_test.get("template_audit_shrink_rejected") is True
+        and config_manifest_self_test.get("strict_config_evidence_promotion_rejected") is True
+        and config_manifest_self_test.get("manifest_task_omission_rejected") is True
+        and config_manifest_self_test.get("prepared_config_hash_drift_rejected") is True
+        and config_manifest_self_test.get("prepared_config_validation_drift_rejected") is True
+        and config_manifest_self_test.get("strict_command_drift_rejected") is True
+        and config_manifest_self_test.get("real_manifest_write_rejected") is True
+        and config_manifest_self_test.get("manifest_path_drift_rejected") is True
+        and config_manifest_self_test.get("real_outputs_untouched") is True
+        and config_manifest_self_checks.get("temporary_config_manifest_packet_ready_but_non_evidence") is True
+        and config_manifest_self_checks.get("real_config_manifest_outputs_untouched") is True
+        and rollout_evidence.get("passed") is True
+        and rollout_evidence.get("not_external_evidence") is True
+        and rollout_evidence.get("rollout_evidence_packet_ready") is True
+        and rollout_evidence.get("strict_rollout_evidence_ready") is False
+        and rollout_evidence.get("strict_external_evidence_ready") is False
+        and rollout_evidence_checks.get("task_work_orders_cover_all_planned_tasks") is True
+        and rollout_evidence_self_test.get("passed") is True
+        and rollout_evidence_self_test.get("version") == "external_rollout_evidence_packet_self_test_v1"
+        and rollout_evidence_self_test.get("not_external_evidence") is True
+        and rollout_evidence_self_test.get("temporary_packet_ready") is True
+        and rollout_evidence_self_test.get("missing_task_work_orders_rejected") is True
+        and rollout_evidence_self_test.get("premature_evidence_promotion_rejected") is True
+        and rollout_evidence_self_test.get("manifest_schema_error_drift_rejected") is True
+        and rollout_evidence_self_test.get("observed_record_drift_rejected") is True
+        and rollout_evidence_self_test.get("collection_budget_shrink_rejected") is True
+        and rollout_evidence_self_test.get("strict_command_drift_rejected") is True
+        and rollout_evidence_self_test.get("downstream_gate_promotion_rejected") is True
+        and rollout_evidence_self_test.get("real_output_write_rejected") is True
+        and rollout_evidence_self_test.get("real_outputs_untouched") is True
+        and rollout_self_checks.get("temporary_rollout_packet_ready_but_non_evidence") is True
+        and rollout_self_checks.get("real_rollout_packet_outputs_untouched") is True
+        and method_implementation.get("passed") is True
+        and method_implementation.get("not_external_evidence") is True
+        and method_implementation.get("strict_adapter_evidence_ready") is False
+        and method_checks.get("work_orders_cover_all_missing_non_oracle_methods") is True
+        and method_implementation_self_test.get("passed") is True
+        and method_implementation_self_test.get("version") == "external_method_implementation_packet_self_test_v1"
+        and method_implementation_self_test.get("not_external_evidence") is True
+        and method_implementation_self_test.get("temporary_packet_ready") is True
+        and method_implementation_self_test.get("missing_work_order_rejected") is True
+        and method_implementation_self_test.get("oracle_work_order_rejected") is True
+        and method_implementation_self_test.get("reference_adapter_shortcut_rejected") is True
+        and method_implementation_self_test.get("checkpoint_hash_shortcut_rejected") is True
+        and method_implementation_self_test.get("fairness_binding_drift_rejected") is True
+        and method_implementation_self_test.get("real_outputs_untouched") is True
+        and method_self_checks.get("temporary_method_packet_ready_but_non_evidence") is True
+        and method_self_checks.get("adapter_evidence_promotion_rejected") is True
+        and method_config_materialization.get("passed") is True
+        and method_config_materialization.get("version") == "external_method_config_materialization_audit_v1"
+        and method_config_materialization.get("not_external_evidence") is True
+        and method_config_materialization.get("strict_adapter_evidence_ready") is False
+        and method_config_materialization.get("strict_external_evidence_ready") is False
+        and int(method_config_materialization.get("candidate_config_count", 0) or 0) >= 11
+        and method_config_materialization.get("oracle_excluded") is True
+        and method_config_checks.get("candidate_configs_cover_non_oracle_methods") is True
+        and method_config_checks.get("candidate_hashes_match_written_files") is True
+        and method_config_checks.get("manifest_stubs_bind_checkpoint_config_hashes") is True
+        and method_config_checks.get("independent_implementation_still_required") is True
+        and method_config_checks.get("no_real_manifest_logs_videos_or_checkpoints_written") is True
+        and method_config_checks.get("candidate_config_contents_remain_non_evidence") is True
+        and method_config_checks.get("baseline_spec_hashes_match_current_files") is True
+        and method_config_checks.get("candidate_manifest_csv_matches_records") is True
+        and method_config_materialization_self_test.get("passed") is True
+        and method_config_materialization_self_test.get("version") == "external_method_config_materialization_self_test_v1"
+        and method_config_materialization_self_test.get("not_external_evidence") is True
+        and method_config_materialization_self_test.get("temporary_materialization_ready") is True
+        and method_config_materialization_self_test.get("candidate_file_hash_drift_rejected") is True
+        and method_config_materialization_self_test.get("candidate_evidence_content_drift_rejected") is True
+        and method_config_materialization_self_test.get("real_outputs_untouched") is True
+        and handoff_bundle.get("passed") is True
+        and handoff_bundle.get("version") == "external_operator_handoff_bundle_v1"
+        and handoff_bundle.get("not_external_evidence") is True
+        and handoff_bundle.get("strict_evidence_ready") is False
+        and handoff_bundle.get("start_state") == "DO_NOT_COLLECT_YET"
+        and handoff_checks.get("bundle_excludes_rollout_evidence_artifacts") is True
+        and handoff_checks.get("external_collection_job_packet_included") is True
+        and handoff_checks.get("backend_integration_packet_included") is True
+        and handoff_checks.get("backend_integration_packet_self_test_included") is True
+        and handoff_checks.get("fidelity_provenance_packet_included") is True
+        and handoff_checks.get("fidelity_provenance_packet_self_test_included") is True
+        and handoff_checks.get("config_manifest_packet_included") is True
+        and handoff_checks.get("rollout_evidence_packet_included") is True
+        and handoff_checks.get("ablation_collection_packet_self_test_included") is True
+        and handoff_checks.get("evidence_intake_ledger_self_test_included") is True
+        and handoff_checks.get("precollection_manifest_draft_self_test_included") is True
+        and handoff_checks.get("method_implementation_packet_included") is True
+        and handoff_checks.get("method_config_materialization_included") is True
+        and handoff_checks.get("method_config_materialization_self_test_included") is True
+        and handoff_checks.get("file_hashes_are_recorded") is True
+        and collection_job.get("passed") is True
+        and collection_job.get("version") == "external_collection_job_packet_audit_v1"
+        and collection_job.get("not_external_evidence") is True
+        and collection_job.get("strict_external_evidence_ready") is False
+        and collection_job.get("job_state") == "DO_NOT_START_COLLECTION_YET"
+        and int(collection_job.get("remaining_submission_blocker_count", 0) or 0) == 4
+        and len(collection_job.get("job_steps", []) or []) >= 17
+        and collection_job_checks.get("command_sequence_covers_full_external_validation_route") is True
+        and collection_job_checks.get("official_collection_commands_guarded") is True
+        and collection_job_checks.get("linux_command_spine_uses_lf_line_endings") is True
+        and collection_job.get("linux_command_file") == "external_validation/collection_job_commands.sh"
+        and "external_validation/collection_job_commands.sh" in (collection_job.get("command_files", []) or [])
+        and machine_bootstrap.get("passed") is True
+        and machine_bootstrap.get("version") == "external_collection_machine_bootstrap_audit_v1"
+        and machine_bootstrap.get("packet_version") == "external_collection_machine_bootstrap_v1"
+        and machine_bootstrap.get("not_external_evidence") is True
+        and machine_bootstrap.get("strict_external_evidence_ready") is False
+        and machine_bootstrap.get("bootstrap_state") == "READY_TO_BOOTSTRAP_EXTERNAL_MACHINE"
+        and machine_bootstrap.get("linux_command_file") == "external_validation/collection_machine_bootstrap.sh"
+        and "external_validation/collection_machine_bootstrap.sh" in machine_bootstrap.get("command_files", [])
+        and machine_bootstrap_checks.get("bootstrap_script_is_probe_only") is True
+        and machine_bootstrap_checks.get("bash_command_file_uses_lf_line_endings") is True
+        and machine_bootstrap_checks.get("local_machine_not_promoted") is True
+        and machine_bootstrap_checks.get("no_real_outputs_written") is True
+        and operator_release.get("passed") is True
+        and operator_release.get("version") == "external_operator_release_bundle_plan_v1"
+        and operator_release.get("not_external_evidence") is True
+        and operator_release.get("strict_external_evidence_ready") is False
+        and operator_release.get("bundle_state") == "READY_TO_SEND_OPERATOR_PACKAGE"
+        and operator_release.get("archive_written") is False
+        and int(operator_release.get("included_file_count", 0) or 0) >= 300
+        and operator_release_checks.get("handoff_hashes_recomputed") is True
+        and operator_release_checks.get("forbidden_evidence_paths_excluded") is True
+        and exists_all(
+            [
+                ROOT / "scripts" / "build_external_acquisition_packet.py",
+                ROOT / "scripts" / "build_external_evidence_closure_brief.py",
+                ROOT / "scripts" / "build_external_collection_job_packet.py",
+                ROOT / "scripts" / "build_external_collection_machine_bootstrap.py",
+                ROOT / "scripts" / "build_external_operator_handoff_bundle.py",
+                ROOT / "scripts" / "build_external_operator_release_bundle.py",
+                ROOT / "scripts" / "build_external_backend_integration_packet.py",
+                ROOT / "scripts" / "self_test_external_backend_integration_packet.py",
+                ROOT / "scripts" / "build_external_fidelity_provenance_packet.py",
+                ROOT / "scripts" / "self_test_external_fidelity_provenance_packet.py",
+                ROOT / "scripts" / "build_external_config_manifest_packet.py",
+                ROOT / "scripts" / "self_test_external_config_manifest_packet.py",
+                ROOT / "scripts" / "build_external_rollout_evidence_packet.py",
+                ROOT / "scripts" / "self_test_external_rollout_evidence_packet.py",
+                ROOT / "scripts" / "self_test_external_ablation_collection_packet.py",
+                ROOT / "scripts" / "self_test_external_evidence_intake_ledger.py",
+                ROOT / "scripts" / "build_external_method_implementation_packet.py",
+                ROOT / "scripts" / "self_test_external_method_implementation_packet.py",
+                ROOT / "scripts" / "materialize_external_method_configs.py",
+                EXTERNAL / "backend_integration_packet.md",
+                EXTERNAL / "backend_integration_work_orders.csv",
+                EXTERNAL / "fidelity_provenance_packet.md",
+                EXTERNAL / "fidelity_provenance_work_orders.csv",
+                EXTERNAL / "config_manifest_packet.md",
+                EXTERNAL / "config_manifest_work_orders.csv",
+                EXTERNAL / "rollout_evidence_packet.md",
+                EXTERNAL / "rollout_evidence_work_orders.csv",
+                EXTERNAL / "method_implementation_packet.md",
+                EXTERNAL / "method_implementation_work_orders.csv",
+                EXTERNAL / "method_config_materialization_plan.md",
+                EXTERNAL / "method_config_candidates.csv",
+                RESULTS / "external_acquisition_packet.json",
+                RESULTS / "external_acquisition_packet.md",
+                RESULTS / "external_evidence_closure_brief.json",
+                RESULTS / "external_evidence_closure_brief.md",
+                DOCS / "external_evidence_closure_brief.md",
+                ROOT / "scripts" / "self_test_external_evidence_closure_brief.py",
+                RESULTS / "external_evidence_closure_brief_self_test.json",
+                RESULTS / "external_evidence_closure_brief_self_test.md",
+                RESULTS / "external_backend_integration_audit.json",
+                RESULTS / "external_backend_integration_audit.md",
+                RESULTS / "external_backend_integration_packet_self_test.json",
+                RESULTS / "external_backend_integration_packet_self_test.md",
+                RESULTS / "external_fidelity_provenance_audit.json",
+                RESULTS / "external_fidelity_provenance_audit.md",
+                RESULTS / "external_fidelity_provenance_packet_self_test.json",
+                RESULTS / "external_fidelity_provenance_packet_self_test.md",
+                RESULTS / "external_config_manifest_audit.json",
+                RESULTS / "external_config_manifest_audit.md",
+                ROOT / "scripts" / "self_test_external_config_materialization.py",
+                RESULTS / "external_config_materialization_self_test.json",
+                RESULTS / "external_config_materialization_self_test.md",
+                RESULTS / "external_config_manifest_packet_self_test.json",
+                RESULTS / "external_config_manifest_packet_self_test.md",
+                RESULTS / "external_rollout_evidence_audit.json",
+                RESULTS / "external_rollout_evidence_audit.md",
+                RESULTS / "external_rollout_evidence_packet_self_test.json",
+                RESULTS / "external_rollout_evidence_packet_self_test.md",
+                RESULTS / "external_ablation_collection_packet_self_test.json",
+                RESULTS / "external_ablation_collection_packet_self_test.md",
+                RESULTS / "external_evidence_intake_ledger_self_test.json",
+                RESULTS / "external_evidence_intake_ledger_self_test.md",
+                RESULTS / "external_precollection_manifest_draft_self_test.json",
+                RESULTS / "external_precollection_manifest_draft_self_test.md",
+                RESULTS / "external_method_implementation_audit.json",
+                RESULTS / "external_method_implementation_audit.md",
+                RESULTS / "external_method_implementation_packet_self_test.json",
+                RESULTS / "external_method_implementation_packet_self_test.md",
+                RESULTS / "external_method_config_materialization_audit.json",
+                RESULTS / "external_method_config_materialization_audit.md",
+                RESULTS / "external_method_config_materialization_self_test.json",
+                RESULTS / "external_method_config_materialization_self_test.md",
+                EXTERNAL / "collection_job_packet.json",
+                EXTERNAL / "collection_job_packet.md",
+                EXTERNAL / "collection_job_commands.ps1",
+                EXTERNAL / "collection_job_commands.sh",
+                EXTERNAL / "collection_job_checklist.csv",
+                RESULTS / "external_collection_job_packet_audit.json",
+                RESULTS / "external_collection_job_packet_audit.md",
+                ROOT / "scripts" / "self_test_external_collection_job_packet.py",
+                RESULTS / "external_collection_job_packet_self_test.json",
+                RESULTS / "external_collection_job_packet_self_test.md",
+                EXTERNAL / "collection_machine_bootstrap.json",
+                EXTERNAL / "collection_machine_bootstrap.md",
+                EXTERNAL / "collection_machine_bootstrap.ps1",
+                EXTERNAL / "collection_machine_bootstrap.sh",
+                RESULTS / "external_collection_machine_bootstrap_audit.json",
+                RESULTS / "external_collection_machine_bootstrap_audit.md",
+                ROOT / "scripts" / "self_test_external_collection_machine_bootstrap.py",
+                RESULTS / "external_collection_machine_bootstrap_self_test.json",
+                RESULTS / "external_collection_machine_bootstrap_self_test.md",
+                EXTERNAL / "operator_release_bundle_manifest.csv",
+                EXTERNAL / "operator_release_bundle_README.md",
+                RESULTS / "external_operator_release_bundle_plan.json",
+                RESULTS / "external_operator_release_bundle_plan.md",
+                RESULTS / "external_operator_handoff_bundle.json",
+                RESULTS / "external_operator_handoff_bundle.md",
+                ROOT / "scripts" / "self_test_external_operator_handoff_bundle.py",
+                RESULTS / "external_operator_handoff_bundle_self_test.json",
+                RESULTS / "external_operator_handoff_bundle_self_test.md",
+                ROOT / "scripts" / "self_test_external_operator_release_bundle.py",
+                RESULTS / "external_operator_release_bundle_self_test.json",
+                RESULTS / "external_operator_release_bundle_self_test.md",
+                ROOT / "scripts" / "self_test_external_evidence_preflight.py",
+                RESULTS / "external_evidence_preflight_self_test.json",
+                RESULTS / "external_evidence_preflight_self_test.md",
+            ]
+        )
+    )
+    add_requirement(
+        requirements,
+        requirement="Machine-audited external evidence acquisition packet for remaining blockers",
+        status="satisfied" if acquisition_packet_ok else "missing",
+        evidence=[
+            "scripts/build_external_acquisition_packet.py",
+            "scripts/build_external_evidence_closure_brief.py",
+            "scripts/build_external_collection_job_packet.py",
+            "scripts/build_external_collection_machine_bootstrap.py",
+            "scripts/build_external_operator_handoff_bundle.py",
+            "scripts/build_external_operator_release_bundle.py",
+            "scripts/build_external_backend_integration_packet.py",
+            "scripts/self_test_external_backend_integration_packet.py",
+            "scripts/build_external_fidelity_provenance_packet.py",
+            "scripts/self_test_external_fidelity_provenance_packet.py",
+            "scripts/build_external_config_manifest_packet.py",
+            "scripts/self_test_external_config_manifest_packet.py",
+            "scripts/build_external_rollout_evidence_packet.py",
+            "scripts/self_test_external_rollout_evidence_packet.py",
+            "scripts/self_test_external_ablation_collection_packet.py",
+            "scripts/self_test_external_evidence_intake_ledger.py",
+            "scripts/build_external_method_implementation_packet.py",
+            "scripts/self_test_external_method_implementation_packet.py",
+            "scripts/materialize_external_method_configs.py",
+            "external_validation/backend_integration_packet.md",
+            "external_validation/backend_integration_work_orders.csv",
+            "external_validation/fidelity_provenance_packet.md",
+            "external_validation/fidelity_provenance_work_orders.csv",
+            "external_validation/config_manifest_packet.md",
+            "external_validation/config_manifest_work_orders.csv",
+            "external_validation/rollout_evidence_packet.md",
+            "external_validation/rollout_evidence_work_orders.csv",
+            "external_validation/method_implementation_packet.md",
+            "external_validation/method_implementation_work_orders.csv",
+            "external_validation/method_config_materialization_plan.md",
+            "external_validation/method_config_candidates.csv",
+            "results/external_acquisition_packet.json",
+            "results/external_acquisition_packet.md",
+            "results/external_evidence_closure_brief.json",
+            "results/external_evidence_closure_brief.md",
+            "docs/external_evidence_closure_brief.md",
+            "scripts/self_test_external_evidence_closure_brief.py",
+            "results/external_evidence_closure_brief_self_test.json",
+            "results/external_evidence_closure_brief_self_test.md",
+            "results/external_backend_integration_audit.json",
+            "results/external_backend_integration_audit.md",
+            "results/external_backend_integration_packet_self_test.json",
+            "results/external_backend_integration_packet_self_test.md",
+            "results/external_fidelity_provenance_audit.json",
+            "results/external_fidelity_provenance_audit.md",
+            "results/external_fidelity_provenance_packet_self_test.json",
+            "results/external_fidelity_provenance_packet_self_test.md",
+            "results/external_config_manifest_audit.json",
+            "results/external_config_manifest_audit.md",
+            "scripts/self_test_external_config_materialization.py",
+            "results/external_config_materialization_self_test.json",
+            "results/external_config_materialization_self_test.md",
+            "results/external_config_manifest_packet_self_test.json",
+            "results/external_config_manifest_packet_self_test.md",
+            "results/external_rollout_evidence_audit.json",
+            "results/external_rollout_evidence_audit.md",
+            "results/external_rollout_evidence_packet_self_test.json",
+            "results/external_rollout_evidence_packet_self_test.md",
+            "results/external_ablation_collection_packet_self_test.json",
+            "results/external_ablation_collection_packet_self_test.md",
+            "results/external_evidence_intake_ledger_self_test.json",
+            "results/external_evidence_intake_ledger_self_test.md",
+            "results/external_precollection_manifest_draft_self_test.json",
+            "results/external_precollection_manifest_draft_self_test.md",
+            "results/external_method_implementation_audit.json",
+            "results/external_method_implementation_audit.md",
+            "results/external_method_implementation_packet_self_test.json",
+            "results/external_method_implementation_packet_self_test.md",
+            "results/external_method_config_materialization_audit.json",
+            "results/external_method_config_materialization_audit.md",
+            "results/external_method_config_materialization_self_test.json",
+            "results/external_method_config_materialization_self_test.md",
+            "external_validation/collection_job_packet.json",
+            "external_validation/collection_job_packet.md",
+            "external_validation/collection_job_commands.ps1",
+            "external_validation/collection_job_commands.sh",
+            "external_validation/collection_job_checklist.csv",
+            "results/external_collection_job_packet_audit.json",
+            "results/external_collection_job_packet_audit.md",
+            "scripts/self_test_external_collection_job_packet.py",
+            "results/external_collection_job_packet_self_test.json",
+            "results/external_collection_job_packet_self_test.md",
+            "external_validation/collection_machine_bootstrap.json",
+            "external_validation/collection_machine_bootstrap.md",
+            "external_validation/collection_machine_bootstrap.ps1",
+            "external_validation/collection_machine_bootstrap.sh",
+            "results/external_collection_machine_bootstrap_audit.json",
+            "results/external_collection_machine_bootstrap_audit.md",
+            "scripts/self_test_external_collection_machine_bootstrap.py",
+            "results/external_collection_machine_bootstrap_self_test.json",
+            "results/external_collection_machine_bootstrap_self_test.md",
+            "external_validation/operator_release_bundle_manifest.csv",
+            "external_validation/operator_release_bundle_README.md",
+            "results/external_operator_release_bundle_plan.json",
+            "results/external_operator_release_bundle_plan.md",
+            "results/external_operator_handoff_bundle.json",
+            "results/external_operator_handoff_bundle.md",
+            "scripts/self_test_external_operator_handoff_bundle.py",
+            "results/external_operator_handoff_bundle_self_test.json",
+            "results/external_operator_handoff_bundle_self_test.md",
+            "scripts/self_test_external_operator_release_bundle.py",
+            "results/external_operator_release_bundle_self_test.json",
+            "results/external_operator_release_bundle_self_test.md",
+            "scripts/self_test_external_evidence_preflight.py",
+            "results/external_evidence_preflight_self_test.json",
+            "results/external_evidence_preflight_self_test.md",
+        ],
+        blocker="" if acquisition_packet_ok else "external acquisition/handoff packet is missing/failing, includes forbidden evidence paths, or incorrectly claims evidence readiness",
+        submission_blocking=True,
+    )
+
+    route_checks = {check.get("name"): check.get("passed") for check in route_audit.get("checks", [])}
+    route_ok = (
+        route_audit.get("passed") is True
+        and route_audit.get("primary_route") == "maniskill_sapien_primary"
+        and route_checks.get("primary_route_independent_of_haonan") is True
+        and route_checks.get("primary_route_covers_collection_tasks") is True
+        and route_checks.get("all_readiness_blockers_have_route_closure") is True
+    )
+    add_requirement(
+        requirements,
+        requirement="Concrete non-Haonan validation route with public simulator and robot options",
+        status="satisfied" if route_ok else "missing",
+        evidence=[
+            "results/independent_validation_route_audit.json",
+            "external_validation/independent_validation_route.md",
+            "external_validation/independent_validation_route_matrix.csv",
+        ],
+        blocker="" if route_ok else "independent validation route audit is missing/failing or no longer covers the external-evidence blockers",
+        submission_blocking=True,
+    )
+
+    outreach_ok = exists_all(
+        [
+            outreach_package,
+            OUTREACH / "paper119_one_page_memo.pdf",
+            OUTREACH / "paper119_four_page_preview.pdf",
+        ]
+    )
+    add_requirement(
+        requirements,
+        requirement="Separate Haonan/Yilun outreach package derived from the strengthened paper",
+        status="satisfied" if outreach_ok else "missing",
+        evidence=[
+            "docs/haonan_yilun_outreach_package.md",
+            "outreach/paper119_one_page_memo.pdf",
+            "outreach/paper119_four_page_preview.pdf",
+            "scripts/validate_outreach_artifacts.py",
+        ],
+        blocker="" if outreach_ok else "outreach package or PDFs are missing",
+        submission_blocking=False,
+    )
+
+    manuscript_polish_ok = manuscript_readability.get("passed") is True and not any("manual_related_work" in item for item in summary.get("missing_scope_evidence", []))
+    add_requirement(
+        requirements,
+        requirement="Machine-audited manuscript/reference readability polish",
+        status="satisfied" if manuscript_polish_ok else "human_polish",
+        evidence=["results/manuscript_readability_audit.json", "results/related_work_audit.json", "results/reference_integrity_audit.json"],
+        blocker="" if manuscript_polish_ok else "manuscript/reference readability audit is missing/failing or stale manual-polish blocker remains",
+        submission_blocking=False,
+    )
+
+    camera_ready_polish_satisfied = (
+        presentation.get("passed") is True
+        and figure_readability.get("passed") is True
+        and camera_ready.get("passed") is True
+    )
+    add_requirement(
+        requirements,
+        requirement="Machine-audited camera-ready figure/design pass",
+        status="satisfied" if camera_ready_polish_satisfied else "human_polish",
+        evidence=["results/presentation_quality_audit.json", "results/figure_readability_audit.json", "results/camera_ready_design_audit.json"],
+        blocker="" if camera_ready_polish_satisfied else "presentation, figure-readability, or camera-ready page-render audit is missing/failing",
+        submission_blocking=False,
+    )
+
+    satisfied = sum(1 for row in requirements if row["status"] == "satisfied")
+    missing = [row for row in requirements if row["status"] == "missing"]
+    human_polish = [row for row in requirements if row["status"] == "human_polish"]
+    blocking_missing = [row for row in missing if row["submission_blocking"]]
+    objective_complete = not blocking_missing and not human_polish
+    audit_passed = not objective_complete and bool(blocking_missing)
+
+    payload = {
+        "version": "submission_readiness_gap_audit_v1",
+        "passed": audit_passed,
+        "objective_complete": objective_complete,
+        "current_decision": summary.get("terminal_decision"),
+        "iclr_main_ready": summary.get("iclr_main_ready"),
+        "scope_gate_pass": summary.get("scope_gate_pass"),
+        "satisfied_requirements": satisfied,
+        "missing_requirements": len(missing),
+        "human_polish_requirements": len(human_polish),
+        "blocking_missing_requirements": len(blocking_missing),
+        "requirements": requirements,
+    }
+    OUT_JSON.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    lines = [
+        "# Submission Readiness Gap Audit",
+        "",
+        f"Passed: `{str(audit_passed).lower()}`.",
+        f"Objective complete: `{str(objective_complete).lower()}`.",
+        f"Satisfied requirements: `{satisfied}/{len(requirements)}`.",
+        f"Blocking missing requirements: `{len(blocking_missing)}`.",
+        f"Human-polish requirements: `{len(human_polish)}`.",
+        "",
+        "This audit is meant to prevent false completion claims. It passes only while the current package is accurately identified as incomplete for independent main-conference submission.",
+        "",
+        "## Requirements",
+        "",
+    ]
+    for row in requirements:
+        lines.append(f"- `{row['status']}` {row['requirement']}")
+        if row["blocker"]:
+            lines.append(f"  Evidence gap: {row['blocker']}")
+        lines.append(f"  Evidence: {', '.join(row['evidence'])}")
+    OUT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    status = "PASS" if audit_passed else "FAIL"
+    print(
+        f"Submission readiness gap audit: {status}; "
+        f"satisfied={satisfied}/{len(requirements)}; blocking_missing={len(blocking_missing)}; human_polish={len(human_polish)}"
+    )
+    print(f"Wrote {OUT_JSON}")
+    print(f"Wrote {OUT_MD}")
+    return 0 if audit_passed else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

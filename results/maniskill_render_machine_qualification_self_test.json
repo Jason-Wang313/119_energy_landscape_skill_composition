@@ -1,0 +1,74 @@
+{
+  "checks": [
+    {
+      "detail": "state=QUALIFIED_FOR_RENDER_BACKED_PILOT, blockers=[]",
+      "name": "synthetic_ready_machine_qualifies",
+      "passed": true
+    },
+    {
+      "detail": "state=RENDER_REMEDIATION_READY, work_orders=['collection_readiness_gate', 'diagnostic_fallback_exclusion', 'fidelity_acceptance_after_render_ready', 'pilot_liveness_retest', 'render_profile_matrix_retest', 'renderer_platform_probe']",
+      "name": "synthetic_ready_remediation_is_ready",
+      "passed": true
+    },
+    {
+      "detail": "state=DO_NOT_COLLECT_RENDER_MACHINE, blockers=12",
+      "name": "render_failure_fails_closed",
+      "passed": true
+    },
+    {
+      "detail": "state=RENDER_REMEDIATION_REQUIRED, work_orders=['collection_readiness_gate', 'diagnostic_fallback_exclusion', 'fidelity_acceptance_after_render_ready', 'pilot_liveness_retest', 'render_profile_matrix_retest', 'renderer_platform_probe']",
+      "name": "failure_remediation_work_orders_cover_gate_sequence",
+      "passed": true
+    },
+    {
+      "detail": "blockers=['missing render preflight record for PullCubeTool-v1']",
+      "name": "missing_environment_record_fails_closed",
+      "passed": true
+    },
+    {
+      "detail": "blockers=['pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence']",
+      "name": "diagnostic_fallback_blocks_qualification",
+      "passed": true
+    },
+    {
+      "detail": "before={'results/maniskill_render_machine_qualification.json': '0fb486ce9aaff6b8765562d3108666ca37c0797835db062bcba77af22d153694', 'results/maniskill_render_machine_qualification.md': '93be7c5c7679ff96a46c66e8a15d2b9cf5d39e6b2f75f4c67124e2c82f0d17da', 'external_validation/render_machine_qualification_packet.md': '93be7c5c7679ff96a46c66e8a15d2b9cf5d39e6b2f75f4c67124e2c82f0d17da', 'results/maniskill_render_failure_remediation.json': 'cf66a7c0cefbcf8fe6c670b17e987419c2c8172fde900e16c2ac1a95b47953c1', 'results/maniskill_render_failure_remediation.md': '09c15b11c23c66a6feb199a6b15d7d4431d104be7bb99721a25055b554e6408b', 'external_validation/render_failure_remediation_work_orders.csv': 'a24c287ad901962080b1bb4b5d5615f62f507cf36cceb7f1fa4877a274a7d7c7'}, after={'results/maniskill_render_machine_qualification.json': '0fb486ce9aaff6b8765562d3108666ca37c0797835db062bcba77af22d153694', 'results/maniskill_render_machine_qualification.md': '93be7c5c7679ff96a46c66e8a15d2b9cf5d39e6b2f75f4c67124e2c82f0d17da', 'external_validation/render_machine_qualification_packet.md': '93be7c5c7679ff96a46c66e8a15d2b9cf5d39e6b2f75f4c67124e2c82f0d17da', 'results/maniskill_render_failure_remediation.json': 'cf66a7c0cefbcf8fe6c670b17e987419c2c8172fde900e16c2ac1a95b47953c1', 'results/maniskill_render_failure_remediation.md': '09c15b11c23c66a6feb199a6b15d7d4431d104be7bb99721a25055b554e6408b', 'external_validation/render_failure_remediation_work_orders.csv': 'a24c287ad901962080b1bb4b5d5615f62f507cf36cceb7f1fa4877a274a7d7c7'}",
+      "name": "real_render_machine_reports_not_overwritten",
+      "passed": true
+    }
+  ],
+  "diagnostic_fallback_rejected": true,
+  "failed_remediation_state": "RENDER_REMEDIATION_REQUIRED",
+  "missing_env_rejected": true,
+  "not_external_evidence": true,
+  "passed": true,
+  "ready_remediation_state": "RENDER_REMEDIATION_READY",
+  "real_report_digests_after": {
+    "external_validation/render_failure_remediation_work_orders.csv": "a24c287ad901962080b1bb4b5d5615f62f507cf36cceb7f1fa4877a274a7d7c7",
+    "external_validation/render_machine_qualification_packet.md": "93be7c5c7679ff96a46c66e8a15d2b9cf5d39e6b2f75f4c67124e2c82f0d17da",
+    "results/maniskill_render_failure_remediation.json": "cf66a7c0cefbcf8fe6c670b17e987419c2c8172fde900e16c2ac1a95b47953c1",
+    "results/maniskill_render_failure_remediation.md": "09c15b11c23c66a6feb199a6b15d7d4431d104be7bb99721a25055b554e6408b",
+    "results/maniskill_render_machine_qualification.json": "0fb486ce9aaff6b8765562d3108666ca37c0797835db062bcba77af22d153694",
+    "results/maniskill_render_machine_qualification.md": "93be7c5c7679ff96a46c66e8a15d2b9cf5d39e6b2f75f4c67124e2c82f0d17da"
+  },
+  "real_report_digests_before": {
+    "external_validation/render_failure_remediation_work_orders.csv": "a24c287ad901962080b1bb4b5d5615f62f507cf36cceb7f1fa4877a274a7d7c7",
+    "external_validation/render_machine_qualification_packet.md": "93be7c5c7679ff96a46c66e8a15d2b9cf5d39e6b2f75f4c67124e2c82f0d17da",
+    "results/maniskill_render_failure_remediation.json": "cf66a7c0cefbcf8fe6c670b17e987419c2c8172fde900e16c2ac1a95b47953c1",
+    "results/maniskill_render_failure_remediation.md": "09c15b11c23c66a6feb199a6b15d7d4431d104be7bb99721a25055b554e6408b",
+    "results/maniskill_render_machine_qualification.json": "0fb486ce9aaff6b8765562d3108666ca37c0797835db062bcba77af22d153694",
+    "results/maniskill_render_machine_qualification.md": "93be7c5c7679ff96a46c66e8a15d2b9cf5d39e6b2f75f4c67124e2c82f0d17da"
+  },
+  "real_reports_untouched": true,
+  "required_work_orders": [
+    "collection_readiness_gate",
+    "diagnostic_fallback_exclusion",
+    "fidelity_acceptance_after_render_ready",
+    "pilot_liveness_retest",
+    "render_profile_matrix_retest",
+    "renderer_platform_probe"
+  ],
+  "strict_external_evidence_ready": false,
+  "synthetic_fail_closed_state": "DO_NOT_COLLECT_RENDER_MACHINE",
+  "synthetic_ready_state": "QUALIFIED_FOR_RENDER_BACKED_PILOT",
+  "version": "maniskill_render_machine_qualification_self_test_v1"
+}

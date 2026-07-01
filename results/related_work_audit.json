@@ -1,0 +1,532 @@
+{
+  "bibliography_keys": [
+    "brohan2023rt1",
+    "chen2026costream",
+    "chi2023diffusionpolicy",
+    "du2019implicit",
+    "florence2022implicit",
+    "garrett2021integrated",
+    "hou2026worldmodel",
+    "ijspeert2013dmp",
+    "janner2019mbpo",
+    "julian2020latent",
+    "kaelbling2011tamp",
+    "khansari2011stable",
+    "khatib1986potential",
+    "koditschek1989navigation",
+    "konidaris2009skillchaining",
+    "lecun2006energy",
+    "liu2026oat",
+    "liu2026simpact",
+    "openx2023",
+    "pane2021runtime",
+    "ratliff2009chomp",
+    "rizwan2025ezskiros",
+    "sutton1999options",
+    "urain2021cep",
+    "vijayaraghavan2025compositionality",
+    "wang2024poco"
+  ],
+  "checks": [
+    {
+      "detail": "missing=[]",
+      "name": "no_missing_citation_entries",
+      "passed": true
+    },
+    {
+      "detail": "duplicates=[]",
+      "name": "no_duplicate_bib_keys",
+      "passed": true
+    },
+    {
+      "detail": "section=Related Work And Boundary",
+      "name": "related_work_section_exists",
+      "passed": true
+    },
+    {
+      "detail": "Classical energy and landscape control",
+      "name": "matrix_row_Classical energy and landscape control",
+      "passed": true
+    },
+    {
+      "detail": "These works are controllers or motion planners; they do not focus on certifying whether two independently available skills can be handed off safely.",
+      "name": "matrix_gap_Classical energy and landscape control",
+      "passed": true
+    },
+    {
+      "detail": "Paper 119 uses basin, barrier, and descent quantities as a predictive seam interface, not as a new low-level controller.",
+      "name": "matrix_boundary_Classical energy and landscape control",
+      "passed": true
+    },
+    {
+      "detail": "Khatib; Koditschek/Rimon; CHOMP; DMP; Khansari/Billard",
+      "name": "matrix_citations_Classical energy and landscape control",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "matrix_boundary_terms_Classical energy and landscape control",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "manuscript_cites_Classical energy and landscape control",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "bibliography_has_Classical energy and landscape control",
+      "passed": true
+    },
+    {
+      "detail": "Composable Energy Policies",
+      "name": "matrix_row_Composable Energy Policies",
+      "passed": true
+    },
+    {
+      "detail": "Paper 119 handles temporally ordered skill handoffs, where the key question is whether skill A's terminal distribution enters skill B's basin without a harmful seam.",
+      "name": "matrix_gap_Composable Energy Policies",
+      "passed": true
+    },
+    {
+      "detail": "Energy is used here to certify a transition between skills, not to solve parallel multi-objective action composition.",
+      "name": "matrix_boundary_Composable Energy Policies",
+      "passed": true
+    },
+    {
+      "detail": "Urain et al.",
+      "name": "matrix_citations_Composable Energy Policies",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "matrix_boundary_terms_Composable Energy Policies",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "manuscript_cites_Composable Energy Policies",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "bibliography_has_Composable Energy Policies",
+      "passed": true
+    },
+    {
+      "detail": "Temporal abstraction, TAMP, and skill chaining",
+      "name": "matrix_row_Temporal abstraction, TAMP, and skill chaining",
+      "passed": true
+    },
+    {
+      "detail": "A graph-valid or geometry-valid edge may still fail physically because of basin miss, hidden barrier, contact transition, or dynamics mismatch.",
+      "name": "matrix_gap_Temporal abstraction, TAMP, and skill chaining",
+      "passed": true
+    },
+    {
+      "detail": "The seam critic adds a physical consequence model to an otherwise valid skill edge.",
+      "name": "matrix_boundary_Temporal abstraction, TAMP, and skill chaining",
+      "passed": true
+    },
+    {
+      "detail": "Sutton/Precup/Singh; Konidaris/Barto; Kaelbling/Lozano-Perez; Garrett et al.",
+      "name": "matrix_citations_Temporal abstraction, TAMP, and skill chaining",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "matrix_boundary_terms_Temporal abstraction, TAMP, and skill chaining",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "manuscript_cites_Temporal abstraction, TAMP, and skill chaining",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "bibliography_has_Temporal abstraction, TAMP, and skill chaining",
+      "passed": true
+    },
+    {
+      "detail": "Runtime Skill Composition and software contracts",
+      "name": "matrix_row_Runtime Skill Composition and software contracts",
+      "passed": true
+    },
+    {
+      "detail": "Software validity does not imply physical handoff validity under contact, partial observability, or terminal-state uncertainty.",
+      "name": "matrix_gap_Runtime Skill Composition and software contracts",
+      "passed": true
+    },
+    {
+      "detail": "Paper 119 complements runtime/DSL checking with a learned physical seam model.",
+      "name": "matrix_boundary_Runtime Skill Composition and software contracts",
+      "passed": true
+    },
+    {
+      "detail": "Pane et al.; Rizwan et al.",
+      "name": "matrix_citations_Runtime Skill Composition and software contracts",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "matrix_boundary_terms_Runtime Skill Composition and software contracts",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "manuscript_cites_Runtime Skill Composition and software contracts",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "bibliography_has_Runtime Skill Composition and software contracts",
+      "passed": true
+    },
+    {
+      "detail": "Diffusion Policy and generative action representations",
+      "name": "matrix_row_Diffusion Policy and generative action representations",
+      "passed": true
+    },
+    {
+      "detail": "High-quality action generation does not by itself decide whether a proposed handoff between skills is safe, repairable, or should be avoided.",
+      "name": "matrix_gap_Diffusion Policy and generative action representations",
+      "passed": true
+    },
+    {
+      "detail": "Paper 119 is a reliability layer around skill transitions, not a replacement for action generation.",
+      "name": "matrix_boundary_Diffusion Policy and generative action representations",
+      "passed": true
+    },
+    {
+      "detail": "Chi et al.; OAT",
+      "name": "matrix_citations_Diffusion Policy and generative action representations",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "matrix_boundary_terms_Diffusion Policy and generative action representations",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "manuscript_cites_Diffusion Policy and generative action representations",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "bibliography_has_Diffusion Policy and generative action representations",
+      "passed": true
+    },
+    {
+      "detail": "Robot foundation policies and datasets",
+      "name": "matrix_row_Robot foundation policies and datasets",
+      "passed": true
+    },
+    {
+      "detail": "Larger libraries make seam selection more important because there are more plausible but unsafe transitions.",
+      "name": "matrix_gap_Robot foundation policies and datasets",
+      "passed": true
+    },
+    {
+      "detail": "The paper asks when to trust a transition between available skills.",
+      "name": "matrix_boundary_Robot foundation policies and datasets",
+      "passed": true
+    },
+    {
+      "detail": "IBC; RT-1; Open X-Embodiment",
+      "name": "matrix_citations_Robot foundation policies and datasets",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "matrix_boundary_terms_Robot foundation policies and datasets",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "manuscript_cites_Robot foundation policies and datasets",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "bibliography_has_Robot foundation policies and datasets",
+      "passed": true
+    },
+    {
+      "detail": "Policy composition and heterogeneous robot learning",
+      "name": "matrix_row_Policy composition and heterogeneous robot learning",
+      "passed": true
+    },
+    {
+      "detail": "Policy composition still needs a transition-level test when skills are chained in time and contact/dynamics change at the handoff.",
+      "name": "matrix_gap_Policy composition and heterogeneous robot learning",
+      "passed": true
+    },
+    {
+      "detail": "Paper 119 focuses on seam certification and repair decisions.",
+      "name": "matrix_boundary_Policy composition and heterogeneous robot learning",
+      "passed": true
+    },
+    {
+      "detail": "PoCo",
+      "name": "matrix_citations_Policy composition and heterogeneous robot learning",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "matrix_boundary_terms_Policy composition and heterogeneous robot learning",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "manuscript_cites_Policy composition and heterogeneous robot learning",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "bibliography_has_Policy composition and heterogeneous robot learning",
+      "passed": true
+    },
+    {
+      "detail": "World/action models and hierarchical world models",
+      "name": "matrix_row_World/action models and hierarchical world models",
+      "passed": true
+    },
+    {
+      "detail": "A full world model is heavier than needed for the local handoff question, while a pure controller is too narrow.",
+      "name": "matrix_gap_World/action models and hierarchical world models",
+      "passed": true
+    },
+    {
+      "detail": "Paper 119 positions itself as a local world/action model for skill seams.",
+      "name": "matrix_boundary_World/action models and hierarchical world models",
+      "passed": true
+    },
+    {
+      "detail": "Yilun energy-based modeling; robot world-model survey",
+      "name": "matrix_citations_World/action models and hierarchical world models",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "matrix_boundary_terms_World/action models and hierarchical world models",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "manuscript_cites_World/action models and hierarchical world models",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "bibliography_has_World/action models and hierarchical world models",
+      "passed": true
+    },
+    {
+      "detail": "Language/Action Compositionality",
+      "name": "matrix_row_Language/Action Compositionality",
+      "passed": true
+    },
+    {
+      "detail": "Learning compositional structure does not guarantee that a particular physical seam is safe under the next skill's basin and barrier geometry.",
+      "name": "matrix_gap_Language/Action Compositionality",
+      "passed": true
+    },
+    {
+      "detail": "Paper 119 tests the physical reliability of a chosen skill transition.",
+      "name": "matrix_boundary_Language/Action Compositionality",
+      "passed": true
+    },
+    {
+      "detail": "Vijayaraghavan et al.",
+      "name": "matrix_citations_Language/Action Compositionality",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "matrix_boundary_terms_Language/Action Compositionality",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "manuscript_cites_Language/Action Compositionality",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "bibliography_has_Language/Action Compositionality",
+      "passed": true
+    },
+    {
+      "detail": "Sim-to-real and latent skill transfer",
+      "name": "matrix_row_Sim-to-real and latent skill transfer",
+      "passed": true
+    },
+    {
+      "detail": "Reusing or interpolating skills still leaves open whether a concrete transition is safe under real terminal uncertainty and contact changes.",
+      "name": "matrix_gap_Sim-to-real and latent skill transfer",
+      "passed": true
+    },
+    {
+      "detail": "Paper 119 is about evaluating and repairing the handoff, not learning the reusable skill manifold.",
+      "name": "matrix_boundary_Sim-to-real and latent skill transfer",
+      "passed": true
+    },
+    {
+      "detail": "Julian et al.",
+      "name": "matrix_citations_Sim-to-real and latent skill transfer",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "matrix_boundary_terms_Sim-to-real and latent skill transfer",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "manuscript_cites_Sim-to-real and latent skill transfer",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "bibliography_has_Sim-to-real and latent skill transfer",
+      "passed": true
+    },
+    {
+      "detail": "Closest outreach works",
+      "name": "matrix_row_Closest outreach works",
+      "passed": true
+    },
+    {
+      "detail": "Paper 119 should not claim to replace those systems; its best contribution is a compact validation layer around skill seams that could plug into them.",
+      "name": "matrix_gap_Closest outreach works",
+      "passed": true
+    },
+    {
+      "detail": "The collaboration pitch is strongest when the missing layer is external validation, not a request for Haonan to supply the whole paper.",
+      "name": "matrix_boundary_Closest outreach works",
+      "passed": true
+    },
+    {
+      "detail": "CoStream; OAT; SIMPACT; PoCo",
+      "name": "matrix_citations_Closest outreach works",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "matrix_boundary_terms_Closest outreach works",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "manuscript_cites_Closest outreach works",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "bibliography_has_Closest outreach works",
+      "passed": true
+    },
+    {
+      "detail": "External Validation Boundary",
+      "name": "matrix_row_External Validation Boundary",
+      "passed": true
+    },
+    {
+      "detail": "It still lacks real robot or accepted high-fidelity simulation evidence, released checkpoints/logs/videos, and manifest-declared independent baseline evidence from real external runs.",
+      "name": "matrix_gap_External Validation Boundary",
+      "passed": true
+    },
+    {
+      "detail": "Submission readiness requires the external-evidence audit to pass; until then the claim remains bounded.",
+      "name": "matrix_boundary_External Validation Boundary",
+      "passed": true
+    },
+    {
+      "detail": "Independent validation protocol; external evidence audit",
+      "name": "matrix_citations_External Validation Boundary",
+      "passed": true
+    },
+    {
+      "detail": "missing_terms=[]",
+      "name": "matrix_boundary_terms_External Validation Boundary",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "manuscript_cites_External Validation Boundary",
+      "passed": true
+    },
+    {
+      "detail": "missing=[]",
+      "name": "bibliography_has_External Validation Boundary",
+      "passed": true
+    },
+    {
+      "detail": "all boundary sentences present",
+      "name": "manuscript_boundary_sentences",
+      "passed": true
+    },
+    {
+      "detail": "matrix final novelty boundary",
+      "name": "reviewer_facing_novelty_boundary_present",
+      "passed": true
+    },
+    {
+      "detail": "Haonan/Yilun boundary",
+      "name": "outreach_boundary_present",
+      "passed": true
+    },
+    {
+      "detail": "independent validation protocol",
+      "name": "validation_protocol_boundary_present",
+      "passed": true
+    }
+  ],
+  "cited_keys": [
+    "brohan2023rt1",
+    "chen2026costream",
+    "chi2023diffusionpolicy",
+    "du2019implicit",
+    "florence2022implicit",
+    "garrett2021integrated",
+    "hou2026worldmodel",
+    "ijspeert2013dmp",
+    "janner2019mbpo",
+    "julian2020latent",
+    "kaelbling2011tamp",
+    "khansari2011stable",
+    "khatib1986potential",
+    "koditschek1989navigation",
+    "konidaris2009skillchaining",
+    "lecun2006energy",
+    "liu2026oat",
+    "liu2026simpact",
+    "openx2023",
+    "pane2021runtime",
+    "ratliff2009chomp",
+    "rizwan2025ezskiros",
+    "sutton1999options",
+    "urain2021cep",
+    "vijayaraghavan2025compositionality",
+    "wang2024poco"
+  ],
+  "failed_checks": [],
+  "passed": true,
+  "required_areas": [
+    "Classical energy and landscape control",
+    "Closest outreach works",
+    "Composable Energy Policies",
+    "Diffusion Policy and generative action representations",
+    "External Validation Boundary",
+    "Language/Action Compositionality",
+    "Policy composition and heterogeneous robot learning",
+    "Robot foundation policies and datasets",
+    "Runtime Skill Composition and software contracts",
+    "Sim-to-real and latent skill transfer",
+    "Temporal abstraction, TAMP, and skill chaining",
+    "World/action models and hierarchical world models"
+  ],
+  "version": "related_work_audit_v1"
+}

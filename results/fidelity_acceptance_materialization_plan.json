@@ -1,0 +1,138 @@
+{
+  "acceptance_write_ready": false,
+  "candidate_acceptance_ready": false,
+  "candidate_gate_statuses": [
+    "operator_unaccepted",
+    "operator_unaccepted",
+    "operator_unaccepted",
+    "operator_unaccepted",
+    "operator_unaccepted"
+  ],
+  "checks": [
+    {
+      "detail": "path=external_validation/fidelity_acceptance_draft.json, version='paper119_fidelity_acceptance_draft_v1', draft_only=True",
+      "name": "draft_exists_and_is_draft_version",
+      "passed": true
+    },
+    {
+      "detail": "version='paper119_fidelity_acceptance_v1', gates=5",
+      "name": "materialized_payload_has_contract_shape",
+      "passed": true
+    },
+    {
+      "detail": "write=False, missing_text=['independent operator/lab identity', 'accepted robot/simulator machine identity', 'contact solver, friction model, and dynamics justification', 'sim/control timestep and substeps per control step', 'paired-reset replay verification', 'real or benchmark calibration basis', 'accepted or replaced task-binding decision', 'operator acceptance-gate signoff', 'known limitations for the accepted route', 'date on which platform acceptance was locked', 'code commit used for collection', 'SHA256 hash for the skill/baseline library']",
+      "name": "operator_text_required_before_write",
+      "passed": true
+    },
+    {
+      "detail": "write=False, missing_confirmations=['confirm_real_platform', 'confirm_independent_operator', 'confirm_render_backed_videos']",
+      "name": "confirmation_flags_required_before_write",
+      "passed": true
+    },
+    {
+      "detail": "write=False, acceptance_write_ready=False",
+      "name": "write_requires_complete_operator_signoff",
+      "passed": true
+    },
+    {
+      "detail": "current_commit='8242a93661319da5e1eec86a74e6a6c09cc629a4', current_skill_library_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1'",
+      "name": "current_checkout_hashes_recorded",
+      "passed": true
+    },
+    {
+      "detail": "write=False, dirty_status_count=0",
+      "name": "write_requires_clean_checkout",
+      "passed": true
+    },
+    {
+      "detail": "write=False, supplied_commit='', current_commit='8242a93661319da5e1eec86a74e6a6c09cc629a4', supplied_skill_hash='', current_skill_hash='62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1'",
+      "name": "write_requires_current_code_commit_and_skill_hash",
+      "passed": true
+    },
+    {
+      "detail": "write=False, acceptance_exists=False, manifest_exists=False",
+      "name": "default_run_does_not_write_real_acceptance_or_manifest",
+      "passed": true
+    },
+    {
+      "detail": "acceptance_write_ready=False, gate_statuses=['operator_unaccepted', 'operator_unaccepted', 'operator_unaccepted', 'operator_unaccepted', 'operator_unaccepted']",
+      "name": "gates_accepted_only_after_confirmations",
+      "passed": true
+    },
+    {
+      "detail": "materializer can write provenance, but strict audits and manifest evidence still decide readiness",
+      "name": "strict_evidence_remains_external_to_materializer",
+      "passed": true
+    },
+    {
+      "detail": "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
+      "name": "operator_write_command_is_guarded",
+      "passed": true
+    },
+    {
+      "detail": "fidelity acceptance is a precollection platform/provenance gate; official rollout logs and manifest declaration remain postcollection strict gates",
+      "name": "postcollection_evidence_deferred_until_after_collection",
+      "passed": true
+    }
+  ],
+  "current_checkout": {
+    "clean_checkout": true,
+    "code_commit": "8242a93661319da5e1eec86a74e6a6c09cc629a4",
+    "dirty_status_lines": [],
+    "skill_library_hash": "62EA64D1C80D67F5EB7EC63A88A581AE2D89B4230873F11D46799658541411F1"
+  },
+  "files_written": [],
+  "manifest_path": "external_validation/manifest.json",
+  "materialization_ready_for_operator": true,
+  "missing_confirmations": [
+    "confirm_real_platform",
+    "confirm_independent_operator",
+    "confirm_render_backed_videos"
+  ],
+  "missing_operator_text": [
+    "independent operator/lab identity",
+    "accepted robot/simulator machine identity",
+    "contact solver, friction model, and dynamics justification",
+    "sim/control timestep and substeps per control step",
+    "paired-reset replay verification",
+    "real or benchmark calibration basis",
+    "accepted or replaced task-binding decision",
+    "operator acceptance-gate signoff",
+    "known limitations for the accepted route",
+    "date on which platform acceptance was locked",
+    "code commit used for collection",
+    "SHA256 hash for the skill/baseline library"
+  ],
+  "not_external_evidence": true,
+  "operator_write_command": "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
+  "output_path": "external_validation/fidelity_acceptance.json",
+  "passed": true,
+  "postcollection_evidence_requirements": [
+    "real_rollout_evidence_required_after_collection",
+    "manifest_declaration_required_after_collection"
+  ],
+  "required_confirmations": [
+    "confirm_real_platform",
+    "confirm_independent_operator",
+    "confirm_render_backed_videos"
+  ],
+  "required_operator_arguments": {
+    "acceptance_gate_signoff": "operator acceptance-gate signoff",
+    "accepted_collection_machine": "accepted robot/simulator machine identity",
+    "code_commit": "code commit used for collection",
+    "contact_solver_and_friction_model": "contact solver, friction model, and dynamics justification",
+    "date_locked": "date on which platform acceptance was locked",
+    "known_limitations": "known limitations for the accepted route",
+    "operator_name_or_lab": "independent operator/lab identity",
+    "paired_reset_replay_test": "paired-reset replay verification",
+    "real_or_benchmark_calibration_basis": "real or benchmark calibration basis",
+    "skill_library_hash": "SHA256 hash for the skill/baseline library",
+    "task_binding_decision": "accepted or replaced task-binding decision",
+    "timestep_and_substeps_per_control_step": "sim/control timestep and substeps per control step"
+  },
+  "source_draft": "external_validation/fidelity_acceptance_draft.json",
+  "strict_external_evidence_ready": false,
+  "strict_fidelity_evidence_ready": false,
+  "version": "fidelity_acceptance_materialization_plan_v1",
+  "write_enabled": false
+}

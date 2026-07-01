@@ -1,0 +1,1124 @@
+{
+  "ablation_collection": {
+    "audit_command": "python scripts\\build_external_ablation_collection_packet.py",
+    "audit_md_path": "results/external_ablation_collection_audit.md",
+    "audit_path": "results/external_ablation_collection_audit.json",
+    "blocking_missing": [
+      "manifest.ablations.basin_overlap is not true with manifest-declared external ablation evidence",
+      "manifest.ablations.barrier_height is not true with manifest-declared external ablation evidence",
+      "manifest.ablations.descent_continuity is not true with manifest-declared external ablation evidence",
+      "manifest.ablations.risk_calibration is not true with manifest-declared external ablation evidence",
+      "manifest.ablations.seam_repair is not true with manifest-declared external ablation evidence"
+    ],
+    "expected_ablation_records": 600,
+    "manifest_ablation_evidence_ready": false,
+    "not_external_evidence": true,
+    "operator_packet_path": "external_validation/ablation_collection_packet.md",
+    "required_ablations": [
+      {
+        "component_removed": "basin-overlap posterior",
+        "external_variant": "minus_basin_overlap",
+        "id": "basin_overlap",
+        "local_reference_variant": "minus_basin_overlap"
+      },
+      {
+        "component_removed": "barrier-height term",
+        "external_variant": "minus_barrier_height",
+        "id": "barrier_height",
+        "local_reference_variant": "minus_barrier_height"
+      },
+      {
+        "component_removed": "descent-continuity term",
+        "external_variant": "minus_descent_continuity",
+        "id": "descent_continuity",
+        "local_reference_variant": "minus_descent_continuity"
+      },
+      {
+        "component_removed": "risk calibration",
+        "external_variant": "minus_calibration",
+        "id": "risk_calibration",
+        "local_reference_variant": "minus_calibration"
+      },
+      {
+        "component_removed": "high-energy seam repair",
+        "external_variant": "minus_high_energy_repair",
+        "id": "seam_repair",
+        "local_reference_variant": "minus_high_energy_repair"
+      }
+    ],
+    "strict_external_evidence_ready": false,
+    "work_order_count": 5
+  },
+  "acquisition_packet_ready": true,
+  "checks": [
+    {
+      "detail": "results/external_collection_readiness_audit.json, results/external_evidence_preflight.json, results/independent_validation_route_audit.json, results/external_platform_probe.json, results/maniskill_task_binding_probe.json, results/maniskill_env_smoke_probe.json, results/external_platform_onboarding_audit.json, results/external_fidelity_provenance_audit.json, results/external_fidelity_acceptance_draft_audit.json, results/fidelity_acceptance_materialization_plan.json, results/external_config_materialization_plan.json, results/external_backend_contract_audit.json, results/external_backend_integration_audit.json, results/maniskill_backend_readiness_audit.json, results/maniskill_reference_collection_preflight_audit.json, results/external_config_manifest_audit.json, results/external_rollout_evidence_audit.json, results/external_ablation_collection_audit.json, results/external_evidence_intake_ledger_audit.json, results/external_precollection_freeze_receipt_audit.json, results/external_postcollection_evidence_seal_audit.json, results/external_postcollection_seal_consistency_audit.json, results/external_method_implementation_audit.json, results/external_pilot_smoke_packet_audit.json, results/maniskill_render_video_preflight_audit.json, results/maniskill_render_resource_sweep.json, results/maniskill_pilot_runtime_liveness_audit.json",
+      "name": "source_audits_exist",
+      "passed": true
+    },
+    {
+      "detail": "missing=['Independent real-robot or accepted high-fidelity external validation evidence', 'External rollout metrics recomputed from raw JSONL logs', 'Manifest-declared real task configs replace non-evidence templates', 'Manifest-declared independent non-oracle baseline evidence and fairness contract']",
+      "name": "gap_audit_has_four_external_blockers",
+      "passed": true
+    },
+    {
+      "detail": "unmapped=[]",
+      "name": "all_missing_requirements_mapped",
+      "passed": true
+    },
+    {
+      "detail": "missing_action_ids=[]",
+      "name": "all_action_ids_exist",
+      "passed": true
+    },
+    {
+      "detail": "collection_ready=False, blockers=['alias_unsealing_explicit', 'backend_module_ready', 'fidelity_acceptance_ready', 'run_id_specific']",
+      "name": "collection_preflight_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "task_config_dir_exists=True",
+      "name": "config_intake_directory_tracked",
+      "passed": true
+    },
+    {
+      "detail": "passed=True, write_enabled=False, task_count=4",
+      "name": "config_materializer_ready",
+      "passed": true
+    },
+    {
+      "detail": "harness_ready=True, actual_backend_ready=False",
+      "name": "backend_contract_gate_ready",
+      "passed": true
+    },
+    {
+      "detail": "backend_integration_packet_ready=True, strict_backend_ready=False",
+      "name": "backend_integration_packet_ready",
+      "passed": true
+    },
+    {
+      "detail": "backend_contract_ready=True, video_writer_ready=True, official_collection_ready=False",
+      "name": "maniskill_reference_backend_audit_ready",
+      "passed": true
+    },
+    {
+      "detail": "contract_ready=True, collection_ready=False, blocking=[\"fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'\"]",
+      "name": "maniskill_reference_collection_preflight_ready",
+      "passed": true
+    },
+    {
+      "detail": "config_manifest_packet_ready=True, strict_config_evidence_ready=False, manifest_declared_config_ready=False",
+      "name": "config_manifest_packet_ready",
+      "passed": true
+    },
+    {
+      "detail": "rollout_evidence_packet_ready=True, strict_rollout_evidence_ready=False, strict_external_evidence_ready=False",
+      "name": "rollout_evidence_packet_ready",
+      "passed": true
+    },
+    {
+      "detail": "work_order_count=5, expected_ablation_records=600, manifest_ablation_evidence_ready=False",
+      "name": "ablation_collection_packet_ready",
+      "passed": true
+    },
+    {
+      "detail": "mapped=37/37, groups=8",
+      "name": "evidence_intake_ledger_ready",
+      "passed": true
+    },
+    {
+      "detail": "locked_artifacts=42, candidate_method_configs=11, freeze_receipt_ready=False",
+      "name": "precollection_freeze_receipt_ready",
+      "passed": true
+    },
+    {
+      "detail": "sealed_artifacts=11, records=0, videos=0, seal_ready=False",
+      "name": "postcollection_evidence_seal_ready",
+      "passed": true
+    },
+    {
+      "detail": "matched=11, records=0, videos=0, consistency_ready=False",
+      "name": "postcollection_seal_consistency_gate_ready",
+      "passed": true
+    },
+    {
+      "detail": "pilot_smoke_packet_ready=True, strict_evidence_ready=False",
+      "name": "pilot_smoke_packet_ready",
+      "passed": true
+    },
+    {
+      "detail": "render_video_ready=False, envs=4, failure_classes=['vulkan_descriptor_pool_exhaustion']",
+      "name": "maniskill_render_video_preflight_recorded",
+      "passed": true
+    },
+    {
+      "detail": "any_ready=False, records=3, classes=['vulkan_descriptor_pool_exhaustion']",
+      "name": "maniskill_render_resource_sweep_recorded",
+      "passed": true
+    },
+    {
+      "detail": "pilot_runtime_ready=False, runner_io_ready=False, render_video_ready=False, timed_out=False, records=0, videos=0, diagnostic_fallbacks=1, failure_summary='official video guard rejected diagnostic fallback sidecar before JSONL write after progress stage record_video_start'",
+      "name": "maniskill_pilot_runtime_liveness_ready",
+      "passed": true
+    },
+    {
+      "detail": "qualification_state='DO_NOT_COLLECT_RENDER_MACHINE', render_machine_qualified=False, blocking=12",
+      "name": "maniskill_render_machine_qualification_ready",
+      "passed": true
+    },
+    {
+      "detail": "method_implementation_packet_ready=True, strict_adapter_evidence_ready=False",
+      "name": "method_implementation_packet_ready",
+      "passed": true
+    },
+    {
+      "detail": "operator_next_actions=5, evidence_ready=False",
+      "name": "preflight_operator_actions_present",
+      "passed": true
+    },
+    {
+      "detail": "primary_route='maniskill_sapien_primary'",
+      "name": "route_independent_of_haonan",
+      "passed": true
+    },
+    {
+      "detail": "primary_route_install_ready=True, missing=[]",
+      "name": "platform_probe_ready",
+      "passed": true
+    },
+    {
+      "detail": "strict_task_binding_install_ready=True, missing=[]",
+      "name": "task_binding_probe_ready",
+      "passed": true
+    },
+    {
+      "detail": "strict_env_smoke_ready=True, primary_reset_missing=[]",
+      "name": "env_smoke_probe_ready",
+      "passed": true
+    },
+    {
+      "detail": "strict_metadata_ready=True, primary_metadata_missing=[]",
+      "name": "fidelity_metadata_probe_ready",
+      "passed": true
+    },
+    {
+      "detail": "platform_onboarding_ready=True, strict_evidence_ready=False",
+      "name": "platform_onboarding_ready",
+      "passed": true
+    },
+    {
+      "detail": "fidelity_provenance_packet_ready=True, strict_fidelity_evidence_ready=False, strict_external_evidence_ready=False",
+      "name": "fidelity_provenance_packet_ready",
+      "passed": true
+    },
+    {
+      "detail": "draft_ready=True, remaining_operator_inputs=9, acceptance_ready=False",
+      "name": "fidelity_acceptance_draft_ready",
+      "passed": true
+    },
+    {
+      "detail": "write_enabled=False, acceptance_write_ready=False",
+      "name": "fidelity_acceptance_materializer_ready",
+      "passed": true
+    },
+    {
+      "detail": "missing_command_fragments=[]",
+      "name": "post_collection_strict_commands_cover_all_gates",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json absent before real evidence",
+      "name": "no_real_manifest_written",
+      "passed": true
+    },
+    {
+      "detail": "Probe the selected external platform machine Probe ManiSkill task-family bindings Smoke-test bound ManiSkill environments Probe ManiSkill/SAPIEN fidelity metadata Onboard the public simulator platform Select a non-template backend module Use the backend integration packet as the public-simulator backend checklist Audit the repository ManiSkill/SAPIEN reference backend candidate Audit explicit reference-backend collection preflight Create real manifest-declared task configs Use the config manifest packet as the task-config evidence checklist Use the rollout evidence packet as the raw-log evidence checklist Collect manifest-declared external ablations Use the evidence intake ledger to close every strict external-evidence failure Freeze precollection hashes before official rollout collection Seal raw postcollection logs and videos before manifest promotion Recompute the postcollection seal before manifest promotion Fill platform fidelity acceptance with real provenance Generate the tracked ManiSkill fidelity acceptance draft Materialize fidelity acceptance only through the guarded promotion path Run a quarantined first-panel backend smoke test Audit bounded ManiSkill pilot runtime liveness Audit ManiSkill render-backed evidence-video export Run a bounded ManiSkill render resource sweep Qualify the exact render machine before official collection Use the fidelity provenance packet as the platform acceptance checklist Unseal method aliases only after configs, implementations, and run plan are frozen Use a specific immutable external run id Replace scaffold-only methods with real non-oracle implementations or wrappers Use the method implementation packet as the non-oracle work-order checklist Collect paired-reset external rollouts Build the real manifest and hash-lock release artifacts Recompute external metrics from raw JSONL logs Audit independent method evidence after the manifest is real Run the final strict external-evidence gate",
+      "name": "operator_actions_cover_collection_blockers",
+      "passed": true
+    },
+    {
+      "detail": "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json; python scripts\\audit_external_collection_readiness.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+      "name": "backend_action_runs_contract_before_readiness",
+      "passed": true
+    }
+  ],
+  "collection_blockers": [
+    "backend_module_ready: --backend-module is required before actual collection",
+    "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'",
+    "alias_unsealing_explicit: unsealed_alias_map=False",
+    "run_id_specific: run_id='paper119_external_validation_run'"
+  ],
+  "evidence_intake_ledger": {
+    "audit_command": "python scripts\\build_external_evidence_intake_ledger.py",
+    "audit_md_path": "results/external_evidence_intake_ledger_audit.md",
+    "audit_path": "results/external_evidence_intake_ledger_audit.json",
+    "blocking_failure_count": 37,
+    "closure_group_count": 8,
+    "mapped_failure_count": 37,
+    "not_external_evidence": true,
+    "operator_csv_path": "external_validation/evidence_intake_ledger.csv",
+    "operator_packet_path": "external_validation/evidence_intake_ledger.md",
+    "strict_external_evidence_ready": false,
+    "unmapped_failures": []
+  },
+  "missing_requirements": [
+    {
+      "blocker": "strict external evidence audit is NOT_READY; real manifest/log/video/checkpoint evidence and accepted robot/simulator fidelity provenance are missing",
+      "mapped_actions": [
+        "platform_probe",
+        "task_binding_probe",
+        "env_smoke_probe",
+        "fidelity_metadata_probe",
+        "platform_onboarding",
+        "fidelity_provenance_packet",
+        "backend_integration_packet",
+        "maniskill_reference_backend_audit",
+        "maniskill_reference_collection_preflight",
+        "fidelity_acceptance_draft",
+        "fidelity_acceptance_materializer",
+        "rollout_evidence_packet",
+        "backend_module",
+        "platform_fidelity",
+        "pilot_smoke_packet",
+        "maniskill_render_video_preflight",
+        "maniskill_render_resource_sweep",
+        "maniskill_pilot_runtime_liveness",
+        "maniskill_render_machine_qualification",
+        "ablation_collection_packet",
+        "evidence_intake_ledger",
+        "precollection_freeze_receipt",
+        "run_collection",
+        "postcollection_evidence_seal",
+        "postcollection_seal_consistency_gate",
+        "manifest_and_release"
+      ],
+      "requirement": "Independent real-robot or accepted high-fidelity external validation evidence"
+    },
+    {
+      "blocker": "strict rollout validation does not pass because external_validation/manifest.json and raw logs are missing",
+      "mapped_actions": [
+        "rollout_evidence_packet",
+        "ablation_collection_packet",
+        "evidence_intake_ledger",
+        "precollection_freeze_receipt",
+        "run_collection",
+        "postcollection_evidence_seal",
+        "postcollection_seal_consistency_gate",
+        "strict_rollout_recompute"
+      ],
+      "requirement": "External rollout metrics recomputed from raw JSONL logs"
+    },
+    {
+      "blocker": "strict config evidence audit has no real manifest-declared configs",
+      "mapped_actions": [
+        "config_manifest_packet",
+        "evidence_intake_ledger",
+        "precollection_freeze_receipt",
+        "real_task_configs",
+        "postcollection_evidence_seal",
+        "postcollection_seal_consistency_gate",
+        "manifest_and_release"
+      ],
+      "requirement": "Manifest-declared real task configs replace non-evidence templates"
+    },
+    {
+      "blocker": "baseline contract still reports manifest-declared independent non-oracle evidence as missing; strict adapter contract evidence audit has no passing manifest-declared real implementations",
+      "mapped_actions": [
+        "method_implementation_packet",
+        "evidence_intake_ledger",
+        "precollection_freeze_receipt",
+        "real_method_implementations",
+        "postcollection_evidence_seal",
+        "postcollection_seal_consistency_gate",
+        "strict_adapter_evidence"
+      ],
+      "requirement": "Manifest-declared independent non-oracle baseline evidence and fairness contract"
+    }
+  ],
+  "not_external_evidence": true,
+  "operator_actions": [
+    {
+      "artifacts": [
+        "results/external_platform_probe.json",
+        "results/external_platform_probe.md"
+      ],
+      "closes": [
+        "platform package, GPU, renderer, code, config, and backend hash provenance before fidelity acceptance"
+      ],
+      "commands": [
+        "python scripts\\probe_external_platform.py",
+        "python scripts\\probe_external_platform.py --strict"
+      ],
+      "id": "platform_probe",
+      "operator_input": "run the non-evidence probe on the GPU workstation or accepted robot/simulator machine before backend qualification",
+      "title": "Probe the selected external platform machine"
+    },
+    {
+      "artifacts": [
+        "external_validation/maniskill_task_bindings.json",
+        "results/maniskill_task_binding_probe.json",
+        "results/maniskill_task_binding_probe.md"
+      ],
+      "closes": [
+        "task-family to public-simulator environment binding before operator fidelity acceptance"
+      ],
+      "commands": [
+        "python scripts\\probe_maniskill_task_bindings.py",
+        "python scripts\\probe_maniskill_task_bindings.py --strict"
+      ],
+      "id": "task_binding_probe",
+      "operator_input": "bind each Paper 119 task family to concrete ManiSkill/SAPIEN environment candidates and inspect the local registry when available",
+      "title": "Probe ManiSkill task-family bindings"
+    },
+    {
+      "artifacts": [
+        "results/maniskill_env_smoke_probe.json",
+        "results/maniskill_env_smoke_probe.md"
+      ],
+      "closes": [
+        "environment construction/reset and missing-asset readiness before backend qualification"
+      ],
+      "commands": [
+        "python scripts\\probe_maniskill_env_smoke.py",
+        "python scripts\\probe_maniskill_env_smoke.py --strict"
+      ],
+      "id": "env_smoke_probe",
+      "operator_input": "construct and reset the bound public-simulator environment candidates without writing rollout logs or videos",
+      "title": "Smoke-test bound ManiSkill environments"
+    },
+    {
+      "artifacts": [
+        "results/maniskill_fidelity_metadata_probe.json",
+        "results/maniskill_fidelity_metadata_probe.md"
+      ],
+      "closes": [
+        "platform timing/backend/controller metadata intake before operator fidelity acceptance"
+      ],
+      "commands": [
+        "python scripts\\probe_maniskill_fidelity_metadata.py",
+        "python scripts\\probe_maniskill_fidelity_metadata.py --strict"
+      ],
+      "id": "fidelity_metadata_probe",
+      "operator_input": "record non-evidence timing, scene/backend, controller, observation, and asset metadata for every bound environment candidate",
+      "title": "Probe ManiSkill/SAPIEN fidelity metadata"
+    },
+    {
+      "artifacts": [
+        "external_validation/platform_onboarding_packet.md",
+        "external_validation/platform_onboarding_packet.json",
+        "results/external_platform_probe.json",
+        "results/maniskill_task_binding_probe.json",
+        "results/maniskill_env_smoke_probe.json",
+        "results/maniskill_fidelity_metadata_probe.json",
+        "results/external_platform_onboarding_audit.json"
+      ],
+      "closes": [
+        "platform onboarding for independent high-fidelity or robot evidence capture"
+      ],
+      "commands": [
+        "python scripts\\probe_external_platform.py",
+        "python scripts\\probe_maniskill_task_bindings.py",
+        "python scripts\\probe_maniskill_env_smoke.py",
+        "python scripts\\probe_maniskill_fidelity_metadata.py",
+        "python scripts\\build_external_platform_onboarding.py",
+        "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
+        "python scripts\\audit_external_fidelity_acceptance.py --strict"
+      ],
+      "id": "platform_onboarding",
+      "operator_input": "GPU workstation or accepted robot/simulator platform plus recorded version/provenance fields",
+      "title": "Onboard the public simulator platform"
+    },
+    {
+      "artifacts": [
+        "external_validation/runner/backends/<real_backend>.py"
+      ],
+      "closes": [
+        "actual collection backend readiness"
+      ],
+      "commands": [
+        "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
+        "python scripts\\audit_external_collection_readiness.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map"
+      ],
+      "id": "backend_module",
+      "operator_input": "--backend-module <module_or_path>",
+      "title": "Select a non-template backend module"
+    },
+    {
+      "artifacts": [
+        "external_validation/backend_integration_packet.md",
+        "external_validation/backend_integration_work_orders.csv",
+        "results/external_backend_integration_audit.json"
+      ],
+      "closes": [
+        "actual collection backend readiness"
+      ],
+      "commands": [
+        "python scripts\\build_external_backend_integration_packet.py",
+        "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json"
+      ],
+      "id": "backend_integration_packet",
+      "operator_input": "complete the non-template backend work orders with real module, provenance, task binding, hashes, logs, and videos",
+      "title": "Use the backend integration packet as the public-simulator backend checklist"
+    },
+    {
+      "artifacts": [
+        "external_validation/runner/maniskill_reference_backend.py",
+        "results/maniskill_backend_readiness_audit.json",
+        "results/maniskill_backend_readiness_audit.md"
+      ],
+      "closes": [
+        "reference backend contract plus MP4-writer qualification only; official collection still requires accepted fidelity, renderable per-episode videos, logs, manifests, and strict evidence gates"
+      ],
+      "commands": [
+        "python scripts\\audit_maniskill_backend_readiness.py"
+      ],
+      "id": "maniskill_reference_backend_audit",
+      "operator_input": "use the tracked reference backend to inspect API/config/adapter wiring before replacing or wrapping it with a real evidence backend",
+      "title": "Audit the repository ManiSkill/SAPIEN reference backend candidate"
+    },
+    {
+      "artifacts": [
+        "results/maniskill_reference_collection_preflight_audit.json",
+        "results/maniskill_reference_collection_preflight_audit.md",
+        "external_validation/runner/maniskill_reference_backend.py"
+      ],
+      "closes": [
+        "reference backend/config/run-id/alias preflight to fidelity acceptance only; official collection still requires accepted fidelity, logs, videos, manifest, and strict evidence gates"
+      ],
+      "commands": [
+        "python scripts\\audit_maniskill_reference_collection_preflight.py"
+      ],
+      "id": "maniskill_reference_collection_preflight",
+      "operator_input": "use the tracked reference backend with prepared configs, an explicit run id, and unsealed aliases to verify that preflight reaches the fidelity gate",
+      "title": "Audit explicit reference-backend collection preflight"
+    },
+    {
+      "artifacts": [
+        "external_validation/configs/peg_place_regrasp.json",
+        "external_validation/configs/drawer_to_pick_transfer.json",
+        "external_validation/configs/door_open_navigation.json",
+        "external_validation/configs/cable_route_insert.json"
+      ],
+      "closes": [
+        "Manifest-declared real task configs replace non-evidence templates"
+      ],
+      "commands": [
+        "python scripts\\materialize_external_configs.py --platform-type <real_robot|high_fidelity_sim> --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
+        "python scripts\\validate_external_configs.py --strict"
+      ],
+      "id": "real_task_configs",
+      "operator_input": "external_validation/configs/<task_family>.json for each task family",
+      "title": "Create real manifest-declared task configs"
+    },
+    {
+      "artifacts": [
+        "external_validation/config_manifest_packet.md",
+        "external_validation/config_manifest_work_orders.csv",
+        "results/external_config_manifest_audit.json"
+      ],
+      "closes": [
+        "Manifest-declared real task configs replace non-evidence templates"
+      ],
+      "commands": [
+        "python scripts\\build_external_config_manifest_packet.py",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\validate_external_configs.py --strict"
+      ],
+      "id": "config_manifest_packet",
+      "operator_input": "manifest-declare prepared configs with hashes only after real platform, log, and video artifacts exist",
+      "title": "Use the config manifest packet as the task-config evidence checklist"
+    },
+    {
+      "artifacts": [
+        "external_validation/rollout_evidence_packet.md",
+        "external_validation/rollout_evidence_work_orders.csv",
+        "results/external_rollout_evidence_audit.json"
+      ],
+      "closes": [
+        "Independent real-robot or accepted high-fidelity external validation evidence",
+        "External rollout metrics recomputed from raw JSONL logs"
+      ],
+      "commands": [
+        "python scripts\\build_external_rollout_evidence_packet.py",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "id": "rollout_evidence_packet",
+      "operator_input": "complete the rollout work orders with manifest-declared JSONL logs, videos, config hashes, method hashes, and strict recomputation",
+      "title": "Use the rollout evidence packet as the raw-log evidence checklist"
+    },
+    {
+      "artifacts": [
+        "external_validation/ablation_collection_packet.md",
+        "external_validation/ablation_collection_work_orders.csv",
+        "results/external_ablation_collection_audit.json"
+      ],
+      "closes": [
+        "Independent real-robot or accepted high-fidelity external validation evidence",
+        "External rollout metrics recomputed from raw JSONL logs"
+      ],
+      "commands": [
+        "python scripts\\build_external_ablation_collection_packet.py",
+        "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "id": "ablation_collection_packet",
+      "operator_input": "five required ablated variants on the same accepted task configs, skill library, paired resets, observation interface, and compute budget",
+      "title": "Collect manifest-declared external ablations"
+    },
+    {
+      "artifacts": [
+        "external_validation/evidence_intake_ledger.md",
+        "external_validation/evidence_intake_ledger.csv",
+        "results/external_evidence_intake_ledger_audit.json"
+      ],
+      "closes": [
+        "Independent real-robot or accepted high-fidelity external validation evidence",
+        "External rollout metrics recomputed from raw JSONL logs",
+        "Manifest-declared real task configs replace non-evidence templates",
+        "Manifest-declared independent non-oracle baseline evidence and fairness contract"
+      ],
+      "commands": [
+        "python scripts\\build_external_evidence_intake_ledger.py",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "id": "evidence_intake_ledger",
+      "operator_input": "complete the ledger rows for manifest, fidelity, configs, logs/videos, methods, metrics, ablations, pairing, release hashes, and oracle-boundary explanation",
+      "title": "Use the evidence intake ledger to close every strict external-evidence failure"
+    },
+    {
+      "artifacts": [
+        "external_validation/precollection_freeze_receipt.json",
+        "external_validation/precollection_freeze_receipt.md",
+        "external_validation/precollection_freeze_receipt.csv",
+        "results/external_precollection_freeze_receipt_audit.json"
+      ],
+      "closes": [
+        "precollection drift between alias map, configs, backend, run id, code commit, skill library, and final raw logs/videos"
+      ],
+      "commands": [
+        "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+        "python scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map"
+      ],
+      "id": "precollection_freeze_receipt",
+      "operator_input": "specific backend module, run id, operator id, collection machine, date lock, unsealed alias map, and current clean-checkout code/skill hashes",
+      "title": "Freeze precollection hashes before official rollout collection"
+    },
+    {
+      "artifacts": [
+        "external_validation/postcollection_evidence_seal.json",
+        "external_validation/postcollection_evidence_seal.md",
+        "external_validation/postcollection_evidence_seal.csv",
+        "results/external_postcollection_evidence_seal_audit.json"
+      ],
+      "closes": [
+        "postcollection drift between raw JSONL logs, rollout videos, configs, operator metadata, precollection receipt, and manifest promotion"
+      ],
+      "commands": [
+        "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+        "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
+        "python scripts\\build_external_manifest.py --write --check-video-paths"
+      ],
+      "id": "postcollection_evidence_seal",
+      "operator_input": "specific backend module, run id, operator id, collection machine, seal date, completed JSONL logs, rollout videos, and prepared configs after official collection",
+      "title": "Seal raw postcollection logs and videos before manifest promotion"
+    },
+    {
+      "artifacts": [
+        "results/external_postcollection_seal_consistency_audit.json",
+        "results/external_postcollection_seal_consistency_audit.md"
+      ],
+      "closes": [
+        "manifest promotion from a different raw-log/video/config set than the one sealed after collection"
+      ],
+      "commands": [
+        "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
+        "python scripts\\build_external_manifest.py --write --check-video-paths"
+      ],
+      "id": "postcollection_seal_consistency_gate",
+      "operator_input": "completed postcollection seal plus unchanged raw JSONL logs, rollout videos, prepared configs, and no official manifest written yet",
+      "title": "Recompute the postcollection seal before manifest promotion"
+    },
+    {
+      "artifacts": [
+        "external_validation/fidelity_acceptance.json"
+      ],
+      "closes": [
+        "Independent real-robot or accepted high-fidelity external validation evidence"
+      ],
+      "commands": [
+        "python scripts\\audit_external_fidelity_acceptance.py --strict"
+      ],
+      "id": "platform_fidelity",
+      "operator_input": "accepted simulator or robot evidence, contact/dynamics/camera/state provenance, and task coverage",
+      "title": "Fill platform fidelity acceptance with real provenance"
+    },
+    {
+      "artifacts": [
+        "external_validation/fidelity_acceptance_draft.json",
+        "external_validation/fidelity_acceptance_draft.md",
+        "results/external_fidelity_acceptance_draft_audit.json"
+      ],
+      "closes": [
+        "platform fidelity acceptance intake; still not evidence until promoted, manifest-declared, and strict-audited"
+      ],
+      "commands": [
+        "python scripts\\build_external_fidelity_acceptance_draft.py",
+        "python scripts\\audit_external_fidelity_acceptance.py --strict"
+      ],
+      "id": "fidelity_acceptance_draft",
+      "operator_input": "review the prefilled draft, replace draft-only fields with accepted independent provenance, then promote it only after real platform evidence exists",
+      "title": "Generate the tracked ManiSkill fidelity acceptance draft"
+    },
+    {
+      "artifacts": [
+        "scripts/materialize_fidelity_acceptance.py",
+        "results/fidelity_acceptance_materialization_plan.json",
+        "results/fidelity_acceptance_materialization_plan.md",
+        "external_validation/fidelity_acceptance.json"
+      ],
+      "closes": [
+        "guarded promotion from draft fidelity intake to precollection acceptance; still not rollout evidence until manifest-backed strict audits pass"
+      ],
+      "commands": [
+        "python scripts\\materialize_fidelity_acceptance.py",
+        "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <current_clean_checkout_commit_sha> --skill-library-hash <current_baselines_sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
+        "python scripts\\audit_external_fidelity_acceptance.py --strict"
+      ],
+      "id": "fidelity_acceptance_materializer",
+      "operator_input": "real platform provenance, independent operator signoff, render-backed evidence-video readiness, paired replay, current clean-checkout code commit, and current skill-library hash before official collection",
+      "title": "Materialize fidelity acceptance only through the guarded promotion path"
+    },
+    {
+      "artifacts": [
+        "external_validation/pilot_smoke_packet.md",
+        "external_validation/pilot_smoke_work_orders.csv",
+        "results/external_pilot_smoke_packet_audit.json",
+        "results/external_pilot_smoke_audit.json"
+      ],
+      "closes": [
+        "operator backend smoke test before official collection; not evidence"
+      ],
+      "commands": [
+        "python scripts\\build_external_pilot_smoke_packet.py",
+        "python scripts\\audit_external_pilot_smoke.py --strict --expected-records 12 --check-video-paths"
+      ],
+      "id": "pilot_smoke_packet",
+      "operator_input": "real backend, accepted fidelity gate, prepared configs, unsealed aliases, and a pilot-specific run id",
+      "title": "Run a quarantined first-panel backend smoke test"
+    },
+    {
+      "artifacts": [
+        "scripts/audit_maniskill_pilot_runtime_liveness.py",
+        "results/maniskill_pilot_runtime_liveness_audit.json",
+        "results/maniskill_pilot_runtime_liveness_audit.md"
+      ],
+      "closes": [
+        "pre-collection runtime liveness check for the tracked ManiSkill route; not evidence"
+      ],
+      "commands": [
+        "python scripts\\audit_maniskill_pilot_runtime_liveness.py --timeout-seconds 60 --max-rows 1"
+      ],
+      "id": "maniskill_pilot_runtime_liveness",
+      "operator_input": "tracked reference backend, prepared configs, unsealed aliases, pilot-specific run id, and a bounded timeout on the selected runtime machine",
+      "title": "Audit bounded ManiSkill pilot runtime liveness"
+    },
+    {
+      "artifacts": [
+        "scripts/audit_maniskill_render_video_preflight.py",
+        "results/maniskill_render_video_preflight_audit.json",
+        "results/maniskill_render_video_preflight_audit.md"
+      ],
+      "closes": [
+        "pre-collection render-backed MP4 readiness for the tracked ManiSkill route; not evidence"
+      ],
+      "commands": [
+        "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4"
+      ],
+      "id": "maniskill_render_video_preflight",
+      "operator_input": "selected ManiSkill/SAPIEN runtime machine with renderer access before full external collection",
+      "title": "Audit ManiSkill render-backed evidence-video export"
+    },
+    {
+      "artifacts": [
+        "scripts/audit_maniskill_render_resource_sweep.py",
+        "results/maniskill_render_resource_sweep.json",
+        "results/maniskill_render_resource_sweep.md",
+        "external_validation/render_resource_sweep_work_orders.csv"
+      ],
+      "closes": [
+        "bounded renderer-resource diagnosis before accepted-machine render qualification; not evidence"
+      ],
+      "commands": [
+        "python scripts\\audit_maniskill_render_resource_sweep.py --timeout-seconds 45 --max-envs 1"
+      ],
+      "id": "maniskill_render_resource_sweep",
+      "operator_input": "first primary task family, minimal render resolution, and explicit renderer profiles on the selected runtime machine",
+      "title": "Run a bounded ManiSkill render resource sweep"
+    },
+    {
+      "artifacts": [
+        "external_validation/render_machine_qualification_packet.md",
+        "scripts/build_maniskill_render_machine_qualification.py",
+        "results/maniskill_render_machine_qualification.json",
+        "results/maniskill_render_machine_qualification.md"
+      ],
+      "closes": [
+        "accepted-machine render-backed MP4 qualification before collection; not evidence"
+      ],
+      "commands": [
+        "python scripts\\build_maniskill_render_machine_qualification.py"
+      ],
+      "id": "maniskill_render_machine_qualification",
+      "operator_input": "accepted collection machine with platform probe, render-backed MP4 preflight, pilot liveness, and no diagnostic fallback videos",
+      "title": "Qualify the exact render machine before official collection"
+    },
+    {
+      "artifacts": [
+        "external_validation/fidelity_provenance_packet.md",
+        "external_validation/fidelity_provenance_work_orders.csv",
+        "results/external_fidelity_provenance_audit.json"
+      ],
+      "closes": [
+        "Independent real-robot or accepted high-fidelity external validation evidence"
+      ],
+      "commands": [
+        "python scripts\\build_external_fidelity_provenance_packet.py",
+        "python scripts\\audit_external_fidelity_acceptance.py --strict",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
+        "python scripts\\build_external_manifest.py --write --check-video-paths"
+      ],
+      "id": "fidelity_provenance_packet",
+      "operator_input": "complete platform physics/contact, paired-reset replay, operator independence, calibration basis, code commit, skill-library hash, and acceptance gates",
+      "title": "Use the fidelity provenance packet as the platform acceptance checklist"
+    },
+    {
+      "artifacts": [
+        "external_validation/method_alias_map.json"
+      ],
+      "closes": [
+        "paired-reset method-panel integrity before collection"
+      ],
+      "commands": [
+        "python scripts\\audit_external_collection_readiness.py --strict --unsealed-alias-map"
+      ],
+      "id": "alias_unseal",
+      "operator_input": "--unsealed-alias-map",
+      "title": "Unseal method aliases only after configs, implementations, and run plan are frozen"
+    },
+    {
+      "artifacts": [
+        "external_validation/logs/*.jsonl"
+      ],
+      "closes": [
+        "run identity provenance"
+      ],
+      "commands": [
+        "python scripts\\audit_external_collection_readiness.py --strict --run-id <specific_run_id>"
+      ],
+      "id": "specific_run_id",
+      "operator_input": "--run-id <platform>_<date>_<protocol_version>",
+      "title": "Use a specific immutable external run id"
+    },
+    {
+      "artifacts": [
+        "external_validation/adapters/<method>/implementation.py",
+        "external_validation/baselines/<method>/implementation.py",
+        "external_validation/checkpoints_or_configs/<method>.*"
+      ],
+      "closes": [
+        "Manifest-declared independent non-oracle baseline evidence and fairness contract"
+      ],
+      "commands": [
+        "python scripts\\build_external_baseline_contract.py",
+        "python scripts\\validate_external_adapters.py --strict"
+      ],
+      "id": "real_method_implementations",
+      "operator_input": "implementation_path and checkpoint_or_config_path/hash for every non-oracle method",
+      "title": "Replace scaffold-only methods with real non-oracle implementations or wrappers"
+    },
+    {
+      "artifacts": [
+        "external_validation/method_implementation_packet.md",
+        "external_validation/method_implementation_work_orders.csv",
+        "external_validation/method_reference_provenance.csv",
+        "external_validation/method_manifest_cutover_checklist.csv",
+        "external_validation/method_manifest_cutover_checklist.md",
+        "external_validation/adapter_acceptance_fixtures.json",
+        "external_validation/adapter_acceptance_fixtures.md",
+        "external_validation/adapter_acceptance_fixtures.csv",
+        "results/external_method_implementation_audit.json"
+      ],
+      "closes": [
+        "Manifest-declared independent non-oracle baseline evidence and fairness contract"
+      ],
+      "commands": [
+        "python scripts\\build_external_method_implementation_packet.py",
+        "python scripts\\validate_external_adapters.py --strict"
+      ],
+      "id": "method_implementation_packet",
+      "operator_input": "complete every non-oracle method work order with real implementation/config/checkpoint paths and hashes",
+      "title": "Use the method implementation packet as the non-oracle work-order checklist"
+    },
+    {
+      "artifacts": [
+        "external_validation/logs/peg_place_regrasp.jsonl",
+        "external_validation/logs/drawer_to_pick_transfer.jsonl",
+        "external_validation/logs/door_open_navigation.jsonl",
+        "external_validation/logs/cable_route_insert.jsonl",
+        "external_validation/videos/<task_family>/*"
+      ],
+      "closes": [
+        "Independent real-robot or accepted high-fidelity external validation evidence",
+        "External rollout metrics recomputed from raw JSONL logs"
+      ],
+      "commands": [
+        "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map"
+      ],
+      "id": "run_collection",
+      "operator_input": "1,440 JSONL records over 4 tasks x 12 methods x 120 paired resets",
+      "title": "Collect paired-reset external rollouts"
+    },
+    {
+      "artifacts": [
+        "external_validation/manifest.json",
+        "external_validation/manifest_assembly_checklist.csv",
+        "results/external_manifest_builder_report.json"
+      ],
+      "closes": [
+        "Independent real-robot or accepted high-fidelity external validation evidence",
+        "Manifest-declared real task configs replace non-evidence templates"
+      ],
+      "commands": [
+        "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\audit_external_release_package.py --strict"
+      ],
+      "id": "manifest_and_release",
+      "operator_input": "manifest paths, code commit, skill-library hash, config/log/video/checkpoint hashes",
+      "title": "Build the real manifest and hash-lock release artifacts"
+    },
+    {
+      "artifacts": [
+        "results/external_rollout_metrics.json",
+        "results/external_rollout_metrics.md"
+      ],
+      "closes": [
+        "External rollout metrics recomputed from raw JSONL logs"
+      ],
+      "commands": [
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+      ],
+      "id": "strict_rollout_recompute",
+      "operator_input": "strict rollout validator over manifest-declared logs and videos",
+      "title": "Recompute external metrics from raw JSONL logs"
+    },
+    {
+      "artifacts": [
+        "results/external_baseline_contract_audit.json",
+        "results/external_adapter_contract_evidence_audit.json"
+      ],
+      "closes": [
+        "Manifest-declared independent non-oracle baseline evidence and fairness contract"
+      ],
+      "commands": [
+        "python scripts\\build_external_baseline_contract.py",
+        "python scripts\\validate_external_adapters.py --strict"
+      ],
+      "id": "strict_adapter_evidence",
+      "operator_input": "manifest-declared non-oracle implementation paths and hashes",
+      "title": "Audit independent method evidence after the manifest is real"
+    },
+    {
+      "artifacts": [
+        "results/external_evidence_audit.json",
+        "results/submission_readiness_gap_audit.json"
+      ],
+      "closes": [
+        "objective completion audit after real evidence exists"
+      ],
+      "commands": [
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_evidence.py --strict",
+        "python scripts\\audit_submission_readiness_gap.py"
+      ],
+      "id": "final_strict_gate",
+      "operator_input": "completed manifest, logs, videos, configs, checkpoints/hashes, adapters, and fidelity acceptance",
+      "title": "Run the final strict external-evidence gate"
+    }
+  ],
+  "passed": true,
+  "post_collection_strict_commands": [
+    "python scripts\\build_external_postcollection_evidence_seal.py",
+    "python scripts\\audit_external_postcollection_seal_consistency.py",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_fidelity_acceptance.py --strict",
+    "python scripts\\validate_external_adapters.py --strict",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "postcollection_evidence_seal": {
+    "audit_command": "python scripts\\build_external_postcollection_evidence_seal.py",
+    "audit_md_path": "results/external_postcollection_evidence_seal_audit.md",
+    "audit_path": "results/external_postcollection_evidence_seal_audit.json",
+    "expected_records": 1440,
+    "jsonl_record_count": 0,
+    "not_external_evidence": true,
+    "operator_csv_path": "external_validation/postcollection_evidence_seal.csv",
+    "operator_packet_path": "external_validation/postcollection_evidence_seal.md",
+    "postcollection_seal_ready": false,
+    "ready_for_manifest_promotion": false,
+    "rollout_video_count": 0,
+    "sealed_artifact_count": 11,
+    "strict_external_evidence_ready": false
+  },
+  "postcollection_seal_consistency_gate": {
+    "audit_command": "python scripts\\audit_external_postcollection_seal_consistency.py",
+    "audit_md_path": "results/external_postcollection_seal_consistency_audit.md",
+    "audit_path": "results/external_postcollection_seal_consistency_audit.json",
+    "current_jsonl_record_count": 0,
+    "current_rollout_video_count": 0,
+    "extra_official_artifacts": [],
+    "matched_hash_count": 11,
+    "mismatched_hashes": [],
+    "not_external_evidence": true,
+    "ready_for_manifest_promotion": false,
+    "seal_consistency_ready": false,
+    "strict_external_evidence_ready": false
+  },
+  "precollection_freeze_receipt": {
+    "audit_command": "python scripts\\build_external_precollection_freeze_receipt.py",
+    "audit_md_path": "results/external_precollection_freeze_receipt_audit.md",
+    "audit_path": "results/external_precollection_freeze_receipt_audit.json",
+    "candidate_method_config_count": 11,
+    "freeze_receipt_ready": false,
+    "locked_artifact_count": 42,
+    "method_config_hash_lock_ready": true,
+    "missing_lock_paths": [
+      "selected_backend_module"
+    ],
+    "not_external_evidence": true,
+    "operator_csv_path": "external_validation/precollection_freeze_receipt.csv",
+    "operator_packet_path": "external_validation/precollection_freeze_receipt.md",
+    "strict_external_evidence_ready": false
+  },
+  "render_machine_qualification": {
+    "audit_command": "python scripts\\build_maniskill_render_machine_qualification.py",
+    "audit_md_path": "results/maniskill_render_machine_qualification.md",
+    "audit_path": "results/maniskill_render_machine_qualification.json",
+    "blocking_missing": [
+      "render_video_ready is false in results/maniskill_render_video_preflight_audit.json",
+      "PegInsertionSide-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "PegInsertionSide-v1 did not write a renderer-backed MP4",
+      "OpenCabinetDrawer-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "OpenCabinetDrawer-v1 did not write a renderer-backed MP4",
+      "OpenCabinetDoor-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "OpenCabinetDoor-v1 did not write a renderer-backed MP4",
+      "PullCubeTool-v1 has no render-backed MP4: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory",
+      "PullCubeTool-v1 did not write a renderer-backed MP4",
+      "pilot runtime liveness is not ready on the selected machine",
+      "pilot runtime used diagnostic fallback video; fallback media cannot count as external evidence",
+      "pilot runtime render_video_ready is false"
+    ],
+    "not_external_evidence": true,
+    "operator_packet_path": "external_validation/render_machine_qualification_packet.md",
+    "qualification_state": "DO_NOT_COLLECT_RENDER_MACHINE",
+    "render_machine_qualified": false,
+    "strict_external_evidence_ready": false
+  },
+  "render_resource_sweep": {
+    "any_render_video_ready": false,
+    "audit_command": "python scripts\\audit_maniskill_render_resource_sweep.py --timeout-seconds 45 --max-envs 1",
+    "audit_md_path": "results/maniskill_render_resource_sweep.md",
+    "audit_path": "results/maniskill_render_resource_sweep.json",
+    "descriptor_pool_failure_persists_at_minimum_resolution": true,
+    "not_external_evidence": true,
+    "operator_csv_path": "external_validation/render_resource_sweep_work_orders.csv",
+    "record_count": 3,
+    "renderer_failure_classes": [
+      "vulkan_descriptor_pool_exhaustion"
+    ],
+    "renderer_failure_stages": [
+      "initial_render_start"
+    ],
+    "strict_external_evidence_ready": false
+  },
+  "render_video_preflight": {
+    "audit_command": "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 45 --max-envs 4",
+    "audit_md_path": "results/maniskill_render_video_preflight_audit.md",
+    "audit_path": "results/maniskill_render_video_preflight_audit.json",
+    "blocking_missing": [
+      "render-backed MP4 preflight is not ready on this machine; PegInsertionSide-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done); OpenCabinetDrawer-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done); OpenCabinetDoor-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done); PullCubeTool-v1: vk::Device::allocateDescriptorSetsUnique: ErrorOutOfPoolMemory (failure stage: initial_render_start, terminal stage: close_done)"
+    ],
+    "env_count": 4,
+    "not_external_evidence": true,
+    "operator_remediation": [
+      "Do not use diagnostic fallback videos as external evidence; rerun this preflight on the exact accepted collection machine.",
+      "Record Python, ManiSkill, SAPIEN, GPU/Vulkan, render backend, shader pack, and driver provenance with scripts\\probe_external_platform.py before fidelity acceptance.",
+      "Treat vk::Device::allocateDescriptorSetsUnique/ErrorOutOfPoolMemory as a renderer-resource blocker for this machine, not as rollout evidence failure.",
+      "Retest one primary environment at a time with explicit renderer profiles before official collection: cpu/minimal, gpu/minimal, and sapien_cuda/minimal.",
+      "Use a machine whose SAPIEN/Vulkan renderer can capture RGB frames for all four primary task families before promoting fidelity acceptance."
+    ],
+    "render_ready_env_count": 0,
+    "render_video_ready": false,
+    "renderer_failure_classes": [
+      "vulkan_descriptor_pool_exhaustion"
+    ],
+    "renderer_failure_stages": [
+      "initial_render_start"
+    ],
+    "renderer_profile_retest_commands": [
+      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 1 --width 128 --height 128 --render-backend cpu --shader-pack minimal",
+      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 1 --width 128 --height 128 --render-backend gpu --shader-pack minimal",
+      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 1 --width 128 --height 128 --render-backend sapien_cuda --shader-pack minimal",
+      "python scripts\\audit_maniskill_render_video_preflight.py --timeout-seconds 120 --max-envs 4 --width 128 --height 128 --render-backend cpu --shader-pack minimal"
+    ],
+    "strict_external_evidence_ready": false
+  },
+  "source_reports": [
+    "results/submission_readiness_gap_audit.json",
+    "results/external_collection_readiness_audit.json",
+    "results/external_evidence_preflight.json",
+    "results/independent_validation_route_audit.json",
+    "results/external_platform_probe.json",
+    "results/maniskill_task_binding_probe.json",
+    "results/maniskill_env_smoke_probe.json",
+    "results/maniskill_fidelity_metadata_probe.json",
+    "results/external_platform_onboarding_audit.json",
+    "results/external_fidelity_provenance_audit.json",
+    "results/external_fidelity_acceptance_draft_audit.json",
+    "results/fidelity_acceptance_materialization_plan.json",
+    "results/external_config_materialization_plan.json",
+    "results/external_backend_contract_audit.json",
+    "results/external_backend_integration_audit.json",
+    "results/maniskill_backend_readiness_audit.json",
+    "results/external_config_manifest_audit.json",
+    "results/external_rollout_evidence_audit.json",
+    "results/external_ablation_collection_audit.json",
+    "results/external_evidence_intake_ledger_audit.json",
+    "results/external_precollection_freeze_receipt_audit.json",
+    "results/external_postcollection_evidence_seal_audit.json",
+    "results/external_postcollection_seal_consistency_audit.json",
+    "results/external_method_implementation_audit.json",
+    "results/external_pilot_smoke_packet_audit.json",
+    "results/maniskill_render_video_preflight_audit.json",
+    "results/maniskill_render_resource_sweep.json",
+    "results/maniskill_pilot_runtime_liveness_audit.json",
+    "results/maniskill_render_machine_qualification.json"
+  ],
+  "strict_collection_command": "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+  "strict_evidence_ready": false,
+  "version": "external_acquisition_packet_v1"
+}

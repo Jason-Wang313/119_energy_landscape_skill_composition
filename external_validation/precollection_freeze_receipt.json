@@ -1,0 +1,564 @@
+{
+  "backend_module": "",
+  "candidate_method_config_count": 11,
+  "candidate_method_config_records": [
+    {
+      "actual_sha256": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/barrier_certified_energy_composer_v5.json",
+      "config_sha256": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872",
+      "evidence_role": "paper_method_under_test",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "barrier_certified_energy_composer_v5",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/behavior_cloned_skill_chain.json",
+      "config_sha256": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "behavior_cloned_skill_chain",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/cem_trajectory_composer.json",
+      "config_sha256": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "cem_trajectory_composer",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/diffusion_skill_stitcher.json",
+      "config_sha256": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "diffusion_skill_stitcher",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/energy_compatibility_heuristic.json",
+      "config_sha256": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "energy_compatibility_heuristic",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/greedy_module_sequence.json",
+      "config_sha256": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "greedy_module_sequence",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/option_graph_planner.json",
+      "config_sha256": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "option_graph_planner",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/proposed_energy_landscape_composer_v4_1.json",
+      "config_sha256": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3",
+      "evidence_role": "paper_predecessor_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "proposed_energy_landscape_composer_v4_1",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/residual_rl_composer.json",
+      "config_sha256": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "residual_rl_composer",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/stable_dmp_handoff.json",
+      "config_sha256": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "stable_dmp_handoff",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    },
+    {
+      "actual_sha256": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB",
+      "blocking_until_real_evidence": true,
+      "config_hash_matches": true,
+      "config_path": "external_validation/method_config_candidates/tamp_feasibility_screen.json",
+      "config_sha256": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB",
+      "evidence_role": "independent_non_oracle_method",
+      "evidence_status": "candidate_config_not_manifest_evidence",
+      "manifest_declaration_required": true,
+      "method": "tamp_feasibility_screen",
+      "operator_acceptance_required": true,
+      "rollout_log_binding_required": true,
+      "strict_adapter_evidence_ready": false
+    }
+  ],
+  "collection_machine": "",
+  "current_checkout": {
+    "clean_checkout": false,
+    "code_commit": "7f043f463b8bc02c882ec148ddde1f7e912a40a7",
+    "dirty_status_lines": [
+      "M .github/workflows/paper119-validation.yml",
+      " M README.md",
+      " M child_status.md",
+      " M docs/claim_evidence_ledger.json",
+      " M docs/final_audit.md",
+      " M docs/haonan_yilun_outreach_package.md",
+      " M docs/reproducibility_checklist.md",
+      " M docs/submission_readiness_audit_v5.md",
+      " M docs/submission_readiness_decision.md",
+      " M docs/submission_version_log.md",
+      " M external_validation/manifest_precollection_draft.json",
+      " M external_validation/method_config_materialization_plan.json",
+      " M external_validation/method_config_materialization_plan.md",
+      " M external_validation/postcollection_evidence_seal.csv",
+      " M external_validation/postcollection_evidence_seal.json",
+      " M external_validation/postcollection_evidence_seal.md",
+      " M external_validation/precollection_freeze_receipt.csv",
+      " M external_validation/precollection_freeze_receipt.json",
+      " M external_validation/precollection_freeze_receipt.md",
+      " M results/external_method_config_materialization_audit.json",
+      " M results/external_method_config_materialization_audit.md",
+      " M results/external_precollection_freeze_receipt_audit.json",
+      " M results/external_precollection_freeze_receipt_audit.md",
+      " M results/external_precollection_freeze_receipt_self_test.json",
+      " M results/external_precollection_freeze_receipt_self_test.md",
+      " M results/external_precollection_manifest_draft_self_test.json",
+      " M results/external_precollection_manifest_draft_self_test.md",
+      " M scripts/audit_submission_readiness_gap.py",
+      " M scripts/audit_visible_contribution.py",
+      " M scripts/build_external_operator_handoff_bundle.py",
+      " M scripts/build_submission_artifacts.ps1",
+      " M scripts/materialize_external_method_configs.py",
+      " M scripts/validate_submission_artifacts.py",
+      "?? results/external_method_config_materialization_self_test.json",
+      "?? results/external_method_config_materialization_self_test.md",
+      "?? scripts/self_test_external_method_config_materialization.py"
+    ],
+    "skill_library_hash": "F2016F31E605B5135E4F34E95C7CC483C0F170352ACA8E2D0190D2D15F203802"
+  },
+  "date_locked": "",
+  "evidence_boundary": "This receipt freezes precollection inputs only. It is not a manifest, rollout log, video, checkpoint, metric result, method evidence, or external validation evidence.",
+  "freeze_receipt_ready": false,
+  "lock_artifacts": [
+    {
+      "exists": true,
+      "path": "external_validation/blinded_operator_sheet.csv",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "BAAF6BC6B7BFA0DAD346498D8C7FACEE413FD2A0844E5F833A519BBAD4BEEBF5"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_alias_map.json",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "B56A11CB20914B2FD2649DA647F7722DE43D6B04DE3E89704A8CD3F952A4E031"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/manifest_precollection_draft.json",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "8C993B9FD0AEFD072FE81D052808BB20691B497B725877C7D1D13B2802A91D29"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/manifest_precollection_draft.md",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "0DB9BB55D0E70B38E9C96321298309A9C54977E6B137258EF6FA2C0DF8879B43"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/manifest_template.json",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "158757454025E628D3E63FA9019C0454F4E3E4FEB28A6104A465252F67B25066"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/log_schema_v1.json",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "BF2194D543F83448F03BBD9ADB5310C9BDE7313228EA876BE7FE75CD788A4917"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/statistical_analysis_plan.json",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "CADC94E4F3A6A3898B99151C79BD437EB8D997A9F488BD673D205A70420CD65E"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/evidence_intake_ledger.json",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "BA2A6A50BCFB44FDF7531CF71BCBEBB68D3E9B3D8851F75BB5F11CED1F8D24D9"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/evidence_intake_ledger.md",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "8E8E11E9AA7A949FC3C34FE40B5F64D960178E8285C1D794415CFDF44BAB0F87"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/evidence_intake_ledger.csv",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "92CE1249896D06559B8C6199716A841A8F08ED883222B1C617325E07D9826D71"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_manifest_cutover_checklist.csv",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "A7C212C2F99ABFE921D5C5128446E1DE908996C5B789D9BFF6F2B5DA926DF899"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_manifest_cutover_checklist.md",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "D21F7033199CA20BA8610BAC8777E385EC1790FBF2A447B25EF1D12883942765"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/runner/backend_contract.py",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "724802B452269859B9F9686942CC9788A078B907EDD32EC9C857CF5A1427801A"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/runner/real_collection_runner.py",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "3C35D3CDC8EF3A54E518242D371BF95E5C554BC656DA536D7DD01B0040CAB133"
+    },
+    {
+      "exists": true,
+      "path": "results/external_collection_readiness_audit.json",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "8AC215A38BD0E7BBF44A20C547A4ED43CDD76960DCE679ADAF46B24D8C02422E"
+    },
+    {
+      "exists": true,
+      "path": "results/external_fidelity_acceptance_audit.json",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "23846A8DFE65737A9EFB04A4231D05ADE15749DAED64DE6AFE5F466F941AA3C5"
+    },
+    {
+      "exists": true,
+      "path": "results/fidelity_acceptance_materialization_plan.json",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "6A7D96A5F604DB5FAD8283FC5418CC97DB11C365637EB2CF1F9211C9FD527479"
+    },
+    {
+      "exists": true,
+      "path": "results/external_config_manifest_audit.json",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "A46DED8E5FF2E9E9FAB155569F9FA4FD8FDA633E062962180781B9DCB360D972"
+    },
+    {
+      "exists": true,
+      "path": "results/external_method_implementation_audit.json",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "F8AA15870753DC4E6B4F681ACEF956A4C49ADAF3A12A98C32091582474021FAC"
+    },
+    {
+      "exists": true,
+      "path": "results/external_evidence_intake_ledger_audit.json",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "BA2A6A50BCFB44FDF7531CF71BCBEBB68D3E9B3D8851F75BB5F11CED1F8D24D9"
+    },
+    {
+      "exists": true,
+      "path": "results/external_precollection_manifest_draft_audit.json",
+      "required_before_collection": true,
+      "role": "core_precollection_artifact",
+      "sha256": "5EA5219C264B754DCDEB65B3DC107C99FCF834E6909BF707082ABCB537A548BF"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/configs/cable_route_insert.json",
+      "required_before_collection": true,
+      "role": "prepared_task_config",
+      "sha256": "8C6E99766F68CEA04C40D7B54124D4F14A927363D3CF721E68F9C6E523BFF19E"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/configs/door_open_navigation.json",
+      "required_before_collection": true,
+      "role": "prepared_task_config",
+      "sha256": "13F285EFD596568ADCCB8AE2255CBB9FDC9F0B9EBC074297883902C1A15B8B61"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/configs/drawer_to_pick_transfer.json",
+      "required_before_collection": true,
+      "role": "prepared_task_config",
+      "sha256": "1288223014CB9D9285E4249B2FA607FFC16EBEE20B6F44E0241B63E88233E471"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/configs/peg_place_regrasp.json",
+      "required_before_collection": true,
+      "role": "prepared_task_config",
+      "sha256": "021336396EBF09D9AD0AF7688216E0772E6455A8581C7588BA59258F1498E6B9"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_materialization_plan.json",
+      "required_before_collection": true,
+      "role": "method_config_materialization_artifact",
+      "sha256": "BD209F79FB82612573D745A9E394858B25787B82A9DAA9B38694E6279E31F9FB"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_materialization_plan.md",
+      "required_before_collection": true,
+      "role": "method_config_materialization_artifact",
+      "sha256": "EE02B6996F22C1F4FB47AF876B57DA980245CABB8B41027F4C8D4EBBF3C651D9"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates.csv",
+      "required_before_collection": true,
+      "role": "method_config_materialization_artifact",
+      "sha256": "BBFDEAAA8563980BCD0CDE8002DA50676B1B7F1B68A238CCC39CEEEEDCBB4EF5"
+    },
+    {
+      "exists": true,
+      "path": "results/external_method_config_materialization_audit.json",
+      "required_before_collection": true,
+      "role": "method_config_materialization_artifact",
+      "sha256": "9AD446480FF0179BFD791DEFB24203C4DEDA83D33D29D69A3FB525452372007E"
+    },
+    {
+      "exists": true,
+      "path": "results/external_method_config_materialization_audit.md",
+      "required_before_collection": true,
+      "role": "method_config_materialization_artifact",
+      "sha256": "ABEA5CABFD6ACE447CBB141086C8AC658EF0D8209806091F06B85C4B2E209200"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/barrier_certified_energy_composer_v5.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "0DF7FB36D51A1866B46716F0601E46E81B815849675D0C6CAB8FB4037B801872"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/behavior_cloned_skill_chain.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "BCFB1DAAE14267E91CC9FE9AA08083FFF90625B255C81FA74E47647018A969C2"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/cem_trajectory_composer.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "BA1A268A3FBADB9E86286B11B6B9E593BEFB448586493CFBB4CDFDE8C6661C99"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/diffusion_skill_stitcher.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "4F44159059554664F238B144C1D65395CDE4417F89308ABD8C3DC09EDB02165B"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/energy_compatibility_heuristic.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "ED6FB2887EFB80342705CA1528597B8AE4FB890C28B285660FD9C0443FA0903C"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/greedy_module_sequence.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "4158524DEB92394F50D7550D295D67860F9D2D92F4C1D06B13FA668B1F1F7DFA"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/option_graph_planner.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "DE3E0198432E4CF42F017C473EED3CF889B60FE5B85B642C55C44A1FF02410AD"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/proposed_energy_landscape_composer_v4_1.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "7331767D0D76C6507C4F586F2FD093ADAF7FF0DF07CAB50A1A4FD164D8CEABB3"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/residual_rl_composer.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "4A0CE8A9FD2BE847325029A688ED912635342D4F0159FF454828FA228C5F302F"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/stable_dmp_handoff.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "0AD7209C0E2023CE462624C5A10EB09AC5EA7A249D86CA47A4EBC20F852639EF"
+    },
+    {
+      "exists": true,
+      "path": "external_validation/method_config_candidates/tamp_feasibility_screen.json",
+      "required_before_collection": true,
+      "role": "candidate_method_config",
+      "sha256": "18F846DB89B1C852DF378A3ED9A205389141AE2C56D0D9E27210401973620EFB"
+    },
+    {
+      "exists": false,
+      "path": "",
+      "required_before_collection": true,
+      "role": "selected_backend_module",
+      "sha256": ""
+    }
+  ],
+  "method_config_candidates_csv_path": "external_validation/method_config_candidates.csv",
+  "method_config_hash_lock_ready": true,
+  "method_config_materialization_artifact_count": 5,
+  "method_config_materialization_audit_path": "results/external_method_config_materialization_audit.json",
+  "method_config_materialization_plan_path": "external_validation/method_config_materialization_plan.json",
+  "missing_lock_paths": [
+    "selected_backend_module"
+  ],
+  "not_external_evidence": true,
+  "operator_id": "",
+  "operator_regeneration_command": "python scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
+  "ready_to_collect_after_receipt": false,
+  "run_id": "paper119_external_validation_run",
+  "source_state": {
+    "collection_blocking_missing": [
+      "backend_module_ready: --backend-module is required before actual collection",
+      "fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'",
+      "alias_unsealing_explicit: unsealed_alias_map=False",
+      "run_id_specific: run_id='paper119_external_validation_run'"
+    ],
+    "collection_ready": false,
+    "fidelity_acceptance_ready": false,
+    "fidelity_blocking_missing": [
+      "real_acceptance_file_exists: external_validation/fidelity_acceptance_template.json",
+      "real_acceptance_version: version='paper119_fidelity_acceptance_template_v1', expected='paper119_fidelity_acceptance_v1'",
+      "real_acceptance_declares_ready: acceptance_ready=None",
+      "not_template_only: template_only=True",
+      "strict_readiness_remains_external_to_acceptance: not_external_evidence=True, strict_fidelity_evidence_ready=None, strict_external_evidence_ready=None",
+      "platform_values_filled: placeholder_fields=['asset_sources', 'contact_solver', 'physics_engine', 'platform_name', 'platform_version', 'robot_model_source', 'substeps_per_control_step', 'timestep_seconds']",
+      "qualification_text_filled: weak_or_placeholder=['contact_dynamics_justification', 'known_limitations', 'operator_independence_statement', 'paired_reset_replay_test', 'real_or_benchmark_calibration_basis']",
+      "operator_independence_declared: operator_not_target_collaborator=True",
+      "date_locked_filled: date_locked='FILL_AFTER_PLATFORM_SELECTION'",
+      "date_locked_iso_like: date_locked='FILL_AFTER_PLATFORM_SELECTION'",
+      "code_commit_filled: code_commit=''",
+      "code_commit_sha40: code_commit=''",
+      "skill_library_hash_valid: skill_library_hash must be 64-character SHA256",
+      "precollection_confirmation_booleans_true: real_platform_confirmed_by_operator=None, render_backed_videos_confirmed_by_operator=None",
+      "postcollection_evidence_deferred_until_manifest: manifest_declaration_required_after_collection=None, real_rollout_evidence_required_after_collection=None, manifest_declaration_confirmed_by_operator=None, real_rollout_evidence_confirmed_by_operator=None",
+      "materialized_by_guarded_path: materialized_by=None, materialized_from_draft_path=None",
+      "all_acceptance_gates_passed: unpassed=['platform_provenance_complete', 'paired_reset_replay_verified', 'contact_failure_observable', 'non_oracle_methods_fair', 'raw_logs_drive_metrics']"
+    ]
+  },
+  "strict_command_sequence": [
+    "python scripts\\audit_external_fidelity_acceptance.py --strict",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\validate_external_adapters.py --strict",
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id paper119_external_validation_run --unsealed-alias-map",
+    "python scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
+    "python scripts\\self_test_external_precollection_freeze_receipt.py",
+    "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id paper119_external_validation_run --unsealed-alias-map",
+    "python scripts\\build_external_postcollection_evidence_seal.py",
+    "python scripts\\audit_external_postcollection_seal_consistency.py",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "strict_external_evidence_ready": false,
+  "unsealed_alias_map": false,
+  "version": "external_precollection_freeze_receipt_v1"
+}

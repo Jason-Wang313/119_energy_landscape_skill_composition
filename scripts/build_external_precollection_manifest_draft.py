@@ -1,0 +1,603 @@
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+import validate_external_configs as config_validator
+
+
+ROOT = Path(__file__).resolve().parents[1]
+EXTERNAL = ROOT / "external_validation"
+RESULTS = ROOT / "results"
+
+TEMPLATE = EXTERNAL / "manifest_template.json"
+SCHEMA = EXTERNAL / "config_schema_v1.json"
+OFFICIAL_MANIFEST = EXTERNAL / "manifest.json"
+DRAFT_JSON = EXTERNAL / "manifest_precollection_draft.json"
+DRAFT_MD = EXTERNAL / "manifest_precollection_draft.md"
+AUDIT_JSON = RESULTS / "external_precollection_manifest_draft_audit.json"
+AUDIT_MD = RESULTS / "external_precollection_manifest_draft_audit.md"
+METHOD_CONFIG_PLAN = EXTERNAL / "method_config_materialization_plan.json"
+METHOD_CONFIG_AUDIT = RESULTS / "external_method_config_materialization_audit.json"
+
+DRAFT_VERSION = "external_precollection_manifest_draft_v1"
+AUDIT_VERSION = "external_precollection_manifest_draft_audit_v1"
+ORACLE_METHOD = "oracle_basin_composer"
+
+SOURCE_REPORTS = [
+    RESULTS / "external_manifest_builder_report.json",
+    RESULTS / "external_config_manifest_audit.json",
+    RESULTS / "external_rollout_evidence_audit.json",
+    RESULTS / "external_ablation_collection_audit.json",
+    RESULTS / "external_evidence_intake_ledger_audit.json",
+    RESULTS / "external_method_implementation_audit.json",
+    METHOD_CONFIG_AUDIT,
+    RESULTS / "external_collection_readiness_audit.json",
+    RESULTS / "maniskill_render_machine_qualification.json",
+]
+
+
+def read_json(path: Path) -> dict[str, Any]:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise SystemExit(f"invalid JSON in {rel(path)}: {exc}") from exc
+
+
+def rel(path: Path) -> str:
+    return path.relative_to(ROOT).as_posix()
+
+
+def rel_path(value: str) -> Path:
+    path = Path(value)
+    return path if path.is_absolute() else ROOT / path
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest().upper()
+
+
+def add_check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str) -> None:
+    checks.append({"name": name, "passed": bool(passed), "detail": detail})
+
+
+def path_exists_as_evidence(path: Path) -> bool:
+    if path.is_file():
+        return True
+    if path.is_dir():
+        return any(child.is_file() for child in path.rglob("*"))
+    return False
+
+
+def config_records(template: dict[str, Any], schema: dict[str, Any]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    draft_tasks: list[dict[str, Any]] = []
+    records: list[dict[str, Any]] = []
+    for task in template.get("tasks", []) or []:
+        if not isinstance(task, dict):
+            continue
+        draft_task = dict(task)
+        config_path = rel_path(str(task.get("config_path", "")))
+        config_hash = sha256_file(config_path) if config_path.exists() else ""
+        manifest_task = dict(task)
+        manifest_task["config_hash"] = config_hash
+        ok, errors = (
+            config_validator.validate_config(config_path, schema, strict=True, manifest_task=manifest_task)
+            if config_path.exists()
+            else (False, ["config file missing"])
+        )
+        draft_task["config_hash"] = config_hash
+        draft_task["manifest_declared_ready_if_promoted"] = bool(ok and config_hash)
+        draft_tasks.append(draft_task)
+        records.append(
+            {
+                "task_family": str(task.get("task_family", "")),
+                "config_path": str(task.get("config_path", "")),
+                "config_exists": config_path.exists(),
+                "config_hash": config_hash,
+                "strict_validation_passed_if_manifest_declared": ok,
+                "validation_errors": errors,
+            }
+        )
+    return draft_tasks, records
+
+
+def method_config_candidates() -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]:
+    plan = read_json(METHOD_CONFIG_PLAN)
+    if plan.get("version") != "external_method_config_materialization_plan_v1":
+        raise SystemExit(f"{rel(METHOD_CONFIG_PLAN)} version={plan.get('version')!r}")
+    if plan.get("not_external_evidence") is not True or plan.get("strict_adapter_evidence_ready") is not False:
+        raise SystemExit(f"{rel(METHOD_CONFIG_PLAN)} must remain non-evidence and strict_adapter_evidence_ready=false")
+    records: list[dict[str, Any]] = []
+    for record in plan.get("records", []) or []:
+        if not isinstance(record, dict):
+            continue
+        method = str(record.get("method", ""))
+        if not method or method == ORACLE_METHOD:
+            continue
+        config_path_text = str(record.get("config_path", ""))
+        config_path = rel_path(config_path_text)
+        recomputed_hash = sha256_file(config_path) if config_path.is_file() else ""
+        declared_hash = str(record.get("config_sha256", ""))
+        stub = record.get("manifest_stub", {}) or {}
+        records.append(
+            {
+                "method": method,
+                "evidence_role": record.get("evidence_role", ""),
+                "config_path": config_path_text,
+                "config_exists": config_path.is_file(),
+                "config_sha256": declared_hash,
+                "recomputed_config_sha256": recomputed_hash,
+                "config_hash_matches": bool(recomputed_hash and recomputed_hash == declared_hash),
+                "manifest_stub_checkpoint_or_config_path": stub.get("checkpoint_or_config_path", ""),
+                "manifest_stub_checkpoint_or_config_hash": stub.get("checkpoint_or_config_hash", ""),
+                "strict_adapter_evidence_ready": False,
+                "operator_acceptance_required": True,
+                "manifest_declaration_required": True,
+                "rollout_log_binding_required": True,
+                "blocking_until_real_evidence": True,
+            }
+        )
+    return records, {record["method"]: record for record in records}
+
+
+def method_gaps(template: dict[str, Any], candidate_by_method: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+    gaps: list[dict[str, Any]] = []
+    for method in template.get("methods", []) or []:
+        if not isinstance(method, dict):
+            continue
+        name = str(method.get("name", ""))
+        if name == ORACLE_METHOD:
+            continue
+        implementation = str(method.get("implementation", "")).strip()
+        checkpoint = str(method.get("checkpoint_or_config_path", "")).strip()
+        declared_hash = str(method.get("checkpoint_or_config_hash", "")).strip()
+        implementation_path = rel_path(implementation) if implementation else None
+        checkpoint_path = rel_path(checkpoint) if checkpoint else None
+        implementation_exists = bool(implementation_path and implementation_path.exists())
+        checkpoint_exists = bool(checkpoint_path and checkpoint_path.exists())
+        candidate = candidate_by_method.get(name, {})
+        candidate_config_path = str(candidate.get("config_path", ""))
+        candidate_config_hash = str(candidate.get("config_sha256", ""))
+        candidate_hash_matches = candidate.get("config_hash_matches") is True
+        candidate_config_exists = candidate.get("config_exists") is True
+        candidate_available = bool(candidate_config_path and candidate_config_hash and candidate_hash_matches)
+        blocking_missing = [
+            item
+            for item, missing in (
+                ("implementation_path", not implementation_exists),
+                ("candidate_checkpoint_or_config_path", not candidate_config_exists),
+                ("candidate_checkpoint_or_config_hash", not candidate_hash_matches),
+                ("independent_operator_provenance", True),
+                ("manifest_method_declaration", True),
+                ("rollout_policy_hash_binding", True),
+            )
+            if missing
+        ]
+        gaps.append(
+            {
+                "method": name,
+                "implementation": implementation,
+                "implementation_exists": implementation_exists,
+                "implementation_hash": sha256_file(implementation_path) if implementation_path and implementation_path.is_file() else "",
+                "checkpoint_or_config_path": checkpoint,
+                "checkpoint_or_config_exists": checkpoint_exists,
+                "checkpoint_or_config_hash": declared_hash,
+                "candidate_config_path": candidate_config_path,
+                "candidate_config_exists": candidate_config_exists,
+                "candidate_config_hash": candidate_config_hash,
+                "candidate_config_hash_matches": candidate_hash_matches,
+                "candidate_checkpoint_or_config_prefill_available": candidate_available,
+                "candidate_manifest_stub_checkpoint_or_config_path": candidate.get("manifest_stub_checkpoint_or_config_path", ""),
+                "candidate_manifest_stub_checkpoint_or_config_hash": candidate.get("manifest_stub_checkpoint_or_config_hash", ""),
+                "candidate_promotable_after_operator_acceptance": candidate_available,
+                "blocking_missing": blocking_missing,
+            }
+        )
+    return gaps
+
+
+def rollout_gaps(template: dict[str, Any]) -> list[dict[str, Any]]:
+    gaps: list[dict[str, Any]] = []
+    for task in template.get("tasks", []) or []:
+        if not isinstance(task, dict):
+            continue
+        for field, kind in (("log_jsonl", "jsonl_log"), ("video_dir", "video_dir")):
+            value = str(task.get(field, ""))
+            path = rel_path(value)
+            ready = path_exists_as_evidence(path)
+            gaps.append(
+                {
+                    "task_family": str(task.get("task_family", "")),
+                    "kind": kind,
+                    "path": value,
+                    "present": ready,
+                    "blocking_until_real_evidence": not ready,
+                    "strict_gate": "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+                }
+            )
+    return gaps
+
+
+def source_report_records() -> list[dict[str, Any]]:
+    records = []
+    for path in SOURCE_REPORTS:
+        records.append(
+            {
+                "path": rel(path),
+                "exists": path.exists(),
+                "sha256": sha256_file(path) if path.exists() else "",
+            }
+        )
+    return records
+
+
+def build_payload() -> dict[str, Any]:
+    template = read_json(TEMPLATE)
+    schema = read_json(SCHEMA)
+    manifest_report = read_json(RESULTS / "external_manifest_builder_report.json")
+    task_manifest_entries, prepared_configs = config_records(template, schema)
+    candidate_method_configs, candidate_by_method = method_config_candidates()
+    methods = method_gaps(template, candidate_by_method)
+    rollouts = rollout_gaps(template)
+    sources = source_report_records()
+    blocking_rows = [
+        row
+        for row in manifest_report.get("assembly_checklist_rows", []) or []
+        if isinstance(row, dict) and row.get("blocking_until_real_evidence") == "true"
+    ]
+
+    missing_method_count = sum(1 for row in methods if row["blocking_missing"])
+    missing_rollout_count = sum(1 for row in rollouts if row["blocking_until_real_evidence"])
+    prepared_config_count = sum(1 for row in prepared_configs if row["strict_validation_passed_if_manifest_declared"] and row["config_hash"])
+
+    cutover_commands = [
+        r"python scripts\build_external_precollection_manifest_draft.py",
+        r"python scripts\materialize_fidelity_acceptance.py --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --code-commit <commit> --skill-library-hash <sha256> --write <operator fields>",
+        r"python scripts\audit_external_fidelity_acceptance.py --strict",
+        r"python scripts\audit_external_backend_contract.py --strict --backend-module <module_or_path>",
+        r"python scripts\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\configs --run-id <specific_run_id> --unsealed-alias-map",
+        r"python scripts\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
+        r"python scripts\self_test_external_precollection_freeze_receipt.py",
+        r"python external_validation\runner\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\configs --output-log-dir external_validation\logs --video-dir external_validation\videos --run-id <specific_run_id> --unsealed-alias-map",
+        r"python scripts\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+        r"python scripts\audit_external_postcollection_seal_consistency.py",
+        r"python scripts\build_external_manifest.py --write --check-video-paths",
+        r"python scripts\validate_external_configs.py --strict",
+        r"python scripts\validate_external_adapters.py --strict",
+        r"python scripts\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        r"python scripts\audit_external_pairing_integrity.py --strict",
+        r"python scripts\audit_external_release_package.py --strict",
+        r"python scripts\audit_external_evidence.py --strict",
+    ]
+
+    return {
+        "version": DRAFT_VERSION,
+        "not_external_evidence": True,
+        "draft_only": True,
+        "precollection_manifest_draft_ready": True,
+        "strict_external_evidence_ready": False,
+        "strict_config_evidence_ready": False,
+        "ready_to_write_official_manifest": False,
+        "official_manifest_path": rel(OFFICIAL_MANIFEST),
+        "official_manifest_exists": OFFICIAL_MANIFEST.exists(),
+        "official_manifest_absent_at_build": not OFFICIAL_MANIFEST.exists(),
+        "would_promote_to_manifest_version": template.get("version"),
+        "route": template.get("route"),
+        "log_schema": template.get("log_schema"),
+        "claim": template.get("claim"),
+        "task_count": len(task_manifest_entries),
+        "prepared_config_count": prepared_config_count,
+        "task_manifest_entries_with_hashes": task_manifest_entries,
+        "prepared_config_records": prepared_configs,
+        "candidate_method_config_count": sum(
+            1
+            for row in candidate_method_configs
+            if row["config_exists"] and row["config_hash_matches"] and row["method"] != ORACLE_METHOD
+        ),
+        "candidate_method_config_records": candidate_method_configs,
+        "method_gap_count": missing_method_count,
+        "method_gaps": methods,
+        "missing_rollout_artifact_count": missing_rollout_count,
+        "rollout_artifact_gaps": rollouts,
+        "manifest_assembly_blocking_count": len(blocking_rows),
+        "manifest_assembly_blocking_items": [
+            {
+                "phase": row.get("phase"),
+                "item": row.get("item"),
+                "current_state": row.get("current_state"),
+                "required_path": row.get("required_path"),
+                "strict_gate": row.get("strict_gate"),
+            }
+            for row in blocking_rows
+        ],
+        "forbidden_promotion_without": [
+            "accepted fidelity acceptance file from an independent operator",
+            "manifest-declared JSONL logs and render-backed videos",
+            "manifest-declared non-oracle implementation/checkpoint hashes",
+            "release artifact hashes for code, configs, logs, videos, and checkpoints",
+            "strict rollout, pairing, config, adapter, release, and evidence gates passing",
+        ],
+        "cutover_commands": cutover_commands,
+        "source_reports": sources,
+    }
+
+
+def map_by_key(rows: list[dict[str, Any]], key: str) -> dict[str, dict[str, Any]]:
+    return {str(row.get(key, "")): row for row in rows if isinstance(row, dict) and row.get(key)}
+
+
+def source_reports_match_current_files(source_reports_payload: list[dict[str, Any]]) -> tuple[bool, str]:
+    current_sources = source_report_records()
+    payload_by_path = map_by_key(source_reports_payload, "path")
+    current_by_path = map_by_key(current_sources, "path")
+    mismatches: list[str] = []
+    for path, current in current_by_path.items():
+        payload = payload_by_path.get(path, {})
+        if payload.get("exists") is not True or payload.get("sha256") != current.get("sha256"):
+            mismatches.append(path)
+    extra = sorted(set(payload_by_path) - set(current_by_path))
+    ok = not mismatches and not extra and len(payload_by_path) == len(current_by_path)
+    detail = f"sources={len(payload_by_path)}/{len(current_by_path)}, mismatches={mismatches}, extra={extra}"
+    return ok, detail
+
+
+def prepared_records_match_current_configs(payload: dict[str, Any]) -> tuple[bool, str]:
+    template = read_json(TEMPLATE)
+    schema = read_json(SCHEMA)
+    task_manifest_entries, current_prepared = config_records(template, schema)
+    current_by_task = map_by_key(current_prepared, "task_family")
+    payload_records = payload.get("prepared_config_records", []) or []
+    payload_by_task = map_by_key(payload_records, "task_family")
+    template_tasks = {
+        str(task.get("task_family", "")): str(task.get("config_path", ""))
+        for task in template.get("tasks", []) or []
+        if isinstance(task, dict)
+    }
+    payload_tasks = {
+        str(row.get("task_family", "")): str(row.get("config_path", ""))
+        for row in payload_records
+        if isinstance(row, dict)
+    }
+    draft_entries = payload.get("task_manifest_entries_with_hashes", []) or []
+    draft_entry_tasks = {
+        str(row.get("task_family", "")): str(row.get("config_path", ""))
+        for row in draft_entries
+        if isinstance(row, dict)
+    }
+    mismatches: list[str] = []
+    for task_family, current in current_by_task.items():
+        payload_record = payload_by_task.get(task_family, {})
+        if (
+            payload_record.get("config_path") != current.get("config_path")
+            or payload_record.get("config_hash") != current.get("config_hash")
+            or payload_record.get("strict_validation_passed_if_manifest_declared") is not True
+        ):
+            mismatches.append(task_family)
+    extra = sorted(set(payload_by_task) - set(current_by_task))
+    task_paths_match = payload_tasks == template_tasks and draft_entry_tasks == template_tasks
+    ok = (
+        not mismatches
+        and not extra
+        and len(payload_by_task) == len(current_by_task)
+        and len(draft_entries) == len(task_manifest_entries)
+        and task_paths_match
+    )
+    detail = (
+        f"prepared={len(payload_by_task)}/{len(current_by_task)}, "
+        f"task_paths_match={task_paths_match}, mismatches={mismatches}, extra={extra}"
+    )
+    return ok, detail
+
+
+def candidate_records_match_current_plan(payload: dict[str, Any]) -> tuple[bool, str]:
+    try:
+        current_candidates, _candidate_by_method = method_config_candidates()
+    except SystemExit as exc:
+        return False, f"method config plan rejected: {exc}"
+    payload_records = payload.get("candidate_method_config_records", []) or []
+    payload_by_method = map_by_key(payload_records, "method")
+    current_by_method = map_by_key(current_candidates, "method")
+    mismatches: list[str] = []
+    for method, current in current_by_method.items():
+        payload_record = payload_by_method.get(method, {})
+        if (
+            payload_record.get("config_path") != current.get("config_path")
+            or payload_record.get("config_sha256") != current.get("config_sha256")
+            or current.get("config_hash_matches") is not True
+            or current.get("config_exists") is not True
+        ):
+            mismatches.append(method)
+    extra = sorted(set(payload_by_method) - set(current_by_method))
+    ok = not mismatches and not extra and len(payload_by_method) == len(current_by_method) and len(payload_by_method) >= 11
+    detail = f"candidate_method_configs={len(payload_by_method)}/{len(current_by_method)}, mismatches={mismatches}, extra={extra}"
+    return ok, detail
+
+
+def audit_packet(payload: dict[str, Any]) -> dict[str, Any]:
+    checks: list[dict[str, Any]] = []
+    config_records_payload = payload.get("prepared_config_records", []) or []
+    candidate_method_config_payload = payload.get("candidate_method_config_records", []) or []
+    method_gaps_payload = payload.get("method_gaps", []) or []
+    rollout_gaps_payload = payload.get("rollout_artifact_gaps", []) or []
+    source_reports_payload = payload.get("source_reports", []) or []
+    command_text = "\n".join(payload.get("cutover_commands", []) or [])
+
+    add_check(checks, "draft_json_written_to_precollection_path", DRAFT_JSON.exists() and DRAFT_JSON.name != "manifest.json", rel(DRAFT_JSON))
+    add_check(checks, "draft_marked_non_evidence_and_fail_closed", payload.get("not_external_evidence") is True and payload.get("draft_only") is True and payload.get("strict_external_evidence_ready") is False and payload.get("ready_to_write_official_manifest") is False, "draft is non-evidence and cannot write the official manifest")
+    add_check(checks, "official_manifest_absent", payload.get("official_manifest_exists") is False and not OFFICIAL_MANIFEST.exists(), rel(OFFICIAL_MANIFEST))
+    add_check(checks, "prepared_config_hashes_prefilled", len(config_records_payload) >= 4 and all(row.get("strict_validation_passed_if_manifest_declared") is True and len(str(row.get("config_hash", ""))) == 64 for row in config_records_payload), f"configs={len(config_records_payload)}")
+    prepared_match, prepared_detail = prepared_records_match_current_configs(payload)
+    add_check(checks, "prepared_config_hashes_match_current_files", prepared_match, prepared_detail)
+    add_check(
+        checks,
+        "candidate_method_configs_prefilled",
+        len(candidate_method_config_payload) >= 11
+        and all(row.get("config_exists") is True and row.get("config_hash_matches") is True for row in candidate_method_config_payload)
+        and all(row.get("method") != ORACLE_METHOD for row in candidate_method_config_payload),
+        f"candidate_method_configs={len(candidate_method_config_payload)}",
+    )
+    candidate_match, candidate_detail = candidate_records_match_current_plan(payload)
+    add_check(checks, "candidate_method_configs_match_current_plan", candidate_match, candidate_detail)
+    add_check(
+        checks,
+        "method_gaps_bind_candidate_configs",
+        len(method_gaps_payload) >= 11
+        and all(row.get("candidate_checkpoint_or_config_prefill_available") is True for row in method_gaps_payload),
+        f"method_gaps={len(method_gaps_payload)}",
+    )
+    add_check(
+        checks,
+        "method_gaps_still_require_independent_evidence",
+        len(method_gaps_payload) >= 11
+        and all(
+            {"implementation_path", "independent_operator_provenance", "manifest_method_declaration", "rollout_policy_hash_binding"}.issubset(
+                set(row.get("blocking_missing", []) or [])
+            )
+            for row in method_gaps_payload
+        ),
+        "candidate config hashes do not replace independent implementations, provenance, manifest declaration, or rollout log binding",
+    )
+    add_check(checks, "method_gaps_remain_blocking", len(method_gaps_payload) >= 11 and int(payload.get("method_gap_count", 0) or 0) >= 11, f"method_gap_count={payload.get('method_gap_count')!r}")
+    add_check(checks, "rollout_artifacts_remain_blocking", len(rollout_gaps_payload) >= 8 and int(payload.get("missing_rollout_artifact_count", 0) or 0) >= 8, f"missing_rollout_artifact_count={payload.get('missing_rollout_artifact_count')!r}")
+    add_check(checks, "manifest_assembly_blockers_preserved", int(payload.get("manifest_assembly_blocking_count", 0) or 0) >= 20, f"blocking={payload.get('manifest_assembly_blocking_count')!r}")
+    add_check(checks, "source_reports_hash_listed", all(row.get("exists") and len(str(row.get("sha256", ""))) == 64 for row in source_reports_payload), f"sources={len(source_reports_payload)}")
+    sources_match, sources_detail = source_reports_match_current_files(source_reports_payload)
+    add_check(checks, "source_reports_match_current_files", sources_match, sources_detail)
+    for fragment in (
+        "materialize_fidelity_acceptance.py",
+        "audit_external_collection_readiness.py --strict",
+        "build_external_precollection_freeze_receipt.py",
+        "real_collection_runner.py",
+        "build_external_postcollection_evidence_seal.py",
+        "audit_external_postcollection_seal_consistency.py",
+        "build_external_manifest.py --write --check-video-paths",
+        "validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "audit_external_evidence.py --strict",
+    ):
+        check_name = "cutover_command_contains_" + fragment.split(".")[0].replace(" ", "_").replace("\\", "_")
+        add_check(checks, check_name, fragment in command_text, fragment)
+
+    passed = all(check["passed"] for check in checks)
+    return {
+        "version": AUDIT_VERSION,
+        "passed": passed,
+        "not_external_evidence": True,
+        "draft_ready": passed,
+        "strict_external_evidence_ready": False,
+        "strict_config_evidence_ready": False,
+        "official_manifest_exists": OFFICIAL_MANIFEST.exists(),
+        "draft_path": rel(DRAFT_JSON),
+        "draft_md_path": rel(DRAFT_MD),
+        "task_count": payload.get("task_count"),
+        "prepared_config_count": payload.get("prepared_config_count"),
+        "candidate_method_config_count": payload.get("candidate_method_config_count"),
+        "method_gap_count": payload.get("method_gap_count"),
+        "missing_rollout_artifact_count": payload.get("missing_rollout_artifact_count"),
+        "manifest_assembly_blocking_count": payload.get("manifest_assembly_blocking_count"),
+        "build_command": r"python scripts\build_external_precollection_manifest_draft.py",
+        "cutover_commands": payload.get("cutover_commands", []),
+        "checks": checks,
+    }
+
+
+def build_audit(payload: dict[str, Any]) -> dict[str, Any]:
+    return audit_packet(payload)
+
+
+def write_draft_md(payload: dict[str, Any]) -> None:
+    lines = [
+        "# External Precollection Manifest Draft",
+        "",
+        "Not evidence: `true`.",
+        "Draft only: `true`.",
+        "Strict external evidence ready: `false`.",
+        f"Official manifest exists: `{str(payload['official_manifest_exists']).lower()}`.",
+        "",
+        "This draft records the manifest fields that can be safely prefilled before collection, especially prepared task-config hashes and candidate method-config hashes. It is not `external_validation/manifest.json`, it is not submission evidence, and it cannot promote itself to evidence without the strict cutover commands below.",
+        "",
+        "## Prepared Task Configs",
+        "",
+    ]
+    for record in payload["prepared_config_records"]:
+        lines.append(
+            f"- `{record['task_family']}`: `{record['config_path']}` "
+            f"sha256 `{record['config_hash']}`; strict-if-manifest-declared `{str(record['strict_validation_passed_if_manifest_declared']).lower()}`"
+        )
+    lines.extend(["", "## Candidate Method Config Prefills", ""])
+    for record in payload["candidate_method_config_records"]:
+        lines.append(
+            f"- `{record['method']}`: `{record['config_path']}` "
+            f"sha256 `{record['config_sha256']}`; operator-acceptance-required `true`; "
+            f"strict-adapter-evidence-ready `false`"
+        )
+    lines.extend(["", "## Blocking Method Gaps", ""])
+    for record in payload["method_gaps"]:
+        lines.append(
+            f"- `{record['method']}`: candidate config `{record['candidate_config_path']}` "
+            f"sha256 `{record['candidate_config_hash']}`; missing `{record['blocking_missing']}`"
+        )
+    lines.extend(["", "## Blocking Rollout Artifacts", ""])
+    for record in payload["rollout_artifact_gaps"]:
+        if record["blocking_until_real_evidence"]:
+            lines.append(f"- `{record['task_family']}` `{record['kind']}`: `{record['path']}`")
+    lines.extend(["", "## Promotion Requirements", ""])
+    for item in payload["forbidden_promotion_without"]:
+        lines.append(f"- {item}")
+    lines.extend(["", "## Cutover Commands", ""])
+    for command in payload["cutover_commands"]:
+        lines.extend(["```powershell", command, "```"])
+    DRAFT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_audit_md(audit: dict[str, Any]) -> None:
+    lines = [
+        "# External Precollection Manifest Draft Audit",
+        "",
+        f"Passed: `{str(audit['passed']).lower()}`.",
+        "Not evidence: `true`.",
+        f"Draft ready: `{str(audit['draft_ready']).lower()}`.",
+        "Strict external evidence ready: `false`.",
+        "",
+        "This audit checks that the precollection manifest draft is useful for an operator but remains fail-closed before real logs, videos, fidelity acceptance, method hashes, and release artifacts exist.",
+        "",
+        "## Checks",
+        "",
+    ]
+    for check in audit["checks"]:
+        status = "pass" if check["passed"] else "fail"
+        lines.append(f"- `{status}` `{check['name']}`: {check['detail']}")
+    AUDIT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def main() -> int:
+    EXTERNAL.mkdir(exist_ok=True)
+    RESULTS.mkdir(exist_ok=True)
+    payload = build_payload()
+    DRAFT_JSON.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_draft_md(payload)
+    audit = build_audit(payload)
+    AUDIT_JSON.write_text(json.dumps(audit, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_audit_md(audit)
+    print(
+        "External precollection manifest draft: "
+        f"{'PASS' if audit['passed'] else 'FAIL'}; "
+        f"configs={audit['prepared_config_count']}; "
+        f"method_configs={audit['candidate_method_config_count']}; "
+        f"method_gaps={audit['method_gap_count']}; "
+        f"rollout_gaps={audit['missing_rollout_artifact_count']}"
+    )
+    print(f"Wrote {DRAFT_JSON}")
+    print(f"Wrote {DRAFT_MD}")
+    print(f"Wrote {AUDIT_JSON}")
+    print(f"Wrote {AUDIT_MD}")
+    return 0 if audit["passed"] else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

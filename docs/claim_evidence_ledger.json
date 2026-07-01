@@ -1,0 +1,634 @@
+{
+  "version": "claim_evidence_ledger_v1",
+  "current_decision": "STRONG_REVISE",
+  "iclr_main_ready": false,
+  "scope_gate_pass": false,
+  "core_identity": "A local world/action model for robot skill seams: predict handoff failure, diagnose why, choose repair/probe/abstain/transition, and update planner edge beliefs.",
+  "permitted_claims": [
+    {
+      "name": "bounded_mechanism_claim",
+      "claim": "Barrier-certified seam models can improve skill composition when they act as local world/action interfaces: predicting handoff failure, diagnosing basin/barrier/descent risks, choosing accept/repair/probe/abstain/transition, and updating planner-edge beliefs from outcomes.",
+      "evidence": ["paper/main.tex", "results/summary.json", "results/hard_aggregate_metrics.csv", "results/ablation_metrics.csv"]
+    },
+    {
+      "name": "local_result_claim",
+      "claim": "In the frozen local rollout suite, v5 improves hard-slice success and utility over the strongest non-oracle predecessor.",
+      "evidence": ["results/summary.json", "results/hard_aggregate_metrics.csv", "paper/main.tex", "results/manuscript_number_audit.json"]
+    },
+    {
+      "name": "local_holdout_robustness_claim",
+      "claim": "In local withheld-slice audits, the v5 gain remains positive across task-family, seam-regime, split, task-regime, and deterministic hash-fold holdouts.",
+      "evidence": ["results/holdout_robustness_audit.json", "results/holdout_robustness_audit.md", "paper/generated_holdout_robustness_table.tex", "paper/main.tex"]
+    },
+    {
+      "name": "diagnostic_claim",
+      "claim": "The method reports seam failure, barrier violation, basin alignment, descent continuity, risk calibration, and realized seam breach diagnostics.",
+      "evidence": ["results/metrics.csv", "results/failure_cases.csv", "paper/main.tex", "results/manuscript_number_audit.json"]
+    },
+    {
+      "name": "diagnostic_mechanism_consistency_claim",
+      "claim": "The local rollout artifacts expose diagnostic labels, seam decisions, and planner-edge updates, and a machine-checkable local audit verifies that the exported labels, decisions, and updates are rule-consistent while preserving the external-validation boundary.",
+      "evidence": ["results/diagnostic_mechanism_audit.json", "results/diagnostic_mechanism_audit.md", "paper/generated_diagnostic_mechanism_table.tex", "paper/main.tex"]
+    },
+    {
+      "name": "local_decision_quality_claim",
+      "claim": "On the local hard slice, the v5 seam decision layer recovers useful accepted transitions that the strongest predecessor abstains from, while keeping accepted-seam breach above the fixed-risk budget near zero.",
+      "evidence": ["results/decision_quality_audit.json", "results/decision_quality_audit.md", "paper/generated_decision_quality_table.tex", "paper/main.tex"]
+    },
+    {
+      "name": "local_planner_edge_policy_claim",
+      "claim": "On local hard-slice planning frontiers, the exported planner-edge updates select higher-utility, higher-success, lower-breach transition candidates than the strongest predecessor without using realized utility to choose the edge.",
+      "evidence": ["results/planner_edge_policy_audit.json", "results/planner_edge_policy_audit.md", "paper/generated_planner_edge_policy_table.tex", "paper/main.tex"]
+    },
+    {
+      "name": "local_failure_memory_adaptation_claim",
+      "claim": "On local hard-slice observed-to-held-out seam signatures, early seam outcomes provide predictive planner-memory evidence for later breach and utility, while preserving the external-validation boundary.",
+      "evidence": ["results/failure_memory_adaptation_audit.json", "results/failure_memory_adaptation_audit.md", "paper/generated_failure_memory_adaptation_table.tex", "paper/main.tex"]
+    },
+    {
+      "name": "local_predictive_calibration_claim",
+      "claim": "On the local hard slice, predicted seam risk tracks realized seam breach with low ten-bin calibration error, monotone risk deciles, and decision-relevant utility separation while preserving the external-validation boundary.",
+      "evidence": ["results/seam_prediction_calibration_audit.json", "results/seam_prediction_calibration_audit.md", "paper/generated_seam_prediction_calibration_table.tex", "paper/main.tex"]
+    },
+    {
+      "name": "local_model_release_claim",
+      "claim": "The repository provides a hash-locked local model release card for the deterministic v5 skill-seam world/action model, including source, method-parameter, result-artifact, and reference-adapter hashes, while explicitly remaining non-external evidence and not a trained robot policy checkpoint.",
+      "evidence": ["scripts/build_local_model_release.py", "docs/local_model_release.md", "results/local_model_release_manifest.json", "results/local_model_release_audit.json", "results/local_model_release_audit.md"]
+    },
+    {
+      "name": "external_validation_contract_claim",
+      "claim": "The repository defines a machine-checkable external validation contract with raw-log recomputation, confidence-gated external rollout statistics, and a final rollout confidence summary gate, but the contract currently does not pass because no real/high-fidelity evidence package exists.",
+      "evidence": ["external_validation/log_schema_v1.json", "scripts/build_external_collection_plan.py", "results/external_collection_plan.json", "scripts/validate_external_rollouts.py", "scripts/audit_external_evidence.py", "results/external_evidence_audit.json"]
+    },
+    {
+      "name": "external_evidence_pipeline_self_test_claim",
+      "claim": "The repository includes tooling-only self-tests showing that the strict external validation path can bind prepared task configs and tracked candidate method configs in a temporary full-pipeline fixture, and that the manifest-builder path, backend qualification gate, config evidence gate with prepared task-config binding, adapter evidence gate with tracked candidate method-config binding, confidence-gated external rollout statistics gate, strict reference-adapter rejection gate, strict checkpoint/config artifact gate, strict fairness-contract binding gate, fidelity acceptance gate, strict fidelity acceptance provenance gate, fidelity materializer checkout self-test, release-package gate, final rollout confidence summary gate, final release artifact hash recomputation gate, pairing-integrity gate, collection preflight gate, and actual runner backend path can accept temporary synthetic fixtures, while the official video write guard rejects diagnostic fallback media, the official JSONL write guard rejects schema-invalid rows before appending, atomic official evidence promotion preserves prior official videos/logs on selected-batch failure, the release-package internal-artifact rejection gate rejects staged/backup/diagnostic/fallback log-video artifacts, empty video directories, and non-MP4-like video artifacts, the materializer self-test rejects stale commits, mismatched skill-library hashes, and dirty checkouts before writing, the rollout validator rejects weak confidence bounds, the final external evidence audit rejects tampered rollout confidence summaries and tampered manifest release hashes, and the real repository evidence state is left untouched.",
+      "evidence": ["scripts/self_test_external_evidence_pipeline.py", "results/external_evidence_pipeline_self_test.json", "results/external_evidence_pipeline_self_test.md", "scripts/self_test_external_manifest_builder.py", "results/external_manifest_builder_self_test.json", "results/external_manifest_builder_self_test.md", "scripts/self_test_external_backend_contract.py", "results/external_backend_contract_self_test.json", "results/external_backend_contract_self_test.md", "scripts/self_test_external_config_evidence.py", "results/external_config_evidence_self_test.json", "results/external_config_evidence_self_test.md", "scripts/self_test_external_adapter_evidence.py", "results/external_adapter_evidence_self_test.json", "results/external_adapter_evidence_self_test.md", "scripts/self_test_external_fidelity_acceptance.py", "results/external_fidelity_acceptance_self_test.json", "results/external_fidelity_acceptance_self_test.md", "scripts/self_test_fidelity_acceptance_materializer.py", "results/fidelity_acceptance_materializer_self_test.json", "results/fidelity_acceptance_materializer_self_test.md", "scripts/self_test_external_release_package.py", "results/external_release_package_self_test.json", "results/external_release_package_self_test.md", "scripts/self_test_external_pairing_integrity.py", "results/external_pairing_integrity_self_test.json", "results/external_pairing_integrity_self_test.md", "scripts/self_test_external_collection_preflight.py", "results/external_collection_preflight_self_test.json", "results/external_collection_preflight_self_test.md", "scripts/self_test_external_runner_backend.py", "results/external_runner_backend_self_test.json", "results/external_runner_backend_self_test.md", "scripts/audit_external_evidence.py", "scripts/validate_external_rollouts.py", "scripts/validate_external_configs.py", "external_validation/README.md"]
+    },
+    {
+      "name": "external_evidence_closure_brief_claim",
+      "claim": "The repository provides a compact non-evidence closure brief that maps the four remaining submission blockers to the minimum independent proof package, chronological strict command spine, and non-Haonan outreach boundary.",
+      "evidence": ["scripts/build_external_evidence_closure_brief.py", "docs/external_evidence_closure_brief.md", "results/external_evidence_closure_brief.json", "results/external_evidence_closure_brief.md"]
+    },
+    {
+      "name": "external_evidence_closure_brief_self_test_claim",
+      "claim": "The external evidence closure brief has a tooling-only mutation self-test that rejects fifth-blocker drift, premature manifests, missing Linux command spines, Haonan-dependent route drift, missing source packets, and real-output overwrites while keeping strict external evidence false.",
+      "evidence": ["scripts/self_test_external_evidence_closure_brief.py", "results/external_evidence_closure_brief_self_test.json", "results/external_evidence_closure_brief_self_test.md"]
+    },
+    {
+      "name": "independent_validation_launch_ticket_claim",
+      "claim": "The repository provides a non-evidence independent validation launch ticket that converts the four remaining external-evidence blockers into an operator-facing issue body with no-go states, Windows/Linux bootstrap and collection commands, upload expectations, close criteria, and an explicit non-Haonan proof route.",
+      "evidence": ["scripts/build_independent_validation_launch_ticket.py", "docs/independent_validation_launch_ticket.md", "external_validation/independent_validation_launch_ticket.md", "results/independent_validation_launch_ticket_audit.json", "results/independent_validation_launch_ticket_audit.md", "results/external_collection_job_packet_audit.json", "results/external_collection_machine_bootstrap_audit.json", "results/maniskill_render_machine_qualification.json"]
+    },
+    {
+      "name": "submission_readiness_gap_claim",
+      "claim": "The repository includes a requirement-level gap audit that maps the active submission objective to satisfied, missing, and human-polish requirements and currently reports the objective as incomplete.",
+      "evidence": ["scripts/audit_submission_readiness_gap.py", "results/submission_readiness_gap_audit.json", "results/submission_readiness_gap_audit.md", "docs/submission_readiness_audit_v5.md"]
+    },
+    {
+      "name": "visible_contribution_claim",
+      "claim": "The repository includes a visible-contribution audit that keeps README, final audit, readiness docs, version log, child status, outreach package, send-ready outreach packet, reviewer response packet, closure brief, and independent validation launch ticket synchronized with the current planner-edge policy audit, failure-memory adaptation audit, materializer, fidelity materializer checkout self-test, operator packet, collection machine bootstrap, fidelity acceptance draft, strict fidelity acceptance provenance gate, tracked reference route, strict config evidence hash gate, prepared task-config binding, strict full-method coverage gate, strict rollout sample-count gate, strict paired-panel gate, strict rollout uniqueness gate, confidence-gated external rollout statistics, final rollout confidence summary gate, official video write guard, official JSONL write guard, diagnostic sidecar rejected before JSONL write tracking, reset-timeout triage sidecar, backend reset substage markers, render host qualification brief, render failure remediation packet, atomic official evidence promotion, release-package internal-artifact rejection, final release artifact hash recomputation, external evidence closure brief, external evidence closure brief self-test, external operator return package contract, adapter acceptance fixtures, tracked candidate method-config binding, reference-adapter provenance, strict reference-adapter rejection gate, strict checkpoint/config artifact gate, strict fairness-contract binding gate, outreach stance, and readiness boundary.",
+      "evidence": ["scripts/audit_visible_contribution.py", "README.md", "docs/final_audit.md", "docs/submission_readiness_decision.md", "docs/submission_readiness_audit_v5.md", "docs/submission_version_log.md", "child_status.md", "docs/haonan_yilun_outreach_package.md", "docs/haonan_yilun_send_ready_outreach.md", "docs/reviewer_response_packet.md", "docs/independent_validation_launch_ticket.md", "docs/maniskill_render_host_qualification_brief.md", "results/independent_validation_launch_ticket_audit.json", "results/maniskill_render_host_qualification_brief_audit.json"]
+    },
+    {
+      "name": "reviewer_response_packet_claim",
+      "claim": "The repository provides a non-evidence reviewer response packet that maps hostile reviewer objections to exact local evidence, allowed claims, remaining external gates, and Haonan/Yilun outreach use while preserving the STRONG_REVISE boundary.",
+      "evidence": ["scripts/build_reviewer_response_packet.py", "docs/reviewer_response_packet.md", "results/reviewer_response_packet_audit.json", "results/reviewer_response_packet_audit.md", "results/submission_readiness_gap_audit.json", "docs/haonan_yilun_outreach_package.md"]
+    },
+    {
+      "name": "haonan_yilun_send_ready_outreach_claim",
+      "claim": "The repository provides a non-evidence send-ready Haonan/Yilun outreach packet that keeps the first contact concise, uses CoStream as the only first-email paper anchor, preserves the 17/21 STRONG_REVISE boundary, and does not frame Haonan as responsible for supplying the missing proof.",
+      "evidence": ["scripts/build_haonan_yilun_send_ready_outreach.py", "docs/haonan_yilun_send_ready_outreach.md", "results/haonan_yilun_send_ready_outreach_audit.json", "results/haonan_yilun_send_ready_outreach_audit.md", "outreach/paper119_one_page_memo.pdf", "outreach/paper119_four_page_preview.pdf", "docs/external_evidence_closure_brief.md"]
+    },
+    {
+      "name": "external_collection_plan_claim",
+      "claim": "The repository provides a non-evidence collection schedule for producing independent high-fidelity validation records before any Haonan/Yilun collaboration.",
+      "evidence": ["scripts/build_external_collection_plan.py", "results/external_collection_plan.json", "results/external_collection_plan.md", "docs/independent_validation_protocol.md"]
+    },
+    {
+      "name": "external_analysis_plan_claim",
+      "claim": "The repository provides a non-evidence preregistered external statistical analysis plan that locks primary hypotheses, thresholds, paired-comparison keys, confidence-gated external rollout statistics, exclusion and unblinding policy, strict gates, and reporting before independent rollout collection.",
+      "evidence": ["scripts/build_external_analysis_plan.py", "external_validation/statistical_analysis_plan.json", "external_validation/statistical_analysis_plan.md", "results/external_analysis_plan_audit.json", "results/external_analysis_plan_audit.md", "external_validation/log_schema_v1.json", "results/external_collection_plan.json"]
+    },
+    {
+      "name": "external_platform_probe_claim",
+      "claim": "The repository provides a non-evidence external platform probe that records Python, package, GPU/renderer, code-commit, and config/backend hash provenance for the independent public-simulator route while strict fidelity and external evidence remain false.",
+      "evidence": ["scripts/probe_external_platform.py", "results/external_platform_probe.json", "results/external_platform_probe.md", "external_validation/platform_onboarding_packet.json", "external_validation/fidelity_provenance_packet.json"]
+    },
+    {
+      "name": "maniskill_task_binding_probe_claim",
+      "claim": "The repository provides a non-evidence ManiSkill task binding probe that maps Paper 119 task families to concrete public-simulator environment candidates and checks registry availability when ManiSkill is installed, while accepted task binding, strict fidelity, and external evidence remain false.",
+      "evidence": ["external_validation/maniskill_task_bindings.json", "scripts/probe_maniskill_task_bindings.py", "results/maniskill_task_binding_probe.json", "results/maniskill_task_binding_probe.md", "external_validation/platform_onboarding_packet.json"]
+    },
+    {
+      "name": "maniskill_env_smoke_probe_claim",
+      "claim": "The repository provides a non-evidence ManiSkill environment smoke probe that isolates bound public-simulator candidates, reports construction/reset readiness, and records remaining support-asset blockers including oakink-v2 and ycb while accepted fidelity and strict external evidence remain false.",
+      "evidence": ["scripts/probe_maniskill_env_smoke.py", "results/maniskill_env_smoke_probe.json", "results/maniskill_env_smoke_probe.md", "external_validation/platform_onboarding_packet.json"]
+    },
+    {
+      "name": "maniskill_fidelity_metadata_probe_claim",
+      "claim": "The repository provides a non-evidence ManiSkill fidelity metadata probe that records timing, backend, controller, observation, and asset metadata for bound public-simulator candidates while accepted fidelity and strict external evidence remain false.",
+      "evidence": ["scripts/probe_maniskill_fidelity_metadata.py", "results/maniskill_fidelity_metadata_probe.json", "results/maniskill_fidelity_metadata_probe.md", "external_validation/fidelity_acceptance_draft.json", "results/external_operator_packet.json"]
+    },
+    {
+      "name": "external_platform_onboarding_claim",
+      "claim": "The repository provides a non-evidence platform onboarding packet for the primary non-Haonan ManiSkill/SAPIEN route, including official source anchors, required simulator provenance, task onboarding files, backend requirements, and strict gate ordering before any rollout can count as evidence.",
+      "evidence": ["scripts/build_external_platform_onboarding.py", "external_validation/platform_onboarding_packet.json", "external_validation/platform_onboarding_packet.md", "results/external_platform_onboarding_audit.json", "results/external_platform_onboarding_audit.md", "results/independent_validation_route_audit.json", "external_validation/fidelity_acceptance_template.json"]
+    },
+    {
+      "name": "external_fidelity_provenance_packet_claim",
+      "claim": "The repository provides a non-evidence fidelity provenance packet that turns the missing platform physics/contact, paired-reset replay, operator independence, calibration basis, code/skill hashes, manifest declaration, and strict fidelity gate into concrete operator work orders while strict fidelity and external evidence remain false.",
+      "evidence": ["scripts/build_external_fidelity_provenance_packet.py", "external_validation/fidelity_provenance_packet.json", "external_validation/fidelity_provenance_packet.md", "external_validation/fidelity_provenance_work_orders.csv", "results/external_fidelity_provenance_audit.json", "results/external_fidelity_provenance_audit.md", "results/external_fidelity_acceptance_audit.json", "external_validation/fidelity_acceptance_template.json"]
+    },
+    {
+      "name": "external_fidelity_provenance_packet_self_test_claim",
+      "claim": "The repository provides a non-evidence fidelity provenance packet self-test that rebuilds the packet in temporary fixtures and verifies fail-closed rejection of missing or vague work orders, premature fidelity/external evidence promotion, false acceptance readiness, strict-command drift, accidental real acceptance or manifest writes, and missing packet files without touching real outputs.",
+      "evidence": ["scripts/self_test_external_fidelity_provenance_packet.py", "results/external_fidelity_provenance_packet_self_test.json", "results/external_fidelity_provenance_packet_self_test.md", "scripts/build_external_fidelity_provenance_packet.py", "results/external_fidelity_provenance_audit.json", "external_validation/fidelity_provenance_packet.json"]
+    },
+    {
+      "name": "external_fidelity_acceptance_draft_claim",
+      "claim": "The repository provides a non-evidence fidelity acceptance draft and strict fidelity acceptance provenance gate for the tracked ManiSkill/SAPIEN route that pre-fills platform, backend, task-config, task-binding, environment-smoke, and fidelity-metadata anchors, separates machine-prefilled readiness from independent operator signoff, and rejects future real acceptance files unless they come from guarded materialization, declare acceptance_ready=true, carry a SHA40 collection commit, carry an ISO-like lock date, include operator confirmation booleans, and keep strict evidence flags false until manifest-backed logs/videos pass.",
+      "evidence": ["scripts/build_external_fidelity_acceptance_draft.py", "external_validation/fidelity_acceptance_draft.json", "external_validation/fidelity_acceptance_draft.md", "results/external_fidelity_acceptance_draft_audit.json", "results/external_fidelity_acceptance_draft_audit.md", "results/maniskill_backend_readiness_audit.json", "results/maniskill_env_smoke_probe.json", "results/maniskill_fidelity_metadata_probe.json"]
+    },
+    {
+      "name": "external_fidelity_acceptance_materializer_claim",
+      "claim": "The repository provides a non-evidence fidelity acceptance materializer that can promote the tracked draft to external_validation/fidelity_acceptance.json only through explicit independent-operator, real-platform, render-backed-video, real-rollout, manifest-declaration, code-commit, and skill-hash confirmations, while default validation writes only a fail-closed plan and the fidelity materializer checkout self-test verifies temporary clean writes plus stale-commit, mismatched-hash, dirty-checkout, cache-file, and real-acceptance-untouched guards.",
+      "evidence": ["scripts/materialize_fidelity_acceptance.py", "results/fidelity_acceptance_materialization_plan.json", "results/fidelity_acceptance_materialization_plan.md", "scripts/self_test_fidelity_acceptance_materializer.py", "results/fidelity_acceptance_materializer_self_test.json", "results/fidelity_acceptance_materializer_self_test.md", "external_validation/fidelity_acceptance_draft.json", "results/external_fidelity_acceptance_draft_audit.json", "results/external_operator_packet.json"]
+    },
+    {
+      "name": "external_backend_integration_packet_claim",
+      "claim": "The repository provides a non-evidence backend integration packet that turns the missing non-template public-simulator backend module into concrete work orders while strict backend readiness and strict external evidence remain false.",
+      "evidence": ["scripts/build_external_backend_integration_packet.py", "external_validation/backend_integration_packet.json", "external_validation/backend_integration_packet.md", "external_validation/backend_integration_work_orders.csv", "results/external_backend_integration_audit.json", "results/external_backend_integration_audit.md", "results/external_backend_contract_audit.json", "results/external_collection_readiness_audit.json"]
+    },
+    {
+      "name": "external_backend_integration_packet_self_test_claim",
+      "claim": "The repository provides a non-evidence backend integration packet self-test that rebuilds the backend work-order packet in temporary fixtures and verifies fail-closed rejection of missing or vague backend work orders, premature backend/evidence readiness, route-independence drift, false actual-backend readiness, missing hooks/provenance fields, strict-command drift, accidental real backend files, and missing packet files without touching real outputs.",
+      "evidence": ["scripts/self_test_external_backend_integration_packet.py", "results/external_backend_integration_packet_self_test.json", "results/external_backend_integration_packet_self_test.md", "scripts/build_external_backend_integration_packet.py", "results/external_backend_integration_audit.json", "external_validation/backend_integration_packet.json"]
+    },
+    {
+      "name": "maniskill_reference_backend_claim",
+      "claim": "The repository provides a non-evidence ManiSkill/SAPIEN reference backend candidate that passes backend API, task-config, reference-adapter, MP4-writer, explicit render-backend/shader control, and state-shaped-array video-guard checks while official collection remains fail-closed and strict external evidence remains false.",
+      "evidence": ["external_validation/runner/maniskill_reference_backend.py", "scripts/audit_maniskill_backend_readiness.py", "results/maniskill_backend_readiness_audit.json", "results/maniskill_backend_readiness_audit.md", "external_validation/runner/README.md"]
+    },
+    {
+      "name": "maniskill_reference_collection_preflight_claim",
+      "claim": "The repository provides a non-evidence ManiSkill/SAPIEN reference collection preflight audit showing that the tracked reference backend passes strict backend-contract checks and explicit collection preflight reaches the fidelity-acceptance gate, while official collection and strict external evidence remain false.",
+      "evidence": ["scripts/audit_maniskill_reference_collection_preflight.py", "external_validation/runner/maniskill_reference_backend.py", "results/maniskill_reference_collection_preflight_audit.json", "results/maniskill_reference_collection_preflight_audit.md", "results/external_fidelity_acceptance_audit.json"]
+    },
+    {
+      "name": "external_runner_backend_probe_claim",
+      "claim": "The repository provides a non-evidence runner backend probe self-test that exercises the actual external collection runner with a temporary non-template backend, writes schema-valid temporary JSONL records and videos, rejects diagnostic fallback media through the official video write guard, rejects schema-invalid rows through the official JSONL write guard before JSONL writing, preserves prior official videos/logs on selected-batch failure through atomic official evidence promotion, and leaves the real external manifest untouched.",
+      "evidence": ["scripts/self_test_external_runner_backend.py", "external_validation/runner/real_collection_runner.py", "external_validation/runner/backend_contract.py", "results/external_runner_backend_self_test.json", "results/external_runner_backend_self_test.md", "external_validation/log_schema_v1.json"]
+    },
+    {
+      "name": "external_pilot_smoke_packet_claim",
+      "claim": "The repository provides a non-evidence pilot-smoke packet and audit that let an independent operator test a real backend on one quarantined 12-row method panel before official collection, while rejecting any pilot logs or videos as external evidence.",
+      "evidence": ["scripts/build_external_pilot_smoke_packet.py", "scripts/audit_external_pilot_smoke.py", "external_validation/pilot_smoke_packet.json", "external_validation/pilot_smoke_packet.md", "external_validation/pilot_smoke_work_orders.csv", "results/external_pilot_smoke_packet_audit.json", "results/external_pilot_smoke_packet_audit.md", "results/external_pilot_smoke_audit.json", "results/external_pilot_smoke_audit.md"]
+    },
+    {
+      "name": "maniskill_pilot_runtime_liveness_claim",
+      "claim": "The repository provides a non-evidence bounded ManiSkill pilot runtime liveness audit and reset-timeout triage sidecar that launch the tracked reference runner in quarantined output directories, record explicit render-backend/shader controls, render/pilot progress markers, backend reset substage markers, timeout progress, the active reset-stage row/config/method/env, the last backend substage reached, and whether a diagnostic sidecar rejected before JSONL write was stopped by the official video guard before any official collection, and keep official collection blocked until an accepted runtime path is available.",
+      "evidence": ["scripts/audit_maniskill_pilot_runtime_liveness.py", "results/maniskill_pilot_runtime_liveness_audit.json", "results/maniskill_pilot_runtime_liveness_audit.md", "results/maniskill_pilot_reset_timeout_triage.json", "results/maniskill_pilot_reset_timeout_triage.md", "external_validation/README.md"]
+    },
+    {
+      "name": "maniskill_render_video_preflight_claim",
+      "claim": "The repository provides a non-evidence ManiSkill render-video preflight and render resource sweep that probe whether the tracked public-simulator runtime can export render-backed RGB MP4 files before official collection, record explicit render-backend/shader controls, failure-stage/terminal-stage progress diagnostics, a bounded timeout diagnosis retest, a bounded renderer profile matrix, and a 16x16 resource sweep, classify the current renderer blocker with a renderer-failure classifier, and keep strict external evidence false.",
+      "evidence": ["scripts/audit_maniskill_render_video_preflight.py", "scripts/audit_maniskill_render_resource_sweep.py", "results/maniskill_render_video_preflight_audit.json", "results/maniskill_render_video_preflight_audit.md", "results/maniskill_render_resource_sweep.json", "results/maniskill_render_resource_sweep.md", "external_validation/render_resource_sweep_work_orders.csv", "results/external_acquisition_packet.json", "results/external_operator_packet.json"]
+    },
+    {
+      "name": "maniskill_render_machine_qualification_claim",
+      "claim": "The repository provides a non-evidence ManiSkill render machine qualification packet and render failure remediation packet that require the exact collection machine to pass platform probing, render-backed MP4 preflight, pilot liveness, zero diagnostic fallback videos, and explicit remediation work orders before official collection can begin, while keeping the current local machine fail-closed.",
+      "evidence": ["scripts/build_maniskill_render_machine_qualification.py", "external_validation/render_machine_qualification_packet.md", "external_validation/render_failure_remediation_work_orders.csv", "results/maniskill_render_machine_qualification.json", "results/maniskill_render_machine_qualification.md", "results/maniskill_render_failure_remediation.json", "results/maniskill_render_failure_remediation.md", "results/maniskill_render_video_preflight_audit.json", "results/maniskill_pilot_runtime_liveness_audit.json"]
+    },
+    {
+      "name": "maniskill_render_host_qualification_brief_claim",
+      "claim": "The repository provides a non-evidence ManiSkill render host qualification brief that converts the current Vulkan descriptor-pool render failure into official-source-anchored host requirements, command spines, close criteria, and a non-Haonan route for qualifying an independent GPU/Vulkan machine before official collection.",
+      "evidence": ["scripts/build_maniskill_render_host_qualification_brief.py", "docs/maniskill_render_host_qualification_brief.md", "external_validation/render_host_qualification_brief.md", "results/maniskill_render_host_qualification_brief_audit.json", "results/maniskill_render_host_qualification_brief_audit.md", "results/maniskill_render_machine_qualification.json", "results/maniskill_render_resource_sweep.json", "results/maniskill_pilot_runtime_liveness_audit.json"]
+    },
+    {
+      "name": "external_collection_job_packet_claim",
+      "claim": "The repository provides a non-evidence External collection job packet that turns the accepted operator route into ordered, guarded Windows/Linux command spines from platform/render qualification through fidelity acceptance, strict collection readiness, official collection, postcollection sealing, manifest promotion, and final strict evidence audits while remaining fail-closed in the current no-go state.",
+      "evidence": ["scripts/build_external_collection_job_packet.py", "external_validation/collection_job_packet.json", "external_validation/collection_job_packet.md", "external_validation/collection_job_commands.ps1", "external_validation/collection_job_commands.sh", "external_validation/collection_job_checklist.csv", "results/external_collection_job_packet_audit.json", "results/external_collection_job_packet_audit.md", "results/external_operator_packet.json", "results/external_collection_readiness_audit.json", "results/maniskill_render_machine_qualification.json"]
+    },
+    {
+      "name": "external_collection_job_packet_self_test_claim",
+      "claim": "The repository provides a non-evidence External collection job packet self-test that rebuilds the packet in temporary copied workspaces and rejects missing sources, source evidence drift, premature manifests, premature ready states, unsafe command-spine edits, missing Linux command output, hash-gate drift, and render self-test drift without touching the real packet outputs.",
+      "evidence": ["scripts/self_test_external_collection_job_packet.py", "results/external_collection_job_packet_self_test.json", "results/external_collection_job_packet_self_test.md", "scripts/build_external_collection_job_packet.py", "external_validation/collection_job_packet.json", "external_validation/collection_job_commands.sh", "results/external_collection_job_packet_audit.json"]
+    },
+    {
+      "name": "external_collection_machine_bootstrap_claim",
+      "claim": "The repository provides a non-evidence External collection machine bootstrap packet and guarded command file for an independent GPU/Vulkan collection machine, covering platform, task binding, environment smoke, fidelity metadata, render-video preflight, pilot liveness, and render-machine qualification probes while explicitly avoiding fidelity acceptance materialization, official collection, manifest writing, logs, and videos.",
+      "evidence": ["scripts/build_external_collection_machine_bootstrap.py", "external_validation/collection_machine_bootstrap.json", "external_validation/collection_machine_bootstrap.md", "external_validation/collection_machine_bootstrap.ps1", "external_validation/collection_machine_bootstrap.sh", "results/external_collection_machine_bootstrap_audit.json", "results/external_collection_machine_bootstrap_audit.md", "results/external_collection_job_packet_audit.json", "results/maniskill_render_machine_qualification.json"]
+    },
+    {
+      "name": "external_collection_machine_bootstrap_self_test_claim",
+      "claim": "The repository provides a non-evidence External collection machine bootstrap self-test that rebuilds the bootstrap packet in temporary copied workspaces and rejects missing source reports, source evidence drift, premature collection-job go-state, local render-machine promotion, unsafe evidence-writing commands, missing explicit confirmation, install-guidance drift, and premature manifest/log/video outputs without touching the real bootstrap outputs.",
+      "evidence": ["scripts/self_test_external_collection_machine_bootstrap.py", "results/external_collection_machine_bootstrap_self_test.json", "results/external_collection_machine_bootstrap_self_test.md", "scripts/build_external_collection_machine_bootstrap.py", "external_validation/collection_machine_bootstrap.json", "external_validation/collection_machine_bootstrap.sh", "results/external_collection_machine_bootstrap_audit.json"]
+    },
+    {
+      "name": "external_operator_release_bundle_claim",
+      "claim": "The repository provides a non-evidence External operator release bundle plan that recomputes the handoff file hashes, excludes official logs, videos, checkpoints, local dry-run artifacts, placeholder media, and real manifests, and can create a deterministic transfer archive only through an explicit write-archive command.",
+      "evidence": ["scripts/build_external_operator_release_bundle.py", "external_validation/operator_release_bundle_manifest.csv", "external_validation/operator_release_bundle_README.md", "results/external_operator_release_bundle_plan.json", "results/external_operator_release_bundle_plan.md", "results/external_operator_handoff_bundle.json", "results/external_operator_handoff_bundle.md"]
+    },
+    {
+      "name": "external_operator_release_bundle_self_test_claim",
+      "claim": "The repository self-tests the External operator release bundle in temporary copied workspaces, proving the default no-archive plan, explicit transfer-archive creation, missing handoff source rejection, handoff no-go drift rejection, missing file and hash-drift rejection, forbidden evidence path rejection, premature manifest rejection, and collection-job drift/omission rejection without touching the real release outputs.",
+      "evidence": ["scripts/self_test_external_operator_release_bundle.py", "results/external_operator_release_bundle_self_test.json", "results/external_operator_release_bundle_self_test.md", "scripts/build_external_operator_release_bundle.py", "results/external_operator_release_bundle_plan.json", "results/external_operator_release_bundle_plan.md", "external_validation/operator_release_bundle_manifest.csv", "external_validation/operator_release_bundle_README.md"]
+    },
+    {
+      "name": "external_method_implementation_packet_claim",
+      "claim": "The repository provides a non-evidence method implementation packet that turns the missing independent non-oracle baseline layer into per-method work orders, adapter acceptance fixtures, and a method manifest cutover checklist while strict adapter evidence remains missing, reference adapters remain rejected as independent evidence, and method hashes must bind to checkpoint/config artifacts rather than implementation source.",
+      "evidence": ["scripts/build_external_method_implementation_packet.py", "external_validation/method_implementation_packet.json", "external_validation/method_implementation_packet.md", "external_validation/method_implementation_work_orders.csv", "external_validation/adapter_acceptance_fixtures.json", "external_validation/adapter_acceptance_fixtures.md", "external_validation/adapter_acceptance_fixtures.csv", "external_validation/method_manifest_cutover_checklist.csv", "external_validation/method_manifest_cutover_checklist.md", "results/external_method_implementation_audit.json", "results/external_method_implementation_audit.md", "results/external_baseline_contract_audit.json", "results/external_adapter_contract_evidence_audit.json"]
+    },
+    {
+      "name": "external_method_implementation_packet_self_test_claim",
+      "claim": "The repository self-tests the External method implementation packet in a temporary copied workspace, proving the packet remains non-evidence while missing non-oracle work orders, oracle leakage, reference-adapter shortcuts, checkpoint/config hash shortcuts, fairness-binding drift, fixture-contract drift, cutover shortcuts, strict-command drift, and accidental strict adapter-evidence promotion fail closed without touching the real method packet outputs.",
+      "evidence": ["scripts/self_test_external_method_implementation_packet.py", "results/external_method_implementation_packet_self_test.json", "results/external_method_implementation_packet_self_test.md", "scripts/build_external_method_implementation_packet.py", "external_validation/method_implementation_packet.json", "results/external_method_implementation_audit.json"]
+    },
+    {
+      "name": "external_method_config_materialization_claim",
+      "claim": "The repository provides a non-evidence External method config materialization plan that writes candidate method config artifacts and hashes for all non-oracle methods, binds manifest stubs to those hashes, and keeps independent implementation provenance, manifest declaration, raw rollout logs, videos, and strict adapter evidence missing until real operator collection.",
+      "evidence": ["scripts/materialize_external_method_configs.py", "external_validation/method_config_materialization_plan.json", "external_validation/method_config_materialization_plan.md", "external_validation/method_config_candidates.csv", "external_validation/method_config_candidates", "results/external_method_config_materialization_audit.json", "results/external_method_config_materialization_audit.md"]
+    },
+    {
+      "name": "external_method_config_materialization_self_test_claim",
+      "claim": "The repository self-tests External method config materialization in temporary copied workspaces, proving candidate configs remain non-evidence while missing candidates, oracle candidates, stale candidate hashes, manifest-stub hash drift, evidence-content promotion, source-packet drift, adapter-evidence promotion, baseline spec drift, CSV drift, real manifest writes, and deleted materialization files fail closed without touching real method-config outputs.",
+      "evidence": ["scripts/self_test_external_method_config_materialization.py", "results/external_method_config_materialization_self_test.json", "results/external_method_config_materialization_self_test.md", "scripts/materialize_external_method_configs.py", "external_validation/method_config_materialization_plan.json", "external_validation/method_config_materialization_plan.md", "external_validation/method_config_candidates.csv", "results/external_method_config_materialization_audit.json"]
+    },
+    {
+      "name": "external_method_reference_provenance_claim",
+      "claim": "The repository provides a non-evidence reference-adapter provenance catalog that hash-lists every non-oracle interface adapter, metadata file, shared adapter source, and reference policy hash while keeping strict adapter evidence false through the strict reference-adapter rejection gate.",
+      "evidence": ["scripts/build_external_method_implementation_packet.py", "external_validation/method_reference_provenance.csv", "external_validation/method_implementation_packet.json", "external_validation/method_implementation_packet.md", "results/external_method_implementation_audit.json", "results/external_method_implementation_audit.md", "external_validation/baselines/common_reference_adapter.py"]
+    },
+    {
+      "name": "external_runbook_claim",
+      "claim": "The repository provides a non-evidence operator packet for collecting the external validation layer, including task cards, config templates, and a 1,440-row record sheet.",
+      "evidence": ["scripts/build_external_runbook.py", "external_validation/collection_runbook.md", "external_validation/operator_record_sheet.csv", "external_validation/task_cards/peg_place_regrasp.md", "external_validation/config_templates/peg_place_regrasp.json", "results/external_runbook_audit.json", "results/external_runbook_audit.md"]
+    },
+    {
+      "name": "external_execution_readiness_claim",
+      "claim": "The repository provides a non-evidence external execution-readiness audit and platform qualification checklist showing that the independent operator packet is ready to run while strict evidence remains missing.",
+      "evidence": ["scripts/audit_external_execution_readiness.py", "external_validation/platform_qualification_checklist.md", "results/external_execution_readiness_audit.json", "results/external_execution_readiness_audit.md"]
+    },
+    {
+      "name": "external_execution_readiness_self_test_claim",
+      "claim": "The repository self-tests the top-level External execution readiness gate in temporary copied workspaces, proving the current operator packet is executable but non-evidence while missing operator packets, missing required packet files, premature manifests, accidental strict-evidence promotion, and Haonan-dependence drift fail closed without touching real execution-readiness outputs.",
+      "evidence": ["scripts/self_test_external_execution_readiness.py", "results/external_execution_readiness_self_test.json", "results/external_execution_readiness_self_test.md", "scripts/audit_external_execution_readiness.py", "results/external_execution_readiness_audit.json", "results/external_execution_readiness_audit.md"]
+    },
+    {
+      "name": "external_backend_contract_claim",
+      "claim": "The repository provides a non-evidence backend contract qualification audit that rejects incomplete runner backends and records that no real backend module is ready until an independent operator supplies one.",
+      "evidence": ["scripts/audit_external_backend_contract.py", "scripts/self_test_external_backend_contract.py", "external_validation/runner/backend_contract.py", "external_validation/runner/README.md", "results/external_backend_contract_audit.json", "results/external_backend_contract_audit.md", "results/external_backend_contract_self_test.json", "results/external_backend_contract_self_test.md"]
+    },
+    {
+      "name": "external_acquisition_packet_claim",
+      "claim": "The repository provides a non-evidence acquisition packet that maps each remaining external-evidence blocker to concrete operator inputs, artifacts, backend qualification, and strict validation commands.",
+      "evidence": ["scripts/build_external_acquisition_packet.py", "results/external_acquisition_packet.json", "results/external_acquisition_packet.md", "results/submission_readiness_gap_audit.json", "results/external_backend_contract_audit.json"]
+    },
+    {
+      "name": "external_acquisition_packet_self_test_claim",
+      "claim": "The repository provides a non-evidence External acquisition packet self-test that rebuilds the packet in temporary copied workspaces, rejects missing source audits, unmapped blockers, accidental real-manifest presence, and premature collection-readiness promotion, and leaves the real acquisition packet untouched.",
+      "evidence": ["scripts/self_test_external_acquisition_packet.py", "results/external_acquisition_packet_self_test.json", "results/external_acquisition_packet_self_test.md", "scripts/build_external_acquisition_packet.py", "results/external_acquisition_packet.json", "results/external_acquisition_packet.md"]
+    },
+    {
+      "name": "external_manifest_assembly_checklist_claim",
+      "claim": "The repository provides a non-evidence manifest assembly checklist and strict manifest promotion gate that map each required external manifest field to the current file/hash state, blocking status, operator action, and strict gate before `external_validation/manifest.json` can be written.",
+      "evidence": ["scripts/build_external_manifest.py", "external_validation/manifest_assembly_checklist.csv", "results/external_manifest_builder_report.json", "results/external_manifest_builder_report.md"]
+    },
+    {
+      "name": "external_manifest_builder_self_test_claim",
+      "claim": "The repository provides a non-evidence External manifest builder self-test that exercises the manifest builder's hash scan, raw JSONL loading, metric recomputation, report, checklist, temporary manifest-write path, and partial-manifest refusal path while leaving the real manifest and real reports untouched.",
+      "evidence": ["scripts/self_test_external_manifest_builder.py", "results/external_manifest_builder_self_test.json", "results/external_manifest_builder_self_test.md", "scripts/build_external_manifest.py"]
+    },
+    {
+      "name": "external_precollection_manifest_draft_claim",
+      "claim": "The repository provides a non-evidence External precollection manifest draft that pre-fills prepared task-config hashes and candidate method-config hashes, preserves independent implementation/provenance/log/video blockers, and records the guarded cutover commands required before `external_validation/manifest.json` can be written.",
+      "evidence": ["scripts/build_external_precollection_manifest_draft.py", "external_validation/manifest_precollection_draft.json", "external_validation/manifest_precollection_draft.md", "external_validation/method_config_materialization_plan.json", "external_validation/method_config_candidates.csv", "results/external_precollection_manifest_draft_audit.json", "results/external_precollection_manifest_draft_audit.md", "results/external_method_config_materialization_audit.json", "results/external_manifest_builder_report.json"]
+    },
+    {
+      "name": "external_precollection_manifest_draft_self_test_claim",
+      "claim": "The repository self-tests the External precollection manifest draft in temporary copied workspaces, proving the draft remains non-evidence while premature evidence promotion, missing prepared task-config hashes, task-config path drift, candidate method-config hash drift, omitted method blockers, omitted rollout gaps, stale source reports, cutover-command drift, real manifest writes, and deleted draft files fail closed without touching real precollection-manifest outputs.",
+      "evidence": ["scripts/self_test_external_precollection_manifest_draft.py", "results/external_precollection_manifest_draft_self_test.json", "results/external_precollection_manifest_draft_self_test.md", "scripts/build_external_precollection_manifest_draft.py", "external_validation/manifest_precollection_draft.json", "external_validation/manifest_precollection_draft.md", "results/external_precollection_manifest_draft_audit.json"]
+    },
+    {
+      "name": "external_precollection_freeze_receipt_claim",
+      "claim": "The repository provides a non-evidence External precollection freeze receipt that hash-locks the operator sheet, alias map, prepared configs, candidate method-config hashes, method cutover checklist, manifest draft, runner files, source audits, current commit, and skill-library hash before official JSONL/video collection while keeping strict external evidence false.",
+      "evidence": ["scripts/build_external_precollection_freeze_receipt.py", "external_validation/precollection_freeze_receipt.json", "external_validation/precollection_freeze_receipt.md", "external_validation/precollection_freeze_receipt.csv", "external_validation/method_config_materialization_plan.json", "external_validation/method_config_candidates.csv", "external_validation/method_config_candidates", "results/external_method_config_materialization_audit.json", "results/external_precollection_freeze_receipt_audit.json", "results/external_precollection_freeze_receipt_audit.md"]
+    },
+    {
+      "name": "external_precollection_freeze_receipt_self_test_claim",
+      "claim": "The repository self-tests the External precollection freeze receipt on a temporary complete backend/config/operator/run-id/clean-checkout fixture while proving missing backend selection, placeholder run identity, missing lock artifacts, and dirty checkout fail without overwriting the real receipt.",
+      "evidence": ["scripts/self_test_external_precollection_freeze_receipt.py", "results/external_precollection_freeze_receipt_self_test.json", "results/external_precollection_freeze_receipt_self_test.md", "scripts/build_external_precollection_freeze_receipt.py"]
+    },
+    {
+      "name": "external_postcollection_evidence_seal_claim",
+      "claim": "The repository provides a non-evidence External postcollection evidence seal that hash-locks raw JSONL logs, rollout videos, prepared configs, precollection receipt, operator metadata, and manifest-promotion inputs after official collection and before manifest writing while keeping strict external evidence false.",
+      "evidence": ["scripts/build_external_postcollection_evidence_seal.py", "external_validation/postcollection_evidence_seal.json", "external_validation/postcollection_evidence_seal.md", "external_validation/postcollection_evidence_seal.csv", "results/external_postcollection_evidence_seal_audit.json", "results/external_postcollection_evidence_seal_audit.md"]
+    },
+    {
+      "name": "external_postcollection_evidence_seal_self_test_claim",
+      "claim": "The repository self-tests the External postcollection evidence seal builder on a temporary complete sealed fixture while proving missing operator metadata, incomplete official videos, and pre-existing manifests fail without overwriting the real seal.",
+      "evidence": ["scripts/self_test_external_postcollection_evidence_seal.py", "results/external_postcollection_evidence_seal_self_test.json", "results/external_postcollection_evidence_seal_self_test.md", "scripts/build_external_postcollection_evidence_seal.py"]
+    },
+    {
+      "name": "external_postcollection_seal_consistency_gate_claim",
+      "claim": "The repository provides a non-evidence External postcollection seal consistency gate that recomputes the sealed raw-log, video, config, precollection, and metadata hashes before manifest promotion, rejecting hash drift or unsealed official artifacts while keeping strict external evidence false.",
+      "evidence": ["scripts/audit_external_postcollection_seal_consistency.py", "results/external_postcollection_seal_consistency_audit.json", "results/external_postcollection_seal_consistency_audit.md", "external_validation/postcollection_evidence_seal.json", "external_validation/postcollection_evidence_seal.csv"]
+    },
+    {
+      "name": "external_postcollection_seal_consistency_self_test_claim",
+      "claim": "The repository self-tests the External postcollection seal consistency gate on a temporary complete sealed fixture while proving hash drift and unsealed official artifacts fail without overwriting the real consistency report.",
+      "evidence": ["scripts/self_test_external_postcollection_seal_consistency.py", "results/external_postcollection_seal_consistency_self_test.json", "results/external_postcollection_seal_consistency_self_test.md", "scripts/audit_external_postcollection_seal_consistency.py"]
+    },
+    {
+      "name": "external_operator_packet_claim",
+      "claim": "The repository provides a generated non-evidence operator packet with a go/no-go state, backend qualification gate, generic pre-collection blockers, a tracked ManiSkill reference route that reaches the single fidelity-acceptance blocker, a fidelity-metadata probe summary, exact collection commands, and post-collection strict gates for an independent validation operator.",
+      "evidence": ["scripts/build_external_operator_packet.py", "results/external_operator_packet.json", "results/external_operator_packet.md", "results/external_backend_contract_audit.json", "results/external_collection_readiness_audit.json", "results/maniskill_reference_collection_preflight_audit.json", "results/maniskill_fidelity_metadata_probe.json", "results/external_acquisition_packet.json"]
+    },
+    {
+      "name": "external_operator_handoff_bundle_claim",
+      "claim": "The repository provides a generated non-evidence operator handoff bundle manifest that hash-lists the operator-facing validation files while excluding rollout logs, videos, checkpoints, local dry-run artifacts, placeholder media, and real evidence manifests.",
+      "evidence": ["scripts/build_external_operator_handoff_bundle.py", "results/external_operator_handoff_bundle.json", "results/external_operator_handoff_bundle.md", "results/external_operator_packet.json", "results/external_acquisition_packet.json", "results/external_evidence_preflight.json"]
+    },
+    {
+      "name": "external_operator_handoff_bundle_self_test_claim",
+      "claim": "The repository self-tests the External operator handoff bundle in temporary copied workspaces, proving missing source packets, no-go drift, acquisition blocker drift, premature strict-evidence readiness, missing included files, forbidden evidence paths, premature real manifests, and missing collection-job/bootstrap packets fail closed without touching the real handoff outputs.",
+      "evidence": ["scripts/self_test_external_operator_handoff_bundle.py", "results/external_operator_handoff_bundle_self_test.json", "results/external_operator_handoff_bundle_self_test.md", "scripts/build_external_operator_handoff_bundle.py", "results/external_operator_handoff_bundle.json", "results/external_operator_handoff_bundle.md"]
+    },
+    {
+      "name": "external_evidence_preflight_self_test_claim",
+      "claim": "The repository self-tests the External evidence preflight in temporary workspaces, proving the current no-manifest state remains fail-closed, a complete temporary 1,440-record package can reach the strict-audit handoff state, and incomplete logs, placeholder videos, template configs, scaffold implementations, and real-output overwrite attempts are rejected without promoting real evidence.",
+      "evidence": ["scripts/self_test_external_evidence_preflight.py", "results/external_evidence_preflight_self_test.json", "results/external_evidence_preflight_self_test.md", "scripts/audit_external_evidence_preflight.py", "results/external_evidence_preflight.json", "results/external_evidence_preflight.md"]
+    },
+    {
+      "name": "external_config_template_claim",
+      "claim": "The repository provides a non-evidence task config schema, template validator, and tracked real-config intake directory, while strict config evidence remains missing until real manifest-declared configs replace templates.",
+      "evidence": ["external_validation/config_schema_v1.json", "external_validation/config_templates/peg_place_regrasp.json", "external_validation/configs/README.md", "scripts/validate_external_configs.py", "results/external_config_template_audit.json", "results/external_config_template_audit.md"]
+    },
+    {
+      "name": "external_config_materialization_claim",
+      "claim": "The repository provides a guarded config materialization tool and prepared high-fidelity route configs for the independent simulator path, while strict config evidence remains missing until a real manifest declares them with rollout artifacts.",
+      "evidence": ["scripts/materialize_external_configs.py", "results/external_config_materialization_plan.json", "results/external_config_materialization_plan.md", "external_validation/configs/README.md", "external_validation/configs/peg_place_regrasp.json", "external_validation/configs/drawer_to_pick_transfer.json", "external_validation/configs/door_open_navigation.json", "external_validation/configs/cable_route_insert.json"]
+    },
+    {
+      "name": "external_config_materialization_self_test_claim",
+      "claim": "The repository self-tests External config materialization in temporary copied workspaces, proving the default plan writes no configs, confirmed fixture writes materialize schema-valid task configs, and missing confirmation, placeholder platform names, template tokens, missing task bindings, overwrite attempts, and real-output drift fail closed without touching real prepared configs or materialization reports.",
+      "evidence": ["scripts/self_test_external_config_materialization.py", "results/external_config_materialization_self_test.json", "results/external_config_materialization_self_test.md", "scripts/materialize_external_configs.py", "results/external_config_materialization_plan.json", "results/external_config_materialization_plan.md", "external_validation/config_templates", "external_validation/maniskill_task_bindings.json"]
+    },
+    {
+      "name": "external_config_manifest_packet_claim",
+      "claim": "The repository provides a non-evidence config manifest packet that turns prepared task configs into manifest-declaration and hash-lock work orders while strict config evidence and manifest-declared config readiness remain false.",
+      "evidence": ["scripts/build_external_config_manifest_packet.py", "external_validation/config_manifest_packet.json", "external_validation/config_manifest_packet.md", "external_validation/config_manifest_work_orders.csv", "results/external_config_manifest_audit.json", "results/external_config_manifest_audit.md", "results/external_config_materialization_plan.json", "results/external_config_evidence_audit.json"]
+    },
+    {
+      "name": "external_config_manifest_packet_self_test_claim",
+      "claim": "The repository self-tests the External config manifest packet in temporary copied workspaces, proving the packet remains non-evidence while missing config-to-manifest work orders, premature evidence promotion, materialization-write drift, shrunken template coverage, strict config evidence promotion, manifest task omission, stale prepared-config hashes, failed prepared-config validation, strict-command drift, real manifest writes, and manifest path drift fail closed without touching real config-manifest outputs.",
+      "evidence": ["scripts/self_test_external_config_manifest_packet.py", "results/external_config_manifest_packet_self_test.json", "results/external_config_manifest_packet_self_test.md", "scripts/build_external_config_manifest_packet.py", "external_validation/config_manifest_packet.json", "results/external_config_manifest_audit.json", "results/external_config_materialization_plan.json", "results/external_config_evidence_audit.json"]
+    },
+    {
+      "name": "external_config_evidence_hash_gate_claim",
+      "claim": "The repository provides a strict config evidence hash gate that recomputes manifest-declared task-config hashes, proves the prepared task configs bind under a temporary strict manifest, and rejects strict config evidence when `config_hash` is missing, malformed, or mismatched with `config_path`.",
+      "evidence": ["scripts/validate_external_configs.py", "scripts/self_test_external_config_evidence.py", "results/external_config_evidence_self_test.json", "results/external_config_evidence_self_test.md", "results/external_config_evidence_audit.json"]
+    },
+    {
+      "name": "external_rollout_evidence_packet_claim",
+      "claim": "The repository provides a non-evidence rollout evidence packet that turns the missing raw JSONL rollout, video, manifest, pairing, release, and strict recomputation layer into operator work orders while strict rollout and external evidence remain false.",
+      "evidence": ["scripts/build_external_rollout_evidence_packet.py", "external_validation/rollout_evidence_packet.json", "external_validation/rollout_evidence_packet.md", "external_validation/rollout_evidence_work_orders.csv", "results/external_rollout_evidence_audit.json", "results/external_rollout_evidence_audit.md", "results/external_rollout_metrics.json", "results/external_evidence_preflight.json"]
+    },
+    {
+      "name": "external_rollout_evidence_packet_self_test_claim",
+      "claim": "The repository self-tests the External rollout evidence packet in temporary copied workspaces, proving the packet remains non-evidence while missing task-specific JSONL/video work orders, premature strict-evidence promotion, loss of the missing-manifest rollout-metrics signal, fake observed-record drift, shrunken collection budgets, strict command drift, downstream gate promotion, and accidental manifest/log/video writes fail closed without touching real rollout packet outputs.",
+      "evidence": ["scripts/self_test_external_rollout_evidence_packet.py", "results/external_rollout_evidence_packet_self_test.json", "results/external_rollout_evidence_packet_self_test.md", "scripts/build_external_rollout_evidence_packet.py", "external_validation/rollout_evidence_packet.json", "results/external_rollout_evidence_audit.json", "results/external_rollout_metrics.json"]
+    },
+    {
+      "name": "external_strict_video_evidence_gate_claim",
+      "claim": "The repository provides a strict MP4 video evidence gate that rejects missing, placeholder, diagnostic, staged, backup/internal, non-MP4-like, undersized, or out-of-manifest video paths when strict external rollout validation is enabled.",
+      "evidence": ["scripts/validate_external_rollouts.py", "scripts/self_test_external_rollout_validator.py", "scripts/self_test_external_evidence_pipeline.py", "results/external_rollout_metrics.json", "results/external_rollout_evidence_audit.json"]
+    },
+    {
+      "name": "external_rollout_uniqueness_gate_claim",
+      "claim": "The repository provides a strict rollout uniqueness gate that rejects raw JSONL rollout packages with duplicate episode identities or reused rollout video paths.",
+      "evidence": ["scripts/validate_external_rollouts.py", "scripts/self_test_external_rollout_validator.py", "results/external_rollout_metrics.json", "results/external_rollout_evidence_audit.json"]
+    },
+    {
+      "name": "external_rollout_sample_count_gate_claim",
+      "claim": "The repository provides a strict rollout sample-count gate that rejects raw JSONL rollout packages when manifest-declared `episodes_per_method` is below 30 or when any task/method record count differs from the manifest declaration.",
+      "evidence": ["scripts/validate_external_rollouts.py", "scripts/self_test_external_rollout_validator.py", "results/external_rollout_metrics.json", "results/external_rollout_evidence_audit.json"]
+    },
+    {
+      "name": "external_rollout_confidence_gate_claim",
+      "claim": "The repository provides confidence-gated external rollout statistics and a final rollout confidence summary gate: strict external rollout validation requires 95% bootstrap confidence bounds over raw logs to clear the predeclared success, utility, paired-win, fixed-risk coverage, and fixed-risk breach thresholds, and the final external evidence audit requires the embedded confidence summary before the external mechanism claim can pass.",
+      "evidence": ["scripts/validate_external_rollouts.py", "scripts/build_external_analysis_plan.py", "scripts/self_test_external_rollout_validator.py", "scripts/self_test_external_evidence_pipeline.py", "external_validation/statistical_analysis_plan.json", "results/external_analysis_plan_audit.json", "results/external_rollout_metrics.json"]
+    },
+    {
+      "name": "external_rollout_paired_panel_gate_claim",
+      "claim": "The repository provides a strict paired-panel gate that rejects raw JSONL rollout packages when a paired reset has duplicate method records or lacks any manifest-declared method.",
+      "evidence": ["scripts/validate_external_rollouts.py", "scripts/self_test_external_rollout_validator.py", "scripts/audit_external_pairing_integrity.py", "results/external_rollout_metrics.json", "results/external_pairing_integrity_audit.json"]
+    },
+    {
+      "name": "external_rollout_full_method_coverage_gate_claim",
+      "claim": "The repository provides a strict full-method coverage gate that rejects raw JSONL rollout packages whose manifest omits any required external method, including the primary method, oracle boundary, and all required non-oracle baselines.",
+      "evidence": ["scripts/validate_external_rollouts.py", "scripts/self_test_external_rollout_validator.py", "scripts/audit_external_evidence.py", "results/external_rollout_metrics.json", "results/external_evidence_audit.json"]
+    },
+    {
+      "name": "external_task_config_hash_gate_claim",
+      "claim": "The repository provides a strict task-config hash gate that rejects raw JSONL rollout rows when the manifest-declared task config is stale, missing, hash-mismatched, or inconsistent with row skill/risk fields.",
+      "evidence": ["scripts/validate_external_rollouts.py", "scripts/self_test_external_rollout_validator.py", "results/external_rollout_metrics.json", "results/external_rollout_evidence_audit.json"]
+    },
+    {
+      "name": "external_policy_config_hash_gate_claim",
+      "claim": "The repository provides a strict policy/config hash gate that rejects raw JSONL rollout rows when `policy_or_config_hash` does not match the manifest-declared method `checkpoint_or_config_hash`.",
+      "evidence": ["scripts/validate_external_rollouts.py", "scripts/self_test_external_rollout_validator.py", "results/external_rollout_metrics.json", "results/external_rollout_evidence_audit.json"]
+    },
+    {
+      "name": "external_ablation_collection_packet_claim",
+      "claim": "The repository provides a non-evidence external ablation collection packet that maps the strict external ablation blocker to five manifest-declared ablation work orders over the same accepted configs, skill library, resets, observation interface, and compute budget, while manifest ablation evidence and strict external evidence remain false.",
+      "evidence": ["scripts/build_external_ablation_collection_packet.py", "external_validation/ablation_collection_packet.json", "external_validation/ablation_collection_packet.md", "external_validation/ablation_collection_work_orders.csv", "results/external_ablation_collection_audit.json", "results/external_ablation_collection_audit.md", "results/external_evidence_audit.json", "results/external_collection_plan.json"]
+    },
+    {
+      "name": "external_ablation_collection_packet_self_test_claim",
+      "claim": "The repository self-tests the External ablation collection packet in temporary copied workspaces, proving the packet remains non-evidence while missing ablation work orders, premature evidence promotion, shrunken ablation budgets, strict missing-ablation drift, local-reference variant drift, missing manifest ablation booleans, vague work-order artifacts or commands, strict command drift, real manifest writes, and deleted packet files fail closed without touching real ablation-packet outputs.",
+      "evidence": ["scripts/self_test_external_ablation_collection_packet.py", "results/external_ablation_collection_packet_self_test.json", "results/external_ablation_collection_packet_self_test.md", "scripts/build_external_ablation_collection_packet.py", "external_validation/ablation_collection_packet.json", "external_validation/ablation_collection_packet.md", "external_validation/ablation_collection_work_orders.csv", "results/external_ablation_collection_audit.json"]
+    },
+    {
+      "name": "external_evidence_intake_ledger_claim",
+      "claim": "The repository provides a non-evidence external evidence intake ledger that maps every current strict external-evidence failure to its operator artifact, source packet, strict gate, and completion test while strict external evidence remains false.",
+      "evidence": ["scripts/build_external_evidence_intake_ledger.py", "external_validation/evidence_intake_ledger.json", "external_validation/evidence_intake_ledger.md", "external_validation/evidence_intake_ledger.csv", "results/external_evidence_intake_ledger_audit.json", "results/external_evidence_intake_ledger_audit.md", "results/external_evidence_audit.json", "external_validation/manifest_template.json"]
+    },
+    {
+      "name": "external_evidence_intake_ledger_self_test_claim",
+      "claim": "The repository self-tests the External evidence intake ledger in temporary copied workspaces, proving the ledger remains non-evidence while missing blocker rows, premature evidence promotion, unmapped strict failures, missing closure groups, failing source packets, manifest-template omissions, stale row source/completion fields, strict command drift, real manifest writes, and deleted ledger files fail closed without touching real evidence-intake outputs.",
+      "evidence": ["scripts/self_test_external_evidence_intake_ledger.py", "results/external_evidence_intake_ledger_self_test.json", "results/external_evidence_intake_ledger_self_test.md", "scripts/build_external_evidence_intake_ledger.py", "external_validation/evidence_intake_ledger.json", "external_validation/evidence_intake_ledger.md", "external_validation/evidence_intake_ledger.csv", "results/external_evidence_intake_ledger_audit.json"]
+    },
+    {
+      "name": "external_operator_return_package_contract_claim",
+      "claim": "The repository provides a non-evidence External operator return package contract that converts current external preflight blockers into exact returned artifact classes, per-task JSONL/video/config counts, per-method checkpoint/config hash requirements, and strict command spine before manifest promotion.",
+      "evidence": ["scripts/build_external_operator_return_package_contract.py", "external_validation/operator_return_package_contract.json", "external_validation/operator_return_package_contract.md", "external_validation/operator_return_package_contract.csv", "results/external_operator_return_package_contract_audit.json", "results/external_operator_return_package_contract_audit.md", "results/external_evidence_preflight.json", "external_validation/manifest_template.json"]
+    },
+    {
+      "name": "external_baseline_contract_claim",
+      "claim": "The repository provides a non-evidence baseline implementation contract, method matrix, and per-method adapter specs, while explicitly recording that independent non-oracle implementations are still missing.",
+      "evidence": ["scripts/build_external_baseline_contract.py", "external_validation/baseline_implementation_contract.md", "external_validation/baseline_implementation_matrix.csv", "external_validation/baseline_specs/barrier_certified_energy_composer_v5.json", "external_validation/baseline_specs/oracle_basin_composer.json", "results/external_baseline_contract_audit.json", "results/external_baseline_contract_audit.md"]
+    },
+    {
+      "name": "external_baseline_contract_self_test_claim",
+      "claim": "The repository self-tests the External baseline contract in temporary copied workspaces, proving the contract remains non-evidence while missing required methods, premature implementation readiness, independent-source drift, oracle-boundary drift, weakened fairness invariants, adapter API drift, spec method-binding drift, missing release-evidence requirements, missing policy/config hash log requirements, and deleted contract files fail closed without touching real baseline-contract outputs.",
+      "evidence": ["scripts/self_test_external_baseline_contract.py", "results/external_baseline_contract_self_test.json", "results/external_baseline_contract_self_test.md", "scripts/build_external_baseline_contract.py", "external_validation/baseline_implementation_contract.md", "external_validation/baseline_implementation_matrix.csv", "results/external_baseline_contract_audit.json"]
+    },
+    {
+      "name": "external_adapter_scaffold_claim",
+      "claim": "The repository provides non-evidence executable adapter scaffolds for every external method, and strict external validation rejects scaffold-only adapters until real independent implementations replace them.",
+      "evidence": ["scripts/build_external_adapter_scaffolds.py", "scripts/self_test_external_adapter_scaffold_guard.py", "external_validation/baseline_adapter_scaffold.md", "external_validation/baselines/README.md", "external_validation/baselines/barrier_certified_energy_composer_v5/adapter_template.py", "external_validation/baselines/barrier_certified_energy_composer_v5/adapter_metadata.json", "results/external_adapter_scaffold_audit.json", "results/external_adapter_scaffold_audit.md"]
+    },
+    {
+      "name": "external_reference_adapter_claim",
+      "claim": "The repository provides executable reference adapters for every external method and audits them against the adapter contract, while explicitly treating them as implementation-only artifacts rather than rollout evidence.",
+      "evidence": ["scripts/build_external_reference_adapters.py", "external_validation/baselines/common_reference_adapter.py", "external_validation/baselines/barrier_certified_energy_composer_v5/adapter.py", "external_validation/reference_adapter_report.md", "results/external_reference_adapter_audit.json", "results/external_reference_adapter_audit.md"]
+    },
+    {
+      "name": "external_local_dry_run_claim",
+      "claim": "The repository provides a non-evidence local dry run that converts frozen local rows into the external JSONL schema and recomputes external-style metrics from those records without satisfying the external evidence gate.",
+      "evidence": ["scripts/build_external_local_dry_run.py", "external_validation/local_dry_run/manifest.json", "external_validation/local_dry_run/logs/peg_place_regrasp.jsonl", "results/external_local_dry_run_metrics.json", "results/external_local_dry_run_metrics.md"]
+    },
+    {
+      "name": "external_adapter_contract_claim",
+      "claim": "The repository provides a non-evidence adapter contract validator, strict adapter-evidence self-test, strict independent method provenance gate, strict checkpoint/config artifact gate, and strict fairness-contract binding gate for the seam-model API, while recording that real strict manifest-declared adapter evidence is still missing until independent implementations replace scaffolds/reference adapters, declare non-leaky provenance, and supply checkpoint/config artifacts whose hashes cannot be replaced by implementation-source hashes, and bind every method provenance entry to the manifest fairness contract.",
+      "evidence": ["scripts/validate_external_adapters.py", "scripts/self_test_external_adapter_evidence.py", "scripts/build_external_method_implementation_packet.py", "external_validation/method_implementation_packet.md", "external_validation/manifest_template.json", "results/external_method_implementation_audit.json", "results/external_adapter_contract_audit.json", "results/external_adapter_contract_audit.md", "results/external_adapter_contract_evidence_audit.json", "results/external_adapter_contract_evidence_audit.md", "results/external_adapter_evidence_self_test.json", "results/external_adapter_evidence_self_test.md", "external_validation/README.md"]
+    },
+    {
+      "name": "external_release_package_self_test_claim",
+      "claim": "The repository provides a tooling-only release-package self-test that proves the hash-lock gate can accept temporary complete artifacts while rejecting missing manifests, local-dry-run, template, scaffold, placeholder, staged, backup, diagnostic, fallback, empty-video-directory, and non-MP4-like log-video artifacts, and the final external evidence audit independently recomputes manifest release artifact hashes before submission readiness can pass.",
+      "evidence": ["scripts/self_test_external_release_package.py", "results/external_release_package_self_test.json", "results/external_release_package_self_test.md", "scripts/audit_external_release_package.py", "results/external_release_package_audit.json", "results/external_release_package_audit.md"]
+    },
+    {
+      "name": "external_pairing_integrity_self_test_claim",
+      "claim": "The repository provides a tooling-only pairing-integrity self-test that proves complete paired-reset method panels can pass while missing manifests, duplicate method rows, incomplete panels, and terminal-sample mismatches are rejected.",
+      "evidence": ["scripts/self_test_external_pairing_integrity.py", "results/external_pairing_integrity_self_test.json", "results/external_pairing_integrity_self_test.md", "scripts/audit_external_pairing_integrity.py", "results/external_pairing_integrity_audit.json", "results/external_pairing_integrity_audit.md"]
+    },
+    {
+      "name": "novelty_boundary_claim",
+      "claim": "The paper positions itself as a local world/action model for skill seams rather than a low-level controller, diffusion policy, full behavior-composition stack, or general robot world model.",
+      "evidence": ["paper/main.tex", "paper/references.bib", "docs/related_work_coverage_matrix.md", "results/related_work_audit.json", "results/reference_integrity_audit.json"]
+    },
+    {
+      "name": "reference_integrity_claim",
+      "claim": "The generated bibliography has machine-checked citation coverage, required fields, recent primary identifiers, and verified Haonan/Yilun-adjacent arXiv/CVPR source metadata.",
+      "evidence": ["paper/references.bib", "results/reference_integrity_audit.json", "results/reference_integrity_audit.md", "scripts/audit_reference_integrity.py"]
+    },
+    {
+      "name": "manuscript_readability_claim",
+      "claim": "The generated manuscript has a machine-checked central framing, novelty boundary, contact-as-testbed positioning, and no stale manual related-work blocker; this remains a readability/framing audit rather than external robot evidence.",
+      "evidence": ["scripts/audit_manuscript_readability.py", "results/manuscript_readability_audit.json", "results/manuscript_readability_audit.md", "paper/main.tex"]
+    },
+    {
+      "name": "presentation_quality_claim",
+      "claim": "The compiled local PDF has a machine-checked presentation surface with blue citation/reference links, vector figures, clean log hygiene, canonical artifact parity, and no internal status leaks.",
+      "evidence": ["paper/main.pdf", "paper/main.tex", "results/presentation_quality_audit.json", "results/presentation_quality_audit.md"]
+    },
+    {
+      "name": "figure_readability_claim",
+      "claim": "The main figure companions pass a machine-checkable readability audit for render resolution, foreground density, contrast, edge margins, color detail, and manuscript references.",
+      "evidence": ["scripts/audit_figure_readability.py", "results/figure_readability_audit.json", "results/figure_readability_audit.md", "figures/skill_seam_action_model_overview_v5.png"]
+    },
+    {
+      "name": "camera_ready_design_claim",
+      "claim": "The compiled PDF passes a machine-checkable camera-ready design audit over rendered pages, page density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.",
+      "evidence": ["scripts/audit_camera_ready_design.py", "results/camera_ready_design_audit.json", "results/camera_ready_design_audit.md", "paper/main.pdf"]
+    }
+  ],
+  "unsupported_claims_to_block": [
+    "ICLR-main ready",
+    "deployment-ready",
+    "hardware-safe",
+    "state-of-the-art real-robot skill composition",
+    "real-robot validation passed",
+    "high-fidelity validation passed",
+    "external evidence passed"
+  ],
+  "required_boundary_phrases": [
+    {
+      "file": "paper/main.tex",
+      "phrase": "The current evidence supports a bounded claim"
+    },
+    {
+      "file": "paper/main.tex",
+      "phrase": "external robot or high-fidelity validation remains necessary before deployment-level claims"
+    },
+    {
+      "file": "paper/main.tex",
+      "phrase": "the paper remains a local study with a bounded claim"
+    },
+    {
+      "file": "README.md",
+      "phrase": "it is still not ICLR-main ready"
+    },
+    {
+      "file": "child_status.md",
+      "phrase": "ICLR main ready: no"
+    },
+    {
+      "file": "docs/submission_readiness_audit_v5.md",
+      "phrase": "ICLR-main ready: no"
+    }
+  ],
+  "audited_text_files": [
+    "paper/main.tex",
+    "README.md",
+    "child_status.md",
+    "docs/claims.md",
+    "docs/final_audit.md",
+    "docs/haonan_yilun_outreach_package.md",
+    "docs/haonan_yilun_send_ready_outreach.md",
+    "docs/independent_validation_protocol.md",
+    "docs/related_work_coverage_matrix.md",
+    "docs/local_model_release.md",
+    "docs/reviewer_response_packet.md",
+    "docs/external_evidence_closure_brief.md",
+    "docs/independent_validation_launch_ticket.md",
+    "docs/maniskill_render_host_qualification_brief.md",
+    "docs/submission_readiness_decision.md",
+    "docs/submission_readiness_audit_v5.md",
+    "docs/submission_version_log.md",
+    "external_validation/platform_qualification_checklist.md",
+    "external_validation/statistical_analysis_plan.md",
+    "external_validation/platform_onboarding_packet.md",
+    "external_validation/fidelity_provenance_packet.md",
+    "external_validation/fidelity_acceptance_draft.md",
+    "external_validation/backend_integration_packet.md",
+    "external_validation/config_manifest_packet.md",
+    "external_validation/rollout_evidence_packet.md",
+    "external_validation/ablation_collection_packet.md",
+    "external_validation/evidence_intake_ledger.md",
+    "external_validation/operator_return_package_contract.md",
+    "external_validation/method_implementation_packet.md",
+    "external_validation/method_manifest_cutover_checklist.md",
+    "external_validation/independent_validation_launch_ticket.md",
+    "external_validation/render_host_qualification_brief.md",
+    "external_validation/README.md",
+    "results/external_analysis_plan_audit.md",
+    "results/external_platform_onboarding_audit.md",
+    "results/external_fidelity_provenance_audit.md",
+    "results/external_fidelity_acceptance_draft_audit.md",
+    "results/external_backend_integration_audit.md",
+    "results/external_backend_integration_packet_self_test.md",
+    "results/external_runner_backend_self_test.md",
+    "results/external_config_manifest_audit.md",
+    "results/external_rollout_evidence_audit.md",
+    "results/external_ablation_collection_audit.md",
+    "results/external_evidence_intake_ledger_audit.md",
+    "results/external_operator_return_package_contract_audit.md",
+    "results/external_evidence_closure_brief.md",
+    "results/external_evidence_closure_brief_self_test.md",
+    "results/independent_validation_launch_ticket_audit.md",
+    "results/external_method_implementation_audit.md",
+    "results/maniskill_render_video_preflight_audit.md",
+    "results/maniskill_render_resource_sweep.md",
+    "results/maniskill_render_host_qualification_brief_audit.md",
+    "results/maniskill_pilot_runtime_liveness_audit.md",
+    "results/maniskill_pilot_reset_timeout_triage.md",
+    "results/external_operator_packet.md",
+    "results/external_operator_handoff_bundle.md",
+    "results/reviewer_response_packet_audit.md",
+    "results/submission_readiness_gap_audit.md"
+  ]
+}

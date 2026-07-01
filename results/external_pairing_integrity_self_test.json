@@ -1,0 +1,44 @@
+{
+  "checks": [
+    {
+      "detail": "ready=True, records=1440/1440",
+      "name": "synthetic_pairing_integrity_passes",
+      "passed": true
+    },
+    {
+      "detail": "ready=False, blockers=['external_validation/manifest.json has not been written from real evidence']",
+      "name": "missing_manifest_fails_pairing_readiness",
+      "passed": true
+    },
+    {
+      "detail": "ready=False, blockers=2",
+      "name": "duplicate_method_rows_fail_pairing",
+      "passed": true
+    },
+    {
+      "detail": "ready=False, blockers=2",
+      "name": "missing_method_panel_fails_pairing",
+      "passed": true
+    },
+    {
+      "detail": "ready=False, blockers=1",
+      "name": "terminal_sample_mismatch_fails_pairing",
+      "passed": true
+    },
+    {
+      "detail": "before=d4abaa9c2083d8b5932139dfee0b1d79b4c7c97acb9088c2e55245b26f624148, after=d4abaa9c2083d8b5932139dfee0b1d79b4c7c97acb9088c2e55245b26f624148",
+      "name": "real_pairing_integrity_report_not_overwritten",
+      "passed": true
+    }
+  ],
+  "duplicate_pairing_ready": false,
+  "missing_manifest_ready": false,
+  "missing_method_pairing_ready": false,
+  "not_external_evidence": true,
+  "passed": true,
+  "real_pairing_integrity_report_after": "d4abaa9c2083d8b5932139dfee0b1d79b4c7c97acb9088c2e55245b26f624148",
+  "real_pairing_integrity_report_before": "d4abaa9c2083d8b5932139dfee0b1d79b4c7c97acb9088c2e55245b26f624148",
+  "synthetic_pairing_ready": true,
+  "terminal_mismatch_pairing_ready": false,
+  "version": "external_pairing_integrity_self_test_v1"
+}

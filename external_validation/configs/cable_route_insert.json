@@ -1,0 +1,62 @@
+{
+  "backend_task_binding": {
+    "accepted_task_binding_ready": false,
+    "binding_source": "external_validation/maniskill_task_bindings.json",
+    "binding_strength": "surrogate_contact_candidate",
+    "primary_env_id": "PullCubeTool-v1",
+    "primary_route": "maniskill_sapien_primary",
+    "registry_probe_report": "results/maniskill_task_binding_probe.json",
+    "requires_operator_fidelity_acceptance": true,
+    "strict_external_evidence_ready": false,
+    "support_env_ids": [
+      "InsertFlower-v1"
+    ]
+  },
+  "compute_budget": {
+    "same_for_all_non_oracle_methods": true,
+    "simulator_query_budget": 4096,
+    "wall_clock_seconds": 120
+  },
+  "config_schema": "external_validation/config_schema_v1.json",
+  "fixed_risk_budget": 0.15,
+  "must_log": [
+    "initial_state_hash",
+    "terminal_sample_set_hash",
+    "basin_estimate",
+    "barrier_score",
+    "descent_continuity_score",
+    "predicted_seam_risk",
+    "decision",
+    "failure_diagnosis",
+    "success",
+    "realized_seam_breach",
+    "utility",
+    "video_path",
+    "policy_or_config_hash"
+  ],
+  "not_external_evidence": false,
+  "observation_interface": {
+    "camera_logging_required": true,
+    "contact_or_force_logging_required": true,
+    "state_logging_required": true
+  },
+  "paired_reset_count": 30,
+  "platform_name": "ManiSkill-SAPIEN-primary-route",
+  "platform_type": "high_fidelity_sim",
+  "required_fidelity_checks": [
+    "deformable or contact-rich cable model",
+    "endpoint pose/state logging",
+    "failure video coverage"
+  ],
+  "reset_protocol": {
+    "initial_state_hash_required": true,
+    "paired_resets": true,
+    "reset_count": 30,
+    "scene_id_template": "cable_route_insert_reset_{index:03d}"
+  },
+  "seam_under_test": "deformable cable state must remain in the insertion basin after routing",
+  "skill_i": "route_cable_along_path",
+  "skill_j": "insert_cable_endpoint",
+  "task_family": "cable_route_insert",
+  "version": "paper119_external_config_v1"
+}

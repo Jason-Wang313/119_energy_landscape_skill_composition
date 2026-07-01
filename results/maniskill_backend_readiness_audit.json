@@ -1,0 +1,123 @@
+{
+  "backend_contract_ready": true,
+  "backend_file": "external_validation/runner/maniskill_reference_backend.py",
+  "backend_module": "external_validation.runner.maniskill_reference_backend",
+  "checks": [
+    {
+      "detail": "external_validation.runner.maniskill_reference_backend",
+      "name": "backend_module_supplied",
+      "passed": true
+    },
+    {
+      "detail": "Backend",
+      "name": "backend_constructs",
+      "passed": true
+    },
+    {
+      "detail": "all required methods are implemented by the backend class",
+      "name": "backend_contract_complete",
+      "passed": true
+    },
+    {
+      "detail": "{\"backend_module_sha256\": \"B02E244CF41FBABA7CC1382CED8B2F9701E015E7D1E9679805A006694355783F\", \"collection_enabled_by_default\": false, \"contact_solver\": \"operator_verified_by_fidelity_acceptance\", \"gymnasium_version\": \"1.2.3\", \"maniskill_version\": \"3.0.1\", \"not_external_evidence\": true, \"operating_system\": \"Windows-10-10.0.26200-SP0\", \"physics_timestep\": \"operator_verified_by_fidelity_acceptance\", \"platform_name\": \"ManiSkill-SAPIEN-reference-backend\", \"platform_type\": \"high_fidelity_sim\", \"platform_version\": \"3.0.1\", \"python_version\": \"3.10.11\", \"render_backend\": \"cpu\", \"render_height\": 128, \"render_width\": 128, \"renderer\": \"cpu\", \"sapien_version\": \"3.0.3\", \"sensor_modalities\": [\"state\", \"camera\", \"contact_or_force\"], \"shader_pack\": \"minimal\", \"torch_version\": \"2.10.0\"}",
+      "name": "backend_platform_provenance_complete",
+      "passed": true
+    },
+    {
+      "detail": "tasks=4",
+      "name": "backend_loads_all_task_configs",
+      "passed": true
+    },
+    {
+      "detail": "methods=12",
+      "name": "backend_reports_method_hashes",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/runner/maniskill_reference_backend.py",
+      "name": "backend_file_exists",
+      "passed": true
+    },
+    {
+      "detail": "TEMPLATE_ONLY=False, BACKEND_NAME='maniskill_sapien_reference_backend_v1'",
+      "name": "backend_is_non_template",
+      "passed": true
+    },
+    {
+      "detail": "strict backend-module contract passed",
+      "name": "backend_contract_strict_passes",
+      "passed": true
+    },
+    {
+      "detail": "not_external_evidence=True, collection_enabled_by_default=False",
+      "name": "platform_provenance_marks_non_evidence",
+      "passed": true
+    },
+    {
+      "detail": "methods=12, missing=[]",
+      "name": "delegates_to_reference_adapters",
+      "passed": true
+    },
+    {
+      "detail": "ManiSkill reference backend is contract-qualified but fail-closed for official collection; set PAPER119_MANISKILL_REFERENCE_BACKEND_ENABLE_ROLLOUTS=1 only inside an accepted external run.",
+      "name": "official_collection_fail_closed_without_enable_flag",
+      "passed": true
+    },
+    {
+      "detail": "record_video requires a reset ManiSkill environment",
+      "name": "video_export_fail_closed_before_reset",
+      "passed": true
+    },
+    {
+      "detail": "bytes=1587, mp4_header=True",
+      "name": "synthetic_mp4_writer_passes",
+      "passed": true
+    },
+    {
+      "detail": "render did not return an RGB-like frame",
+      "name": "state_shaped_arrays_rejected_as_video_frames",
+      "passed": true
+    },
+    {
+      "detail": "backend contract and MP4-writer readiness are not rollout evidence, fidelity acceptance, logs, or manifest evidence",
+      "name": "strict_evidence_remains_false",
+      "passed": true
+    }
+  ],
+  "failed_checks": [],
+  "method_adapter_count": 12,
+  "not_external_evidence": true,
+  "official_collection_ready": false,
+  "passed": true,
+  "platform_provenance": {
+    "backend_module_sha256": "B02E244CF41FBABA7CC1382CED8B2F9701E015E7D1E9679805A006694355783F",
+    "collection_enabled_by_default": false,
+    "contact_solver": "operator_verified_by_fidelity_acceptance",
+    "gymnasium_version": "1.2.3",
+    "maniskill_version": "3.0.1",
+    "not_external_evidence": true,
+    "operating_system": "Windows-10-10.0.26200-SP0",
+    "physics_timestep": "operator_verified_by_fidelity_acceptance",
+    "platform_name": "ManiSkill-SAPIEN-reference-backend",
+    "platform_type": "high_fidelity_sim",
+    "platform_version": "3.0.1",
+    "python_version": "3.10.11",
+    "render_backend": "cpu",
+    "render_height": 128,
+    "render_width": 128,
+    "renderer": "cpu",
+    "sapien_version": "3.0.3",
+    "sensor_modalities": [
+      "state",
+      "camera",
+      "contact_or_force"
+    ],
+    "shader_pack": "minimal",
+    "torch_version": "2.10.0"
+  },
+  "reference_backend_available": true,
+  "reference_backend_collection_enabled": false,
+  "strict_external_evidence_ready": false,
+  "version": "maniskill_reference_backend_audit_v1",
+  "video_writer_ready": true
+}

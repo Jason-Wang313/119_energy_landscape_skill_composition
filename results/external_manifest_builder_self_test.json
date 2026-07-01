@@ -1,0 +1,56 @@
+{
+  "checks": [
+    {
+      "detail": "ready=True, records=1440, schema_errors=0",
+      "name": "synthetic_manifest_builder_ready",
+      "passed": true
+    },
+    {
+      "detail": "exists=True, version='external_validation_v1'",
+      "name": "synthetic_manifest_written_to_temp_output",
+      "passed": true
+    },
+    {
+      "detail": "success_margin=0.19999999999999996, utility_margin=0.30999999999999994, paired_win_rate=1.0",
+      "name": "raw_logs_drive_manifest_metrics",
+      "passed": true
+    },
+    {
+      "detail": "counts={'code': 13, 'configs': 4, 'logs': 4, 'videos': 4, 'checkpoints': 12}",
+      "name": "release_artifacts_scanned_from_temp_workspace",
+      "passed": true
+    },
+    {
+      "detail": "tasks=4, methods=12",
+      "name": "config_and_method_hashes_materialized",
+      "passed": true
+    },
+    {
+      "detail": "checklist_rows=35",
+      "name": "manifest_report_and_checklist_written_in_temp_workspace",
+      "passed": true
+    },
+    {
+      "detail": "ready=False, written=False, write_blockers=1",
+      "name": "partial_manifest_with_missing_method_refuses_write",
+      "passed": true
+    },
+    {
+      "detail": "template_status={'ready_to_write_manifest': False, 'records_loaded': 0, 'schema_error_count': 4, 'warning_count': 11, 'manifest_write_blocking_count': 28}",
+      "name": "real_manifest_template_remains_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "before={'external_validation/manifest.json': None, 'external_validation/manifest_assembly_checklist.csv': '572827C87C44B677B5897E2215FB3741E38000A40C23AF5141AFBC923D31FAEA', 'results/external_manifest_builder_report.json': 'E42AA95FC6891B19A22EA26DDB1249D711A1D85C7531F906D476F3AF738FE852', 'results/external_manifest_builder_report.md': 'F616DFADCC8944C7029F1EE3D9E3DE0EFB46823580B7E1DB809CAE3F166A58C4'}, after={'external_validation/manifest.json': None, 'external_validation/manifest_assembly_checklist.csv': '572827C87C44B677B5897E2215FB3741E38000A40C23AF5141AFBC923D31FAEA', 'results/external_manifest_builder_report.json': 'E42AA95FC6891B19A22EA26DDB1249D711A1D85C7531F906D476F3AF738FE852', 'results/external_manifest_builder_report.md': 'F616DFADCC8944C7029F1EE3D9E3DE0EFB46823580B7E1DB809CAE3F166A58C4'}",
+      "name": "real_manifest_and_reports_not_overwritten",
+      "passed": true
+    }
+  ],
+  "not_external_evidence": true,
+  "passed": true,
+  "real_manifest_and_reports_unchanged": true,
+  "real_template_ready_to_write_manifest": false,
+  "synthetic_manifest_written": true,
+  "synthetic_records_loaded": 1440,
+  "version": "external_manifest_builder_self_test_v1"
+}

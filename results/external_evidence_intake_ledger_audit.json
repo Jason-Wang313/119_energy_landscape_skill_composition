@@ -1,0 +1,497 @@
+{
+  "blocking_failure_count": 37,
+  "checks": [
+    {
+      "detail": "not_external_evidence=True, strict_external_evidence_ready=False",
+      "name": "ledger_is_non_evidence_and_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "submission_ready=False, failures=37, packet_failures=37",
+      "name": "strict_external_evidence_is_currently_missing",
+      "passed": true
+    },
+    {
+      "detail": "unmapped=[], packet_unmapped=[], mapped=37, failures=37",
+      "name": "every_blocking_failure_is_mapped",
+      "passed": true
+    },
+    {
+      "detail": "missing=[], closure_group_names=['ablations', 'fidelity_acceptance', 'manifest_contract', 'methods_baselines', 'oracle_boundary', 'pairing_release', 'rollout_logs_videos_metrics', 'task_configs']",
+      "name": "all_required_closure_groups_present",
+      "passed": true
+    },
+    {
+      "detail": "collection, rollout, config, method, ablation, and fidelity packets loaded",
+      "name": "source_packets_loaded",
+      "passed": true
+    },
+    {
+      "detail": "manifest template has version, tasks, methods, release_artifacts, and ablations",
+      "name": "manifest_template_declares_expected_evidence_fields",
+      "passed": true
+    },
+    {
+      "detail": "strict command spine covers fidelity, configs, adapters, collection, manifest, rollouts, pairing, release, and final evidence",
+      "name": "strict_command_spine_covers_final_evidence_path",
+      "passed": true
+    },
+    {
+      "detail": "each ledger row mirrors the current strict failure detail, closure group, source packet, strict gate, completion test, and evidence_ready_now=false",
+      "name": "rows_are_actionable_and_source_bound",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json remains absent before real evidence",
+      "name": "no_real_manifest_written",
+      "passed": true
+    }
+  ],
+  "closure_groups": [
+    {
+      "failure_count": 1,
+      "name": "ablations",
+      "source_packet": "external_validation/ablation_collection_packet.md; external_validation/ablation_collection_work_orders.csv",
+      "strict_gate": "python scripts\\build_external_ablation_collection_packet.py; python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "failure_count": 1,
+      "name": "fidelity_acceptance",
+      "source_packet": "external_validation/fidelity_provenance_packet.md; external_validation/fidelity_acceptance_draft.md; results/fidelity_acceptance_materialization_plan.md",
+      "strict_gate": "python scripts\\materialize_fidelity_acceptance.py ... --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write; python scripts\\audit_external_fidelity_acceptance.py --strict"
+    },
+    {
+      "failure_count": 9,
+      "name": "manifest_contract",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv",
+      "strict_gate": "python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "failure_count": 4,
+      "name": "methods_baselines",
+      "source_packet": "external_validation/method_implementation_packet.md; external_validation/method_implementation_work_orders.csv; external_validation/method_reference_provenance.csv",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict; python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "failure_count": 2,
+      "name": "oracle_boundary",
+      "source_packet": "external_validation/manifest_template.json; docs/claim_evidence_ledger.json",
+      "strict_gate": "python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "failure_count": 6,
+      "name": "pairing_release",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv; results/external_release_package_audit.md; results/external_pairing_integrity_audit.md",
+      "strict_gate": "python scripts\\audit_external_pairing_integrity.py --strict; python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "failure_count": 11,
+      "name": "rollout_logs_videos_metrics",
+      "source_packet": "external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv",
+      "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "failure_count": 3,
+      "name": "task_configs",
+      "source_packet": "external_validation/config_manifest_packet.md; external_validation/config_manifest_work_orders.csv",
+      "strict_gate": "python scripts\\materialize_external_configs.py ... --confirm-real-platform --write; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_configs.py --strict"
+    }
+  ],
+  "ledger_csv_path": "external_validation/evidence_intake_ledger.csv",
+  "ledger_path": "external_validation/evidence_intake_ledger.md",
+  "mapped_failure_count": 37,
+  "not_external_evidence": true,
+  "operator_commands": [
+    "python scripts\\audit_external_fidelity_acceptance.py --strict",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\validate_external_adapters.py --strict",
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
+    "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+    "python scripts\\audit_external_postcollection_seal_consistency.py",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "passed": true,
+  "rows": [
+    {
+      "closure_group": "manifest_contract",
+      "completion_test": "manifest exists, has external_validation_v1, declares log schema, route, tasks, methods, fairness flags, recomputed metrics, and release hashes",
+      "current_detail": "external_validation/manifest.json is missing",
+      "evidence_ready_now": "false",
+      "failure_name": "manifest_exists",
+      "operator_artifacts": "external_validation/manifest.json with version, route, schema, shared-skill/reset/observation/compute flags, task/method declarations, metrics, and release artifacts",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv",
+      "strict_gate": "python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "closure_group": "fidelity_acceptance",
+      "completion_test": "fidelity acceptance audit reports acceptance_ready=true while strict external evidence remains false until manifest-backed rollout gates pass",
+      "current_detail": "acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'",
+      "evidence_ready_now": "false",
+      "failure_name": "external_fidelity_acceptance_ready",
+      "operator_artifacts": "external_validation/fidelity_acceptance.json promoted from the draft with independent operator signoff, accepted platform provenance, render-backed video readiness, paired replay, commit, and skill hash before collection; real rollout evidence and manifest declaration close postcollection gates",
+      "source_packet": "external_validation/fidelity_provenance_packet.md; external_validation/fidelity_acceptance_draft.md; results/fidelity_acceptance_materialization_plan.md",
+      "strict_gate": "python scripts\\materialize_fidelity_acceptance.py ... --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write; python scripts\\audit_external_fidelity_acceptance.py --strict"
+    },
+    {
+      "closure_group": "methods_baselines",
+      "completion_test": "strict adapter evidence audit passes; scaffolds/reference adapters are not counted as evidence, and checkpoint_or_config_hash values match real checkpoint_or_config_path artifacts rather than implementation source",
+      "current_detail": "passed=False, adapters=0",
+      "evidence_ready_now": "false",
+      "failure_name": "external_adapter_contract_evidence_passed",
+      "operator_artifacts": "manifest-declared independent non-oracle implementations/configs/checkpoints with hashes and JSONL policy_or_config_hash values matching the manifest",
+      "source_packet": "external_validation/method_implementation_packet.md; external_validation/method_implementation_work_orders.csv; external_validation/method_reference_provenance.csv",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict; python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "closure_group": "task_configs",
+      "completion_test": "strict config evidence audit passes with manifest-declared configs and matching hashes",
+      "current_detail": "passed=False, configs=0",
+      "evidence_ready_now": "false",
+      "failure_name": "external_config_evidence_passed",
+      "operator_artifacts": "external_validation/configs/<task_family>.json consumed by the accepted backend, with config_hash declared in external_validation/manifest.json",
+      "source_packet": "external_validation/config_manifest_packet.md; external_validation/config_manifest_work_orders.csv",
+      "strict_gate": "python scripts\\materialize_external_configs.py ... --confirm-real-platform --write; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_configs.py --strict"
+    },
+    {
+      "closure_group": "manifest_contract",
+      "completion_test": "manifest exists, has external_validation_v1, declares log schema, route, tasks, methods, fairness flags, recomputed metrics, and release hashes",
+      "current_detail": "version=None",
+      "evidence_ready_now": "false",
+      "failure_name": "manifest_version",
+      "operator_artifacts": "external_validation/manifest.json with version, route, schema, shared-skill/reset/observation/compute flags, task/method declarations, metrics, and release artifacts",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv",
+      "strict_gate": "python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "closure_group": "manifest_contract",
+      "completion_test": "manifest exists, has external_validation_v1, declares log schema, route, tasks, methods, fairness flags, recomputed metrics, and release hashes",
+      "current_detail": "log_schema=''",
+      "evidence_ready_now": "false",
+      "failure_name": "manifest_declares_log_schema",
+      "operator_artifacts": "external_validation/manifest.json with version, route, schema, shared-skill/reset/observation/compute flags, task/method declarations, metrics, and release artifacts",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv",
+      "strict_gate": "python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "closure_group": "manifest_contract",
+      "completion_test": "manifest exists, has external_validation_v1, declares log schema, route, tasks, methods, fairness flags, recomputed metrics, and release hashes",
+      "current_detail": "route='', counts={'real_robot': 0, 'high_fidelity_sim': 0, 'mixed': 0}",
+      "evidence_ready_now": "false",
+      "failure_name": "validation_route",
+      "operator_artifacts": "external_validation/manifest.json with version, route, schema, shared-skill/reset/observation/compute flags, task/method declarations, metrics, and release artifacts",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv",
+      "strict_gate": "python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "closure_group": "manifest_contract",
+      "completion_test": "manifest exists, has external_validation_v1, declares log schema, route, tasks, methods, fairness flags, recomputed metrics, and release hashes",
+      "current_detail": "shared_skill_library=None",
+      "evidence_ready_now": "false",
+      "failure_name": "shared_skill_library",
+      "operator_artifacts": "external_validation/manifest.json with version, route, schema, shared-skill/reset/observation/compute flags, task/method declarations, metrics, and release artifacts",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv",
+      "strict_gate": "python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "closure_group": "manifest_contract",
+      "completion_test": "manifest exists, has external_validation_v1, declares log schema, route, tasks, methods, fairness flags, recomputed metrics, and release hashes",
+      "current_detail": "same_initial_states=None",
+      "evidence_ready_now": "false",
+      "failure_name": "same_initial_states",
+      "operator_artifacts": "external_validation/manifest.json with version, route, schema, shared-skill/reset/observation/compute flags, task/method declarations, metrics, and release artifacts",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv",
+      "strict_gate": "python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "closure_group": "manifest_contract",
+      "completion_test": "manifest exists, has external_validation_v1, declares log schema, route, tasks, methods, fairness flags, recomputed metrics, and release hashes",
+      "current_detail": "same_observation_interface=None",
+      "evidence_ready_now": "false",
+      "failure_name": "same_observation_interface",
+      "operator_artifacts": "external_validation/manifest.json with version, route, schema, shared-skill/reset/observation/compute flags, task/method declarations, metrics, and release artifacts",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv",
+      "strict_gate": "python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "closure_group": "manifest_contract",
+      "completion_test": "manifest exists, has external_validation_v1, declares log schema, route, tasks, methods, fairness flags, recomputed metrics, and release hashes",
+      "current_detail": "same_compute_budget=None",
+      "evidence_ready_now": "false",
+      "failure_name": "same_compute_budget",
+      "operator_artifacts": "external_validation/manifest.json with version, route, schema, shared-skill/reset/observation/compute flags, task/method declarations, metrics, and release artifacts",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv",
+      "strict_gate": "python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "closure_group": "manifest_contract",
+      "completion_test": "manifest exists, has external_validation_v1, declares log schema, route, tasks, methods, fairness flags, recomputed metrics, and release hashes",
+      "current_detail": "paired_resets=None",
+      "evidence_ready_now": "false",
+      "failure_name": "paired_resets",
+      "operator_artifacts": "external_validation/manifest.json with version, route, schema, shared-skill/reset/observation/compute flags, task/method declarations, metrics, and release artifacts",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv",
+      "strict_gate": "python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "closure_group": "task_configs",
+      "completion_test": "strict config evidence audit passes with manifest-declared configs and matching hashes",
+      "current_detail": "invalid=[], families=[]",
+      "evidence_ready_now": "false",
+      "failure_name": "valid_task_families",
+      "operator_artifacts": "external_validation/configs/<task_family>.json consumed by the accepted backend, with config_hash declared in external_validation/manifest.json",
+      "source_packet": "external_validation/config_manifest_packet.md; external_validation/config_manifest_work_orders.csv",
+      "strict_gate": "python scripts\\materialize_external_configs.py ... --confirm-real-platform --write; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_configs.py --strict"
+    },
+    {
+      "closure_group": "task_configs",
+      "completion_test": "strict config evidence audit passes with manifest-declared configs and matching hashes",
+      "current_detail": "weak=[]",
+      "evidence_ready_now": "false",
+      "failure_name": "episodes_per_method",
+      "operator_artifacts": "external_validation/configs/<task_family>.json consumed by the accepted backend, with config_hash declared in external_validation/manifest.json",
+      "source_packet": "external_validation/config_manifest_packet.md; external_validation/config_manifest_work_orders.csv",
+      "strict_gate": "python scripts\\materialize_external_configs.py ... --confirm-real-platform --write; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_configs.py --strict"
+    },
+    {
+      "closure_group": "rollout_logs_videos_metrics",
+      "completion_test": "external rollout metric validator passes and manifest metrics match recomputed rollout metrics",
+      "current_detail": "no task logs declared",
+      "evidence_ready_now": "false",
+      "failure_name": "episode_log_schema",
+      "operator_artifacts": "manifest-declared external_validation/logs/*.jsonl, external_validation/videos/<task_family>/ files, and metrics recomputed from raw JSONL logs",
+      "source_packet": "external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv",
+      "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "closure_group": "rollout_logs_videos_metrics",
+      "completion_test": "external rollout metric validator passes and manifest metrics match recomputed rollout metrics",
+      "current_detail": "missing=[]",
+      "evidence_ready_now": "false",
+      "failure_name": "task_video_dirs",
+      "operator_artifacts": "manifest-declared external_validation/logs/*.jsonl, external_validation/videos/<task_family>/ files, and metrics recomputed from raw JSONL logs",
+      "source_packet": "external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv",
+      "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "closure_group": "methods_baselines",
+      "completion_test": "strict adapter evidence audit passes; scaffolds/reference adapters are not counted as evidence, and checkpoint_or_config_hash values match real checkpoint_or_config_path artifacts rather than implementation source",
+      "current_detail": "missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'oracle_basin_composer', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen']",
+      "evidence_ready_now": "false",
+      "failure_name": "required_methods",
+      "operator_artifacts": "manifest-declared independent non-oracle implementations/configs/checkpoints with hashes and JSONL policy_or_config_hash values matching the manifest",
+      "source_packet": "external_validation/method_implementation_packet.md; external_validation/method_implementation_work_orders.csv; external_validation/method_reference_provenance.csv",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict; python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "closure_group": "methods_baselines",
+      "completion_test": "strict adapter evidence audit passes; scaffolds/reference adapters are not counted as evidence, and checkpoint_or_config_hash values match real checkpoint_or_config_path artifacts rather than implementation source",
+      "current_detail": "missing=['barrier_certified_energy_composer_v5', 'behavior_cloned_skill_chain', 'cem_trajectory_composer', 'diffusion_skill_stitcher', 'energy_compatibility_heuristic', 'greedy_module_sequence', 'option_graph_planner', 'proposed_energy_landscape_composer_v4_1', 'residual_rl_composer', 'stable_dmp_handoff', 'tamp_feasibility_screen']",
+      "evidence_ready_now": "false",
+      "failure_name": "independent_method_implementations",
+      "operator_artifacts": "manifest-declared independent non-oracle implementations/configs/checkpoints with hashes and JSONL policy_or_config_hash values matching the manifest",
+      "source_packet": "external_validation/method_implementation_packet.md; external_validation/method_implementation_work_orders.csv; external_validation/method_reference_provenance.csv",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict; python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "closure_group": "rollout_logs_videos_metrics",
+      "completion_test": "external rollout metric validator passes and manifest metrics match recomputed rollout metrics",
+      "current_detail": "value=None, threshold=0.05",
+      "evidence_ready_now": "false",
+      "failure_name": "external_success_margin",
+      "operator_artifacts": "manifest-declared external_validation/logs/*.jsonl, external_validation/videos/<task_family>/ files, and metrics recomputed from raw JSONL logs",
+      "source_packet": "external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv",
+      "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "closure_group": "rollout_logs_videos_metrics",
+      "completion_test": "external rollout metric validator passes and manifest metrics match recomputed rollout metrics",
+      "current_detail": "value=None, threshold=0.08",
+      "evidence_ready_now": "false",
+      "failure_name": "external_utility_margin",
+      "operator_artifacts": "manifest-declared external_validation/logs/*.jsonl, external_validation/videos/<task_family>/ files, and metrics recomputed from raw JSONL logs",
+      "source_packet": "external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv",
+      "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "closure_group": "rollout_logs_videos_metrics",
+      "completion_test": "external rollout metric validator passes and manifest metrics match recomputed rollout metrics",
+      "current_detail": "value=None, threshold=0.7",
+      "evidence_ready_now": "false",
+      "failure_name": "paired_win_rate",
+      "operator_artifacts": "manifest-declared external_validation/logs/*.jsonl, external_validation/videos/<task_family>/ files, and metrics recomputed from raw JSONL logs",
+      "source_packet": "external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv",
+      "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "closure_group": "rollout_logs_videos_metrics",
+      "completion_test": "external rollout metric validator passes and manifest metrics match recomputed rollout metrics",
+      "current_detail": "value=None, threshold=0.02",
+      "evidence_ready_now": "false",
+      "failure_name": "fixed_risk_breach",
+      "operator_artifacts": "manifest-declared external_validation/logs/*.jsonl, external_validation/videos/<task_family>/ files, and metrics recomputed from raw JSONL logs",
+      "source_packet": "external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv",
+      "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "closure_group": "rollout_logs_videos_metrics",
+      "completion_test": "external rollout metric validator passes and manifest metrics match recomputed rollout metrics",
+      "current_detail": "value=None, threshold=0.55",
+      "evidence_ready_now": "false",
+      "failure_name": "fixed_risk_coverage",
+      "operator_artifacts": "manifest-declared external_validation/logs/*.jsonl, external_validation/videos/<task_family>/ files, and metrics recomputed from raw JSONL logs",
+      "source_packet": "external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv",
+      "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "closure_group": "rollout_logs_videos_metrics",
+      "completion_test": "external rollout metric validator passes and manifest metrics match recomputed rollout metrics",
+      "current_detail": "positive=0, total=0",
+      "evidence_ready_now": "false",
+      "failure_name": "positive_task_family_coverage",
+      "operator_artifacts": "manifest-declared external_validation/logs/*.jsonl, external_validation/videos/<task_family>/ files, and metrics recomputed from raw JSONL logs",
+      "source_packet": "external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv",
+      "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "closure_group": "rollout_logs_videos_metrics",
+      "completion_test": "external rollout metric validator passes and manifest metrics match recomputed rollout metrics",
+      "current_detail": "passed=False, episodes=0",
+      "evidence_ready_now": "false",
+      "failure_name": "external_rollout_metrics_passed",
+      "operator_artifacts": "manifest-declared external_validation/logs/*.jsonl, external_validation/videos/<task_family>/ files, and metrics recomputed from raw JSONL logs",
+      "source_packet": "external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv",
+      "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "closure_group": "rollout_logs_videos_metrics",
+      "completion_test": "external rollout metric validator passes and manifest metrics match recomputed rollout metrics",
+      "current_detail": "version=None, all_primary=None, missing=['external_success_margin', 'external_utility_margin', 'fixed_risk_breach', 'fixed_risk_coverage', 'paired_win_rate'], failing=[], positive_task_gate=None",
+      "evidence_ready_now": "false",
+      "failure_name": "external_rollout_confidence_gates_passed",
+      "operator_artifacts": "manifest-declared external_validation/logs/*.jsonl, external_validation/videos/<task_family>/ files, and metrics recomputed from raw JSONL logs",
+      "source_packet": "external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv",
+      "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "closure_group": "pairing_release",
+      "completion_test": "pairing_ready=true and release_package_ready=true under strict audits",
+      "current_detail": "pairing_ready=False, blocking_missing_count=1",
+      "evidence_ready_now": "false",
+      "failure_name": "external_pairing_integrity_ready",
+      "operator_artifacts": "complete paired-reset method panels and release_artifacts entries for code, configs, logs, videos, and checkpoints with valid SHA256 hashes",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv; results/external_release_package_audit.md; results/external_pairing_integrity_audit.md",
+      "strict_gate": "python scripts\\audit_external_pairing_integrity.py --strict; python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "closure_group": "pairing_release",
+      "completion_test": "pairing_ready=true and release_package_ready=true under strict audits",
+      "current_detail": "release_package_ready=False, blocking_missing_count=1",
+      "evidence_ready_now": "false",
+      "failure_name": "external_release_package_ready",
+      "operator_artifacts": "complete paired-reset method panels and release_artifacts entries for code, configs, logs, videos, and checkpoints with valid SHA256 hashes",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv; results/external_release_package_audit.md; results/external_pairing_integrity_audit.md",
+      "strict_gate": "python scripts\\audit_external_pairing_integrity.py --strict; python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "closure_group": "rollout_logs_videos_metrics",
+      "completion_test": "external rollout metric validator passes and manifest metrics match recomputed rollout metrics",
+      "current_detail": "external_success_margin: manifest=None, rollout=None; external_utility_margin: manifest=None, rollout=None; paired_win_rate: manifest=None, rollout=None; fixed_risk_breach: manifest=None, rollout=None",
+      "evidence_ready_now": "false",
+      "failure_name": "manifest_metrics_match_rollout",
+      "operator_artifacts": "manifest-declared external_validation/logs/*.jsonl, external_validation/videos/<task_family>/ files, and metrics recomputed from raw JSONL logs",
+      "source_packet": "external_validation/rollout_evidence_packet.md; external_validation/rollout_evidence_work_orders.csv",
+      "strict_gate": "python external_validation\\runner\\real_collection_runner.py ...; python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+    },
+    {
+      "closure_group": "oracle_boundary",
+      "completion_test": "oracle_reported=true and oracle_stronger_or_saturated_explained is explicitly set in manifest metrics",
+      "current_detail": "oracle_reported=None",
+      "evidence_ready_now": "false",
+      "failure_name": "oracle_reported",
+      "operator_artifacts": "manifest metrics explain oracle upper-bound status and saturation/boundary interpretation without using the oracle as an independent baseline",
+      "source_packet": "external_validation/manifest_template.json; docs/claim_evidence_ledger.json",
+      "strict_gate": "python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "closure_group": "oracle_boundary",
+      "completion_test": "oracle_reported=true and oracle_stronger_or_saturated_explained is explicitly set in manifest metrics",
+      "current_detail": "oracle_stronger_or_saturated_explained=None",
+      "evidence_ready_now": "false",
+      "failure_name": "oracle_boundary",
+      "operator_artifacts": "manifest metrics explain oracle upper-bound status and saturation/boundary interpretation without using the oracle as an independent baseline",
+      "source_packet": "external_validation/manifest_template.json; docs/claim_evidence_ledger.json",
+      "strict_gate": "python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "closure_group": "ablations",
+      "completion_test": "external evidence audit reports all five manifest.ablations.* flags true with manifest-declared external ablation evidence",
+      "current_detail": "missing=['basin_overlap', 'barrier_height', 'descent_continuity', 'risk_calibration', 'seam_repair']",
+      "evidence_ready_now": "false",
+      "failure_name": "external_ablations",
+      "operator_artifacts": "manifest-declared external ablation logs/videos for basin_overlap, barrier_height, descent_continuity, risk_calibration, and seam_repair on the same accepted configs, skill library, resets, observation interface, and compute budget",
+      "source_packet": "external_validation/ablation_collection_packet.md; external_validation/ablation_collection_work_orders.csv",
+      "strict_gate": "python scripts\\build_external_ablation_collection_packet.py; python scripts\\build_external_postcollection_evidence_seal.py ...; python scripts\\audit_external_postcollection_seal_consistency.py; python scripts\\build_external_manifest.py --write --check-video-paths; python scripts\\audit_external_evidence.py --strict"
+    },
+    {
+      "closure_group": "pairing_release",
+      "completion_test": "pairing_ready=true and release_package_ready=true under strict audits",
+      "current_detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
+      "evidence_ready_now": "false",
+      "failure_name": "release_code",
+      "operator_artifacts": "complete paired-reset method panels and release_artifacts entries for code, configs, logs, videos, and checkpoints with valid SHA256 hashes",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv; results/external_release_package_audit.md; results/external_pairing_integrity_audit.md",
+      "strict_gate": "python scripts\\audit_external_pairing_integrity.py --strict; python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "closure_group": "pairing_release",
+      "completion_test": "pairing_ready=true and release_package_ready=true under strict audits",
+      "current_detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
+      "evidence_ready_now": "false",
+      "failure_name": "release_configs",
+      "operator_artifacts": "complete paired-reset method panels and release_artifacts entries for code, configs, logs, videos, and checkpoints with valid SHA256 hashes",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv; results/external_release_package_audit.md; results/external_pairing_integrity_audit.md",
+      "strict_gate": "python scripts\\audit_external_pairing_integrity.py --strict; python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "closure_group": "pairing_release",
+      "completion_test": "pairing_ready=true and release_package_ready=true under strict audits",
+      "current_detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
+      "evidence_ready_now": "false",
+      "failure_name": "release_logs",
+      "operator_artifacts": "complete paired-reset method panels and release_artifacts entries for code, configs, logs, videos, and checkpoints with valid SHA256 hashes",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv; results/external_release_package_audit.md; results/external_pairing_integrity_audit.md",
+      "strict_gate": "python scripts\\audit_external_pairing_integrity.py --strict; python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "closure_group": "pairing_release",
+      "completion_test": "pairing_ready=true and release_package_ready=true under strict audits",
+      "current_detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
+      "evidence_ready_now": "false",
+      "failure_name": "release_videos",
+      "operator_artifacts": "complete paired-reset method panels and release_artifacts entries for code, configs, logs, videos, and checkpoints with valid SHA256 hashes",
+      "source_packet": "external_validation/manifest_assembly_checklist.csv; results/external_release_package_audit.md; results/external_pairing_integrity_audit.md",
+      "strict_gate": "python scripts\\audit_external_pairing_integrity.py --strict; python scripts\\audit_external_release_package.py --strict"
+    },
+    {
+      "closure_group": "methods_baselines",
+      "completion_test": "strict adapter evidence audit passes; scaffolds/reference adapters are not counted as evidence, and checkpoint_or_config_hash values match real checkpoint_or_config_path artifacts rather than implementation source",
+      "current_detail": "entries=0, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=[], hash_errors=[]",
+      "evidence_ready_now": "false",
+      "failure_name": "release_checkpoints",
+      "operator_artifacts": "manifest-declared independent non-oracle implementations/configs/checkpoints with hashes and JSONL policy_or_config_hash values matching the manifest",
+      "source_packet": "external_validation/method_implementation_packet.md; external_validation/method_implementation_work_orders.csv; external_validation/method_reference_provenance.csv",
+      "strict_gate": "python scripts\\validate_external_adapters.py --strict; python scripts\\audit_external_evidence.py --strict"
+    }
+  ],
+  "source_external_evidence_audit": "results/external_evidence_audit.json",
+  "source_manifest_template": "external_validation/manifest_template.json",
+  "strict_external_evidence_ready": false,
+  "unmapped_failures": [],
+  "version": "external_evidence_intake_ledger_v1"
+}

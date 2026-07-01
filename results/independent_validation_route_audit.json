@@ -1,0 +1,194 @@
+{
+  "artifacts": {
+    "audit_json": "results/independent_validation_route_audit.json",
+    "audit_markdown": "results/independent_validation_route_audit.md",
+    "route_markdown": "external_validation/independent_validation_route.md",
+    "route_matrix": "external_validation/independent_validation_route_matrix.csv"
+  },
+  "checks": [
+    {
+      "detail": "passed=True",
+      "name": "collection_plan_passed",
+      "passed": true
+    },
+    {
+      "detail": "total_required_records=1440",
+      "name": "collection_plan_scale_preserved",
+      "passed": true
+    },
+    {
+      "detail": "routes=4",
+      "name": "route_count_ge_4",
+      "passed": true
+    },
+    {
+      "detail": "route_id=maniskill_sapien_primary, owner='Jason or any external operator with a GPU workstation'",
+      "name": "primary_route_independent_of_haonan",
+      "passed": true
+    },
+    {
+      "detail": "planned=['cable_route_insert', 'door_open_navigation', 'drawer_to_pick_transfer', 'peg_place_regrasp'], primary_coverage=['cable_route_insert', 'door_open_navigation', 'drawer_to_pick_transfer', 'peg_place_regrasp']",
+      "name": "primary_route_covers_collection_tasks",
+      "passed": true
+    },
+    {
+      "detail": "closed=['independent_non_oracle_baselines', 'manifest_backed_external_evidence', 'raw_jsonl_metric_recompute', 'real_task_configs']",
+      "name": "all_readiness_blockers_have_route_closure",
+      "passed": true
+    },
+    {
+      "detail": "high-fidelity simulator routes include official source URLs",
+      "name": "public_sim_routes_have_official_sources",
+      "passed": true
+    },
+    {
+      "detail": "commands=['python scripts\\\\validate_external_configs.py --strict', 'python scripts\\\\validate_external_adapters.py --strict', 'python scripts\\\\build_external_manifest.py --write --check-video-paths', 'python scripts\\\\validate_external_rollouts.py --write-results --check-video-paths --strict', 'python scripts\\\\audit_external_evidence.py --strict']",
+      "name": "strict_commands_cover_manifest_rollout_config_adapter_audits",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/independent_validation_route_matrix.csv",
+      "name": "route_matrix_written",
+      "passed": true
+    },
+    {
+      "detail": "route artifacts are execution planning only",
+      "name": "route_marked_not_evidence",
+      "passed": true
+    }
+  ],
+  "failed_checks": [],
+  "not_external_evidence": true,
+  "passed": true,
+  "planned_tasks": [
+    "peg_place_regrasp",
+    "drawer_to_pick_transfer",
+    "door_open_navigation",
+    "cable_route_insert"
+  ],
+  "primary_route": "maniskill_sapien_primary",
+  "purpose": "Non-Haonan execution route for collecting the missing external validation package.",
+  "readiness_blockers": [
+    "manifest_backed_external_evidence",
+    "raw_jsonl_metric_recompute",
+    "real_task_configs",
+    "independent_non_oracle_baselines"
+  ],
+  "routes": [
+    {
+      "blocking_requirements_closed": [
+        "manifest_backed_external_evidence",
+        "raw_jsonl_metric_recompute",
+        "real_task_configs",
+        "independent_non_oracle_baselines"
+      ],
+      "expected_owner": "Jason or any external operator with a GPU workstation",
+      "fidelity_risk": "Must document contact solver, friction, compliance, sensor rendering, and any deformable or cable proxy before the route can count as accepted high-fidelity evidence.",
+      "independent_of_haonan": true,
+      "official_sources": [
+        "https://maniskill.readthedocs.io/en/latest/user_guide/index.html",
+        "https://sapien.ucsd.edu/"
+      ],
+      "platform_family": "ManiSkill/SAPIEN",
+      "platform_type": "high_fidelity_sim",
+      "rank": 1,
+      "requires_gpu": true,
+      "role": "primary independent high-fidelity simulator route",
+      "route_id": "maniskill_sapien_primary",
+      "task_coverage": [
+        "peg_place_regrasp",
+        "drawer_to_pick_transfer",
+        "door_open_navigation",
+        "cable_route_insert"
+      ],
+      "why": "Open-source manipulation simulator route for collecting paired state, camera, contact, action, and video evidence without needing Haonan's lab access."
+    },
+    {
+      "blocking_requirements_closed": [
+        "raw_jsonl_metric_recompute",
+        "real_task_configs",
+        "independent_non_oracle_baselines"
+      ],
+      "expected_owner": "Jason or an independent replication operator",
+      "fidelity_risk": "Likely insufficient alone for the full four-task high-fidelity route unless door/cable tasks are implemented and accepted with contact/dynamics provenance.",
+      "independent_of_haonan": true,
+      "official_sources": [
+        "https://mujoco.readthedocs.io/",
+        "https://robosuite.ai/"
+      ],
+      "platform_family": "MuJoCo/robosuite",
+      "platform_type": "high_fidelity_sim",
+      "rank": 2,
+      "requires_gpu": false,
+      "role": "cross-engine replication route",
+      "route_id": "mujoco_robosuite_cross_engine",
+      "task_coverage": [
+        "peg_place_regrasp",
+        "drawer_to_pick_transfer",
+        "tool_use_handover"
+      ],
+      "why": "Useful for a second physics-engine check and CPU-friendlier manipulation replication, especially for tabletop handoff tasks."
+    },
+    {
+      "blocking_requirements_closed": [
+        "manifest_backed_external_evidence",
+        "raw_jsonl_metric_recompute",
+        "real_task_configs",
+        "independent_non_oracle_baselines"
+      ],
+      "expected_owner": "external operator with NVIDIA GPU and Isaac stack",
+      "fidelity_risk": "Installation and GPU requirements are heavier; accepted evidence still needs a filled fidelity acceptance file, hash-locked configs, raw JSONL logs, and videos.",
+      "independent_of_haonan": true,
+      "official_sources": [
+        "https://docs.isaacsim.omniverse.nvidia.com/",
+        "https://isaac-sim.github.io/IsaacLab/"
+      ],
+      "platform_family": "Isaac Sim/Isaac Lab",
+      "platform_type": "high_fidelity_sim",
+      "rank": 3,
+      "requires_gpu": true,
+      "role": "sensor-realistic secondary simulator route",
+      "route_id": "isaac_sim_lab_secondary",
+      "task_coverage": [
+        "peg_place_regrasp",
+        "drawer_to_pick_transfer",
+        "door_open_navigation",
+        "cable_route_insert"
+      ],
+      "why": "Useful if the paper needs more realistic rendering, sensor logs, and PhysX-based robot-environment interaction as an independent validation route."
+    },
+    {
+      "blocking_requirements_closed": [
+        "manifest_backed_external_evidence",
+        "raw_jsonl_metric_recompute",
+        "real_task_configs",
+        "independent_non_oracle_baselines"
+      ],
+      "expected_owner": "any independent lab with a manipulation platform",
+      "fidelity_risk": "Requires external collaborator time and hardware access, but is not Haonan-specific.",
+      "independent_of_haonan": true,
+      "official_sources": [],
+      "platform_family": "independent robot lab",
+      "platform_type": "real_robot",
+      "rank": 4,
+      "requires_gpu": false,
+      "role": "physical robot confirmation route",
+      "route_id": "third_party_robot_lab",
+      "task_coverage": [
+        "peg_place_regrasp",
+        "drawer_to_pick_transfer",
+        "door_open_navigation"
+      ],
+      "why": "Best evidence if available: real robot paired resets, calibrated camera/force/state logs, videos, and method implementations run through the same blinded protocol."
+    }
+  ],
+  "source_collection_plan": "results/external_collection_plan.json",
+  "strict_commands": [
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\validate_external_adapters.py --strict",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "version": "independent_validation_route_v1"
+}

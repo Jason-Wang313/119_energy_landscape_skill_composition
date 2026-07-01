@@ -1,0 +1,82 @@
+{
+  "checks": [
+    {
+      "detail": "not_external_evidence=True, strict_external_evidence_ready=False, postcollection_seal_ready=False, ready_for_manifest_promotion=False",
+      "name": "seal_is_non_evidence_and_fail_closed",
+      "passed": true
+    },
+    {
+      "detail": "precollection_freeze_ready=False",
+      "name": "precollection_freeze_loaded_but_not_real_ready",
+      "passed": true
+    },
+    {
+      "detail": "logs=0, records=0, videos=0",
+      "name": "raw_logs_and_videos_absent_before_collection",
+      "passed": true
+    },
+    {
+      "detail": "operator='', machine='', date='', run_id='paper119_external_validation_run'",
+      "name": "operator_metadata_still_required",
+      "passed": true
+    },
+    {
+      "detail": "artifact_count=11",
+      "name": "hash_inventory_written_for_precollection_inputs",
+      "passed": true
+    },
+    {
+      "detail": "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id paper119_external_validation_run --unsealed-alias-map\npython scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id paper119_external_validation_run --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map\npython external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id paper119_external_validation_run --unsealed-alias-map\npython scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id paper119_external_validation_run --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>\npython scripts\\audit_external_postcollection_seal_consistency.py\npython scripts\\build_external_manifest.py --write --check-video-paths\npython scripts\\validate_external_configs.py --strict\npython scripts\\validate_external_adapters.py --strict\npython scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict\npython scripts\\audit_external_pairing_integrity.py --strict\npython scripts\\audit_external_release_package.py --strict\npython scripts\\audit_external_evidence.py --strict",
+      "name": "strict_sequence_places_seal_after_collection_before_manifest",
+      "passed": true
+    },
+    {
+      "detail": "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id paper119_external_validation_run --unsealed-alias-map\npython scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id paper119_external_validation_run --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map\npython external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id paper119_external_validation_run --unsealed-alias-map\npython scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id paper119_external_validation_run --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>\npython scripts\\audit_external_postcollection_seal_consistency.py\npython scripts\\build_external_manifest.py --write --check-video-paths\npython scripts\\validate_external_configs.py --strict\npython scripts\\validate_external_adapters.py --strict\npython scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict\npython scripts\\audit_external_pairing_integrity.py --strict\npython scripts\\audit_external_release_package.py --strict\npython scripts\\audit_external_evidence.py --strict",
+      "name": "seal_references_consistency_gate_before_manifest",
+      "passed": true
+    },
+    {
+      "detail": "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id paper119_external_validation_run --unsealed-alias-map\npython scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id paper119_external_validation_run --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map\npython external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id paper119_external_validation_run --unsealed-alias-map\npython scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id paper119_external_validation_run --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>\npython scripts\\audit_external_postcollection_seal_consistency.py\npython scripts\\build_external_manifest.py --write --check-video-paths\npython scripts\\validate_external_configs.py --strict\npython scripts\\validate_external_adapters.py --strict\npython scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict\npython scripts\\audit_external_pairing_integrity.py --strict\npython scripts\\audit_external_release_package.py --strict\npython scripts\\audit_external_evidence.py --strict",
+      "name": "seal_references_rollout_pairing_release_final_gates",
+      "passed": true
+    },
+    {
+      "detail": "rollout=False, config=False, adapter=False, external=False",
+      "name": "strict_evidence_gates_still_false",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json absent before real evidence",
+      "name": "no_real_manifest_written",
+      "passed": true
+    }
+  ],
+  "expected_records": 1440,
+  "jsonl_record_count": 0,
+  "not_external_evidence": true,
+  "operator_regeneration_command": "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id <specific_run_id> --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+  "passed": true,
+  "postcollection_seal_ready": false,
+  "ready_for_manifest_promotion": false,
+  "rollout_video_count": 0,
+  "seal_csv_path": "external_validation/postcollection_evidence_seal.csv",
+  "seal_md_path": "external_validation/postcollection_evidence_seal.md",
+  "seal_path": "external_validation/postcollection_evidence_seal.json",
+  "sealed_artifact_count": 11,
+  "strict_command_sequence": [
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id paper119_external_validation_run --unsealed-alias-map",
+    "python scripts\\build_external_precollection_freeze_receipt.py --backend-module <module_or_path> --run-id paper119_external_validation_run --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-locked <YYYY-MM-DD> --unsealed-alias-map",
+    "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id paper119_external_validation_run --unsealed-alias-map",
+    "python scripts\\build_external_postcollection_evidence_seal.py --backend-module <module_or_path> --run-id paper119_external_validation_run --operator-id <operator_or_lab> --collection-machine <machine_or_robot_platform> --date-sealed <YYYY-MM-DD>",
+    "python scripts\\audit_external_postcollection_seal_consistency.py",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\validate_external_adapters.py --strict",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "strict_external_evidence_ready": false,
+  "version": "external_postcollection_evidence_seal_audit_v1"
+}

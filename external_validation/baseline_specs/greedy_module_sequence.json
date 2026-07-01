@@ -1,0 +1,47 @@
+{
+  "adapter_api": {
+    "initialize": "load method config/checkpoint and declare method_name, version, and hashes",
+    "log": "emit predicted risk, diagnosis, decision, repair action, policy/config hash, and timing for the episode JSONL record",
+    "propose": "given shared observation, terminal samples, skill_i, skill_j, and compute budget, return seam decision and optional repair",
+    "reset": "clear method-local state between paired resets unless the method explicitly models online memory and logs it"
+  },
+  "allowed_inputs": [
+    "skill library",
+    "current observation",
+    "task graph",
+    "shared reset metadata"
+  ],
+  "fairness_invariants": [
+    "same skill library for every non-oracle method",
+    "same initial state, scene_id, seed, and skill pair for paired comparisons",
+    "same observation interface and no hidden state except where the platform exposes it to all methods",
+    "same compute budget or a predeclared budget measured in wall-clock time and simulator queries",
+    "same logging schema, video requirement, and policy/config hash requirement",
+    "oracle_basin_composer is reported only as a post hoc upper bound and is excluded from strongest non-oracle selection"
+  ],
+  "forbidden_advantages": [
+    "energy seam labels",
+    "post hoc basin truth",
+    "extra reset attempts"
+  ],
+  "method": "greedy_module_sequence",
+  "not_external_evidence": true,
+  "required_entrypoint": "select_next_skill_and_handoff",
+  "required_release_evidence": {
+    "checkpoint_or_config_path": "required when the method uses learned weights or tuned parameters",
+    "episode_log_fields": [
+      "method",
+      "policy_or_config_hash",
+      "predicted_seam_risk",
+      "decision",
+      "failure_diagnosis",
+      "success",
+      "realized_seam_breach",
+      "utility"
+    ],
+    "implementation_path_or_repository": "required for every non-oracle method",
+    "sha256_or_commit": "required for implementation, config, and checkpoint artifacts"
+  },
+  "role": "open-loop skill graph baseline",
+  "version": "paper119_external_baseline_spec_v1"
+}

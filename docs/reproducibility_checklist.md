@@ -1,8 +1,137 @@
 # Reproducibility Checklist
 
 - Code entry point: `src/run_experiment.py`
+- Full local build entry point: `scripts/build_submission_artifacts.ps1`
+- GitHub validation workflow: `.github/workflows/paper119-validation.yml`
 - Manuscript entry point: `scripts/generate_manuscript.py`
 - Artifact validator: `scripts/validate_submission_artifacts.py`
+- Haonan/Yilun send-ready outreach builder: `scripts/build_haonan_yilun_send_ready_outreach.py`
+  - Durable report: `results/haonan_yilun_send_ready_outreach_audit.md`
+- Local falsification validator: `scripts/audit_local_falsification.py`
+- Holdout robustness validator: `scripts/audit_holdout_robustness.py`
+- Diagnostic mechanism validator: `scripts/audit_diagnostic_mechanism.py`
+- Comparative decision-quality validator: `scripts/audit_decision_quality.py`
+- Planner-edge policy validator: `scripts/audit_planner_edge_policy.py`
+- Failure-memory adaptation validator: `scripts/audit_failure_memory_adaptation.py`
+- Local model release card builder: `scripts/build_local_model_release.py`
+- Seam prediction calibration validator: `scripts/audit_seam_prediction_calibration.py`
+- Manuscript number validator: `scripts/audit_manuscript_numbers.py`
+- Related-work validator: `scripts/audit_related_work.py`
+- Reference integrity validator: `scripts/audit_reference_integrity.py`
+- Manuscript readability validator: `scripts/audit_manuscript_readability.py`
+- Presentation quality validator: `scripts/audit_presentation_quality.py`
+- Figure readability validator: `scripts/audit_figure_readability.py`
+- Camera-ready design validator: `scripts/audit_camera_ready_design.py`
+- Claim boundary validator: `scripts/audit_claim_boundary.py`
+- Visible contribution validator: `scripts/audit_visible_contribution.py`
+- Submission readiness gap validator: `scripts/audit_submission_readiness_gap.py`
+- External collection planner: `scripts/build_external_collection_plan.py`
+- External analysis plan builder: `scripts/build_external_analysis_plan.py`
+- External platform onboarding builder: `scripts/build_external_platform_onboarding.py`
+- External fidelity provenance packet builder: `scripts/build_external_fidelity_provenance_packet.py`
+- External fidelity provenance packet self-test: `scripts/self_test_external_fidelity_provenance_packet.py`
+  - Durable report: `results/external_fidelity_provenance_packet_self_test.md`
+- External fidelity acceptance draft builder: `scripts/build_external_fidelity_acceptance_draft.py`
+- External collection runbook builder: `scripts/build_external_runbook.py`
+- External backend contract validator: `scripts/audit_external_backend_contract.py`
+- ManiSkill reference collection preflight validator: `scripts/audit_maniskill_reference_collection_preflight.py`
+- External backend integration packet builder: `scripts/build_external_backend_integration_packet.py`
+- External backend integration packet self-test: `scripts/self_test_external_backend_integration_packet.py`
+  - Durable report: `results/external_backend_integration_packet_self_test.md`
+- External config manifest packet builder: `scripts/build_external_config_manifest_packet.py`
+- External config manifest packet self-test: `scripts/self_test_external_config_manifest_packet.py`
+  - Durable report: `results/external_config_manifest_packet_self_test.md`
+- External rollout evidence packet builder: `scripts/build_external_rollout_evidence_packet.py`
+- External rollout evidence packet self-test: `scripts/self_test_external_rollout_evidence_packet.py`
+  - Durable report: `results/external_rollout_evidence_packet_self_test.md`
+- External ablation collection packet builder: `scripts/build_external_ablation_collection_packet.py`
+- External ablation collection packet self-test: `scripts/self_test_external_ablation_collection_packet.py`
+  - Durable report: `results/external_ablation_collection_packet_self_test.md`
+- External evidence intake ledger builder: `scripts/build_external_evidence_intake_ledger.py`
+- External evidence intake ledger self-test: `scripts/self_test_external_evidence_intake_ledger.py`
+  - Durable report: `results/external_evidence_intake_ledger_self_test.md`
+- External operator return package contract builder: `scripts/build_external_operator_return_package_contract.py`
+  - Durable report: `results/external_operator_return_package_contract_audit.md`
+- External precollection manifest draft builder: `scripts/build_external_precollection_manifest_draft.py`
+- External precollection manifest draft self-test: `scripts/self_test_external_precollection_manifest_draft.py`
+  - Durable report: `results/external_precollection_manifest_draft_self_test.md`
+- External collection readiness validator: `scripts/audit_external_collection_readiness.py`
+- External config validator: `scripts/validate_external_configs.py`
+- External baseline contract builder: `scripts/build_external_baseline_contract.py`
+- External baseline contract self-test: `scripts/self_test_external_baseline_contract.py`
+  - Durable report: `results/external_baseline_contract_self_test.md`
+- External method implementation packet builder: `scripts/build_external_method_implementation_packet.py`
+  - Emits adapter acceptance fixtures: `external_validation/adapter_acceptance_fixtures.{json,md,csv}`
+- External method implementation packet self-test: `scripts/self_test_external_method_implementation_packet.py`
+  - Durable report: `results/external_method_implementation_packet_self_test.md`
+- External method config materialization builder: `scripts/materialize_external_method_configs.py`
+  - Emits candidate method configs and hashes: `external_validation/method_config_materialization_plan.md`, `external_validation/method_config_candidates.csv`, `external_validation/method_config_candidates/*.json`, and `results/external_method_config_materialization_audit.md`
+- External method config materialization self-test: `scripts/self_test_external_method_config_materialization.py`
+  - Durable report: `results/external_method_config_materialization_self_test.md`
+- External config materialization self-test: `scripts/self_test_external_config_materialization.py`
+  - Durable report: `results/external_config_materialization_self_test.md`
+- External adapter scaffold builder: `scripts/build_external_adapter_scaffolds.py`
+- External reference adapter builder: `scripts/build_external_reference_adapters.py`
+- External local dry-run builder: `scripts/build_external_local_dry_run.py`
+- External adapter contract validator: `scripts/validate_external_adapters.py`
+- External manifest builder: `scripts/build_external_manifest.py`
+- External manifest builder self-test: `scripts/self_test_external_manifest_builder.py`
+- ManiSkill render machine qualification packet: `scripts/build_maniskill_render_machine_qualification.py`
+- ManiSkill render host qualification brief: `scripts/build_maniskill_render_host_qualification_brief.py`
+- ManiSkill render machine qualification self-test: `scripts/self_test_maniskill_render_machine_qualification.py`
+  - Durable report: `results/maniskill_render_machine_qualification_self_test.md`
+- External release package validator: `scripts/audit_external_release_package.py`
+- External evidence preflight validator: `scripts/audit_external_evidence_preflight.py`
+- External evidence preflight self-test: `scripts/self_test_external_evidence_preflight.py`
+  - Durable report: `results/external_evidence_preflight_self_test.md`
+- External evidence acquisition packet builder: `scripts/build_external_acquisition_packet.py`
+- External acquisition packet self-test: `scripts/self_test_external_acquisition_packet.py`
+  - Durable report: `results/external_acquisition_packet_self_test.md`
+- External evidence closure brief builder: `scripts/build_external_evidence_closure_brief.py`
+- External evidence closure brief self-test: `scripts/self_test_external_evidence_closure_brief.py`
+  - Durable report: `results/external_evidence_closure_brief_self_test.md`
+- External operator packet builder: `scripts/build_external_operator_packet.py`
+- External collection job packet builder: `scripts/build_external_collection_job_packet.py`
+- External collection job packet self-test: `scripts/self_test_external_collection_job_packet.py`
+  - Durable report: `results/external_collection_job_packet_self_test.md`
+- External collection machine bootstrap builder: `scripts/build_external_collection_machine_bootstrap.py`
+- External collection machine bootstrap self-test: `scripts/self_test_external_collection_machine_bootstrap.py`
+  - Durable report: `results/external_collection_machine_bootstrap_self_test.md`
+- Independent validation launch ticket builder: `scripts/build_independent_validation_launch_ticket.py`
+  - Durable report: `results/independent_validation_launch_ticket_audit.md`
+  - Operator copy: `external_validation/independent_validation_launch_ticket.md`
+- External operator handoff bundle builder: `scripts/build_external_operator_handoff_bundle.py`
+- External operator handoff bundle self-test: `scripts/self_test_external_operator_handoff_bundle.py`
+  - Durable report: `results/external_operator_handoff_bundle_self_test.md`
+- External operator release bundle builder: `scripts/build_external_operator_release_bundle.py`
+- External operator release bundle self-test: `scripts/self_test_external_operator_release_bundle.py`
+  - Durable report: `results/external_operator_release_bundle_self_test.md`
+- External adapter scaffold guard self-test: `scripts/self_test_external_adapter_scaffold_guard.py`
+  - Durable report: `results/external_adapter_scaffold_guard_self_test.md`
+- External evidence validator: `scripts/audit_external_evidence.py`
+- External execution readiness validator: `scripts/audit_external_execution_readiness.py`
+- External execution readiness self-test: `scripts/self_test_external_execution_readiness.py`
+  - Durable report: `results/external_execution_readiness_self_test.md`
+- External rollout metric validator: `scripts/validate_external_rollouts.py`
+- External pairing integrity validator: `scripts/audit_external_pairing_integrity.py`
+- External rollout validator self-test: `scripts/self_test_external_rollout_validator.py`
+  - Durable report: `results/external_rollout_validator_self_test.md`
+- External backend contract self-test: `scripts/self_test_external_backend_contract.py`
+- External config evidence self-test: `scripts/self_test_external_config_evidence.py` verifies temporary strict configs and prepared task configs without promoting them to evidence.
+- External adapter evidence self-test: `scripts/self_test_external_adapter_evidence.py` verifies temporary strict adapters and tracked candidate method configs without promoting them to evidence.
+- External fidelity acceptance self-test: `scripts/self_test_external_fidelity_acceptance.py`
+- External precollection freeze receipt self-test: `scripts/self_test_external_precollection_freeze_receipt.py`
+- External postcollection evidence seal self-test: `scripts/self_test_external_postcollection_evidence_seal.py`
+- External postcollection seal consistency self-test: `scripts/self_test_external_postcollection_seal_consistency.py`
+- External release package self-test: `scripts/self_test_external_release_package.py`
+- External pairing integrity self-test: `scripts/self_test_external_pairing_integrity.py`
+- External collection preflight self-test: `scripts/self_test_external_collection_preflight.py` verifies the temporary complete fixture and the tracked ManiSkill reference route after temporary accepted fidelity.
+- External runner backend-path self-test: `scripts/self_test_external_runner_backend.py`
+- External full-pipeline evidence self-test: `scripts/self_test_external_evidence_pipeline.py`
+  - Durable report: `results/external_evidence_pipeline_self_test.md`
+  - Binds the prepared task configs and tracked candidate method configs into a temporary complete package without promoting them to evidence.
+- External rollout schema: `external_validation/log_schema_v1.json`
+- Related-work coverage matrix: `docs/related_work_coverage_matrix.md`
 - Requirements: `numpy`, `matplotlib`
 - Deterministic base seed: `119_2026_5`
 - Main outputs:
@@ -24,21 +153,254 @@
   - `results/fixed_risk_seed_metrics.csv`
   - `results/fixed_risk_metrics.csv`
   - `results/fixed_risk_pairwise_stats.csv`
+  - `results/local_falsification_audit.json`
+  - `results/local_falsification_audit.md`
+  - `results/holdout_robustness_audit.json`
+  - `results/holdout_robustness_audit.md`
+  - `results/diagnostic_mechanism_audit.json`
+  - `results/diagnostic_mechanism_audit.md`
+  - `results/decision_quality_audit.json`
+  - `results/decision_quality_audit.md`
+  - `results/planner_edge_policy_audit.json`
+  - `results/planner_edge_policy_audit.md`
+  - `results/failure_memory_adaptation_audit.json`
+  - `results/failure_memory_adaptation_audit.md`
+  - `docs/local_model_release.md`
+  - `results/local_model_release_manifest.json`
+  - `results/local_model_release_audit.json`
+  - `results/local_model_release_audit.md`
+  - `results/seam_prediction_calibration_audit.json`
+  - `results/seam_prediction_calibration_audit.md`
+  - `results/manuscript_number_audit.json`
+  - `results/manuscript_number_audit.md`
+  - `results/related_work_audit.json`
+  - `results/related_work_audit.md`
+  - `results/reference_integrity_audit.json`
+  - `results/reference_integrity_audit.md`
+  - `results/manuscript_readability_audit.json`
+  - `results/manuscript_readability_audit.md`
+  - `results/presentation_quality_audit.json`
+  - `results/presentation_quality_audit.md`
+  - `results/figure_readability_audit.json`
+  - `results/figure_readability_audit.md`
+  - `results/camera_ready_design_audit.json`
+  - `results/camera_ready_design_audit.md`
+  - `results/visible_contribution_audit.json`
+  - `results/visible_contribution_audit.md`
+  - `results/submission_readiness_gap_audit.json`
+  - `results/submission_readiness_gap_audit.md`
+  - `results/external_collection_plan.json`
+  - `results/external_collection_plan.md`
+  - `external_validation/statistical_analysis_plan.json`
+  - `external_validation/statistical_analysis_plan.md`
+  - `results/external_analysis_plan_audit.json`
+  - `results/external_analysis_plan_audit.md`
+  - `external_validation/platform_onboarding_packet.json`
+  - `external_validation/platform_onboarding_packet.md`
+  - `results/external_platform_onboarding_audit.json`
+  - `results/external_platform_onboarding_audit.md`
+  - `external_validation/fidelity_provenance_packet.json`
+  - `external_validation/fidelity_provenance_packet.md`
+  - `external_validation/fidelity_provenance_work_orders.csv`
+  - `results/external_fidelity_provenance_audit.json`
+  - `results/external_fidelity_provenance_audit.md`
+  - `external_validation/fidelity_acceptance_draft.json`
+  - `external_validation/fidelity_acceptance_draft.md`
+  - `results/external_fidelity_acceptance_draft_audit.json`
+  - `results/external_fidelity_acceptance_draft_audit.md`
+  - `external_validation/backend_integration_packet.json`
+  - `external_validation/backend_integration_packet.md`
+  - `external_validation/backend_integration_work_orders.csv`
+  - `results/external_backend_integration_audit.json`
+  - `results/external_backend_integration_audit.md`
+  - `external_validation/config_manifest_packet.json`
+  - `external_validation/config_manifest_packet.md`
+  - `external_validation/config_manifest_work_orders.csv`
+  - `results/external_config_manifest_audit.json`
+  - `results/external_config_manifest_audit.md`
+  - `external_validation/rollout_evidence_packet.json`
+  - `external_validation/rollout_evidence_packet.md`
+  - `external_validation/rollout_evidence_work_orders.csv`
+  - `results/external_rollout_evidence_audit.json`
+  - `results/external_rollout_evidence_audit.md`
+  - `external_validation/ablation_collection_packet.json`
+  - `external_validation/ablation_collection_packet.md`
+  - `external_validation/ablation_collection_work_orders.csv`
+  - `results/external_ablation_collection_audit.json`
+  - `results/external_ablation_collection_audit.md`
+  - `external_validation/evidence_intake_ledger.json`
+  - `external_validation/evidence_intake_ledger.md`
+  - `external_validation/evidence_intake_ledger.csv`
+  - `results/external_evidence_intake_ledger_audit.json`
+  - `results/external_evidence_intake_ledger_audit.md`
+  - `results/external_runbook_audit.json`
+  - `results/external_runbook_audit.md`
+  - `results/external_collection_readiness_audit.json`
+  - `results/external_collection_readiness_audit.md`
+  - `results/maniskill_reference_collection_preflight_audit.json`
+  - `results/maniskill_reference_collection_preflight_audit.md`
+  - `results/maniskill_render_machine_qualification.json`
+  - `results/maniskill_render_machine_qualification.md`
+  - `results/maniskill_render_machine_qualification_self_test.json`
+  - `results/maniskill_render_machine_qualification_self_test.md`
+  - `results/maniskill_render_failure_remediation.json`
+  - `results/maniskill_render_failure_remediation.md`
+  - `results/external_config_template_audit.json`
+  - `results/external_config_template_audit.md`
+  - `results/external_config_evidence_audit.json`
+  - `results/external_config_evidence_audit.md`
+  - `results/external_baseline_contract_audit.json`
+  - `results/external_baseline_contract_audit.md`
+  - `results/external_adapter_scaffold_audit.json`
+  - `results/external_adapter_scaffold_audit.md`
+  - `results/external_adapter_scaffold_guard_self_test.json`
+  - `results/external_adapter_scaffold_guard_self_test.md`
+  - `results/external_reference_adapter_audit.json`
+  - `results/external_reference_adapter_audit.md`
+  - `results/external_local_dry_run_metrics.json`
+  - `results/external_local_dry_run_metrics.md`
+  - `results/external_adapter_contract_audit.json`
+  - `results/external_adapter_contract_audit.md`
+  - `results/external_adapter_contract_evidence_audit.json`
+  - `results/external_adapter_contract_evidence_audit.md`
+  - `results/external_adapter_evidence_self_test.json`
+  - `results/external_adapter_evidence_self_test.md`
+  - `results/external_manifest_builder_report.json`
+  - `results/external_manifest_builder_report.md`
+  - `results/external_release_package_audit.json`
+  - `results/external_release_package_audit.md`
+  - `results/external_release_package_self_test.json`
+  - `results/external_release_package_self_test.md`
+  - `results/external_evidence_preflight.json`
+  - `results/external_evidence_preflight.md`
+  - `results/external_evidence_preflight_self_test.json`
+  - `results/external_evidence_preflight_self_test.md`
+  - `results/external_acquisition_packet.json`
+  - `results/external_acquisition_packet.md`
+  - `results/external_acquisition_packet_self_test.json`
+  - `results/external_acquisition_packet_self_test.md`
+  - `results/external_operator_packet.json`
+  - `results/external_operator_packet.md`
+  - `external_validation/collection_job_packet.json`
+  - `external_validation/collection_job_packet.md`
+  - `external_validation/collection_job_commands.ps1`
+  - `external_validation/collection_job_commands.sh`
+  - `external_validation/collection_job_checklist.csv`
+  - `results/external_collection_job_packet_audit.json`
+  - `results/external_collection_job_packet_audit.md`
+  - `results/external_collection_job_packet_self_test.json`
+  - `results/external_collection_job_packet_self_test.md`
+  - `external_validation/collection_machine_bootstrap.json`
+  - `external_validation/collection_machine_bootstrap.md`
+  - `external_validation/collection_machine_bootstrap.ps1`
+  - `external_validation/collection_machine_bootstrap.sh`
+  - `results/external_collection_machine_bootstrap_audit.json`
+  - `results/external_collection_machine_bootstrap_audit.md`
+  - `results/external_collection_machine_bootstrap_self_test.json`
+  - `results/external_collection_machine_bootstrap_self_test.md`
+  - `results/external_operator_handoff_bundle.json`
+  - `results/external_operator_handoff_bundle.md`
+  - `results/external_operator_handoff_bundle_self_test.json`
+  - `results/external_operator_handoff_bundle_self_test.md`
+  - `external_validation/operator_release_bundle_manifest.csv`
+  - `external_validation/operator_release_bundle_README.md`
+  - `results/external_operator_release_bundle_plan.json`
+  - `results/external_operator_release_bundle_plan.md`
+  - `results/external_operator_release_bundle_self_test.json`
+  - `results/external_operator_release_bundle_self_test.md`
+  - `results/external_pairing_integrity_audit.json`
+  - `results/external_pairing_integrity_audit.md`
+  - `results/external_pairing_integrity_self_test.json`
+  - `results/external_pairing_integrity_self_test.md`
+  - `results/external_rollout_validator_self_test.json`
+  - `results/external_rollout_validator_self_test.md`
+  - `results/external_execution_readiness_audit.json`
+  - `results/external_execution_readiness_audit.md`
+  - `results/external_execution_readiness_self_test.json`
+  - `results/external_execution_readiness_self_test.md`
   - `results/summary.json`
   - `results/summary.txt`
+- External collection scaffolding:
+  - `external_validation/collection_runbook.md`
+  - `external_validation/operator_record_sheet.csv`
+  - `external_validation/task_cards/peg_place_regrasp.md`
+  - `external_validation/task_cards/drawer_to_pick_transfer.md`
+  - `external_validation/task_cards/door_open_navigation.md`
+  - `external_validation/task_cards/cable_route_insert.md`
+  - `external_validation/config_templates/peg_place_regrasp.json`
+  - `external_validation/config_templates/drawer_to_pick_transfer.json`
+  - `external_validation/config_templates/door_open_navigation.json`
+  - `external_validation/config_templates/cable_route_insert.json`
+  - `external_validation/config_schema_v1.json`
+  - `external_validation/fidelity_provenance_packet.json`
+  - `external_validation/fidelity_provenance_packet.md`
+  - `external_validation/fidelity_provenance_work_orders.csv`
+  - `external_validation/fidelity_acceptance_draft.json`
+  - `external_validation/fidelity_acceptance_draft.md`
+  - `external_validation/config_manifest_packet.json`
+  - `external_validation/config_manifest_packet.md`
+  - `external_validation/config_manifest_work_orders.csv`
+  - `external_validation/rollout_evidence_packet.json`
+  - `external_validation/rollout_evidence_packet.md`
+  - `external_validation/rollout_evidence_work_orders.csv`
+  - `external_validation/platform_qualification_checklist.md`
+  - `external_validation/backend_integration_packet.json`
+  - `external_validation/backend_integration_packet.md`
+  - `external_validation/backend_integration_work_orders.csv`
+- External baseline implementation scaffolding:
+  - `external_validation/baseline_implementation_contract.md`
+  - `external_validation/baseline_implementation_matrix.csv`
+  - `external_validation/method_implementation_packet.json`
+  - `external_validation/method_implementation_packet.md`
+  - `external_validation/method_implementation_work_orders.csv`
+  - `external_validation/baseline_specs/barrier_certified_energy_composer_v5.json`
+  - `external_validation/baseline_specs/oracle_basin_composer.json`
+  - `external_validation/baseline_adapter_scaffold.md`
+  - `external_validation/baselines/README.md`
+  - `external_validation/baselines/barrier_certified_energy_composer_v5/adapter_template.py`
+  - `external_validation/baselines/barrier_certified_energy_composer_v5/adapter_metadata.json`
+  - `external_validation/baselines/common_reference_adapter.py`
+  - `external_validation/baselines/barrier_certified_energy_composer_v5/adapter.py`
+  - `external_validation/baselines/barrier_certified_energy_composer_v5/reference_adapter_metadata.json`
+  - `external_validation/reference_adapter_report.md`
+  - `external_validation/adapter_acceptance_fixtures.json`
+  - `external_validation/adapter_acceptance_fixtures.md`
+  - `external_validation/adapter_acceptance_fixtures.csv`
+  - `external_validation/local_dry_run/manifest.json`
+  - `external_validation/local_dry_run/logs/peg_place_regrasp.jsonl`
+  - `results/external_local_dry_run_metrics.json`
+  - `results/external_reference_adapter_audit.json`
+  - `results/external_adapter_contract_audit.json`
+  - `results/external_adapter_contract_evidence_audit.json`
+  - `results/external_method_implementation_audit.json`
+  - `results/external_method_implementation_audit.md`
+  - `results/external_adapter_evidence_self_test.json`
 - Main figures:
+  - `figures/skill_seam_action_model_overview_v5.pdf`
+  - `figures/skill_seam_action_model_overview_v5.png`
+  - `figures/energy_landscape_composition_hard_success_v5.pdf`
   - `figures/energy_landscape_composition_hard_success_v5.png`
+  - `figures/energy_landscape_composition_utility_risk_v5.pdf`
   - `figures/energy_landscape_composition_utility_risk_v5.png`
+  - `figures/energy_landscape_composition_ablation_v5.pdf`
   - `figures/energy_landscape_composition_ablation_v5.png`
+  - `figures/energy_landscape_composition_stress_sweep_v5.pdf`
   - `figures/energy_landscape_composition_stress_sweep_v5.png`
+  - `figures/energy_landscape_composition_fixed_coverage_v5.pdf`
   - `figures/energy_landscape_composition_fixed_coverage_v5.png`
+  - `figures/energy_landscape_composition_fixed_risk_v5.pdf`
   - `figures/energy_landscape_composition_fixed_risk_v5.png`
 
 Reproduction command:
 
 ```powershell
-pip install -r requirements.txt
-python src\run_experiment.py
-python scripts\generate_manuscript.py
-python scripts\validate_submission_artifacts.py
+powershell -ExecutionPolicy Bypass -File scripts\build_submission_artifacts.ps1
 ```
+
+The full build keeps the render-backed video preflight bounded by default: 45 seconds per probed environment, four primary environments for the main preflight, and one environment per renderer profile in the `cpu/minimal`, `gpu/minimal`, and `sapien_cuda/minimal` matrix. To make those bounds explicit on another machine:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\build_submission_artifacts.ps1 -RenderPreflightTimeoutSeconds 45 -RenderPreflightMaxEnvs 4 -RenderProfileMatrixMaxEnvs 1
+```
+
+Changing these bounds only changes pre-collection diagnostics. It does not make local outputs external evidence or satisfy `external_validation/manifest.json`.

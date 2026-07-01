@@ -1,0 +1,710 @@
+from __future__ import annotations
+
+import hashlib
+import json
+import tempfile
+from pathlib import Path
+from typing import Any
+
+import validate_external_rollouts as rollout
+
+
+ROOT = Path(__file__).resolve().parents[1]
+RESULTS = ROOT / "results"
+SCHEMA_PATH = ROOT / "external_validation" / "log_schema_v1.json"
+OUT_JSON = RESULTS / "external_rollout_validator_self_test.json"
+OUT_MD = RESULTS / "external_rollout_validator_self_test.md"
+REAL_REPORTS = [
+    RESULTS / "external_rollout_metrics.json",
+    RESULTS / "external_rollout_metrics.md",
+]
+
+
+def digest(value: str) -> str:
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+
+def file_digest(path: Path) -> str:
+    digest_obj = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest_obj.update(chunk)
+    return digest_obj.hexdigest()
+
+
+def file_digest_if_exists(path: Path) -> str | None:
+    return file_digest(path) if path.exists() else None
+
+
+def real_report_digests() -> dict[str, str | None]:
+    return {path.relative_to(ROOT).as_posix(): file_digest_if_exists(path) for path in REAL_REPORTS}
+
+
+def write_synthetic_mp4(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    header = b"\x00\x00\x00\x18ftypisom\x00\x00\x02\x00isomiso2mp41"
+    payload = b"\x00\x00\x02\x20mdat" + (b"synthetic self-test frame bytes; not external evidence\n" * 16)
+    path.write_bytes(header + payload)
+
+
+METHODS = [
+    "greedy_module_sequence",
+    "behavior_cloned_skill_chain",
+    "option_graph_planner",
+    "tamp_feasibility_screen",
+    "stable_dmp_handoff",
+    "diffusion_skill_stitcher",
+    "cem_trajectory_composer",
+    "residual_rl_composer",
+    "energy_compatibility_heuristic",
+    "proposed_energy_landscape_composer_v4_1",
+    rollout.PRIMARY_METHOD,
+    rollout.ORACLE_METHOD,
+]
+
+BASELINE_SUCCESS_CUTOFFS = {
+    "proposed_energy_landscape_composer_v4_1": 24,
+    "tamp_feasibility_screen": 21,
+    "diffusion_skill_stitcher": 20,
+    "cem_trajectory_composer": 19,
+    "residual_rl_composer": 19,
+    "energy_compatibility_heuristic": 18,
+    "option_graph_planner": 17,
+    "stable_dmp_handoff": 17,
+    "behavior_cloned_skill_chain": 16,
+    "greedy_module_sequence": 15,
+}
+
+
+def make_record(task: str, scene_idx: int, method: str, *, success: bool, utility: float) -> dict:
+    return {
+        "run_id": "synthetic_self_test_only",
+        "task_family": task,
+        "platform_type": "high_fidelity_sim",
+        "platform_name": "temporary_self_test_fixture",
+        "scene_id": f"{task}_scene_{scene_idx:02d}",
+        "episode_index": scene_idx,
+        "seed": scene_idx,
+        "method": method,
+        "skill_i": f"{task}_skill_i",
+        "skill_j": f"{task}_skill_j",
+        "initial_state_hash": digest(f"{task}:{scene_idx}:initial"),
+        "terminal_sample_set_hash": digest(f"{task}:{scene_idx}:terminal"),
+        "basin_estimate": 0.82 if method == rollout.PRIMARY_METHOD else 0.55,
+        "barrier_score": 0.12 if method == rollout.PRIMARY_METHOD else 0.31,
+        "descent_continuity_score": 0.88 if method == rollout.PRIMARY_METHOD else 0.63,
+        "predicted_seam_risk": 0.05 if method == rollout.PRIMARY_METHOD else 0.21,
+        "fixed_risk_budget": 0.15,
+        "decision": "accept" if method == rollout.PRIMARY_METHOD else "transition",
+        "failure_diagnosis": "none" if success else "basin_miss",
+        "repair_action": "none",
+        "success": success,
+        "seam_failure": not success,
+        "barrier_violation": False,
+        "damage_or_intervention": False,
+        "composition_cost": 0.19 if method == rollout.PRIMARY_METHOD else 0.29,
+        "realized_seam_breach": False,
+        "utility": utility,
+        "video_path": f"synthetic_self_test_only/{task}_{scene_idx}_{method}.mp4",
+        "policy_or_config_hash": digest(f"{method}:config"),
+    }
+
+
+def method_hashes(methods: list[str]) -> dict[str, str]:
+    return {method: digest(f"{method}:config") for method in methods}
+
+
+def build_fixture(tmp: Path) -> tuple[dict, dict]:
+    schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+    tasks = [
+        "peg_place_regrasp",
+        "drawer_to_pick_transfer",
+        "door_open_navigation",
+        "cable_route_insert",
+    ]
+    log_dir = tmp / "logs"
+    config_dir = tmp / "configs"
+    log_dir.mkdir()
+    config_dir.mkdir()
+    methods = METHODS
+    hashes = method_hashes(methods)
+    manifest = {
+        "tasks": [],
+        "methods": [{"name": method, "checkpoint_or_config_hash": hashes[method]} for method in methods],
+    }
+    for task in tasks:
+        config_path = config_dir / f"{task}.json"
+        config_payload = {
+            "task_family": task,
+            "platform_type": "high_fidelity_sim",
+            "platform_name": "temporary_self_test_fixture",
+            "skill_i": f"{task}_skill_i",
+            "skill_j": f"{task}_skill_j",
+            "fixed_risk_budget": 0.15,
+        }
+        config_path.write_text(json.dumps(config_payload, sort_keys=True) + "\n", encoding="utf-8")
+        log_path = log_dir / f"{task}.jsonl"
+        with log_path.open("w", encoding="utf-8") as handle:
+            for scene_idx in range(30):
+                for method in methods:
+                    if method == rollout.PRIMARY_METHOD:
+                        success = scene_idx < 28
+                        utility = 1.0 if success else 0.42
+                    elif method == rollout.ORACLE_METHOD:
+                        success = True
+                        utility = 1.05
+                    else:
+                        success = scene_idx < BASELINE_SUCCESS_CUTOFFS[method]
+                        utility = 0.79 if success else 0.30
+                    record = make_record(task, scene_idx, method, success=success, utility=utility)
+                    handle.write(json.dumps(record, sort_keys=True) + "\n")
+        manifest["tasks"].append(
+            {
+                "task_family": task,
+                "platform_type": "high_fidelity_sim",
+                "platform_name": "temporary_self_test_fixture",
+                "log_jsonl": str(log_path),
+                "config_path": str(config_path),
+                "config_hash": file_digest(config_path),
+                "episodes_per_method": 30,
+            }
+        )
+    return manifest, schema
+
+
+def assert_close(name: str, actual: float, expected: float, tolerance: float = 1e-9) -> None:
+    if abs(actual - expected) > tolerance:
+        raise AssertionError(f"{name}: {actual} != {expected}")
+
+
+def add_check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str) -> None:
+    checks.append({"name": name, "passed": bool(passed), "detail": detail})
+
+
+def redact_temp_path(text: str, tmp_name: str) -> str:
+    return text.replace(tmp_name, "<tmp>").replace(tmp_name.replace("\\", "\\\\"), "<tmp>")
+
+
+def write_report(payload: dict[str, Any]) -> None:
+    RESULTS.mkdir(exist_ok=True)
+    OUT_JSON.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    lines = [
+        "# External Rollout Validator Self-Test",
+        "",
+        f"Passed: `{str(payload['passed']).lower()}`.",
+        "Not evidence: `true`.",
+        f"Synthetic records recomputed: `{payload['synthetic_records_loaded']}`.",
+        f"Synthetic task families: `{payload['synthetic_task_count']}`.",
+        f"Synthetic method count: `{payload['synthetic_method_count']}`.",
+        f"Synthetic confidence gates passed: `{str(payload['synthetic_confidence_gates_passed']).lower()}`.",
+        "",
+        "This self-test builds temporary raw JSONL rollout fixtures and exercises the strict external rollout validator directly. It proves metric recomputation, schema validation, confidence-gate rejection, paired-reset panel checks, task-config and policy-hash checks, and strict MP4 video evidence checks without touching the real rollout metrics report or creating external validation evidence.",
+        "",
+        "## Checks",
+        "",
+    ]
+    for check in payload["checks"]:
+        status = "pass" if check["passed"] else "fail"
+        lines.append(f"- `{status}` `{check['name']}`: {check['detail']}")
+    OUT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def main() -> int:
+    report_before = real_report_digests()
+    with tempfile.TemporaryDirectory(prefix="paper119_rollout_selftest_") as tmp_name:
+        manifest, schema = build_fixture(Path(tmp_name))
+        records, errors = rollout.load_records(manifest, schema, check_video_paths=False, max_errors=10)
+        if errors:
+            raise AssertionError(f"unexpected schema errors: {errors}")
+        summary = rollout.summarize(records, schema)
+        checks = rollout.threshold_checks(summary, schema)
+
+        if len(records) != 1440:
+            raise AssertionError(f"expected 1440 synthetic records, got {len(records)}")
+        if summary["strongest_external_baseline"] != "proposed_energy_landscape_composer_v4_1":
+            raise AssertionError(f"wrong strongest baseline: {summary['strongest_external_baseline']}")
+        assert_close("external_success_margin", summary["external_success_margin"], 2.0 / 15.0)
+        assert_close("external_utility_margin", summary["external_utility_margin"], 101.0 / 375.0)
+        assert_close("paired_win_rate", summary["paired_win_rate"], 1.0)
+        assert_close("fixed_risk_coverage", summary["fixed_risk_coverage"], 1.0)
+        assert_close("fixed_risk_breach", summary["fixed_risk_breach"], 0.0)
+        if summary["positive_task_families"] != 4:
+            raise AssertionError(f"positive_task_families: {summary['positive_task_families']} != 4")
+        failed_checks = [check.message for check in checks if not check.passed]
+        if failed_checks:
+            raise AssertionError(f"unexpected failed threshold checks: {failed_checks}")
+        confidence = summary.get("statistical_confidence", {})
+        if confidence.get("version") != "external_statistical_confidence_v1":
+            raise AssertionError(f"missing statistical confidence summary: {confidence}")
+        if confidence.get("all_primary_confidence_gates_passed") is not True:
+            raise AssertionError(f"synthetic confidence gates did not pass: {confidence}")
+        for metric_name in (
+            "external_success_margin",
+            "external_utility_margin",
+            "paired_win_rate",
+            "fixed_risk_coverage",
+            "fixed_risk_breach",
+        ):
+            metric = confidence.get("metrics", {}).get(metric_name, {})
+            if metric.get("passed") is not True:
+                raise AssertionError(f"synthetic confidence gate failed for {metric_name}: {metric}")
+
+        weak_confidence_records = []
+        for record in records:
+            weak_record = dict(record)
+            if weak_record["method"] == rollout.PRIMARY_METHOD:
+                weak_success = int(weak_record["episode_index"]) < 26
+                weak_record["success"] = weak_success
+                weak_record["seam_failure"] = not weak_success
+                weak_record["failure_diagnosis"] = "none" if weak_success else "basin_miss"
+                weak_record["utility"] = 1.0 if weak_success else 0.42
+            weak_confidence_records.append(weak_record)
+        weak_confidence_summary = rollout.summarize(weak_confidence_records, schema)
+        weak_confidence_checks = rollout.threshold_checks(weak_confidence_summary, schema)
+        if all(check.passed for check in weak_confidence_checks):
+            raise AssertionError("weak statistical confidence test did not fail the strict rollout gates")
+        if not any(
+            (not check.passed) and "external_success_margin_confidence_gate" in check.message
+            for check in weak_confidence_checks
+        ):
+            raise AssertionError(
+                f"weak statistical confidence failed for the wrong reason: {[check.message for check in weak_confidence_checks if not check.passed]}"
+            )
+
+        bad_record = dict(records[0])
+        del bad_record["utility"]
+        bad_errors = rollout.validate_record(
+            bad_record,
+            line_id="synthetic_bad_record",
+            schema=schema,
+            manifest_methods=set(METHODS),
+            manifest_tasks=set(summary["task_families"]),
+            check_video_paths=False,
+        )
+        if not any("missing required fields" in error and "utility" in error for error in bad_errors):
+            raise AssertionError(f"missing-field test did not fail as expected: {bad_errors}")
+
+        missing_method_manifest = json.loads(json.dumps(manifest))
+        missing_method_manifest["methods"] = [
+            method for method in missing_method_manifest["methods"] if method["name"] != "greedy_module_sequence"
+        ]
+        _, missing_method_errors = rollout.load_records(
+            missing_method_manifest,
+            schema,
+            check_video_paths=False,
+            max_errors=10,
+        )
+        if not any("manifest missing required external methods" in error for error in missing_method_errors):
+            raise AssertionError(f"missing method-coverage test did not fail as expected: {missing_method_errors}")
+
+        weak_episode_manifest = json.loads(json.dumps(manifest))
+        weak_episode_manifest["tasks"][0]["episodes_per_method"] = 2
+        _, weak_episode_errors = rollout.load_records(
+            weak_episode_manifest,
+            schema,
+            check_video_paths=False,
+            max_errors=10,
+        )
+        if not any("episodes_per_method must be integer >= 30" in error for error in weak_episode_errors):
+            raise AssertionError(f"weak episode-count test did not fail as expected: {weak_episode_errors}")
+
+        short_count_manifest = json.loads(json.dumps(manifest))
+        short_count_log = Path(tmp_name) / "logs" / "short_count.jsonl"
+        short_count_task = str(short_count_manifest["tasks"][0]["task_family"])
+        short_count_rows = [
+            make_record(short_count_task, 0, rollout.PRIMARY_METHOD, success=True, utility=1.0),
+            make_record(short_count_task, 0, "greedy_module_sequence", success=True, utility=0.79),
+        ]
+        short_count_log.write_text(
+            "".join(json.dumps(record, sort_keys=True) + "\n" for record in short_count_rows),
+            encoding="utf-8",
+        )
+        short_count_manifest["tasks"][0]["log_jsonl"] = str(short_count_log)
+        _, short_count_errors = rollout.load_records(
+            short_count_manifest,
+            schema,
+            check_video_paths=False,
+            max_errors=10,
+        )
+        if not any("record count" in error and "does not match episodes_per_method" in error for error in short_count_errors):
+            raise AssertionError(f"short record-count test did not fail as expected: {short_count_errors}")
+
+        duplicate_panel_manifest = json.loads(json.dumps(manifest))
+        duplicate_panel_log = Path(tmp_name) / "logs" / "duplicate_paired_method.jsonl"
+        duplicate_panel_task = str(duplicate_panel_manifest["tasks"][0]["task_family"])
+        duplicate_panel_rows = [
+            make_record(duplicate_panel_task, 0, rollout.PRIMARY_METHOD, success=True, utility=1.0),
+            make_record(duplicate_panel_task, 0, "greedy_module_sequence", success=True, utility=0.79),
+            make_record(duplicate_panel_task, 0, rollout.PRIMARY_METHOD, success=True, utility=1.0),
+        ]
+        duplicate_panel_rows[2]["episode_index"] = 999
+        duplicate_panel_rows[2]["video_path"] = duplicate_panel_rows[2]["video_path"] + ".panel_duplicate"
+        duplicate_panel_log.write_text(
+            "".join(json.dumps(record, sort_keys=True) + "\n" for record in duplicate_panel_rows),
+            encoding="utf-8",
+        )
+        duplicate_panel_manifest["tasks"][0]["log_jsonl"] = str(duplicate_panel_log)
+        _, duplicate_panel_errors = rollout.load_records(
+            duplicate_panel_manifest,
+            schema,
+            check_video_paths=False,
+            max_errors=10,
+        )
+        if not any("duplicate method record within paired reset" in error for error in duplicate_panel_errors):
+            raise AssertionError(f"duplicate paired-method test did not fail as expected: {duplicate_panel_errors}")
+
+        missing_panel_manifest = json.loads(json.dumps(manifest))
+        missing_panel_log = Path(tmp_name) / "logs" / "missing_paired_method.jsonl"
+        missing_panel_task = str(missing_panel_manifest["tasks"][0]["task_family"])
+        missing_panel_rows = []
+        for scene_idx in range(30):
+            missing_panel_rows.append(
+                make_record(missing_panel_task, scene_idx, rollout.PRIMARY_METHOD, success=True, utility=1.0)
+            )
+            missing_panel_rows.append(
+                make_record(missing_panel_task, scene_idx + 100, "greedy_module_sequence", success=True, utility=0.79)
+            )
+        missing_panel_log.write_text(
+            "".join(json.dumps(record, sort_keys=True) + "\n" for record in missing_panel_rows),
+            encoding="utf-8",
+        )
+        missing_panel_manifest["tasks"][0]["log_jsonl"] = str(missing_panel_log)
+        _, missing_panel_errors = rollout.load_records(
+            missing_panel_manifest,
+            schema,
+            check_video_paths=False,
+            max_errors=20,
+        )
+        if not any("paired reset group" in error and "missing declared methods" in error for error in missing_panel_errors):
+            raise AssertionError(f"missing paired-method test did not fail as expected: {missing_panel_errors}")
+
+        duplicate_identity_manifest = json.loads(json.dumps(manifest))
+        duplicate_identity_log = Path(tmp_name) / "logs" / "duplicate_identity.jsonl"
+        duplicate_task = str(duplicate_identity_manifest["tasks"][0]["task_family"])
+        duplicate_rows = [
+            make_record(duplicate_task, 0, rollout.PRIMARY_METHOD, success=True, utility=1.0),
+            make_record(duplicate_task, 0, rollout.PRIMARY_METHOD, success=True, utility=1.0),
+        ]
+        duplicate_rows[1]["video_path"] = duplicate_rows[1]["video_path"] + ".copy"
+        duplicate_identity_log.write_text(
+            "".join(json.dumps(record, sort_keys=True) + "\n" for record in duplicate_rows),
+            encoding="utf-8",
+        )
+        duplicate_identity_manifest["tasks"][0]["log_jsonl"] = str(duplicate_identity_log)
+        _, duplicate_identity_errors = rollout.load_records(
+            duplicate_identity_manifest,
+            schema,
+            check_video_paths=False,
+            max_errors=10,
+        )
+        if not any("duplicate rollout record identity" in error for error in duplicate_identity_errors):
+            raise AssertionError(f"duplicate rollout identity test did not fail as expected: {duplicate_identity_errors}")
+
+        duplicate_video_manifest = json.loads(json.dumps(manifest))
+        duplicate_video_log = Path(tmp_name) / "logs" / "duplicate_video_path.jsonl"
+        video_rows = [
+            make_record(duplicate_task, 100, rollout.PRIMARY_METHOD, success=True, utility=1.0),
+            make_record(duplicate_task, 101, rollout.PRIMARY_METHOD, success=True, utility=1.0),
+        ]
+        video_rows[1]["video_path"] = video_rows[0]["video_path"]
+        duplicate_video_log.write_text(
+            "".join(json.dumps(record, sort_keys=True) + "\n" for record in video_rows),
+            encoding="utf-8",
+        )
+        duplicate_video_manifest["tasks"][0]["log_jsonl"] = str(duplicate_video_log)
+        _, duplicate_video_errors = rollout.load_records(
+            duplicate_video_manifest,
+            schema,
+            check_video_paths=False,
+            max_errors=10,
+        )
+        if not any("duplicate video_path" in error for error in duplicate_video_errors):
+            raise AssertionError(f"duplicate video path test did not fail as expected: {duplicate_video_errors}")
+
+        stale_config_hash_manifest = json.loads(json.dumps(manifest))
+        stale_config_hash_manifest["tasks"][0]["config_hash"] = digest("stale:task_config")
+        _, stale_config_hash_errors = rollout.load_records(
+            stale_config_hash_manifest,
+            schema,
+            check_video_paths=False,
+            max_errors=10,
+        )
+        if not any("config_hash does not match config_path" in error for error in stale_config_hash_errors):
+            raise AssertionError(f"stale task config hash test did not fail as expected: {stale_config_hash_errors}")
+
+        config_task = str(records[0]["task_family"])
+        task_config = json.loads(Path(manifest["tasks"][0]["config_path"]).read_text(encoding="utf-8"))
+        stale_task_config_record = dict(records[0])
+        stale_task_config_record["skill_i"] = "stale_skill_i_from_old_task_config"
+        stale_task_config_errors = rollout.validate_record(
+            stale_task_config_record,
+            line_id="synthetic_stale_task_config_record",
+            schema=schema,
+            manifest_methods=set(METHODS),
+            manifest_tasks=set(summary["task_families"]),
+            check_video_paths=False,
+            manifest_task_specs={config_task: manifest["tasks"][0]},
+            manifest_task_configs={config_task: task_config},
+            manifest_method_hashes=method_hashes(METHODS),
+        )
+        if not any("skill_i must match manifest task config" in error for error in stale_task_config_errors):
+            raise AssertionError(f"stale task config row test did not fail as expected: {stale_task_config_errors}")
+
+        spoofed_hash_record = dict(records[0])
+        spoofed_hash_record["policy_or_config_hash"] = digest("spoofed:policy")
+        spoofed_hash_errors = rollout.validate_record(
+            spoofed_hash_record,
+            line_id="synthetic_spoofed_policy_hash_record",
+            schema=schema,
+            manifest_methods=set(METHODS),
+            manifest_tasks=set(summary["task_families"]),
+            check_video_paths=False,
+            manifest_method_hashes=method_hashes(METHODS),
+        )
+        if not any("policy_or_config_hash must match manifest checkpoint_or_config_hash" in error for error in spoofed_hash_errors):
+            raise AssertionError(f"spoofed policy/config hash test did not fail as expected: {spoofed_hash_errors}")
+
+        video_dir = Path(tmp_name) / "videos" / "peg_place_regrasp"
+        good_video = video_dir / "good_render_backed_fixture.mp4"
+        write_synthetic_mp4(good_video)
+        good_video_record = dict(records[0])
+        good_video_record["video_path"] = str(good_video)
+        good_video_errors = rollout.validate_record(
+            good_video_record,
+            line_id="synthetic_good_video_record",
+            schema=schema,
+            manifest_methods=set(METHODS),
+            manifest_tasks=set(summary["task_families"]),
+            check_video_paths=True,
+            manifest_video_dirs={"peg_place_regrasp": video_dir},
+            strict_video_evidence=True,
+        )
+        if good_video_errors:
+            raise AssertionError(f"strict video fixture unexpectedly failed: {good_video_errors}")
+
+        fake_video = video_dir / "fake_text_payload.mp4"
+        fake_video.write_bytes(b"plain text pretending to be an mp4\n" * 32)
+        fake_video_record = dict(good_video_record)
+        fake_video_record["video_path"] = str(fake_video)
+        fake_video_errors = rollout.validate_record(
+            fake_video_record,
+            line_id="synthetic_fake_video_record",
+            schema=schema,
+            manifest_methods=set(METHODS),
+            manifest_tasks=set(summary["task_families"]),
+            check_video_paths=True,
+            manifest_video_dirs={"peg_place_regrasp": video_dir},
+            strict_video_evidence=True,
+        )
+        if not any("not MP4-like evidence" in error for error in fake_video_errors):
+            raise AssertionError(f"strict video fixture did not reject fake MP4: {fake_video_errors}")
+
+        forbidden_video_cases = {
+            "staging": video_dir / "internal_runner_artifact.staging.mp4",
+            "backup": video_dir / "internal_runner_artifact.backup.mp4",
+        }
+        forbidden_video_errors_by_fragment = {}
+        for fragment, forbidden_video in forbidden_video_cases.items():
+            write_synthetic_mp4(forbidden_video)
+            forbidden_record = dict(good_video_record)
+            forbidden_record["video_path"] = str(forbidden_video)
+            forbidden_errors = rollout.validate_record(
+                forbidden_record,
+                line_id=f"synthetic_forbidden_{fragment}_video_record",
+                schema=schema,
+                manifest_methods=set(METHODS),
+                manifest_tasks=set(summary["task_families"]),
+                check_video_paths=True,
+                manifest_video_dirs={"peg_place_regrasp": video_dir},
+                strict_video_evidence=True,
+            )
+            forbidden_video_errors_by_fragment[fragment] = forbidden_errors
+            if not any("forbidden non-evidence fragment" in error and fragment in error for error in forbidden_errors):
+                raise AssertionError(f"strict video fixture did not reject {fragment} MP4 path: {forbidden_errors}")
+
+    report_after = real_report_digests()
+    checks: list[dict[str, Any]] = []
+    confidence = summary.get("statistical_confidence", {})
+    confidence_metrics = confidence.get("metrics", {}) if isinstance(confidence, dict) else {}
+    weak_confidence_failed_messages = [check.message for check in weak_confidence_checks if not check.passed]
+
+    add_check(
+        checks,
+        "synthetic_records_recomputed",
+        len(records) == 1440
+        and summary.get("version") == "external_rollout_metrics_v1"
+        and int(summary.get("external_task_families", 0) or 0) == 4
+        and len(summary.get("method_summary", {}) or {}) == len(METHODS),
+        (
+            f"records={len(records)}, tasks={summary.get('external_task_families')!r}, "
+            f"methods={len(summary.get('method_summary', {}) or {})}"
+        ),
+    )
+    add_check(
+        checks,
+        "synthetic_threshold_metrics_match_expected",
+        summary.get("strongest_external_baseline") == "proposed_energy_landscape_composer_v4_1"
+        and abs(float(summary.get("external_success_margin", 0.0)) - (2.0 / 15.0)) <= 1e-9
+        and abs(float(summary.get("external_utility_margin", 0.0)) - (101.0 / 375.0)) <= 1e-9
+        and float(summary.get("paired_win_rate", 0.0)) == 1.0
+        and float(summary.get("fixed_risk_coverage", 0.0)) == 1.0
+        and float(summary.get("fixed_risk_breach", 1.0)) == 0.0,
+        (
+            f"baseline={summary.get('strongest_external_baseline')!r}, "
+            f"success_margin={summary.get('external_success_margin')!r}, "
+            f"utility_margin={summary.get('external_utility_margin')!r}"
+        ),
+    )
+    add_check(
+        checks,
+        "synthetic_confidence_gates_pass",
+        confidence.get("version") == "external_statistical_confidence_v1"
+        and confidence.get("all_primary_confidence_gates_passed") is True
+        and all((confidence_metrics.get(metric_name, {}) or {}).get("passed") is True for metric_name in (
+            "external_success_margin",
+            "external_utility_margin",
+            "paired_win_rate",
+            "fixed_risk_coverage",
+            "fixed_risk_breach",
+        )),
+        f"version={confidence.get('version')!r}, all_passed={confidence.get('all_primary_confidence_gates_passed')!r}",
+    )
+    add_check(
+        checks,
+        "weak_confidence_rejected",
+        any("external_success_margin_confidence_gate" in message for message in weak_confidence_failed_messages),
+        f"failed_checks={weak_confidence_failed_messages!r}",
+    )
+    add_check(
+        checks,
+        "schema_missing_required_field_rejected",
+        any("missing required fields" in error and "utility" in error for error in bad_errors),
+        f"errors={bad_errors!r}",
+    )
+    add_check(
+        checks,
+        "missing_required_method_rejected",
+        any("manifest missing required external methods" in error for error in missing_method_errors),
+        f"errors={missing_method_errors!r}",
+    )
+    add_check(
+        checks,
+        "weak_episode_count_rejected",
+        any("episodes_per_method must be integer >= 30" in error for error in weak_episode_errors),
+        f"errors={weak_episode_errors!r}",
+    )
+    add_check(
+        checks,
+        "short_record_count_rejected",
+        any("record count" in error and "does not match episodes_per_method" in error for error in short_count_errors),
+        f"errors={short_count_errors!r}",
+    )
+    add_check(
+        checks,
+        "duplicate_method_panel_rejected",
+        any("duplicate method record within paired reset" in error for error in duplicate_panel_errors),
+        f"errors={duplicate_panel_errors!r}",
+    )
+    add_check(
+        checks,
+        "missing_method_panel_rejected",
+        any("paired reset group" in error and "missing declared methods" in error for error in missing_panel_errors),
+        f"errors={missing_panel_errors!r}",
+    )
+    add_check(
+        checks,
+        "duplicate_rollout_identity_rejected",
+        any("duplicate rollout record identity" in error for error in duplicate_identity_errors),
+        f"errors={duplicate_identity_errors!r}",
+    )
+    add_check(
+        checks,
+        "duplicate_video_path_rejected",
+        any("duplicate video_path" in error for error in duplicate_video_errors),
+        f"errors={duplicate_video_errors!r}",
+    )
+    add_check(
+        checks,
+        "stale_task_config_hash_rejected",
+        any("config_hash does not match config_path" in error for error in stale_config_hash_errors),
+        f"errors={stale_config_hash_errors!r}",
+    )
+    add_check(
+        checks,
+        "stale_task_config_row_rejected",
+        any("skill_i must match manifest task config" in error for error in stale_task_config_errors),
+        f"errors={stale_task_config_errors!r}",
+    )
+    add_check(
+        checks,
+        "spoofed_policy_or_config_hash_rejected",
+        any("policy_or_config_hash must match manifest checkpoint_or_config_hash" in error for error in spoofed_hash_errors),
+        f"errors={spoofed_hash_errors!r}",
+    )
+    add_check(
+        checks,
+        "strict_video_fixture_accepts_mp4_like_file",
+        not good_video_errors,
+        f"errors={good_video_errors!r}",
+    )
+    add_check(
+        checks,
+        "strict_video_fixture_rejects_fake_mp4",
+        any("not MP4-like evidence" in error for error in fake_video_errors),
+        f"errors={fake_video_errors!r}",
+    )
+    add_check(
+        checks,
+        "strict_video_fixture_rejects_forbidden_fragments",
+        all(
+            any("forbidden non-evidence fragment" in error and fragment in error for error in errors)
+            for fragment, errors in forbidden_video_errors_by_fragment.items()
+        )
+        and set(forbidden_video_errors_by_fragment) == {"staging", "backup"},
+        f"errors={forbidden_video_errors_by_fragment!r}",
+    )
+    add_check(
+        checks,
+        "real_rollout_metrics_report_not_overwritten",
+        report_before == report_after,
+        f"before={report_before!r}, after={report_after!r}",
+    )
+    for check in checks:
+        check["detail"] = redact_temp_path(str(check["detail"]), tmp_name)
+
+    payload = {
+        "version": "external_rollout_validator_self_test_v1",
+        "passed": all(check["passed"] for check in checks),
+        "not_external_evidence": True,
+        "synthetic_records_loaded": len(records),
+        "synthetic_task_count": int(summary.get("external_task_families", 0) or 0),
+        "synthetic_method_count": len(summary.get("method_summary", {}) or {}),
+        "synthetic_confidence_gates_passed": confidence.get("all_primary_confidence_gates_passed") is True,
+        "weak_confidence_rejected": any("external_success_margin_confidence_gate" in message for message in weak_confidence_failed_messages),
+        "strict_video_rejections_checked": set(forbidden_video_errors_by_fragment) == {"staging", "backup"},
+        "real_rollout_reports_untouched": report_before == report_after,
+        "real_report_digests_before": report_before,
+        "real_report_digests_after": report_after,
+        "summary": {
+            "strongest_external_baseline": summary.get("strongest_external_baseline"),
+            "external_success_margin": summary.get("external_success_margin"),
+            "external_utility_margin": summary.get("external_utility_margin"),
+            "paired_win_rate": summary.get("paired_win_rate"),
+            "fixed_risk_coverage": summary.get("fixed_risk_coverage"),
+            "fixed_risk_breach": summary.get("fixed_risk_breach"),
+        },
+        "checks": checks,
+    }
+    write_report(payload)
+    if payload["passed"] is not True:
+        failed = [check for check in checks if not check["passed"]]
+        raise AssertionError(f"external rollout validator self-test report failed checks: {failed}")
+
+    print("External rollout validator self-test passed: synthetic metrics recomputed and schema failure path checked.")
+    print(f"Wrote {OUT_JSON}")
+    print(f"Wrote {OUT_MD}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,194 @@
+{
+  "actual_backend_ready": false,
+  "backend_contract_harness_ready": true,
+  "backend_integration_packet_ready": true,
+  "collection_ready": false,
+  "current_backend_blockers": [
+    "backend_module_ready: --backend-module is required before actual collection"
+  ],
+  "forbidden_evidence_shortcuts": [
+    "using backend_templates as real backends",
+    "using local_dry_run logs or placeholder videos as external evidence",
+    "collecting before strict backend qualification and collection readiness pass",
+    "changing task configs or method identities after alias unsealing",
+    "omitting policy/config hashes or platform provenance from logs and manifest inputs"
+  ],
+  "not_external_evidence": true,
+  "planned_records": 1440,
+  "planned_tasks": [
+    "peg_place_regrasp",
+    "drawer_to_pick_transfer",
+    "door_open_navigation",
+    "cable_route_insert"
+  ],
+  "primary_platform_family": "ManiSkill/SAPIEN",
+  "primary_route": "maniskill_sapien_primary",
+  "purpose": "Convert the missing non-template backend module into concrete integration work orders for the independent public-simulator route.",
+  "required_backend_hooks": [
+    "platform_provenance",
+    "load_task_config",
+    "reset_scene",
+    "capture_observation",
+    "terminal_samples",
+    "run_method",
+    "execute_skill_pair",
+    "record_video",
+    "policy_or_config_hash"
+  ],
+  "required_platform_provenance_fields": [
+    "platform_name",
+    "platform_version",
+    "maniskill_version",
+    "sapien_version",
+    "python_version",
+    "operating_system",
+    "gpu_model",
+    "gpu_driver",
+    "vulkan_or_renderer_device",
+    "physics_timestep",
+    "contact_solver",
+    "friction_model",
+    "camera_intrinsics_and_resolution",
+    "state_observation_keys",
+    "contact_signal_keys",
+    "backend_module_sha256",
+    "code_commit"
+  ],
+  "source_reports": [
+    "external_validation/platform_onboarding_packet.json",
+    "results/external_platform_onboarding_audit.json",
+    "results/external_backend_contract_audit.json",
+    "results/external_collection_readiness_audit.json"
+  ],
+  "strict_acceptance_commands": [
+    "python scripts\\build_external_backend_integration_packet.py",
+    "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json",
+    "python scripts\\materialize_external_configs.py --platform-type high_fidelity_sim --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
+    "python scripts\\validate_external_configs.py --strict",
+    "python scripts\\audit_external_fidelity_acceptance.py --strict",
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+    "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_postcollection_evidence_seal.py",
+    "python scripts\\audit_external_postcollection_seal_consistency.py",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_pairing_integrity.py --strict",
+    "python scripts\\audit_external_release_package.py --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "strict_backend_ready": false,
+  "strict_evidence_ready": false,
+  "version": "external_backend_integration_packet_v1",
+  "work_orders": [
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_backend_integration_packet.py",
+        "python scripts\\audit_external_backend_contract.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --alias-map external_validation\\method_alias_map.json"
+      ],
+      "id": "create_non_template_backend_module",
+      "operator_input": "implement create_backend() or Backend using ExternalCollectionBackend without TEMPLATE_ONLY",
+      "platform_family": "ManiSkill/SAPIEN",
+      "required_artifacts": [
+        "external_validation/runner/backends/<real_backend>.py",
+        "external_validation/fidelity_acceptance.json"
+      ],
+      "required_hooks": [
+        "platform_provenance",
+        "load_task_config",
+        "reset_scene",
+        "capture_observation",
+        "terminal_samples",
+        "run_method",
+        "execute_skill_pair",
+        "record_video",
+        "policy_or_config_hash"
+      ],
+      "route": "maniskill_sapien_primary"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\materialize_external_configs.py --platform-type high_fidelity_sim --platform-name <accepted_platform_name> --wall-clock-seconds <seconds> --simulator-query-budget <queries> --confirm-real-platform --write",
+        "python scripts\\validate_external_configs.py --strict",
+        "python scripts\\audit_external_fidelity_acceptance.py --strict"
+      ],
+      "id": "bind_task_configs_to_backend",
+      "operator_input": "load every prepared task config and record the exact accepted platform values",
+      "platform_family": "ManiSkill/SAPIEN",
+      "required_artifacts": [
+        "external_validation/configs/*.json",
+        "external_validation/config_schema_v1.json"
+      ],
+      "required_tasks": [
+        "peg_place_regrasp",
+        "drawer_to_pick_transfer",
+        "door_open_navigation",
+        "cable_route_insert"
+      ],
+      "route": "maniskill_sapien_primary"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map"
+      ],
+      "id": "preserve_paired_reset_execution",
+      "operator_input": "make reset_scene preserve scene_id, seed, skill_i, skill_j, and initial_state_hash across the full method panel",
+      "platform_family": "ManiSkill/SAPIEN",
+      "required_artifacts": [
+        "external_validation/blinded_operator_sheet.csv",
+        "external_validation/method_alias_map.json"
+      ],
+      "required_tasks": [
+        "peg_place_regrasp",
+        "drawer_to_pick_transfer",
+        "door_open_navigation",
+        "cable_route_insert"
+      ],
+      "route": "maniskill_sapien_primary"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_method_implementation_packet.py",
+        "python scripts\\validate_external_adapters.py --strict"
+      ],
+      "id": "bridge_method_adapters_and_hashes",
+      "operator_input": "route run_method through real manifest-declared method implementations and emit policy_or_config_hash",
+      "platform_family": "ManiSkill/SAPIEN",
+      "required_artifacts": [
+        "external_validation/method_implementation_packet.md",
+        "external_validation/method_implementation_work_orders.csv"
+      ],
+      "required_hooks": [
+        "run_method",
+        "policy_or_config_hash",
+        "terminal_samples"
+      ],
+      "route": "maniskill_sapien_primary"
+    },
+    {
+      "acceptance_commands": [
+        "python external_validation\\runner\\real_collection_runner.py --backend-module <module_or_path> --task-config-dir external_validation\\configs --output-log-dir external_validation\\logs --video-dir external_validation\\videos --run-id <specific_run_id> --unsealed-alias-map",
+        "python scripts\\build_external_postcollection_evidence_seal.py",
+        "python scripts\\audit_external_postcollection_seal_consistency.py",
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_pairing_integrity.py --strict",
+        "python scripts\\audit_external_release_package.py --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "id": "export_logs_videos_and_manifest_inputs",
+      "operator_input": "write JSONL records and videos from the real backend, then hash-lock them into the manifest",
+      "platform_family": "ManiSkill/SAPIEN",
+      "required_artifacts": [
+        "external_validation/logs/*.jsonl",
+        "external_validation/videos/<task_family>/"
+      ],
+      "required_tasks": [
+        "peg_place_regrasp",
+        "drawer_to_pick_transfer",
+        "door_open_navigation",
+        "cable_route_insert"
+      ],
+      "route": "maniskill_sapien_primary"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+external_validation/collection_machine_bootstrap.sh text eol=lf
+external_validation/collection_job_commands.sh text eol=lf

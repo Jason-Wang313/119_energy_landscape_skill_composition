@@ -1,0 +1,58 @@
+{
+  "checks": [
+    {
+      "detail": "External collection runner wrote 2 JSONL records. Not validated until manifest and strict audits pass.\n",
+      "name": "runner_actual_path_exits_zero",
+      "passed": true
+    },
+    {
+      "detail": "records=2",
+      "name": "temporary_records_written",
+      "passed": true
+    },
+    {
+      "detail": "errors=[]",
+      "name": "temporary_records_schema_valid",
+      "passed": true
+    },
+    {
+      "detail": "videos=2",
+      "name": "temporary_videos_written",
+      "passed": true
+    },
+    {
+      "detail": "returncode=1, records=0, output=backend produced diagnostic fallback video sidecar, which cannot be official evidence: C:\\Users\\wangz\\AppData\\Local\\Temp\\paper119_runner_diagnostic_video_selftest_z595h41d\\videos\\peg_place_regrasp\\000_barrier_certified_energy_composer_v5.83",
+      "name": "diagnostic_fallback_video_rejected_before_jsonl_write",
+      "passed": true
+    },
+    {
+      "detail": "returncode=1, records=0, output=runner refused schema-invalid official JSONL record before write: peg_place_regrasp:0:barrier_certified_energy_composer_v5: decision='bad_schema_decision' not in ['accept', 'repair', 'probe', 'abstain', 'transition']\n",
+      "name": "schema_invalid_record_rejected_before_jsonl_write",
+      "passed": true
+    },
+    {
+      "detail": "returncode=1, log_preserved=True, output=Traceback (most recent call last):\n  File \"C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\external_validation\\runner\\real_collection_runner.py\", line 684, in <module>\n    raise SystemExit(main())\n ",
+      "name": "partial_batch_failure_preserves_official_jsonl",
+      "passed": true
+    },
+    {
+      "detail": "returncode=1, video_preserved=True, staging_leftovers=[]",
+      "name": "partial_batch_failure_preserves_official_videos",
+      "passed": true
+    },
+    {
+      "detail": "external_validation/manifest.json unchanged or absent",
+      "name": "real_manifest_untouched",
+      "passed": true
+    }
+  ],
+  "diagnostic_runner_returncode": 1,
+  "invalid_schema_runner_returncode": 1,
+  "not_external_evidence": true,
+  "partial_failure_runner_returncode": 1,
+  "passed": true,
+  "records_written": 2,
+  "runner_returncode": 0,
+  "schema_errors": [],
+  "version": "external_runner_backend_self_test_v1"
+}

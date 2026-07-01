@@ -1,0 +1,926 @@
+{
+  "baseline": "proposed_energy_landscape_composer_v4_1",
+  "checks": [
+    {
+      "detail": "local holdout audit only",
+      "name": "not_external_evidence_declared",
+      "passed": true
+    },
+    {
+      "detail": "rows=13440",
+      "name": "hard_rows_per_method_ge_10000",
+      "passed": true
+    },
+    {
+      "detail": "6/6",
+      "name": "task_holdouts_positive_utility",
+      "passed": true
+    },
+    {
+      "detail": "7/7",
+      "name": "regime_holdouts_positive_utility",
+      "passed": true
+    },
+    {
+      "detail": "4/4",
+      "name": "split_holdouts_positive_utility",
+      "passed": true
+    },
+    {
+      "detail": "42/42",
+      "name": "task_regime_holdouts_positive_utility",
+      "passed": true
+    },
+    {
+      "detail": "42/42",
+      "name": "task_regime_holdouts_positive_success",
+      "passed": true
+    },
+    {
+      "detail": "5/5",
+      "name": "hash_folds_positive_utility",
+      "passed": true
+    },
+    {
+      "detail": "min_seed_wins=10",
+      "name": "hash_fold_seed_wins_ge_8",
+      "passed": true
+    },
+    {
+      "detail": "+0.02188",
+      "name": "worst_task_regime_success_delta_ge_0_015",
+      "passed": true
+    },
+    {
+      "detail": "+0.17256",
+      "name": "worst_task_regime_utility_delta_ge_0_150",
+      "passed": true
+    },
+    {
+      "detail": "+0.22706",
+      "name": "worst_hash_fold_utility_delta_ge_0_150",
+      "passed": true
+    },
+    {
+      "detail": "+0.19422",
+      "name": "oracle_gap_remains_positive",
+      "passed": true
+    }
+  ],
+  "failed_checks": [],
+  "groups": {
+    "hash_fold": [
+      {
+        "name": "fold_0",
+        "oracle_utility_gap": 0.257757329999998,
+        "partition": "hash_fold",
+        "realized_breach_delta": -0.07550445958333334,
+        "rows_per_method": 2400,
+        "seam_failure_delta": -0.0489610658333335,
+        "success_delta": 0.07833333333333325,
+        "utility_delta": 0.22854126708333322,
+        "utility_delta_ci95_by_seed": 0.020891818891725915,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "fold_1",
+        "oracle_utility_gap": 0.2543923922794078,
+        "partition": "hash_fold",
+        "realized_breach_delta": -0.075734237132353,
+        "rows_per_method": 2720,
+        "seam_failure_delta": -0.04917415845588258,
+        "success_delta": 0.07610294117647065,
+        "utility_delta": 0.22705717316176788,
+        "utility_delta_ci95_by_seed": 0.01991335548220234,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "fold_2",
+        "oracle_utility_gap": 0.25377417763157983,
+        "partition": "hash_fold",
+        "realized_breach_delta": -0.07640450953947356,
+        "rows_per_method": 3040,
+        "seam_failure_delta": -0.049708535526315725,
+        "success_delta": 0.08026315789473681,
+        "utility_delta": 0.23183123914473514,
+        "utility_delta_ci95_by_seed": 0.013390790346956326,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "fold_3",
+        "oracle_utility_gap": 0.2584210750000009,
+        "partition": "hash_fold",
+        "realized_breach_delta": -0.07518093620689627,
+        "rows_per_method": 2320,
+        "seam_failure_delta": -0.04888894784482757,
+        "success_delta": 0.0814655172413794,
+        "utility_delta": 0.23107085948275885,
+        "utility_delta_ci95_by_seed": 0.0222955202959032,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "fold_4",
+        "oracle_utility_gap": 0.23648868648649002,
+        "partition": "hash_fold",
+        "realized_breach_delta": -0.07526605067567532,
+        "rows_per_method": 2960,
+        "seam_failure_delta": -0.04878816148648635,
+        "success_delta": 0.10439189189189191,
+        "utility_delta": 0.254642186148647,
+        "utility_delta_ci95_by_seed": 0.022742090040487165,
+        "utility_seed_wins": 10
+      }
+    ],
+    "regime": [
+      {
+        "name": "combined_seam_stress",
+        "oracle_utility_gap": 0.2886434630208349,
+        "partition": "regime",
+        "realized_breach_delta": -0.08082195468750022,
+        "rows_per_method": 1920,
+        "seam_failure_delta": -0.05260251562499975,
+        "success_delta": 0.08437499999999998,
+        "utility_delta": 0.24549078854166612,
+        "utility_delta_ci95_by_seed": 0.016349239846204875,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "contact_mode_transition",
+        "oracle_utility_gap": 0.24118486354166857,
+        "partition": "regime",
+        "realized_breach_delta": -0.07546330677083297,
+        "rows_per_method": 1920,
+        "seam_failure_delta": -0.048972289583333564,
+        "success_delta": 0.09635416666666663,
+        "utility_delta": 0.2466272640624958,
+        "utility_delta_ci95_by_seed": 0.01880730370045238,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "dynamics_mismatch",
+        "oracle_utility_gap": 0.27030067083333165,
+        "partition": "regime",
+        "realized_breach_delta": -0.07721453854166659,
+        "rows_per_method": 1920,
+        "seam_failure_delta": -0.050266429166667057,
+        "success_delta": 0.07656249999999998,
+        "utility_delta": 0.23011623541666537,
+        "utility_delta_ci95_by_seed": 0.01649230936386287,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "high_barrier",
+        "oracle_utility_gap": 0.2371541770833313,
+        "partition": "regime",
+        "realized_breach_delta": -0.07393663385416653,
+        "rows_per_method": 1920,
+        "seam_failure_delta": -0.04814813854166686,
+        "success_delta": 0.08020833333333333,
+        "utility_delta": 0.22880434479166734,
+        "utility_delta_ci95_by_seed": 0.02247285853763379,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "narrow_basin",
+        "oracle_utility_gap": 0.2297434729166683,
+        "partition": "regime",
+        "realized_breach_delta": -0.07186891250000006,
+        "rows_per_method": 1920,
+        "seam_failure_delta": -0.04620807708333315,
+        "success_delta": 0.07395833333333335,
+        "utility_delta": 0.21657606666666496,
+        "utility_delta_ci95_by_seed": 0.020867518903030288,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "nonconvex_energy",
+        "oracle_utility_gap": 0.2514103505208317,
+        "partition": "regime",
+        "realized_breach_delta": -0.07502968489583363,
+        "rows_per_method": 1920,
+        "seam_failure_delta": -0.04882120572916669,
+        "success_delta": 0.08177083333333335,
+        "utility_delta": 0.23083757187500076,
+        "utility_delta_ci95_by_seed": 0.032358707807448116,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "partial_observability",
+        "oracle_utility_gap": 0.24280352552083173,
+        "partition": "regime",
+        "realized_breach_delta": -0.07518831197916595,
+        "rows_per_method": 1920,
+        "seam_failure_delta": -0.04884047656249993,
+        "success_delta": 0.09895833333333326,
+        "utility_delta": 0.247738761979169,
+        "utility_delta_ci95_by_seed": 0.018527183642391868,
+        "utility_seed_wins": 10
+      }
+    ],
+    "split": [
+      {
+        "name": "combined_stress",
+        "oracle_utility_gap": 0.26266684136904417,
+        "partition": "split",
+        "realized_breach_delta": -0.07676517738095247,
+        "rows_per_method": 3360,
+        "seam_failure_delta": -0.04989576071428606,
+        "success_delta": 0.07738095238095233,
+        "utility_delta": 0.23036484315476202,
+        "utility_delta_ci95_by_seed": 0.019838383810786998,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "long_horizon_chain",
+        "oracle_utility_gap": 0.2522984398809519,
+        "partition": "split",
+        "realized_breach_delta": -0.07573946398809508,
+        "rows_per_method": 3360,
+        "seam_failure_delta": -0.04910960565476197,
+        "success_delta": 0.08422619047619051,
+        "utility_delta": 0.23479859464285857,
+        "utility_delta_ci95_by_seed": 0.014560999489490498,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "new_skill_pair",
+        "oracle_utility_gap": 0.23354355595238074,
+        "partition": "split",
+        "realized_breach_delta": -0.07494891190476201,
+        "rows_per_method": 3360,
+        "seam_failure_delta": -0.04851074702380981,
+        "success_delta": 0.09732142857142856,
+        "utility_delta": 0.24633925833333248,
+        "utility_delta_ci95_by_seed": 0.015339181669689169,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "shifted_objects",
+        "oracle_utility_gap": 0.2579143190476195,
+        "partition": "split",
+        "realized_breach_delta": -0.07513121428571429,
+        "rows_per_method": 3360,
+        "seam_failure_delta": -0.04897481934523794,
+        "success_delta": 0.07946428571428577,
+        "utility_delta": 0.2291778943452376,
+        "utility_delta_ci95_by_seed": 0.01809530369237611,
+        "utility_seed_wins": 10
+      }
+    ],
+    "task": [
+      {
+        "name": "cable_route_insert",
+        "oracle_utility_gap": 0.2440530834821426,
+        "partition": "task",
+        "realized_breach_delta": -0.07608089508928549,
+        "rows_per_method": 2240,
+        "seam_failure_delta": -0.049339995982142754,
+        "success_delta": 0.10312500000000002,
+        "utility_delta": 0.25466435535714127,
+        "utility_delta_ci95_by_seed": 0.016178052926573733,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "door_open_navigation",
+        "oracle_utility_gap": 0.25151120089285517,
+        "partition": "task",
+        "realized_breach_delta": -0.07530338839285722,
+        "rows_per_method": 2240,
+        "seam_failure_delta": -0.04895100758928571,
+        "success_delta": 0.09017857142857144,
+        "utility_delta": 0.2402727075892882,
+        "utility_delta_ci95_by_seed": 0.02371371235542856,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "drawer_to_pick_transfer",
+        "oracle_utility_gap": 0.266248215178571,
+        "partition": "task",
+        "realized_breach_delta": -0.0753038651785718,
+        "rows_per_method": 2240,
+        "seam_failure_delta": -0.04877612053571426,
+        "success_delta": 0.05446428571428574,
+        "utility_delta": 0.2045622401785714,
+        "utility_delta_ci95_by_seed": 0.02205841512318375,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "mobile_push_then_grasp",
+        "oracle_utility_gap": 0.2611307312499975,
+        "partition": "task",
+        "realized_breach_delta": -0.07566069375000009,
+        "rows_per_method": 2240,
+        "seam_failure_delta": -0.049372944196428334,
+        "success_delta": 0.08258928571428581,
+        "utility_delta": 0.23305533660714328,
+        "utility_delta_ci95_by_seed": 0.030888556222148707,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "peg_place_regrasp",
+        "oracle_utility_gap": 0.24464791696428545,
+        "partition": "task",
+        "realized_breach_delta": -0.07547668080357148,
+        "rows_per_method": 2240,
+        "seam_failure_delta": -0.04892904107142876,
+        "success_delta": 0.09553571428571428,
+        "utility_delta": 0.24590888258928445,
+        "utility_delta_ci95_by_seed": 0.021607035666573873,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "tool_use_handover",
+        "oracle_utility_gap": 0.2420435866071421,
+        "partition": "task",
+        "realized_breach_delta": -0.07605162812499973,
+        "rows_per_method": 2240,
+        "seam_failure_delta": -0.04936728973214302,
+        "success_delta": 0.08169642857142867,
+        "utility_delta": 0.23255736339285726,
+        "utility_delta_ci95_by_seed": 0.021449499674989842,
+        "utility_seed_wins": 10
+      }
+    ],
+    "task_regime": [
+      {
+        "name": "cable_route_insert::combined_seam_stress",
+        "oracle_utility_gap": 0.2867820562499992,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.08123325312500013,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.052601837500000026,
+        "success_delta": 0.10625000000000007,
+        "utility_delta": 0.2680793000000005,
+        "utility_delta_ci95_by_seed": 0.045513018816843664,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "cable_route_insert::contact_mode_transition",
+        "oracle_utility_gap": 0.23390411874999972,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07505955000000003,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04868874062499991,
+        "success_delta": 0.09375,
+        "utility_delta": 0.24507074999999945,
+        "utility_delta_ci95_by_seed": 0.054063375544475295,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "cable_route_insert::dynamics_mismatch",
+        "oracle_utility_gap": 0.2615692843750007,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.0774676062500001,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.05084274062499991,
+        "success_delta": 0.08437500000000009,
+        "utility_delta": 0.23961300937500007,
+        "utility_delta_ci95_by_seed": 0.04625028242424142,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "cable_route_insert::high_barrier",
+        "oracle_utility_gap": 0.22438184687499996,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.0750890718749998,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04881051875000014,
+        "success_delta": 0.1312500000000001,
+        "utility_delta": 0.2808196843749994,
+        "utility_delta_ci95_by_seed": 0.05539561614370038,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "cable_route_insert::narrow_basin",
+        "oracle_utility_gap": 0.19422303750000092,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07266738437499992,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.046670518750000084,
+        "success_delta": 0.08750000000000002,
+        "utility_delta": 0.23129345937500068,
+        "utility_delta_ci95_by_seed": 0.0917819604371707,
+        "utility_seed_wins": 9
+      },
+      {
+        "name": "cable_route_insert::nonconvex_energy",
+        "oracle_utility_gap": 0.2526140499999998,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.0755337250000003,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04873140937500002,
+        "success_delta": 0.1312500000000001,
+        "utility_delta": 0.28051289062499907,
+        "utility_delta_ci95_by_seed": 0.051663694350966814,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "cable_route_insert::partial_observability",
+        "oracle_utility_gap": 0.25489719062499905,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07551567499999988,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04903420625000014,
+        "success_delta": 0.08750000000000002,
+        "utility_delta": 0.23726139375000077,
+        "utility_delta_ci95_by_seed": 0.07519509548019854,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "door_open_navigation::combined_seam_stress",
+        "oracle_utility_gap": 0.28693306874999924,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.08013540624999996,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.052490840625000035,
+        "success_delta": 0.09999999999999998,
+        "utility_delta": 0.26046127812500003,
+        "utility_delta_ci95_by_seed": 0.06723843828391726,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "door_open_navigation::contact_mode_transition",
+        "oracle_utility_gap": 0.22396038749999891,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07535157500000011,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04880259062500003,
+        "success_delta": 0.140625,
+        "utility_delta": 0.2916498625000008,
+        "utility_delta_ci95_by_seed": 0.05253205688926423,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "door_open_navigation::dynamics_mismatch",
+        "oracle_utility_gap": 0.2918404968749997,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07745573124999991,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.05049872187500003,
+        "success_delta": 0.043749999999999956,
+        "utility_delta": 0.19712849687499934,
+        "utility_delta_ci95_by_seed": 0.04638034629532832,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "door_open_navigation::high_barrier",
+        "oracle_utility_gap": 0.2289953812500003,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07397444375000001,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04837164999999988,
+        "success_delta": 0.07500000000000007,
+        "utility_delta": 0.22315918125000045,
+        "utility_delta_ci95_by_seed": 0.04678505413469219,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "door_open_navigation::narrow_basin",
+        "oracle_utility_gap": 0.24378310625000066,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07119898437500013,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.045335196875000004,
+        "success_delta": 0.03125,
+        "utility_delta": 0.17255934374999926,
+        "utility_delta_ci95_by_seed": 0.05445238242038147,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "door_open_navigation::nonconvex_energy",
+        "oracle_utility_gap": 0.22705413125000062,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07433955000000014,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.048882731250000006,
+        "success_delta": 0.11250000000000004,
+        "utility_delta": 0.26052534687499895,
+        "utility_delta_ci95_by_seed": 0.053302231427619515,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "door_open_navigation::partial_observability",
+        "oracle_utility_gap": 0.25801183437500086,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07466802812499995,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04827532187500004,
+        "success_delta": 0.12812500000000004,
+        "utility_delta": 0.27642544374999967,
+        "utility_delta_ci95_by_seed": 0.0435493409089983,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "drawer_to_pick_transfer::combined_seam_stress",
+        "oracle_utility_gap": 0.2901106156249995,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.08108853749999981,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.05259775312500009,
+        "success_delta": 0.06874999999999998,
+        "utility_delta": 0.2297507125,
+        "utility_delta_ci95_by_seed": 0.0761325519344363,
+        "utility_seed_wins": 9
+      },
+      {
+        "name": "drawer_to_pick_transfer::contact_mode_transition",
+        "oracle_utility_gap": 0.25039706875000034,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07468647187499994,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04840815937500002,
+        "success_delta": 0.046875,
+        "utility_delta": 0.19619444062500002,
+        "utility_delta_ci95_by_seed": 0.059703858920816505,
+        "utility_seed_wins": 9
+      },
+      {
+        "name": "drawer_to_pick_transfer::dynamics_mismatch",
+        "oracle_utility_gap": 0.27927097499999987,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07649739999999997,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.049488931249999965,
+        "success_delta": 0.0625,
+        "utility_delta": 0.21527010937500057,
+        "utility_delta_ci95_by_seed": 0.1155937239082712,
+        "utility_seed_wins": 8
+      },
+      {
+        "name": "drawer_to_pick_transfer::high_barrier",
+        "oracle_utility_gap": 0.2556455531249986,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07344685937500008,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.047642218750000034,
+        "success_delta": 0.06874999999999998,
+        "utility_delta": 0.21672452812500032,
+        "utility_delta_ci95_by_seed": 0.06793975698657262,
+        "utility_seed_wins": 9
+      },
+      {
+        "name": "drawer_to_pick_transfer::narrow_basin",
+        "oracle_utility_gap": 0.27726576249999957,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.071350446875,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.045856537499999954,
+        "success_delta": 0.04375000000000007,
+        "utility_delta": 0.1854895906249998,
+        "utility_delta_ci95_by_seed": 0.09053338067338829,
+        "utility_seed_wins": 9
+      },
+      {
+        "name": "drawer_to_pick_transfer::nonconvex_energy",
+        "oracle_utility_gap": 0.2670517593750009,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.074679809375,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.048445771875000015,
+        "success_delta": 0.03437499999999993,
+        "utility_delta": 0.18318754062499976,
+        "utility_delta_ci95_by_seed": 0.06756777213359805,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "drawer_to_pick_transfer::partial_observability",
+        "oracle_utility_gap": 0.2439957718750002,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07537753125000013,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.048993471875000014,
+        "success_delta": 0.05625000000000002,
+        "utility_delta": 0.20531875937499855,
+        "utility_delta_ci95_by_seed": 0.045600777931913736,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "mobile_push_then_grasp::combined_seam_stress",
+        "oracle_utility_gap": 0.3136633062500007,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.079772671875,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.052430578124999794,
+        "success_delta": 0.02187500000000009,
+        "utility_delta": 0.18322795937500036,
+        "utility_delta_ci95_by_seed": 0.06343040740160891,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "mobile_push_then_grasp::contact_mode_transition",
+        "oracle_utility_gap": 0.2005859781250019,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07643145625,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04989714687499999,
+        "success_delta": 0.109375,
+        "utility_delta": 0.2591580937499989,
+        "utility_delta_ci95_by_seed": 0.08401693276236878,
+        "utility_seed_wins": 9
+      },
+      {
+        "name": "mobile_push_then_grasp::dynamics_mismatch",
+        "oracle_utility_gap": 0.30511082812500046,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07772303125000007,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.050116268749999984,
+        "success_delta": 0.08750000000000002,
+        "utility_delta": 0.24107459999999958,
+        "utility_delta_ci95_by_seed": 0.06626985525762817,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "mobile_push_then_grasp::high_barrier",
+        "oracle_utility_gap": 0.2616019812500002,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07389991249999994,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04838227499999995,
+        "success_delta": 0.05312499999999998,
+        "utility_delta": 0.20137069062500057,
+        "utility_delta_ci95_by_seed": 0.08401644637072865,
+        "utility_seed_wins": 9
+      },
+      {
+        "name": "mobile_push_then_grasp::narrow_basin",
+        "oracle_utility_gap": 0.2278127937499994,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07168325625,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.046560600000000035,
+        "success_delta": 0.15312500000000007,
+        "utility_delta": 0.29521481250000026,
+        "utility_delta_ci95_by_seed": 0.08025891785115771,
+        "utility_seed_wins": 9
+      },
+      {
+        "name": "mobile_push_then_grasp::nonconvex_energy",
+        "oracle_utility_gap": 0.2615810624999997,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07536961562499987,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04935694687500004,
+        "success_delta": 0.078125,
+        "utility_delta": 0.22785316875000017,
+        "utility_delta_ci95_by_seed": 0.05537470670541387,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "mobile_push_then_grasp::partial_observability",
+        "oracle_utility_gap": 0.2575591687500003,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07474491250000001,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04886679374999996,
+        "success_delta": 0.07499999999999996,
+        "utility_delta": 0.22348803125000005,
+        "utility_delta_ci95_by_seed": 0.057835105685215785,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "peg_place_regrasp::combined_seam_stress",
+        "oracle_utility_gap": 0.27420622187500066,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.08063970000000012,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.052274356250000126,
+        "success_delta": 0.13124999999999998,
+        "utility_delta": 0.29183391874999903,
+        "utility_delta_ci95_by_seed": 0.05464293163152311,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "peg_place_regrasp::contact_mode_transition",
+        "oracle_utility_gap": 0.27256180937499996,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07558717812500004,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04900275625000006,
+        "success_delta": 0.09687499999999993,
+        "utility_delta": 0.2466422687499995,
+        "utility_delta_ci95_by_seed": 0.046061652670670625,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "peg_place_regrasp::dynamics_mismatch",
+        "oracle_utility_gap": 0.24890105625000136,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07716478125000013,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.050426371875000014,
+        "success_delta": 0.10312500000000002,
+        "utility_delta": 0.2558769312499988,
+        "utility_delta_ci95_by_seed": 0.046801613551448754,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "peg_place_regrasp::high_barrier",
+        "oracle_utility_gap": 0.21977259062500143,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07319306250000013,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04776796562500002,
+        "success_delta": 0.05937500000000007,
+        "utility_delta": 0.2075684562500003,
+        "utility_delta_ci95_by_seed": 0.05569360413124932,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "peg_place_regrasp::narrow_basin",
+        "oracle_utility_gap": 0.23269283124999984,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07203715312499998,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04618986249999997,
+        "success_delta": 0.0625,
+        "utility_delta": 0.20610037187499985,
+        "utility_delta_ci95_by_seed": 0.07622922679906757,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "peg_place_regrasp::nonconvex_energy",
+        "oracle_utility_gap": 0.23589046250000079,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.074725665625,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04814288437500004,
+        "success_delta": 0.078125,
+        "utility_delta": 0.2272632187500001,
+        "utility_delta_ci95_by_seed": 0.06976927566236041,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "peg_place_regrasp::partial_observability",
+        "oracle_utility_gap": 0.22851044687499977,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07498922499999983,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.048699090624999955,
+        "success_delta": 0.13749999999999996,
+        "utility_delta": 0.2860770124999992,
+        "utility_delta_ci95_by_seed": 0.07888822664272278,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "tool_use_handover::combined_seam_stress",
+        "oracle_utility_gap": 0.28016550937499973,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.082062159375,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.053219728125000046,
+        "success_delta": 0.078125,
+        "utility_delta": 0.23959156249999924,
+        "utility_delta_ci95_by_seed": 0.06446380155672096,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "tool_use_handover::contact_mode_transition",
+        "oracle_utility_gap": 0.26569981874999926,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07566360937499994,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04903434374999986,
+        "success_delta": 0.09062499999999996,
+        "utility_delta": 0.24104816875000024,
+        "utility_delta_ci95_by_seed": 0.06590732286878,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "tool_use_handover::dynamics_mismatch",
+        "oracle_utility_gap": 0.23511138437500012,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07697868125,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.05022554062500005,
+        "success_delta": 0.078125,
+        "utility_delta": 0.23173426562500032,
+        "utility_delta_ci95_by_seed": 0.07409543308095805,
+        "utility_seed_wins": 9
+      },
+      {
+        "name": "tool_use_handover::high_barrier",
+        "oracle_utility_gap": 0.23252770937499945,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07401645312500023,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.047914203124999936,
+        "success_delta": 0.09375,
+        "utility_delta": 0.24318352812499966,
+        "utility_delta_ci95_by_seed": 0.06786818826927804,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "tool_use_handover::narrow_basin",
+        "oracle_utility_gap": 0.20268330624999953,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07227624999999996,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.04663574687499993,
+        "success_delta": 0.06562500000000004,
+        "utility_delta": 0.20879882187500054,
+        "utility_delta_ci95_by_seed": 0.0630511793035886,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "tool_use_handover::nonconvex_energy",
+        "oracle_utility_gap": 0.2642706375000008,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.07552974375000002,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.049367490625000066,
+        "success_delta": 0.05625000000000002,
+        "utility_delta": 0.20568326562500028,
+        "utility_delta_ci95_by_seed": 0.06717382529457411,
+        "utility_seed_wins": 10
+      },
+      {
+        "name": "tool_use_handover::partial_observability",
+        "oracle_utility_gap": 0.2138467406250001,
+        "partition": "task_regime",
+        "realized_breach_delta": -0.0758345,
+        "rows_per_method": 320,
+        "seam_failure_delta": -0.049173974999999995,
+        "success_delta": 0.109375,
+        "utility_delta": 0.25786193124999945,
+        "utility_delta_ci95_by_seed": 0.039545784947135,
+        "utility_seed_wins": 10
+      }
+    ]
+  },
+  "metrics": {
+    "hard_rows_per_method": 13440,
+    "worst_hash_fold_seed_wins": 10,
+    "worst_hash_fold_utility_delta": 0.22705717316176788,
+    "worst_oracle_utility_gap": 0.19422303750000092,
+    "worst_task_regime_success_delta": 0.02187500000000009,
+    "worst_task_regime_utility_delta": 0.17255934374999926
+  },
+  "not_external_evidence": true,
+  "oracle": "oracle_basin_composer",
+  "partition_stats": {
+    "hash_fold": {
+      "groups": 5,
+      "max_breach_delta": -0.07518093620689627,
+      "min_oracle_utility_gap": 0.23648868648649002,
+      "min_success_delta": 0.07610294117647065,
+      "min_utility_delta": 0.22705717316176788,
+      "min_utility_seed_wins": 10,
+      "negative_breach_groups": 5,
+      "oracle_gap_positive_groups": 5,
+      "positive_success_groups": 5,
+      "positive_utility_groups": 5
+    },
+    "regime": {
+      "groups": 7,
+      "max_breach_delta": -0.07186891250000006,
+      "min_oracle_utility_gap": 0.2297434729166683,
+      "min_success_delta": 0.07395833333333335,
+      "min_utility_delta": 0.21657606666666496,
+      "min_utility_seed_wins": 10,
+      "negative_breach_groups": 7,
+      "oracle_gap_positive_groups": 7,
+      "positive_success_groups": 7,
+      "positive_utility_groups": 7
+    },
+    "split": {
+      "groups": 4,
+      "max_breach_delta": -0.07494891190476201,
+      "min_oracle_utility_gap": 0.23354355595238074,
+      "min_success_delta": 0.07738095238095233,
+      "min_utility_delta": 0.2291778943452376,
+      "min_utility_seed_wins": 10,
+      "negative_breach_groups": 4,
+      "oracle_gap_positive_groups": 4,
+      "positive_success_groups": 4,
+      "positive_utility_groups": 4
+    },
+    "task": {
+      "groups": 6,
+      "max_breach_delta": -0.07530338839285722,
+      "min_oracle_utility_gap": 0.2420435866071421,
+      "min_success_delta": 0.05446428571428574,
+      "min_utility_delta": 0.2045622401785714,
+      "min_utility_seed_wins": 10,
+      "negative_breach_groups": 6,
+      "oracle_gap_positive_groups": 6,
+      "positive_success_groups": 6,
+      "positive_utility_groups": 6
+    },
+    "task_regime": {
+      "groups": 42,
+      "max_breach_delta": -0.07119898437500013,
+      "min_oracle_utility_gap": 0.19422303750000092,
+      "min_success_delta": 0.02187500000000009,
+      "min_utility_delta": 0.17255934374999926,
+      "min_utility_seed_wins": 8,
+      "negative_breach_groups": 42,
+      "oracle_gap_positive_groups": 42,
+      "positive_success_groups": 42,
+      "positive_utility_groups": 42
+    }
+  },
+  "passed": true,
+  "proposed": "barrier_certified_energy_composer_v5",
+  "version": "holdout_robustness_audit_v1"
+}

@@ -1,0 +1,59 @@
+{
+  "checks": [
+    {
+      "detail": "submission_ready=True, blocking=0",
+      "name": "synthetic_complete_package_reaches_final_external_ready",
+      "passed": true
+    },
+    {
+      "detail": "records=1440, tasks=4, methods=12, confidence=True",
+      "name": "synthetic_records_cover_tasks_methods_and_confidence",
+      "passed": true
+    },
+    {
+      "detail": "tasks=4, prepared_tasks=4",
+      "name": "prepared_task_configs_bound_in_full_pipeline_fixture",
+      "passed": true
+    },
+    {
+      "detail": "methods=12, tracked_non_oracle_methods=11",
+      "name": "tracked_candidate_method_configs_bound_in_full_pipeline_fixture",
+      "passed": true
+    },
+    {
+      "detail": "config=True, adapter=True, fidelity=True, pairing=True, release=True",
+      "name": "synthetic_component_gates_pass",
+      "passed": true
+    },
+    {
+      "detail": "failures=['external_rollout_confidence_gates_passed']",
+      "name": "tampered_rollout_confidence_summary_rejected",
+      "passed": true
+    },
+    {
+      "detail": "release_code_failure=\"entries=11, malformed=[], missing_paths=[], missing_sha256=[], hash_mismatches=['external_validation/implementations/greedy_module_sequence/adapter.py: declared=000000000000..., actual=473FF337E5E0...'], hash_errors=[]\"",
+      "name": "tampered_release_artifact_hash_rejected",
+      "passed": true
+    },
+    {
+      "detail": "manifest_before=None, manifest_after=None, external_audit_before=95549a716a35845863d28aaec7bc61f0029e767b6e57f7618d39e07b524fbbd5, external_audit_after=95549a716a35845863d28aaec7bc61f0029e767b6e57f7618d39e07b524fbbd5, rollout_before=d5cbdf671f96ddc7f79fda887f889d216d8db388b3a06bec98b0191deb141c2a, rollout_after=d5cbdf671f96ddc7f79fda887f889d216d8db388b3a06bec98b0191deb141c2a",
+      "name": "real_repository_evidence_state_untouched",
+      "passed": true
+    }
+  ],
+  "not_external_evidence": true,
+  "passed": true,
+  "prepared_task_configs_bound": true,
+  "real_manifest_untouched": true,
+  "real_reports_untouched": true,
+  "strict_external_evidence_ready": false,
+  "synthetic_confidence_gates_passed": true,
+  "synthetic_method_count": 12,
+  "synthetic_record_count": 1440,
+  "synthetic_submission_ready": true,
+  "synthetic_task_count": 4,
+  "tampered_release_hash_rejected": true,
+  "tampered_rollout_confidence_rejected": true,
+  "tracked_candidate_method_configs_bound": true,
+  "version": "external_evidence_pipeline_self_test_v1"
+}

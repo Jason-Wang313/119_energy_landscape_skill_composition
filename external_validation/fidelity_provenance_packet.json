@@ -1,0 +1,243 @@
+{
+  "acceptance_ready": false,
+  "blocking_missing": [
+    "real_acceptance_file_exists: external_validation/fidelity_acceptance_template.json",
+    "real_acceptance_version: version='paper119_fidelity_acceptance_template_v1', expected='paper119_fidelity_acceptance_v1'",
+    "real_acceptance_declares_ready: acceptance_ready=None",
+    "not_template_only: template_only=True",
+    "strict_readiness_remains_external_to_acceptance: not_external_evidence=True, strict_fidelity_evidence_ready=None, strict_external_evidence_ready=None",
+    "platform_values_filled: placeholder_fields=['asset_sources', 'contact_solver', 'physics_engine', 'platform_name', 'platform_version', 'robot_model_source', 'substeps_per_control_step', 'timestep_seconds']",
+    "qualification_text_filled: weak_or_placeholder=['contact_dynamics_justification', 'known_limitations', 'operator_independence_statement', 'paired_reset_replay_test', 'real_or_benchmark_calibration_basis']",
+    "operator_independence_declared: operator_not_target_collaborator=True",
+    "date_locked_filled: date_locked='FILL_AFTER_PLATFORM_SELECTION'",
+    "date_locked_iso_like: date_locked='FILL_AFTER_PLATFORM_SELECTION'",
+    "code_commit_filled: code_commit=''",
+    "code_commit_sha40: code_commit=''",
+    "skill_library_hash_valid: skill_library_hash must be 64-character SHA256",
+    "precollection_confirmation_booleans_true: real_platform_confirmed_by_operator=None, render_backed_videos_confirmed_by_operator=None",
+    "postcollection_evidence_deferred_until_manifest: manifest_declaration_required_after_collection=None, real_rollout_evidence_required_after_collection=None, manifest_declaration_confirmed_by_operator=None, real_rollout_evidence_confirmed_by_operator=None",
+    "materialized_by_guarded_path: materialized_by=None, materialized_from_draft_path=None",
+    "all_acceptance_gates_passed: unpassed=['platform_provenance_complete', 'paired_reset_replay_verified', 'contact_failure_observable', 'non_oracle_methods_fair', 'raw_logs_drive_metrics']"
+  ],
+  "blocking_missing_count": 17,
+  "collection_ready": false,
+  "expected_real_acceptance_path": "external_validation/fidelity_acceptance.json",
+  "fidelity_provenance_packet_ready": true,
+  "forbidden_evidence_shortcuts": [
+    "treating fidelity_acceptance_template.json as real acceptance evidence",
+    "using a platform without filled physics/contact provenance and accepted limitations",
+    "counting rollouts before paired reset replay is verified",
+    "omitting operator independence, code commit, or skill-library hash",
+    "claiming high-fidelity validation before strict fidelity and external-evidence audits pass"
+  ],
+  "manifest_written": false,
+  "not_external_evidence": true,
+  "platform_onboarding_ready": true,
+  "platform_probe_missing_packages": [],
+  "platform_probe_primary_route_install_ready": true,
+  "platform_probe_ready": true,
+  "primary_route": "maniskill_sapien_primary",
+  "purpose": "Convert the platform fidelity/provenance blocker into fillable, auditable work orders before official external rollout collection. Accepted fidelity is not external evidence until postcollection logs, videos, manifest entries, and strict audits pass.",
+  "readiness_state": "COLLECT_PLATFORM_PROVENANCE",
+  "source_reports": [
+    "results/external_fidelity_acceptance_audit.json",
+    "results/external_platform_onboarding_audit.json",
+    "results/external_collection_readiness_audit.json",
+    "results/independent_validation_route_audit.json",
+    "external_validation/fidelity_acceptance_template.json",
+    "results/external_platform_probe.json"
+  ],
+  "strict_acceptance_commands": [
+    "python scripts\\build_external_fidelity_provenance_packet.py",
+    "python scripts\\build_external_platform_onboarding.py",
+    "python scripts\\probe_external_platform.py --strict",
+    "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
+    "python scripts\\audit_external_fidelity_acceptance.py --strict",
+    "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+    "python scripts\\build_external_manifest.py --write --check-video-paths",
+    "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+    "python scripts\\audit_external_evidence.py --strict"
+  ],
+  "strict_external_evidence_ready": false,
+  "strict_fidelity_evidence_ready": false,
+  "template_acceptance_gates": [
+    "platform_provenance_complete",
+    "paired_reset_replay_verified",
+    "contact_failure_observable",
+    "non_oracle_methods_fair",
+    "raw_logs_drive_metrics"
+  ],
+  "template_platform_fields": [
+    "asset_sources",
+    "contact_or_force_channels",
+    "contact_solver",
+    "physics_engine",
+    "platform_name",
+    "platform_type",
+    "platform_version",
+    "robot_model_source",
+    "sensor_modalities",
+    "state_observation_channels",
+    "substeps_per_control_step",
+    "timestep_seconds"
+  ],
+  "template_qualification_fields": [
+    "contact_dynamics_justification",
+    "deterministic_paired_resets",
+    "failed_and_abstained_runs_logged",
+    "known_limitations",
+    "no_privileged_state_for_non_oracle",
+    "operator_independence_statement",
+    "paired_reset_replay_test",
+    "pre_registered_before_rollouts",
+    "raw_jsonl_is_source_of_truth",
+    "real_or_benchmark_calibration_basis",
+    "same_compute_budget",
+    "same_observation_interface",
+    "shared_skill_library",
+    "videos_tied_to_run_ids"
+  ],
+  "template_task_families": [
+    "peg_place_regrasp",
+    "drawer_to_pick_transfer",
+    "door_open_navigation",
+    "cable_route_insert"
+  ],
+  "version": "external_fidelity_provenance_packet_v1",
+  "work_orders": [
+    {
+      "acceptance_commands": [
+        "python scripts\\build_external_fidelity_provenance_packet.py",
+        "python scripts\\build_external_platform_onboarding.py",
+        "python scripts\\probe_external_platform.py --strict",
+        "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
+        "python scripts\\audit_external_fidelity_acceptance.py --strict"
+      ],
+      "blocks": [
+        "platform_values_filled: placeholder_fields=['asset_sources', 'contact_solver', 'physics_engine', 'platform_name', 'platform_version', 'robot_model_source', 'substeps_per_control_step', 'timestep_seconds']",
+        "precollection_confirmation_booleans_true: real_platform_confirmed_by_operator=None, render_backed_videos_confirmed_by_operator=None",
+        "all_acceptance_gates_passed: unpassed=['platform_provenance_complete', 'paired_reset_replay_verified', 'contact_failure_observable', 'non_oracle_methods_fair', 'raw_logs_drive_metrics']"
+      ],
+      "id": "fill_platform_identity_and_physics",
+      "operator_input": "run the external platform probe on the selected machine, then fill platform_name, platform_version, physics engine, contact solver, timestep, substeps, robot model, assets, sensors, and contact/force channels",
+      "required_artifacts": [
+        "results/external_platform_probe.json",
+        "external_validation/fidelity_acceptance.json"
+      ],
+      "scope": "platform"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\probe_external_platform.py --strict",
+        "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict"
+      ],
+      "blocks": [
+        "qualification_text_filled: weak_or_placeholder=['contact_dynamics_justification', 'known_limitations', 'operator_independence_statement', 'paired_reset_replay_test', 'real_or_benchmark_calibration_basis']",
+        "all_acceptance_gates_passed: unpassed=['platform_provenance_complete', 'paired_reset_replay_verified', 'contact_failure_observable', 'non_oracle_methods_fair', 'raw_logs_drive_metrics']"
+      ],
+      "id": "verify_contact_dynamics_and_observability",
+      "operator_input": "document why each skill seam exposes the contact/dynamics failures needed for Paper 119's diagnosis and risk estimates",
+      "required_artifacts": [
+        "external_validation/fidelity_acceptance.json",
+        "external_validation/videos/<task_family>/*"
+      ],
+      "scope": "task_fidelity"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\probe_external_platform.py --strict",
+        "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
+        "python scripts\\build_external_manifest.py --write --check-video-paths"
+      ],
+      "blocks": [
+        "qualification_text_filled: weak_or_placeholder=['contact_dynamics_justification', 'known_limitations', 'operator_independence_statement', 'paired_reset_replay_test', 'real_or_benchmark_calibration_basis']",
+        "all_acceptance_gates_passed: unpassed=['platform_provenance_complete', 'paired_reset_replay_verified', 'contact_failure_observable', 'non_oracle_methods_fair', 'raw_logs_drive_metrics']"
+      ],
+      "id": "verify_paired_reset_replay",
+      "operator_input": "prove the selected platform can replay the same scene, seed, skill pair, and initial-state hash across every method panel",
+      "required_artifacts": [
+        "external_validation/fidelity_acceptance.json",
+        "external_validation/blinded_operator_sheet.csv"
+      ],
+      "scope": "collection"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\probe_external_platform.py --strict",
+        "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write"
+      ],
+      "blocks": [
+        "qualification_text_filled: weak_or_placeholder=['contact_dynamics_justification', 'known_limitations', 'operator_independence_statement', 'paired_reset_replay_test', 'real_or_benchmark_calibration_basis']",
+        "operator_independence_declared: operator_not_target_collaborator=True",
+        "date_locked_filled: date_locked='FILL_AFTER_PLATFORM_SELECTION'",
+        "date_locked_iso_like: date_locked='FILL_AFTER_PLATFORM_SELECTION'",
+        "precollection_confirmation_booleans_true: real_platform_confirmed_by_operator=None, render_backed_videos_confirmed_by_operator=None",
+        "postcollection_evidence_deferred_until_manifest: manifest_declaration_required_after_collection=None, real_rollout_evidence_required_after_collection=None, manifest_declaration_confirmed_by_operator=None, real_rollout_evidence_confirmed_by_operator=None"
+      ],
+      "id": "document_operator_independence_and_calibration_basis",
+      "operator_input": "record independent operator/lab, date lock, calibration or benchmark basis, known limitations, and no target-collaborator dependency",
+      "required_artifacts": [
+        "external_validation/fidelity_acceptance.json"
+      ],
+      "scope": "provenance"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\probe_external_platform.py --strict",
+        "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
+        "python scripts\\audit_external_fidelity_acceptance.py --strict"
+      ],
+      "blocks": [
+        "code_commit_filled: code_commit=''",
+        "code_commit_sha40: code_commit=''",
+        "skill_library_hash_valid: skill_library_hash must be 64-character SHA256",
+        "postcollection_evidence_deferred_until_manifest: manifest_declaration_required_after_collection=None, real_rollout_evidence_required_after_collection=None, manifest_declaration_confirmed_by_operator=None, real_rollout_evidence_confirmed_by_operator=None"
+      ],
+      "id": "lock_code_skill_and_artifact_hashes",
+      "operator_input": "fill code commit, skill-library hash, artifact hash policy, and the future manifest path; manifest-declared fidelity_acceptance_path is checked after postcollection sealing",
+      "required_artifacts": [
+        "external_validation/fidelity_acceptance.json"
+      ],
+      "scope": "release"
+    },
+    {
+      "acceptance_commands": [
+        "python scripts\\probe_external_platform.py --strict",
+        "python scripts\\materialize_fidelity_acceptance.py --operator-name-or-lab <independent_operator_or_lab> --accepted-collection-machine <machine_or_robot_platform> --contact-solver-and-friction-model <solver_friction_contact_model> --timestep-and-substeps-per-control-step <sim_dt_control_dt_substeps> --paired-reset-replay-test <paired_reset_replay_result> --real-or-benchmark-calibration-basis <calibration_basis> --task-binding-decision <accepted_or_replaced_task_bindings> --acceptance-gate-signoff <gate_signoff_summary> --known-limitations <known_limitations> --date-locked <YYYY-MM-DD> --code-commit <commit_sha> --skill-library-hash <sha256> --confirm-real-platform --confirm-independent-operator --confirm-render-backed-videos --write",
+        "python scripts\\audit_external_fidelity_acceptance.py --strict",
+        "python scripts\\audit_external_collection_readiness.py --strict --backend-module <module_or_path> --task-config-dir external_validation\\configs --run-id <specific_run_id> --unsealed-alias-map",
+        "python scripts\\build_external_manifest.py --write --check-video-paths",
+        "python scripts\\validate_external_rollouts.py --write-results --check-video-paths --strict",
+        "python scripts\\audit_external_evidence.py --strict"
+      ],
+      "blocks": [
+        "real_acceptance_file_exists: external_validation/fidelity_acceptance_template.json",
+        "real_acceptance_version: version='paper119_fidelity_acceptance_template_v1', expected='paper119_fidelity_acceptance_v1'",
+        "real_acceptance_declares_ready: acceptance_ready=None",
+        "not_template_only: template_only=True",
+        "strict_readiness_remains_external_to_acceptance: not_external_evidence=True, strict_fidelity_evidence_ready=None, strict_external_evidence_ready=None",
+        "platform_values_filled: placeholder_fields=['asset_sources', 'contact_solver', 'physics_engine', 'platform_name', 'platform_version', 'robot_model_source', 'substeps_per_control_step', 'timestep_seconds']",
+        "qualification_text_filled: weak_or_placeholder=['contact_dynamics_justification', 'known_limitations', 'operator_independence_statement', 'paired_reset_replay_test', 'real_or_benchmark_calibration_basis']",
+        "operator_independence_declared: operator_not_target_collaborator=True",
+        "date_locked_filled: date_locked='FILL_AFTER_PLATFORM_SELECTION'",
+        "date_locked_iso_like: date_locked='FILL_AFTER_PLATFORM_SELECTION'",
+        "code_commit_filled: code_commit=''",
+        "code_commit_sha40: code_commit=''",
+        "skill_library_hash_valid: skill_library_hash must be 64-character SHA256",
+        "precollection_confirmation_booleans_true: real_platform_confirmed_by_operator=None, render_backed_videos_confirmed_by_operator=None",
+        "postcollection_evidence_deferred_until_manifest: manifest_declaration_required_after_collection=None, real_rollout_evidence_required_after_collection=None, manifest_declaration_confirmed_by_operator=None, real_rollout_evidence_confirmed_by_operator=None",
+        "materialized_by_guarded_path: materialized_by=None, materialized_from_draft_path=None",
+        "all_acceptance_gates_passed: unpassed=['platform_provenance_complete', 'paired_reset_replay_verified', 'contact_failure_observable', 'non_oracle_methods_fair', 'raw_logs_drive_metrics']"
+      ],
+      "id": "run_strict_fidelity_and_external_gates",
+      "operator_input": "after platform provenance, logs, videos, configs, implementations, and hashes are real, run strict fidelity and external-evidence gates",
+      "required_artifacts": [
+        "results/external_fidelity_acceptance_audit.json",
+        "results/external_rollout_metrics.json",
+        "results/external_evidence_audit.json"
+      ],
+      "scope": "final_gate"
+    }
+  ]
+}
