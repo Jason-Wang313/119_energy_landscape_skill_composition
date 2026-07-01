@@ -16,8 +16,8 @@ The External operator release bundle self-test documents transfer-package fail-c
 
 ## Checks
 
-- `pass` `canonical_pdf_metadata_available`: path=C:\Users\wangz\Downloads\119.pdf, sha=AE310705B235339B73987C6E2DBD31439C50F78ADD364D5593302A9733D83A5B, size=469674
-- `pass` `paper_pdf_matches_canonical`: paper_sha=AE310705B235339B73987C6E2DBD31439C50F78ADD364D5593302A9733D83A5B, canonical_sha=AE310705B235339B73987C6E2DBD31439C50F78ADD364D5593302A9733D83A5B
+- `pass` `canonical_pdf_metadata_available`: path=C:\Users\wangz\Downloads\119.pdf, sha=9C2FADFAA36C21BA5465581B68207BAE7720A18BED7FA15F7111A6931D1B9A79, size=396432
+- `pass` `paper_pdf_matches_canonical`: paper_sha=9C2FADFAA36C21BA5465581B68207BAE7720A18BED7FA15F7111A6931D1B9A79, canonical_sha=9C2FADFAA36C21BA5465581B68207BAE7720A18BED7FA15F7111A6931D1B9A79
 - `pass` `readiness_gap_state_visible`: objective_complete=False, satisfied=17, blocking=4
 - `pass` `operator_packet_no_go_visible`: start_state='DO_NOT_COLLECT_YET', blocking_missing_count=4
 - `pass` `collection_readiness_tracked_reference_route_visible`: backend='external_validation\\runner\\maniskill_reference_backend.py', run_id='maniskill_sapien_reference_preflight_protocol_v1', blocking=["reference_fidelity_acceptance_ready: acceptance_ready=False, readiness_state='COLLECT_PLATFORM_PROVENANCE'"]
@@ -111,4 +111,4 @@ The External operator release bundle self-test documents transfer-package fail-c
 - `pass` `outreach_current_visible_contribution_terms`: missing=[]
 - `pass` `reviewer_current_visible_contribution_terms`: missing=[]
 - `pass` `send_ready_outreach_current_visible_contribution_terms`: missing=[]
-- `pass` `public_pdf_metadata_matches_canonical_artifact`: sha=AE310705B235339B73987C6E2DBD31439C50F78ADD364D5593302A9733D83A5B, size=469674, missing_sha=[], missing_size=[]
+- `pass` `public_pdf_metadata_matches_canonical_artifact`: sha=9C2FADFAA36C21BA5465581B68207BAE7720A18BED7FA15F7111A6931D1B9A79, size=396432, missing_sha=[], missing_size=[]

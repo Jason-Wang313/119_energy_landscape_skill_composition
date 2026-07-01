@@ -157,7 +157,7 @@ def write_tex_table(rows: list[dict[str, str]]) -> None:
     lines = [
         r"\begin{tabular}{p{0.23\linewidth}p{0.58\linewidth}p{0.09\linewidth}}",
         r"\toprule",
-        r"reviewer attack & local falsification evidence & verdict \\",
+        r"alternative explanation & local falsification evidence & verdict \\",
         r"\midrule",
     ]
     for row in rows:

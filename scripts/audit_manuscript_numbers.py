@@ -103,7 +103,7 @@ def main() -> int:
     add_check(
         checks,
         "evaluation_auxiliary_counts",
-        f"Ablations add {int(counts['ablation_cell']):,} cells, stress sweeps add {int(counts['stress_cell']):,} cells, fixed-risk tests add {int(counts['fixed_risk_cell']):,} cells, and the failure audit contains {int(counts['failure_cases'])} cases",
+        f"Ablations add {int(counts['ablation_cell']):,} cells, stress sweeps add {int(counts['stress_cell']):,} cells, and fixed-risk tests add {int(counts['fixed_risk_cell']):,} cells",
         tex,
         "results/summary.json row_counts",
     )

@@ -13,7 +13,7 @@
 - Expanded to 12 methods, 10 paired seeds, 230,400 main cells, 38,400 ablation cells, 161,280 stress cells, 107,520 fixed-risk cells, and 24 failure cases.
 - Selected the strongest non-oracle baseline from the hard aggregate; it is `proposed_energy_landscape_composer_v4_1`.
 - Reported hard success, hard utility, mechanism diagnostics, ablations, stress endpoints, fixed-risk coverage/breach/gated success, and scope blockers.
-- Generated a 30-page ICLR-style PDF with hidden link borders and conference-style citations.
+- Generated a compact ICLR-style PDF with hidden link borders and conference-style citations.
 - Retitled the main paper to `Local World/Action Models for Robot Skill Seams` so the agenda is explicit in the title while the abstract and scope boundary keep the claim local and testable.
 - Updated the manuscript generator to emit a natural skill-seam world/action-interface framing instead of an internal audit abstract.
 - Reframed the core claim around predicting handoff failure, diagnosing the failure reason, choosing repair/probe/abstain/transition decisions, updating planner edge beliefs, and feeding those outcomes back into future planning.
@@ -175,7 +175,7 @@
 - Added `scripts/audit_manuscript_readability.py` so the central framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and stale manual-polish blocker are machine-checked.
 - Added `scripts/audit_presentation_quality.py` so the compiled PDF/source/log/figure surface is checked for top-conference presentation hygiene.
 - Added `scripts/audit_figure_readability.py` so all seven main figure companions are checked for render resolution, foreground density, contrast, edge margins, color detail, and manuscript references.
-- Added `scripts/audit_camera_ready_design.py` so all 30 rendered PDF pages are checked for nonblank content, density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
+- Added `scripts/audit_camera_ready_design.py` so all current rendered PDF pages are checked for nonblank content, density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
 - Added `scripts/build_submission_artifacts.ps1` as the single local rebuild command for experiments, manuscript, PDF, audits, and outreach artifacts.
 - Terminal decision remains STRONG_REVISE.
 - ICLR main readiness remains no pending real robot or accepted high-fidelity validation, released checkpoints/logs, hardware videos, and manifest-declared independent baseline evidence.

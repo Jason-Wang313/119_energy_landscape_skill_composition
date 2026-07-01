@@ -12,7 +12,7 @@
 - [x] Fixed-risk deployment audit reports coverage, breach, gated success, gated utility, and pairwise comparisons.
 - [x] 24 failure cases documented.
 - [x] Terminal gates computed in `results/summary.json` and `results/summary.txt`.
-- [x] 30-page PDF, vector/PDF main figures with PNG companions, BibTeX warning count zero, log warning scan clean, visual QA complete.
+- [x] Compact 14-page PDF, vector/PDF main figures with PNG companions, BibTeX warning count zero, log warning scan clean, visual QA complete.
 - [x] Machine-checkable external evidence audit exists and currently fails until real/high-fidelity artifacts are supplied.
 - [x] External manifest builder exists and currently writes a non-evidence readiness report until real logs, videos, configs, and checkpoints are supplied.
 - [x] External collection plan exists and currently expands the high-fidelity route into 1,440 required JSONL records while remaining non-evidence.
@@ -44,7 +44,7 @@
 - [x] Manuscript readability audit checks central framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and stale manual-polish blocker removal.
 - [x] Presentation quality audit checks PDF structure, source/log hygiene, hidden links, vector figures, canonical artifact parity, and internal-status leak prevention.
 - [x] Figure readability audit checks raster companion resolution, foreground density, contrast, edge margins, color detail, and manuscript references for all seven main figures.
-- [x] Camera-ready design audit renders all 30 PDF pages and checks page density, contrast, margins, sparse-page count, and selected text anchors.
+- [x] Camera-ready design audit renders all current PDF pages and checks page density, contrast, margins, sparse-page count, and selected text anchors.
 - [x] Single local build script regenerates experiments, manuscript, PDF, audits, and outreach artifacts.
 - [x] Related-work coverage matrix exists for the main novelty boundary and outreach-adjacent work.
 

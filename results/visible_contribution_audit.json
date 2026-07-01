@@ -15,12 +15,12 @@
   },
   "checks": [
     {
-      "detail": "path=C:\\Users\\wangz\\Downloads\\119.pdf, sha=AE310705B235339B73987C6E2DBD31439C50F78ADD364D5593302A9733D83A5B, size=469674",
+      "detail": "path=C:\\Users\\wangz\\Downloads\\119.pdf, sha=9C2FADFAA36C21BA5465581B68207BAE7720A18BED7FA15F7111A6931D1B9A79, size=396432",
       "name": "canonical_pdf_metadata_available",
       "passed": true
     },
     {
-      "detail": "paper_sha=AE310705B235339B73987C6E2DBD31439C50F78ADD364D5593302A9733D83A5B, canonical_sha=AE310705B235339B73987C6E2DBD31439C50F78ADD364D5593302A9733D83A5B",
+      "detail": "paper_sha=9C2FADFAA36C21BA5465581B68207BAE7720A18BED7FA15F7111A6931D1B9A79, canonical_sha=9C2FADFAA36C21BA5465581B68207BAE7720A18BED7FA15F7111A6931D1B9A79",
       "name": "paper_pdf_matches_canonical",
       "passed": true
     },
@@ -490,7 +490,7 @@
       "passed": true
     },
     {
-      "detail": "sha=AE310705B235339B73987C6E2DBD31439C50F78ADD364D5593302A9733D83A5B, size=469674, missing_sha=[], missing_size=[]",
+      "detail": "sha=9C2FADFAA36C21BA5465581B68207BAE7720A18BED7FA15F7111A6931D1B9A79, size=396432, missing_sha=[], missing_size=[]",
       "name": "public_pdf_metadata_matches_canonical_artifact",
       "passed": true
     }

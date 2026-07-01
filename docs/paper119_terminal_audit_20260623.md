@@ -1,8 +1,8 @@
 # Paper 119 Terminal Audit 2026-06-23
 
-Updated artifact note: the current reframed PDF was rebuilt on 2026-06-29 as a 30-page paper with SHA256 `AE310705B235339B73987C6E2DBD31439C50F78ADD364D5593302A9733D83A5B`.
+Updated artifact note: the current reframed PDF was rebuilt on 2026-07-01 as a 14-page paper with SHA256 `9C2FADFAA36C21BA5465581B68207BAE7720A18BED7FA15F7111A6931D1B9A79`.
 
-The v5 expansion was completed as a CPU-only, RAM-light rebuild. The current artifact is a 30-page PDF in Downloads only, with hidden link borders, targeted skill-seam world/action-interface framing, diagnostic and decision-quality audits, and vector-first tables/figures generated from v5 CSV outputs.
+The v5 expansion was completed as a CPU-only, RAM-light rebuild. The current artifact is a 14-page PDF in Downloads only, with hidden link borders, targeted skill-seam world/action-interface framing, diagnostic and decision-quality audits, and vector-first tables/figures generated from v5 CSV outputs.
 
 Current external-readiness note: `results/external_execution_readiness_audit.md` now verifies that the independent 1,440-record high-fidelity operator packet, platform qualification checklist, config templates, adapter harness, and fail-closed manifest tooling are ready to execute while still explicitly remaining non-evidence until real manifest-declared artifacts exist.
 
@@ -12,7 +12,7 @@ Current local-dry-run note: `results/external_local_dry_run_metrics.md` now veri
 
 Current figure-readiness note: `results/figure_readability_audit.md` now checks all seven main figure companions for render resolution, foreground density, contrast, edge margins, color detail, and manuscript references.
 
-Current camera-ready note: `results/camera_ready_design_audit.md` renders all 30 PDF pages and checks nonblank content, density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
+Current camera-ready note: `results/camera_ready_design_audit.md` renders all current PDF pages and checks nonblank content, density, contrast, margins, sparse-page count, canonical PDF parity, and selected text anchors.
 
 Current manuscript-readability note: `results/manuscript_readability_audit.md` checks central framing, novelty boundary, contact-as-testbed positioning, paragraph readability, and removal of the stale manual related-work blocker.
 

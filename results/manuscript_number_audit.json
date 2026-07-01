@@ -19,7 +19,7 @@
       "source": "results/summary.json row_counts.main_cell"
     },
     {
-      "expected": "Ablations add 38,400 cells, stress sweeps add 161,280 cells, fixed-risk tests add 107,520 cells, and the failure audit contains 24 cases",
+      "expected": "Ablations add 38,400 cells, stress sweeps add 161,280 cells, and fixed-risk tests add 107,520 cells",
       "name": "evaluation_auxiliary_counts",
       "passed": true,
       "source": "results/summary.json row_counts"

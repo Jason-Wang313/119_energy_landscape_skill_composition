@@ -459,7 +459,7 @@ def make_manuscript(summary):
     a(r"\section{Evaluation Protocol}")
     a(
         f"The evaluation protocol is fixed before interpreting final results. The main matrix contains 12 methods, 6 task families, 8 seam regimes, 5 deployment splits, 10 paired seeds, 8 rollout episodes per cell, and {counts['main_cell']:,} main cell rows. "
-        f"Ablations add {counts['ablation_cell']:,} cells, stress sweeps add {counts['stress_cell']:,} cells, fixed-risk tests add {counts['fixed_risk_cell']:,} cells, and the failure audit contains {counts['failure_cases']} cases. The previous proposed method remains a named baseline. The protocol measures both composition outcomes and seam-model behavior: predicted risk, diagnostic label, decision, realized breach, and planner-edge update."
+        f"Ablations add {counts['ablation_cell']:,} cells, stress sweeps add {counts['stress_cell']:,} cells, and fixed-risk tests add {counts['fixed_risk_cell']:,} cells. The previous proposed method remains a named baseline. The protocol measures both composition outcomes and seam-model behavior: predicted risk, diagnostic label, decision, realized breach, and planner-edge update."
     )
     a(r"\begin{table}[t]\centering\small\resizebox{\linewidth}{!}{\input{generated_gate_table.tex}}\caption{Local evidence gates used for the seam-composition audit. External robot or high-fidelity validation is evaluated separately.}\label{tab:gates}\end{table}")
 
@@ -546,14 +546,14 @@ def make_manuscript(summary):
 
     a(r"\subsection{Local Falsification Audit}")
     a(
-        "Because the current evidence is local, we add a machine-checkable falsification audit for common reviewer attacks. "
+        "Because the current evidence is local, we add a machine-checkable falsification audit for common alternative explanations. "
         f"On {int(falsification_metrics['paired_hard_rows']):,} paired hard rows, the proposed composer beats the strongest non-oracle baseline in utility on {fmt(falsification_metrics['utility_pair_win_rate'], 3)} of paired rows. "
         f"The result is not explained by abstention or search cost: abstention changes by only {fmt(falsification_metrics['abstention_delta'])}, composition cost changes by {fmt(falsification_metrics['composition_cost_delta'])}, and cost-normalized utility improves by {fmt(falsification_metrics['cost_normalized_utility_margin'])}. "
         f"Predicted seam risk is also not decorative: five risk quantile bins are monotone in realized breach, with risk-breach correlation {fmt(falsification_metrics['risk_breach_correlation'], 3)}. "
         f"Margins are positive in all {int(falsification_metrics['task_regime_margins']['groups'])} hard task-regime slices, and the oracle remains above the proposed method by {fmt(falsification_metrics['oracle_success_gap'])} success and {fmt(falsification_metrics['oracle_utility_gap'])} utility. "
         "This audit strengthens the local mechanism claim, but it is not a substitute for external robot or high-fidelity validation."
     )
-    a(r"\begin{table}[t]\centering\small\resizebox{\linewidth}{!}{\input{generated_local_falsification_table.tex}}\caption{Local falsification checks against common reviewer explanations. The audit is generated from episode-level local hard-slice rows and does not satisfy the external-evidence gate.}\label{tab:falsification}\end{table}")
+    a(r"\begin{table}[t]\centering\small\resizebox{\linewidth}{!}{\input{generated_local_falsification_table.tex}}\caption{Local falsification checks against common alternative explanations. The audit is generated from episode-level local hard-slice rows and does not satisfy the external-evidence gate.}\label{tab:falsification}\end{table}")
 
     a(r"\subsection{Withheld-Slice Robustness Audit}")
     a(
@@ -609,138 +609,6 @@ def make_manuscript(summary):
         "The repository therefore treats external evidence as a machine-checkable contract: a future submission-ready version must pass an external-evidence audit over a manifest, episode-level JSONL logs, video directories, config/checkpoint hashes, baseline implementations, fixed-risk metrics, and ablations. "
         "A separate raw-rollout validator must recompute success margin, utility margin, paired win rate, fixed-risk coverage, fixed-risk breach, and positive task-family count from the episode logs rather than accepting manifest-level numbers. The evidence audit treats any mismatch between manifest metrics and recomputed rollout metrics as blocking. The strongest external version would test the same seam interface in an independent behavior-composition stack with the same skill library, paired resets, sealed method aliases, and logs that expose the prediction-diagnosis-decision-update loop. Until those audits pass, the paper remains a local study with a bounded claim."
     )
-
-    a(r"\clearpage")
-    a(r"\appendix")
-    a(r"\section{Frozen Gate Interpretation}")
-    for gate, ok in sorted(gates.items()):
-        a(rf"\paragraph{{{esc(gate)}.}} Status: {'pass' if ok else 'fail'}. This gate is local only and cannot override the external scope gate.")
-
-    a(r"\clearpage")
-    add_cards(lines, "Task Cards", TASK_CARDS, "External validation should log terminal samples, basin estimates, barrier values, accepted/rejected seams, and final outcomes.")
-    for name, _ in TASK_CARDS:
-        a(rf"\paragraph{{External replication for {esc(display_label(name))}.}} Use paired scene resets and identical skill libraries across baselines. Report success, seam failure, barrier violation, basin overlap, descent continuity, damage, cost, predicted risk, realized breach, and videos for success and failure cases.")
-
-    a(r"\clearpage")
-    add_cards(lines, "Regime Cards", REGIME_CARDS, "The regime stays visible so the report cannot hide collapse under an average.")
-    for name, _ in REGIME_CARDS:
-        a(rf"\paragraph{{Reviewer question for {esc(display_label(name))}.}} Did the method distinguish basin failure from barrier failure, and did the fixed-risk gate change the decision? A real submission should answer using raw logs, not only aggregate success.")
-
-    a(r"\clearpage")
-    add_cards(lines, "Baseline Cards", BASELINE_CARDS, "The baseline remains visible to avoid weak-comparator games.")
-    for name, _ in BASELINE_CARDS:
-        a(rf"\paragraph{{Interface audit for {esc(display_label(name))}.}} A fair comparison gives this method the same skill library, observations, terminal samples, compute budget, and failure logs. If the wrapper differs, the comparison is not credible.")
-
-    a(r"\clearpage")
-    a(r"\section{Failure Case Audit}")
-    for row in failures:
-        failure_label = display_label(row["failure_case"])
-        failure_desc = display_label(seam_framed_description(row["description"]))
-        a(rf"\paragraph{{Case {esc(row['case_id'])}: {esc(failure_label)}.}} {esc(failure_desc)} Reviewer attack: {esc(row['reviewer_attack'])} V5 response: {esc(row['v5_response'])}. Remaining blocker: {esc(row['remaining_blocker'])}.")
-
-    a(r"\clearpage")
-    a(r"\section{Metric Definitions}")
-    metric_defs = [
-        ("success", "Task completion under the local rollout-cell model."),
-        ("composition_utility", "Composite deployment score rewarding success, basin alignment, and descent while penalizing seam failure, barrier violation, damage, cost, energy-model error, calibration error, and abstention."),
-        ("seam_failure_rate", "Rate at which the handoff state is incompatible with the next skill basin."),
-        ("barrier_violation_rate", "Rate at which composition crosses an unsafe or high-energy barrier."),
-        ("basin_alignment", "Overlap between terminal samples and the next attraction basin."),
-        ("descent_continuity", "Whether energy continues decreasing after handoff."),
-        ("damage_rate", "Unsafe physical interaction induced by the handoff or repair."),
-        ("composition_cost", "Cost of seam repair, sampling, search, and fallback."),
-        ("energy_model_error", "Mismatch between predicted and realized energy/seam behavior."),
-        ("risk_calibration_error", "Mismatch between predicted seam risk and realized seam breach."),
-        ("abstention_rate", "Rate at which the method refuses a seam; meaningful only with coverage and breach."),
-        ("realized_seam_breach", "Post hoc seam breach used to audit the fixed-risk screen."),
-    ]
-    for name, desc in metric_defs:
-        a(rf"\paragraph{{{esc(name)}.}} {esc(desc)}")
-
-    a(r"\clearpage")
-    a(r"\section{External Validation Protocol Required Before Submission}")
-    protocol = [
-        ("Robot platforms", "Run the composed skills on real robot hardware or an accepted high-fidelity simulator with documented contact and dynamics fidelity."),
-        ("Skill library", "Release or hash every primitive skill and ensure baselines compose the same library."),
-        ("Logs", "Release terminal samples, basin estimates, barrier scores, descent diagnostics, accepted/rejected seams, predicted risk, realized breach, actions, and outcomes."),
-        ("Baselines", "Reimplement or faithfully wrap option graphs, diffusion stitching, CEM, residual RL, energy heuristic, TAMP screen, stable-DMP handoff, v4.1, v5, and oracle post hoc analysis."),
-        ("Risk budgets", "Pre-register fixed seam-risk budgets and report coverage and breach before tuning utility."),
-        ("Videos", "Release representative successes, failures, abstentions, and oracle-gap cases."),
-        ("Statistics", "Use paired resets or paired seeds so gains cannot be explained by easier scenes."),
-        ("Artifacts", "Release code, configs, checkpoints or hashes, and data-processing scripts."),
-        ("External evidence audit", "Populate the external validation manifest, validate raw rollout JSONL logs, and pass the strict audit over logs, videos, configs, checkpoints, metrics, and ablations."),
-    ]
-    for name, desc in protocol:
-        a(rf"\paragraph{{{esc(name)}.}} {esc(desc)}")
-
-    a(r"\clearpage")
-    a(r"\section{Reviewer Attack Log}")
-    attacks = [
-        "The result is just an energy heuristic with more words.",
-        "The composer wins by over-searching the seam.",
-        "The composer wins by abstaining from hard cases.",
-        "The previous proposed method was hidden.",
-        "The strongest baseline was chosen conveniently.",
-        "The oracle gap was hidden.",
-        "The fixed-risk gate is cosmetic.",
-        "The basin/barrier theory is only local.",
-        "Synthetic local evidence will not transfer to hardware.",
-        "TAMP and stable-DMP baselines are unfairly wrapped.",
-        "The paper is not submission-ready without real robot evidence.",
-    ]
-    for attack in attacks:
-        a(rf"\paragraph{{Attack.}} {esc(attack)} The v5 response is to expose the corresponding baseline, ablation, pairwise test, fixed-risk metric, oracle comparison, or scope blocker.")
-
-    a(r"\clearpage")
-    a(r"\section{Reproducibility Checklist}")
-    checks = [
-        "The experiment generator is deterministic and CPU-only.",
-        "Thread caps are used for NumPy-backed computation.",
-        "The previous v4.1 method is retained as a named baseline.",
-        "The oracle is reported as an upper bound, not a deployable method.",
-        "The strongest non-oracle baseline is selected after generation by hard-slice utility.",
-        "All CSV files are checked for row counts and numeric finiteness.",
-        "Ablations remove one mechanism at a time.",
-        "Stress sweeps vary intensity instead of cherry-picking one endpoint.",
-        "Fixed-risk results include coverage and breach.",
-        "Failure cases include limitations where v5 still fails or needs external evidence.",
-        "Citation links are hidden and clickable.",
-        "The numbered PDF is placed in Downloads only.",
-        "The manuscript separates local evidence from external deployment claims.",
-        "The manuscript readability audit checks the central framing, related-work boundary, and stale-polish blocker.",
-    ]
-    for item in checks:
-        a(rf"\paragraph{{Check.}} {esc(item)}")
-
-    a(r"\clearpage")
-    a(r"\section{Remaining External Evidence}")
-    for blocker in summary["missing_scope_evidence"]:
-        a(rf"\paragraph{{Blocker.}} {esc(blocker)} This blocker cannot be solved by adding more local CSV rows or nicer prose.")
-
-    a(r"\clearpage")
-    a(r"\section{Row Counts And Source Of Truth}")
-    for key, value in sorted(counts.items()):
-        a(rf"\paragraph{{{esc(key)}.}} {value:,} rows. This count is generated by \texttt{{src/run\_experiment.py}} and recorded in \texttt{{results/summary.json}}.")
-
-    a(r"\medskip")
-    a(r"\section{Artifact Release Requirements}")
-    release_items = [
-        ("Composer code", "Exact basin, barrier, descent, repair, calibration, fixed-risk, and abstention logic, with a hash-locked local model release card."),
-        ("Baseline wrappers", "Identical observations, skill libraries, terminal samples, and compute budgets."),
-        ("Raw rollout logs", "Unprocessed observations, actions, handoff states, risk scores, accepted seams, rejected seams, and outcomes."),
-        ("Processed CSVs", "Aggregates regenerated from raw logs by public scripts."),
-        ("Calibration metadata", "Camera, contact, force, proprioceptive, and timing calibration details."),
-        ("Videos", "Successes, seam failures, abstentions, and oracle-gap cases linked to case IDs."),
-        ("Ablation configs", "Configuration toggles for every removed component."),
-        ("Environment metadata", "Friction, compliance, payload, contact mode, barrier and basin annotations."),
-        ("Rebuild command", "Run scripts/build_submission_artifacts.ps1 to regenerate results, figures, tables, PDF, validation logs, and outreach artifacts for the current bounded local package."),
-        ("Claim boundary audit", "Run scripts/audit_claim_boundary.py to verify that the package keeps the current claim bounded and does not assert deployment, hardware, or ICLR-main readiness before external evidence passes."),
-        ("External validator self-test", "Run scripts/self_test_external_rollout_validator.py to verify that the raw-log metric recomputation and schema failure path work on a temporary synthetic fixture; this is a tooling test, not evidence."),
-        ("External audit command", "Run scripts/validate_external_rollouts.py --strict --write-results and scripts/audit_external_evidence.py --strict after adding real or high-fidelity validation artifacts."),
-        ("License notes", "Redistribution status for skills, policies, and robot logs."),
-    ]
-    for name, desc in release_items:
-        a(rf"\paragraph{{{esc(name)}.}} {esc(desc)}")
 
     a(r"\begingroup")
     a(r"\raggedright")

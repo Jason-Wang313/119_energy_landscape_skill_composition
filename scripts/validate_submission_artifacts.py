@@ -25,6 +25,8 @@ def configured_path(env_name, default):
 
 DOWNLOADS_PDF = configured_path("PAPER119_CANONICAL_PDF", "C:/Users/wangz/Downloads/119.pdf")
 DESKTOP_PDF = configured_path("PAPER119_DESKTOP_PDF", "C:/Users/wangz/Desktop/119.pdf")
+MIN_CONFERENCE_PAGES = 8
+MAX_CONFERENCE_PAGES = 18
 
 
 def fail(message):
@@ -3109,9 +3111,10 @@ def main():
         fail("camera-ready design audit did not pass")
     if camera_ready.get("not_external_evidence") is not True:
         fail("camera-ready design audit must declare that it is not external evidence")
-    if int(camera_ready.get("pages", 0)) != 30:
-        fail("camera-ready design audit page count mismatch")
-    if len(camera_ready.get("page_metrics", [])) != 30:
+    camera_pages = int(camera_ready.get("pages", 0) or 0)
+    if not (MIN_CONFERENCE_PAGES <= camera_pages <= MAX_CONFERENCE_PAGES):
+        fail(f"camera-ready design audit page count mismatch: {camera_pages}")
+    if len(camera_ready.get("page_metrics", [])) != camera_pages:
         fail("camera-ready design audit did not render every page")
     if len(camera_ready.get("checks", [])) < 18:
         fail("camera-ready design audit has too few checks")
@@ -6723,6 +6726,22 @@ def main():
         fail("manuscript missing holdout robustness interpretation")
     if "not a substitute for external robot or high-fidelity validation" not in tex:
         fail("manuscript local falsification audit must preserve the external-validation boundary")
+    removed_tail_markers = [
+        "\\appendix",
+        "Failure Case Audit",
+        "Reviewer Attack Log",
+        "Remaining External Evidence",
+        "Row Counts And Source Of Truth",
+        "Artifact Release Requirements",
+        "Reviewer attack",
+        "Remaining blocker",
+        "Reviewer question",
+        "common reviewer attacks",
+        "common reviewer explanations",
+    ]
+    leaked_tail_markers = [marker for marker in removed_tail_markers if marker in tex]
+    if leaked_tail_markers:
+        fail(f"manuscript still contains removed appendix/tail material: {leaked_tail_markers[:8]}")
     if ".png}" in tex:
         fail("main manuscript should use vector PDF figures instead of PNG figures")
     abstract = tex.split("\\begin{abstract}", 1)[1].split("\\end{abstract}", 1)[0]
@@ -6909,8 +6928,8 @@ def main():
     if not PAPER_PDF.exists():
         fail(f"missing rebuilt paper PDF: {PAPER_PDF}")
     paper_pages = pdf_pages(PAPER_PDF)
-    if paper_pages < 25:
-        fail(f"paper PDF has only {paper_pages} pages; expected at least 25")
+    if not (MIN_CONFERENCE_PAGES <= paper_pages <= MAX_CONFERENCE_PAGES):
+        fail(f"paper PDF has {paper_pages} pages; expected {MIN_CONFERENCE_PAGES}-{MAX_CONFERENCE_PAGES}")
 
     if not DOWNLOADS_PDF.exists():
         fail(f"missing canonical PDF: {DOWNLOADS_PDF}")
@@ -6921,8 +6940,8 @@ def main():
     if CHILD_PDF.exists():
         fail(f"child numbered PDF must not exist: {CHILD_PDF}")
     pages = pdf_pages(DOWNLOADS_PDF)
-    if pages < 25:
-        fail(f"PDF has only {pages} pages; expected at least 25")
+    if not (MIN_CONFERENCE_PAGES <= pages <= MAX_CONFERENCE_PAGES):
+        fail(f"PDF has {pages} pages; expected {MIN_CONFERENCE_PAGES}-{MAX_CONFERENCE_PAGES}")
 
     paper_digest = sha256(PAPER_PDF)
     digest = sha256(DOWNLOADS_PDF)

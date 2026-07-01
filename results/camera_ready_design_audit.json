@@ -16,13 +16,13 @@
       "passed": true
     },
     {
-      "detail": "pages=30",
-      "name": "page_count_exact",
+      "detail": "pages=14, expected=8-18",
+      "name": "page_count_compact",
       "passed": true
     },
     {
-      "detail": "rendered=30, pages=30",
-      "name": "rendered_page_count_exact",
+      "detail": "rendered=14, pages=14",
+      "name": "rendered_page_count_matches_pdf",
       "passed": true
     },
     {
@@ -61,8 +61,8 @@
       "passed": true
     },
     {
-      "detail": "sparse_pages=[16, 21]",
-      "name": "sparse_appendix_pages_bounded",
+      "detail": "sparse_pages=[]",
+      "name": "sparse_pages_bounded",
       "passed": true
     },
     {
@@ -93,12 +93,9 @@
   ],
   "density_summary": {
     "maximum": 0.171507148313871,
-    "mean": 0.10006984612026627,
-    "minimum": 0.018074866310160427,
-    "sparse_pages": [
-      16,
-      21
-    ]
+    "mean": 0.12419778300930763,
+    "minimum": 0.031208119611480956,
+    "sparse_pages": []
   },
   "failed_checks": [],
   "minimum_edge_margin_px": 27,
@@ -140,9 +137,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.1694881588999236,
+      "foreground_fraction": 0.16814580377605587,
       "height": 770,
-      "luminance_std": 0.15168367581448394,
+      "luminance_std": 0.15134103248717726,
       "page": 3,
       "width": 595
     },
@@ -238,9 +235,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.12498963221652297,
+      "foreground_fraction": 0.1255091127360035,
       "height": 770,
-      "luminance_std": 0.16494209783565128,
+      "luminance_std": 0.16534145667685649,
       "page": 10,
       "width": 595
     },
@@ -252,9 +249,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.1562064825930372,
+      "foreground_fraction": 0.15640510749754447,
       "height": 770,
-      "luminance_std": 0.18161564527377674,
+      "luminance_std": 0.18178569457888766,
       "page": 11,
       "width": 595
     },
@@ -266,9 +263,9 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.13070391793080868,
+      "foreground_fraction": 0.155817963549056,
       "height": 770,
-      "luminance_std": 0.1573441403222222,
+      "luminance_std": 0.16890028756176112,
       "page": 12,
       "width": 595
     },
@@ -277,12 +274,12 @@
         "bottom": 31,
         "left": 71,
         "minimum": 27,
-        "right": 105,
+        "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.07847429881043326,
+      "foreground_fraction": 0.1337378587798756,
       "height": 770,
-      "luminance_std": 0.1342436043946029,
+      "luminance_std": 0.15724919084264355,
       "page": 13,
       "width": 595
     },
@@ -294,238 +291,14 @@
         "right": 104,
         "top": 27
       },
-      "foreground_fraction": 0.12089708610717013,
+      "foreground_fraction": 0.031208119611480956,
       "height": 770,
-      "luminance_std": 0.15716197393258738,
+      "luminance_std": 0.07652868393058249,
       "page": 14,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 31,
-        "left": 71,
-        "minimum": 27,
-        "right": 104,
-        "top": 27
-      },
-      "foreground_fraction": 0.11553203099421587,
-      "height": 770,
-      "luminance_std": 0.15416471774915405,
-      "page": 15,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 31,
-        "left": 71,
-        "minimum": 27,
-        "right": 105,
-        "top": 27
-      },
-      "foreground_fraction": 0.018074866310160427,
-      "height": 770,
-      "luminance_std": 0.05819083474793801,
-      "page": 16,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 32,
-        "left": 71,
-        "minimum": 27,
-        "right": 104,
-        "top": 27
-      },
-      "foreground_fraction": 0.11000545672814581,
-      "height": 770,
-      "luminance_std": 0.15247573839741602,
-      "page": 17,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 31,
-        "left": 71,
-        "minimum": 27,
-        "right": 104,
-        "top": 27
-      },
-      "foreground_fraction": 0.07375750300120049,
-      "height": 770,
-      "luminance_std": 0.12689652172277305,
-      "page": 18,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 31,
-        "left": 71,
-        "minimum": 27,
-        "right": 104,
-        "top": 27
-      },
-      "foreground_fraction": 0.14316053694204955,
-      "height": 770,
-      "luminance_std": 0.16837403702254564,
-      "page": 19,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 31,
-        "left": 71,
-        "minimum": 27,
-        "right": 104,
-        "top": 27
-      },
-      "foreground_fraction": 0.14512059369202226,
-      "height": 770,
-      "luminance_std": 0.168809688343848,
-      "page": 20,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 32,
-        "left": 71,
-        "minimum": 27,
-        "right": 104,
-        "top": 27
-      },
-      "foreground_fraction": 0.0268798428462294,
-      "height": 770,
-      "luminance_std": 0.07009034012855765,
-      "page": 21,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 32,
-        "left": 71,
-        "minimum": 27,
-        "right": 104,
-        "top": 27
-      },
-      "foreground_fraction": 0.0502586489141111,
-      "height": 770,
-      "luminance_std": 0.10372576987213654,
-      "page": 22,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 31,
-        "left": 71,
-        "minimum": 27,
-        "right": 104,
-        "top": 27
-      },
-      "foreground_fraction": 0.05410891629379024,
-      "height": 770,
-      "luminance_std": 0.10474027257449998,
-      "page": 23,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 32,
-        "left": 71,
-        "minimum": 27,
-        "right": 104,
-        "top": 27
-      },
-      "foreground_fraction": 0.08283749863581796,
-      "height": 770,
-      "luminance_std": 0.1259845030489529,
-      "page": 24,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 31,
-        "left": 71,
-        "minimum": 27,
-        "right": 105,
-        "top": 27
-      },
-      "foreground_fraction": 0.04629051620648259,
-      "height": 770,
-      "luminance_std": 0.09651071375302338,
-      "page": 25,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 31,
-        "left": 71,
-        "minimum": 27,
-        "right": 105,
-        "top": 27
-      },
-      "foreground_fraction": 0.038561606460766125,
-      "height": 770,
-      "luminance_std": 0.08693669213320977,
-      "page": 26,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 31,
-        "left": 71,
-        "minimum": 27,
-        "right": 105,
-        "top": 27
-      },
-      "foreground_fraction": 0.08055658627087199,
-      "height": 770,
-      "luminance_std": 0.1198944178337517,
-      "page": 27,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 31,
-        "left": 71,
-        "minimum": 27,
-        "right": 104,
-        "top": 27
-      },
-      "foreground_fraction": 0.0998581250682091,
-      "height": 770,
-      "luminance_std": 0.14122165955858523,
-      "page": 28,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 31,
-        "left": 71,
-        "minimum": 27,
-        "right": 104,
-        "top": 27
-      },
-      "foreground_fraction": 0.1348357524828113,
-      "height": 770,
-      "luminance_std": 0.15734719766938268,
-      "page": 29,
-      "width": 595
-    },
-    {
-      "edge_margins_px": {
-        "bottom": 31,
-        "left": 71,
-        "minimum": 27,
-        "right": 104,
-        "top": 27
-      },
-      "foreground_fraction": 0.033552330022918256,
-      "height": 770,
-      "luminance_std": 0.07706015964186454,
-      "page": 30,
       "width": 595
     }
   ],
-  "pages": 30,
+  "pages": 14,
   "passed": true,
   "render_dpi": 70,
   "version": "camera_ready_design_audit_v1"

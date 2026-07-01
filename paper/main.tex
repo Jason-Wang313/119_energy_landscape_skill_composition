@@ -44,7 +44,7 @@ A sequence can be graph-valid while physically unsafe at the seam. If terminal s
 The model output is therefore not just a compatibility number. It is a compact answer to four planning questions: will this handoff fail, why might it fail, should the system repair, probe, abstain, or route through another transition, and what should the planner learn for later plans? The important prediction is the one that changes the next action choice, including the choice not to execute. That is the action-model point: prediction matters because it changes action selection and future planning memory.
 This gives a bounded claim. When basin overlap, barrier height, and descent continuity are identifiable enough to reject bad seams and preserve useful ones, a barrier-certified implementation can make skill composition more reliable. Its value is not only higher success, but more structured failure information: the planner can learn which transitions are reliable, which require repair or a diagnostic probe, and which should be avoided. The key loop is simple: predict the local consequence before execution, choose a transition-level response, observe the outcome, and update the edge memory that future plans query. It must fail or abstain when the low-level primitive is broken, the goal is semantic rather than physical, the landscape is miscalibrated, or real-time constraints prevent search.
 \section{Evaluation Protocol}
-The evaluation protocol is fixed before interpreting final results. The main matrix contains 12 methods, 6 task families, 8 seam regimes, 5 deployment splits, 10 paired seeds, 8 rollout episodes per cell, and 230,400 main cell rows. Ablations add 38,400 cells, stress sweeps add 161,280 cells, fixed-risk tests add 107,520 cells, and the failure audit contains 24 cases. The previous proposed method remains a named baseline. The protocol measures both composition outcomes and seam-model behavior: predicted risk, diagnostic label, decision, realized breach, and planner-edge update.
+The evaluation protocol is fixed before interpreting final results. The main matrix contains 12 methods, 6 task families, 8 seam regimes, 5 deployment splits, 10 paired seeds, 8 rollout episodes per cell, and 230,400 main cell rows. Ablations add 38,400 cells, stress sweeps add 161,280 cells, and fixed-risk tests add 107,520 cells. The previous proposed method remains a named baseline. The protocol measures both composition outcomes and seam-model behavior: predicted risk, diagnostic label, decision, realized breach, and planner-edge update.
 \begin{table}[t]\centering\small\resizebox{\linewidth}{!}{\input{generated_gate_table.tex}}\caption{Local evidence gates used for the seam-composition audit. External robot or high-fidelity validation is evaluated separately.}\label{tab:gates}\end{table}
 \section{Main Results}
 The strongest non-oracle comparator is proposed\_energy\_landscape\_composer\_v4\_1. The proposed composer improves hard success by 0.08460 and hard utility by 0.23517; paired hard-utility wins are 10/10. The oracle remains stronger with success 0.90967 and utility 1.13988, so the local problem is not solved. The intended readout is therefore not only success; it is whether a seam action model can preserve useful skill edges while refusing or redirecting seams that its own predictions mark as unsafe, and whether those decisions produce planner-facing evidence that changes later composition choices.
@@ -82,8 +82,8 @@ A seam model should be predictive, not only useful after the fact. On the propos
 \noindent{\small\textbf{Predictive calibration table.} Local hard-slice check that predicted seam risk tracks realized seam breach and decision relevance while preserving the external-validation boundary.}
 \begin{center}\small\resizebox{\linewidth}{!}{\input{generated_seam_prediction_calibration_table.tex}}\end{center}
 \subsection{Local Falsification Audit}
-Because the current evidence is local, we add a machine-checkable falsification audit for common reviewer attacks. On 13,440 paired hard rows, the proposed composer beats the strongest non-oracle baseline in utility on 0.855 of paired rows. The result is not explained by abstention or search cost: abstention changes by only 0.00649, composition cost changes by -0.04584, and cost-normalized utility improves by 0.21810. Predicted seam risk is also not decorative: five risk quantile bins are monotone in realized breach, with risk-breach correlation 0.971. Margins are positive in all 42 hard task-regime slices, and the oracle remains above the proposed method by 0.10796 success and 0.25161 utility. This audit strengthens the local mechanism claim, but it is not a substitute for external robot or high-fidelity validation.
-\begin{table}[t]\centering\small\resizebox{\linewidth}{!}{\input{generated_local_falsification_table.tex}}\caption{Local falsification checks against common reviewer explanations. The audit is generated from episode-level local hard-slice rows and does not satisfy the external-evidence gate.}\label{tab:falsification}\end{table}
+Because the current evidence is local, we add a machine-checkable falsification audit for common alternative explanations. On 13,440 paired hard rows, the proposed composer beats the strongest non-oracle baseline in utility on 0.855 of paired rows. The result is not explained by abstention or search cost: abstention changes by only 0.00649, composition cost changes by -0.04584, and cost-normalized utility improves by 0.21810. Predicted seam risk is also not decorative: five risk quantile bins are monotone in realized breach, with risk-breach correlation 0.971. Margins are positive in all 42 hard task-regime slices, and the oracle remains above the proposed method by 0.10796 success and 0.25161 utility. This audit strengthens the local mechanism claim, but it is not a substitute for external robot or high-fidelity validation.
+\begin{table}[t]\centering\small\resizebox{\linewidth}{!}{\input{generated_local_falsification_table.tex}}\caption{Local falsification checks against common alternative explanations. The audit is generated from episode-level local hard-slice rows and does not satisfy the external-evidence gate.}\label{tab:falsification}\end{table}
 \subsection{Withheld-Slice Robustness Audit}
 We also audit whether the headline gain hides a narrow favorable slice. Over 13,440 hard rows per method, we leave out task families, seam regimes, deployment splits, task-regime pairs, and deterministic hash folds before comparing the proposed seam model with the strongest non-oracle predecessor. Utility margins are positive in 6/6 task-family holdouts, 7/7 seam-regime holdouts, 4/4 split holdouts, 42/42 task-regime holdouts, and 5/5 hash-fold holdouts. The worst task-regime holdout still has success margin 0.02188 and utility margin 0.17256; the weakest hash fold has utility margin 0.22706 and 10/10 seed wins. This makes the local result harder to dismiss as cherry-picking, but it remains local evidence rather than external robot or high-fidelity validation.
 \begin{table}[t]\centering\small\resizebox{0.94\linewidth}{!}{\input{generated_holdout_robustness_table.tex}}\caption{Withheld-slice local robustness audit. Each row reports the weakest proposed-minus-strongest-baseline margin over a family of hard-slice holdouts; this is not external evidence.}\label{tab:holdout}\end{table}
@@ -99,208 +99,6 @@ The interpretation is intentionally modest. A skill seam is a small place where 
 \section{Scope And Validation}
 External robot or high-fidelity validation remains necessary before deployment-level claims.
 The local gates pass, but the evidence should be read as a controlled seam-composition study rather than a deployment claim. A complete submission package still needs real robot rollouts or accepted high-fidelity skill-composition simulation, released skill-energy or policy checkpoints, calibrated contact-force/camera/state logs, rollout videos, and manifest-declared independent baseline evidence from real external runs. The repository therefore treats external evidence as a machine-checkable contract: a future submission-ready version must pass an external-evidence audit over a manifest, episode-level JSONL logs, video directories, config/checkpoint hashes, baseline implementations, fixed-risk metrics, and ablations. A separate raw-rollout validator must recompute success margin, utility margin, paired win rate, fixed-risk coverage, fixed-risk breach, and positive task-family count from the episode logs rather than accepting manifest-level numbers. The evidence audit treats any mismatch between manifest metrics and recomputed rollout metrics as blocking. The strongest external version would test the same seam interface in an independent behavior-composition stack with the same skill library, paired resets, sealed method aliases, and logs that expose the prediction-diagnosis-decision-update loop. Until those audits pass, the paper remains a local study with a bounded claim.
-\clearpage
-\appendix
-\section{Frozen Gate Interpretation}
-\paragraph{ablation\_success\_margin\_ge\_0.015.} Status: pass. This gate is local only and cannot override the external scope gate.
-\paragraph{ablation\_utility\_margin\_ge\_0.030.} Status: pass. This gate is local only and cannot override the external scope gate.
-\paragraph{barrier\_violation\_delta\_le\_-0.020.} Status: pass. This gate is local only and cannot override the external scope gate.
-\paragraph{basin\_alignment\_delta\_ge\_0.030.} Status: pass. This gate is local only and cannot override the external scope gate.
-\paragraph{composition\_cost\_delta\_le\_0.} Status: pass. This gate is local only and cannot override the external scope gate.
-\paragraph{damage\_rate\_delta\_le\_-0.005.} Status: pass. This gate is local only and cannot override the external scope gate.
-\paragraph{descent\_continuity\_delta\_ge\_0.030.} Status: pass. This gate is local only and cannot override the external scope gate.
-\paragraph{failure\_cases\_ge\_24.} Status: pass. This gate is local only and cannot override the external scope gate.
-\paragraph{hard\_success\_margin\_ge\_0.030.} Status: pass. This gate is local only and cannot override the external scope gate.
-\paragraph{hard\_utility\_margin\_ge\_0.050.} Status: pass. This gate is local only and cannot override the external scope gate.
-\paragraph{paired\_hard\_utility\_wins\_ge\_8.} Status: pass. This gate is local only and cannot override the external scope gate.
-\paragraph{realized\_seam\_breach\_delta\_le\_-0.020.} Status: pass. This gate is local only and cannot override the external scope gate.
-\paragraph{risk\_calibration\_error\_delta\_le\_-0.010.} Status: pass. This gate is local only and cannot override the external scope gate.
-\paragraph{seam\_failure\_delta\_le\_-0.020.} Status: pass. This gate is local only and cannot override the external scope gate.
-\paragraph{stress\_endpoint\_success\_margin\_ge\_0.030.} Status: pass. This gate is local only and cannot override the external scope gate.
-\paragraph{strict\_fixed\_risk\_breach\_le\_0.020.} Status: pass. This gate is local only and cannot override the external scope gate.
-\paragraph{strict\_fixed\_risk\_coverage\_ge\_0.550.} Status: pass. This gate is local only and cannot override the external scope gate.
-\clearpage
-\section{Task Cards}
-\paragraph{peg place regrasp.} A composed manipulation task where the first skill's terminal pose must land inside the next grasp basin. External validation should log terminal samples, basin estimates, barrier values, accepted/rejected seams, and final outcomes.
-\paragraph{drawer to pick transfer.} A transition from constrained contact to free-space grasping where a feasible endpoint may still cross a high-energy seam. External validation should log terminal samples, basin estimates, barrier values, accepted/rejected seams, and final outcomes.
-\paragraph{mobile push then grasp.} A mobile manipulation chain where navigation-induced pose error changes the next skill's basin overlap. External validation should log terminal samples, basin estimates, barrier values, accepted/rejected seams, and final outcomes.
-\paragraph{tool use handover.} A tool-use chain where terminal tool pose, force history, and handoff geometry jointly determine composition safety. External validation should log terminal samples, basin estimates, barrier values, accepted/rejected seams, and final outcomes.
-\paragraph{door open navigation.} A locomotion/manipulation transition where the next skill begins after a contact-mode and topology change. External validation should log terminal samples, basin estimates, barrier values, accepted/rejected seams, and final outcomes.
-\paragraph{cable route insert.} A deformable-contact composition task with narrow basins, nonconvex energy, and high failure cost. External validation should log terminal samples, basin estimates, barrier values, accepted/rejected seams, and final outcomes.
-\paragraph{External replication for peg place regrasp.} Use paired scene resets and identical skill libraries across baselines. Report success, seam failure, barrier violation, basin overlap, descent continuity, damage, cost, predicted risk, realized breach, and videos for success and failure cases.
-\paragraph{External replication for drawer to pick transfer.} Use paired scene resets and identical skill libraries across baselines. Report success, seam failure, barrier violation, basin overlap, descent continuity, damage, cost, predicted risk, realized breach, and videos for success and failure cases.
-\paragraph{External replication for mobile push then grasp.} Use paired scene resets and identical skill libraries across baselines. Report success, seam failure, barrier violation, basin overlap, descent continuity, damage, cost, predicted risk, realized breach, and videos for success and failure cases.
-\paragraph{External replication for tool use handover.} Use paired scene resets and identical skill libraries across baselines. Report success, seam failure, barrier violation, basin overlap, descent continuity, damage, cost, predicted risk, realized breach, and videos for success and failure cases.
-\paragraph{External replication for door open navigation.} Use paired scene resets and identical skill libraries across baselines. Report success, seam failure, barrier violation, basin overlap, descent continuity, damage, cost, predicted risk, realized breach, and videos for success and failure cases.
-\paragraph{External replication for cable route insert.} Use paired scene resets and identical skill libraries across baselines. Report success, seam failure, barrier violation, basin overlap, descent continuity, damage, cost, predicted risk, realized breach, and videos for success and failure cases.
-\clearpage
-\section{Regime Cards}
-\paragraph{nominal.} Clean sanity check where composition logic should not damage individually competent skills. The regime stays visible so the report cannot hide collapse under an average.
-\paragraph{narrow basin.} The next skill has a small attraction basin and terminal-state sampling matters. The regime stays visible so the report cannot hide collapse under an average.
-\paragraph{high barrier.} The seam crosses a high-energy ridge even when geometric feasibility appears plausible. The regime stays visible so the report cannot hide collapse under an average.
-\paragraph{nonconvex energy.} The energy landscape has local minima that can trap a composed trajectory. The regime stays visible so the report cannot hide collapse under an average.
-\paragraph{contact mode transition.} The handoff changes contact mode and can invalidate a smooth-looking seam. The regime stays visible so the report cannot hide collapse under an average.
-\paragraph{partial observability.} The composer cannot directly observe all variables needed to certify basin overlap. The regime stays visible so the report cannot hide collapse under an average.
-\paragraph{dynamics mismatch.} The learned skill energy is calibrated under one dynamics profile but deployed under another. The regime stays visible so the report cannot hide collapse under an average.
-\paragraph{combined seam stress.} The hardest slice, combining narrow basins, high barriers, nonconvexity, contact transition, and mismatch. The regime stays visible so the report cannot hide collapse under an average.
-\paragraph{Reviewer question for nominal.} Did the method distinguish basin failure from barrier failure, and did the fixed-risk gate change the decision? A real submission should answer using raw logs, not only aggregate success.
-\paragraph{Reviewer question for narrow basin.} Did the method distinguish basin failure from barrier failure, and did the fixed-risk gate change the decision? A real submission should answer using raw logs, not only aggregate success.
-\paragraph{Reviewer question for high barrier.} Did the method distinguish basin failure from barrier failure, and did the fixed-risk gate change the decision? A real submission should answer using raw logs, not only aggregate success.
-\paragraph{Reviewer question for nonconvex energy.} Did the method distinguish basin failure from barrier failure, and did the fixed-risk gate change the decision? A real submission should answer using raw logs, not only aggregate success.
-\paragraph{Reviewer question for contact mode transition.} Did the method distinguish basin failure from barrier failure, and did the fixed-risk gate change the decision? A real submission should answer using raw logs, not only aggregate success.
-\paragraph{Reviewer question for partial observability.} Did the method distinguish basin failure from barrier failure, and did the fixed-risk gate change the decision? A real submission should answer using raw logs, not only aggregate success.
-\paragraph{Reviewer question for dynamics mismatch.} Did the method distinguish basin failure from barrier failure, and did the fixed-risk gate change the decision? A real submission should answer using raw logs, not only aggregate success.
-\paragraph{Reviewer question for combined seam stress.} Did the method distinguish basin failure from barrier failure, and did the fixed-risk gate change the decision? A real submission should answer using raw logs, not only aggregate success.
-\clearpage
-\section{Baseline Cards}
-\paragraph{greedy module sequence.} Chains locally available skills without checking the energy seam. The baseline remains visible to avoid weak-comparator games.
-\paragraph{behavior cloned skill chain.} Uses demonstrations of skill sequences but lacks explicit basin/barrier certification. The baseline remains visible to avoid weak-comparator games.
-\paragraph{option graph planner.} Plans over an option graph and is a direct skill-composition baseline. The baseline remains visible to avoid weak-comparator games.
-\paragraph{diffusion skill stitcher.} Samples handoff states from a generative skill stitcher. The baseline remains visible to avoid weak-comparator games.
-\paragraph{cem trajectory composer.} Searches for a composed trajectory using CEM-style optimization. The baseline remains visible to avoid weak-comparator games.
-\paragraph{residual rl composer.} Learns residual repairs around skill handoffs. The baseline remains visible to avoid weak-comparator games.
-\paragraph{energy compatibility heuristic.} Scores energy compatibility without full certification and repair. The baseline remains visible to avoid weak-comparator games.
-\paragraph{tamp feasibility screen.} Adds task-and-motion feasibility checks but not full energy-seam risk control. The baseline remains visible to avoid weak-comparator games.
-\paragraph{stable dmp handoff.} Uses stable dynamical-system/DMP-style handoffs. The baseline remains visible to avoid weak-comparator games.
-\paragraph{proposed energy landscape composer v4 1.} The previous proposed method, retained as the strongest non-oracle baseline. The baseline remains visible to avoid weak-comparator games.
-\paragraph{barrier certified energy composer v5.} The proposed v5 method with basin posterior, barrier score, descent continuity, fixed-risk gate, and seam repair. The baseline remains visible to avoid weak-comparator games.
-\paragraph{oracle basin composer.} A privileged upper bound with true basin and barrier information. The baseline remains visible to avoid weak-comparator games.
-\paragraph{Interface audit for greedy module sequence.} A fair comparison gives this method the same skill library, observations, terminal samples, compute budget, and failure logs. If the wrapper differs, the comparison is not credible.
-\paragraph{Interface audit for behavior cloned skill chain.} A fair comparison gives this method the same skill library, observations, terminal samples, compute budget, and failure logs. If the wrapper differs, the comparison is not credible.
-\paragraph{Interface audit for option graph planner.} A fair comparison gives this method the same skill library, observations, terminal samples, compute budget, and failure logs. If the wrapper differs, the comparison is not credible.
-\paragraph{Interface audit for diffusion skill stitcher.} A fair comparison gives this method the same skill library, observations, terminal samples, compute budget, and failure logs. If the wrapper differs, the comparison is not credible.
-\paragraph{Interface audit for cem trajectory composer.} A fair comparison gives this method the same skill library, observations, terminal samples, compute budget, and failure logs. If the wrapper differs, the comparison is not credible.
-\paragraph{Interface audit for residual rl composer.} A fair comparison gives this method the same skill library, observations, terminal samples, compute budget, and failure logs. If the wrapper differs, the comparison is not credible.
-\paragraph{Interface audit for energy compatibility heuristic.} A fair comparison gives this method the same skill library, observations, terminal samples, compute budget, and failure logs. If the wrapper differs, the comparison is not credible.
-\paragraph{Interface audit for tamp feasibility screen.} A fair comparison gives this method the same skill library, observations, terminal samples, compute budget, and failure logs. If the wrapper differs, the comparison is not credible.
-\paragraph{Interface audit for stable dmp handoff.} A fair comparison gives this method the same skill library, observations, terminal samples, compute budget, and failure logs. If the wrapper differs, the comparison is not credible.
-\paragraph{Interface audit for proposed energy landscape composer v4 1.} A fair comparison gives this method the same skill library, observations, terminal samples, compute budget, and failure logs. If the wrapper differs, the comparison is not credible.
-\paragraph{Interface audit for barrier certified energy composer v5.} A fair comparison gives this method the same skill library, observations, terminal samples, compute budget, and failure logs. If the wrapper differs, the comparison is not credible.
-\paragraph{Interface audit for oracle basin composer.} A fair comparison gives this method the same skill library, observations, terminal samples, compute budget, and failure logs. If the wrapper differs, the comparison is not credible.
-\clearpage
-\section{Failure Case Audit}
-\paragraph{Case F01: unseen liquid contact.} Boundary case for seam-composition reliability: unseen liquid contact. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: composer rejects all known basins. Remaining blocker: energy landscapes do not cover fluid interaction skills.
-\paragraph{Case F02: broken skill primitive.} Boundary case for seam-composition reliability: broken skill primitive. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: composition should abstain. Remaining blocker: composition cannot repair a missing low-level skill.
-\paragraph{Case F03: semantic goal conflict.} Boundary case for seam-composition reliability: semantic goal conflict. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: energy compatibility should not resolve instruction conflict. Remaining blocker: language grounding is out of scope.
-\paragraph{Case F04: hard real time interrupt.} Boundary case for seam-composition reliability: hard real time interrupt. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: high-cost search becomes infeasible. Remaining blocker: latency constraints need a separate scheduler.
-\paragraph{Case F05: compound nonconservative contact.} Boundary case for seam-composition reliability: compound nonconservative contact. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: composer abstains or requests a new landscape fit. Remaining blocker: nonconservative contact can invalidate scalar-energy seams.
-\paragraph{Case F06: actuator torque saturation.} Boundary case for seam-composition reliability: actuator torque saturation. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: barrier repair should flag infeasible descent. Remaining blocker: energy compatibility is not actuator feasibility.
-\paragraph{Case F07: delayed human intervention.} Boundary case for seam-composition reliability: delayed human intervention. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: handoff should be re-evaluated after state changes. Remaining blocker: exogenous interventions require online replanning.
-\paragraph{Case F08: adversarial energy model miscalibration.} Boundary case for seam-composition reliability: adversarial energy model miscalibration. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: composer should reject low-confidence energy estimates. Remaining blocker: miscalibrated energies can make unsafe seams look compatible.
-\paragraph{Case F09: narrow basin aliasing.} Boundary case for seam-composition reliability: narrow basin aliasing. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: keep multiple basin hypotheses active. Remaining blocker: single-basin handoff can be wrong.
-\paragraph{Case F10: barrier hidden by partial observability.} Boundary case for seam-composition reliability: barrier hidden by partial observability. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: probe before accepting the seam. Remaining blocker: unseen barriers defeat local descent checks.
-\paragraph{Case F11: contact mode flip after handoff.} Boundary case for seam-composition reliability: contact mode flip after handoff. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: re-evaluate the seam after contact mode changes. Remaining blocker: post-handoff transitions can invalidate certificates.
-\paragraph{Case F12: terminal sampler mode collapse.} Boundary case for seam-composition reliability: terminal sampler mode collapse. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: diversify terminal-state samples. Remaining blocker: sampler collapse can overstate basin overlap.
-\paragraph{Case F13: repair cost explosion.} Boundary case for seam-composition reliability: repair cost explosion. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: prefer abstention over unsafe repair. Remaining blocker: repair cost must remain in the objective.
-\paragraph{Case F14: dmp stability mismatch.} Boundary case for seam-composition reliability: dmp stability mismatch. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: stable primitives still need seam compatibility. Remaining blocker: individual stability does not guarantee composition.
-\paragraph{Case F15: tamp feasible energy unsafe.} Boundary case for seam-composition reliability: tamp feasible energy unsafe. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: feasibility screen must include energy risk. Remaining blocker: geometric feasibility can cross high barriers.
-\paragraph{Case F16: diffusion stitcher high energy sample.} Boundary case for seam-composition reliability: diffusion stitcher high energy sample. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: reject high-energy generated seams. Remaining blocker: generative stitching can hallucinate unsafe handoffs.
-\paragraph{Case F17: residual rl reward shortcut.} Boundary case for seam-composition reliability: residual rl reward shortcut. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: audit seam metrics separately. Remaining blocker: success reward can hide barrier violations.
-\paragraph{Case F18: oracle gap under compound stress.} Boundary case for seam-composition reliability: oracle gap under compound stress. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: report privileged gap. Remaining blocker: local composer is useful but not saturated.
-\paragraph{Case F19: skill library missing bridge.} Boundary case for seam-composition reliability: skill library missing bridge. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: request a new bridge skill. Remaining blocker: composition cannot invent missing primitives.
-\paragraph{Case F20: camera latency energy shift.} Boundary case for seam-composition reliability: camera latency energy shift. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: include latency in external logs. Remaining blocker: local landscapes ignore some hardware delays.
-\paragraph{Case F21: force control unmodeled work.} Boundary case for seam-composition reliability: force control unmodeled work. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: reject nonconservative work cycles. Remaining blocker: energy functions may not model all contact work.
-\paragraph{Case F22: real robot compliance shift.} Boundary case for seam-composition reliability: real robot compliance shift. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: replicate with calibrated contact logs. Remaining blocker: local compliance may not transfer.
-\paragraph{Case F23: baseline wrapper mismatch.} Boundary case for seam-composition reliability: baseline wrapper mismatch. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: use identical observations and skill library. Remaining blocker: unfair wrappers can fake gains.
-\paragraph{Case F24: human safety override.} Boundary case for seam-composition reliability: human safety override. Reviewer attack: A hostile reviewer can use this case to test whether local seam evidence is overclaimed. V5 response: allow human override and mark non-autonomous. Remaining blocker: autonomous composition is not always appropriate.
-\clearpage
-\section{Metric Definitions}
-\paragraph{success.} Task completion under the local rollout-cell model.
-\paragraph{composition\_utility.} Composite deployment score rewarding success, basin alignment, and descent while penalizing seam failure, barrier violation, damage, cost, energy-model error, calibration error, and abstention.
-\paragraph{seam\_failure\_rate.} Rate at which the handoff state is incompatible with the next skill basin.
-\paragraph{barrier\_violation\_rate.} Rate at which composition crosses an unsafe or high-energy barrier.
-\paragraph{basin\_alignment.} Overlap between terminal samples and the next attraction basin.
-\paragraph{descent\_continuity.} Whether energy continues decreasing after handoff.
-\paragraph{damage\_rate.} Unsafe physical interaction induced by the handoff or repair.
-\paragraph{composition\_cost.} Cost of seam repair, sampling, search, and fallback.
-\paragraph{energy\_model\_error.} Mismatch between predicted and realized energy/seam behavior.
-\paragraph{risk\_calibration\_error.} Mismatch between predicted seam risk and realized seam breach.
-\paragraph{abstention\_rate.} Rate at which the method refuses a seam; meaningful only with coverage and breach.
-\paragraph{realized\_seam\_breach.} Post hoc seam breach used to audit the fixed-risk screen.
-\clearpage
-\section{External Validation Protocol Required Before Submission}
-\paragraph{Robot platforms.} Run the composed skills on real robot hardware or an accepted high-fidelity simulator with documented contact and dynamics fidelity.
-\paragraph{Skill library.} Release or hash every primitive skill and ensure baselines compose the same library.
-\paragraph{Logs.} Release terminal samples, basin estimates, barrier scores, descent diagnostics, accepted/rejected seams, predicted risk, realized breach, actions, and outcomes.
-\paragraph{Baselines.} Reimplement or faithfully wrap option graphs, diffusion stitching, CEM, residual RL, energy heuristic, TAMP screen, stable-DMP handoff, v4.1, v5, and oracle post hoc analysis.
-\paragraph{Risk budgets.} Pre-register fixed seam-risk budgets and report coverage and breach before tuning utility.
-\paragraph{Videos.} Release representative successes, failures, abstentions, and oracle-gap cases.
-\paragraph{Statistics.} Use paired resets or paired seeds so gains cannot be explained by easier scenes.
-\paragraph{Artifacts.} Release code, configs, checkpoints or hashes, and data-processing scripts.
-\paragraph{External evidence audit.} Populate the external validation manifest, validate raw rollout JSONL logs, and pass the strict audit over logs, videos, configs, checkpoints, metrics, and ablations.
-\clearpage
-\section{Reviewer Attack Log}
-\paragraph{Attack.} The result is just an energy heuristic with more words. The v5 response is to expose the corresponding baseline, ablation, pairwise test, fixed-risk metric, oracle comparison, or scope blocker.
-\paragraph{Attack.} The composer wins by over-searching the seam. The v5 response is to expose the corresponding baseline, ablation, pairwise test, fixed-risk metric, oracle comparison, or scope blocker.
-\paragraph{Attack.} The composer wins by abstaining from hard cases. The v5 response is to expose the corresponding baseline, ablation, pairwise test, fixed-risk metric, oracle comparison, or scope blocker.
-\paragraph{Attack.} The previous proposed method was hidden. The v5 response is to expose the corresponding baseline, ablation, pairwise test, fixed-risk metric, oracle comparison, or scope blocker.
-\paragraph{Attack.} The strongest baseline was chosen conveniently. The v5 response is to expose the corresponding baseline, ablation, pairwise test, fixed-risk metric, oracle comparison, or scope blocker.
-\paragraph{Attack.} The oracle gap was hidden. The v5 response is to expose the corresponding baseline, ablation, pairwise test, fixed-risk metric, oracle comparison, or scope blocker.
-\paragraph{Attack.} The fixed-risk gate is cosmetic. The v5 response is to expose the corresponding baseline, ablation, pairwise test, fixed-risk metric, oracle comparison, or scope blocker.
-\paragraph{Attack.} The basin/barrier theory is only local. The v5 response is to expose the corresponding baseline, ablation, pairwise test, fixed-risk metric, oracle comparison, or scope blocker.
-\paragraph{Attack.} Synthetic local evidence will not transfer to hardware. The v5 response is to expose the corresponding baseline, ablation, pairwise test, fixed-risk metric, oracle comparison, or scope blocker.
-\paragraph{Attack.} TAMP and stable-DMP baselines are unfairly wrapped. The v5 response is to expose the corresponding baseline, ablation, pairwise test, fixed-risk metric, oracle comparison, or scope blocker.
-\paragraph{Attack.} The paper is not submission-ready without real robot evidence. The v5 response is to expose the corresponding baseline, ablation, pairwise test, fixed-risk metric, oracle comparison, or scope blocker.
-\clearpage
-\section{Reproducibility Checklist}
-\paragraph{Check.} The experiment generator is deterministic and CPU-only.
-\paragraph{Check.} Thread caps are used for NumPy-backed computation.
-\paragraph{Check.} The previous v4.1 method is retained as a named baseline.
-\paragraph{Check.} The oracle is reported as an upper bound, not a deployable method.
-\paragraph{Check.} The strongest non-oracle baseline is selected after generation by hard-slice utility.
-\paragraph{Check.} All CSV files are checked for row counts and numeric finiteness.
-\paragraph{Check.} Ablations remove one mechanism at a time.
-\paragraph{Check.} Stress sweeps vary intensity instead of cherry-picking one endpoint.
-\paragraph{Check.} Fixed-risk results include coverage and breach.
-\paragraph{Check.} Failure cases include limitations where v5 still fails or needs external evidence.
-\paragraph{Check.} Citation links are hidden and clickable.
-\paragraph{Check.} The numbered PDF is placed in Downloads only.
-\paragraph{Check.} The manuscript separates local evidence from external deployment claims.
-\paragraph{Check.} The manuscript readability audit checks the central framing, related-work boundary, and stale-polish blocker.
-\clearpage
-\section{Remaining External Evidence}
-\paragraph{Blocker.} no\_real\_robot\_rollouts This blocker cannot be solved by adding more local CSV rows or nicer prose.
-\paragraph{Blocker.} no\_accepted\_high\_fidelity\_skill\_composition\_simulation This blocker cannot be solved by adding more local CSV rows or nicer prose.
-\paragraph{Blocker.} no\_released\_skill\_energy\_or\_policy\_checkpoint This blocker cannot be solved by adding more local CSV rows or nicer prose.
-\paragraph{Blocker.} no\_calibrated\_contact\_force\_camera\_or\_state\_logs This blocker cannot be solved by adding more local CSV rows or nicer prose.
-\paragraph{Blocker.} no\_hardware\_rollout\_videos This blocker cannot be solved by adding more local CSV rows or nicer prose.
-\paragraph{Blocker.} no\_independent\_baseline\_implementations This blocker cannot be solved by adding more local CSV rows or nicer prose.
-\clearpage
-\section{Row Counts And Source Of Truth}
-\paragraph{ablation\_cell.} 38,400 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{ablation\_metric.} 10 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{ablation\_seed.} 100 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{dataset\_summary.} 240 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{failure\_cases.} 24 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{fixed\_risk\_cell.} 107,520 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{fixed\_risk\_metric.} 28 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{fixed\_risk\_pairwise.} 24 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{fixed\_risk\_seed.} 280 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{hard\_metric.} 12 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{hard\_pairwise.} 11 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{hard\_seed.} 120 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{main\_cell.} 230,400 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{main\_group.} 2,880 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{metric.} 12 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{seed\_metric.} 600 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{stress\_cell.} 161,280 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{stress\_metric.} 42 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\paragraph{stress\_seed.} 420 rows. This count is generated by \texttt{src/run\_experiment.py} and recorded in \texttt{results/summary.json}.
-\medskip
-\section{Artifact Release Requirements}
-\paragraph{Composer code.} Exact basin, barrier, descent, repair, calibration, fixed-risk, and abstention logic, with a hash-locked local model release card.
-\paragraph{Baseline wrappers.} Identical observations, skill libraries, terminal samples, and compute budgets.
-\paragraph{Raw rollout logs.} Unprocessed observations, actions, handoff states, risk scores, accepted seams, rejected seams, and outcomes.
-\paragraph{Processed CSVs.} Aggregates regenerated from raw logs by public scripts.
-\paragraph{Calibration metadata.} Camera, contact, force, proprioceptive, and timing calibration details.
-\paragraph{Videos.} Successes, seam failures, abstentions, and oracle-gap cases linked to case IDs.
-\paragraph{Ablation configs.} Configuration toggles for every removed component.
-\paragraph{Environment metadata.} Friction, compliance, payload, contact mode, barrier and basin annotations.
-\paragraph{Rebuild command.} Run scripts/build\_submission\_artifacts.ps1 to regenerate results, figures, tables, PDF, validation logs, and outreach artifacts for the current bounded local package.
-\paragraph{Claim boundary audit.} Run scripts/audit\_claim\_boundary.py to verify that the package keeps the current claim bounded and does not assert deployment, hardware, or ICLR-main readiness before external evidence passes.
-\paragraph{External validator self-test.} Run scripts/self\_test\_external\_rollout\_validator.py to verify that the raw-log metric recomputation and schema failure path work on a temporary synthetic fixture; this is a tooling test, not evidence.
-\paragraph{External audit command.} Run scripts/validate\_external\_rollouts.py --strict --write-results and scripts/audit\_external\_evidence.py --strict after adding real or high-fidelity validation artifacts.
-\paragraph{License notes.} Redistribution status for skills, policies, and robot logs.
 \begingroup
 \raggedright
 \bibliographystyle{iclr2026_conference}

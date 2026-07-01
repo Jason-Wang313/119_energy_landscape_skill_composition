@@ -2,8 +2,8 @@
   "canonical_pdf": "C:\\Users\\wangz\\Downloads\\119.pdf",
   "checks": [
     {
-      "detail": "pages=30",
-      "name": "pdf_page_count",
+      "detail": "pages=14, expected=8-18",
+      "name": "pdf_page_count_compact",
       "passed": true
     },
     {
@@ -12,7 +12,7 @@
       "passed": true
     },
     {
-      "detail": "bytes=469674",
+      "detail": "bytes=396432",
       "name": "pdf_size_reasonable",
       "passed": true
     },
@@ -22,7 +22,7 @@
       "passed": true
     },
     {
-      "detail": "text_chars=82932",
+      "detail": "text_chars=46271",
       "name": "pdf_text_extractable",
       "passed": true
     },
@@ -87,23 +87,18 @@
       "passed": true
     },
     {
-      "detail": "appendix scope section",
-      "name": "remaining_evidence_visible",
-      "passed": true
-    },
-    {
       "detail": "leaks=[]",
       "name": "no_internal_status_leaks_in_pdf",
       "passed": true
     },
     {
-      "detail": "hidelinks",
-      "name": "hidden_links_configured",
+      "detail": "leaks=[], appendix=False",
+      "name": "no_removed_appendix_tail_in_tex",
       "passed": true
     },
     {
-      "detail": "appendix wording",
-      "name": "hidden_link_wording",
+      "detail": "hidelinks",
+      "name": "hidden_links_configured",
       "passed": true
     },
     {
@@ -237,7 +232,7 @@
       "passed": true
     },
     {
-      "detail": "underfull_count=2",
+      "detail": "underfull_count=1",
       "name": "log_underfull_count_bounded",
       "passed": true
     },
@@ -248,9 +243,9 @@
     }
   ],
   "failed_checks": [],
-  "pages": 30,
+  "pages": 14,
   "passed": true,
   "pdf": "C:\\Users\\wangz\\robotics_massive_pool_paper_factory\\119_energy_landscape_skill_composition\\paper\\main.pdf",
-  "pdf_bytes": 469674,
+  "pdf_bytes": 396432,
   "version": "presentation_quality_audit_v1"
 }

@@ -1,18 +1,18 @@
 # Presentation Quality Audit
 
 Passed: `true`.
-PDF pages: `30`.
-PDF size: `469674` bytes.
+PDF pages: `14`.
+PDF size: `396432` bytes.
 
 This audit checks presentation polish and artifact hygiene. It does not substitute for real external validation.
 
 ## Checks
 
-- `pass` `pdf_page_count`: pages=30
+- `pass` `pdf_page_count_compact`: pages=14, expected=8-18
 - `pass` `pdf_letter_size`: page_size='612 x 792 pts (letter)'
-- `pass` `pdf_size_reasonable`: bytes=469674
+- `pass` `pdf_size_reasonable`: bytes=396432
 - `pass` `canonical_matches_paper_pdf`: paper/main.pdf vs Downloads/119.pdf
-- `pass` `pdf_text_extractable`: text_chars=82932
+- `pass` `pdf_text_extractable`: text_chars=46271
 - `pass` `section_present_Motivation`: Motivation
 - `pass` `section_present_Problem Setup`: Problem Setup
 - `pass` `section_present_Skill Seams As Local World/Action Models`: Skill Seams As Local World/Action Models
@@ -25,10 +25,9 @@ This audit checks presentation polish and artifact hygiene. It does not substitu
 - `pass` `title_visible`: PDF title text
 - `pass` `abstract_visible`: abstract text
 - `pass` `scope_boundary_visible`: abstract boundary
-- `pass` `remaining_evidence_visible`: appendix scope section
 - `pass` `no_internal_status_leaks_in_pdf`: leaks=[]
+- `pass` `no_removed_appendix_tail_in_tex`: leaks=[], appendix=False
 - `pass` `hidden_links_configured`: hidelinks
-- `pass` `hidden_link_wording`: appendix wording
 - `pass` `vector_figures_only_in_manuscript`: no PNG includes in main.tex
 - `pass` `figure_pdf_exists_skill_seam_action_model_overview_v5`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\figures\skill_seam_action_model_overview_v5.pdf bytes=22161
 - `pass` `figure_png_companion_exists_skill_seam_action_model_overview_v5`: C:\Users\wangz\robotics_massive_pool_paper_factory\119_energy_landscape_skill_composition\figures\skill_seam_action_model_overview_v5.png bytes=143735
@@ -55,5 +54,5 @@ This audit checks presentation polish and artifact hygiene. It does not substitu
 - `pass` `log_no_warnings`: hits=0
 - `pass` `log_no_overfull`: hits=0
 - `pass` `log_no_fatal`: hits=0
-- `pass` `log_underfull_count_bounded`: underfull_count=2
+- `pass` `log_underfull_count_bounded`: underfull_count=1
 - `pass` `log_underfull_badness_bounded`: max_badness=1442

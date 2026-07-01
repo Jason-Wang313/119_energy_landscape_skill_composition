@@ -9,7 +9,7 @@ This audit checks that manuscript and table numbers are traceable to generated r
 - `pass` `abstract_proposed_hard_success_and_utility` from results/summary.json metrics.hard_success_proposed, hard_utility_proposed: `composer reaches hard-slice success 0.80171 and utility 0.88827`
 - `pass` `abstract_strongest_baseline_values` from results/summary.json metrics.hard_success_strongest, hard_utility_strongest: `compared with 0.71711 and 0.65310`
 - `pass` `evaluation_main_matrix_count` from results/summary.json row_counts.main_cell: `and 230,400 main cell rows`
-- `pass` `evaluation_auxiliary_counts` from results/summary.json row_counts: `Ablations add 38,400 cells, stress sweeps add 161,280 cells, fixed-risk tests add 107,520 cells, and the failure audit contains 24 cases`
+- `pass` `evaluation_auxiliary_counts` from results/summary.json row_counts: `Ablations add 38,400 cells, stress sweeps add 161,280 cells, and fixed-risk tests add 107,520 cells`
 - `pass` `main_result_margins` from results/summary.json metrics.hard_success_margin, hard_utility_margin: `improves hard success by 0.08460 and hard utility by 0.23517`
 - `pass` `paired_hard_utility_wins` from results/summary.json metrics.paired_hard_utility_wins: `paired hard-utility wins are 10/10`
 - `pass` `oracle_result_values` from results/summary.json metrics.hard_success_oracle, hard_utility_oracle: `The oracle remains stronger with success 0.90967 and utility 1.13988`

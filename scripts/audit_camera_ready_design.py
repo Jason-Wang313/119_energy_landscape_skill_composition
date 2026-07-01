@@ -27,7 +27,8 @@ def configured_path(env_name: str, default: str) -> Path:
 
 CANONICAL_PDF = configured_path("PAPER119_CANONICAL_PDF", "C:/Users/wangz/Downloads/119.pdf")
 
-EXPECTED_PAGES = 30
+MIN_CONFERENCE_PAGES = 8
+MAX_CONFERENCE_PAGES = 18
 RENDER_DPI = 70
 MIN_PAGE_WIDTH = 500
 MIN_PAGE_HEIGHT = 700
@@ -150,13 +151,18 @@ def main() -> int:
 
     add_check(checks, "canonical_matches_paper_pdf", sha256(PAPER_PDF) == sha256(CANONICAL_PDF), "paper/main.pdf vs Downloads/119.pdf")
     pages = pdf_page_count(PAPER_PDF)
-    add_check(checks, "page_count_exact", pages == EXPECTED_PAGES, f"pages={pages}")
+    add_check(
+        checks,
+        "page_count_compact",
+        MIN_CONFERENCE_PAGES <= pages <= MAX_CONFERENCE_PAGES,
+        f"pages={pages}, expected={MIN_CONFERENCE_PAGES}-{MAX_CONFERENCE_PAGES}",
+    )
 
     with tempfile.TemporaryDirectory(prefix="paper119_camera_ready_") as tmp_name:
         rendered = render_pages(PAPER_PDF, Path(tmp_name))
         metrics = [page_metrics(path, index + 1) for index, path in enumerate(rendered)]
 
-    add_check(checks, "rendered_page_count_exact", len(metrics) == pages == EXPECTED_PAGES, f"rendered={len(metrics)}, pages={pages}")
+    add_check(checks, "rendered_page_count_matches_pdf", len(metrics) == pages, f"rendered={len(metrics)}, pages={pages}")
     low_resolution = [item["page"] for item in metrics if item["width"] < MIN_PAGE_WIDTH or item["height"] < MIN_PAGE_HEIGHT]
     add_check(checks, "render_resolution_ok", not low_resolution, f"low_resolution_pages={low_resolution}")
     blank_pages = [item["page"] for item in metrics if item["foreground_fraction"] < MIN_PAGE_FOREGROUND]
@@ -174,7 +180,7 @@ def main() -> int:
     sparse_pages = [item["page"] for item in metrics if item["foreground_fraction"] < 0.030]
     add_check(checks, "main_pages_have_enough_content", not weak_main_density, f"weak_main_density={weak_main_density}")
     add_check(checks, "main_pages_have_enough_contrast", not weak_main_contrast, f"weak_main_contrast={weak_main_contrast}")
-    add_check(checks, "sparse_appendix_pages_bounded", len(sparse_pages) <= MAX_SPARSE_PAGES, f"sparse_pages={sparse_pages}")
+    add_check(checks, "sparse_pages_bounded", len(sparse_pages) <= MAX_SPARSE_PAGES, f"sparse_pages={sparse_pages}")
 
     full_text = compact(pdf_text(PAPER_PDF))
     page_texts = {page: compact(pdf_text(PAPER_PDF, page=page)) for page in range(1, pages + 1)}
@@ -192,7 +198,7 @@ def main() -> int:
         "title_and_abstract": "localworldactionmodels" in page_texts[1]
         and "robotskillseams" in page_texts[1]
         and "abstract" in page_texts[1],
-        "decision_quality_page": any("comparativedecisionqualityaudit" in page_texts[page] for page in (5, 6)),
+        "decision_quality_page": any("comparativedecisionqualityaudit" in text for text in page_texts.values()),
         "predictive_calibration_page": any("predictivecalibrationtable" in text for text in page_texts.values()),
         "stress_and_fixed_risk_page": any("stresssweep" in text and "fixedrisk" in text for text in page_texts.values()),
         "scope_boundary_full_text": scope_boundary_ok,

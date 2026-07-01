@@ -39,6 +39,8 @@ EXPECTED_FIGURE_STEMS = [
     "energy_landscape_composition_fixed_risk_v5",
     "energy_landscape_composition_fixed_coverage_v5",
 ]
+MIN_CONFERENCE_PAGES = 8
+MAX_CONFERENCE_PAGES = 18
 
 FORBIDDEN_PDF_PHRASES = [
     "STRONG_REVISE",
@@ -46,6 +48,16 @@ FORBIDDEN_PDF_PHRASES = [
     "not ICLR-main ready",
     "local CPU-only",
     "Terminal decision",
+    "Failure Case Audit",
+    "Reviewer Attack Log",
+    "Remaining External Evidence",
+    "Row Counts And Source Of Truth",
+    "Artifact Release Requirements",
+    "Reviewer attack",
+    "Remaining blocker",
+    "Reviewer question",
+    "common reviewer attacks",
+    "common reviewer explanations",
 ]
 
 
@@ -117,11 +129,16 @@ def main() -> int:
 
     pages = int(info.get("Pages", "0"))
     size = PAPER_PDF.stat().st_size
-    add_check(checks, "pdf_page_count", pages == 30, f"pages={pages}")
+    add_check(
+        checks,
+        "pdf_page_count_compact",
+        MIN_CONFERENCE_PAGES <= pages <= MAX_CONFERENCE_PAGES,
+        f"pages={pages}, expected={MIN_CONFERENCE_PAGES}-{MAX_CONFERENCE_PAGES}",
+    )
     add_check(checks, "pdf_letter_size", info.get("Page size", "").startswith("612 x 792 pts"), f"page_size={info.get('Page size')!r}")
-    add_check(checks, "pdf_size_reasonable", 350_000 <= size <= 900_000, f"bytes={size}")
+    add_check(checks, "pdf_size_reasonable", 250_000 <= size <= 800_000, f"bytes={size}")
     add_check(checks, "canonical_matches_paper_pdf", sha256(PAPER_PDF) == sha256(CANONICAL_PDF), "paper/main.pdf vs Downloads/119.pdf")
-    add_check(checks, "pdf_text_extractable", len(normalized_text) > 35_000, f"text_chars={len(normalized_text)}")
+    add_check(checks, "pdf_text_extractable", len(normalized_text) > 18_000, f"text_chars={len(normalized_text)}")
 
     for section in EXPECTED_SECTIONS:
         add_check(checks, f"section_present_{section}", f"\\section{{{section}}}" in tex, section)
@@ -130,12 +147,13 @@ def main() -> int:
     add_check(checks, "title_visible", "localworldactionmodelsforrobotskillseams" in compact_text, "PDF title text")
     add_check(checks, "abstract_visible", "abstract" in compact_text and "boundedclaim" in compact_text, "abstract text")
     add_check(checks, "scope_boundary_visible", "externalrobotorhighfidelityvalidationremainsnecessary" in compact_text, "abstract boundary")
-    add_check(checks, "remaining_evidence_visible", "remainingexternalevidence" in compact_text, "appendix scope section")
 
     missing_pdf_phrases = [phrase for phrase in FORBIDDEN_PDF_PHRASES if phrase in text or phrase in normalized_text]
     add_check(checks, "no_internal_status_leaks_in_pdf", not missing_pdf_phrases, f"leaks={missing_pdf_phrases}")
+    missing_tex_phrases = [phrase for phrase in FORBIDDEN_PDF_PHRASES if phrase in tex]
+    has_appendix = r"\appendix" in tex
+    add_check(checks, "no_removed_appendix_tail_in_tex", not missing_tex_phrases and not has_appendix, f"leaks={missing_tex_phrases}, appendix={has_appendix}")
     add_check(checks, "hidden_links_configured", r"\hypersetup{hidelinks}" in tex, "hidelinks")
-    add_check(checks, "hidden_link_wording", "Citation links are hidden and clickable" in tex and "Citation links are boxed" not in tex, "appendix wording")
     add_check(checks, "vector_figures_only_in_manuscript", ".png}" not in tex, "no PNG includes in main.tex")
 
     for stem in EXPECTED_FIGURE_STEMS:
